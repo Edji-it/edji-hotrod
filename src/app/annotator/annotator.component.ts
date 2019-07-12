@@ -32,7 +32,7 @@ import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './.
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
-import { CommentPaneComponent } from '../shared/comment-pane/comment-pane.component';
+import { CommentPaneComponent } from '../shared/comment-pane/comment-pane.component'
 
 @Component({
   selector: 'annotator',
@@ -67,6 +67,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public feedbackForUser: Feedback[] = []
   public paneCommentComponentUpdates: CommentComponent[]
   private replyScrollReady: boolean
+  private deepLinkParams: { parent?: string; comment?: string } = {}
   // Determines when infinite scroll should begin
   public lastWord: number = 4000
   public lastWordImageOffset: number = 100
@@ -158,7 +159,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public window: any
   public audioSupportError: boolean = false
-  private fragment: string
 
   public quickSelect: { anchor: number; focus: number } = {
     anchor: null,
@@ -224,59 +224,58 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.paneCommentComponentUpdates = this.commentPaneEl.commentComponents.toArray()
         this.scrollToReply()
       }),
-      this.route.fragment.subscribe(fragment => {
-        if (fragment) {
-          this.fragment = fragment
-          let fragmentType = fragment.split("-")[0] // available types are fb (feedback), comment (comment/reply)
-          // handler for feedback
-          if (fragmentType === 'fb') {
-            let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {
-              return feedbackEl.feedback._id === fragment.split("-")[1]
-            })
-            feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
-          } else if (fragmentType === 'comment') {
-            // set default to position to the comment (if not a reply)
-            let idIndex = 1
-            if (fragment.includes('parent')) {
-              // this means we have a reply and need to locate the parent comment
-              idIndex = 3
-            }
-            let commentEl = this.commentComponents.toArray().find(commentEl => {
-              return commentEl.comment._id === fragment.split("-")[idIndex]
-            })
-
-            // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
-            if (commentEl.comment.start > this.lastWord) {
-              this.lastWord = commentEl.comment.start + 800
-              // Make sure we broadcast lastWord position out to listening components
-              this._projects.lastWordUpdateSubj.next(this.lastWord)
-            }
-
-            // Hack that follows same settimeout as the below for updating image heights
-            // We have to wait for images and questions to load in order for the scroll on load to be accurate
-            // after the intitial load, we only want a 1ms timeout to prevent errors is all
-            let scrollTimeout = this.renderTimeout
-            if (this.commentFragScrollReady) {
-              scrollTimeout = 1
-            }
-            // settimeout here to prevent errors where expression changes after checked
-            setTimeout(() => {
-              // scroll to that comment element
-              commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
-              // activate the comment in the service
-              this._comments.activeComment = commentEl.comment
-              // access the comment component to select the comment and toggle the comment pane
-              this.toggleCommentPane(true, commentEl.comment)
-              // pop open the replies on that comment
-              if (fragment.includes('parent')) {
-                this.commentPaneEl.commentReplyEmitter(commentEl.comment, true)
-                // allow browser to scroll to the reply
-                this.replyScrollReady = true
-              } else {
-                commentEl.comment.selected = true
-              }
-            }, scrollTimeout)
+      this.route.queryParams.subscribe(params => {
+        console.log('Query udpate!', params)
+        // handler for feedback
+        if (params['feedback']) {
+          let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {
+            return feedbackEl.feedback._id === params['feedback']
+          })
+          // Scroll to feedback
+          feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
+        } else if (params['comment']) {
+          // Parent indicates a reply comment
+          let commendId = params['parent'] ? params['parent'] : params['comment']
+          let commentEl = this.commentComponents.toArray().find(commentEl => {
+            return commentEl.comment._id === commendId
+          })
+          // Cancel if comment not found
+          if (!commentEl) {
+            return
+          } else {
+            // Set deep link params
+            this.deepLinkParams = params
           }
+          // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
+          if (commentEl.comment.start > this.lastWord) {
+            this.lastWord = commentEl.comment.start + 800
+            // Make sure we broadcast lastWord position out to listening components
+            this._projects.lastWordUpdateSubj.next(this.lastWord)
+          }
+          // Hack that follows same settimeout as the below for updating image heights
+          // We have to wait for images and questions to load in order for the scroll on load to be accurate
+          // after the intitial load, we only want a 1ms timeout to prevent errors is all
+          let scrollTimeout = this.renderTimeout
+          if (this.commentFragScrollReady) {
+            scrollTimeout = 1
+          }
+          // settimeout here to prevent errors where expression changes after checked
+          setTimeout(() => {
+            // scroll to that comment element
+            commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
+            // activate the comment in the service
+            this._comments.activeComment = commentEl.comment
+            // access the comment component to select the comment and toggle the comment pane
+            this.toggleCommentPane(true, commentEl.comment)
+            // pop open the replies on that comment
+            if (params['parent']) {
+              this.commentPaneEl.commentReplyEmitter(commentEl.comment, true)
+              // allow browser to scroll to the reply
+              this.replyScrollReady = true
+            } else {
+              commentEl.comment.selected = true
+            }
+          }, scrollTimeout)
         }
       }),
     )
@@ -286,7 +285,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.replyScrollReady) {
       // find the reply
       let replyEl = this.paneCommentComponentUpdates.find(replyEl => {
-        return replyEl.comment._id === this.fragment.split("-")[1]
+        return replyEl.comment._id === this.deepLinkParams.comment
       })
       // scroll to that reply element
       if (replyEl) {
@@ -492,7 +491,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           let feedback = groupUpdate['feedback']
           this.setFeedback(feedback)
           if (feedback.user_id === this.user._id) {
-            this.showFeedbackToast(feedback, 'feedback')
+            this.showCommentToast(feedback, 'feedback')
           }
         } else if (groupUpdate.type === 'replyUpdate') {
           const reply = groupUpdate['reply']
@@ -504,7 +503,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           reply.parent = parentCommentId
           // reference the parent comment and make sure it's
           if (reply.user_id !== this.user._id && parentComment['user_id'] === this.user._id) {
-            this.showFeedbackToast(reply, 'reply')
+            this.showCommentToast(reply, 'reply')
           }
         } else if (groupUpdate.type === 'coteacherPromote') {
           // Show promotion toast for user
@@ -622,7 +621,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param content is the content object of the live interaction type
    * @param toastType is the type of live interaction (feedback, reply)
    */
-  private showFeedbackToast(content: any, toastType: toastType) {
+  private showCommentToast(content: any, toastType: toastType) {
     if (toastType === 'feedback') {
       // Send toast via message service
       this._messages.sendToast({
@@ -630,7 +629,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         type: 'new-feedback',
         id: 'newFeedback',
         link: './',
-        linkFragment: 'fb-' + content._id,
+        linkParams: { feedback: content._id },
         limitToPage: 'project',
         requireDismiss: true,
       })
@@ -641,7 +640,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         type: 'new-reply',
         id: 'newReply',
         link: './',
-        linkFragment: `comment-${content._id}-parent-${content.parent}`,
+        linkParams: { comment: content._id, parent: content.parent },
         limitToPage: 'project',
         requireDismiss: true,
       })
@@ -1138,7 +1137,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function (node: any): number {
+      let getNodeIndex = function(node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1220,7 +1219,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
           return el.replace(/([\n])/g, '')
         })
 

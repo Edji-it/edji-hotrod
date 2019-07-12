@@ -180,6 +180,7 @@ export interface MessageToast {
   id: string
   link?: string // routerLink path
   linkFragment?: string
+  linkParams?: any
   date?: Date
   limitToPage?: string // identify route where message type should show
   requireDismiss?: boolean
