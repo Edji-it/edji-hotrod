@@ -30,7 +30,7 @@ import {
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
 import { CommentPaneComponent } from '../shared/comment-pane/comment-pane.component'
 
@@ -67,7 +67,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public feedbackForUser: Feedback[] = []
   public paneCommentComponentUpdates: CommentComponent[]
   private replyScrollReady: boolean
-  private deepLinkParams: { parent?: string; comment?: string } = {}
   // Determines when infinite scroll should begin
   public lastWord: number = 4000
   public lastWordImageOffset: number = 100
@@ -181,6 +180,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _audio: AudioService,
     private _messages: MessageService,
     private route: ActivatedRoute,
+    private _router: Router,
     private _academy: AcademyService,
   ) {
     this.window = window
@@ -225,7 +225,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.scrollToReply()
       }),
       this.route.queryParams.subscribe(params => {
-        console.log('Query udpate!', params)
         // handler for feedback
         if (params['feedback']) {
           let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {
@@ -241,10 +240,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           })
           // Cancel if comment not found
           if (!commentEl) {
+            // Clear param if comment not found
+            this.clearQueryParams()
             return
-          } else {
-            // Set deep link params
-            this.deepLinkParams = params
           }
           // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
           if (commentEl.comment.start > this.lastWord) {
@@ -282,10 +280,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   scrollToReply(): void {
-    if (this.replyScrollReady) {
+    let commentId = this.route.snapshot.queryParams['comment']
+    if (this.replyScrollReady && commentId) {
       // find the reply
       let replyEl = this.paneCommentComponentUpdates.find(replyEl => {
-        return replyEl.comment._id === this.deepLinkParams.comment
+        return replyEl.comment._id === commentId
       })
       // scroll to that reply element
       if (replyEl) {
@@ -645,6 +644,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         requireDismiss: true,
       })
     }
+  }
+
+  /**
+   * Clear Query Params
+   * - Used to clear deep link params for comments/replies
+   */
+  private clearQueryParams(): void {
+    this._router.navigate(['./'], { relativeTo: this.route, queryParams: {} })
   }
 
   private showPromotedToast(): void {
@@ -1467,9 +1474,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Set the input comment to the comment pane if it is not currently open
     if (visible) {
       this.selectedComment = comment
-    }
-    // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
-    if (visible) {
+      // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
       this._projects.commentPaneStateSubj.next(true)
@@ -1477,6 +1482,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // console.log("Line y: " +  comment.lineY, "First word offset: " + this.getFirstWordOffset(comment))
       this.commentHeightPos = this.getCommentDisplayY(comment)
     } else {
+      // Clear Comment ID/deep link params
+      this.clearQueryParams()
       // iOS selection
       let selec = Rangy.getSelection()
       selec.removeAllRanges()
