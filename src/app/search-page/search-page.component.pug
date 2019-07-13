@@ -164,12 +164,12 @@ nav-bar([showDashboardOptions]="true")
                                 [owner]="reading.owner",
                                 (followEvent)="!user.isLoggedIn ? showLoginModal = true : ''"
                             )
-                            i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null) }}
                             .btn.btn-sm.btn-primary.float-right(
                                 (click)="openReadingPreview(reading)", 
                                 [class.force-hover]="previewIndex===i"
                             ) Preview
-                            i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null) }}
                         .clickable(
                             (click)="openReadingPreview(reading)",
                             (mouseenter)="readingCardHoverSet(i)", 
