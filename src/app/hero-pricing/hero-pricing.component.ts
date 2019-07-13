@@ -150,18 +150,14 @@ export class HeroPricingComponent implements OnInit {
     }
 
     this.subscriptions.push(
-      this._auth.getCurrentUser().pipe(
-        map(user => {
-          if (user.email) {
-            // this.store.select('metrics').pipe(take(1)).subscribe(metrics => this.store.dispatch(new IncrementMetric('hero_page_load_count')))
-            this.store.dispatch(new IncrementMetric('hero_page_load_count'))
-          }
-          return user
-        })
-      ).subscribe(user => {
+      this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
     )
+
+    if (this._auth.getUser().email) {
+      this.store.dispatch(new IncrementMetric('hero_page_load_count'))
+    }
   }
 
   goHero(location?: string): void {
