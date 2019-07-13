@@ -53,6 +53,16 @@
     color: #222;
   }
 }
+// Used within toast header
+.toast__action {
+  font-size: 80%;
+  font-weight: 400;
+
+  .toast:hover &,
+  .toast:focus & {
+    color: $blue;
+  }
+}
 
 .toast--clickable {
   cursor: pointer;
