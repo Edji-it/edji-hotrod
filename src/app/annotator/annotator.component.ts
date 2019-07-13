@@ -636,7 +636,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     } else if (toastType === 'reply') {
       // Send toast via message service
       this._messages.sendToast({
-        message: `You have a new reply to your comment from ${content.author}`,
+        message: `<b>${content.author}</b> replied to your comment<div class="toast__action">View reply</div>`,
         type: 'new-reply',
         id: 'newReply',
         link: './',
