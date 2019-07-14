@@ -4,7 +4,7 @@
   .fireBlock
     .list-item.list-item--block.fireTime-card
       | {{fireComment.author}}
-      span.fireTime-card__time &nbsp;{{ fireComment.createdAt | edjidate:'timeAgo':null:secondsAgo }}
+      span.fireTime-card__time &nbsp;{{ fireComment.createdAt | edjidate:'timeAgo':null }}
     //- Emoji Comment display
     .list-item.list-item--block.fireComment-card(*ngIf="fireComment.type == 'emoji' || !fireComment.type")
       <div class="emoji-comment-input" [innerHtml]="fireComment.data && fireComment.data.length > 0 ? (fireComment.data | emojione) : '<span class=\'sample-placeholder\'>Empty...</span>'"></div>

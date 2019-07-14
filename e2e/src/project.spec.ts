@@ -239,10 +239,10 @@ describe('Project Page', () => {
     })
 
     it('should open a project with the query param for a live comment and see that comment', () => {
-      project.getPage(`test-live#comment-${commentId}`)
+      project.getPage(`test-live?comment=${commentId}`)
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
       // verify the query param shows up in the url
-      browser.wait(EC.urlContains(`#comment-${commentId}`), 15000, 'live comment query param never showed in project url')
+      browser.wait(EC.urlContains(`?comment=${commentId}`), 15000, 'live comment query param never showed in project url')
       // verify the comment pane opens
       browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
       // verify we scroll to the reply and can see it
@@ -250,10 +250,10 @@ describe('Project Page', () => {
     })
 
     it('should open a project with the query param for a live reply and see that reply', () => {
-      project.getPage(`test-live#comment-${replyId}-parent-${commentId}`)
+      project.getPage(`test-live?comment=${replyId}&parent=${commentId}`)
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
       // verify the query param shows up in the url
-      browser.wait(EC.urlContains(`#comment-${replyId}-parent-${commentId}`), 15000, 'live reply query param never showed in project url')
+      browser.wait(EC.urlContains(`?comment=${replyId}&parent=${commentId}`), 15000, 'live reply query param never showed in project url')
       // verify the comment pane opens
       browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
       // verify we scroll to the reply and can see it

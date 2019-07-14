@@ -11,7 +11,7 @@
         span.is-emoji([innerHtml]="':seedling:' | emojione")
       .fireBlock
         .list-item.list-item--block.fireTime-card
-          | {{ project.createdAt | edjidate:'timeAgo':null:secondsAgo }}
+          | {{ project.createdAt | edjidate:'timeAgo':null }}
         p.small
           b {{project.label}}
           |  group was created for 
