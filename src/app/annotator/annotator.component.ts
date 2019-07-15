@@ -9,15 +9,14 @@ import {
   ViewChildren,
   HostListener,
   ViewChild,
-  AfterViewChecked,
   AfterViewInit,
 } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
 import { Angulartics2 } from 'angulartics2'
 import { Location } from '@angular/common'
-// import { HotkeysService, Hotkey } from 'angular2-hotkeys'
 
+// Project Dependencies
 import { CommentComponent } from './comment/comment.component'
 import {
   AudioService,
@@ -34,8 +33,6 @@ import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './.
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
-import { CommentPaneComponent } from '../shared/comment-pane/comment-pane.component'
-import { take } from 'rxjs/operators'
 
 @Component({
   selector: 'annotator',
@@ -62,7 +59,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren('words') wordEls
   @ViewChild('article') articleEl: ElementRef
   @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
-  @ViewChild(CommentPaneComponent) commentPaneEl: CommentPaneComponent
 
   public reading: Reading = <Reading>{}
   public project: Project = <Project>{}
