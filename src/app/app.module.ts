@@ -22,7 +22,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() { }
+  constructor() {}
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -291,4 +291,4 @@ const routerOptions: ExtraOptions = {
     APP_PROVIDERS,
   ],
 }) //@NgModule
-export class AppModule { }
+export class AppModule {}

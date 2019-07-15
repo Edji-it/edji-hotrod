@@ -9,10 +9,13 @@ import {
   ViewChildren,
   HostListener,
   ViewChild,
+  AfterViewChecked,
+  AfterViewInit,
 } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
 import { Angulartics2 } from 'angulartics2'
+import { Location } from '@angular/common'
 // import { HotkeysService, Hotkey } from 'angular2-hotkeys'
 
 import { CommentComponent } from './comment/comment.component'
@@ -39,7 +42,7 @@ import { take } from 'rxjs/operators'
   templateUrl: './annotator.component.pug',
   styleUrls: ['annotator.component.scss'],
 })
-export class AnnotatorComponent implements OnInit, OnDestroy {
+export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   /*
         Annotator Component
         Last Mod: 5 Aug 2017 - Josh Kyburz
@@ -182,6 +185,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _router: Router,
     private _academy: AcademyService,
+    private location: Location,
   ) {
     this.window = window
   }
@@ -303,57 +307,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         }
         // Re-evaluate comment positions
         this.setLinePositions()
-      }),
-      // Subscribe to link params (deep links to comments/replies)
-      this.route.queryParams.subscribe(params => {
-        // handler for feedback
-        if (params['feedback']) {
-          let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {
-            return feedbackEl.feedback._id === params['feedback']
-          })
-          // Scroll to feedback
-          feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
-        } else if (params['comment']) {
-          // Parent indicates a reply comment
-          let isReply = !!params['parent']
-          let commendId = isReply ? params['parent'] : params['comment']
-          let commentEl = this.commentComponents.toArray().find(commentEl => {
-            return commentEl.comment._id === commendId
-          })
-          // Cancel if comment not found
-          if (!commentEl) {
-            // Clear param if comment not found
-            this.clearQueryParams()
-            return
-          }
-          // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
-          if (commentEl.comment.start > this.lastWord) {
-            this.lastWord = commentEl.comment.start + 800
-            // Make sure we broadcast lastWord position out to listening components
-            this._projects.lastWordUpdateSubj.next(this.lastWord)
-          }
-          // Hack that follows same settimeout as the below for updating image heights
-          // We have to wait for images and questions to load in order for the scroll on load to be accurate
-          // after the intitial load, we only want a 1ms timeout to prevent errors is all
-          let scrollTimeout = this.renderTimeout
-          if (this.commentFragScrollReady) {
-            scrollTimeout = 1
-          }
-          // settimeout here to prevent errors where expression changes after checked
-          setTimeout(() => {
-            // Scroll to line in reading where comment was made
-            commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
-            // Toggle the comment pane
-            if (isReply) {
-              let reply = this.project.comments.find(comment => {
-                return (comment._id = params['comment'])
-              })
-              this.toggleCommentPane(true, commentEl.comment, reply)
-            } else {
-              this.toggleCommentPane(true, commentEl.comment)
-            }
-          }, scrollTimeout)
-        }
       }),
     )
     /** Run-once logic to initialize the comment-based arrays and stats */
@@ -509,6 +462,65 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     })
   } // ngOnInit
 
+  ngAfterViewInit() {
+    this.subscriptions.push(
+      /**
+       * Subscribe to link params (deep links to comments/replies)
+       * - In AfterViewInit due to "commentComponents" use
+       */
+      this.route.queryParams.subscribe(params => {
+        // handler for feedback
+        if (params['feedback']) {
+          let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {
+            return feedbackEl.feedback._id === params['feedback']
+          })
+          // Scroll to feedback
+          feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
+        } else if (params['comment']) {
+          // Parent indicates a reply comment
+          let isReply = !!params['parent']
+          let commendId = isReply ? params['parent'] : params['comment']
+          let commentEl = this.commentComponents.toArray().find(commentEl => {
+            return commentEl.comment._id === commendId
+          })
+          // Cancel if comment not found
+          if (!commentEl) {
+            // Clear param if comment not found
+            this.clearQueryParams()
+            return
+          }
+          // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
+          if (commentEl.comment.start > this.lastWord) {
+            this.lastWord = commentEl.comment.start + 800
+            // Make sure we broadcast lastWord position out to listening components
+            this._projects.lastWordUpdateSubj.next(this.lastWord)
+          }
+          // Hack that follows same settimeout as the below for updating image heights
+          // We have to wait for images and questions to load in order for the scroll on load to be accurate
+          // after the intitial load, we only want a 1ms timeout to prevent errors is all
+          let scrollTimeout = this.renderTimeout
+          if (this.commentFragScrollReady) {
+            scrollTimeout = 1
+          }
+          // settimeout here to prevent errors where expression changes after checked
+          setTimeout(() => {
+            // Scroll to line in reading where comment was made
+            commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
+            // Toggle the comment pane
+            if (isReply) {
+              let reply = this.project.comments.find(comment => {
+                return (comment._id = params['comment'])
+              })
+              this.toggleCommentPane(true, commentEl.comment, reply)
+            } else {
+              this.toggleCommentPane(true, commentEl.comment)
+            }
+          }, scrollTimeout)
+        }
+      }),
+    )
+  }
+
   ngOnDestroy() {
     this._readings.clear()
     this.subscriptions.forEach(sub => {
@@ -622,7 +634,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * - Used to clear deep link params for comments/replies
    */
   private clearQueryParams(): void {
-    this._router.navigate(['./'], { relativeTo: this.route, queryParams: {} })
+    // this._router.navigate(['./'], { relativeTo: this.route, queryParams: {}, replaceUrl: true })
+    this.location.replaceState(this._router.url.split('?')[0])
   }
 
   private showPromotedToast(): void {
