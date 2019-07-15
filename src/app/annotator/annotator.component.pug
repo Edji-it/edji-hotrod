@@ -223,9 +223,10 @@ emoji-keyboard(
 
 //- comment-pane
 comment-pane(
-    [isActive]="selectedComment.active ? true : false",
-    [isSelected]="selectedComment.selected ? true : false",
+    [isActive]="(selectedComment.active || selectedReply.active) ? true : false",
+    [isSelected]="(selectedComment.selected || selectedReply.selected) ? true : false",
     [comment]="selectedComment",
+    [reply]="selectedReply",
     (hideComment)="toggleCommentPane(false)",
     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",
     (commentUpdated)="setLinePositions()",

@@ -1,7 +1,18 @@
 import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs'
 import { CommentPermissions, EdjiComment } from '../datatypes/index'
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewChildren, QueryList } from '@angular/core'
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewChildren,
+  QueryList,
+} from '@angular/core'
 
 // Project Dependencies
 import { AuthService, ProjectService, CommentService, SocketService } from '../../_services'
@@ -37,15 +48,12 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   // Comment Pane Component Inputs
   @Input() comment: EdjiComment
+  @Input() reply: EdjiComment
   @Input()
   set isActive(isActive: boolean) {
     if (typeof isActive !== 'undefined' && this.active !== isActive) {
       this.active = isActive
-
-      // if the comment is new, let's adjust the scroll position if there are a ton of comments
-      if (this.comment.new) {
-        this.scrollToComment(this.comment)
-      }
+      this.evaluateShouldScroll()
     }
   }
   // Checking for selected in the instances where a user clicks on the avatar and we want to scroll to that comment while adding the associated classes
@@ -53,11 +61,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   set isSelected(isSelected: boolean) {
     if (typeof isSelected !== 'undefined' && this.selected !== isSelected) {
       this.selected = isSelected
-
-      // if the comment was selected then we'll need to scroll to it, but not activate it
-      if (this.comment.selected) {
-        this.scrollToComment(this.comment)
-      }
+      this.evaluateShouldScroll()
     }
   }
 
@@ -74,7 +78,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _comments: CommentService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Subscribe to updates to the comment by line number position array
@@ -105,6 +109,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this._projects.commentPaneState.subscribe(paneState => {
         this.visible = paneState
         if (paneState) {
+          this.evaluateShouldScroll()
           document.body.classList.add('body__lock-scroll')
         } else {
           document.body.classList.remove('body__lock-scroll')
@@ -132,6 +137,9 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   dismissCommentPane() {
     this.selected = false
     this.comment.selected = false
+    if (this.reply) {
+      this.reply.selected = false
+    }
     this.hideComment.emit()
     this._projects.commentPaneStateSubj.next(false)
     document.body.classList.remove('body__lock-scroll')
@@ -145,10 +153,35 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Evaluate conditions for scrolling to a comment
+   */
+  evaluateShouldScroll(): void {
+    if (!this.visible) {
+      return
+    }
+    // if the comment is new, let's adjust the scroll position if there are a ton of comments
+    if (this.comment.new) {
+      this.scrollToComment(this.comment)
+    } else if (this.reply.new) {
+      this.scrollToComment(this.reply, true)
+    }
+    // if the comment was selected then we'll need to scroll to it, but not activate it
+    if (this.comment.selected) {
+      this.scrollToComment(this.comment)
+    } else if (this.reply.selected) {
+      this.scrollToComment(this.reply, true)
+    }
+  }
+
+  /**
    * Scroll to Comment
    * @param targetComment Comment to scroll to
    */
   scrollToComment(targetComment: EdjiComment, isReply?: boolean) {
+    if (isReply) {
+      // Tell parent comment to display replies
+      this.commentReplyEmitter(this.comment, true)
+    }
     setTimeout(() => {
       let commentEl = document.getElementById('comment-' + targetComment._id)
       // Found comment, scroll!
@@ -195,6 +228,10 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     this.commentUpdated.emit()
   }
 
+  /**
+   * Toggle replies on parent comment
+   * @param comment Parent Comment
+   */
   commentReplyEmitter(comment: EdjiComment, forceShow?: boolean): void {
     this.repliesToggleById[comment._id] = forceShow || !this.repliesToggleById[comment._id]
   }
