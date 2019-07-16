@@ -160,16 +160,17 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       return
     }
     // if the comment is new, let's adjust the scroll position if there are a ton of comments
-    if (this.comment.new) {
-      this.scrollToComment(this.comment)
-    } else if (this.reply.new) {
+    // + Verify reply changes first, in order to support transitioning from comment => reply
+    if (this.reply.new) {
       this.scrollToComment(this.reply, true)
+    } else if (this.comment.new) {
+      this.scrollToComment(this.comment)
     }
     // if the comment was selected then we'll need to scroll to it, but not activate it
-    if (this.comment.selected) {
-      this.scrollToComment(this.comment)
-    } else if (this.reply.selected) {
+    if (this.reply.selected) {
       this.scrollToComment(this.reply, true)
+    } else if (this.comment.selected) {
+      this.scrollToComment(this.comment)
     }
   }
 

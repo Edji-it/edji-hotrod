@@ -473,6 +473,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           // Scroll to feedback
           feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
         } else if (params['comment']) {
+          // Reset selected comment values
+          // > ensures comment pane scroll action when transitioning between comments and replies
+          if (this.selectedComment) this.selectedComment.selected = false
+          if (this.selectedReply) this.selectedReply.selected = false
           // Parent indicates a reply comment
           let isReply = !!params['parent']
           let commendId = isReply ? params['parent'] : params['comment']
