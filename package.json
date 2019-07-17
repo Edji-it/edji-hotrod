@@ -93,6 +93,7 @@
     "grunt-checkbranch": "^1.0.4",
     "http-server": "^0.11.1",
     "jasmine-marbles": "^0.5.0",
+    "jasmine-reporters": "^2.3.2",
     "jest": "^24.8.0",
     "jest-junit": "^6.4.0",
     "jest-preset-angular": "^7.1.1",
