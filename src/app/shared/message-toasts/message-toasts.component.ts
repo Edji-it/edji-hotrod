@@ -15,7 +15,7 @@ export class MessageToastsComponent implements OnInit {
   public toasts: MessageToast[] = []
   public toastObservable: Observable<MessageToast[]>
 
-  constructor(private _messages: MessageService, public _router: Router, public location: Location) { }
+  constructor(private _messages: MessageService, public _router: Router, public location: Location) {}
 
   ngOnInit() {
     this.toastObservable = this._messages.toastUpdates
@@ -34,6 +34,7 @@ export class MessageToastsComponent implements OnInit {
       promo: 'icon-gift',
       promoted: 'icon-promote',
       'new-feedback': 'icon-feedback',
+      'new-reply': 'icon-reply-arrow',
     }
     return toastTypeMap[toastType] || toastTypeMap['info']
   }
