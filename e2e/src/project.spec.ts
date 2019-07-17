@@ -232,10 +232,14 @@ describe('Project Page', () => {
     let commentId = '5d21289421d995dd649174aa'
     let replyId = '5d212ebc21d995dd649174ae'
 
-    beforeAll(() => {
+    beforeEach(() => {
       login.getPage()
       browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
       login.loginAndVerify(login.studentUser, login.studentPassword)
+    })
+
+    afterEach(() => {
+      sidebar.logout()
     })
 
     it('should open a project with the query param for a live comment and see that comment', () => {
