@@ -1,17 +1,32 @@
 import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs'
 import { CommentPermissions, EdjiComment } from '../datatypes/index'
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+  ViewChildren,
+  QueryList,
+} from '@angular/core'
 
 // Project Dependencies
 import { AuthService, ProjectService, CommentService, SocketService } from '../../_services'
 import { Angulartics2 } from 'angulartics2'
+import { CommentComponent } from 'src/app/annotator/comment/comment.component'
 @Component({
   selector: 'comment-pane',
   templateUrl: './comment-pane.component.pug',
   styleUrls: ['./comment-pane.component.scss'],
 })
 export class CommentPaneComponent implements OnInit, OnDestroy {
+  @ViewChild('commentPane') private commentPane: ElementRef
+  @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
+
   // General variables for the comment pane component
   public lineNum: number = 0
   public commentCount: number = 0
@@ -33,15 +48,12 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   // Comment Pane Component Inputs
   @Input() comment: EdjiComment
+  @Input() reply: EdjiComment
   @Input()
   set isActive(isActive: boolean) {
     if (typeof isActive !== 'undefined' && this.active !== isActive) {
       this.active = isActive
-
-      // if the comment is new, let's adjust the scroll position if there are a ton of comments
-      if (this.comment.new) {
-        this.scrollToComment(this.comment)
-      }
+      this.evaluateShouldScroll()
     }
   }
   // Checking for selected in the instances where a user clicks on the avatar and we want to scroll to that comment while adding the associated classes
@@ -49,11 +61,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   set isSelected(isSelected: boolean) {
     if (typeof isSelected !== 'undefined' && this.selected !== isSelected) {
       this.selected = isSelected
-
-      // if the comment was selected then we'll need to scroll to it, but not activate it
-      if (this.comment.selected) {
-        this.scrollToComment(this.comment)
-      }
+      this.evaluateShouldScroll()
     }
   }
 
@@ -62,8 +70,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   @Output() commentActivationMobile = new EventEmitter<any>()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
-
-  @ViewChild('commentPane') private commentPane: ElementRef
 
   constructor(
     private _projects: ProjectService,
@@ -103,6 +109,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this._projects.commentPaneState.subscribe(paneState => {
         this.visible = paneState
         if (paneState) {
+          this.evaluateShouldScroll()
           document.body.classList.add('body__lock-scroll')
         } else {
           document.body.classList.remove('body__lock-scroll')
@@ -130,6 +137,9 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   dismissCommentPane() {
     this.selected = false
     this.comment.selected = false
+    if (this.reply) {
+      this.reply.selected = false
+    }
     this.hideComment.emit()
     this._projects.commentPaneStateSubj.next(false)
     document.body.classList.remove('body__lock-scroll')
@@ -143,24 +153,51 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Evaluate conditions for scrolling to a comment
+   */
+  evaluateShouldScroll(): void {
+    if (!this.visible) {
+      return
+    }
+    // if the comment is new, let's adjust the scroll position if there are a ton of comments
+    // + Verify reply changes first, in order to support transitioning from comment => reply
+    if (this.reply.new) {
+      this.scrollToComment(this.reply, true)
+    } else if (this.comment.new) {
+      this.scrollToComment(this.comment)
+    }
+    // if the comment was selected then we'll need to scroll to it, but not activate it
+    if (this.reply.selected) {
+      this.scrollToComment(this.reply, true)
+    } else if (this.comment.selected) {
+      this.scrollToComment(this.comment)
+    }
+  }
+
+  /**
    * Scroll to Comment
    * @param targetComment Comment to scroll to
    */
-  scrollToComment(targetComment: EdjiComment) {
+  scrollToComment(targetComment: EdjiComment, isReply?: boolean) {
+    if (isReply) {
+      // Tell parent comment to display replies
+      this.commentReplyEmitter(this.comment, true)
+    }
     setTimeout(() => {
       let commentEl = document.getElementById('comment-' + targetComment._id)
       // Found comment, scroll!
       if (commentEl && commentEl.scrollIntoView) {
         commentEl.scrollIntoView()
         // Offset for comment pane sticky header (60px) and nav bar (70px), and a lil padding
-        this.commentPane.nativeElement.scrollTop -= 150
+        if (!isReply) {
+          this.commentPane.nativeElement.scrollTop -= 150
+        }
       }
     }, 1)
   }
 
   commentActivationEmitter(shouldActivate, comment?: any) {
     let wordIndex = comment.start
-    // let processedCommentData = this._projects.processComments(this.project)
     let commentsByIndex = this._projects.commentsByIndex
 
     let commentIndex = 0
@@ -192,10 +229,12 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     this.commentUpdated.emit()
   }
 
-  commentReplyEmitter(comment) {
-    // Toggle display of
-    this.repliesToggleById[comment._id] = !this.repliesToggleById[comment._id]
-    // this.commentReply.emit(comment)
+  /**
+   * Toggle replies on parent comment
+   * @param comment Parent Comment
+   */
+  commentReplyEmitter(comment: EdjiComment, forceShow?: boolean): void {
+    this.repliesToggleById[comment._id] = forceShow || !this.repliesToggleById[comment._id]
   }
 
   /**

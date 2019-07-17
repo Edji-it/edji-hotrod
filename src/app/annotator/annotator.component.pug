@@ -174,11 +174,10 @@ scroll-progress([scrollProgress]="currentScroll")
                 .lesson-block__body
                     .lesson-block__header Teacher's Feedback For You
                     ng-container(*ngFor="let feedback of feedbackForUser")
-                        .sub-label.mb-0 
-                            | {{ project.teacher.fullname }}
-                            i &nbsp;{{ feedback.createdAt | edjidate:'timeAgo':null:secondsAgo }}
-                        p.feedback-bubble {{ feedback.evaluation ? feedback.evaluation : '' }}
-                        div([attr.id]="feedbackAttribute(feedback)")
+                        edji-teacher-feedback(
+                            [feedback]="feedback",
+                            [teacherName]="project && project.teacher.fullname"
+                        )
         .row.mb-4(*ngIf="lastWord < reading.words.length")
             .loading(style="margin: 0 auto;")
 //- End of Reading options
@@ -224,9 +223,10 @@ emoji-keyboard(
 
 //- comment-pane
 comment-pane(
-    [isActive]="selectedComment.active ? true : false",
-    [isSelected]="selectedComment.selected ? true : false",
+    [isActive]="(selectedComment.active || selectedReply.active) ? true : false",
+    [isSelected]="(selectedComment.selected || selectedReply.selected) ? true : false",
     [comment]="selectedComment",
+    [reply]="selectedReply",
     (hideComment)="toggleCommentPane(false)",
     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",
     (commentUpdated)="setLinePositions()",

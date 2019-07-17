@@ -2,9 +2,10 @@ import { Subscription } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, CommentService, ProjectService, UtilToolService, AcademyService } from '../../_services'
+import { AuthService, CommentService, ProjectService, UtilToolService, AcademyService, SocketService } from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'edji-comment',
@@ -12,21 +13,6 @@ import { ALLSPARK } from './../../app.constants'
   styleUrls: ['./comment.component.scss'],
 })
 export class CommentComponent implements OnInit, OnDestroy {
-  /*
-  Front end implementation of a comment.
-  Last Mod: 5 Aug 2017
-
-  NOTES:
-    commentContext : string - 8.5.17
-      For saying what context the comment is used in. Use 'normal' for normal comments,
-      'reply' for comment replies, and 'answer' for answers to questions.
-
-  What you'll need for:
-    - making comment as an answer
-      - commentContext
-      - assignedQuestion
-  */
-
   public lineCount: number = 1
   public indexOnLine: number = 1
   public repliesShowing: boolean = false
@@ -46,6 +32,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   private commentPane: boolean
   private indicatesPane: boolean
   private setLineYAttempts: number = 0
+  private fragment: string
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -94,7 +81,9 @@ export class CommentComponent implements OnInit, OnDestroy {
     private _util: UtilToolService,
     public el: ElementRef,
     private _academy: AcademyService,
-  ) {}
+    private _socket: SocketService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     // Set initial values if passed
@@ -232,8 +221,6 @@ export class CommentComponent implements OnInit, OnDestroy {
         this.comment.lineY = this.nearestLine(wordY)
       }
     } else {
-      // Y position debug log
-      // console.log("Looking for y position of comment not yet rendered...")
       this.setLineYAttempts++
       if (this.setLineYAttempts < 10) {
         setTimeout(() => {
@@ -298,6 +285,15 @@ export class CommentComponent implements OnInit, OnDestroy {
         .then(comment => {
           this.isLoading = false
           this.commentUpdated.emit()
+
+          // let the student that made the comment know there is a reply
+          if (this.commentContext === 'reply') {
+            this._socket.groupUpdateEvent({
+              type: 'replyUpdate',
+              reply: this.comment,
+              pComment: this.comment.reply_to
+            })
+          }
 
           this.justSaved = true
           setTimeout(() => {

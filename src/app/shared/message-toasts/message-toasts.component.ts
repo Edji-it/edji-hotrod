@@ -34,6 +34,7 @@ export class MessageToastsComponent implements OnInit {
       promo: 'icon-gift',
       promoted: 'icon-promote',
       'new-feedback': 'icon-feedback',
+      'new-reply': 'icon-reply-arrow',
     }
     return toastTypeMap[toastType] || toastTypeMap['info']
   }

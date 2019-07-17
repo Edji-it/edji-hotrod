@@ -10,7 +10,9 @@
             aria-atomic="true",
             [class.toast--clickable]="toast.link",
             [routerLink]="toast.link",
-            [fragment]="toast.linkFragment"
+            [fragment]="toast.linkFragment",
+            [queryParams]="toast.linkParams",
+            (click)="dismissToast(toast.id)"
             )
             .toast-header
                 i.icon.rounded([ngClass]="[toastIconClass(toast.type)]")

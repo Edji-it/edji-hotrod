@@ -23,7 +23,7 @@
       p.reading-details(
         *ngIf="reading.parent_id"
       ) 
-        span.reading-date {{ reading.createdAt | edjidate:'timeAgo':null:secondsAgo }} &nbsp;
+        span.reading-date {{ reading.createdAt | edjidate:'timeAgo':null }} &nbsp;
         span.reading-version((click)="getVersions(reading.version_id)") 
           | Previous Versions
   i.icon.icon-draft.reading-draft(*ngIf="reading['draft']")

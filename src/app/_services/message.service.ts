@@ -176,10 +176,11 @@ interface GetMessagesResponse {
 
 export interface MessageToast {
   message: string
-  type: string // "info", "heat-on", "heat-off", "promo", "new-feedback", "promoted"
+  type: string // "info", "heat-on", "heat-off", "promo", "new-feedback", "promoted", "new-reply"
   id: string
   link?: string // routerLink path
   linkFragment?: string
+  linkParams?: any
   date?: Date
   limitToPage?: string // identify route where message type should show
   requireDismiss?: boolean

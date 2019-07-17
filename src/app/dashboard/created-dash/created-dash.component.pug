@@ -170,7 +170,7 @@
       .draft-card([routerLink]="['/new-reading/' + draft._id]")
         .icon.icon-lg.icon-create
         .h2.draft-card__title {{ draft.title }}
-        p.draft-card__date Last edited {{ draft.updatedAt | edjidate:'timeAgo':null:secondsAgo }}
+        p.draft-card__date Last edited {{ draft.updatedAt | edjidate:'timeAgo':null }}
       .draft-card__action.icon-button.e2e-draft-delete(title="Delete draft", (click)="deleteDraft(draft); draft.loading = true")
         span(*ngIf="!draft.loading", [innerHtml]="':x:' | emojione")
         .icon.icon-loading(*ngIf="draft.loading")
