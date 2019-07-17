@@ -29,6 +29,13 @@
     min-width: 20px;
   }
 
+  // specific icon tweaks
+  .icon-reply-arrow {
+    background-size: 60% auto;
+    border-radius: 50% !important;
+    border: 1px solid $actionGreen;
+  }
+
   .close {
     position: absolute;
     top: 3px;
