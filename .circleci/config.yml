@@ -84,7 +84,7 @@ workflows:
   version: 2
   test:
     jobs:
-      - build
+      - e2e
       # - version:
       #     filters:
       #       branches:
