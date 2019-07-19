@@ -1,11 +1,15 @@
 import { Router, ActivatedRoute } from '@angular/router'
 import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Store } from '@ngrx/store'
 
 // Project Dependencies
 import { AuthService } from '../_services'
 import { Subscription } from 'rxjs'
 import { User } from '../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
+import { AppState } from './../_reducers'
+import { IncrementMetric } from '../_reducers/metrics.reducers'
+import { map, take } from 'rxjs/operators';
 @Component({
   selector: 'hero-pricing',
   templateUrl: './hero-pricing.component.pug',
@@ -135,6 +139,7 @@ export class HeroPricingComponent implements OnInit {
     private _auth: AuthService,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
+    private store: Store<AppState>
   ) { }
 
   ngOnInit() {
@@ -149,6 +154,10 @@ export class HeroPricingComponent implements OnInit {
         this.user = user
       }),
     )
+
+    if (this._auth.getUser().email) {
+      this.store.dispatch(new IncrementMetric('hero_page_load_count'))
+    }
   }
 
   goHero(location?: string): void {

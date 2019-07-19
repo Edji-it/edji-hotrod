@@ -4,6 +4,9 @@ import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-br
 import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
 import * as Sentry from '@sentry/browser'
+import { StoreModule } from '@ngrx/store'
+import { reducers, metaReducers } from './_reducers'
+import { EffectsModule } from '@ngrx/effects'
 
 // App is our top level component
 import { AppComponent } from './app.component'
@@ -22,7 +25,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor() { }
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -46,6 +49,7 @@ import {
   UtilToolService,
   DashboardGuardService,
   MailchimpService,
+  StateService,
 } from './_services'
 // import { ReuseStrategy } from './route-reuse-strategy'
 
@@ -136,6 +140,7 @@ import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/
 import { TeamPageComponent } from './team-page/team-page.component'
 import { SearchPage } from './search-page/search-page.component'
 import { TeacherFeedbackComponent } from './annotator/teacher-feedback/teacher-feedback.component'
+import { MetricsEffects } from './_reducers/metrics.effects'
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
@@ -164,6 +169,7 @@ const APP_PROVIDERS = [
   UtilToolService,
   BumblebeeService,
   MailchimpService,
+  StateService,
   {
     provide: HAMMER_GESTURE_CONFIG,
     useClass: MyHammerConfig,
@@ -284,6 +290,8 @@ const routerOptions: ExtraOptions = {
     TooltipModule,
     Ng4TwitterTimelineModule,
     NgxPageScrollModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot([MetricsEffects])
   ],
   providers: [
     // expose our Services and Providers into Angular's dependency injection
@@ -291,4 +299,4 @@ const routerOptions: ExtraOptions = {
     APP_PROVIDERS,
   ],
 }) //@NgModule
-export class AppModule {}
+export class AppModule { }
