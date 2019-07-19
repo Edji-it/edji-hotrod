@@ -259,9 +259,9 @@ export class ProjectService {
     return this._http
       .get(
         this._auth.getUrl() +
-          '/api/v1/projects/' +
-          encodeURIComponent(projectCode) +
-          '?pop[]=reading_id&pop[]=teacher&pop[]=co_owners',
+        '/api/v1/projects/' +
+        encodeURIComponent(projectCode) +
+        '?pop[]=reading_id&pop[]=teacher&pop[]=co_owners',
         this._auth.getOptions(),
       )
       .pipe(
@@ -931,8 +931,15 @@ export class ProjectService {
    */
   public addUserToProject(projectId: string): Observable<any> {
     let project = this.currentProjectSource.value
-    // We only need to check for student ids, temp users will not attemp "re-adding"
-    let alreadyJoined = project && project.students_ids.indexOf(this.user._id)
+
+    // check if student already is in the student_ids or temp_ids arrays
+    let alreadyJoined = false
+    if (this.user.type && this.user.type === 'temp') {
+      alreadyJoined = project && project.temp_ids.includes(this.user._id)
+    } else {
+      alreadyJoined = project && project.students_ids.includes(this.user._id)
+    }
+
     if (projectId === project._id && alreadyJoined) {
       return of({ status: 'success' }) // mock response
     } else {

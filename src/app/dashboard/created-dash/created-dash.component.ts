@@ -155,7 +155,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         error => {
           console.error(error)
         },
-    )
+      )
   }
 
   /**
@@ -176,7 +176,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         err => {
           console.log('Unable to delete draft')
         },
-    )
+      )
   }
 
   /**
