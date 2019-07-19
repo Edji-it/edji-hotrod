@@ -72,9 +72,10 @@
 
         .question-answer-status__block(*ngIf='commentUser && currentReading.questions && currentReading.questions.length > 0')
           .answer-designate Answers:
-          ng-container(*ngFor='let answer of userAnswers')
-            .answer-circle__group(*ngIf='answer.user===commentUser._id')
-              .circle([class.filled]="answer.answered")
+          ng-container(*ngFor='let question of currentReading.questions')
+            .answer-circle__group
+              ng-container(*ngFor="let answer of answersById[question._id]")
+                .circle([class.filled]="answer.user_id===commentUser._id")
   .filter-bubble(
       [class.slide-in]="appliedFilter && !archived",
       (swipeleft)="pageStudentFilter(-1)",
