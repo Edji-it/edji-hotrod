@@ -27,7 +27,7 @@ export class TeamPageComponent implements OnInit {
       title: 'Outreach & Teacher Success',
       photo: '/assets/images/promo/headshot-amanda.jpg',
       emoji: ':crown:',
-      book: "The Ranger's Apprentice",
+      book: "Scrappy Little Nobody",
     },
     {
       name: 'Brennen Hicklin',
