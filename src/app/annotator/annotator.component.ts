@@ -43,7 +43,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   /*
         Annotator Component
         Last Mod: 5 Aug 2017 - Josh Kyburz
-        
+
         This does all the heavy lifting in a a reading.
         - Loads Reading text
         - Compiles word components
@@ -1452,8 +1452,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
-    // Make sure the line counts are up-to-date
-    this.setLinePositions()
+    let annotatorWidth = this.annotatorContent.clientWidth
+    setTimeout(() => {
+      // Limit when set line position fires, heavy w/ lots of comments
+      if (annotatorWidth != this.annotatorContent.clientWidth) {
+        this.setLinePositions()
+      }
+    }, 500)
 
     // Set the input comment to the comment pane if it is not currently open
     if (visible) {
