@@ -730,7 +730,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.showCommentOptionsWait = true
         setTimeout(() => {
           this.showCommentOptionsWait = false
-        }, 400)
+        }, 200)
       }
     }
     // Only show options if text selected
