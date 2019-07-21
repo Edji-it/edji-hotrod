@@ -112,6 +112,24 @@ export class LeaderboardComponent implements OnInit {
   }
 
   /**
+   * Checks to see if a user answered a question to fill in the answer bubble, else it will be a hollow bubble
+   * @param questionId _id of the question we're checking
+   * @param userId _id of the user that made the answer
+   */
+  public checkIsAnswered(questionId: string, userId: string): boolean {
+    if (this.answersById[questionId]) {
+      const len = this.answersById[questionId].length
+      for (var i = 0; i < len; i++) {
+        let answer = this.answersById[questionId][i]
+        if (answer.user_id === userId) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  /**
    * Apply Student Filter
    * @param student User needs "_id" and "fullname"/"username"
    */

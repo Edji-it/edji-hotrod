@@ -74,8 +74,7 @@
           .answer-designate Answers:
           ng-container(*ngFor='let question of currentReading.questions')
             .answer-circle__group
-              ng-container(*ngFor="let answer of answersById[question._id]")
-                .circle([class.filled]="answer.user_id===commentUser._id")
+              .circle([class.filled]="checkIsAnswered(question._id, commentUser._id)")
   .filter-bubble(
       [class.slide-in]="appliedFilter && !archived",
       (swipeleft)="pageStudentFilter(-1)",
