@@ -72,9 +72,9 @@
 
         .question-answer-status__block(*ngIf='commentUser && currentReading.questions && currentReading.questions.length > 0')
           .answer-designate Answers:
-          ng-container(*ngFor='let question of currentReading.questions')
+          ng-container(*ngFor='let question of commentUser.questions')
             .answer-circle__group
-              .circle([class.filled]="checkIsAnswered(question._id, commentUser._id)")
+              .circle([class.filled]="question.answered")
   .filter-bubble(
       [class.slide-in]="appliedFilter && !archived",
       (swipeleft)="pageStudentFilter(-1)",

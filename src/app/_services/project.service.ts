@@ -952,6 +952,15 @@ export class ProjectService {
   }
 
   /**
+   * Allows us to make an update to the comment stats to update the answer values
+   * @param answer current answer we are adjusting
+   * @param answerChange toggling the answer value
+   */
+  public recalculateAnswers(answer: any, answerChange: boolean): void {
+    this.commentStats.recalculateAnswers(answer, answerChange, this.project)
+  }
+
+  /**
    * Generates the "commentByPos" array, and pushes out to Subscribers
    * - Uses lineY values on the comments as the "position" value
    */
