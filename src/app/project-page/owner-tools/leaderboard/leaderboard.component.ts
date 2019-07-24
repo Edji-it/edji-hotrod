@@ -60,7 +60,7 @@ export class LeaderboardComponent implements OnInit {
     private _auth: AuthService,
     private _route: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Subscribe to current user
@@ -81,7 +81,6 @@ export class LeaderboardComponent implements OnInit {
         this._projects.answersById.subscribe(
           answersById => {
             this.answersById = answersById
-            this.questionAnswerStatus()
           },
           error => {
             console.error(error)
@@ -110,47 +109,6 @@ export class LeaderboardComponent implements OnInit {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
-  }
-
-  private questionAnswerStatus() {
-    var answered: boolean
-    this.userAnswers = []
-
-    // check if there is a user, and the reading contains questions
-    if (
-      this.commentStats.stats.userStats &&
-      this.commentStats.stats.userStats.length > 0 &&
-      this.currentReading.questions &&
-      this.currentReading.questions.length > 0
-    ) {
-      // loop through the userStats to get answered questions by each user in the reading
-      for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
-        let commentUser = this.commentStats.stats.userStats[i]
-
-        // loop through the reading's available questions
-        for (let j = 0; j < this.currentReading.questions.length; j++) {
-          let question = this.currentReading.questions[j]
-          // check if the question has answers
-          if (this.answersById[question._id] && this.answersById[question._id].length > 0) {
-            // loop through the answers by that question ID
-            for (let k = 0; k < this.answersById[question._id].length; k++) {
-              let answer = this.answersById[question._id][k]
-              if (answer.user_id === commentUser._id) {
-                answered = true
-                break
-              }
-            }
-            // if the user has answered that question, then break and mark it answered (default is not answered)
-            let userAnswerObj = {
-              user: commentUser._id,
-              answered: answered,
-            }
-            this.userAnswers.push(userAnswerObj)
-            answered = false
-          }
-        }
-      }
-    }
   }
 
   /**

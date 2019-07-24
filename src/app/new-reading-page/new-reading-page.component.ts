@@ -172,14 +172,12 @@ export class NewReadingPage implements OnInit, OnDestroy {
   constructor(
     private _route: ActivatedRoute,
     private _readings: ReadingService,
-    private _projects: ProjectService,
     private router: Router,
     private angulartics: Angulartics2,
     fb: FormBuilder,
     private el: ElementRef,
     private _title: Title,
     private _auth: AuthService,
-    private _util: UtilToolService,
     private _academy: AcademyService,
     private _messages: MessageService
   ) {
@@ -335,14 +333,14 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           console.error(err)
         },
-    )
+      )
   }
 
   /**
    * Checks on the content field's cursor position
    * - Enables inserting images at cursor position
    */
-  private contentChange(event: Event) {
+  public contentChange(event: Event) {
     // Trigger autosave
     this.changeMonitor()
     // Handle insert position
@@ -397,7 +395,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   /**
    * Returns appropriate placeholder text based on ReadingHtml array index
    */
-  private getReadingPlaceholder(textIndex: number): string {
+  public getReadingPlaceholder(textIndex: number): string {
     if (textIndex == 0) {
       return this.readingPlaceholder
     } else {
@@ -676,6 +674,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     let reading: Reading = Object.assign({}, readingForm)
     // Clear parsed words array
     this.words = []
+    this.questions = []
 
     // Process reading html into useful Words Array
     let editors = this.el.nativeElement.querySelectorAll('#angularMediumEditor')
@@ -910,7 +909,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
   }
 
-  private updateQ(question, freshQuestion) {
+  public updateQ(question, freshQuestion) {
     /* Whenever updates happen to the question component like..
      *  adding an answer type
      *  removing an answer type

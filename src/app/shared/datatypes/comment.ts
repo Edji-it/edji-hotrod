@@ -66,6 +66,7 @@ export interface UserCommentStats {
   audio_comment_count: number
   comments?: EdjiComment[]
   status: userReadingStatus
+  questions?: any[]
 }
 
 export interface iCommentStats {
