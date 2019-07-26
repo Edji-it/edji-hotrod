@@ -1,5 +1,5 @@
 import { NgModule, ApplicationRef, ErrorHandler, Injectable } from '@angular/core'
-import { HttpModule } from '@angular/http'
+import { HttpClientModule } from '@angular/common/http'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
@@ -127,7 +127,6 @@ import { DiscoverFeedComponent } from './discover-feed/discover-feed.component'
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { GoogleButton, CleverButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
-import { HttpClientModule } from '@angular/common/http'
 import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
 import { TooltipModule } from 'primeng/tooltip'
@@ -279,7 +278,6 @@ const routerOptions: ExtraOptions = {
     // import Angular's modules
     SharedModule,
     BrowserAnimationsModule,
-    HttpModule,
     HttpClientModule,
     LockerModule,
     MediumEditorModule,

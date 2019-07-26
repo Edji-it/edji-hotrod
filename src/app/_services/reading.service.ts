@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
@@ -29,7 +28,7 @@ export class ReadingService {
 
   private subscriptions: Subscription[] = []
 
-  constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
+  constructor(private _http: HttpClient, private _auth: AuthService) {
     this.subscriptions.push(
       /**
        * Clear held values when told by _auth
@@ -111,7 +110,7 @@ export class ReadingService {
             this.userReadingsSource.next(data)
           }
           return data
-        })
+        }),
       )
   }
 
@@ -239,18 +238,16 @@ export class ReadingService {
 
   /**
    * Deletes a reading from the collection, all projects for that reading, and all versions that are based on the said reading from their collections
-   * @param deleteReading is the reading we're passing in to delete 
+   * @param deleteReading is the reading we're passing in to delete
    */
   public delete(deleteReading: Reading): Observable<any> {
-    return this._http.delete(
-      this._auth.getUrl() + `/api/v1/readings/${deleteReading._id}`,
-      this._auth.getOptions()
-    ).pipe(
-      map(value => {
-        // Delete was successful
-        let readingResponse = this.userReadingsSource.value
-        readingResponse.readings.forEach(
-          (reading, index) => {
+    return this._http
+      .delete(this._auth.getUrl() + `/api/v1/readings/${deleteReading._id}`, this._auth.getOptions())
+      .pipe(
+        map(value => {
+          // Delete was successful
+          let readingResponse = this.userReadingsSource.value
+          readingResponse.readings.forEach((reading, index) => {
             if (reading.version_count > 1) {
               // Reload content (slower but simpler)
               this.updateCreated(this._auth.getUser())
@@ -260,11 +257,10 @@ export class ReadingService {
               readingResponse.total--
               this.userReadingsSource.next(readingResponse)
             }
-          },
-        )
-        return value
-      }),
-    )
+          })
+          return value
+        }),
+      )
   }
 
   /**
@@ -298,7 +294,7 @@ export class ReadingService {
         subjects: reading.subjects,
         grade_levels: reading.grade_levels,
         // We reset "createdAt" in New Reading when publishing a draft
-        createdAt: reading.createdAt
+        createdAt: reading.createdAt,
       }
 
       return this._http
@@ -312,9 +308,13 @@ export class ReadingService {
         )
     } else {
       return this._http
-        .post<{ reading: Reading }>(this._auth.getUrl() + '/api/v1/readings', { reading: reading }, this._auth.getOptions())
+        .post<{ reading: Reading }>(
+          this._auth.getUrl() + '/api/v1/readings',
+          { reading: reading },
+          this._auth.getOptions(),
+        )
         .pipe(
-          map((data) => {
+          map(data => {
             if (data && data.reading) {
               this.readingValue = data.reading
               this.readingSource.next(this.readingValue)
@@ -327,7 +327,7 @@ export class ReadingService {
 
   /**
    * @deprecated 5/1/2019
-   * @param filters 
+   * @param filters
    */
   public getFeed(filters?: FilterObj): Observable<any> {
     let feedParams = new HttpParams()

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import { HttpClient } from '@angular/common/http'
 import { Observable, Subject } from 'rxjs'
 import { map } from 'rxjs/operators'
 
@@ -8,7 +8,7 @@ export class MediaService {
   private imageService: string = '//grapple-dev.edji.it'
   private pdfBucket: string = '//image-dev.edji.it/pdf'
 
-  constructor(private http: Http) {
+  constructor(private _http: HttpClient) {
     // Check to see if prod or dev environment
     if (window.location.host.indexOf('dev.edji.it') > -1) {
       this.imageService = '//grapple-dev.edji.it'
@@ -25,13 +25,13 @@ export class MediaService {
   // Upload an image to the bucket to be locally stored.
   uploadImage(file: File): Observable<any> {
     let uploadSource = new Subject()
-    this.http.get(this.imageService + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type).subscribe(
+    this._http.get(this.imageService + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type).subscribe(
       res => {
-        let s3data = res.json()
+        let s3data = res
 
-        this.http.put(s3data.signedRequest, file).subscribe(
+        this._http.put(s3data['signedRequest'], file).subscribe(
           res => {
-            uploadSource.next({ url: s3data.url })
+            uploadSource.next({ url: s3data['url'] })
           },
           error => {
             uploadSource.error(error)
@@ -53,15 +53,15 @@ export class MediaService {
     // let type = 'audio/aac'
     // let name = 'my-audio.aac'
 
-    this.http
+    this._http
       .get(this.imageService + '/sign-s3?file-name=' + name + '&file-type=' + type + '&file-path=audio')
       .subscribe(
         res => {
-          let s3data = res.json()
+          let s3data = res
 
-          this.http.put(s3data.signedRequest, formData).subscribe(
+          this._http.put(s3data['signedRequest'], formData).subscribe(
             res => {
-              uploadSource.next({ url: s3data.url })
+              uploadSource.next({ url: s3data['url'] })
             },
             error => {
               uploadSource.error(error)
@@ -78,15 +78,15 @@ export class MediaService {
 
   uploadAvatar(file: File): Observable<any> {
     let uploadSource = new Subject()
-    this.http
+    this._http
       .get(this.imageService + '/sign-s3?file-name=' + file.name + '&file-type=' + file.type + '&file-path=avatars')
       .subscribe(
         res => {
-          let s3data = res.json()
+          let s3data = res
 
-          this.http.put(s3data.signedRequest, file).subscribe(
+          this._http.put(s3data['signedRequest'], file).subscribe(
             res => {
-              uploadSource.next({ url: s3data.url })
+              uploadSource.next({ url: s3data['url'] })
             },
             error => {
               uploadSource.error(error)
@@ -104,9 +104,9 @@ export class MediaService {
   uploadPdf(file: File): Observable<any> {
     let uploadSource = new Subject()
 
-    this.http.put(this.imageService + '/v1/pdf', file).subscribe(
+    this._http.put(this.imageService + '/v1/pdf', file).subscribe(
       res => {
-        let doc = res.json() || {}
+        let doc = res || {}
         uploadSource.next(doc)
       },
       error => {
@@ -118,9 +118,9 @@ export class MediaService {
   } // uploadPdf
 
   pdfCheck(fileId: string): Observable<any> {
-    return this.http.get(this.pdfBucket + '/' + fileId + '/spark.json').pipe(
+    return this._http.get(this.pdfBucket + '/' + fileId + '/spark.json').pipe(
       map(data => {
-        return data.json() || {}
+        return data || {}
       }),
     )
   } // pdfCheck(fileId: string): Observable<any>
