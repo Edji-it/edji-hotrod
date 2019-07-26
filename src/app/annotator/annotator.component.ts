@@ -165,7 +165,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // For debouncing/wait on showCommentOptions
   private showCommentOptionsWait: boolean = false
-  private touchStartPosition: { x?: number; y?: number } = {}
 
   constructor(
     private element: ElementRef,
@@ -672,57 +671,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Keep note of when user is dragging/scrolling, and ignore touchend
-   * @param event touchmove event
-   */
-  logScrollStart(event): void {
-    let touches = event.touches
-    if (touches.length < 1) {
-      touches = event.changedTouches
-    }
-    if (touches[0]) {
-      this.touchStartPosition.x = touches[0].clientX
-      this.touchStartPosition.y = touches[0].clientY
-    }
-  }
-
-  /**
-   * Check if a touchend event is the end of a scroll/drag
-   * @param endEvent a touchend event
-   */
-  checkIfScrolling(endEvent): boolean {
-    let scrolled = false
-    let touches = endEvent.touches
-    if (touches.length < 1) {
-      touches = endEvent.changedTouches
-    }
-    if (touches && touches[0]) {
-      let startX = this.touchStartPosition.x
-      let startY = this.touchStartPosition.y
-      let endX = touches[0].clientX
-      let endY = touches[0].clientY
-      if (startX && startY) {
-        // If finger moves more than 10px, consider it a scroll/drag
-        // code.google.com/mobile/articles/fast_buttons.html
-        if (Math.abs(endX - startX) > 20 || Math.abs(endY - startY) > 20) {
-          scrolled = true
-        }
-      }
-      // Reset start values once referenced
-      this.touchStartPosition = {}
-    }
-    return scrolled
-  }
-
-  /**
    * Show tooltip to the side with buttons for adding comment types
    */
   showCommentOptions(event): void {
-    if (
-      this.showCommentOptionsWait ||
-      (event.type == 'touchend' && this.checkIfScrolling(event)) ||
-      this.project.archived
-    ) {
+    if (this.showCommentOptionsWait || this.project.archived) {
       return
     } else {
       // We only need to worry about preventing overlapping touch and click events
@@ -1358,13 +1310,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     let ImgPos
 
     // Handle touch events
-    if (e.type == 'touchend' || e.type == 'tap') {
+    if (e.type == 'touchend') {
       let touches = e['touches']
       if (touches.length < 1) {
         touches = e['changedTouches']
       }
       e = touches[0]
       target = e.target
+    } else {
+      // assume click or tap
     }
 
     function FindPosition(oElement) {
@@ -1374,13 +1328,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           posY += oElement.offsetTop
         }
         return [posX, posY]
+      } else if (oElement.offsetX && oElement.offsetY) {
+        return [oElement.offsetX, oElement.offsetY]
       } else {
         return [oElement.x, oElement.y]
       }
     }
     ImgPos = FindPosition(target)
 
-    if (e['pageX'] || e['pageY']) {
+    if (e['center']) {
+      // Tap event handling
+      PosX = e['center'].x
+      PosY = e['center'].y
+    } else if (e['pageX'] || e['pageY']) {
       PosX = e['pageX']
       PosY = e['pageY']
     } else if (e['clientX'] || e['clientY']) {

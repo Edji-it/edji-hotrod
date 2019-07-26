@@ -1,6 +1,6 @@
 doctype html
 //-Annotator Component
-    
+
     Provides:
     - Highlighting functionality
     - Tying in comments and comment creation methods
@@ -14,7 +14,7 @@ scroll-progress([scrollProgress]="currentScroll")
         (blur)="hideCommentOptions($event)",
         [style.top]="highlightY + 'px'",
         [ngClass]="{ 'active' : optionsShow }"
-    ) 
+    )
         //- optionsShow
         //- Desktop buttons
         .options.hidden-md-down
@@ -41,19 +41,19 @@ scroll-progress([scrollProgress]="currentScroll")
         .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="project.isTeaching")
             //- .mobile-carrot-pointer &#9654;
             .comment__options--mobileRow.comment-options-group--mobile([class.btn-group-show--animation]="optionsShow")
-                //- Emoji Comment 
+                //- Emoji Comment
                 #addEmojiCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('emoji') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)", 
+                    [ngClass]="'col-' + (12 / directCommentOptions.length)",
                     [class.btn-show--animation]="optionsShow",
                     (tap)="addCommentOfType('emoji')"
                 )
                     button.emoji.comment__options--mobileButton()
                         i.icon.icon-comment-emoji
-                //-- Text Comment 
+                //-- Text Comment
                 #addTextCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('text') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)", 
+                    [ngClass]="'col-' + (12 / directCommentOptions.length)",
                     [class.btn-show--animation]="optionsShow",
                     (tap)="addCommentOfType('text')"
                 )
@@ -63,7 +63,7 @@ scroll-progress([scrollProgress]="currentScroll")
                 #addAudioCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
                     *ngIf="project.types.indexOf('audio') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)",
-                    [class.super-disabled]="audioSupportError", 
+                    [class.super-disabled]="audioSupportError",
                     [class.btn-show--animation]="optionsShow",
                     (tap)="addCommentOfType('audio')"
                 )
@@ -82,16 +82,15 @@ scroll-progress([scrollProgress]="currentScroll")
                 (click)="audioSupportError = !audioSupportError"
             )
                 span(aria-hidden="true") &times;
-            | The browser you are on does not currently support recording audio. Audio comment playback may also be affected on some browsers. The recommended browser for audio comments is the 
+            | The browser you are on does not currently support recording audio. Audio comment playback may also be affected on some browsers. The recommended browser for audio comments is the
             a(href="https://www.google.com/chrome/browser/desktop/", target="_blank")
                 | Google Chrome Web Browser
             | for your desktop device.
         //- Create components after load for reading
         //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
         article#annotatorContent.content.active-content.pt-4(
-            (mouseup)="showCommentOptions($event)",
-            (touchstart)="logScrollStart($event)",
-            (touchend)="showCommentOptions($event)",
+            (tap)="showCommentOptions($event)",
+            [style.touch-action]="'pan-y'",
             (clickOutside)="hideCommentOptions()",
             [ngClass]="[ quickSelect.anchor != null ? 'quick-select--begin' : '', quickSelect.focus != null ? 'quick-select--end':'']"
             #article,
@@ -133,7 +132,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     [attr.index]="i",
                     [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
                     target="_blank"
-                ) 
+                )
                     | {{ w && w.str }}
                 ng-container(*ngIf="!wHasStyle(w, 'a')")
                     //- Non-link Words, show content
@@ -185,7 +184,7 @@ scroll-progress([scrollProgress]="currentScroll")
     button.btn.btn-secondary(
         *ngIf="user.type == 'temp'",
         [routerLink]="['/register']",
-        [queryParams]="{ userId: user._id }" 
+        [queryParams]="{ userId: user._id }"
     ) Save this reading
     //- Copy and Edit: Temp User
     button.btn.btn-primary(

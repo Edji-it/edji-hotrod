@@ -25,7 +25,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() { }
+  constructor() {}
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -144,12 +144,20 @@ import { MetricsEffects } from './_reducers/metrics.effects'
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
+  buildHammer(element: HTMLElement) {
+    // Enable polyfill for touch actions to support scrolling on top of tap bindings
+    let mc = new Hammer(element, {
+      touchAction: 'pan-y',
+    })
+    return mc
+  }
   overrides = <any>{
     // override default gesture settings
     //  Tap overrides for Chrome v71 sensitivity when making comments
     tap: {
       time: 2000, // Maximum press time in ms.
-      threshold: 100, //	While doing a tap some small movement is allowed.
+      threshold: 20, //	While doing a tap some time spent moving is allowed.
+      posThreshold: 75, // While tapping some position movement is allowed
     },
   }
 }
@@ -291,7 +299,7 @@ const routerOptions: ExtraOptions = {
     Ng4TwitterTimelineModule,
     NgxPageScrollModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot([MetricsEffects])
+    EffectsModule.forRoot([MetricsEffects]),
   ],
   providers: [
     // expose our Services and Providers into Angular's dependency injection
@@ -299,4 +307,4 @@ const routerOptions: ExtraOptions = {
     APP_PROVIDERS,
   ],
 }) //@NgModule
-export class AppModule { }
+export class AppModule {}
