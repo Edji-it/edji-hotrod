@@ -18,7 +18,7 @@
         a.btn.btn-link([attr.id]="link.id", [routerLink]="[link.route]", routerLinkActive="active", [attr.title]="link.tooltip")
           | {{ link.displayName }}
       .dropdown(*ngIf="user.isAcademyAdmin", [class.show]="academyMenuShow")
-        a#navAcademy.btn.btn-link([routerLink]="['/academy/licenses']", routerLinkActive="active") 
+        a#navAcademy.btn.btn-link([routerLink]="['/academy/licenses']", routerLinkActive="active")
           | Academy
         //- a#navAcademy.btn.btn-link.dropdown-toggle(
         //-     routerLinkActive="active",
@@ -58,14 +58,14 @@
               *ngIf="currentProject.isTeaching",
               [routerLink]="['./']",
               [queryParams]="{ studentList: 'coteach'}"
-            ) Add a teacher 
+            ) Add a teacher
               //- OR add Co-teacher
             //- Live Reader Count
             //- - Student display
             .badge.badge-pill(
               *ngIf="!currentProject.isTeaching",
               [ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']"
-            ) 
+            )
               | {{ liveCount }} Reading
             //- - Teacher display
             .badge.badge-pill.badge-button(
@@ -73,7 +73,7 @@
               [ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']",
               [routerLink]="['./']",
               [queryParams]="{ studentList: 'open'}"
-            ) 
+            )
               | {{ liveCount }} Reading
     //- Login/Register Actions
     .nav__btn-wrap(*ngIf="!user.isLoggedIn && !hideAccountOptions")
@@ -91,7 +91,7 @@
           button#accountButton.list-group-item.list-group-item-action(type="button", (click)="openAccount()") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
-          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()") 
+          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()")
             ng-container(*ngIf="user.hero_status")
               | Refer a Friend
               span.list-icon--right([innerHtml]="':satellite:' | emojione")
@@ -121,7 +121,7 @@
             ng-container(*ngIf="currentProject.isTeaching")
               i.icon.icon-vision-flame((click)="toggleSlider('heat')")
                 .icon-pill-status
-              .btn-slider__value.hover-parent((click)="toggleHeatVision(!currentProject.heat_vision)") 
+              .btn-slider__value.hover-parent((click)="toggleHeatVision(!currentProject.heat_vision)")
                 .hover-show--inline-block(style="width: 85px; text-align:center;") Turn {{ currentProject.heat_vision ? 'Off' : 'On' }}
                 .hover-hide Heat Vision {{ currentProject.heat_vision ? 'On' : 'Off' }}
             ng-container(*ngIf="!currentProject.isTeaching")
@@ -158,7 +158,7 @@
             .icon-pill-status
             .tooltip.tooltip--bottom(style="top: calc(100% + 27px)")
               .tooltip-title Hero Academy Member
-          .btn-slider__value((click)="showAcademyDropdown = !showAcademyDropdown") 
+          .btn-slider__value((click)="showAcademyDropdown = !showAcademyDropdown")
             | {{ currentAcademy.abbreviation }}
         .btn-slider__drop-down.list-group([class.visible]="showAcademyDropdown")
           .arrow
@@ -167,20 +167,20 @@
     //- New Reading actions
     .nav__btn-wrap(*ngIf="canPublish")
       //- Share button: Desktop
-      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down((click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
+      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down((click)="this.shareAction.emit()", [class.active]="showShareTooltip")
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
       //- Share button: Mobile
-      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.shareAction.emit()", [class.active]="showShareTooltip") 
+      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.shareAction.emit()", [class.active]="showShareTooltip")
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
     //- Reading Preview
     .nav__btn-wrap(*ngIf="canPublish")
       //- Share button: Desktop
-      button#showReadingPreview.btn.btn-primary.nav-bar__btn.hidden-sm-down((click)="this.previewAction.emit()") 
+      button#showReadingPreview.btn.btn-primary.nav-bar__btn.hidden-sm-down((click)="this.previewAction.emit()")
         | Preview
       //- Share button: Mobile
-      button#showReadingPreview.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.previewAction.emit()") 
+      button#showReadingPreview.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.previewAction.emit()")
         | Preview
     //- Save button and status
     .nav__btn-wrap(*ngIf="canPublish")
@@ -199,25 +199,25 @@
     .row.col-4.col-xl-5.nav__join-code.hidden-md-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg
         input#projectCodeInputNav.form-control(
-          name="ProjectCodeInput", 
-          type="text", 
-          style="text-align: center;", 
-          (keyup.enter)="joinSession(projectCode)", 
-          [(ngModel)]="projectCode", 
+          name="ProjectCodeInput",
+          type="text",
+          style="text-align: center;",
+          (keyup.enter)="joinSession(projectCode)",
+          [(ngModel)]="projectCode",
           [class.is-invalid]="errorObject.invalidCode"
-          placeholder="🔑 Code", 
+          placeholder="🔑 Code",
           aria-describedby="add-project-code")
         .input-group-append
           button#buttonJoinProject.btn.btn-primary(
-            [class.loading]="joinLoading", 
-            type="button", 
-            (click)="joinSession(projectCode)", 
-            name="Join", 
+            [class.loading]="joinLoading",
+            type="button",
+            (click)="joinSession(projectCode)",
+            name="Join",
             href="#") Go!
       #projectCodeError.invalid-feedback.d-block(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
     //- Go hero action (non-existent if already a hero)
     .nav__btn-wrap(*ngIf="!showProjectInfo && (!user.isLoggedIn || (!user.hero_status && !user.isStudent))")
-      a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/plans']", [routerLinkActive]="'hide'", fragment="top") 
+      a#heroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down([routerLink]="['/plans']", [routerLinkActive]="'hide'", fragment="top")
         | {{ currentPage == "home" ? "Discover Hero" : heroBtnCopy }}
       a#goHeroLink.btn.btn-hero.btn-sm.nav-bar__btn.hidden-sm-down(
           *ngIf="user.isLoggedIn && currentPage == 'hero'",
@@ -232,20 +232,20 @@
 .col-12.nav__join-code--under.hidden-md-up(*ngIf="_router.url.indexOf('/home') > -1")
   .input-group.input-group-lg
     input#projectCodeInputUnderNav.form-control(
-      name="ProjectCodeInput", 
-      type="text", 
+      name="ProjectCodeInput",
+      type="text",
       style="text-align: center;",
       [class.is-invalid]="errorObject.invalidCode",
-      (keyup.enter)="joinSession(projectCode)", 
-      [(ngModel)]="projectCode", 
-      placeholder="🔑 Code", 
+      (keyup.enter)="joinSession(projectCode)",
+      [(ngModel)]="projectCode",
+      placeholder="🔑 Code",
       aria-describedby="add-project-code")
     .input-group-append
       button#buttonJoinProject.btn.btn-primary(
-        [class.loading]="joinLoading", 
-        type="button", 
-        (click)="joinSession(projectCode)", 
-        name="Join", 
+        [class.loading]="joinLoading",
+        type="button",
+        (click)="joinSession(projectCode)",
+        name="Join",
         href="#") Go!
   #projectCodeError.invalid-feedback.d-block(*ngIf="errorObject.invalidCode", [innerHtml]="errorObject.invalidCode | emojione")
 
@@ -255,7 +255,7 @@
 //- Group share code modal
 share-code(
   *ngIf="showShareCodeModal",
-  [class.show]="showShareCodeModal", 
+  [class.show]="showShareCodeModal",
   [showOnNewReading]="isNewReading",
   (closeModal)="showShareCodeModal = false"
 )
@@ -264,14 +264,14 @@ edji-message-toasts([currentPage]="currentPage")
 //- Referrals
 referral-modal(
   [showReferral]="showReferralModal",
-  (hideReferral)="showReferralModal=false", 
+  (hideReferral)="showReferralModal=false",
   (exerciseCoupon)="useCoupon($event)"
 )
 //- Hero Subscribe/Pay
 hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",
-  [class.show]="showHeroSubModal", 
-  (closeModal)="showHeroSubModal=false", 
+  [class.show]="showHeroSubModal",
+  (closeModal)="showHeroSubModal=false",
   (heroWasBorn)="_router.navigate(['/dashboard'])",
   [couponCode]="couponCode"
 )

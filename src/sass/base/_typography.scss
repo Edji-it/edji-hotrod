@@ -98,7 +98,7 @@ a.linkified {
 }
 
 a.link--light {
-  @extend a.link;
+  @extend .link;
 
   color: #fff;
   text-decoration: underline;
@@ -245,7 +245,7 @@ a.on-dark {
   color: $btnHeroColor;
 
   button:hover & {
-    color:$btnHeroFocusColor;
+    color: $btnHeroFocusColor;
   }
 }
 

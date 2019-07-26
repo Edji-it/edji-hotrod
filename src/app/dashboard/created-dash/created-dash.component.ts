@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
@@ -75,7 +74,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // datalist component intializes by calling loadRecentlyCreated()

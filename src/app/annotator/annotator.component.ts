@@ -57,7 +57,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
   @ViewChildren('words') wordEls
-  @ViewChild('article') articleEl: ElementRef
+  @ViewChild('article', { static: false }) articleEl: ElementRef
   @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
 
   public reading: Reading = <Reading>{}
@@ -1092,7 +1092,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function (node: any): number {
+      let getNodeIndex = function(node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1174,7 +1174,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
           return el.replace(/([\n])/g, '')
         })
 

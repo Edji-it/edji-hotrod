@@ -24,7 +24,7 @@ import { CommentComponent } from 'src/app/annotator/comment/comment.component'
   styleUrls: ['./comment-pane.component.scss'],
 })
 export class CommentPaneComponent implements OnInit, OnDestroy {
-  @ViewChild('commentPane') private commentPane: ElementRef
+  @ViewChild('commentPane', { static: false }) private commentPane: ElementRef
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
 
   // General variables for the comment pane component
