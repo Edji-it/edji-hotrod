@@ -351,6 +351,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.removeRepliesFromComments(comment)
               }
             }
+            if (comment.questionId && this.project.isTeaching) {
+              // in this case we got an answer, so we need to update comment stats
+              this._projects.recalculateAnswers(comment, false)
+            }
           } else if (commentUpdate.action === 'UPDATE') {
             if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
               this.commentsByIndexUpdate(comment, wIndex, cIndex)
@@ -369,6 +373,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             if (comment.reply_to) {
               this.addReplyToComment(comment)
             }
+            if (comment.questionId && this.project.isTeaching) {
+              // in this case we got an answer, so we need to update comment stats
+              this._projects.recalculateAnswers(comment, true)
+            }
           } else if (commentUpdate.action === 'CREATE') {
             // Socket updates don't come through with a timestamp
             comment.createdAt = Date.now()
@@ -379,6 +387,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
               comment.end,
             )
             this.commentsByIndexAdd(comment, wIndex, true)
+            if (comment.questionId && this.project.isTeaching) {
+              // in this case we got an answer, so we need to update comment stats
+              this._projects.recalculateAnswers(comment, true)
+            }
           }
         },
         error => {
@@ -1080,7 +1092,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function(node: any): number {
+      let getNodeIndex = function (node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1162,7 +1174,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
           return el.replace(/([\n])/g, '')
         })
 

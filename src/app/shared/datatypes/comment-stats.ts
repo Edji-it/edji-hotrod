@@ -102,6 +102,8 @@ export class CommentStats {
       let student = project.students[i]
       // see if there is a student in the stats list already
       let studentFound = commentStats.userStats.find(el => el._id === student._id)
+      // check for answered questions
+      let studentQuestions = project.reading_id.questions ? this.getAnswers(project.reading_id.questions, project.answers, student) : []
       // add the student if they are not already in the list
       if (!studentFound) {
         commentStats.userStats.push({
@@ -115,6 +117,7 @@ export class CommentStats {
           fullname: student.fullname,
           comments: [],
           status: 'offline',
+          questions: studentQuestions
         })
       }
     }
@@ -124,6 +127,8 @@ export class CommentStats {
       let student = project.temps[i]
       // see if there is a student in the stats list already
       let studentFound = commentStats.userStats.find(el => el._id === student._id)
+      // check for answered questions
+      let studentQuestions = project.reading_id.questions ? this.getAnswers(project.reading_id.questions, project.answers, student) : []
       // add the student if they are not already in the list
       if (!studentFound) {
         commentStats.userStats.push({
@@ -137,6 +142,7 @@ export class CommentStats {
           fullname: student.fullname,
           comments: [],
           status: 'offline',
+          questions: studentQuestions
         })
       }
     }
@@ -164,6 +170,9 @@ export class CommentStats {
    * @param commentStats The comment stats object which will be modified and returned
    */
   public addCommentToStats(comment: EdjiComment, difference: number): void {
+    // if this is an answer, then do not do anything here
+    if (comment.questionId) return
+
     let isReply = comment.reply_to && comment.reply_to.length > 0
     // increment the total reading comment count by the difference
     if (isReply) {
@@ -226,6 +235,20 @@ export class CommentStats {
     this._stats.userStats.sort(this.compareStudents)
     // calculate min/max/avg values
     this.calculateMinMaxAvg()
+  }
+
+  public recalculateAnswers(answer: any, answerChange: boolean, project: Project): void {
+    let student = this.findStudent(answer.user_id)
+    if (student) {
+      student.questions.find((ans: any) => ans.questionId === answer.questionId)
+      const len = student.questions.length
+      for (var i = 0; i < len; i++) {
+        let question = student.questions[i]
+        if (question._id === answer.questionId) {
+          student.questions[i].answered = answerChange
+        }
+      }
+    }
   }
 
   /**
@@ -303,6 +326,32 @@ export class CommentStats {
     if (student) {
       student.status = status
     }
+  }
+
+  /**
+   * Checks through the answers on the project to see if a student has answered each of the questions on that reading
+   * @param questions the array of question _id's and answered value (boolean)
+   * @param answers answers on the project
+   * @param student current student we're evaluating for
+   */
+  private getAnswers(readingQuestions: any, answers: any, student: any): any[] {
+    const len = readingQuestions.length
+    let questions = []
+    for (var i = 0; i < len; i++) {
+      let ans = false // default
+      let question = readingQuestions[i]
+      if (answers) {
+        let answerFound = answers.find((ans: any) => ans.questionId === question._id && ans.user_id === student._id)
+        if (answerFound) {
+          ans = true
+        }
+      }
+      questions.push({
+        _id: question._id, // reference
+        answered: ans
+      })
+    }
+    return questions
   }
 }
 
