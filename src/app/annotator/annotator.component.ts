@@ -300,8 +300,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           this.filterHighlightArray = null
         }
-        // Re-evaluate comment positions
-        this.setLinePositions()
+        // Re-evaluate comment line counts
+        this._projects.buildCommentsByPos()
       }),
     )
     /** Run-once logic to initialize the comment-based arrays and stats */
@@ -403,8 +403,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.push(
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
-        this.setLinePositions()
-
+        // Re-evaluate comment line counts
+        this._projects.buildCommentsByPos()
         // We send the message here because we only care to show it when the user has the reading loaded
         this.showHeatVisionToast(this.project.heat_vision)
       }),
@@ -952,7 +952,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         if (comment._id) {
           // Add setting to trigger focus on new comment
           comment.new = true // this is basically to tell our test cases which comment was just made
-          this.inactivateComment()
           this.commentsByIndexAdd(comment, start)
         } else {
           console.warn("Didn't get a comment back from server!")
@@ -993,8 +992,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setActiveCommentByIndex(true, start, 0)
       }
     }
-    // this.updateAllLineCounts()
-    this.setLinePositions()
+
     this._projects.commentStats.addCommentToStats(commentPointer, 1)
   }
 
@@ -1028,7 +1026,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     // Update line counts
-    this.setLinePositions()
+    this._projects.buildCommentsByPos()
   }
 
   /**
@@ -1052,16 +1050,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this._comments.activeComment = comment
         this._comments.activeComment.active = true
       } else {
-        this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
+        this.selectedComment = this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
         this._comments.activeComment.active = true
       }
     }
   }
 
   inactivateComment(): void {
-    this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
-    this._comments.activeComment.active = false
-    this._comments.activeComment = <EdjiComment>{}
+    if (this._comments.activeComment.start) {
+      this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
+      this._comments.activeComment.active = false
+      this._comments.activeComment = <EdjiComment>{}
+    }
   }
 
   /**
@@ -1424,6 +1424,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
+    /**
+     * In tablet view, the width of content changes as the pane slides
+     * @todo determine a better layout option that doesn't cause relevant comments to change
+     */
     let annotatorWidth = this.annotatorContent.clientWidth
     setTimeout(() => {
       // Limit when set line position fires, heavy w/ lots of comments
