@@ -6,7 +6,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 // Project Dependencies
 import { User } from '../shared/datatypes'
-import { URLSearchParams } from '@angular/http/src/url_search_params'
 import { Angulartics2 } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { LockerService } from '../_services/locker.service'

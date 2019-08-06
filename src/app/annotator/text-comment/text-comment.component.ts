@@ -10,8 +10,8 @@ import { CommentService } from '../../_services'
   styleUrls: ['./text-comment.component.scss'],
 })
 export class TextCommentComponent implements OnInit, AfterViewInit {
-  @ViewChild('textInput') public textInput: ElementRef
-  @ViewChild('textDisplay') public textDisplay: ElementRef
+  @ViewChild('textInput', { static: false }) public textInput: ElementRef
+  @ViewChild('textDisplay', { static: false }) public textDisplay: ElementRef
 
   @Input() public comment: EdjiComment
   @Input() public reply: boolean = false

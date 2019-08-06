@@ -43,7 +43,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   /*
         Annotator Component
         Last Mod: 5 Aug 2017 - Josh Kyburz
-        
+
         This does all the heavy lifting in a a reading.
         - Loads Reading text
         - Compiles word components
@@ -57,7 +57,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
   @ViewChildren('words') wordEls
-  @ViewChild('article') articleEl: ElementRef
+  @ViewChild('article', { static: false }) articleEl: ElementRef
   @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
 
   public reading: Reading = <Reading>{}
@@ -165,7 +165,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // For debouncing/wait on showCommentOptions
   private showCommentOptionsWait: boolean = false
-  private touchStartPosition: { x?: number; y?: number } = {}
 
   constructor(
     private element: ElementRef,
@@ -301,8 +300,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
           this.filterHighlightArray = null
         }
-        // Re-evaluate comment positions
-        this.setLinePositions()
+        // Re-evaluate comment line counts
+        this._projects.buildCommentsByPos()
       }),
     )
     /** Run-once logic to initialize the comment-based arrays and stats */
@@ -404,8 +403,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.push(
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
-        this.setLinePositions()
-
+        // Re-evaluate comment line counts
+        this._projects.buildCommentsByPos()
         // We send the message here because we only care to show it when the user has the reading loaded
         this.showHeatVisionToast(this.project.heat_vision)
       }),
@@ -684,57 +683,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Keep note of when user is dragging/scrolling, and ignore touchend
-   * @param event touchmove event
-   */
-  logScrollStart(event): void {
-    let touches = event.touches
-    if (touches.length < 1) {
-      touches = event.changedTouches
-    }
-    if (touches[0]) {
-      this.touchStartPosition.x = touches[0].clientX
-      this.touchStartPosition.y = touches[0].clientY
-    }
-  }
-
-  /**
-   * Check if a touchend event is the end of a scroll/drag
-   * @param endEvent a touchend event
-   */
-  checkIfScrolling(endEvent): boolean {
-    let scrolled = false
-    let touches = endEvent.touches
-    if (touches.length < 1) {
-      touches = endEvent.changedTouches
-    }
-    if (touches && touches[0]) {
-      let startX = this.touchStartPosition.x
-      let startY = this.touchStartPosition.y
-      let endX = touches[0].clientX
-      let endY = touches[0].clientY
-      if (startX && startY) {
-        // If finger moves more than 10px, consider it a scroll/drag
-        // code.google.com/mobile/articles/fast_buttons.html
-        if (Math.abs(endX - startX) > 20 || Math.abs(endY - startY) > 20) {
-          scrolled = true
-        }
-      }
-      // Reset start values once referenced
-      this.touchStartPosition = {}
-    }
-    return scrolled
-  }
-
-  /**
    * Show tooltip to the side with buttons for adding comment types
    */
   showCommentOptions(event): void {
-    if (
-      this.showCommentOptionsWait ||
-      (event.type == 'touchend' && this.checkIfScrolling(event)) ||
-      this.project.archived
-    ) {
+    if (this.showCommentOptionsWait || this.project.archived) {
       return
     } else {
       // We only need to worry about preventing overlapping touch and click events
@@ -1000,7 +952,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         if (comment._id) {
           // Add setting to trigger focus on new comment
           comment.new = true // this is basically to tell our test cases which comment was just made
-          this.inactivateComment()
           this.commentsByIndexAdd(comment, start)
         } else {
           console.warn("Didn't get a comment back from server!")
@@ -1041,8 +992,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setActiveCommentByIndex(true, start, 0)
       }
     }
-    // this.updateAllLineCounts()
-    this.setLinePositions()
+
     this._projects.commentStats.addCommentToStats(commentPointer, 1)
   }
 
@@ -1076,7 +1026,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     // Update line counts
-    this.setLinePositions()
+    this._projects.buildCommentsByPos()
   }
 
   /**
@@ -1100,16 +1050,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this._comments.activeComment = comment
         this._comments.activeComment.active = true
       } else {
-        this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
+        this.selectedComment = this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
         this._comments.activeComment.active = true
       }
     }
   }
 
   inactivateComment(): void {
-    this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
-    this._comments.activeComment.active = false
-    this._comments.activeComment = <EdjiComment>{}
+    if (this._comments.activeComment.start) {
+      this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
+      this._comments.activeComment.active = false
+      this._comments.activeComment = <EdjiComment>{}
+    }
   }
 
   /**
@@ -1140,7 +1092,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function (node: any): number {
+      let getNodeIndex = function(node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1222,7 +1174,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
           return el.replace(/([\n])/g, '')
         })
 
@@ -1370,13 +1322,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     let ImgPos
 
     // Handle touch events
-    if (e.type == 'touchend' || e.type == 'tap') {
+    if (e.type == 'touchend') {
       let touches = e['touches']
       if (touches.length < 1) {
         touches = e['changedTouches']
       }
       e = touches[0]
       target = e.target
+    } else {
+      // assume click or tap
     }
 
     function FindPosition(oElement) {
@@ -1386,13 +1340,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           posY += oElement.offsetTop
         }
         return [posX, posY]
+      } else if (oElement.offsetX && oElement.offsetY) {
+        return [oElement.offsetX, oElement.offsetY]
       } else {
         return [oElement.x, oElement.y]
       }
     }
     ImgPos = FindPosition(target)
 
-    if (e['pageX'] || e['pageY']) {
+    if (e['center']) {
+      // Tap event handling
+      PosX = e['center'].x
+      PosY = e['center'].y
+    } else if (e['pageX'] || e['pageY']) {
       PosX = e['pageX']
       PosY = e['pageY']
     } else if (e['clientX'] || e['clientY']) {
@@ -1464,8 +1424,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
-    // Make sure the line counts are up-to-date
-    this.setLinePositions()
+    /**
+     * In tablet view, the width of content changes as the pane slides
+     * @todo determine a better layout option that doesn't cause relevant comments to change
+     */
+    let annotatorWidth = this.annotatorContent.clientWidth
+    setTimeout(() => {
+      // Limit when set line position fires, heavy w/ lots of comments
+      if (annotatorWidth != this.annotatorContent.clientWidth) {
+        this.setLinePositions()
+      }
+    }, 500)
 
     // Set the input comment to the comment pane if it is not currently open
     if (visible) {

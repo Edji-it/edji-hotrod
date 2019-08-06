@@ -2,7 +2,14 @@ import { Subscription } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, CommentService, ProjectService, UtilToolService, AcademyService, SocketService } from '../../_services'
+import {
+  AuthService,
+  CommentService,
+  ProjectService,
+  UtilToolService,
+  AcademyService,
+  SocketService,
+} from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
 import { ActivatedRoute } from '@angular/router'
@@ -82,8 +89,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     public el: ElementRef,
     private _academy: AcademyService,
     private _socket: SocketService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit() {
     // Set initial values if passed
@@ -291,7 +298,7 @@ export class CommentComponent implements OnInit, OnDestroy {
             this._socket.groupUpdateEvent({
               type: 'replyUpdate',
               reply: this.comment,
-              pComment: this.comment.reply_to
+              pComment: this.comment.reply_to,
             })
           }
 
@@ -410,6 +417,11 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   toggleCPane(comment?, forceOpen?: boolean): void {
+    // When displaying in comment pane, comment MUST have line y
+    if (!this.comment.lineY) {
+      this.setLineY()
+      this._projects.buildCommentsByPos()
+    }
     if (!this.commentPaneActive) {
       if (comment.selected) {
         this.comment.selected = true

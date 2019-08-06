@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
-import { Http } from '@angular/http'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
+import { HttpClient } from '@angular/common/http'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
 import { take } from 'rxjs/operators'
@@ -38,7 +37,7 @@ export class FeedbackComponent implements OnInit {
   constructor(
     private _auth: AuthService,
     private _bumblebee: BumblebeeService,
-    private http: Http,
+    private http: HttpClient,
     private angulartics: Angulartics2,
     fb: FormBuilder,
     public _util: UtilToolService,

@@ -1,7 +1,6 @@
 import { Title } from '@angular/platform-browser'
 import { Component, ElementRef, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 
@@ -66,7 +65,7 @@ export class DashboardComponent implements OnInit {
     private _auth: AuthService,
     private _title: Title,
     private _locker: LockerService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -103,7 +102,7 @@ export class DashboardComponent implements OnInit {
     if (
       ((this.currentUser.identities && this.currentUser.identities.includes('teacher')) ||
         (this.currentUser.identities && this.currentUser.identities.includes('administrator'))) &&
-      ((this.currentUser.school && !this.currentUser.school.district_name && !this.currentUser['school_name'])) // @deprecated property check of school_name
+      (this.currentUser.school && !this.currentUser.school.district_name && !this.currentUser['school_name']) // @deprecated property check of school_name
     ) {
       incomplete = true
     }

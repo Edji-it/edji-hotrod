@@ -24,7 +24,7 @@ import { CommentComponent } from 'src/app/annotator/comment/comment.component'
   styleUrls: ['./comment-pane.component.scss'],
 })
 export class CommentPaneComponent implements OnInit, OnDestroy {
-  @ViewChild('commentPane') private commentPane: ElementRef
+  @ViewChild('commentPane', { static: false }) private commentPane: ElementRef
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
 
   // General variables for the comment pane component
@@ -67,7 +67,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   // Comment Pane Component Outputs
   @Output() hideComment = new EventEmitter()
-  @Output() commentActivationMobile = new EventEmitter<any>()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
 
@@ -214,14 +213,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       if (comment && comment.type === 'emoji') {
         this.scrollToComment(comment)
       }
-      this.commentActivationMobile.emit({
-        activate: shouldActivate,
-        wi: wordIndex,
-        ci: commentIndex,
-        activatedComment: comment,
-      })
-    } else {
-      this.commentActivationMobile.emit({ activate: shouldActivate })
     }
   }
 

@@ -37,7 +37,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   // The keyboard's presence is controlled by the parent BUT the keyboard can also dismiss itself
   @Output() dismissKeyboard = new EventEmitter()
   // Handy internal element reference for controlling the emoji filter actions
-  @ViewChild('emojiScrollArea') emojiScrollArea
+  @ViewChild('emojiScrollArea', { static: false }) emojiScrollArea
 
   // Variables for controlling the emoji filter buttons
   private activeCategoryIndex: number = 0
