@@ -88,6 +88,14 @@ $iconGrayOpacity: 0.6;
   @include icon('icon-bookmark-off.svg');
 }
 
+.icon-strategies-sm {
+  @include icon('icon-strategies-sm.svg');
+}
+
+.icon-strategies-lg {
+  @include icon('icon-strategies-lg.svg');
+}
+
 .icon-caret,
 .ui-paginator-icon.pi {
   @include icon('icon-caret-right.svg');
@@ -208,6 +216,10 @@ $iconGrayOpacity: 0.6;
   display: inline-block;
   width: 2em;
   height: 2em;
+}
+
+.icon-feedback {
+  @include icon('icon-feedback.svg');
 }
 
 .icon-filter {
@@ -397,6 +409,10 @@ $iconGrayOpacity: 0.6;
 
 .icon-plus {
   @include icon('icon-plus.svg');
+}
+
+.icon-promote {
+  @include icon('icon-promote.svg');
 }
 
 .icon-question {

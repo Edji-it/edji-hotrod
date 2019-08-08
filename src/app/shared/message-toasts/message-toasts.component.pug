@@ -3,12 +3,16 @@
 .toast-wrap
     ng-container(*ngFor="let toast of toastObservable | async")
         .toast(
+            [attr.id]="toast.id",
             [class.show]="!toast.limitToPage || (toast.limitToPage == currentPage)"
             role="alert", 
             aria-live="assertive",
             aria-atomic="true",
             [class.toast--clickable]="toast.link",
-            [routerLink]="[toast.link]"
+            [routerLink]="toast.link",
+            [fragment]="toast.linkFragment",
+            [queryParams]="toast.linkParams",
+            (click)="dismissToast(toast.id)"
             )
             .toast-header
                 i.icon.rounded([ngClass]="[toastIconClass(toast.type)]")

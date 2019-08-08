@@ -30,6 +30,11 @@ exports.config = {
     },
     shardTestFiles: true,
     maxInstances: 5,
+    loggingPrefs: {
+      driver: 'SEVERE',
+      server: 'SEVERE',
+      browser: 'SEVERE',
+    },
   },
 
   /*
@@ -38,14 +43,17 @@ exports.config = {
   */
   suites: {
     account: helpers.root('e2e/src/account.spec.ts'),
+    coteacher: helpers.root('e2e/src/owner-tools__co-teacher.spec.ts'),
     dashboard: helpers.root('e2e/src/dashboard.spec.ts'),
     discover: helpers.root('e2e/src/discover.spec.ts'),
+    discoverPublic: helpers.root('e2e/src/discover-share-public.spec.ts'),
     heroSubscribe: helpers.root('e2e/src/hero-subscribe.spec.ts'),
     home: helpers.root('e2e/src/home.spec.ts'),
     leaderboard: helpers.root('e2e/src/owner-tools__leaderboard.spec.ts'),
     license: helpers.root('e2e/src/license.spec.ts'),
     login: helpers.root('e2e/src/login.spec.ts'),
     newReading: helpers.root('e2e/src/new-reading.spec.ts'),
+    readingMedia: helpers.root('e2e/src/reading-media.spec.ts'),
     ownerTools: helpers.root('e2e/src/owner-tools.spec.ts'),
     project: helpers.root('e2e/src/project.spec.ts'),
     question: helpers.root('e2e/src/questions.spec.ts'),
@@ -70,11 +78,11 @@ exports.config = {
     includeStackTrace: false, // Reporting is better handled by our SpecReporter below
     // A longer default timeout makes our test suite unusable
     defaultTimeoutInterval: 60000,
-    print: () => { }, // take out the dot logging when tests are run
+    print: () => {}, // take out the dot logging when tests are run
   },
   directConnect: true,
 
-  onPrepare: function () {
+  onPrepare: function() {
     // We do not want to ignoreSynchronization, it defeats the purpose of protractor
     browser.ignoreSynchronization = true
 
@@ -82,6 +90,7 @@ exports.config = {
     jasmine.getEnv().addReporter(
       new SpecReporter({
         spec: {
+          // Protractor-flake needs stack trace find the correct specs to run
           displayStacktrace: true,
         },
       }),

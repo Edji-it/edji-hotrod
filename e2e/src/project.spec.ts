@@ -1,54 +1,37 @@
 import { browser, by, element, protractor } from 'protractor'
 
-import { Project, Sidebar, Home } from './page-objects'
+import { Project, Sidebar, Home, Login, Dashboard } from './page-objects'
 import { LoginModal, GuestLoginForm } from './components'
 import { reset } from './utils/browser-methods'
+import { StudentList } from './components/student-list'
 
-/*
-    27 Jan 2017
-    Last Modified: 8 Aug 2017
-    Nicholas Pumper
-
-    e2e test the Project page!
-
-    - We log into all types of account.
-*/
-
-// Now into the testing.
 describe('Project Page', () => {
-  /* ---- Variable Initialization --------------- */
   let project = new Project()
   let home = new Home()
   let sidebar = new Sidebar()
+  let studentList = new StudentList()
   let loginModal = new LoginModal()
-  let EC = protractor.ExpectedConditions // vital
+  let EC = protractor.ExpectedConditions
   let guestForm = new GuestLoginForm()
+  let login = new Login()
+  let dashboard = new Dashboard()
 
-  /* ---- beforeEach ---------------------------- */
+  afterEach(() => {
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
+  })
 
-  // beforeAll(() => {
-  //     project.getPage();
-  // });
-
-  /* ---- Project Tests ------------------------- */
-
-  /**
-   * Test:
-   * - Go to a project page
-   * - Login with guest name
-   * - Make sure that the guest name is on the account button
-   */
-
-  // describe("Login modal errors", () => {
-  //     home.getPage();
-  //     // Go to project to see login modal
-  //     home.enterProjectCodeFromHome('test')
-  //     loginModal.testLoginModalErrors()
-  // })
-
-  describe('Commenting', () => {
+  describe('Commenting and student interactions', () => {
     beforeAll(() => {
-      // Login
       project.getPage('test')
       guestForm.loginAsGuest()
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
@@ -223,35 +206,62 @@ describe('Project Page', () => {
         'text reply comment never went away after deleting it',
       )
     })
+
+    /**
+     * Verify students can't do things they shouldn't
+     */
+    it('should not give students owner tools', () => {
+      // Student should see teacher names
+      expect(browser.isElementPresent(sidebar.ownerName)).toBeTruthy(
+        'student should see at least one owner/teacher for the reading',
+      )
+      // Student should not have co-teacher button
+      expect(browser.isElementPresent(sidebar.addCoTeacherButton)).toBeFalsy(
+        'student should not see "Add Teacher" in reading',
+      )
+      // Student should not see owner tools
+      expect(browser.isElementPresent(sidebar.ownerTools)).toBeFalsy('student should not see Owner Tools in reading')
+      // Student should not see student list toggle
+      expect(browser.isElementPresent(studentList.studentListToggle)).toBeFalsy(
+        'student should not see Student List toggle in reading',
+      )
+    })
   })
 
-  // beforeAll(() => {
-  //   // Join project from the homepage
-  //   home.getPage()
-  //   home.enterProjectCodeFromHome('audio')
-  //   // Login
-  //   guestForm.loginAsGuest()
-  //   browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
-  // })
+  describe('Live Notifications', () => {
+    let commentId = '5d21289421d995dd649174aa'
+    let replyId = '5d212ebc21d995dd649174ae'
 
-  // afterAll(() => {
-  //   // log out
-  //   browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon), 5000, 'never found the avatar dropdown button')
-  //   sidebar.clickLogOutButton()
-  // })
+    beforeEach(() => {
+      login.getPage()
+      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+      login.loginAndVerify(login.studentUser, login.studentPassword)
+    })
 
-  // beforeAll(() => {
-  //   // Join reply project from the homepage
-  //   home.getPage()
-  //   home.enterProjectCodeFromHome('reply')
-  //   // Login
-  //   guestForm.loginAsGuest()
-  //   browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
-  // })
+    afterEach(() => {
+      sidebar.logout()
+    })
 
-  // afterAll(() => {
-  //   // log out
-  //   browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon), 5000, 'never found the avatar dropdown button')
-  //   sidebar.clickLogOutButton()
-  // })
-}) // describe 'Dashboard Page'
+    it('should open a project with the query param for a live comment and see that comment', () => {
+      project.getPage(`test-live?comment=${commentId}`)
+      browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
+      // verify the query param shows up in the url
+      browser.wait(EC.urlContains(`?comment=${commentId}`), 15000, 'live comment query param never showed in project url')
+      // verify the comment pane opens
+      browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
+      // verify we scroll to the reply and can see it
+      browser.wait(EC.visibilityOf(element(by.css(`#comment-${commentId}`))), 5000, 'never found the comment')
+    })
+
+    it('should open a project with the query param for a live reply and see that reply', () => {
+      project.getPage(`test-live?comment=${replyId}&parent=${commentId}`)
+      browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
+      // verify the query param shows up in the url
+      browser.wait(EC.urlContains(`?comment=${replyId}&parent=${commentId}`), 15000, 'live reply query param never showed in project url')
+      // verify the comment pane opens
+      browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
+      // verify we scroll to the reply and can see it
+      browser.wait(EC.visibilityOf(element(by.css(`.replyCommentBlock[replyId="${replyId}"]`))), 5000, 'never found the reply')
+    })
+  })
+})

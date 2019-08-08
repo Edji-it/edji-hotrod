@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
@@ -29,7 +28,7 @@ export class ReadingService {
 
   private subscriptions: Subscription[] = []
 
-  constructor(private http: Http, private _http: HttpClient, private _auth: AuthService) {
+  constructor(private _http: HttpClient, private _auth: AuthService) {
     this.subscriptions.push(
       /**
        * Clear held values when told by _auth
@@ -169,6 +168,10 @@ export class ReadingService {
       following.forEach(userId => {
         queryString += `&owner_id=${userId}`
       })
+    } else if (searchParams.activeLibrary === 'strategies') {
+      // strategies filter will hard-code to the edji strategies account
+      const edjiStrategies = '5cc65d8d156b5300215670fe'
+      queryString += `&owner_id=${edjiStrategies}`
     } else if (searchParams.activeLibrary !== 'public') {
       // Handle academy/institution id filter
     }
@@ -323,11 +326,10 @@ export class ReadingService {
   }
 
   // Push new or update Reading
-  public save(reading: any): Observable<any> {
-    // DO NOT ADD OWNER_ID OR TEACHER_IDS
-    // The server takes care of all of that by itself
+  public save(reading: Reading): Observable<Reading> {
+    // owner_id is defaulted by the service
 
-    if (reading['_id']) {
+    if (reading._id) {
       let putReading = {
         title: reading.title,
         words: reading.words,
@@ -338,27 +340,28 @@ export class ReadingService {
         public: reading.public,
         subjects: reading.subjects,
         grade_levels: reading.grade_levels,
-        owner_bookmarked: reading.owner_bookmarked,
         // We reset "createdAt" in New Reading when publishing a draft
         createdAt: reading.createdAt,
       }
 
       return this._http
-        .put(this._auth.getUrl() + '/readings/' + reading['_id'], { reading: putReading }, this._auth.getOptions())
+        .put<{}>(this._auth.getUrl() + '/api/v1/readings/' + reading['_id'], putReading, this._auth.getOptions())
         .pipe(
-          map((data: any) => {
-            if (data && data.reading) {
-              this.readingValue = data.reading
-              this.readingSource.next(this.readingValue)
-            }
-            return data.reading
+          map(() => {
+            this.readingValue = reading
+            this.readingSource.next(this.readingValue)
+            return this.readingValue
           }),
         )
     } else {
       return this._http
-        .post(this._auth.getUrl() + '/api/v1/readings', { reading: reading }, this._auth.getOptions())
+        .post<{ reading: Reading }>(
+          this._auth.getUrl() + '/api/v1/readings',
+          { reading: reading },
+          this._auth.getOptions(),
+        )
         .pipe(
-          map((data: any) => {
+          map(data => {
             if (data && data.reading) {
               this.readingValue = data.reading
               this.readingSource.next(this.readingValue)
@@ -465,4 +468,4 @@ export interface ReadingQuery {
 type POP = 'projects'
 type CreatedCollection = 'bookmarked' | 'recent' | 'versions'
 type Scope = 'public' | 'owner'
-type ActiveLibrary = 'public' | 'following'
+type ActiveLibrary = 'public' | 'following' | 'strategies'

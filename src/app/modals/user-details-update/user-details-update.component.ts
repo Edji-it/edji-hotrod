@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { take, debounceTime, map } from 'rxjs/operators'
 import { fromEvent } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
 
 import { User } from './../../shared/datatypes'
 import { AuthService, BumblebeeService, AcademyService, MailchimpService } from './../../_services'
@@ -11,12 +11,12 @@ import { ALLSPARK } from 'src/app/app.constants'
 @Component({
   selector: 'hot-user-details-update',
   templateUrl: './user-details-update.component.pug',
-  styleUrls: ['user-details-update.component.scss']
+  styleUrls: ['user-details-update.component.scss'],
 })
 export class UserDetailsUpdateModal implements OnInit {
   @Input() showModal: boolean
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
-  @ViewChild('schoolInput') input: ElementRef
+  @ViewChild('schoolInput', { static: false }) input: ElementRef
 
   private currentUser: User
   private userDetailsForm: FormGroup
@@ -46,21 +46,21 @@ export class UserDetailsUpdateModal implements OnInit {
     body: string
   } = {
     header: 'Before you begin',
-    body: 'Help us customize your experience. Are you a...'
+    body: 'Help us customize your experience. Are you a...',
   }
 
   public schools: any[]
   public schoolSuggestShow: boolean
   public schoolInfo: {
-    school_name: string,
-    school_id: string,
-    district_name: string,
+    school_name: string
+    school_id: string
+    district_name: string
     district_id: string
   } = {
     school_name: '',
     school_id: '',
     district_name: '',
-    district_id: ''
+    district_id: '',
   }
 
   constructor(
@@ -69,6 +69,7 @@ export class UserDetailsUpdateModal implements OnInit {
     private _bumble: BumblebeeService,
     private _chimp: MailchimpService,
     _fb: FormBuilder,
+    private angulartics: Angulartics2,
   ) {
     this.userDetailsForm = _fb.group({
       school: [null, Validators.required],
@@ -130,7 +131,7 @@ export class UserDetailsUpdateModal implements OnInit {
     let contactMe = false
     if (form.value.school) {
       let districtNameVal = this.schoolInfo.district_name
-      if (this.schoolInfo.school_name==='') {
+      if (this.schoolInfo.school_name === '') {
         districtNameVal = form.value.school
       }
       // set the school and district data here
@@ -138,7 +139,7 @@ export class UserDetailsUpdateModal implements OnInit {
         school_name: this.schoolInfo.school_name,
         school_id: this.schoolInfo.school_id,
         district_name: districtNameVal,
-        district_id: this.schoolInfo.district_id
+        district_id: this.schoolInfo.district_id,
       }
     }
     if (form.value.phone) {
@@ -178,6 +179,14 @@ export class UserDetailsUpdateModal implements OnInit {
               teacher: true,
               hero: res.user.hero_status || false,
               institution_id: res.user.institution_ids || [],
+            })
+            // fire an analytic event here for tracking purposes
+            this.angulartics.eventTrack.next({
+              action: 'registration',
+              properties: {
+                category: this._auth.setAnalyticEventCategory(),
+                label: this._auth.setAnalyticEventLabel(),
+              },
             })
           }
         },
@@ -246,24 +255,26 @@ export class UserDetailsUpdateModal implements OnInit {
     setTimeout(() => {
       const keyUpEvent = fromEvent(this.input && this.input.nativeElement, 'keyup').pipe(map(i => i))
       const debouncedInput = keyUpEvent && keyUpEvent.pipe(debounceTime(250))
-      const searching = this.input && debouncedInput.subscribe(async val => {
-        let searchText = this.userDetailsForm.value.school
-        if (searchText!=='') {
-          try {
-            let schoolResults: any[] = []
-            schoolResults = await this._auth.getSchoolDistrict(searchText).toPromise()
-            this.displayResults(schoolResults)
-          } catch (err) {
-            console.error(err)
+      const searching =
+        this.input &&
+        debouncedInput.subscribe(async val => {
+          let searchText = this.userDetailsForm.value.school
+          if (searchText !== '') {
+            try {
+              let schoolResults: any[] = []
+              schoolResults = await this._auth.getSchoolDistrict(searchText).toPromise()
+              this.displayResults(schoolResults)
+            } catch (err) {
+              console.error(err)
+            }
+          } else {
+            this.schoolSuggestShow = false
           }
-        } else {
-          this.schoolSuggestShow = false
-        }
-      })
+        })
     }, 1)
   }
 
-   /**
+  /**
    * Sets up the results that come back so a user can select them
    * @param results search Results that we get from the school/district lookup
    */
@@ -272,7 +283,7 @@ export class UserDetailsUpdateModal implements OnInit {
     this.schoolSuggestShow = true
   }
 
-   /**
+  /**
    * Set the school name in the field and then set the school details to the form object
    * @param school is the school that the user selected!
    */

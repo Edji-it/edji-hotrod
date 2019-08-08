@@ -13,10 +13,22 @@ describe('Questions', () => {
   let question = new Questions()
   let dashboard = new Dashboard()
 
-  // Testing the creation
+  afterEach(() => {
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
+  })
+
   describe('Create', () => {
     beforeAll(() => {
-      // Login as test account
       login.getPage()
       login.loginAndVerify(login.heroUser, login.heroPassword)
     })
@@ -112,7 +124,7 @@ describe('Questions', () => {
       newReading.finalizeButton.click()
 
       // Should close the reading share code modal after creating a new reading
-      browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
+      browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
 
       browser.wait(
         EC.elementToBeClickable(newReading.shareCodeModalClose),
@@ -128,16 +140,13 @@ describe('Questions', () => {
 
   describe('Create Answers', () => {
     beforeEach(() => {
-      // home.enterProjectCodeFromHome('questions')
       project.getPage('questions')
 
-      // Login as a temp user
       guestForm.loginAsGuest()
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
     })
 
     afterEach(() => {
-      // log out
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon), 5000, 'never found the avatar dropdown button')
       sidebar.clickLogOutButton()
     })

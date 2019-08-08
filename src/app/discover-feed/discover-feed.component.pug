@@ -23,9 +23,9 @@ nav-bar([showDashboardOptions]="true")
                         .feed__reading-data.mb-2(*ngIf="reading.owner")
                             .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
                             follow-tag([owner]="reading.owner")
-                            i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null) }}
                             .btn.btn-sm.btn-primary.float-right([routerLink]="['/new-reading']", [queryParams]="{ copyId: reading._id }") Get this Reading
-                            i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null) }}
                         hot-reading-card([reading]="reading", [readOnly]="true")
                         .feed__reading-preview(*ngIf="reading.words_preview")
                             span.w(

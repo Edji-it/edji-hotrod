@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowJs": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -9,9 +10,25 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
-    "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
-    "types": ["hammerjs", "jasmine", "node", "selenium-webdriver", "source-map", "uglify-js", "webpack"]
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "types": [
+      "hammerjs",
+      "jest",
+      "node",
+      "selenium-webdriver",
+      "source-map",
+      "uglify-js",
+      "webpack"
+    ]
   },
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

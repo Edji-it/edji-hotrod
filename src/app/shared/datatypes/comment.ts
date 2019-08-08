@@ -2,21 +2,26 @@
   Last Mod: 8.5.17
 */
 
-/** Comment properties we add on the front end */
+/**
+ * Commment, client-side
+ * - Extends server data "base comment"
+ */
 export interface EdjiComment extends BaseComment {
+  // Client-side properties
   lineCount: number
   expanded: boolean
   project_id: string
   active: boolean
   showAvatar: boolean
+  authorIsTeacher: boolean
   imagePos: number
   selected: boolean
-  question_number?: number
-  createdAt?: Date
-  updatedAt?: Date
 }
 
-/** Comment properties we get from the server */
+/**
+ * Comment, server
+ * - Raw comment data received from server
+ */
 export interface BaseComment {
   _id: string
   user_id: string
@@ -42,6 +47,9 @@ export interface BaseComment {
   questionId?: string
   prompt?: string
   new?: boolean
+  question_number?: number
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 /** Used to control permissions on altering comment data */
@@ -63,6 +71,8 @@ export interface UserCommentStats {
   text_comment_count: number
   audio_comment_count: number
   comments?: EdjiComment[]
+  status: userReadingStatus
+  questions?: any[]
 }
 
 export interface iCommentStats {
@@ -73,3 +83,5 @@ export interface iCommentStats {
   reply_count: number
   userStats: UserCommentStats[]
 }
+
+export type userReadingStatus = 'offline' | 'idle' | 'active'

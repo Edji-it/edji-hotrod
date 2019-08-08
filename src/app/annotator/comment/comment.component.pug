@@ -19,9 +19,9 @@
         [ngClass]="[ reply ? 'replyUsername' : '' ]"
     )
         | {{ comment.author }}
-        .comment__time.text-right(*ngIf="reply && replyRef") &nbsp;{{ comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}
-        .comment__time.text-right(*ngIf="reply && !replyRef") &nbsp;{{ comment.updatedAt | edjidate:'timeAgo':null:secondsAgo }}
-    .comment__avatar(*ngIf="comment.author",[class.show]="comment.showAvatar || reply") {{comment.author.substr(0,2).toUpperCase()}}
+        .comment__time.text-right(*ngIf="reply && replyRef") &nbsp;{{ comment.createdAt | edjidate:'timeAgo':null }}
+        .comment__time.text-right(*ngIf="reply && !replyRef") &nbsp;{{ comment.updatedAt | edjidate:'timeAgo':null }}
+    .comment__avatar(*ngIf="comment.author",[class.show]="comment.showAvatar || reply", [class.selected]="comment.selected") {{comment.author.substr(0,2).toUpperCase()}}
     .comment-input-wrapper([ngClass]="[ replyRef ? 'replyCommentHandler' : '', comment.type + '' ]")
         //- Swap between different comment types
         emoji-comment(
@@ -91,14 +91,19 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             (tap)="deactivate(comment)",
             [innerHtml]="':white_check_mark:' | emojione"
         )
-        .user-icon(*ngIf="!readingReport", [class.selected]="comment.selected", [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]")
+        .user-icon(
+                *ngIf="!readingReport", 
+                [class.selected]="comment.selected",
+                [class.has-teacher-tag]="comment.authorIsTeacher", 
+                [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
+            )
             span.user-icon__initials {{comment.author.substring(0,2)}}
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'mobileBlock--reading-recap' : '' ]")
             .list-item.list-item--block.mobileTime-card(*ngIf="!readingReport")
                 | {{comment.author}}
                 span.mobileTime-card__time([class.is-draft]="isCommentNewDraft(comment)") &nbsp;
                     span.time-text--draft New
-                    span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null:secondsAgo }}
+                    span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
             .comment-input-wrapper
                 emoji-comment(
                     *ngIf="comment.type == 'emoji' || !comment.type",

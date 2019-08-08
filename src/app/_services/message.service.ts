@@ -6,6 +6,7 @@ import { map, take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService } from './auth.service'
+import { NavigationExtras } from '@angular/router'
 
 const TOAST_TIME: number = 10000
 @Injectable()
@@ -24,6 +25,12 @@ export class MessageService {
   constructor(private _http: HttpClient, private angulartics: Angulartics2, private _auth: AuthService) {
     this.toastUpdatesSource = new BehaviorSubject([])
     this.toastUpdates = this.toastUpdatesSource.asObservable()
+
+    // Clear all toasts on logout, etc.
+    this._auth.clearAll.subscribe(clear => {
+      // Clear all toasts
+      this.toastUpdatesSource.next([])
+    })
   }
 
   /**
@@ -144,14 +151,14 @@ export class MessageService {
                       error => {
                         console.error(error)
                       },
-                  )
+                    )
                 }
               }
             },
             err => {
               console.error(err)
             },
-        )
+          )
       }
     })
   }
@@ -169,9 +176,11 @@ interface GetMessagesResponse {
 
 export interface MessageToast {
   message: string
-  type: string // "info", "heat-on", "heat-off", "promo"
+  type: string // "info", "heat-on", "heat-off", "promo", "new-feedback", "promoted", "new-reply"
   id: string
   link?: string // routerLink path
+  linkFragment?: string
+  linkParams?: any
   date?: Date
   limitToPage?: string // identify route where message type should show
   requireDismiss?: boolean

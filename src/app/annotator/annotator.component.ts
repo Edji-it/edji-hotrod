@@ -9,12 +9,14 @@ import {
   ViewChildren,
   HostListener,
   ViewChild,
+  AfterViewInit,
 } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
 import { Angulartics2 } from 'angulartics2'
-// import { HotkeysService, Hotkey } from 'angular2-hotkeys'
+import { Location } from '@angular/common'
 
+// Project Dependencies
 import { CommentComponent } from './comment/comment.component'
 import {
   AudioService,
@@ -24,22 +26,24 @@ import {
   ReadingService,
   SocketService,
   UtilToolService,
-  MessageService
+  MessageService,
+  AcademyService,
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
-import { start } from 'repl';
+import { ActivatedRoute, Router } from '@angular/router'
+import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
 
 @Component({
   selector: 'annotator',
   templateUrl: './annotator.component.pug',
   styleUrls: ['annotator.component.scss'],
 })
-export class AnnotatorComponent implements OnInit, OnDestroy {
+export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   /*
         Annotator Component
         Last Mod: 5 Aug 2017 - Josh Kyburz
-        
+
         This does all the heavy lifting in a a reading.
         - Loads Reading text
         - Compiles word components
@@ -53,12 +57,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
   @ViewChildren('words') wordEls
-  @ViewChild('article') articleEl: ElementRef
+  @ViewChild('article', { static: false }) articleEl: ElementRef
+  @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
 
   public reading: Reading = <Reading>{}
   public project: Project = <Project>{}
   // Feedback for current user
   public feedbackForUser: Feedback[] = []
+  public paneCommentComponentUpdates: CommentComponent[]
   // Determines when infinite scroll should begin
   public lastWord: number = 4000
   public lastWordImageOffset: number = 100
@@ -70,7 +76,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   public focusOverride: boolean = false
 
   // Indices highlighted by users other than owner or current user
-  public highlightArray: number[][] = []
+  public highlightArray: number[] | number[][] = []
   // Indices highlighted by current user or reading owner
   public alwaysHighlightArray: number[][] = []
   // Indices for highlights of a selected filter
@@ -93,6 +99,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   // public activeComment: EdjiComment = <EdjiComment>{}
   public replyComment: EdjiComment = <EdjiComment>{}
   public selectedComment: EdjiComment = <EdjiComment>{}
+  public selectedReply: EdjiComment = <EdjiComment>{}
   // Comment options that can be made directly on a word
   public directCommentOptions: string[] = []
 
@@ -103,14 +110,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
   // Status Booleans
   public isMobile = false
+  private commentFragScrollReady = false
 
   public highlightY = 200
   public highlightX = 20
   public optionLeft = true
   public mobileIndex = 0
   public commentHeightPos = 0
+  private renderTimeout = 3000
 
-  public imageCoords: { x?: number, y?: number } = {}
+  public imageCoords: { x?: number; y?: number } = {}
   public imageHotspotPlaceholder: any = {
     index: -1,
     x: 0,
@@ -134,18 +143,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   public guideContent = [
     {
       title: 'Try Highlighting!',
-      image: '/assets/guide/add-highlight.gif',
-      body: 'Highlight text or click on an image to see the comment types.',
+      image: '/assets/guide/add-highlight-v2.gif',
+      body: 'Select text by clicking 1 or 2 words. Or click on an image to place a dot!',
     },
     {
       title: 'Add a Comment!',
-      image: '/assets/guide/add-comment-type.gif',
-      body: 'Choose to leave a Text or Emoji comment.',
+      image: '/assets/guide/add-comment-type-v2.gif',
+      body: 'Choose the type of comment you want to make to create your highlight.',
     },
     {
       title: 'Who sees my comment?',
       // image: "/assets/guide/add-comment-type.gif",
-      body: 'Your comment can be seen by the reading creator. If they turn Heat Vision on, everyone can see it!',
+      body: 'Your comment can be seen by the teacher. If they turn Heat Vision on, everyone can see it!',
     },
   ]
   public guideStepNo = 1
@@ -156,16 +165,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   public window: any
   public audioSupportError: boolean = false
 
-  public quickSelect: { anchor: number; focus: number, boxes?: { word: number, start: number, end?: number } } = {
+  public quickSelect: { anchor: number; focus: number; boxes?: { word: number; start: number; end?: number } } = {
     anchor: null,
     focus: null,
-    boxes: null
+    boxes: null,
   }
-
 
   // For debouncing/wait on showCommentOptions
   private showCommentOptionsWait: boolean = false
-  private touchStartPosition: { x?: number; y?: number } = {}
 
   constructor(
     private element: ElementRef,
@@ -177,16 +184,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     public _comments: CommentService,
     private angulartics: Angulartics2,
     private _audio: AudioService,
-    private _messages: MessageService, // private _hotkeysService: HotkeysService
+    private _messages: MessageService,
+    private route: ActivatedRoute,
+    private _router: Router,
+    private _academy: AcademyService,
+    private location: Location,
   ) {
-    // this._hotkeysService.add(new Hotkey('t', (event: KeyboardEvent): boolean => {
-    //      this.addTextComment({ name: 'Hotkey'})
-    //     return false // Prevent bubbling
-    // }))
-    // this._hotkeysService.add(new Hotkey('e', (event: KeyboardEvent): boolean => {
-    //      this.addEmojiComment({ name: 'Hotkey'})
-    //     return false // Prevent bubbling
-    // }))
     this.window = window
   }
 
@@ -211,6 +214,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Update scroll progress on resize
     this.currentDocHeight = 0
     this.preScrollHeightUpdate()
+  }
+
+  /**
+   * Track Activity
+   * when the user moves the mouse, let academy service know so we can keep tracking reading ticks
+   * and we also make sure they have a "live" status on the indicator
+   */
+  @HostListener('window:mousemove') refreshUserState() {
+    this._academy.trackActivity()
   }
 
   ngOnInit() {
@@ -248,36 +260,41 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             this._projects.filterByUser(this.user)
           }
           if (project) {
+            let initialLoad = this.project._id != project._id
             this.project = project
             this.setLinePositions()
-            // Check if audio is supported
-            if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
-              this.audioSupportError = true
-              // if audio is not supported, let analytics know
-              this.angulartics.eventTrack.next({
-                action: 'noAudioSupport',
-                properties: {
-                  category: this._auth.setAnalyticEventCategory(),
-                  label: this._auth.setAnalyticEventLabel(),
-                },
-              })
-            }
-            this.directCommentOptions = []
-            for (let i = 0; i < this.project.types.length; i++) {
-              // Ignore comment types that can't be made on a word
-              // - add other types not display in text-options to the array below
-              if (['reply'].indexOf(this.project.types[i]) < 0) {
-                this.directCommentOptions.push(this.project.types[i])
-              }
-            }
             // Set aside feedback for current user
             if (this.project.report_evals) {
-              this.feedbackForUser = this.project.report_evals.filter(feedback => {
-                return this.user._id == feedback.user_id
-              })
+              this.setFeedback()
             }
-            // Display heat vision status on initial load
-            this.showHeatVisionToast(this.project.heat_vision)
+            // Initial Load events
+            if (initialLoad) {
+              this.directCommentOptions = []
+              // Display heat vision status on initial load
+              this.showHeatVisionToast(this.project.heat_vision)
+              // Set comment types
+              if (this.project.types) {
+                for (let i = 0; i < this.project.types.length; i++) {
+                  // Ignore comment types that can't be made on a word
+                  // - add other types not display in text-options to the array below
+                  if (['reply'].indexOf(this.project.types[i]) < 0) {
+                    this.directCommentOptions.push(this.project.types[i])
+                  }
+                }
+                // Check if audio is supported
+                if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
+                  this.audioSupportError = true
+                  // if audio is not supported, let analytics know
+                  this.angulartics.eventTrack.next({
+                    action: 'noAudioSupport',
+                    properties: {
+                      category: this._auth.setAnalyticEventCategory(),
+                      label: this._auth.setAnalyticEventLabel(),
+                    },
+                  })
+                }
+              }
+            }
           }
         },
         error => {
@@ -291,8 +308,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         } else {
           this.filterHighlightArray = null
         }
-        // Re-evaluate comment positions
-        this.setLinePositions()
+        // Re-evaluate comment line counts
+        this._projects.buildCommentsByPos()
       }),
     )
     /** Run-once logic to initialize the comment-based arrays and stats */
@@ -342,6 +359,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
                 this.removeRepliesFromComments(comment)
               }
             }
+            if (comment.questionId && this.project.isTeaching) {
+              // in this case we got an answer, so we need to update comment stats
+              this._projects.recalculateAnswers(comment, false)
+            }
           } else if (commentUpdate.action === 'UPDATE') {
             if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
               this.commentsByIndexUpdate(comment, wIndex, cIndex)
@@ -360,6 +381,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
             if (comment.reply_to) {
               this.addReplyToComment(comment)
             }
+            if (comment.questionId && this.project.isTeaching) {
+              // in this case we got an answer, so we need to update comment stats
+              this._projects.recalculateAnswers(comment, true)
+            }
           } else if (commentUpdate.action === 'CREATE') {
             // Socket updates don't come through with a timestamp
             comment.createdAt = Date.now()
@@ -370,6 +395,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
               comment.end,
             )
             this.commentsByIndexAdd(comment, wIndex, true)
+            if (comment.questionId && this.project.isTeaching) {
+              // in this case we got an answer, so we need to update comment stats
+              this._projects.recalculateAnswers(comment, true)
+            }
           }
         },
         error => {
@@ -382,10 +411,44 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
-        this.setLinePositions()
-
+        // Re-evaluate comment line counts
+        this._projects.buildCommentsByPos()
         // We send the message here because we only care to show it when the user has the reading loaded
         this.showHeatVisionToast(this.project.heat_vision)
+      }),
+    )
+
+    /**
+     * Our socket handler for group-specific socket update events
+     * groupUpdate.type is the identifier for specific events
+     */
+    this.subscriptions.push(
+      // Subscribe to feedback updates
+      this._socket.groupUpdate.subscribe(groupUpdate => {
+        if (groupUpdate.type === 'feedbackUpdate') {
+          let feedback = groupUpdate['feedback']
+          this.setFeedback(feedback)
+          if (feedback.user_id === this.user._id) {
+            this.showCommentToast(feedback, 'feedback')
+          }
+        } else if (groupUpdate.type === 'replyUpdate') {
+          const reply = groupUpdate['reply']
+          const parentCommentId = groupUpdate['pComment']
+          let parentComment = this.project.comments.find(comment => {
+            return parentCommentId == comment._id
+          })
+          // set the parent comment id so we can find it later
+          reply.parent = parentCommentId
+          // reference the parent comment and make sure it's
+          if (reply.user_id !== this.user._id && parentComment['user_id'] === this.user._id) {
+            this.showCommentToast(reply, 'reply')
+          }
+        } else if (groupUpdate.type === 'coteacherPromote') {
+          // Show promotion toast for user
+          if (groupUpdate.user._id === this.user._id) {
+            this.showPromotedToast()
+          }
+        }
       }),
     )
 
@@ -403,7 +466,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     // Hacky McHackFace since images render later, and need to be rendered to determine comment position
     setTimeout(() => {
       this.setLinePositions()
-    }, 3000)
+      this.commentFragScrollReady = true
+    }, this.renderTimeout)
 
     // Only supported by modern browsers, but very reliable in those cases
     document.addEventListener('selectionchange', event => {
@@ -413,6 +477,69 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     })
   } // ngOnInit
 
+  ngAfterViewInit() {
+    this.subscriptions.push(
+      /**
+       * Subscribe to link params (deep links to comments/replies)
+       * - In AfterViewInit due to "commentComponents" use
+       */
+      this.route.queryParams.subscribe(params => {
+        // handler for feedback
+        if (params['feedback']) {
+          let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {
+            return feedbackEl.feedback._id === params['feedback']
+          })
+          // Scroll to feedback
+          feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
+        } else if (params['comment']) {
+          // Reset selected comment values
+          // > ensures comment pane scroll action when transitioning between comments and replies
+          if (this.selectedComment) this.selectedComment.selected = false
+          if (this.selectedReply) this.selectedReply.selected = false
+          // Parent indicates a reply comment
+          let isReply = !!params['parent']
+          let commendId = isReply ? params['parent'] : params['comment']
+          let commentEl = this.commentComponents.toArray().find(commentEl => {
+            return commentEl.comment._id === commendId
+          })
+          // Cancel if comment not found
+          if (!commentEl) {
+            // Clear param if comment not found
+            this.clearQueryParams()
+            return
+          }
+          // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
+          if (commentEl.comment.start > this.lastWord) {
+            this.lastWord = commentEl.comment.start + 800
+            // Make sure we broadcast lastWord position out to listening components
+            this._projects.lastWordUpdateSubj.next(this.lastWord)
+          }
+          // Hack that follows same settimeout as the below for updating image heights
+          // We have to wait for images and questions to load in order for the scroll on load to be accurate
+          // after the intitial load, we only want a 1ms timeout to prevent errors is all
+          let scrollTimeout = this.renderTimeout
+          if (this.commentFragScrollReady) {
+            scrollTimeout = 1
+          }
+          // settimeout here to prevent errors where expression changes after checked
+          setTimeout(() => {
+            // Scroll to line in reading where comment was made
+            commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
+            // Toggle the comment pane
+            if (isReply) {
+              let reply = this.project.comments.find(comment => {
+                return (comment._id = params['comment'])
+              })
+              this.toggleCommentPane(true, commentEl.comment, reply)
+            } else {
+              this.toggleCommentPane(true, commentEl.comment)
+            }
+          }, scrollTimeout)
+        }
+      }),
+    )
+  }
+
   ngOnDestroy() {
     this._readings.clear()
     this.subscriptions.forEach(sub => {
@@ -421,6 +548,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
 
     // Clear heat vision message
     this._messages.dismissToast('heat')
+    // Clear feedback message
+    this._messages.dismissToast('feedback')
   }
 
   /**
@@ -489,6 +618,56 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Display new live interaction toast
+   * @param content is the content object of the live interaction type
+   * @param toastType is the type of live interaction (feedback, reply)
+   */
+  private showCommentToast(content: any, toastType: toastType) {
+    if (toastType === 'feedback') {
+      // Send toast via message service
+      this._messages.sendToast({
+        message: 'You have new feedback from your teacher',
+        type: 'new-feedback',
+        id: 'newFeedback',
+        link: './',
+        linkParams: { feedback: content._id },
+        limitToPage: 'project',
+        requireDismiss: true,
+      })
+    } else if (toastType === 'reply') {
+      // Send toast via message service
+      this._messages.sendToast({
+        message: `<b>${content.author}</b> replied to your comment<div class="toast__action">View reply</div>`,
+        type: 'new-reply',
+        id: 'newReply',
+        link: './',
+        linkParams: { comment: content._id, parent: content.parent },
+        limitToPage: 'project',
+        requireDismiss: true,
+      })
+    }
+  }
+
+  /**
+   * Clear Query Params
+   * - Used to clear deep link params for comments/replies
+   */
+  private clearQueryParams(): void {
+    // this._router.navigate(['./'], { relativeTo: this.route, queryParams: {}, replaceUrl: true })
+    this.location.replaceState(this._router.url.split('?')[0])
+  }
+
+  private showPromotedToast(): void {
+    this._messages.sendToast({
+      message: 'You have been promoted to co-teacher, please refresh!',
+      type: 'promoted',
+      id: 'coteacherPromoted',
+      limitToPage: 'project',
+      requireDismiss: true,
+    })
+  }
+
+  /**
    * Is group owner?
    * @return boolean: is current user the owner of the active reading/group
    */
@@ -509,64 +688,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
     this.quickSelect = {
       focus: null,
-      anchor: null
+      anchor: null,
     }
-  }
-
-  /**
-   * Keep note of when user is dragging/scrolling, and ignore touchend
-   * @param event touchmove event
-   */
-  logScrollStart(event): void {
-    let touches = event.touches
-    if (touches.length < 1) {
-      touches = event.changedTouches
-    }
-    if (touches[0]) {
-      this.touchStartPosition.x = touches[0].clientX
-      this.touchStartPosition.y = touches[0].clientY
-    }
-  }
-
-  /**
-   * Check if a touchend event is the end of a scroll/drag
-   * @param endEvent a touchend event
-   */
-  checkIfScrolling(endEvent): boolean {
-    let scrolled = false
-    let touches = endEvent.touches
-    if (touches.length < 1) {
-      touches = endEvent.changedTouches
-    }
-    if (touches && touches[0]) {
-      let startX = this.touchStartPosition.x
-      let startY = this.touchStartPosition.y
-      let endX = touches[0].clientX
-      let endY = touches[0].clientY
-      if (startX && startY) {
-        // If finger moves more than 10px, consider it a scroll/drag
-        // code.google.com/mobile/articles/fast_buttons.html
-        if (Math.abs(endX - startX) > 20 || Math.abs(endY - startY) > 20) {
-          scrolled = true
-        }
-      }
-      // Reset start values once referenced
-      this.touchStartPosition = {}
-    }
-    return scrolled
   }
 
   /**
    * Show tooltip to the side with buttons for adding comment types
    */
   showCommentOptions(event): void {
-    // Debug with:
-    // console.log("showCommentOptions fired from ", event.type)
-    if (
-      this.showCommentOptionsWait ||
-      (event.type == 'touchend' && this.checkIfScrolling(event)) ||
-      this.project.archived
-    ) {
+    if (this.showCommentOptionsWait || this.project.archived) {
       return
     } else {
       // We only need to worry about preventing overlapping touch and click events
@@ -601,7 +731,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       this.focusArray = []
       // Determine SPOT or BOX
       if (hitBox) {
-        console.log("Word box clicked!")
+        console.log('Word box clicked!')
         this.optionsShow = false
         let boxIndex: number = parseInt(target.getAttribute('index'))
         let wordIndex: number = parseInt(target.getAttribute('w-index'))
@@ -613,7 +743,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           this.clearQuickSelect()
           this.quickSelect.boxes = {
             word: wordIndex,
-            start: boxIndex
+            start: boxIndex,
           }
         }
         // Only get coordinates for first word
@@ -621,8 +751,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           // Set click coordinates from box
           this.imageCoords = this.getBoxCoords(target)
         }
-        console.log("QuickSelect set", this.quickSelect, wordIndex)
-        this.focusHighlight(wordIndex, wordIndex, null, { start: this.quickSelect.boxes.start, end: this.quickSelect.boxes.end })
+        console.log('QuickSelect set', this.quickSelect, wordIndex)
+        this.focusHighlight(wordIndex, wordIndex, null, {
+          start: this.quickSelect.boxes.start,
+          end: this.quickSelect.boxes.end,
+        })
       } else {
         // Set click coordinates
         this.imageCoords = this.getRelativeCoords(event)
@@ -640,7 +773,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           y: this.imageCoords['y'],
           preview: true,
         }
-
       }
     } else {
       delete this.quickSelect.boxes
@@ -664,13 +796,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         (sel.anchorNode.parentNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('img-wrap')))
     ) {
       /**
-      * Make sure selection exists, and is within highlightable content
-      * - Runs when:
-      *      - Regular selection is being made
-      *      - Image hotspot is made
-      * - Should:
-      *      - Clear Quick Select
-      */
+       * Make sure selection exists, and is within highlightable content
+       * - Runs when:
+       *      - Regular selection is being made
+       *      - Image hotspot is made
+       * - Should:
+       *      - Clear Quick Select
+       */
       let focusY
       // Clear Quick Select
       !this.quickSelect.boxes && this.clearQuickSelect()
@@ -701,7 +833,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       !target.classList.contains('question') &&
       !target.classList.contains('br')
     ) {
-      console.log("Quick select detection!")
+      console.log('Quick select detection!')
       /**
        * Quick Select
        * - Runs when words are tapped
@@ -793,7 +925,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * Add new highlights to local array
    */
   incrementHighlights(alwaysHighlight: boolean, start: number, end: number, bstart?: number, bend?: number): void {
-    console.log("Increment!", bstart, bend)
+    console.log('Increment!', bstart, bend)
     if (!bstart) {
       bstart = 0
       bend = 0
@@ -878,7 +1010,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       for (let i = span.start; i <= span.end; i++) {
         let page = this.reading.words[i]
         for (let bi = span.boxStart; bi <= span.boxEnd; bi++) {
-          text += (page.boxes[bi] && page.boxes[bi]['str']) ? (page.boxes[bi]['str'] + ' ') : ''
+          text += page.boxes[bi] && page.boxes[bi]['str'] ? page.boxes[bi]['str'] + ' ' : ''
         }
       }
     }
@@ -891,7 +1023,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       end: span.end,
       type: type,
       text: text,
-      loc: this.imageCoords
+      loc: this.imageCoords,
     }
     // Attach box indices
     if (isBox) {
@@ -899,12 +1031,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         start: span.boxStart,
         end: span.boxEnd,
         start_x: this.imageCoords.x,
-        start_y: this.imageCoords.y
+        start_y: this.imageCoords.y,
       }
       // remove coords
       delete comment.loc
     }
-    console.log("Create!", comment)
+    console.log('Create!', comment)
     // Tell server we've added a comment
     this._projects
       .saveComment(comment)
@@ -913,8 +1045,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         if (comment._id) {
           // Add setting to trigger focus on new comment
           comment.new = true // this is basically to tell our test cases which comment was just made
-          this.inactivateComment()
-          this.commentsByIndexAdd(comment, span.start)
+          this.commentsByIndexAdd(comment, comment.start)
         } else {
           console.warn("Didn't get a comment back from server!")
         }
@@ -954,8 +1085,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this.setActiveCommentByIndex(true, start, 0)
       }
     }
-    // this.updateAllLineCounts()
-    this.setLinePositions()
+
     this._projects.commentStats.addCommentToStats(commentPointer, 1)
   }
 
@@ -989,7 +1119,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       }
     }
     // Update line counts
-    this.setLinePositions()
+    this._projects.buildCommentsByPos()
   }
 
   /**
@@ -1013,16 +1143,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         this._comments.activeComment = comment
         this._comments.activeComment.active = true
       } else {
-        this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
+        this.selectedComment = this._comments.activeComment = this.commentsByIndex[wordIndex][commentIndex]
         this._comments.activeComment.active = true
       }
     }
   }
 
   inactivateComment(): void {
-    this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
-    this._comments.activeComment.active = false
-    this._comments.activeComment = <EdjiComment>{}
+    if (this._comments.activeComment.start) {
+      this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
+      this._comments.activeComment.active = false
+      this._comments.activeComment = <EdjiComment>{}
+    }
   }
 
   /**
@@ -1045,7 +1177,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     if (this.quickSelect.boxes && this.quickSelect.boxes.word) {
       // Image/PDF hit/word box
       start = this.quickSelect.boxes.word
-    } else if (this.imageHotspotPlaceholder && this.imageHotspotPlaceholder.preview && this.imageHotspotPlaceholder.index) {
+    } else if (
+      this.imageHotspotPlaceholder &&
+      this.imageHotspotPlaceholder.preview &&
+      this.imageHotspotPlaceholder.index
+    ) {
       // Image Selection
       start = this.imageHotspotPlaceholder.index
     } else if (this.quickSelect.anchor != null) {
@@ -1057,7 +1193,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function (node: any): number {
+      let getNodeIndex = function(node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1109,7 +1245,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   addCommentOfType(type: string): void {
     // Get selection indices
     let span = this.getSelectionSpan()
-    console.log("ADD!", span)
+    console.log('ADD!', span)
     if (!(span.start >= 0) || !(span.end >= 0)) {
       return
     }
@@ -1149,7 +1285,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
           return el.replace(/([\n])/g, '')
         })
 
@@ -1199,7 +1335,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * Update focusArray for a specified selection
    * @param value true or false - are you adding or removing focus?
    */
-  private updateFocusArray(value: boolean, start: number, end: number, boxes?: { start: number, end: number }): void {
+  private updateFocusArray(value: boolean, start: number, end: number, boxes?: { start: number; end: number }): void {
     // Make sure start and end are in order
     if (start > end) {
       end = [start, (start = end)][0] // Swap start and end values
@@ -1229,7 +1365,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param start Index for first word
    * @param end Index for last word
    */
-  public focusHighlight(start, end, location?: any, boxes?: { start: number, end: number }): void {
+  public focusHighlight(start, end, location?: any, boxes?: { start: number; end: number }): void {
     if (this.optionsShow == true) {
       return
     }
@@ -1251,7 +1387,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
    * @param start Index for first word
    * @param end Index for last word
    */
-  public unfocusHighlight(start, end, location?: any, boxes?: { start: number, end: number }): void {
+  public unfocusHighlight(start, end, location?: any, boxes?: { start: number; end: number }): void {
     if (this.focusOverride) {
       return
     }
@@ -1278,8 +1414,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
         highlightCount += this.filterHighlightArray[i][bi]
       }
     } else {
-      if ((this.project.heat_vision || this.user._id == this.project.teacher_id) && this.highlightArray[i] && this.highlightArray[i][bi]) {
+      if (
+        (this.project.heat_vision || this.project.isTeaching) &&
+        this.highlightArray[i] &&
+        this.highlightArray[i][bi]
+      ) {
         highlightCount += this.highlightArray[i][bi]
+      } else if ((this.project.heat_vision || this.project.isTeaching) && this.highlightArray[i]) {
+        highlightCount += <number>this.highlightArray[i]
       }
       if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi]) {
         highlightCount += this.alwaysHighlightArray[i][bi]
@@ -1325,7 +1467,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   /**
    * For image hit/word box comments: Determines relative middle of word
    */
-  private getBoxCoords(el: HTMLElement): { x: number, y: number } {
+  private getBoxCoords(el: HTMLElement): { x: number; y: number } {
     let top = parseFloat(el.style.top.replace('%', '').replace('px', ''))
     let left = parseFloat(el.style.left.replace('%', '').replace('px', ''))
     let height = parseFloat(el.style.height.replace('%', '').replace('px', ''))
@@ -1337,20 +1479,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
   /**
    * For image comments: Determines relative location of hotspot
    */
-  private getRelativeCoords(e: Event): { x: number, y: number } {
+  private getRelativeCoords(e: Event): { x: number; y: number } {
     let target = e.target
     let PosX = 0
     let PosY = 0
     let ImgPos
 
     // Handle touch events
-    if (e.type == 'touchend' || e.type == 'tap') {
+    if (e.type == 'touchend') {
       let touches = e['touches']
       if (touches.length < 1) {
         touches = e['changedTouches']
       }
       e = touches[0]
       target = e.target
+    } else {
+      // assume click or tap
     }
 
     function FindPosition(oElement) {
@@ -1360,13 +1504,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
           posY += oElement.offsetTop
         }
         return [posX, posY]
+      } else if (oElement.offsetX && oElement.offsetY) {
+        return [oElement.offsetX, oElement.offsetY]
       } else {
         return [oElement.x, oElement.y]
       }
     }
     ImgPos = FindPosition(target)
 
-    if (e['pageX'] || e['pageY']) {
+    if (e['center']) {
+      // Tap event handling
+      PosX = e['center'].x
+      PosY = e['center'].y
+    } else if (e['pageX'] || e['pageY']) {
       PosX = e['pageX']
       PosY = e['pageY']
     } else if (e['clientX'] || e['clientY']) {
@@ -1437,23 +1587,42 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
     }
   }
 
-  public toggleCommentPane(visible?: boolean, comment?): void {
-    // Make sure the line counts are up-to-date
-    this.setLinePositions()
+  public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
+    /**
+     * In tablet view, the width of content changes as the pane slides
+     * @todo determine a better layout option that doesn't cause relevant comments to change
+     */
+    let annotatorWidth = this.annotatorContent.clientWidth
+    setTimeout(() => {
+      // Limit when set line position fires, heavy w/ lots of comments
+      if (annotatorWidth != this.annotatorContent.clientWidth) {
+        this.setLinePositions()
+      }
+    }, 500)
 
     // Set the input comment to the comment pane if it is not currently open
     if (visible) {
-      this.selectedComment = comment
-    }
-    // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
-    if (visible) {
+      if (selectedComment) {
+        selectedComment.selected = !selectedReply
+        this.selectedComment = selectedComment
+        // Set the icon arrow position based on lineY and offsets
+        this.commentHeightPos = this.getCommentDisplayY(selectedComment)
+
+        if (selectedReply) {
+          selectedReply.selected = true
+          this.selectedReply = selectedReply
+        } else {
+          // Reset selected reply
+          this.selectedReply = <EdjiComment>{}
+        }
+      }
+      // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
       this._projects.commentPaneStateSubj.next(true)
-      // Set the icon arrow position based on lineY and offsets
-      // console.log("Line y: " +  comment.lineY, "First word offset: " + this.getFirstWordOffset(comment))
-      this.commentHeightPos = this.getCommentDisplayY(comment)
     } else {
+      // Clear Comment ID/deep link params
+      this.clearQueryParams()
       // iOS selection
       let selec = Rangy.getSelection()
       selec.removeAllRanges()
@@ -1552,11 +1721,25 @@ export class AnnotatorComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  // Sets the feedback display for students
+  private setFeedback(feedback?: any): void {
+    if (!feedback) {
+      this.feedbackForUser = this.project.report_evals.filter(feedback => {
+        return this.user._id == feedback.user_id
+      })
+    } else {
+      // the socket update needs to have the latest feedback pushed in
+      this.feedbackForUser.push(feedback)
+    }
+  }
 }
 
 interface SelectionSpan {
-  start: number,
-  end: number,
-  boxStart?: number,
+  start: number
+  end: number
+  boxStart?: number
   boxEnd?: number
 }
+
+export type toastType = 'feedback' | 'reply'

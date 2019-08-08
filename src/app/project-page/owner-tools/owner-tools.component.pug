@@ -1,4 +1,4 @@
-.owner-bar.hidden-md-down(*ngIf="currentProject && user._id == currentProject.owner_id")
+#ownerToolsBar.owner-bar.hidden-md-down(*ngIf="currentProject && currentProject.isTeaching")
   label.bar-title Owner
   //- Buttons for toggling panes and tools
     - Desktop Buttons
@@ -51,11 +51,11 @@
     i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")
     label Recap
 
-.owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && user._id == currentProject.owner_id")
+.owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && currentProject.isTeaching")
   //- Mobile Buttons
   .owner-options-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
     //- Comment Stats pane
-    button#toggleLeaderboard.btn.btn-icon--circle-shadow.owner-options--mobile(
+    button#toggleLeaderboard--narrow-viewport.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
       (tap)="showElseFalse('showCommentCounts'); ownerToolShow=!ownerToolShow", 
       [class.btn-show--animation]="ownerToolShow", 
@@ -98,7 +98,12 @@
     span(style="font-size: 11px;") Tools
 
 //- Leaderboard goes here
-hot-leaderboard((hide)="showCommentCounts=false", [commentStats]="commentStats", [visible]="showCommentCounts", [archived]="currentProject.archived")
+hot-leaderboard(
+  [(visibility)]="showCommentCounts", 
+  [commentStats]="commentStats", 
+  [archived]="currentProject.archived",
+  [coOwnerGuide]="showCoOwnerGuide"
+  )
 
 //- Fire Feed goes here
 hot-firefeed((hide)="showFireFeed=false", [visible]="showFireFeed")

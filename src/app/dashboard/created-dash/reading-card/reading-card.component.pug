@@ -23,7 +23,7 @@
       p.reading-details(
         *ngIf="reading.parent_id"
       ) 
-        span.reading-date {{ reading.createdAt | edjidate:'timeAgo':null:secondsAgo }} &nbsp;
+        span.reading-date {{ reading.createdAt | edjidate:'timeAgo':null }} &nbsp;
         span.reading-version((click)="getVersions(reading.version_id)") 
           | Previous Versions
   i.icon.icon-draft.reading-draft(*ngIf="reading['draft']")
@@ -34,7 +34,7 @@
   )
     button.btn.btn-icon--plain(
       (click)="showOptions = !showOptions", 
-      [attr.testFindOptions]="reading.title"
+      [attr.data-test]="'options-'+reading.title"
     )
       i.icon.icon-more
     //- dropdown buttons
@@ -66,7 +66,7 @@
       //- Delete dropdown button
       button.dropdown-item(
         (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;", 
-        [attr.testDelete]="reading.title"
+        [attr.data-test]="'delete-'+reading.title"
       ) 
         .icon.icon-delete
         | &nbsp; Delete
@@ -88,16 +88,17 @@
       )
         i.icon.icon-link
       //- Private/Public Toggle
-      .btn.btn-icon--round.reading-access-icon.reading-action(
+      #togglePublic.btn.btn-icon--round.reading-access-icon.reading-action(
         [attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", 
         (click)="togglePublicTooltip()",
         [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'",
-        [class.disabled]="reading.archived"
+        [class.disabled]="reading.archived",
+        [attr.testFindTogglePublic]="reading.title"
       )
-        i.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
-        i.icon(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
+        i#readingPublic.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
+        i#readingPrivate.icon(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
         .tooltip-wrap
-          .tooltip([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
+          .tooltip.tooltip--interactive([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
             .tooltip-title
               | Make public for others to Discover?
             .tooltiptext.block-with-text
@@ -126,7 +127,7 @@
         i.icon.icon-bookmark.hide-inactive
         i.icon.icon-bookmark-off.hide-active
         .tooltip-wrap
-          .tooltip
+          .tooltip.tooltip--interactive
             .tooltip-title(*ngIf="!user.hero_status") Bookmarking is available with <a class="link" [routerLink]="['/plans']">Hero</a>
             .tooltip-title(*ngIf="user.hero_status") {{ reading.owner_bookmarked ? "Bookmarked" : "Not Bookmarked" }}
   //- Delete Reading if Draft Button

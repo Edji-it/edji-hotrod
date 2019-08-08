@@ -12,6 +12,8 @@ export class Discover implements PageObjectInterface {
   public followEdjiTag = element(by.id('followEdjiTag'))
   public followTags = element.all(by.css('.badge-follow'))
   public unfollowTags = element.all(by.css('.badge-unfollow'))
+  // "followStatus" are any follow or unfollow tags
+  public followStatusTags = element.all(by.css('[data-test="followStatusTag"]'))
   public feedReadings = element.all(by.css('.feed__reading'))
   public firstFeedReading = this.feedReadings.first()
   public feedTitles = element.all(by.css('.feed__reading .reading-title__text'))
@@ -24,11 +26,13 @@ export class Discover implements PageObjectInterface {
   public loginModalEl = element(by.id('loginModal'))
   public outsideLoginModal = element(by.id('loginModalOutsideContent'))
   public previewTitle = element(by.id('previewTitle'))
+  public strategiesBanner = element(by.id('discoverStrategies'))
 
   // Discover Filters
   public filterPublic = element(by.id('discoverFilterPublic'))
   public filterFollowing = element(by.id('discoverFilterFollowing'))
-  public searchCount = element(by.id('searchCount'))
+  public filterStrategies = element(by.id('discoverFilterStrategies'))
+  public searchCount = element(by.css('[data-test="searchCount"]'))
   public searchInput = element(by.id('readingSearch'))
   public clearSearchBtn = element(by.css('.form-control-clear.icon.icon-close'))
 
@@ -36,9 +40,22 @@ export class Discover implements PageObjectInterface {
   getPage(): void {
     browser.get('/')
     browser.get('/#/discover')
+    // We expect a reading card to always show on initial load, so its a good indicator of the page being loaded
+    browser.wait(
+      this.EC.elementToBeClickable(this.firstFeedReading),
+      5000,
+      'getting Discover feed page, did not fully loaded because no reading cards loaded',
+    )
   } //getPage(): void
 
   toggleFollowEdji(follow: boolean): void {
+    // Verify the page has loaded with some sort of follow tags
+    let firstFollowTag = this.followStatusTags.first()
+    browser.wait(
+      this.EC.elementToBeClickable(firstFollowTag),
+      3000,
+      'follow tags were not found when trying to follow/unfollow Edji',
+    )
     if (follow) {
       this.followEdjiTag.isPresent().then(result => {
         if (result) {
@@ -121,11 +138,7 @@ export class Discover implements PageObjectInterface {
         this.closeReadingPreviewBtn.isDisplayed().then(result => {
           if (result) {
             this.closeReadingPreviewBtn.click()
-            browser.wait(
-              this.EC.invisibilityOf(this.readingPreview),
-              5000,
-              'failed to close the reading preview',
-            )
+            browser.wait(this.EC.invisibilityOf(this.readingPreview), 5000, 'failed to close the reading preview')
           }
         })
       }

@@ -1,9 +1,6 @@
-/**
- * Leaderboard/Student Panel tests
- */
 import { browser, by, element, protractor } from 'protractor'
 
-import { Project, Sidebar } from './page-objects'
+import { Project, Sidebar, Login } from './page-objects'
 import { LoginModal } from './components'
 import { Home } from './page-objects/home-page'
 
@@ -12,52 +9,36 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
   let project = new Project()
   let loginModal = new LoginModal()
   let sidebar = new Sidebar()
-  let home = new Home()
   let EC = protractor.ExpectedConditions // vital
+  let login = new Login()
 
   /* ---- beforeEach ---------------------------- */
 
-  beforeEach(() => {
-    // Id for Owner Tools Test Reading owned by Teach/Teach
-    browser.get('/#/home')
-    // Open Test project
-    home.enterProjectCodeFromHome('testhero')
+  beforeAll(() => {
+    project.joinProjectCodeAndLogIn('testhero', login.heroUser, login.heroPassword)
   })
 
-  afterEach(() => {
-    // log out
+  afterAll(() => {
     sidebar.logout()
   })
 
-  /* ---- Project Tests ------------------------- */
+  afterEach(() => {
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
+  })
 
   it('should open the Leaderboard and filter by student', () => {
-    // initial validation
-    browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header")
-    expect(loginModal.guestLoginHeader.isPresent()).toBeTruthy()
-    expect(loginModal.clickawaySquare.isPresent()).toBeFalsy()
-
-    // switch to login section and validate
-    browser.wait(
-      EC.elementToBeClickable(loginModal.gotoAccountLoginButton),
-      5000,
-      'never found button to go to account login',
-    )
-    loginModal.gotoAccountLoginButton.click()
-    expect(loginModal.clickawaySquare.isPresent()).toBeTruthy()
-    loginModal.usernameInput.sendKeys('testhero')
-    loginModal.passwordInput.sendKeys('testhero16')
-    browser.wait(
-      EC.elementToBeClickable(loginModal.accountLoginButton),
-      5000,
-      'never found the account login button on modal',
-    )
-
-    loginModal.accountLoginButton.submit()
-
     // Need to check for and click the owner tools button if its showing
     sidebar.ownerToolToggle()
-
     // Open Leaderboard
     browser.wait(
       EC.elementToBeClickable(sidebar.leaderboardButton),
@@ -94,21 +75,22 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     firstCommenterFilter.click()
 
     // First Commenter should only have one comment
-    let firstCommenterComments = element.all(by.css('.e2e-comment--First-Commenter .user-icon')) // User icon is a more reliable indicator of visibility
     browser.wait(
-      EC.visibilityOf(firstCommenterComments.first()),
+      EC.visibilityOf(sidebar.firstCommenterFirstComment),
       3000,
       "not able to see First Commenter's comment when filtering",
     )
-    firstCommenterComments.count().then(count => {
+    sidebar.firstCommenterComments.count().then(count => {
       expect(count).toBe(1, "found more or less than First Commenter's single comment despite filtering")
     })
     // Paginate to previous Student
     browser.wait(EC.elementToBeClickable(sidebar.prevStudentButton), 5000, 'never saw "previous" student filter button')
+    // Wait for animation
+    browser.sleep(500)
     sidebar.prevStudentButton.click()
     // First commenter's comment should no longer be visible
     browser.wait(
-      EC.invisibilityOf(firstCommenterComments.first()),
+      EC.invisibilityOf(sidebar.firstCommenterFirstComment),
       5000,
       "previous student filter did not hide previous student's comments",
     )
@@ -116,7 +98,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     sidebar.studentFilterClose.click()
     // Ensure First Commenter's comment is visible again
     browser.wait(
-      EC.elementToBeClickable(firstCommenterComments.first()),
+      EC.elementToBeClickable(sidebar.firstCommenterFirstComment),
       3000,
       "never saw First Commenter's comment after clearing",
     )
@@ -127,5 +109,26 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
       .then(count => {
         expect(count == totalCount).toBeTruthy('all comments did not show after clearing student filter')
       })
+
+    // close the leaderboard
+    browser.wait(EC.elementToBeClickable(sidebar.leaderboardClose), 5000, 'never found the close leaderboard button')
+    sidebar.closeLeaderboard()
+  })
+
+  it('should open the Leaderboard and see a live status indicator next to the user name', () => {
+    sidebar.closeLeaderboard()
+    // Open Leaderboard
+    browser.wait(
+      EC.elementToBeClickable(sidebar.leaderboardButton),
+      5000,
+      'never found the leaderboard owner tool button',
+    )
+    sidebar.leaderboardButton.click()
+
+    browser.wait(EC.elementToBeClickable(sidebar.leaderLiveStatus), 5000, 'never found the live status indicator')
+
+    // close the leaderboard
+    browser.wait(EC.elementToBeClickable(sidebar.leaderboardClose), 5000, 'never found the close leaderboard button')
+    sidebar.leaderboardClose.click()
   })
 })

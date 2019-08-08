@@ -837,6 +837,15 @@ $progressStart: 51px;
   &.show {
     opacity: 1;
   }
+  
+  &.selected {
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(236, 167, 54, 0);
+    box-shadow: 0px 0px 0px 0px rgba($selectedOrange, 0);
+    transition: border-color ease 1s;
+    animation: border-pulsate 2s ease-in-out 4;
+  }
 }
 
 .comment:hover {
@@ -950,15 +959,16 @@ textarea.text-comment-input,
     background-image: url('../assets/images/icon-comment--blue.svg');
   }
 
-  &.avatar__reply {
-    opacity: 1;
-    background-image: url('../assets/images/icon-comment--green.svg');
-    min-width: initial;
-    width: 12px;
-    height: 12px;
-    left: 5px;
-    bottom: -8px;
-  }
+  // Comment icon style
+  // &.avatar__reply {
+  //   opacity: 1;
+  //   background-image: url('../assets/images/icon-comment--green.svg');
+  //   min-width: initial;
+  //   width: 12px;
+  //   height: 12px;
+  //   left: 5px;
+  //   bottom: -8px;
+  // }
 }
 
 .comment__count--mobile {

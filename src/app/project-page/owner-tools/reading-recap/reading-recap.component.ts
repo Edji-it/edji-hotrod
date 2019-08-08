@@ -9,7 +9,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
 import { User, Project, EdjiComment, CommentStats } from '../../../shared/datatypes'
-import { AuthService, AcademyService } from '../../../_services'
+import { AuthService, AcademyService, SocketService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
 
@@ -69,6 +69,7 @@ export class ReadingRecapComponent implements OnInit {
     private _fb: FormBuilder,
     private _academy: AcademyService,
     private angulartics: Angulartics2,
+    private _socket: SocketService
   ) {
     this.evaluationForm = _fb.group({
       email: [null, [Validators.required, this.emailValidator]],
@@ -216,6 +217,7 @@ export class ReadingRecapComponent implements OnInit {
   private populateStudentList(initialPass?: boolean): void {
     let removePos = -1
     // set the dropdown filter for all students
+    this.students = []
     this.commentStats.stats.userStats.forEach((student, index) => {
       if (student._id !== this.teacherId) {
         this.students.push({ label: student.fullname, value: student._id })
@@ -295,7 +297,7 @@ export class ReadingRecapComponent implements OnInit {
 
             // user our academy service to package up the email details and send it off to our api if the project successfully updated
             this._academy.sendReadingRecap(formValue, pdfData).subscribe(
-              data => {},
+              data => { },
               error => {
                 console.error(error)
               },
@@ -337,8 +339,13 @@ export class ReadingRecapComponent implements OnInit {
 
     // update the project with the new evaluation, create the pdf, and then email it out
     this._projects.update(projectToUpdate, this.project._id).subscribe(project => {
+      const newEval = project.report_evals[project.report_evals.length - 1]
       // update our project so evaluation shows in the page
-      this.evaluations.push(evalObj)
+      this.evaluations.push(newEval)
+      this._socket.groupUpdateEvent({
+        type: 'feedbackUpdate',
+        feedback: newEval
+      })
     }),
       error => {
         console.error(error)

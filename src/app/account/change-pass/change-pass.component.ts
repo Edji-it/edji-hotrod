@@ -1,4 +1,3 @@
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Component, Output, EventEmitter, OnInit } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'

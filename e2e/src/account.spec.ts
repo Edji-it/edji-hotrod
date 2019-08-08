@@ -3,28 +3,12 @@ import { Account, Login } from './page-objects'
 import * as path from 'path'
 import { Sidebar } from './page-objects/sidebar-page'
 
-/*
-    27 Jan 2017
-    Last Modified: 3 July 2017
-    Nicholas Pumper
-
-    e2e test the account page!
-
-    - We log into all types of account.
-*/
-
-// Now into the testing.
 describe('Account Page', () => {
-  /* ---- Variable Initialization --------------- */
-
-  // object references
   let EC = protractor.ExpectedConditions // vital
   let account = new Account()
   let login = new Login()
   let sidebar = new Sidebar()
 
-  /* ---- beforeEach ---------------------------- */
-  // Does this before each test.
   beforeAll(() => {
     login.getPage()
     browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
@@ -33,23 +17,20 @@ describe('Account Page', () => {
     browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
     login.loginButton.click()
     browser.wait(EC.urlContains('dashboard'), 5000, 'never arrived at dashboard')
-    // account.getPage();
     sidebar.clickAccountButton()
     browser.wait(EC.urlContains('account'), 5000, 'never arrived at account page')
-  }) // beforeAll
-
-  /* ---- Vital Super Basic Test  --------------- */
-
-  /* Test: Extremely Basic Test.
-    - IF THIS FAILS: You are not running Protractor correctly;
-    */
-  it('Extremely Basic Test', () => {
-    let subject = browser.getTitle()
-    let result = 'Edji'
-    browser.wait(EC.titleContains(result), 5000, 'Title should contain "Edji".')
   })
 
-  // Created 7.25.17
+  afterEach(() => {
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
+  })
+
   describe('Hero Management', () => {
     it('Hero user should see subscription options', () => {
       // make sure there is no avatar

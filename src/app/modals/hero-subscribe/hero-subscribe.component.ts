@@ -53,7 +53,7 @@ export class HeroSubscribeComponent implements OnInit {
     private _chimp: MailchimpService,
     private angulartics: Angulartics2,
     private fb: FormBuilder,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // get the user
@@ -113,7 +113,7 @@ export class HeroSubscribeComponent implements OnInit {
     this.card.mount('#card-element')
 
     // Handle real-time validation errors from the card Element.
-    this.card.addEventListener('change', function(event) {
+    this.card.addEventListener('change', function (event) {
       var displayError = document.getElementById('card-errors')
       if (event.error) {
         displayError.textContent = event.error.message
@@ -190,8 +190,8 @@ export class HeroSubscribeComponent implements OnInit {
         this.initWithCoupon
           ? this.couponCode.toUpperCase()
           : this.sForm.valid
-          ? this.sForm.controls['couponCode'].value.toUpperCase()
-          : '',
+            ? this.sForm.controls['couponCode'].value.toUpperCase()
+            : '',
       )
       .subscribe(
         data => {

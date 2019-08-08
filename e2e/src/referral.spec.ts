@@ -1,13 +1,8 @@
 import { browser, by, element, protractor } from 'protractor'
 
-// Internal
 import { Home, Login, Sidebar, Hero, Dashboard, NewReading, Discover } from './page-objects'
 import { LoginForm, RegisterForm, UserDetailsModal } from './components'
 
-/**
- * Referral Tests
- * - Users can refer other users, and be rewarded
- */
 describe('Share', () => {
   let login = new Login()
   let loginForm = new LoginForm()
@@ -20,7 +15,6 @@ describe('Share', () => {
   let discover = new Discover()
   let EC = protractor.ExpectedConditions
 
-  // Referral specific element references
   let copyReferralLinkBtn = element(by.id('buttonCopylink'))
   let copySuccessMsg = element(by.id('linkCopySuccess'))
   let referalCodeBox = element(by.id('copyShareLink'))
@@ -36,17 +30,23 @@ describe('Share', () => {
   let twitterShare = element(by.id('shareIconTwitter'))
   let emailShare = element(by.id('shareIconEmail'))
 
+  afterEach(() => {
+    browser.manage().logs().get('browser').then(browserLog => {
+      if (browserLog.length > 0) {
+        browserLog.forEach(log => {
+          console.error(log.message)
+        })
+      }
+    })
+  })
+
   describe('Account Referral Sharing and Rewards', () => {
     beforeAll(() => {
       login.getPage()
       login.loginAndVerify(login.referUser, login.referPassword)
     })
     let referralLink = ''
-    /**
-     * Referral Code
-     * - User should be able to open the Referral modal
-     * - User should be able to share their referral code
-     */
+
     it('should access referral modal with code', async () => {
       // Open Referral Modal
       sidebar.clickReferralButton()
@@ -63,12 +63,6 @@ describe('Share', () => {
       referralClose.click()
     })
 
-    /**
-     * Share Referral via:
-     * - Facebook
-     * - Twitter
-     * - Email
-     */
     it('should be able to share unique referral link via socials', async () => {
       // Open Referral Modal
       sidebar.clickReferralButton()
@@ -116,9 +110,6 @@ describe('Share', () => {
       referralClose.click()
     })
 
-    /**
-     * User who has completed 5 referrals should be rewarded
-     */
     it('should reward user with 5 or more referrals', () => {
       // Open Referral modal
       sidebar.clickReferralButton()
@@ -142,10 +133,6 @@ describe('Share', () => {
       hero.subscribeModalClose.click()
     })
 
-    /**
-     * Referral link should credit registered user as referred
-     * - Referral modal will show 20% off
-     */
     it('should register with referral link, create reading, and be credited for referral', () => {
       // Log out referral user
       sidebar.clickLogOutButton()
@@ -193,7 +180,7 @@ describe('Share', () => {
       newReading.groupInput.sendKeys(newReading.groupString)
       newReading.finalizeButton.click()
       // Should redirect to Project page for new reading
-      browser.wait(EC.urlContains('project'), 5000, 'never arrived at new reading')
+      browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
       // Reset user to dashboard
       sidebar.backToDash()
       /**

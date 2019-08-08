@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable, interval, Subscription } from 'rxjs'
+import { Observable, interval, Subscription, Subject } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // project dependancies
@@ -17,13 +17,21 @@ export class AcademyService implements CanActivate {
 
   public allLicenses: any
   public institutionLicenses: any
+  private user: User
+
+  // User status in project
+  private userActivity: any
+  private userActive: boolean = true
+
+  public userStatusSubj: Subject<any> = new Subject()
+  public userStatus: Observable<any> = this.userStatusSubj.asObservable()
 
   constructor(
     private _http: HttpClient,
     private _auth: AuthService,
     private _router: Router,
     private _locker: LockerService,
-  ) {}
+  ) { }
 
   /**
    * Accepts a license that is shared with the user
@@ -198,14 +206,19 @@ export class AcademyService implements CanActivate {
    * Sends an event to pipo every 30 seconds once the timer is rolling
    * - Stops by using stopReadingTimer - or leaving Edji all together
    */
-  public startReadingTimer(user: User, project: Project): void {
+  public startReadingTimer(user: User, project: Project, resume?: boolean): void {
+    // We broadcast out the user in a socket event if inactive for the status indicator
+    this.user = user
+    // Start checking for lack of activity now
+    this.monitorUserReadingStatus()
+    // Kick off the reading timer subscription
     this.readingTimerSubscription = interval(30000).subscribe(() => {
       // send the data to Pipo to log the new reading
       this.pipoEvent({
         // standard event info:
         event_name: 'reading_tick',
         user_id: user._id,
-        teacher: project.teacher._id === user._id,
+        teacher: project.isTeaching,
         hero: user.hero_status || false,
         institution_id: user.institution_ids || [],
         // event-specific info:
@@ -215,6 +228,34 @@ export class AcademyService implements CanActivate {
         reading_time: 30,
       })
     })
+  }
+
+  /**
+   * Before we start the timer, we'll subscribe to an event that will monitor user activity. 
+   * when the user idles, we'll call on stopReadingTimer and let socket know the user went idle in the reading
+   * for the live status indicators. Once the user has activity again, we'll fire another message out to indicate
+   * live status and start the timer again
+   */
+  private monitorUserReadingStatus(resume?: boolean): void {
+    this.userActivity = setTimeout(() => {
+      this.userActive = false
+      // this will set the user's status on the leaderboard to idle
+      this.userStatusSubj.next({
+        status: 'idle'
+      })
+    }, 120000) // if the user status indicator is going idle too much, then add more time here!
+  }
+
+  public trackActivity(): void {
+    clearTimeout(this.userActivity)
+    // this will set the user's status on the leaderboard to active
+    if (!this.userActive) {
+      this.userStatusSubj.next({
+        status: 'active'
+      })
+    }
+    this.userActive = true
+    this.monitorUserReadingStatus()
   }
 
   /** Provides logic for sending user back to home if they are not authorized */

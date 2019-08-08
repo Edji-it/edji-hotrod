@@ -1,8 +1,9 @@
 import { Subscription } from 'rxjs'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
-import { CommentStats, Reading, User } from './../../../shared/datatypes'
+import { CommentStats, Reading, User, Project, PublicUser } from './../../../shared/datatypes'
 import { ProjectService, ReadingService, AuthService } from '../../../_services'
 import { CommentFilter } from '../../../_services/project.service'
 
@@ -12,23 +13,54 @@ import { CommentFilter } from '../../../_services/project.service'
   styleUrls: ['./leaderboard.component.scss'],
 })
 export class LeaderboardComponent implements OnInit {
-  @Input() visible: boolean = false
   @Input() archived: boolean = false
-  @Output() hide: EventEmitter<any> = new EventEmitter()
+  @Input()
+  set coOwnerGuide(val) {
+    if (val === true) {
+      if (this.coOwnerTooltipIndex < 0) {
+        this.coOwnerTooltipIndex = 0
+      }
+    }
+  }
+  // Manage visibility with 2 way binding
+  private visible: boolean = false
+  @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter()
+  @Input()
+  get visibility() {
+    return this.visible
+  }
+  set visibility(val) {
+    if (this.visible !== val) {
+      this.visible = val
+      this.visibilityChange.emit(this.visible)
+    }
+  }
 
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
 
   private currentUser: User
   private currentReading: Reading
+  private currentProject: Project
   private subscriptions: Subscription[] = []
   private answersById: any = {}
   private userAnswers: any[] = []
 
   public appliedFilter: CommentFilter
   public showFilterHeroModal: boolean
+  public coOwnerToBe: User
+  // Determines display of co-owner tooltips
+  public coOwnerTooltipIndex: number = -1
+  // Student settings display
+  public studentSettingsIndex: number = -1
 
-  constructor(private _readings: ReadingService, private _projects: ProjectService, private _auth: AuthService) {}
+  constructor(
+    private _readings: ReadingService,
+    private _projects: ProjectService,
+    private _auth: AuthService,
+    private _route: ActivatedRoute,
+    private router: Router,
+  ) { }
 
   ngOnInit() {
     // Subscribe to current user
@@ -45,29 +77,32 @@ export class LeaderboardComponent implements OnInit {
             console.error(error)
           },
         ),
-      ),
-      // Subscribe to updates to the answer reference object
-      this._projects.answersById.subscribe(
-        answersById => {
-          this.answersById = answersById
-          this.questionAnswerStatus()
-        },
-        error => {
-          console.error(error)
-        },
-      ),
-      // Get Updates about applied comment filters so we can show the user
-      this._projects.filterUpdates.subscribe(filter => {
-        this.appliedFilter = filter
+        // Subscribe to updates to the answer reference object
+        this._projects.answersById.subscribe(
+          answersById => {
+            this.answersById = answersById
+          },
+          error => {
+            console.error(error)
+          },
+        ),
+        // Subscribe to updates to the project
+        this._projects.currentProject.subscribe(project => {
+          this.currentProject = project
+        }),
+        // Get Updates about applied comment filters so we can show the user
+        this._projects.filterUpdates.subscribe(filter => {
+          this.appliedFilter = filter
 
-        if (this.commentStats.stats.userStats) {
-          for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
-            this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(
-              this.commentStats.stats.userStats[i],
-            )
+          if (this.commentStats.stats.userStats) {
+            for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
+              this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(
+                this.commentStats.stats.userStats[i],
+              )
+            }
           }
-        }
-      })
+        }),
+      )
   }
 
   ngOnDestroy() {
@@ -76,53 +111,19 @@ export class LeaderboardComponent implements OnInit {
     })
   }
 
-  private questionAnswerStatus() {
-    var answered: boolean
-    this.userAnswers = []
-
-    // check if there is a user, and the reading contains questions
-    if (
-      this.commentStats.stats.userStats &&
-      this.commentStats.stats.userStats.length > 0 &&
-      this.currentReading.questions &&
-      this.currentReading.questions.length > 0
-    ) {
-      // loop through the userStats to get answered questions by each user in the reading
-      for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
-        let commentUser = this.commentStats.stats.userStats[i]
-
-        // loop through the reading's available questions
-        for (let j = 0; j < this.currentReading.questions.length; j++) {
-          let question = this.currentReading.questions[j]
-          // check if the question has answers
-          if (this.answersById[question._id] && this.answersById[question._id].length > 0) {
-            // loop through the answers by that question ID
-            for (let k = 0; k < this.answersById[question._id].length; k++) {
-              let answer = this.answersById[question._id][k]
-              if (answer.user_id === commentUser._id) {
-                answered = true
-                break
-              }
-            }
-            // if the user has answered that question, then break and mark it answered (default is not answered)
-            let userAnswerObj = {
-              user: commentUser._id,
-              answered: answered,
-            }
-            this.userAnswers.push(userAnswerObj)
-            answered = false
-          }
-        }
-      }
-    }
-  }
-
   /**
    * Apply Student Filter
    * @param student User needs "_id" and "fullname"/"username"
    */
   public viewStudentFilter(student: any): void {
-    this._projects.filterByUser(student)
+    // Hide dropdown
+    this.studentSettingsIndex = -1
+    // Toggle filter
+    if (!this.isStudentFiltered(student)) {
+      this._projects.filterByUser(student)
+    } else {
+      this._projects.clearFilters()
+    }
   }
 
   /**
@@ -165,11 +166,72 @@ export class LeaderboardComponent implements OnInit {
   /**
    * Is Student Filtered
    */
-  public isStudentFiltered(student: any): boolean {
+  public isStudentFiltered(student: PublicUser): boolean {
     if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
       return this.appliedFilter.propertyFilters.user_id.test(student._id)
     } else {
       return false
     }
+  }
+
+  /**
+   * Returns if user is co-teacher
+   * @param student id
+   */
+  public isStudentCoTeacher(student: PublicUser): boolean {
+    return this.currentProject.co_owner_ids && this.currentProject.co_owner_ids.indexOf(student._id) > -1
+  }
+
+  /**
+   * Toggle Student settings dropdown
+   * @param studentIndex
+   */
+  public toggleStudentSettings(studentIndex: number): void {
+    if (this.studentSettingsIndex === studentIndex) {
+      this.studentSettingsIndex = -1
+    } else {
+      this.studentSettingsIndex = studentIndex
+    }
+    // Progress guidance tooltips
+    this.coOwnerTooltipNext()
+  }
+
+  /**
+   * Trigger confirmation modal
+   */
+  public confirmCoOwner(student: User) {
+    // Hide dropdown
+    this.studentSettingsIndex = -1
+    // Clear coowner tooltips
+    this.coOwnerTooltipIndex = -1
+    this.coOwnerToBe = student
+  }
+
+  /**
+   * Progress the co-owner guide tooltip
+   */
+  public coOwnerTooltipNext(): void {
+    if (this.coOwnerTooltipIndex > -1) {
+      this.coOwnerTooltipIndex++
+    }
+    if (this.coOwnerTooltipIndex > 1) {
+      this.coOwnerTooltipIndex = -1
+    }
+  }
+
+  /**
+   * Close the student list
+   */
+  public close(): void {
+    this.router.navigate(['./'], {
+      relativeTo: this._route,
+      queryParams: { studentList: null },
+      queryParamsHandling: 'merge',
+    })
+    this.visibility = false
+    // Clear tooltips
+    this.coOwnerTooltipIndex = -1
+    // Close dropdowns
+    this.studentSettingsIndex = -1
   }
 }

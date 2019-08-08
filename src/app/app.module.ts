@@ -1,9 +1,12 @@
 import { NgModule, ApplicationRef, ErrorHandler, Injectable } from '@angular/core'
-import { HttpModule } from '@angular/http'
+import { HttpClientModule } from '@angular/common/http'
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 import { LockerModule, Locker, LockerConfig } from 'angular-safeguard'
 import { Angulartics2Module } from 'angulartics2'
 import * as Sentry from '@sentry/browser'
+import { StoreModule } from '@ngrx/store'
+import { reducers, metaReducers } from './_reducers'
+import { EffectsModule } from '@ngrx/effects'
 
 // App is our top level component
 import { AppComponent } from './app.component'
@@ -22,7 +25,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() { }
+  constructor() {}
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -46,6 +49,7 @@ import {
   UtilToolService,
   DashboardGuardService,
   MailchimpService,
+  StateService,
 } from './_services'
 // import { ReuseStrategy } from './route-reuse-strategy'
 
@@ -81,8 +85,9 @@ import {
   DiscoverAddMetaModal,
   ReadingArchivedModal,
   ConfirmArchiveModal,
+  ConfirmCoOwnerModal,
   ReadingPreviewModal,
-  ReadingLinkModal
+  ReadingLinkModal,
 } from './modals'
 import {
   AnnotatorComponent,
@@ -122,27 +127,36 @@ import { DiscoverFeedComponent } from './discover-feed/discover-feed.component'
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { GoogleButton, CleverButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
-import { HttpClientModule } from '@angular/common/http'
 import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
 import { TooltipModule } from 'primeng/tooltip'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { RouterModule, PreloadAllModules, Router } from '@angular/router'
+import { RouterModule, PreloadAllModules, Router, ExtraOptions } from '@angular/router'
 import { ROUTES } from './app.routes'
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component'
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component'
 import { ReadingRecapComponent } from './project-page/owner-tools/reading-recap/reading-recap.component'
 import { TeamPageComponent } from './team-page/team-page.component'
-import { SearchPage } from './search-page/search-page.component';
+import { SearchPage } from './search-page/search-page.component'
+import { TeacherFeedbackComponent } from './annotator/teacher-feedback/teacher-feedback.component'
+import { MetricsEffects } from './_reducers/metrics.effects'
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
+  buildHammer(element: HTMLElement) {
+    // Enable polyfill for touch actions to support scrolling on top of tap bindings
+    let mc = new Hammer(element, {
+      touchAction: 'pan-y',
+    })
+    return mc
+  }
   overrides = <any>{
     // override default gesture settings
     //  Tap overrides for Chrome v71 sensitivity when making comments
     tap: {
       time: 2000, // Maximum press time in ms.
-      threshold: 100, //	While doing a tap some small movement is allowed.
+      threshold: 20, //	While doing a tap some time spent moving is allowed.
+      posThreshold: 75, // While tapping some position movement is allowed
     },
   }
 }
@@ -162,6 +176,7 @@ const APP_PROVIDERS = [
   UtilToolService,
   BumblebeeService,
   MailchimpService,
+  StateService,
   {
     provide: HAMMER_GESTURE_CONFIG,
     useClass: MyHammerConfig,
@@ -170,6 +185,11 @@ const APP_PROVIDERS = [
   // { provide: ErrorHandler, useClass: SentryErrorHandler }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
 ] // const APP_PROVIDERS
+
+const routerOptions: ExtraOptions = {
+  useHash: true,
+  anchorScrolling: 'enabled',
+}
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -182,6 +202,7 @@ const APP_PROVIDERS = [
     RegisterPageComponent,
     CommentPaneComponent,
     CommentComponent,
+    TeacherFeedbackComponent,
     AvatarPortalComponent,
     TextCommentComponent,
     EmojiCommentComponent,
@@ -202,6 +223,7 @@ const APP_PROVIDERS = [
     AddProjectModal,
     ReadingArchivedModal,
     ConfirmArchiveModal,
+    ConfirmCoOwnerModal,
     ReadingLinkModal,
     ReadingPreviewModal,
     ChangePassComponent,
@@ -248,7 +270,7 @@ const APP_PROVIDERS = [
     LicenseRedirectComponent,
     LicenseWelcomeComponent,
     ReadingRecapComponent,
-    TeamPageComponent
+    TeamPageComponent,
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],
@@ -256,7 +278,6 @@ const APP_PROVIDERS = [
     // import Angular's modules
     SharedModule,
     BrowserAnimationsModule,
-    HttpModule,
     HttpClientModule,
     LockerModule,
     MediumEditorModule,
@@ -265,13 +286,18 @@ const APP_PROVIDERS = [
       pageTracking: {
         clearIds: true,
       },
+      // gst: {
+      //   trackingIds: ['UA-83792906-1'],
+      // }
     }),
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, routerOptions),
     DataListModule,
     PaginatorModule,
     TooltipModule,
     Ng4TwitterTimelineModule,
     NgxPageScrollModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot([MetricsEffects]),
   ],
   providers: [
     // expose our Services and Providers into Angular's dependency injection
@@ -279,4 +305,4 @@ const APP_PROVIDERS = [
     APP_PROVIDERS,
   ],
 }) //@NgModule
-export class AppModule { }
+export class AppModule {}

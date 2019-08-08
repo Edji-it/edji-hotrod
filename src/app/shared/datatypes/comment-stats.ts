@@ -1,5 +1,5 @@
-import { EdjiComment, iCommentStats, Project } from './'
-import { UserCommentStats } from './comment'
+import { EdjiComment, iCommentStats, Project, User } from './'
+import { UserCommentStats, userReadingStatus } from './comment'
 
 export class CommentStats {
   public _stats: iCommentStats = {
@@ -10,7 +10,7 @@ export class CommentStats {
     comment_avg: 0,
     userStats: [],
   }
-  public teacherId: string
+  public teacherIds: string[]
 
   constructor(project?: Project) {
     this._stats = this.initStats(project)
@@ -37,9 +37,19 @@ export class CommentStats {
     if (!project) {
       return commentStats
     }
-
-    this.teacherId = project && project.teacher_id ? project.teacher_id : ''
-
+    /**
+     * @todo Teacher ids should be referenced directly from the project, so they are kept up to date
+     * - This should be done as comment stats logic is pushed into either the project service or a separate one
+     */
+    this.teacherIds = []
+    // Push teacher id
+    if (project && project.teacher_id) {
+      this.teacherIds.push(project.teacher_id)
+    }
+    // Push co-teacher ids
+    if (project && project.co_owner_ids) {
+      this.teacherIds = this.teacherIds.concat(project.co_owner_ids)
+    }
     // loop through student ids and add them to the array
     //  we have to do this because some students won't make a comment, so this is their only data on the project
     //  looping through addCommentToStats will later increment the count
@@ -56,6 +66,7 @@ export class CommentStats {
         audio_comment_count: 0,
         fullname: student.fullname,
         comments: [],
+        status: 'offline',
       })
     }
 
@@ -73,6 +84,7 @@ export class CommentStats {
         audio_comment_count: 0,
         fullname: student.fullname,
         comments: [],
+        status: 'offline',
       })
     }
     return commentStats
@@ -90,17 +102,22 @@ export class CommentStats {
       let student = project.students[i]
       // see if there is a student in the stats list already
       let studentFound = commentStats.userStats.find(el => el._id === student._id)
+      // check for answered questions
+      let studentQuestions = project.reading_id.questions ? this.getAnswers(project.reading_id.questions, project.answers, student) : []
       // add the student if they are not already in the list
       if (!studentFound) {
         commentStats.userStats.push({
           _id: student._id,
           comment_count: 0,
+
           reply_count: 0,
           emoji_comment_count: 0,
           text_comment_count: 0,
           audio_comment_count: 0,
           fullname: student.fullname,
           comments: [],
+          status: 'offline',
+          questions: studentQuestions
         })
       }
     }
@@ -110,17 +127,22 @@ export class CommentStats {
       let student = project.temps[i]
       // see if there is a student in the stats list already
       let studentFound = commentStats.userStats.find(el => el._id === student._id)
+      // check for answered questions
+      let studentQuestions = project.reading_id.questions ? this.getAnswers(project.reading_id.questions, project.answers, student) : []
       // add the student if they are not already in the list
       if (!studentFound) {
         commentStats.userStats.push({
           _id: student._id,
           comment_count: 0,
+
           reply_count: 0,
           emoji_comment_count: 0,
           text_comment_count: 0,
           audio_comment_count: 0,
           fullname: student.fullname,
           comments: [],
+          status: 'offline',
+          questions: studentQuestions
         })
       }
     }
@@ -148,6 +170,9 @@ export class CommentStats {
    * @param commentStats The comment stats object which will be modified and returned
    */
   public addCommentToStats(comment: EdjiComment, difference: number): void {
+    // if this is an answer, then do not do anything here
+    if (comment.questionId) return
+
     let isReply = comment.reply_to && comment.reply_to.length > 0
     // increment the total reading comment count by the difference
     if (isReply) {
@@ -169,6 +194,7 @@ export class CommentStats {
         text_comment_count: comment.type === 'text' && !isReply ? 1 : 0,
         audio_comment_count: comment.type === 'audio' && !isReply ? 1 : 0,
         comments: [comment],
+        status: this.findStudentStatus(comment.user_id),
       })
     } else if (student) {
       if (isReply) {
@@ -211,6 +237,20 @@ export class CommentStats {
     this.calculateMinMaxAvg()
   }
 
+  public recalculateAnswers(answer: any, answerChange: boolean, project: Project): void {
+    let student = this.findStudent(answer.user_id)
+    if (student) {
+      student.questions.find((ans: any) => ans.questionId === answer.questionId)
+      const len = student.questions.length
+      for (var i = 0; i < len; i++) {
+        let question = student.questions[i]
+        if (question._id === answer.questionId) {
+          student.questions[i].answered = answerChange
+        }
+      }
+    }
+  }
+
   /**
    * Get a student from the _stats.userStats array by _id
    * @param _id the _id from the student that you want to find
@@ -220,6 +260,18 @@ export class CommentStats {
     return this._stats.userStats.find(student => {
       return student._id == _id
     })
+  }
+
+  /**
+   * Returns the current status for the comment user
+   * Primarily used when populating comments because we can't assign a status multiple times (we'll let the student user indicate their status with sockets)
+   * @param _id the comment user's _id
+   */
+  private findStudentStatus(_id: string): userReadingStatus {
+    let student = this._stats.userStats.find(student => {
+      return student._id === _id
+    })
+    return student && student.status || 'offline'
   }
 
   /**
@@ -250,7 +302,7 @@ export class CommentStats {
 
     for (var i = userLength - 1; i >= 0; i--) {
       // only calculate these stats for the students
-      if (this._stats.userStats[i]._id !== this.teacherId) {
+      if (this.teacherIds.indexOf(this._stats.userStats[i]._id) === -1) {
         tmp = this._stats.userStats[i].comment_count
         avgSum += this._stats.userStats[i].comment_count
         if (tmp < lowest) lowest = tmp
@@ -263,4 +315,43 @@ export class CommentStats {
     this._stats.comment_min = lowest
     this._stats.comment_avg = Math.round(avgSum / userLength)
   }
+
+  /**
+   * Updates the user status on the commentStats.userStats
+   * @param user current user
+   * @param status is of type userReadingStatus (offline, idle, or active)
+   */
+  public userStatus(user: any, status: userReadingStatus) {
+    let student = this.findStudent(user._id)
+    if (student) {
+      student.status = status
+    }
+  }
+
+  /**
+   * Checks through the answers on the project to see if a student has answered each of the questions on that reading
+   * @param questions the array of question _id's and answered value (boolean)
+   * @param answers answers on the project
+   * @param student current student we're evaluating for
+   */
+  private getAnswers(readingQuestions: any, answers: any, student: any): any[] {
+    const len = readingQuestions.length
+    let questions = []
+    for (var i = 0; i < len; i++) {
+      let ans = false // default
+      let question = readingQuestions[i]
+      if (answers) {
+        let answerFound = answers.find((ans: any) => ans.questionId === question._id && ans.user_id === student._id)
+        if (answerFound) {
+          ans = true
+        }
+      }
+      questions.push({
+        _id: question._id, // reference
+        answered: ans
+      })
+    }
+    return questions
+  }
 }
+

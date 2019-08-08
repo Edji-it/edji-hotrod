@@ -1,6 +1,5 @@
 import { browser, by, element, protractor } from 'protractor'
 
-// Internal
 import { Home, Login, Sidebar, Hero, Dashboard, NewReading, Discover } from './page-objects'
 
 describe('Reading Link', () => {
@@ -10,7 +9,6 @@ describe('Reading Link', () => {
     let discover = new Discover()
     let EC = protractor.ExpectedConditions
 
-    // Referral specific element references
     let copyReferralLinkBtn = element(by.id('buttonCopylink'))
     let copySuccessMsg = element(by.id('linkCopySuccess'))
     let referalCodeBox = element(by.id('copyShareLink'))
@@ -27,6 +25,16 @@ describe('Reading Link', () => {
 
     afterAll(() => {
         sidebar.logout()
+    })
+
+    afterEach(() => {
+        browser.manage().logs().get('browser').then(browserLog => {
+            if (browserLog.length > 0) {
+                browserLog.forEach(log => {
+                    console.error(log.message)
+                })
+            }
+        })
     })
 
     let readingLink = ''

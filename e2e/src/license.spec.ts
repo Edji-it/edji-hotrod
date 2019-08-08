@@ -1,6 +1,3 @@
-/**
- * License Management Tests
- */
 import { browser, by, element, protractor } from 'protractor'
 import { Sidebar, Login, Dashboard } from './page-objects'
 
@@ -10,34 +7,32 @@ describe('Academy user that has ability to manage licenses for their academy: ',
   let sidebar = new Sidebar()
   let EC = protractor.ExpectedConditions
 
-  // Elements
   let licenseLoader = element(by.id('licenseMgmtLoader'))
 
   describe('Non-Admin users should not be able to access the license mgmt page', () => {
     beforeEach(() => {
-      // get ready to login
       login.getPage()
       browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
     })
 
     afterEach(() => {
-      // log out
       sidebar.logout()
+
+      browser.manage().logs().get('browser').then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
     })
 
-    // Log-in as a student and attempt to access the academy page - should not be able to access, this is expected behavior
     it('should log in as a student and not be able to access the academy license manage page', () => {
-      // log-in as the student and make sure we hit the dashboard
       login.loginAndVerify(login.studentUser, login.studentPassword)
-
-      // go to the academy license manage page
       dashboard.getLicenseManage()
-
-      // should not go to the licenses page
       browser.wait(EC.urlContains('dashboard'), 5000, 'should not have hit the licenses page')
     })
 
-    // Log-in as a teacher that does not have access to manage licenses - should not be able to access, this is expected behavior
     it('should log in as a teacher (non-hero) and not be able to access the academy license manage page', () => {
       // log-in as the teacher (non-hero) and make sure we hit the dashboard
       login.loginAndVerify(login.teacherUser, login.teacherPassword)
@@ -49,9 +44,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
   })
 
   describe('Academy admin should be able to log in and:', () => {
-    // Log-in as a hero that has access to manage the page - verify they can access the page
     beforeAll(() => {
-      // get ready to login
       login.getPage()
       browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
       // log-in as the hero and make sure we hit the dashboard
@@ -65,11 +58,9 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     })
 
     afterAll(() => {
-      // log out
       sidebar.logout()
     })
 
-    // Access the license management page - verify more than 1 license is in use
     it('should verify more than 1 license is in use', () => {
       // Find active license count on license mangagement page
       browser.wait(
@@ -85,7 +76,6 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       })
     })
 
-    // Access the license management page - verify more than 1 license is available
     it('should log in as an admin and verify more than 1 license is available', () => {
       // Find available license count on license mangagement page
       browser.wait(
@@ -101,7 +91,6 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       })
     })
 
-    // Access the license management page - verify inviting a new teacher and that the inivite was succesfully sent
     it('should log in as an admin and successfully invite a teacher to join', () => {
       // Find invite fields
       browser.wait(
@@ -135,10 +124,10 @@ describe('Academy user that has ability to manage licenses for their academy: ',
         'never saw the latest license invite get added',
       )
     })
-  }) //- End Academy Admin steps
+  })
 
-  var specificTextToBePresentInElement = function(elementFinder, nameText) {
-    var hasText = function() {
+  var specificTextToBePresentInElement = function (elementFinder, nameText) {
+    var hasText = function () {
       return elementFinder.getText().then(text => {
         return text
       })

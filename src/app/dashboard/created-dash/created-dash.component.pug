@@ -43,7 +43,7 @@
           | Recently Created
       //- Bookmarks
       .btn-filter-wrap.hover--tooltip(style="position:relative;")
-        button.btn.btn-filter( 
+        button#bookmarksBtn.btn.btn-filter( 
           [class.active]="searchParams.createdCollection === 'bookmarked'",
           [class.disabled--not-hero]="!user.hero_status",
           (click)="searchParams.createdCollection = 'bookmarked'; searchParams.first=0; updateSearchParams('bookmarked')"
@@ -51,7 +51,7 @@
           i.icon.icon-bookmark(style="vertical-align:middle;")
           | Bookmarks
         .tooltip-wrap(*ngIf="!user.hero_status")
-          .tooltip
+          .tooltip.tooltip--interactive
             .tooltip-title Bookmarking is available with <a class="link" [routerLink]="['/plans']">Hero</a>
       //- Versions
       .btn-filter-wrap
@@ -59,14 +59,28 @@
             *ngIf="searchParams.createdCollection === 'versions'",
             [innerHtml]="':books: Versions' | emojione", 
         )
-    .card.my-4.hidden-sm-down(*ngIf="!isSearching")
-      .card-body.card-body--small.pt-1.px-3.pb-3
-        h5.card-title From the Edji Guide
-        p.card-text Get ideas and tips for your classroom:
-        ul.link-list
-          li(*ngFor="let guide of guideLinks")
-            a.link(target="_blank", [href]="guide.url")
-              | {{ guide.displayName }}
+    //- Promo content
+    ng-container(*ngIf="!isSearching && !(user && user.isStudent)")
+      .card.my-4.hidden-sm-down
+        .card-body.card-body--small.pt-1.px-3.pb-3
+          .label.card-title From the Edji Guide
+          p.card-text Get ideas and tips for your classroom:
+          ul.link-list
+            li(*ngFor="let guide of guideLinks")
+              a.link(target="_blank", [href]="guide.url")
+                | {{ guide.displayName }}
+      .card.hidden-sm-down
+        .card-body.card-body--small.pt-1.px-3.pb-1
+          .label.card-title Discover Readings
+          //- p.card-text Get ideas and tips for your classroom:
+          .btn-filter-wrap.hover--tooltip(style="position:relative;")
+            button#dashboardFilterStrategies.btn.btn-filter(
+              title="Find strategy templates by Edji to get you started",
+              [routerLink]="['/discover']",
+              [queryParams]="{library: 'strategies'}"
+            )
+              i.icon.icon-strategies-sm(style="vertical-align:middle;")
+              | Strategies
     .form-group(*ngIf="isSearching")
       label Try the Public Library
       .btn-filter-wrap
@@ -156,7 +170,7 @@
       .draft-card([routerLink]="['/new-reading/' + draft._id]")
         .icon.icon-lg.icon-create
         .h2.draft-card__title {{ draft.title }}
-        p.draft-card__date Last edited {{ draft.updatedAt | edjidate:'timeAgo':null:secondsAgo }}
+        p.draft-card__date Last edited {{ draft.updatedAt | edjidate:'timeAgo':null }}
       .draft-card__action.icon-button.e2e-draft-delete(title="Delete draft", (click)="deleteDraft(draft); draft.loading = true")
         span(*ngIf="!draft.loading", [innerHtml]="':x:' | emojione")
         .icon.icon-loading(*ngIf="draft.loading")

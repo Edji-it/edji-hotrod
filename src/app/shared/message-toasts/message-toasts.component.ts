@@ -1,8 +1,10 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 import { Observable } from 'rxjs'
+import { Location } from '@angular/common'
 
 // Project Dependencies
 import { MessageToast, MessageService } from 'src/app/_services'
+import { Router } from '@angular/router'
 @Component({
   selector: 'edji-message-toasts',
   templateUrl: './message-toasts.component.pug',
@@ -13,7 +15,7 @@ export class MessageToastsComponent implements OnInit {
   public toasts: MessageToast[] = []
   public toastObservable: Observable<MessageToast[]>
 
-  constructor(private _messages: MessageService) { }
+  constructor(private _messages: MessageService, public _router: Router, public location: Location) {}
 
   ngOnInit() {
     this.toastObservable = this._messages.toastUpdates
@@ -29,7 +31,10 @@ export class MessageToastsComponent implements OnInit {
       'heat-off': 'icon-vision-flame inactive',
       success: 'icon-check',
       info: 'icon-notice',
-      promo: 'icon-gift'
+      promo: 'icon-gift',
+      promoted: 'icon-promote',
+      'new-feedback': 'icon-feedback',
+      'new-reply': 'icon-reply-arrow',
     }
     return toastTypeMap[toastType] || toastTypeMap['info']
   }

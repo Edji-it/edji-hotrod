@@ -7,8 +7,8 @@ nav-bar([showDashboardOptions]="true")
 .fixed-btn-row--SE
   tutorial-box.hidden-sm-down(
     [tutorialName]="'newReading'",
-    [pageObjs]="toolTipsContent", 
-    [pager]="toolTipStepNo", 
+    [pageObjs]="toolTipsContent",
+    [pager]="toolTipStepNo",
     (pageChange)="toolTipStepNo = $event"
   )
 hot-user-details-update([showModal]="showUserDetailsModal", (closeModal)="userDetailsAdded()")

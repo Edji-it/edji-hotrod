@@ -26,6 +26,20 @@ describe('Dashboard Page as a Hero', () => {
     sidebar.logout()
   })
 
+  afterEach(() => {
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
+  })
+
   it('should arrive at dashboard', () => {
     browser.wait(EC.urlContains('dashboard'), 15000, 'never arrived at dashboard')
   })
@@ -172,6 +186,90 @@ describe('Dashboard Page as a Hero', () => {
       sidebar.backToDash()
     })
   })
+
+  describe('Updating Public Status from Dashboard', () => {
+    it('should make a private reading public', () => {
+      dashboard.goToCreatedTab()
+      // Wait for Readings to load into Dashboard
+      browser.wait(
+        EC.elementToBeClickable(dashboard.firstReadingCard),
+        8000,
+        'never found Created Readings on Dashboard',
+      )
+      // switch to bookmarked view
+      browser.wait(EC.elementToBeClickable(dashboard.bookmarksBtn), 5000, 'never found bookmarks button')
+      dashboard.bookmarksBtn.click()
+      // input search term 'Public Status' and hit enter
+      browser.wait(EC.visibilityOf(dashboard.searchInput), 5000, 'search input field was not visible')
+      dashboard.searchInput.sendKeys('Public Status')
+      dashboard.searchInput.sendKeys(protractor.Key.ENTER)
+      // check search results
+      browser.wait(EC.visibilityOf(dashboard.searchCount), 5000, 'search results were not visible')
+      // verify the reading showed up
+      browser.wait(
+        EC.elementToBeClickable(dashboard.readingTitleText(dashboard.publicStatusTitle)),
+        5000,
+        'never found the public status reading',
+      )
+      // click toggle
+      browser.wait(
+        EC.elementToBeClickable(dashboard.publicToggleBtn(dashboard.publicStatusTitle)),
+        5000,
+        'never found the toggle public button',
+      )
+      dashboard.publicToggleBtn(dashboard.publicStatusTitle).click()
+      // click public
+      browser.wait(
+        EC.elementToBeClickable(dashboard.readingMakePublic),
+        5000,
+        'never found the make public button on the tooltip to toggle public status',
+      )
+      dashboard.readingMakePublic.click()
+      // verify it changed to public status
+      browser.wait(EC.visibilityOf(dashboard.publicReadingStatus), 5000, 'status never changed back to public')
+    })
+
+    it('should make a public reading private', () => {
+      dashboard.goToCreatedTab()
+      // Wait for Readings to load into Dashboard
+      browser.wait(
+        EC.elementToBeClickable(dashboard.firstReadingCard),
+        8000,
+        'never found Created Readings on Dashboard',
+      )
+      // switch to bookmarked view
+      browser.wait(EC.elementToBeClickable(dashboard.bookmarksBtn), 5000, 'never found bookmarks button')
+      dashboard.bookmarksBtn.click()
+      // input search term 'Public Status' and hit enter
+      browser.wait(EC.visibilityOf(dashboard.searchInput), 5000, 'search input field was not visible')
+      dashboard.searchInput.sendKeys('Public Status')
+      dashboard.searchInput.sendKeys(protractor.Key.ENTER)
+      // check search results
+      browser.wait(EC.visibilityOf(dashboard.searchCount), 5000, 'search results were not visible')
+      // verify the reading showed up
+      browser.wait(
+        EC.elementToBeClickable(dashboard.readingTitleText(dashboard.publicStatusTitle)),
+        5000,
+        'never found the public status reading',
+      )
+      // click toggle
+      browser.wait(
+        EC.elementToBeClickable(dashboard.publicToggleBtn(dashboard.publicStatusTitle)),
+        5000,
+        'never found the toggle public button',
+      )
+      dashboard.publicToggleBtn(dashboard.publicStatusTitle).click()
+      // click public
+      browser.wait(
+        EC.elementToBeClickable(dashboard.readingMakePrivate),
+        5000,
+        'never found the make public button on the tooltip to toggle public status',
+      )
+      dashboard.readingMakePrivate.click()
+      // verify it changed to public status
+      browser.wait(EC.visibilityOf(dashboard.privateReadingStatus), 5000, 'status never changed back to private')
+    })
+  })
 })
 
 describe('Dashboard page as a sidekick', () => {
@@ -187,63 +285,59 @@ describe('Dashboard page as a sidekick', () => {
   beforeEach(() => {
     reset()
     dashboard.getPage()
-    browser.sleep(1500)
   })
 
   afterAll(() => {
     sidebar.logout()
   })
 
+  afterEach(() => {
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
+  })
+
   it('should have only two active readings', async () => {
     const numTotalReadings = await dashboard.readingCards.count()
     const numTotalArchived = await dashboard.archivedReadingCards.count()
-    expect(numTotalReadings - 2).toEqual(numTotalArchived, 'expected there to be only two active readings on the free user dashboard')
+    expect(numTotalReadings - 2).toEqual(
+      numTotalArchived,
+      'expected there to be only two active readings on the free user dashboard',
+    )
   })
 
-  it('should search for readings and get results', async() => {
+  it('should search for readings and get results', async () => {
     // input search term and hit enter
-    browser.wait(
-      EC.visibilityOf(dashboard.searchInput),
-      5000,
-      "search input field was not visible"
-    )
+    browser.wait(EC.visibilityOf(dashboard.searchInput), 5000, 'search input field was not visible')
     dashboard.searchInput.sendKeys('last')
     dashboard.searchInput.sendKeys(protractor.Key.ENTER)
     // check search results
-    browser.wait(
-      EC.visibilityOf(dashboard.searchCount),
-      5000,
-      "search results were not visible"
-    )
+    browser.wait(EC.visibilityOf(dashboard.searchCount), 5000, 'search results were not visible')
     dashboard.searchCount.getText().then(count => {
-      expect(parseInt(count)).toBeGreaterThan(0, "expected to see search results when entering a search")
+      expect(parseInt(count)).toBeGreaterThan(0, 'expected to see search results when entering a search')
     })
   })
 
-  it('should search for readings with a bad term and get no results', async() => {
+  it('should search for readings with a bad term and get no results', async () => {
     // input search term and hit enter
-    browser.wait(
-      EC.visibilityOf(dashboard.searchInput),
-      5000,
-      "search input field was not visible"
-    )
+    browser.wait(EC.visibilityOf(dashboard.searchInput), 5000, 'search input field was not visible')
     dashboard.searchInput.sendKeys('%')
     dashboard.searchInput.sendKeys(protractor.Key.ENTER)
     browser.sleep(1000)
     // wait for loading symbol to not be there
-    browser.wait(
-      EC.invisibilityOf(dashboard.createdListLoading),
-      5000,
-      "loading symbol never disappeared"
-    )
+    browser.wait(EC.invisibilityOf(dashboard.createdListLoading), 5000, 'loading symbol never disappeared')
     // check search results
-    browser.wait(
-      EC.visibilityOf(dashboard.searchCount),
-      5000,
-      "search results were not visible"
-    )
+    browser.wait(EC.visibilityOf(dashboard.searchCount), 5000, 'search results were not visible')
     dashboard.searchCount.getText().then(count => {
-      expect(parseInt(count)).toBe(0, "expected to see no search results when entering a bad search")
+      expect(parseInt(count)).toBe(0, 'expected to see no search results when entering a bad search')
     })
   })
 })

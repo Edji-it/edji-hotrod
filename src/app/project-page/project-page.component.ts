@@ -1,6 +1,6 @@
 import { Title } from '@angular/platform-browser'
-import { Observable, Subscription } from 'rxjs'
-import { Router, ActivatedRoute, Params } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 
 import { AuthService, ProjectService, ReadingService, SocketService, AudioService, AcademyService } from '../_services'
@@ -146,6 +146,16 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     this._socket.joinSocketRoom(project._id, user._id)
     // Start Reading Timer
     this._academy.startReadingTimer(user, project)
+    // this will set the user's status on the leaderboard
+    this._projects.commentStats.userStatus(this.user, 'active')
+    if (this.user._id !== this.project.teacher_id) {
+      // emit the socket back to the teacher
+      this._socket.groupUpdateEvent({
+        type: 'updateUserStatus',
+        status: 'active',
+        user: this.user,
+      })
+    }
   }
 
   private addToLeaderboard() {

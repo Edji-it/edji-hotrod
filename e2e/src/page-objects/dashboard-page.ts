@@ -1,6 +1,6 @@
 import { browser, by, element, protractor, ElementFinder } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
-import { reset } from '../utils/browser-methods';
+import { reset } from '../utils/browser-methods'
 
 export class Dashboard implements PageObjectInterface {
   private EC = protractor.ExpectedConditions
@@ -8,8 +8,11 @@ export class Dashboard implements PageObjectInterface {
   // Public Instance Variables
   public readingCards = element.all(by.css('.reading-card'))
   public firstReadingCard = this.readingCards.first()
+  public firstDraftCard = element.all(by.css('.draft-card')).first()
   public archivedReadingCards = element.all(by.css('.reading-card.archived'))
-  public firstReadingTitle = element.all(by.css('.reading-title__text')).first()
+  public readingTitles = element.all(by.css('.reading-title__text'))
+  public firstReadingTitle = this.readingTitles.first()
+  public readingTitleText = (title: string) => element(by.cssContainingText('.reading-title__text', title))
   public readingLoader = element(by.css('.e2e-reading-loader'))
   public secondPageFirstReadingTitle = element.all(by.css('.page-2 .reading-title__text')).first()
   public projectCards = element.all(by.css('.project-card'))
@@ -24,10 +27,21 @@ export class Dashboard implements PageObjectInterface {
   public createdListLoading = element(by.css('.created-list.loading'))
   public createdListNextPage = element(by.css('.created-list .ui-paginator-next'))
   public createdListPrevPage = element(by.css('.created-list .ui-paginator-prev'))
-  public getReadingOptionsByTitle = (title: string) => element(by.css('button[testFindOptions="' + title + '"]'))
-  public getReadingDeleteByTitle = (title: string) => element(by.css('button[testDelete="' + title + '"]'))
+  public getReadingOptionsByTitle = (title: string) => element(by.css('button[data-test="options-' + title + '"]'))
+  public getReadingDeleteByTitle = (title: string) => element(by.css('button[data-test="delete-' + title + '"]'))
   public searchCount = element(by.id('searchCount'))
   public searchInput = element(by.id('readingSearch'))
+  public bookmarksBtn = element(by.id('bookmarksBtn'))
+  public strategiesBtn = element(by.id('dashboardFilterStrategies'))
+
+  // public toggle and status
+  public publicStatusTitle = 'Public Status <Do Not Delete or Use>'
+  public publicToggleBtnOld = element(by.id('togglePublic'))
+  public publicToggleBtn = (title: string) => element(by.css('div[testFindTogglePublic="' + title + '"]'))
+  public publicReadingStatus = element(by.id('readingPublic'))
+  public privateReadingStatus = element(by.id('readingPrivate'))
+  public readingMakePublic = element(by.id('readingMakePublic'))
+  public readingMakePrivate = element(by.id('readingMakePrivate'))
 
   // Dropdown buttons
   public dropDownMenu = element(by.css('.btn-icon--plain'))
@@ -57,6 +71,8 @@ export class Dashboard implements PageObjectInterface {
   // get the dashboard page
   getPage(): void {
     browser.get('/#/dashboard')
+    // Allow dashboard to display reading cards, and avoid interacting with previous data that may flash/render
+    browser.sleep(1500)
   } //getPage(): void
 
   // get the dashboard page
@@ -77,7 +93,11 @@ export class Dashboard implements PageObjectInterface {
         this.toast.isDisplayed().then(result => {
           if (result) {
             this.toastClose.click()
-            browser.wait(this.EC.invisibilityOf(this.toast), 3000, 'toast was blocking New Reading button, and did not close')
+            browser.wait(
+              this.EC.invisibilityOf(this.toast),
+              3000,
+              'toast was blocking New Reading button, and did not close',
+            )
           }
         })
       }
@@ -132,6 +152,9 @@ export class Dashboard implements PageObjectInterface {
     let groupNameInput = this.projectLabel
     let createGroupButton = element(by.id('buttonCreateGroup'))
 
+    // Wait for new group modal animation
+    browser.sleep(500)
+
     browser.wait(this.EC.presenceOf(groupNameInput), 5000, 'never saw a groupNameInput')
     browser.wait(this.EC.elementToBeClickable(groupNameInput), 5000, 'groupNameInput was never clickable')
 
@@ -168,6 +191,10 @@ export class Dashboard implements PageObjectInterface {
     })
   }
 
+  /**
+   * Deletes a reading via options menu on dashboard
+   * @param title Reading Title
+   */
   deleteReadingByTitle(title: string): void {
     reset()
     this.getPage()

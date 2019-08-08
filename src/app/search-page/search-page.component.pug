@@ -29,7 +29,7 @@ nav-bar([showDashboardOptions]="true")
                             )
                             .form-control.form-control-dummysize(#dummySearchField) {{ searchParams.searchTerm }}
                 div.mt-2
-                    span Found <b id="searchCount">{{ total || 0 }}</b> readings&nbsp;
+                    span(*ngIf="!loading") Found <b data-test="searchCount" id="searchCount">{{ total || 0 }}</b> readings&nbsp;
                     a.link(
                         *ngIf="filterCount > 0", 
                         tabindex="0", 
@@ -81,6 +81,16 @@ nav-bar([showDashboardOptions]="true")
                     //-     )
                     //-         span([innerHTML]="':school: Academy Name' | emojione")
                 .form-group
+                    label Collections
+                    div
+                        button.btn.btn-filter#discoverFilterStrategies(
+                            title="Find strategy templates by Edji to get you started",
+                            [class.active]="searchParams.activeLibrary === 'strategies'",
+                            (click)="searchParams.activeLibrary = 'strategies'; searchParams.first=0; updateSearchParams('filter_following')"
+                        )
+                            i.icon.icon-strategies-sm(style="vertical-align:middle;")
+                            | Strategies
+                .form-group
                     label Subjects
                         button.btn-link.filter-clear(
                             *ngIf="searchParams.subjectFilter.length > 0",
@@ -105,6 +115,16 @@ nav-bar([showDashboardOptions]="true")
                 //-     label Subjects
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="searchParams.subjectFilter", [settings]="subjectDropSettings")
         .col-md-8
+            #discoverStrategies.strategies-banner.mb-5.p-3(*ngIf="searchParams.activeLibrary === 'strategies'")
+                .row
+                    .col-2.px-4.py-0
+                        i.icon-strategies-lg.d-inline-block.w-100.h-100
+                    .col-6.p-0
+                        h2.mb-1 Strategy Templates!
+                        p.banner-text.mb-0 Reading strategy templates for trying new approaches in your classroom
+                    .col-4.px-4.py-0
+                        //- , style="max-width: 400px;"
+                        img(src="/assets/images/graphic-strategies.svg") 
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
@@ -125,7 +145,7 @@ nav-bar([showDashboardOptions]="true")
             .row.loading(*ngIf="loading")
             ng-container(*ngIf="isSearching || filterCount > 0")
                 .found__readings
-                    span Found <b>{{ total || 0 }}</b> readings&nbsp;
+                    span(*ngIf="!loading") Found <b data-test="searchCount">{{ total || 0 }}</b> readings&nbsp;
                     a.link(
                         *ngIf="filterCount > 0", 
                         tabindex="0", 
@@ -144,12 +164,12 @@ nav-bar([showDashboardOptions]="true")
                                 [owner]="reading.owner",
                                 (followEvent)="!user.isLoggedIn ? showLoginModal = true : ''"
                             )
-                            i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null) }}
                             .btn.btn-sm.btn-primary.float-right(
                                 (click)="openReadingPreview(reading)", 
                                 [class.force-hover]="previewIndex===i"
                             ) Preview
-                            i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null:secondsAgo) }}
+                            i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null) }}
                         .clickable(
                             (click)="openReadingPreview(reading)",
                             (mouseenter)="readingCardHoverSet(i)", 
