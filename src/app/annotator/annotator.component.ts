@@ -213,9 +213,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * when the user moves the mouse, let academy service know so we can keep tracking reading ticks
    * and we also make sure they have a "live" status on the indicator
    */
-  // @HostListener('window:mousemove') refreshUserState() {
-  //   this._academy.trackActivity()
-  // }
+  @HostListener('window:mousemove') refreshUserState() {
+    this._academy.trackActivity()
+  }
 
   ngOnInit() {
     // Make sure we broadcast lastWord position out to listening components

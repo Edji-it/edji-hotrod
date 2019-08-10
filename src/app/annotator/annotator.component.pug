@@ -102,7 +102,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     .lesson-block__body
                         .lesson-block__header Instructions
                         p([innerHtml]="project.group_instructions")
-            h1 Testing 1056
+            h1 Testing 1062
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words; let i = index; trackBy:trackByFn" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i" [class.archived]="project.archived">
                 //- Comment Loop: Display comments if they exist for this Word
@@ -128,44 +128,44 @@ scroll-progress([scrollProgress]="currentScroll")
                     [style.top]="comment['loc'] ? comment.imageY + 'px' : '0px'"
                 ) <!-- edji-comment -->
                 //- Link Words: If a word is actually a link, handle it differently
-                //- a.w(
-                //-     *ngIf="wHasStyle(w, 'a')",
-                //-     [attr.index]="i",
-                //-     [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
-                //-     target="_blank"
-                //- )
-                //- | {{ w && w.str }}
-                ng-container(*ngIf="!wHasStyle(w, 'a')")
+                a.w(
+                    *ngIf="wHasStyle(w, 'a')",
+                    [attr.index]="i",
+                    [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
+                    target="_blank"
+                )
+                  | {{ w && w.str }}
+                //- ng-container(*ngIf="!wHasStyle(w, 'a')")
                     //- Non-link Words, show content
-                    | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
-            //-     .img-wrap(*ngIf="wHasStyle(w, 'img')")
-            //-         //- Placeholder image hotspot
-            //-         .hotspot(
-            //-             *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)",
-            //-             [class.focused]="imageHotspotPlaceholder.focus",
-            //-             [style.left]="imageHotspotPlaceholder.x  + '%' ",
-            //-             [style.top]="imageHotspotPlaceholder.y + '%' "
-            //-         )
-            //-         //- Image Hotspots: Show hotspot for each comment
-            //-         .hotspot(
-            //-             *ngFor="let comment of commentsByIndex[i]",
-            //-             [class.hidden]="!_projects.isCommentVisible(comment)",
-            //-             [style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'",
-            //-             [style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"
-            //-         )
-            //-         //- Image: Display image for image "word"
-            //-         img.reading-image(
-            //-             [attr.id]="'readingImage' + i",
-            //-             [attr.index]="i",
-            //-             [src]="w.url",
-            //-             (load)="updateImageHeights()"
-            //-         )
-            //-     //- Question Words: Display question component
-            //-     edji-question(
-            //-         *ngIf="wHasStyle(w, 'question') && reading.questions",
-            //-         [question]="reading.questions[w.index]"
-            //-     )
-            //-     //- end Word span ".w"
+                | {{ false ? '&nbsp;' : w && w.str }}
+                //- .img-wrap(*ngIf="wHasStyle(w, 'img')")
+                //-     //- Placeholder image hotspot
+                //-     .hotspot(
+                //-         *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)",
+                //-         [class.focused]="imageHotspotPlaceholder.focus",
+                //-         [style.left]="imageHotspotPlaceholder.x  + '%' ",
+                //-         [style.top]="imageHotspotPlaceholder.y + '%' "
+                //-     )
+                //-     //- Image Hotspots: Show hotspot for each comment
+                //-     .hotspot(
+                //-         *ngFor="let comment of commentsByIndex[i]",
+                //-         [class.hidden]="!_projects.isCommentVisible(comment)",
+                //-         [style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'",
+                //-         [style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"
+                //-     )
+                //-     //- Image: Display image for image "word"
+                //-     img.reading-image(
+                //-         [attr.id]="'readingImage' + i",
+                //-         [attr.index]="i",
+                //-         [src]="w.url",
+                //-         (load)="updateImageHeights()"
+                //-     )
+                //- //- Question Words: Display question component
+                //- edji-question(
+                //-     *ngIf="wHasStyle(w, 'question') && reading.questions",
+                //-     [question]="reading.questions[w.index]"
+                //- )
+                //- end Word span ".w"
             </span>
             //- Teacher's Feedback
             .row.lesson-block(*ngIf="feedbackForUser && feedbackForUser.length > 0")
