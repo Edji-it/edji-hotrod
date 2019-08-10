@@ -8,12 +8,12 @@ owner-tools
       role="alert",
       *ngIf="project.archived && project.isTeaching"
     )
-      p.mb-0 
+      p.mb-0
         i.icon.icon-folder.mr-1
-        | This Reading has been Archived and is in Read Only mode. Unlock Owner Tools and Comments when you 
+        | This Reading has been Archived and is in Read Only mode. Unlock Owner Tools and Comments when you
         a#goHeroLink.btn.btn-hero.btn-sm.ml-1(
-          [routerLink]="['/plans']", 
-          routerLinkActive="hide", 
+          [routerLink]="['/plans']",
+          routerLinkActive="hide",
           fragment="top"
         ) Go Hero
     //- Archived alert for student

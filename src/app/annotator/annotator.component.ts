@@ -56,7 +56,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() private activeReply: any
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
-  @ViewChildren('words') wordEls
+  // @ViewChildren('words') wordEls
   @ViewChild('article', { static: false }) articleEl: ElementRef
   @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
 
@@ -189,33 +189,33 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * This renders the next 400 words whenever the window gets a certain amount away from the bottom of the view,
    *  which is determined by distanceFromViewport
    */
-  @HostListener('window:scroll', ['$event'])
-  scrollUpdate(event) {
-    this.onScrollUpdate()
-    this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
-  }
+  // @HostListener('window:scroll', ['$event'])
+  // scrollUpdate(event) {
+  //   this.onScrollUpdate()
+  //   this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
+  // }
 
   /**
    * Handle Window Resize
    * - Content reflows impact positioning of comments and other variables we calculate
    */
-  @HostListener('window:resize') onResize() {
-    // Line counts need to be re-rendered when text reflows
-    this.updateImageHeights()
-    this.setLinePositions()
-    // Update scroll progress on resize
-    this.currentDocHeight = 0
-    this.preScrollHeightUpdate()
-  }
+  // @HostListener('window:resize') onResize() {
+  //   // Line counts need to be re-rendered when text reflows
+  //   this.updateImageHeights()
+  //   this.setLinePositions()
+  //   // Update scroll progress on resize
+  //   this.currentDocHeight = 0
+  //   this.preScrollHeightUpdate()
+  // }
 
   /**
    * Track Activity
    * when the user moves the mouse, let academy service know so we can keep tracking reading ticks
    * and we also make sure they have a "live" status on the indicator
    */
-  @HostListener('window:mousemove') refreshUserState() {
-    this._academy.trackActivity()
-  }
+  // @HostListener('window:mousemove') refreshUserState() {
+  //   this._academy.trackActivity()
+  // }
 
   ngOnInit() {
     // Make sure we broadcast lastWord position out to listening components
@@ -462,11 +462,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }, this.renderTimeout)
 
     // Only supported by modern browsers, but very reliable in those cases
-    document.addEventListener('selectionchange', event => {
-      if (!this.optionsShow) {
-        this.showCommentOptions(event)
-      }
-    })
+    // document.addEventListener('selectionchange', event => {
+    //   if (!this.optionsShow) {
+    //     this.showCommentOptions(event)
+    //   }
+    // })
   } // ngOnInit
 
   ngAfterViewInit() {
@@ -1302,7 +1302,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param w Word object
    */
   public wHasStyle(w, style): boolean {
+    console.log('W HAS STYLE')
     return w && w.styles && w.styles.indexOf(style) > -1
+  }
+
+  trackByFn(index) {
+    return index
   }
 
   /** Used to determine which level of permission the user has for a specific comment

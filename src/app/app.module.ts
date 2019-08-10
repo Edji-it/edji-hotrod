@@ -144,10 +144,12 @@ import { MetricsEffects } from './_reducers/metrics.effects'
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
   buildHammer(element: HTMLElement) {
+    delete Hammer.defaults.cssProps.userSelect
     // Enable polyfill for touch actions to support scrolling on top of tap bindings
     let mc = new Hammer(element, {
       touchAction: 'pan-y',
     })
+
     return mc
   }
   overrides = <any>{
