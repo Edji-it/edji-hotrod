@@ -189,24 +189,24 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * This renders the next 400 words whenever the window gets a certain amount away from the bottom of the view,
    *  which is determined by distanceFromViewport
    */
-  // @HostListener('window:scroll', ['$event'])
-  // scrollUpdate(event) {
-  //   this.onScrollUpdate()
-  //   this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
-  // }
+  @HostListener('window:scroll', ['$event'])
+  scrollUpdate(event) {
+    this.onScrollUpdate()
+    this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
+  }
 
   /**
    * Handle Window Resize
    * - Content reflows impact positioning of comments and other variables we calculate
    */
-  // @HostListener('window:resize') onResize() {
-  //   // Line counts need to be re-rendered when text reflows
-  //   this.updateImageHeights()
-  //   this.setLinePositions()
-  //   // Update scroll progress on resize
-  //   this.currentDocHeight = 0
-  //   this.preScrollHeightUpdate()
-  // }
+  @HostListener('window:resize') onResize() {
+    // Line counts need to be re-rendered when text reflows
+    this.updateImageHeights()
+    this.setLinePositions()
+    // Update scroll progress on resize
+    this.currentDocHeight = 0
+    this.preScrollHeightUpdate()
+  }
 
   /**
    * Track Activity
@@ -1302,7 +1302,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param w Word object
    */
   public wHasStyle(w, style): boolean {
-    console.log('W HAS STYLE')
+    // console.log('W HAS STYLE')
     return w && w.styles && w.styles.indexOf(style) > -1
   }
 
