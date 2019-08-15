@@ -88,7 +88,6 @@ scroll-progress([scrollProgress]="currentScroll")
             | for your desktop device.
         //- Create components after load for reading
         //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
-        h1 Testing 1061
         #annotatorContent.content.content--active.pt-4(
             (tap)="showCommentOptions($event)",
             [style.touch-action]="'pan-y'",
@@ -136,7 +135,7 @@ scroll-progress([scrollProgress]="currentScroll")
                 )
                   | {{ w.str }}
                 //- Non-link Words, show content
-                | {{ w.s && !w.a ? '&nbsp;' : w.str }}
+                | {{ w.s ? '&nbsp;' : (!w.a ? w.str : '') }}
                 .img-wrap(*ngIf="w.img")
                     //- Placeholder image hotspot
                     .hotspot(
