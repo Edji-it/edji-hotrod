@@ -222,7 +222,7 @@ export class ReadingService {
         w.s = true
       }
       // Links - only apply if url is available!
-      if (this.wHasStyle(w.styles, 'a') && w.url) {
+      if (this.wHasStyle(w, 'a') && w.url) {
         w.a = true
         w.url = w.url.indexOf('//') > -1 ? w.url : '//' + w.url
       }
