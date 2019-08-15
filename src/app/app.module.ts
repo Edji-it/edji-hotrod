@@ -148,6 +148,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     let mc = new Hammer(element, {
       touchAction: 'pan-y',
     })
+    mc.get('pan').set({ enable: false })
     return mc
   }
   overrides = <any>{
@@ -155,8 +156,9 @@ export class MyHammerConfig extends HammerGestureConfig {
     //  Tap overrides for Chrome v71 sensitivity when making comments
     tap: {
       time: 2000, // Maximum press time in ms.
-      threshold: 20, //	While doing a tap some time spent moving is allowed.
+      threshold: 10, //	While doing a tap some time spent moving is allowed.
       posThreshold: 75, // While tapping some position movement is allowed
+      interval: 10, // we don't care about supporting double taps
     },
   }
 }
