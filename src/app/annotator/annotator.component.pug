@@ -136,9 +136,7 @@ scroll-progress([scrollProgress]="currentScroll")
                 )
                   | {{ w.str }}
                 //- Non-link Words, show content
-                ng-container(*ngIf="!w.a && !w.s") {{ w.str }}
-                //- Spaces
-                ng-container(*ngIf="w.s") &nbsp;
+                | {{ w.s && !w.a ? '&nbsp;' : w.str }}
                 .img-wrap(*ngIf="w.img")
                     //- Placeholder image hotspot
                     .hotspot(
