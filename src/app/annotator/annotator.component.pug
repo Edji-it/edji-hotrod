@@ -103,7 +103,7 @@ scroll-progress([scrollProgress]="currentScroll")
                         .lesson-block__header Instructions
                         p([innerHtml]="project.group_instructions")
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(i) ]" [attr.index]="i" [class.archived]="project.archived">
+            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, focusArray, quickSelect, i) ]" [attr.index]="i" [class.archived]="project.archived">
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",

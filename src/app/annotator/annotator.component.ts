@@ -1269,29 +1269,38 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Keep this light! It runs for every word instance
    * @param i is the word index
    */
-  public getHighlightClass(i: number): string {
+  public getHighlightClass(
+    projectHeat_vision,
+    projectIsTeaching,
+    filterHighlightArray,
+    highlightArray,
+    alwaysHighlightArray,
+    focusArray,
+    quickSelect,
+    i: number,
+  ): string {
     let classString = ''
     let highlightCount = 0
 
     // If a filter is applied, use filter highlights
-    if (this.filterHighlightArray) {
-      if (this.filterHighlightArray[i]) {
-        highlightCount += this.filterHighlightArray[i]
+    if (filterHighlightArray) {
+      if (filterHighlightArray[i]) {
+        highlightCount += filterHighlightArray[i]
       }
     } else {
-      if ((this.project.heat_vision || this.project.isTeaching) && this.highlightArray[i]) {
-        highlightCount += this.highlightArray[i]
+      if ((projectHeat_vision || projectIsTeaching) && highlightArray[i]) {
+        highlightCount += highlightArray[i]
       }
-      if (this.alwaysHighlightArray[i]) {
-        highlightCount += this.alwaysHighlightArray[i]
+      if (alwaysHighlightArray[i]) {
+        highlightCount += alwaysHighlightArray[i]
       }
     }
     // Apply focus class to words of focused comments
-    if (this.focusArray[i]) {
+    if (focusArray[i]) {
       classString = 'h-f'
     }
     //
-    if (i == this.quickSelect.focus || i == this.quickSelect.anchor) {
+    if (i == quickSelect.focus || i == quickSelect.anchor) {
       classString += ' quick-select--click'
     }
     return classString + ' h-' + highlightCount
