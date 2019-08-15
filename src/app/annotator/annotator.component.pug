@@ -70,7 +70,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     button.emoji.comment__options--mobileButton()
                         i.icon.icon-mic
     //- end .text-options
-    .article-wrap
+    .content--active__wrap
         .alert.alert-warning.alert-dismissible.fade.show(
             role="alert",
             *ngIf="audioSupportError"
@@ -88,12 +88,13 @@ scroll-progress([scrollProgress]="currentScroll")
             | for your desktop device.
         //- Create components after load for reading
         //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
-        article#annotatorContent.content.active-content.pt-4(
+        h1 Testing 1061
+        #annotatorContent.content.content--active.pt-4(
             (tap)="showCommentOptions($event)",
             [style.touch-action]="'pan-y'",
             (clickOutside)="hideCommentOptions()",
             [ngClass]="[ quickSelect.anchor != null ? 'quick-select--begin' : '', quickSelect.focus != null ? 'quick-select--end':'']"
-            #article,
+            #activeContent,
             tabindex="-1"
         )
             //- Reading Group Instructions
@@ -103,7 +104,7 @@ scroll-progress([scrollProgress]="currentScroll")
                         .lesson-block__header Instructions
                         p([innerHtml]="project.group_instructions")
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, focusArray, quickSelect, i) ]" [attr.index]="i" [class.archived]="project.archived">
+            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i" [class.archived]="project.archived">
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",
@@ -128,16 +129,17 @@ scroll-progress([scrollProgress]="currentScroll")
                 ) <!-- edji-comment -->
                 //- Link Words: If a word is actually a link, handle it differently
                 a.w(
-                    *ngIf="wHasStyle(w, 'a')",
+                    *ngIf="w.a",
                     [attr.index]="i",
-                    [attr.href]="w.url ? ((w.url.indexOf('//') > -1) ? w.url : ('//' + w.url)) : null",
+                    [attr.href]="w.url",
                     target="_blank"
                 )
-                    | {{ w && w.str }}
-                ng-container(*ngIf="!wHasStyle(w, 'a')")
-                    //- Non-link Words, show content
-                    | {{ (!(w && w.styles) || wHasStyle(w, 'space')) ? '&nbsp;' : w && w.str }}
-                .img-wrap(*ngIf="wHasStyle(w, 'img')")
+                  | {{ w.str }}
+                //- Non-link Words, show content
+                ng-container(*ngIf="!w.a && !w.s") {{ w.str }}
+                //- Spaces
+                ng-container(*ngIf="w.s") &nbsp;
+                .img-wrap(*ngIf="w.img")
                     //- Placeholder image hotspot
                     .hotspot(
                         *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)",
@@ -161,7 +163,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     )
                 //- Question Words: Display question component
                 edji-question(
-                    *ngIf="wHasStyle(w, 'question') && reading.questions",
+                    *ngIf="w.q && reading.questions",
                     [question]="reading.questions[w.index]"
                 )
                 //- end Word span ".w"

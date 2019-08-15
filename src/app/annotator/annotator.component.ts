@@ -57,7 +57,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
   @ViewChildren('words') wordEls
-  @ViewChild('article', { static: false }) articleEl: ElementRef
+  @ViewChild('activeContent', { static: false }) contentEl: ElementRef
   @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
 
   public reading: Reading = <Reading>{}
@@ -548,16 +548,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Updates the rendered words as the user scrolls through the reading
    */
   private onScrollUpdate(): void {
-    let bottomOfArticle = this.articleEl.nativeElement.offsetTop + this.articleEl.nativeElement.clientHeight
-    let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
-    let distanceFromViewport = 500
-    if (bottomOfArticle - distanceFromViewport < bottomOfView) {
-      this.lastWord += 800
-      // Make sure we broadcast lastWord position out to listening components
-      this._projects.lastWordUpdateSubj.next(this.lastWord)
-      // Re-run the line positions so comment avatars show up in the right spot
-      this.setLinePositions()
-    }
+    // let bottomOfArticle = this.contentEl.nativeElement.offsetTop + this.contentEl.nativeElement.clientHeight
+    // let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
+    // let distanceFromViewport = 500
+    // if (bottomOfArticle - distanceFromViewport < bottomOfView) {
+    //   this.lastWord += 800
+    //   // Make sure we broadcast lastWord position out to listening components
+    //   this._projects.lastWordUpdateSubj.next(this.lastWord)
+    //   // Re-run the line positions so comment avatars show up in the right spot
+    //   this.setLinePositions()
+    // }
   }
 
   /**
@@ -1299,20 +1299,44 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (focusArray[i]) {
       classString = 'h-f'
     }
-    //
-    if (i == quickSelect.focus || i == quickSelect.anchor) {
-      classString += ' quick-select--click'
-    }
+
     return classString + ' h-' + highlightCount
   }
 
   /**
-   * Returns whether a "w" word contains a style class
-   * @param w Word object
+   * Get word focus class (keep it LIGHT)
+   * @param focusArray
+   * @param i word index
    */
-  public wHasStyle(w, style): boolean {
-    return w && w.styles && w.styles.indexOf(style) > -1
+  public focusClass(focusArray, i): string {
+    if (focusArray[i]) {
+      return 'h-f'
+    } else {
+      return ''
+    }
   }
+
+  /**
+   * Get Quick Select class (keep it LIGHT)
+   * @param quickSelect anchor/focus object
+   * @param i word index
+   */
+  public quickSelectClass(quickSelect, i): string {
+    if (i === quickSelect.focus || i === quickSelect.anchor) {
+      return 'quick-select--click'
+    } else {
+      return ''
+    }
+  }
+
+  // /**
+  //  * Returns whether a "w" word contains a style class
+  //  * @param w Word object
+  //  */
+  // public wHasStyle(styles, style): boolean {
+  //   // console.log('wHasStyle')
+  //   return w && w.styles && w.styles.indexOf(style) > -1
+  // }
 
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object

@@ -13,7 +13,7 @@ $readingBorder: 1px solid #dcdcdc;
 $focusUnderlineWidth: 3px;
 $adjustedLineHeight: $readingLineHeight - $focusUnderlineWidth - 1px;
 
-article {
+.content {
   padding-bottom: 50px;
   line-height: $adjustedLineHeight;
   margin-top: 22px;
@@ -24,7 +24,7 @@ article {
   max-width: 100%;
 }
 
-article.content {
+.content.content--active {
   margin-top: 0px;
   margin-left: 50px;
   word-break: break-word;
@@ -163,7 +163,7 @@ a.w {
 }
 
 // Styles for ANNOTATABLE content
-.active-content {
+.content--active {
   @extend %canSelectText;
 
   & .w.img {
@@ -222,7 +222,7 @@ header {
   min-width: 180px;
 }
 
-.article-wrap {
+.content--active__wrap {
   position: relative;
   margin-top: 36px;
   margin-bottom: 20px;
@@ -243,7 +243,7 @@ section.search {
   height: auto;
 }
 
-// article.content {
+// .content.content--active {
 // 	position: relative;
 // }
 
@@ -380,7 +380,7 @@ section.search {
   left: -1.2em;
 }
 
-/******************************************* 
+/*******************************************
 
   Highlight Class Generation
 
@@ -533,7 +533,7 @@ $quickBlue: #55aef7;
 }
 
 // Focus Highlight styles (for on comment hover)
-article.content .w.h-f {
+.content.content--active .w.h-f {
   // background: blue;
   // transition: background-color linear 400ms;
   border-bottom: $focusUnderlineWidth solid #969696;
@@ -546,7 +546,7 @@ article.content .w.h-f {
   }
 }
 
-article.content {
+.content.content--active {
   &.quick-select--begin .w.h-f {
     border-bottom-style: dotted;
     border-color: $quickBlue;
@@ -587,7 +587,7 @@ article.content {
 }
 
 .content,
-article.content,
+.content.content--active,
 .medium-editor-element {
   //font-family: 'Georgia', serif;
   font-family: $base-font-family;
