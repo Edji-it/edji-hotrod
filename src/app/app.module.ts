@@ -66,6 +66,7 @@ import {
   ScrollProgressComponent,
   TutorialBoxComponent,
   ResetComponent,
+  PromoBannerComponent,
 } from './shared'
 import { HomeComponent } from './home'
 import { RegisterPageComponent } from './register-page'
@@ -273,6 +274,7 @@ const routerOptions: ExtraOptions = {
     LicenseWelcomeComponent,
     ReadingRecapComponent,
     TeamPageComponent,
+    PromoBannerComponent,
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],

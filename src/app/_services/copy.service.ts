@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Locker, DRIVERS } from 'angular-safeguard'
 import * as Airtable from 'airtable'
+import { Observable, of, BehaviorSubject } from 'rxjs'
 
 /**
  * Localstorage wrapper
@@ -13,6 +14,10 @@ import * as Airtable from 'airtable'
 export class CopyService {
   private base
   private _airtable
+
+  // Promo Copy Observable
+  private activePromotionSubj: BehaviorSubject<PromoCopy> = new BehaviorSubject({})
+  public activePromotions: Observable<PromoCopy> = this.activePromotionSubj.asObservable()
 
   constructor() {
     this._airtable = Airtable
@@ -33,11 +38,11 @@ export class CopyService {
           console.error(err)
           return
         }
-        records.forEach(function(record) {
+        records.forEach(record => {
           let promotion = record.fields
           console.log(promotion)
           if (promotion.active) {
-            console.log(promotion)
+            this.activePromotionSubj.next(promotion)
           }
         })
       })
@@ -45,7 +50,7 @@ export class CopyService {
 }
 
 export interface PromoCopy {
-  promotionTitle: string
+  promotionTitle?: string
   heading?: string
   subheading?: string
   graphic?: {
