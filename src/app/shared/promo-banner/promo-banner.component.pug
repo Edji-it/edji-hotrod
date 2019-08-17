@@ -1,7 +1,8 @@
-.row(*ngIf="promo.heading")
-    .col-2
-    .col-sm-12.col-8.text-center
-        h1 {{ promo.heading }}
-        p {{ promo.subheading }}
-        img(*ngIf="graphic", [src]="graphic")
-    .col-2
+.container
+    .row.promo-banner(*ngIf="promo.heading")
+        .col-md-8
+            h1.promo-heading.mb-1 {{ promo.heading }}
+            p.promo-subheading {{ promo.subheading }}
+            a.btn.btn-hero.btn-sm(*ngIf="promo.link && promo.linkText", [attr.href]="promo.link", [innerHtml]="promo.linkText")
+        .col-4.text-center
+            img.promo-graphic(*ngIf="graphic", [src]="graphic")
