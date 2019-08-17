@@ -1,7 +1,7 @@
-.row
+.row(*ngIf="promo.heading")
     .col-2
     .col-sm-12.col-8.text-center
         h1 {{ promo.heading }}
         p {{ promo.subheading }}
-        img([src]="graphic")
+        img(*ngIf="graphic", [src]="graphic")
     .col-2

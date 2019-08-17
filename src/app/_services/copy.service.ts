@@ -42,8 +42,7 @@ export class CopyService {
         }
         records.forEach(record => {
           let promotion = record.fields
-          console.log(promotion)
-          if (promotion.live && promotion.live.indexOf(env)) {
+          if (promotion.live && promotion.live.indexOf(env) >= 0) {
             this.activePromotionSubj.next(promotion)
           }
         })
