@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { Locker, DRIVERS } from 'angular-safeguard'
 import * as Airtable from 'airtable'
 import { Observable, of, BehaviorSubject } from 'rxjs'
+import { AuthService } from '.'
 
 /**
  * Localstorage wrapper
@@ -19,7 +20,8 @@ export class CopyService {
   private activePromotionSubj: BehaviorSubject<PromoCopy> = new BehaviorSubject({})
   public activePromotions: Observable<PromoCopy> = this.activePromotionSubj.asObservable()
 
-  constructor() {
+  constructor(private _auth: AuthService) {
+    let env = this._auth.getEnv()
     this._airtable = Airtable
 
     this._airtable.configure({
@@ -41,7 +43,7 @@ export class CopyService {
         records.forEach(record => {
           let promotion = record.fields
           console.log(promotion)
-          if (promotion.active) {
+          if (promotion.live && promotion.live.indexOf(env)) {
             this.activePromotionSubj.next(promotion)
           }
         })
@@ -65,5 +67,5 @@ export interface PromoCopy {
     type: string
     url: string
   }[]
-  active?: boolean
+  live?: string[] // dev or prod
 }
