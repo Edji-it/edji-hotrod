@@ -44,6 +44,9 @@ nav-bar
           span.pricing
             | $5
             span.small  / month
+          p.small.hero-color-text(*ngIf="offerDetails")
+            i.icon.icon-gift.mr-1
+            span([innerHtml]="offerDetails")
           p.small Charged annually per teacher
           hr
           p.card-text Hero takes the limits off of Edji and gives teachers powerful evaluation and feedback tools to assist and assess their students as they read.

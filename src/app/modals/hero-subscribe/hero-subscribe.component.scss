@@ -19,3 +19,11 @@ td {
 .strike-through {
   text-decoration: line-through;
 }
+
+.offer-note {
+  & .hero-color-text {
+    text-indent: -1em;
+    margin-bottom: 0.25em;
+  }
+  margin: 1em;
+}

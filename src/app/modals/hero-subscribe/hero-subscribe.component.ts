@@ -5,7 +5,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { debounceTime, map, take } from 'rxjs/operators'
 
 // Project dependencies
-import { AuthService, BumblebeeService, MailchimpService } from '../../_services'
+import { AuthService, BumblebeeService, MailchimpService, CopyService } from '../../_services'
 import { User } from 'src/app/shared/datatypes'
 
 declare var Stripe: any
@@ -32,6 +32,8 @@ export class HeroSubscribeComponent implements OnInit {
   public previouslyCancelled: boolean = false
   public resubscribeSent: boolean = false
   public subscription_id: string = ''
+  // Promotional sitewide offer
+  public offerDetails: string
   // private couponCode: string
 
   public sForm: FormGroup
@@ -53,7 +55,8 @@ export class HeroSubscribeComponent implements OnInit {
     private _chimp: MailchimpService,
     private angulartics: Angulartics2,
     private fb: FormBuilder,
-  ) { }
+    private _copy: CopyService,
+  ) {}
 
   ngOnInit() {
     // get the user
@@ -64,6 +67,13 @@ export class HeroSubscribeComponent implements OnInit {
       this._auth.getStripeSubscriptions().subscribe(subscriptions => {
         this.previouslyCancelled = this.activeSubscription(subscriptions)
       }),
+      this.subscriptions.push(
+        this._copy.activePromotions.subscribe(promo => {
+          if (promo.offerDetails) {
+            this.offerDetails = promo.offerDetails
+          }
+        }),
+      ),
     )
     // Construct formgroup
     this.sForm = this.fb.group(
@@ -113,7 +123,7 @@ export class HeroSubscribeComponent implements OnInit {
     this.card.mount('#card-element')
 
     // Handle real-time validation errors from the card Element.
-    this.card.addEventListener('change', function (event) {
+    this.card.addEventListener('change', function(event) {
       var displayError = document.getElementById('card-errors')
       if (event.error) {
         displayError.textContent = event.error.message
@@ -190,8 +200,8 @@ export class HeroSubscribeComponent implements OnInit {
         this.initWithCoupon
           ? this.couponCode.toUpperCase()
           : this.sForm.valid
-            ? this.sForm.controls['couponCode'].value.toUpperCase()
-            : '',
+          ? this.sForm.controls['couponCode'].value.toUpperCase()
+          : '',
       )
       .subscribe(
         data => {
