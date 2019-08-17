@@ -13,6 +13,13 @@
   animation: swipe-in 500ms;
   animation-fill-mode: forwards;
   animation-timing-function: ease;
+  position: relative;
+}
+
+.promo-message {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .promo-graphic {

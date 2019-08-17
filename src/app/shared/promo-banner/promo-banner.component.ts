@@ -13,8 +13,9 @@ export class PromoBannerComponent implements OnInit, OnDestroy {
   public promo: PromoCopy = {}
   public graphic: string
   private subscriptions: Subscription[] = []
+  private displayLink: boolean
   // Scroll progress inputs for calculation
-  // @Input() link: string
+  @Input() currentPage: string = ''
 
   constructor(private _copy: CopyService) {}
 
@@ -24,6 +25,11 @@ export class PromoBannerComponent implements OnInit, OnDestroy {
         if (promo.heading) {
           this.promo = promo
           this.graphic = promo.graphic[0].thumbnails.full.url
+          this.displayLink = !!(
+            this.promo.link &&
+            this.promo.linkText &&
+            (!this.currentPage || this.promo.link.indexOf(this.currentPage) < 0)
+          )
         }
       }),
     )

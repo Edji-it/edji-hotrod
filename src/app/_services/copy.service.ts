@@ -67,4 +67,6 @@ export interface PromoCopy {
     url: string
   }[]
   live?: string[] // dev or prod
+  link?: string // url
+  linkText?: string
 }
