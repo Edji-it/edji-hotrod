@@ -56,13 +56,13 @@ body {
   overflow-y: auto;
   width: 100%;
   background: $pageBg;
-  -webkit-overflow-scrolling: touch;
+  // -webkit-overflow-scrolling: touch;
 
-  -webkit-transition: all 600ms;
-  -moz-transition: all 600ms;
-  -ms-transition: all 600ms;
-  -o-transition: all 600ms;
-  transition: all 600ms;
+  // -webkit-transition: all 600ms;
+  // -moz-transition: all 600ms;
+  // -ms-transition: all 600ms;
+  // -o-transition: all 600ms;
+  // transition: all 600ms;
 }
 
 blockquote {

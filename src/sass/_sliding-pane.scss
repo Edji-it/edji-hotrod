@@ -43,7 +43,7 @@ $slidingPaneWidth: 265px;
 
 .sliding-pane {
   padding: $base-pad 5px;
-  transition: margin $slidingPaneTime linear;
+  // transition: margin $slidingPaneTime linear;
   padding-top: $navOffset + $base-pad;
   box-shadow: $slidingPaneShadow;
   border-right: $slidingPaneBorder;
@@ -99,7 +99,7 @@ $slidingPaneWidth: 265px;
   overflow: auto;
   box-shadow: $slidingPaneShadow;
   border-right: $slidingPaneBorder;
-  transition: transform $slidingPaneTime linear;
+  // transition: transform $slidingPaneTime linear;
 
   &.from-right {
     // transform: translate3d(100%, 0, 0);

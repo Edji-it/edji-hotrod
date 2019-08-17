@@ -10,6 +10,8 @@ import {
   HostListener,
   ViewChild,
   AfterViewInit,
+  ChangeDetectionStrategy,
+  NgZone,
 } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
@@ -181,6 +183,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _router: Router,
     private _academy: AcademyService,
     private location: Location,
+    private zone: NgZone,
   ) {
     this.window = window
   }
@@ -189,33 +192,33 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * This renders the next 400 words whenever the window gets a certain amount away from the bottom of the view,
    *  which is determined by distanceFromViewport
    */
-  @HostListener('window:scroll', ['$event'])
-  scrollUpdate(event) {
-    this.onScrollUpdate()
-    this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
-  }
+  // @HostListener('window:scroll', ['$event'])
+  // scrollUpdate(event) {
+  //   this.onScrollUpdate()
+  //   this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
+  // }
 
-  /**
-   * Handle Window Resize
-   * - Content reflows impact positioning of comments and other variables we calculate
-   */
-  @HostListener('window:resize') onResize() {
-    // Line counts need to be re-rendered when text reflows
-    this.updateImageHeights()
-    this.setLinePositions()
-    // Update scroll progress on resize
-    this.currentDocHeight = 0
-    this.preScrollHeightUpdate()
-  }
+  // /**
+  //  * Handle Window Resize
+  //  * - Content reflows impact positioning of comments and other variables we calculate
+  //  */
+  // @HostListener('window:resize') onResize() {
+  //   // Line counts need to be re-rendered when text reflows
+  //   this.updateImageHeights()
+  //   this.setLinePositions()
+  //   // Update scroll progress on resize
+  //   this.currentDocHeight = 0
+  //   this.preScrollHeightUpdate()
+  // }
 
-  /**
-   * Track Activity
-   * when the user moves the mouse, let academy service know so we can keep tracking reading ticks
-   * and we also make sure they have a "live" status on the indicator
-   */
-  @HostListener('window:mousemove') refreshUserState() {
-    this._academy.trackActivity()
-  }
+  // /**
+  //  * Track Activity
+  //  * when the user moves the mouse, let academy service know so we can keep tracking reading ticks
+  //  * and we also make sure they have a "live" status on the indicator
+  //  */
+  // @HostListener('window:mousemove') refreshUserState() {
+  //   this._academy.trackActivity()
+  // }
 
   ngOnInit() {
     // Make sure we broadcast lastWord position out to listening components
@@ -248,6 +251,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Get Project from project service
       this._projects.currentProject.subscribe(
         project => {
+          console.log('project update')
           if (project.archived) {
             this._projects.filterByUser(this.user)
           }
@@ -295,6 +299,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       ),
       // Get filtered highlights for comment filters
       this._projects.filterUpdates.subscribe(filter => {
+        console.log('filter update')
         if (filter) {
           this.filterHighlightArray = filter.filterHighlightArray
         } else {
@@ -462,10 +467,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }, this.renderTimeout)
 
     // Only supported by modern browsers, but very reliable in those cases
-    document.addEventListener('selectionchange', event => {
-      if (!this.optionsShow) {
-        this.showCommentOptions(event)
-      }
+    // document.addEventListener('selectionchange', event => {
+    //   if (!this.optionsShow) {
+    //     this.showCommentOptions(event)
+    //   }
+    // })
+
+    this.zone.runOutsideAngular(() => {
+      // window.document.addEventListener('mouseup', this.showCommentOptions.bind(this))
     })
   } // ngOnInit
 
@@ -686,153 +695,167 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Show tooltip to the side with buttons for adding comment types
    */
   showCommentOptions(event): void {
-    if (this.showCommentOptionsWait || this.project.archived) {
-      return
-    } else {
-      // We only need to worry about preventing overlapping touch and click events
-      if (event.type != 'selectionchange') {
-        this.showCommentOptionsWait = true
-        setTimeout(() => {
-          this.showCommentOptionsWait = false
-        }, 200)
-      }
-    }
-    // Only show options if text selected
-    let sel = Rangy.getSelection()
-    let target = event.target || event.srcElement || event.currentTarget
-    let scrollOffset = this.annotatorPaper.getBoundingClientRect().top
-    const readingPad = 52
-    // let targetTag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : ''
+    event.preventDefault()
+    alert('Show comment options!')
+    // let commentOptions = document.querySelector('.text-options')
+    // if (commentOptions.classList.contains('active')) {
+    //   commentOptions.classList.remove('active')
+    // } else {
+    //   commentOptions.classList.add('active')
+    // }
+    //= '.text-options .active'
+    // if (this.showCommentOptionsWait || this.project.archived) {
+    //   return
+    // } else {
+    //   // We only need to worry about preventing overlapping touch and click events
+    //   if (event.type != 'selectionchange') {
+    //     this.showCommentOptionsWait = true
+    //     setTimeout(() => {
+    //       this.showCommentOptionsWait = false
+    //     }, 200)
+    //   }
+    // }
+    // // Only show options if text selected
+    // let sel = Rangy.getSelection()
+    // let target = event.target || event.srcElement || event.currentTarget
+    // let scrollOffset = 100
+    // let highlightY = 200
+    // //this.annotatorPaper.getBoundingClientRect().top
+    // const readingPad = 52
+    // // let targetTag = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : ''
 
-    /**
-     * Handle creating selection and coordinates for comments on images
-     */
-    if (target.classList && target.classList.contains('reading-image') && target['parentNode']) {
-      // When tapping image, clear in progress Quick Select
-      this.clearQuickSelect()
-      // when they click the picture, we need to create the selection for them
-      this.imageCoords = this.getRelativeCoords(event)
-      let range = Rangy.createRange()
-      range.selectNodeContents(target['parentNode'])
+    // /**
+    //  * Handle creating selection and coordinates for comments on images
+    //  */
+    // if (target.classList && target.classList.contains('reading-image') && target['parentNode']) {
+    //   // When tapping image, clear in progress Quick Select
+    //   this.clearQuickSelect()
+    //   // when they click the picture, we need to create the selection for them
+    //   this.imageCoords = this.getRelativeCoords(event)
+    //   let range = Rangy.createRange()
+    //   range.selectNodeContents(target['parentNode'])
 
-      // Create placeholder spot
-      this.imageHotspotPlaceholder = {
-        index: target.getAttribute('index'),
-        x: this.imageCoords['x'],
-        y: this.imageCoords['y'],
-        preview: true,
-      }
+    //   // Create placeholder spot
+    //   this.imageHotspotPlaceholder = {
+    //     index: target.getAttribute('index'),
+    //     x: this.imageCoords['x'],
+    //     y: this.imageCoords['y'],
+    //     preview: true,
+    //   }
 
-      // this makes sure there are no other selections made
-      sel.setSingleRange(range)
-    } else {
-      // Functions as "click outside" for images
-      this.optionsShow = false
-      this.imageHotspotPlaceholder.preview = false
-      // Clear imageCoords so they are not added to non-image comments
-      this.imageCoords = {}
-      if (target.classList && target.classList.contains('img')) {
-        return
-      }
-    }
+    //   // this makes sure there are no other selections made
+    //   sel.setSingleRange(range)
+    // } else {
+    //   // Functions as "click outside" for images
+    //   this.optionsShow = false
+    //   this.imageHotspotPlaceholder.preview = false
+    //   // Clear imageCoords so they are not added to non-image comments
+    //   this.imageCoords = {}
+    //   if (target.classList && target.classList.contains('img')) {
+    //     return
+    //   }
+    // }
 
-    /**
-     * Make sure selection exists, and is within highlightable content
-     * - Runs when:
-     *      - Regular selection is being made
-     *      - Image hotspot is made
-     * - Should:
-     *      - Clear Quick Select
-     */
-    if (
-      sel &&
-      (this.imageHotspotPlaceholder.preview || sel.toString()) &&
-      ((sel.focusNode.classList && sel.focusNode.classList.contains('w')) ||
-        (sel.focusNode.parentNode.classList.contains('w') ||
-          sel.focusNode.parentNode.classList.contains('img-wrap'))) &&
-      ((sel.anchorNode.classList && sel.anchorNode.classList.contains('w')) ||
-        (sel.anchorNode.parentNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('img-wrap')))
-    ) {
-      let focusY
-      // Clear Quick Select
-      this.clearQuickSelect()
-      // Find Y position of selection (for comment options)
-      if (!!sel.focusNode.getBoundingClientRect) {
-        focusY = sel.focusNode.getBoundingClientRect().top
-      } else {
-        focusY = sel.focusNode.parentNode && sel.focusNode.parentNode.getBoundingClientRect().top
-      }
-      // Set y position of comment options
-      this.highlightY = focusY - scrollOffset + readingPad
-      // Adjust y position for image comments
-      if (this.imageHotspotPlaceholder.preview == true) {
-        let yOnImage = this.imageHeight[this.imageHotspotPlaceholder.index]
-        // Offset 10px to line up with hotspot
-        this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y / 100) * yOnImage - 10
-      }
-      // Show comment options
-      this.optionsShow = true
-      // Guide content
-      if (this.guideStepNo < 2) {
-        this.guideStepNo = 2
-      }
-    } else if (
-      target.getAttribute &&
-      target.getAttribute('index') != null &&
-      target.classList &&
-      !target.classList.contains('question') &&
-      !target.classList.contains('br')
-    ) {
-      /**
-       * Quick Select
-       * - Runs when words are tapped
-       * - Should:
-       *      - Clear other types of commenting
-       */
-      let wordI = parseInt(target.getAttribute('index'))
-      let prevAnchor = this.quickSelect.anchor
-      let prevFocus = this.quickSelect.focus
-      let focusY
+    // /**
+    //  * Make sure selection exists, and is within highlightable content
+    //  * - Runs when:
+    //  *      - Regular selection is being made
+    //  *      - Image hotspot is made
+    //  * - Should:
+    //  *      - Clear Quick Select
+    //  */
+    // if (
+    //   sel &&
+    //   (this.imageHotspotPlaceholder.preview || sel.toString()) &&
+    //   ((sel.focusNode.classList && sel.focusNode.classList.contains('w')) ||
+    //     (sel.focusNode.parentNode.classList.contains('w') ||
+    //       sel.focusNode.parentNode.classList.contains('img-wrap'))) &&
+    //   ((sel.anchorNode.classList && sel.anchorNode.classList.contains('w')) ||
+    //     (sel.anchorNode.parentNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('img-wrap')))
+    // ) {
+    //   let focusY
+    //   // Clear Quick Select
+    //   this.clearQuickSelect()
+    //   // Find Y position of selection (for comment options)
+    //   // if (!!sel.focusNode.getBoundingClientRect) {
+    //   //   focusY = sel.focusNode.getBoundingClientRect().top
+    //   // } else {
+    //   //   focusY = sel.focusNode.parentNode && sel.focusNode.parentNode.getBoundingClientRect().top
+    //   // }
+    //   focusY = 100
+    //   // Set y position of comment options
+    //   highlightY = focusY - scrollOffset + readingPad
+    //   // Adjust y position for image comments
+    //   if (this.imageHotspotPlaceholder.preview == true) {
+    //     let yOnImage = this.imageHeight[this.imageHotspotPlaceholder.index]
+    //     // Offset 10px to line up with hotspot
+    //     highlightY = highlightY + (this.imageHotspotPlaceholder.y / 100) * yOnImage - 10
+    //   }
+    //   // Show comment options
+    //   this.optionsShow = true
+    //   // Guide content
+    //   if (this.guideStepNo < 2) {
+    //     this.guideStepNo = 2
+    //   }
+    // } else if (
+    //   target.getAttribute &&
+    //   target.getAttribute('index') != null &&
+    //   target.classList &&
+    //   !target.classList.contains('question') &&
+    //   !target.classList.contains('br')
+    // ) {
+    //   /**
+    //    * Quick Select
+    //    * - Runs when words are tapped
+    //    * - Should:
+    //    *      - Clear other types of commenting
+    //    */
+    //   let wordI = parseInt(target.getAttribute('index'))
+    //   let prevAnchor = this.quickSelect.anchor
+    //   let prevFocus = this.quickSelect.focus
+    //   let focusY
 
-      // If tapped question, ignore event
-      if (target.classList.contains('question') || target.classList.contains('br')) {
-        return
-      }
+    //   // If tapped question, ignore event
+    //   if (target.classList.contains('question') || target.classList.contains('br')) {
+    //     return
+    //   }
 
-      // If tapped word is space, select next word
-      let wordText = (target.innerText || '').trim()
-      if (wordText.length < 1 && wordI != 1) {
-        wordI--
-      }
+    //   // If tapped word is space, select next word
+    //   let wordText = (target.innerText || '').trim()
+    //   if (wordText.length < 1 && wordI != 1) {
+    //     wordI--
+    //   }
 
-      // Set the anchor (start) or focus (end) for the highlight section on the clickable highlighting
-      if (prevAnchor == null && prevFocus == null) {
-        this.quickSelect.anchor = wordI
-        this.focusHighlight(wordI, wordI)
-      } else if (prevAnchor != null && prevFocus == null) {
-        this.quickSelect.focus = wordI
-        this.focusHighlight(prevAnchor, wordI)
-      } else if (prevAnchor != null && prevFocus != null) {
-        // Restart focusing
-        this.unfocusHighlight(prevAnchor, prevFocus)
-        this.quickSelect.anchor = wordI
-        this.quickSelect.focus = null
-        this.focusHighlight(wordI, wordI)
-      }
+    //   // Set the anchor (start) or focus (end) for the highlight section on the clickable highlighting
+    //   if (prevAnchor == null && prevFocus == null) {
+    //     this.quickSelect.anchor = wordI
+    //     this.focusHighlight(wordI, wordI)
+    //   } else if (prevAnchor != null && prevFocus == null) {
+    //     this.quickSelect.focus = wordI
+    //     this.focusHighlight(prevAnchor, wordI)
+    //   } else if (prevAnchor != null && prevFocus != null) {
+    //     // Restart focusing
+    //     this.unfocusHighlight(prevAnchor, prevFocus)
+    //     this.quickSelect.anchor = wordI
+    //     this.quickSelect.focus = null
+    //     this.focusHighlight(wordI, wordI)
+    //   }
 
-      // Set Options Y
-      if (!!target.getBoundingClientRect) {
-        focusY = target.getBoundingClientRect().top
-      } else {
-        focusY = target.parentNode && target.parentNode.getBoundingClientRect().top
-      }
-      // Set y position of comment options
-      this.highlightY = focusY - scrollOffset + readingPad
-      this.optionsShow = true
-    } else {
-      this.clearQuickSelect()
-      this.optionsShow = false
-    }
+    //   // Set Options Y
+    //   // if (!!target.getBoundingClientRect) {
+    //   focusY = 100
+    //   //target.getBoundingClientRect().top
+    //   // } else {
+    //   //   focusY = target.parentNode && target.parentNode.getBoundingClientRect().top
+    //   // }
+    //   // Set y position of comment options
+    //   highlightY = focusY - scrollOffset + readingPad
+    //   this.highlightY = highlightY
+    // this.optionsShow = true
+    // } else {
+    //   this.clearQuickSelect()
+    //   this.optionsShow = false
+    // }
   }
 
   updateImageHeights(): void {

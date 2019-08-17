@@ -1,30 +1,30 @@
-nav-bar([showProjectInfo]="true")
-owner-tools
+//- nav-bar([showProjectInfo]="true")
+//- owner-tools
 .container-fluid
   .row.loading(*ngIf="!project._id", style="min-height: 600px;")
   .project-column(*ngIf="!showArchiveModal")
     //- Archived alert for owner
-    .alert.alert-info.fade.show.text-center.alert--fixed(
-      role="alert",
-      *ngIf="project.archived && project.isTeaching"
-    )
-      p.mb-0 
-        i.icon.icon-folder.mr-1
-        | This Reading has been Archived and is in Read Only mode. Unlock Owner Tools and Comments when you 
-        a#goHeroLink.btn.btn-hero.btn-sm.ml-1(
-          [routerLink]="['/plans']", 
-          routerLinkActive="hide", 
-          fragment="top"
-        ) Go Hero
-    //- Archived alert for student
-    .alert.alert-info.fade.show.text-center.alert--fixed(
-      role="alert",
-      *ngIf="project.archived && !project.isTeaching"
-    )
-      p.mb-0
-        i.icon.icon-folder.mr-1
-        | This Reading has been Archived. You will only be able to see comments that you have made.
-    p.alert.alert-danger(*ngIf="error") {{ error }}
+    //- .alert.alert-info.fade.show.text-center.alert--fixed(
+    //-   role="alert",
+    //-   *ngIf="project.archived && project.isTeaching"
+    //- )
+    //-   p.mb-0
+    //-     i.icon.icon-folder.mr-1
+    //-     | This Reading has been Archived and is in Read Only mode. Unlock Owner Tools and Comments when you
+    //-     a#goHeroLink.btn.btn-hero.btn-sm.ml-1(
+    //-       [routerLink]="['/plans']",
+    //-       routerLinkActive="hide",
+    //-       fragment="top"
+    //-     ) Go Hero
+    //- //- Archived alert for student
+    //- .alert.alert-info.fade.show.text-center.alert--fixed(
+    //-   role="alert",
+    //-   *ngIf="project.archived && !project.isTeaching"
+    //- )
+    //-   p.mb-0
+    //-     i.icon.icon-folder.mr-1
+    //-     | This Reading has been Archived. You will only be able to see comments that you have made.
+    //- p.alert.alert-danger(*ngIf="error") {{ error }}
     <annotator #annotator *ngIf="project._id && reading._id"></annotator>
-hot-login-modal.modal-will-fade(*ngIf="!project.archived", [projectId]="project._id", [class.show]="showLoginModal", (closeModal)="showLoginModal = false")
-hot-reading-archived-modal.modal-will-fade([class.show]="showArchiveModal")
+//- hot-login-modal.modal-will-fade(*ngIf="!project.archived", [projectId]="project._id", [class.show]="showLoginModal", (closeModal)="showLoginModal = false")
+//- hot-reading-archived-modal.modal-will-fade([class.show]="showArchiveModal")

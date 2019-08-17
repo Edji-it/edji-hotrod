@@ -52,7 +52,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
-      window.scrollTo(0, 0)
+      // window.scrollTo(0, 0)
     })
 
     // gets id from route
@@ -67,7 +67,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
         }
         // Join socket + start reading timer
         if (this.user._id && this.project._id && !this.joinedRoom) {
-          this.joinRoom(this.user, this.project)
+          // this.joinRoom(this.user, this.project)
         }
       }),
     )
@@ -90,10 +90,10 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
 
           this.project = project
           // Join socket + start reading timer
-          if (this.user._id && this.project._id && !this.joinedRoom) {
-            this.joinRoom(this.user, this.project)
-            this.addToLeaderboard()
-          }
+          // if (this.user._id && this.project._id && !this.joinedRoom) {
+          //   this.joinRoom(this.user, this.project)
+          //   this.addToLeaderboard()
+          // }
 
           if (this.project.reading_id && this.project.reading_id['_id']) {
             this.reading = this.project.reading_id
