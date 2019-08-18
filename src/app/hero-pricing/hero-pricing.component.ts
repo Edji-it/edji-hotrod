@@ -29,7 +29,7 @@ export class HeroPricingComponent implements OnInit {
     hero_override?: string
   } = {}
   // Personal Hero license sitewide offer
-  private offerDetails: string
+  public offerDetails: string
 
   public featureValues = [
     {
