@@ -70,4 +70,5 @@ export interface PromoCopy {
   link?: string // url
   linkText?: string
   offerDetails?: string
+  toastMessage?: string
 }

@@ -51,7 +51,7 @@
                 p.small.hero-color-text
                   i.icon.icon-gift.mr-1
                   b Offer Applied
-                p.small {{ offerDetails }}
+                p.small([innerHtml]="offerDetails")
             form([formGroup]="sForm")
               #promoCode.form-group([class.has-success]="sForm.controls['couponCode'].valid", [class.has-danger]="sForm.controls['couponCode'].value && sForm.controls['couponCode'].value.length > 0 && !sForm.controls['couponCode'].valid && sForm.controls['couponCode'].touched")
                 label(for="couponCodeInput") Promo Code

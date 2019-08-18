@@ -5,7 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 
 // Project Dependencies
-import { AuthService, ReadingService, ProjectService, LockerService } from '../_services'
+import { AuthService, ReadingService, ProjectService, LockerService, MessageService, CopyService } from '../_services'
 import { User } from './../shared/datatypes'
 
 @Component({
@@ -66,6 +66,8 @@ export class DashboardComponent implements OnInit {
     private _title: Title,
     private _locker: LockerService,
     private route: ActivatedRoute,
+    private _messages: MessageService,
+    private _copy: CopyService,
   ) {
     // this makes the window always render scrolled to the top
     this._router.events.subscribe(() => {
@@ -85,6 +87,28 @@ export class DashboardComponent implements OnInit {
     this.subscriptions.push(
       this._auth.currentUser.subscribe(user => {
         this.currentUser = user
+      }),
+      this._copy.activePromotions.subscribe(promo => {
+        if (promo.toastMessage && promo.promotionTitle) {
+          if (
+            !this.userProfileIncomplete() &&
+            !this.currentUser.hero_status &&
+            !this.currentUser.isStudent &&
+            this._locker.get(promo.promotionTitle) != true
+          ) {
+            // Promo toast
+            this._messages.sendToast({
+              id: 'salepromo',
+              message: promo.toastMessage,
+              type: 'promo',
+              limitToPage: 'dashboard',
+              link: '/plans',
+              requireDismiss: true,
+            })
+            // Indicate toast was displayed
+            this._locker.set(promo.promotionTitle, true)
+          }
+        }
       }),
     )
   }
