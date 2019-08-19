@@ -66,6 +66,7 @@ import {
   ScrollProgressComponent,
   TutorialBoxComponent,
   ResetComponent,
+  PromoBannerComponent,
 } from './shared'
 import { HomeComponent } from './home'
 import { RegisterPageComponent } from './register-page'
@@ -140,6 +141,7 @@ import { TeamPageComponent } from './team-page/team-page.component'
 import { SearchPage } from './search-page/search-page.component'
 import { TeacherFeedbackComponent } from './annotator/teacher-feedback/teacher-feedback.component'
 import { MetricsEffects } from './_reducers/metrics.effects'
+import { CopyService } from './_services/copy.service'
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
@@ -166,6 +168,7 @@ const APP_PROVIDERS = [
   // ...APP_RESOLVER_PROVIDERS,
   // AppState,
   AuthService,
+  CopyService,
   DashboardGuardService,
   ReadingService,
   MediaService,
@@ -271,6 +274,7 @@ const routerOptions: ExtraOptions = {
     LicenseWelcomeComponent,
     ReadingRecapComponent,
     TeamPageComponent,
+    PromoBannerComponent,
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],

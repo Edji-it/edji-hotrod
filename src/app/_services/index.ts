@@ -9,6 +9,7 @@ export * from './reading.service'
 export * from './secret-switches.service'
 export * from './socket.service'
 export * from './util-tool.service'
+export * from './copy.service'
 /**
  * Services relying on other services above
  * - Compiler will fail if dependent services are not listed first in barrel file
