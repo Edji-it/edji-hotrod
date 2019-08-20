@@ -194,6 +194,8 @@ a.w {
 // Styles for ANNOTATABLE content
 .content--active {
   @extend %canSelectText;
+  // Needed to prevent tap bindings from blocking scrolling
+  touch-action: pan-y;
 
   & .w.img {
     cursor: default;

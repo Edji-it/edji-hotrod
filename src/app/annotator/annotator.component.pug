@@ -90,7 +90,6 @@ scroll-progress([scrollProgress]="currentScroll")
         //- Note: Applying TABINDEX to content wrappers will crash longer readings on Chrome mobile
         #annotatorContent.content.content--active.pt-4(
             (tap)="showCommentOptions($event)",
-            [style.touch-action]="'pan-y'",
             (clickOutside)="hideCommentOptions()",
             [ngClass]="[ quickSelect.anchor != null ? 'quick-select--begin' : '', quickSelect.focus != null ? 'quick-select--end':'']"
             #activeContent
