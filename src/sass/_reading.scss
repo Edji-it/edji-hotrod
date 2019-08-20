@@ -13,6 +13,26 @@ $readingBorder: 1px solid #dcdcdc;
 $focusUnderlineWidth: 3px;
 $adjustedLineHeight: $readingLineHeight - $focusUnderlineWidth - 1px;
 
+.reading-page {
+  transition: transform $slidingPaneTime linear;
+  transform: translate3d(0, 0, -1px);
+
+  @media (max-width: $medium-screen - 1px) {
+    padding-left: 60px;
+    &.sliding-out {
+      transform: translate3d(calc(100% - 20px), 0%, -1px);
+    }
+  }
+
+  // iPad
+  @media (min-width: $medium-screen) and (max-width: $large-screen) {
+    padding-left: 60px;
+    &.sliding-out {
+      transform: translate3d(300px, 0%, -1px);
+    }
+  }
+}
+
 .content {
   padding-bottom: 50px;
   line-height: $adjustedLineHeight;
@@ -29,14 +49,15 @@ $adjustedLineHeight: $readingLineHeight - $focusUnderlineWidth - 1px;
   margin-left: 50px;
   word-break: break-word;
 
-  .sliding-out & {
-    // Static width comment pane, flexible margin
-    @media (min-width: $medium-screen) and (max-width: $large-screen) {
-      // 768px - 992px
-      max-width: calc(100% - 330px);
-      margin-left: auto;
-    }
-  }
+  // .sliding-out & {
+  // REMOVED: Flexible width content causes heavy/expensive reflow on mobile devices
+  // Static width comment pane, flexible margin
+  // @media (min-width: $medium-screen) and (max-width: $large-screen) {
+  //   // 768px - 992px
+  //   max-width: calc(100% - 330px);
+  //   margin-left: auto;
+  // }
+  // }
   // Flexible width comment pane, static margin
   @media all and (min-width: $large-screen) {
     // 992px
@@ -555,22 +576,6 @@ $quickBlue: #55aef7;
 
   &.quick-select--end .w.h-f {
     border-bottom-style: solid;
-  }
-}
-
-.reading-page {
-  transition: transform $slidingPaneTime linear;
-  &:not(.sliding-out) {
-    transform: translate3d(0, 0, 0);
-  }
-  // background: #fff;
-  // box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
-  // padding: 40px 60px 50px 35px;
-  @media (max-width: $medium-screen) {
-    padding-left: 60px;
-    &.sliding-out {
-      transform: translate3d(calc(100% - 20px), 0%, -1px);
-    }
   }
 }
 
