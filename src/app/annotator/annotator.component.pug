@@ -91,7 +91,7 @@ scroll-progress([scrollProgress]="currentScroll")
         #annotatorContent.content.content--active.pt-4(
             (tap)="showCommentOptions($event)",
             (clickOutside)="hideCommentOptions()",
-            [ngClass]="[ quickSelect.anchor != null ? 'quick-select--begin' : '', quickSelect.focus != null ? 'quick-select--end':'']"
+            [ngClass]="[ quickSelect.anchor != null ? 'quick-select--begin' : '', quickSelect.focus != null ? 'quick-select--end':'', project.archived ? 'archived' : '']"
             #activeContent
         )
             //- Reading Group Instructions
@@ -101,7 +101,7 @@ scroll-progress([scrollProgress]="currentScroll")
                         .lesson-block__header Instructions
                         p([innerHtml]="project.group_instructions")
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i" [class.archived]="project.archived">
+            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
                 edji-comment(
                     *ngFor="let comment of commentsByIndex[i]; let ci = index",

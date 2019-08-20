@@ -197,6 +197,11 @@ a.w {
   // Needed to prevent tap bindings from blocking scrolling
   touch-action: pan-y;
 
+  &.archived {
+    pointer-events: none;
+    margin-top: 90px; // allow room for archive alert
+  }
+
   & .w.img {
     cursor: default;
 
@@ -297,9 +302,6 @@ section.search {
 
   & .reading-list-item-title {
     margin-bottom: 0px;
-  }
-
-  &:hover {
   }
 }
 
@@ -534,9 +536,12 @@ $quickBlue: #55aef7;
 .w {
   background-position: center;
 
-  &:hover:not(.archived) {
-    cursor: pointer;
-    border-bottom: $focusUnderlineWidth solid $hoverBlue;
+  @media (min-width: $medium-screen) {
+    // Hover styles are both awkward and a little heavy on mobile
+    &:hover {
+      cursor: pointer;
+      border-bottom: $focusUnderlineWidth solid $hoverBlue;
+    }
   }
 
   // "h-f" is also needed because it takes longer to apply than the quick select class
