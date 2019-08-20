@@ -33,7 +33,6 @@ import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './.
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
-import { debounce } from '../_decorators'
 
 @Component({
   selector: 'annotator',
@@ -167,6 +166,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   // For debouncing/wait on showCommentOptions
   private showCommentOptionsWait: boolean = false
 
+  // HostListener debouncers
+  private debounceStatus: { mousemove?: boolean; scroll?: boolean } = {}
+
   constructor(
     private element: ElementRef,
     private _readings: ReadingService,
@@ -187,14 +189,34 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
+   * Simple debounce for Hostlisteners
+   * @param descriptor function or event name
+   * @param delay time in ms to debounce
+   * @returns debounced boolean (true = ignore event)
+   */
+  private debounce(descriptor: string, delay: number): boolean {
+    if (this.debounceStatus[descriptor]) {
+      return true
+    } else {
+      this.debounceStatus[descriptor] = true
+      setTimeout(() => {
+        this.debounceStatus[descriptor] = false
+      }, delay)
+      return false
+    }
+  }
+
+  /**
    * This renders the next 400 words whenever the window gets a certain amount away from the bottom of the view,
    *  which is determined by distanceFromViewport
    */
   @HostListener('window:scroll', ['$event'])
-  @debounce()
   scrollUpdate(event) {
-    this.onScrollUpdate()
-    this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
+    if (!this.debounce('scroll', 300)) {
+      this.onScrollUpdate()
+      this.currentScroll =
+        (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
+    }
   }
 
   /**
@@ -217,9 +239,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * and we also make sure they have a "live" status on the indicator
    */
   @HostListener('window:mousemove')
-  @debounce(5000)
   refreshUserState() {
-    this._academy.trackActivity()
+    if (!this.debounce('mousemove', 5000)) {
+      this._academy.trackActivity()
+    }
   }
 
   ngOnInit() {
