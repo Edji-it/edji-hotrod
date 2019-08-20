@@ -77,7 +77,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public currentRemovedPreText: number = 0
   public currentDocHeight: number = 0
   public currentScroll: number = 0
-  public currentScrollPx: number = 0
 
   public commentsByIndex: EdjiComment[][] = []
   public focusOverride: boolean = false
@@ -564,7 +563,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   private onScrollUpdate(): void {
     let scrollTop = document.documentElement.scrollTop
-    let scrollDifference = this.currentScrollPx - scrollTop
+    let scrollDifference = scrollTop - this.currentScroll
     console.log('Scroll top:', scrollTop)
     this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
 
@@ -572,24 +571,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     let bottomOfArticle = topOfArticle + this.contentEl.nativeElement.clientHeight
     let topOfView = document.scrollingElement.scrollTop
     let bottomOfView = window.innerHeight + topOfView
-    // console.log('top of article:', topOfArticle, 'top of view:', topOfView)
+    console.log('top of article:', topOfArticle, 'top of view:', topOfView)
     let distanceFromViewport = 500
 
-    let firstWordEl
-    if (this.firstWords[0]) {
-      firstWordEl = document.querySelector('.w[index="' + this.firstWords[0].index + '"]')
-    }
     // Save removed height and indices for restoration
-    if (firstWordEl) {
+    if (this.firstWords[0] && this.firstWords[0].el) {
       // we use bottom to support taller non-words
-      // console.log(this.firstWords[0].el.getBoundingClientRect())
-      let scrollChange = firstWordEl.getBoundingClientRect().bottom
-      // Pointer breaks on reinstated
-      // this.firstWords[0].el.getBoundingClientRect().bottom
-      // console.log('Scrollchange', scrollChange, 'Scroll diff', scrollDifference, this.firstWords)
-      if (scrollChange < 0) {
+      let scrollChange = this.firstWords[0].el.getBoundingClientRect().bottom
+      if (scrollChange < -64) {
         console.log('removed words at:', this.firstWords[0], scrollChange)
-        this.currentScrollPx = scrollTop + 0
+        this.currentRemovedPreText += -1 * scrollChange
 
         // todo calculate based on position of article
         let newStart = document.elementFromPoint(30, 80)
@@ -599,44 +590,24 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.firstWords.unshift({
           el: newStart,
           index: index,
-          portionHeight: this.currentRemovedPreText,
-          lastWord: this.lastWord + 0,
+          height: 100,
         })
-        console.log('new first word:', index)
 
         // Swap out words for padding
-        this.currentRemovedPreText += 80 - scrollChange
         this.contentEl.nativeElement.style.paddingTop = this.currentRemovedPreText + 'px'
         this.firstWord = this.firstWords[0].index
         //
-        this.lastWord += 128
+        this.lastWord += 64
         // Make sure we broadcast lastWord position out to listening components
         this._projects.lastWordUpdateSubj.next(this.lastWord)
         // Re-run the line positions so comment avatars show up in the right spot
         this.setLinePositions()
-      } else if (scrollChange > 80) {
-        // Reverse scrolling
-        console.log('REVERSE')
-        let lastFirst
-        if (this.firstWords.length > 1) {
-          let skip = this.firstWords.shift()
-        }
-        lastFirst = this.firstWords[0]
-
-        this.currentScrollPx = scrollTop + 0
-        this.currentRemovedPreText = lastFirst.portionHeight // scrollChange
-        this.contentEl.nativeElement.style.paddingTop = lastFirst.portionHeight + 'px'
-        this.firstWord = lastFirst.index
-        this.lastWord = lastFirst.lastWord
       }
     } else {
       let newStart = document.elementFromPoint(30, 80)
-      if (newStart) {
-        this.firstWords[0] = {
-          el: newStart,
-          index: newStart.getAttribute('index'),
-          portionHeight: 0,
-        }
+      this.firstWords[0] = {
+        el: newStart,
+        index: newStart.getAttribute('index'),
       }
     }
     // // Remove words form top
@@ -650,7 +621,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.setLinePositions()
     }
 
-    console.log(this.firstWord, this.lastWord, this.currentRemovedPreText + 'px')
+    console.log(this.firstWord, this.lastWord)
   }
 
   private offset(i, firstWord) {

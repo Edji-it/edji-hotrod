@@ -86,7 +86,7 @@ scroll-progress([scrollProgress]="currentScroll")
             | for your desktop device.
         //- Create components after load for reading
         //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
-        #annotatorContent.content(
+        #annotatorContent.content.pt-4(
             #activeContent,
             tabindex="-1"
         )
