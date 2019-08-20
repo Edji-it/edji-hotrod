@@ -155,10 +155,10 @@ export class MyHammerConfig extends HammerGestureConfig {
     // override default gesture settings
     //  Tap overrides for Chrome v71 sensitivity when making comments
     tap: {
-      time: 2000, // Maximum press time in ms.
-      threshold: 10, //	While doing a tap some time spent moving is allowed.
-      posThreshold: 75, // While tapping some position movement is allowed
-      interval: 10, // we don't care about supporting double taps
+      time: 2000, // default: 250 / Maximum press time in ms.
+      threshold: 5, //	default: 2 / While doing a tap some time spent moving is allowed.
+      posThreshold: 10, // default: 10 / While tapping some position movement is allowed
+      interval: 10, // default: 300 / we don't care about supporting double taps
     },
   }
 }
