@@ -191,7 +191,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    *  which is determined by distanceFromViewport
    */
   @HostListener('window:scroll', ['$event'])
-  @debounce(500)
+  @debounce()
   scrollUpdate(event) {
     this.onScrollUpdate()
     this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
@@ -553,16 +553,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Updates the rendered words as the user scrolls through the reading
    */
   private onScrollUpdate(): void {
-    // let bottomOfArticle = this.contentEl.nativeElement.offsetTop + this.contentEl.nativeElement.clientHeight
-    // let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
-    // let distanceFromViewport = 500
-    // if (bottomOfArticle - distanceFromViewport < bottomOfView) {
-    //   this.lastWord += 800
-    //   // Make sure we broadcast lastWord position out to listening components
-    //   this._projects.lastWordUpdateSubj.next(this.lastWord)
-    //   // Re-run the line positions so comment avatars show up in the right spot
-    //   this.setLinePositions()
-    // }
+    let bottomOfArticle = this.contentEl.nativeElement.offsetTop + this.contentEl.nativeElement.clientHeight
+    let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
+    let distanceFromViewport = 500
+    if (bottomOfArticle - distanceFromViewport < bottomOfView) {
+      this.lastWord += 800
+      // Make sure we broadcast lastWord position out to listening components
+      this._projects.lastWordUpdateSubj.next(this.lastWord)
+      // Re-run the line positions so comment avatars show up in the right spot
+      this.setLinePositions()
+    }
   }
 
   /**
