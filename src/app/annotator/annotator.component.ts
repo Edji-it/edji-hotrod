@@ -33,6 +33,7 @@ import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './.
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
+import { debounce } from '../_decorators'
 
 @Component({
   selector: 'annotator',
@@ -190,6 +191,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    *  which is determined by distanceFromViewport
    */
   @HostListener('window:scroll', ['$event'])
+  @debounce(500)
   scrollUpdate(event) {
     this.onScrollUpdate()
     this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
@@ -199,7 +201,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Handle Window Resize
    * - Content reflows impact positioning of comments and other variables we calculate
    */
-  @HostListener('window:resize') onResize() {
+  @HostListener('window:resize')
+  onResize() {
     // Line counts need to be re-rendered when text reflows
     this.updateImageHeights()
     this.setLinePositions()
@@ -213,7 +216,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * when the user moves the mouse, let academy service know so we can keep tracking reading ticks
    * and we also make sure they have a "live" status on the indicator
    */
-  @HostListener('window:mousemove') refreshUserState() {
+  @HostListener('window:mousemove')
+  @debounce(5000)
+  refreshUserState() {
     this._academy.trackActivity()
   }
 
