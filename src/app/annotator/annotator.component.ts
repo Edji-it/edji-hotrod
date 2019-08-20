@@ -1266,7 +1266,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Keep this light! It runs for every word instance
+   * Determines highlight heat for a word!
+   * => Pure function, all vars provided as arguments (optimized for Angular doCheck)
+   * => Keep this light! It runs for every word instance
    * @param i is the word index
    */
   public getHighlightClass(
@@ -1275,8 +1277,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     filterHighlightArray,
     highlightArray,
     alwaysHighlightArray,
-    focusArray,
-    quickSelect,
     i: number,
   ): string {
     let classString = ''
@@ -1294,10 +1294,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       if (alwaysHighlightArray[i]) {
         highlightCount += alwaysHighlightArray[i]
       }
-    }
-    // Apply focus class to words of focused comments
-    if (focusArray[i]) {
-      classString = 'h-f'
     }
 
     return classString + ' h-' + highlightCount
