@@ -68,13 +68,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public feedbackForUser: Feedback[] = []
   public paneCommentComponentUpdates: CommentComponent[]
   // Determines when infinite scroll should begin
-  public firstWord: number = 0
-  public lastWord: number = 800
+  public lastWord: number = 4000
   public lastWordImageOffset: number = 100
-  public firstVisibleWord: number = 0
-  public firstWords: any[] = []
   // Used to calculate max/progress for reading progress bar
-  public currentRemovedPreText: number = 0
   public currentDocHeight: number = 0
   public currentScroll: number = 0
 
@@ -196,12 +192,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * This renders the next 400 words whenever the window gets a certain amount away from the bottom of the view,
    *  which is determined by distanceFromViewport
    */
-  @HostListener('window:scroll', ['$event'])
-  scrollUpdate(event) {
-    this.onScrollUpdate()
-    // @todo compare using event.srcElement
-    // console.log(event)
-  }
+  // @HostListener('window:scroll', ['$event'])
+  // scrollUpdate(event) {
+  //   this.onScrollUpdate()
+  //   this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
+  // }
 
   // /**
   //  * Handle Window Resize
@@ -562,70 +557,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Updates the rendered words as the user scrolls through the reading
    */
   private onScrollUpdate(): void {
-    let scrollTop = document.documentElement.scrollTop
-    let scrollDifference = scrollTop - this.currentScroll
-    console.log('Scroll top:', scrollTop)
-    this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
-
-    let topOfArticle = this.contentEl.nativeElement.scrollTop // ZERO
-    let bottomOfArticle = topOfArticle + this.contentEl.nativeElement.clientHeight
-    let topOfView = document.scrollingElement.scrollTop
-    let bottomOfView = window.innerHeight + topOfView
-    console.log('top of article:', topOfArticle, 'top of view:', topOfView)
-    let distanceFromViewport = 500
-
-    // Save removed height and indices for restoration
-    if (this.firstWords[0] && this.firstWords[0].el) {
-      // we use bottom to support taller non-words
-      let scrollChange = this.firstWords[0].el.getBoundingClientRect().bottom
-      if (scrollChange < -64) {
-        console.log('removed words at:', this.firstWords[0], scrollChange)
-        this.currentRemovedPreText += -1 * scrollChange
-
-        // todo calculate based on position of article
-        let newStart = document.elementFromPoint(30, 80)
-        let index = newStart.getAttribute('index')
-        // Find first word in line to update index
-        let firstVisibleWord = index
-        this.firstWords.unshift({
-          el: newStart,
-          index: index,
-          height: 100,
-        })
-
-        // Swap out words for padding
-        this.contentEl.nativeElement.style.paddingTop = this.currentRemovedPreText + 'px'
-        this.firstWord = this.firstWords[0].index
-        //
-        this.lastWord += 64
-        // Make sure we broadcast lastWord position out to listening components
-        this._projects.lastWordUpdateSubj.next(this.lastWord)
-        // Re-run the line positions so comment avatars show up in the right spot
-        this.setLinePositions()
-      }
-    } else {
-      let newStart = document.elementFromPoint(30, 80)
-      this.firstWords[0] = {
-        el: newStart,
-        index: newStart.getAttribute('index'),
-      }
-    }
-    // // Remove words form top
-
-    // Increase words at bottom
-    if (bottomOfArticle - distanceFromViewport < bottomOfView) {
-      this.lastWord += 300
-      // Make sure we broadcast lastWord position out to listening components
-      this._projects.lastWordUpdateSubj.next(this.lastWord)
-      // Re-run the line positions so comment avatars show up in the right spot
-      this.setLinePositions()
-    }
-
-    console.log(this.firstWord, this.lastWord)
-  }
-
-  private offset(i, firstWord) {
-    return parseInt(i) + parseInt(firstWord)
+    // let bottomOfArticle = this.contentEl.nativeElement.offsetTop + this.contentEl.nativeElement.clientHeight
+    // let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
+    // let distanceFromViewport = 500
+    // if (bottomOfArticle - distanceFromViewport < bottomOfView) {
+    //   this.lastWord += 800
+    //   // Make sure we broadcast lastWord position out to listening components
+    //   this._projects.lastWordUpdateSubj.next(this.lastWord)
+    //   // Re-run the line positions so comment avatars show up in the right spot
+    //   this.setLinePositions()
+    // }
   }
 
   /**
