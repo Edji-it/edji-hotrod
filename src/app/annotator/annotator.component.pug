@@ -82,10 +82,8 @@ scroll-progress([scrollProgress]="currentScroll")
                 (click)="audioSupportError = !audioSupportError"
             )
                 span(aria-hidden="true") &times;
-            | The browser you are on does not currently support recording audio. Audio comment playback may also be affected on some browsers. The recommended browser for audio comments is the
-            a(href="https://www.google.com/chrome/browser/desktop/", target="_blank")
-                | Google Chrome Web Browser
-            | for your desktop device.
+            b Audio Comments Unavailable
+            | The browser you are on does not currently support recording audio. Our recommended browser for audio comments is <a href="https://www.google.com/chrome/browser/desktop/" target="_blank">Google Chrome </a> on a desktop device.
         //- Create components after load for reading
         //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
         article#annotatorContent.content.active-content.pt-4(
