@@ -1,5 +1,5 @@
-//- nav-bar([showProjectInfo]="true")
-//- owner-tools
+nav-bar([showProjectInfo]="true")
+owner-tools
 .container-fluid
   .row.loading(*ngIf="!project._id", style="min-height: 600px;")
   .project-column(*ngIf="!showArchiveModal")
@@ -26,5 +26,7 @@
     //-     | This Reading has been Archived. You will only be able to see comments that you have made.
     //- p.alert.alert-danger(*ngIf="error") {{ error }}
     <annotator #annotator *ngIf="project._id && reading._id"></annotator>
+    //- ng-container(*ngIf="project._id && reading._id")
+    //-   span.w(*ngFor="let w of reading.words") {{ w.str }}&nbsp;
 //- hot-login-modal.modal-will-fade(*ngIf="!project.archived", [projectId]="project._id", [class.show]="showLoginModal", (closeModal)="showLoginModal = false")
 //- hot-reading-archived-modal.modal-will-fade([class.show]="showArchiveModal")

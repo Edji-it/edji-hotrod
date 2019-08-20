@@ -10,9 +10,9 @@ scroll-progress([scrollProgress]="currentScroll")
 )
     //- [ngClass]="[ lineExpanded ? 'comment-expanded' : '' , commentPane ? 'sliding-out' : '']",
         [style.min-height]="currentDocHeight + 'px'"
-    .text-options(
-        [style.top]="highlightY + 'px'"
-    )
+    //- .text-options(
+    //-     [style.top]="highlightY + 'px'"
+    //- )
         //- optionsShow
         //- Desktop buttons
         //- .options
@@ -69,35 +69,34 @@ scroll-progress([scrollProgress]="currentScroll")
         //-                 i.icon.icon-mic
     //- end .text-options
     .content--active__wrap
-        .alert.alert-warning.alert-dismissible.fade.show(
-            role="alert",
-            *ngIf="audioSupportError"
-        )
-            button.close(
-                type="button",
-                data-dismiss="alert",
-                aria-label="Close",
-                (click)="audioSupportError = !audioSupportError"
-            )
-                span(aria-hidden="true") &times;
-            | The browser you are on does not currently support recording audio. Audio comment playback may also be affected on some browsers. The recommended browser for audio comments is the
-            a(href="https://www.google.com/chrome/browser/desktop/", target="_blank")
-                | Google Chrome Web Browser
-            | for your desktop device.
-        //- Create components after load for reading
-        //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
+        //-     .alert.alert-warning.alert-dismissible.fade.show(
+        //-         role="alert",
+        //-         *ngIf="audioSupportError"
+        //-     )
+        //-         button.close(
+        //-             type="button",
+        //-             data-dismiss="alert",
+        //-             aria-label="Close",
+        //-             (click)="audioSupportError = !audioSupportError"
+        //-         )
+        //-             span(aria-hidden="true") &times;
+        //-         | The browser you are on does not currently support recording audio. Audio comment playback may also be affected on some browsers. The recommended browser for audio comments is the
+        //-         a(href="https://www.google.com/chrome/browser/desktop/", target="_blank")
+        //-             | Google Chrome Web Browser
+        //-         | for your desktop device.
+        //-     //- Create components after load for reading
+        //-     //- Note: -1 tabindex for disabling "Touch to Search" on mobile https://developers.google.com/web/updates/2015/10/tap-to-search
         #annotatorContent.content.pt-4(
-            #activeContent,
-            tabindex="-1"
+            #activeContent
         )
-            //- Reading Group Instructions
-            .row.lesson-block(*ngIf="project.group_instructions && project.group_instructions.length > 1")
-                    .lesson-block__indicator([innerHtml]="':mega:' | emojione")
-                    .lesson-block__body
-                        .lesson-block__header Instructions
-                        p([innerHtml]="project.group_instructions")
-            //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
-            <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index"  [attr.index]="i">
+            //-         //- Reading Group Instructions
+            //-         .row.lesson-block(*ngIf="project.group_instructions && project.group_instructions.length > 1")
+            //-                 .lesson-block__indicator([innerHtml]="':mega:' | emojione")
+            //-                 .lesson-block__body
+            //-                     .lesson-block__header Instructions
+            //-                     p([innerHtml]="project.group_instructions")
+            //-         //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
+            <span #words class="w"  *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i" [class.archived]="project.archived">
                 //- Comment Loop: Display comments if they exist for this Word
                 //- edji-comment(
                 //-     *ngFor="let comment of commentsByIndex[i]; let ci = index",
@@ -125,7 +124,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     [attr.href]="w.url",
                     target="_blank"
                 )
-                  | {{ w.str }}
+                    | {{ w.str }}
                 //- Non-link Words, show content
                 | {{ w.s ? '&nbsp;' : (!w.a ? w.str : '') }}
                 .img-wrap(*ngIf="w.img")
@@ -157,81 +156,81 @@ scroll-progress([scrollProgress]="currentScroll")
                 )
                 //- end Word span ".w"
             </span>
-            //- Teacher's Feedback
-            .row.lesson-block(*ngIf="feedbackForUser && feedbackForUser.length > 0")
-                .lesson-block__indicator
-                    .icon.icon-feedback
-                .lesson-block__body
-                    .lesson-block__header Teacher's Feedback For You
-                    ng-container(*ngFor="let feedback of feedbackForUser")
-                        edji-teacher-feedback(
-                            [feedback]="feedback",
-                            [teacherName]="project && project.teacher.fullname"
-                        )
-        .row.mb-4(*ngIf="lastWord < reading.words.length")
-            .loading(style="margin: 0 auto;")
+        //-     //- Teacher's Feedback
+        //-     .row.lesson-block(*ngIf="feedbackForUser && feedbackForUser.length > 0")
+        //-         .lesson-block__indicator
+        //-             .icon.icon-feedback
+        //-         .lesson-block__body
+        //-             .lesson-block__header Teacher's Feedback For You
+        //-             ng-container(*ngFor="let feedback of feedbackForUser")
+        //-                 edji-teacher-feedback(
+        //-                     [feedback]="feedback",
+        //-                     [teacherName]="project && project.teacher.fullname"
+        //-                 )
+        //- .row.mb-4(*ngIf="lastWord < reading.words.length")
+        //-     .loading(style="margin: 0 auto;")
 //- End of Reading options
-.button__row
-    button.btn.btn-secondary(
-        *ngIf="user.type == 'temp'",
-        [routerLink]="['/register']",
-        [queryParams]="{ userId: user._id }"
-    ) Save this reading
-    //- Copy and Edit: Temp User
-    button.btn.btn-primary(
-        *ngIf="reading && user.type == 'temp'",
-        [routerLink]="['/register']",
-        [queryParams]="{ reading: reading._id, userId: user._id }"
-    ) Copy and edit
-    //- Copy and Edit: Registered User
-    button.btn.btn-primary(
-        *ngIf="reading && user.type != 'temp' && user._id != reading.owner_id",
-        [routerLink]="['/new-reading']",
-        [queryParams]="{ copyId: reading._id }"
-    ) Copy and edit
+//- .button__row
+//-     button.btn.btn-secondary(
+//-         *ngIf="user.type == 'temp'",
+//-         [routerLink]="['/register']",
+//-         [queryParams]="{ userId: user._id }"
+//-     ) Save this reading
+//-     //- Copy and Edit: Temp User
+//-     button.btn.btn-primary(
+//-         *ngIf="reading && user.type == 'temp'",
+//-         [routerLink]="['/register']",
+//-         [queryParams]="{ reading: reading._id, userId: user._id }"
+//-     ) Copy and edit
+//-     //- Copy and Edit: Registered User
+//-     button.btn.btn-primary(
+//-         *ngIf="reading && user.type != 'temp' && user._id != reading.owner_id",
+//-         [routerLink]="['/new-reading']",
+//-         [queryParams]="{ copyId: reading._id }"
+//-     ) Copy and edit
 
-//- Bottom of the page Options
-.fixed-btn-row--SE.hidden-sm-down(
-    [class.bottom-bar-offset]="project.isTeaching"
-)
-    tutorial-box(
-        [tutorialName]="'highlighting'",
-        [pageObjs]="guideContent",
-        [pager]="guideStepNo",
-        (pageChange)="guideStepNo = $event",
-        [class.keyboard-offset]="isEmojiKeyboardActive()",
-        [class.mobile-toolbar-offset]="optionsShow"
-    )
+//- //- Bottom of the page Options
+//- .fixed-btn-row--SE.hidden-sm-down(
+//-     [class.bottom-bar-offset]="project.isTeaching"
+//- )
+//-     tutorial-box(
+//-         [tutorialName]="'highlighting'",
+//-         [pageObjs]="guideContent",
+//-         [pager]="guideStepNo",
+//-         (pageChange)="guideStepNo = $event",
+//-         [class.keyboard-offset]="isEmojiKeyboardActive()",
+//-         [class.mobile-toolbar-offset]="optionsShow"
+//-     )
 
-//- Emoji Keyboard: Custom Emoji entry component
-    [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''",
-emoji-keyboard(
-    [isActive]="isEmojiKeyboardActive()",
-    (commentChange)="updateActiveComment($event)",
-    (dismissKeyboard)="inactivateComment()"
-)
+//- //- Emoji Keyboard: Custom Emoji entry component
+//-     [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''",
+//- emoji-keyboard(
+//-     [isActive]="isEmojiKeyboardActive()",
+//-     (commentChange)="updateActiveComment($event)",
+//-     (dismissKeyboard)="inactivateComment()"
+//- )
 
-//- comment-pane
-comment-pane(
-    [isActive]="(selectedComment.active || selectedReply.active) ? true : false",
-    [isSelected]="(selectedComment.selected || selectedReply.selected) ? true : false",
-    [comment]="selectedComment",
-    [reply]="selectedReply",
-    (hideComment)="toggleCommentPane(false)",
-    (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",
-    (commentUpdated)="setLinePositions()",
-    (commentReply)="discReplyFire($event)"
-)
+//- //- comment-pane
+//- comment-pane(
+//-     [isActive]="(selectedComment.active || selectedReply.active) ? true : false",
+//-     [isSelected]="(selectedComment.selected || selectedReply.selected) ? true : false",
+//-     [comment]="selectedComment",
+//-     [reply]="selectedReply",
+//-     (hideComment)="toggleCommentPane(false)",
+//-     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",
+//-     (commentUpdated)="setLinePositions()",
+//-     (commentReply)="discReplyFire($event)"
+//- )
 
-//- Icon Arrow for the active comment
-.icon-comment-arrow(
-    [style.top]="commentHeightPos + 'px'"
-)
+//- //- Icon Arrow for the active comment
+//- .icon-comment-arrow(
+//-     [style.top]="commentHeightPos + 'px'"
+//- )
 
-//- Delete Comment Modal
-hot-del-comment(
-    *ngIf="_comments.showDeleteCommentModal",
-    [comment]="_comments.deleteCommentRef",
-    (delete)="deleteComment(_comments.deleteCommentRef)",
-    (closeModal)="_comments.commentDeleted()"
-)
+//- //- Delete Comment Modal
+//- hot-del-comment(
+//-     *ngIf="_comments.showDeleteCommentModal",
+//-     [comment]="_comments.deleteCommentRef",
+//-     (delete)="deleteComment(_comments.deleteCommentRef)",
+//-     (closeModal)="_comments.commentDeleted()"
+//- )
