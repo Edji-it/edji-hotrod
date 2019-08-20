@@ -636,6 +636,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           el: newStart,
           index: newStart.getAttribute('index'),
           portionHeight: 0,
+          lastWord: 800,
         }
       }
     }
