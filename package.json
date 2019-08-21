@@ -1,6 +1,6 @@
 {
   "name": "edji-hotrod",
-  "version": "4.11.2",
+  "version": "4.11.3",
   "description": "Hot Rod is Edji's roaring Front End!",
   "author": "Edji, Inc.",
   "homepage": "https://edji.it/",
@@ -63,7 +63,7 @@
     "primeng": "^7.0.5",
     "pug-loader": "^2.4.0",
     "rangy": "^1.3.0",
-    "rxjs": "^6.4.0",
+    "rxjs": "^6.5.2",
     "socket.io-client": "^2.2.0",
     "standard-version": "^4.4.0",
     "zone.js": "^0.8.29"

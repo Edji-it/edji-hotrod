@@ -7,7 +7,7 @@ import { LockerService } from '../../_services/locker.service'
 
 @Component({
   selector: 'emoji-keyboard',
-  templateUrl: './emoji-keyboard.component.html',
+  templateUrl: './emoji-keyboard.component.pug',
   styleUrls: ['./emoji-keyboard.component.scss'],
 })
 export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
@@ -849,6 +849,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
       ],
     },
   ]
+  public filtersLastIndex: number = 1
 
   constructor(private _locker: LockerService, private _auth: AuthService, private _comments: CommentService) {}
 
@@ -856,6 +857,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     if (this._auth.getUser().prefs && this._auth.getUser().prefs.recentEmoji) {
       this.emojifilters[0].emoji = this._auth.getUser().prefs.recentEmoji
     }
+    this.filtersLastIndex = this.emojifilters.length - 1
   }
 
   ngAfterViewInit() {

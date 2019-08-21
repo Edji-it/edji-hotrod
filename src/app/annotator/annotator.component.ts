@@ -57,7 +57,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
   @ViewChildren('words') wordEls
-  @ViewChild('article', { static: false }) articleEl: ElementRef
+  @ViewChild('activeContent', { static: false }) contentEl: ElementRef
   @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
 
   public reading: Reading = <Reading>{}
@@ -166,6 +166,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   // For debouncing/wait on showCommentOptions
   private showCommentOptionsWait: boolean = false
 
+  // HostListener debouncers
+  private debounceStatus: { mousemove?: boolean; scroll?: boolean } = {}
+
   constructor(
     private element: ElementRef,
     private _readings: ReadingService,
@@ -186,20 +189,42 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
+   * Simple debounce for Hostlisteners
+   * @param descriptor function or event name
+   * @param delay time in ms to debounce
+   * @returns debounced boolean (true = ignore event)
+   */
+  private debounce(descriptor: string, delay: number): boolean {
+    if (this.debounceStatus[descriptor]) {
+      return true
+    } else {
+      this.debounceStatus[descriptor] = true
+      setTimeout(() => {
+        this.debounceStatus[descriptor] = false
+      }, delay)
+      return false
+    }
+  }
+
+  /**
    * This renders the next 400 words whenever the window gets a certain amount away from the bottom of the view,
    *  which is determined by distanceFromViewport
    */
   @HostListener('window:scroll', ['$event'])
   scrollUpdate(event) {
-    this.onScrollUpdate()
-    this.currentScroll = (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
+    if (!this.debounce('scroll', 300)) {
+      this.onScrollUpdate()
+      this.currentScroll =
+        (document.documentElement.scrollTop / (document.body.scrollHeight - window.innerHeight)) * 100
+    }
   }
 
   /**
    * Handle Window Resize
    * - Content reflows impact positioning of comments and other variables we calculate
    */
-  @HostListener('window:resize') onResize() {
+  @HostListener('window:resize')
+  onResize() {
     // Line counts need to be re-rendered when text reflows
     this.updateImageHeights()
     this.setLinePositions()
@@ -213,8 +238,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * when the user moves the mouse, let academy service know so we can keep tracking reading ticks
    * and we also make sure they have a "live" status on the indicator
    */
-  @HostListener('window:mousemove') refreshUserState() {
-    this._academy.trackActivity()
+  @HostListener('window:mousemove')
+  refreshUserState() {
+    if (!this.debounce('mousemove', 5000)) {
+      this._academy.trackActivity()
+    }
   }
 
   ngOnInit() {
@@ -548,7 +576,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Updates the rendered words as the user scrolls through the reading
    */
   private onScrollUpdate(): void {
-    let bottomOfArticle = this.articleEl.nativeElement.offsetTop + this.articleEl.nativeElement.clientHeight
+    let bottomOfArticle = this.contentEl.nativeElement.offsetTop + this.contentEl.nativeElement.clientHeight
     let bottomOfView = window.innerHeight + document.scrollingElement.scrollTop
     let distanceFromViewport = 500
     if (bottomOfArticle - distanceFromViewport < bottomOfView) {
@@ -830,8 +858,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.highlightY = focusY - scrollOffset + readingPad
       this.optionsShow = true
     } else {
-      this.clearQuickSelect()
-      this.optionsShow = false
+      this.hideCommentOptions()
     }
   }
 
@@ -1266,43 +1293,63 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Keep this light! It runs for every word instance
+   * Determines highlight heat for a word!
+   * => Pure function, all vars provided as arguments (optimized for Angular doCheck)
+   * => Keep this light! It runs for every word instance
    * @param i is the word index
    */
-  public getHighlightClass(i: number): string {
+  public getHighlightClass(
+    projectHeat_vision,
+    projectIsTeaching,
+    filterHighlightArray,
+    highlightArray,
+    alwaysHighlightArray,
+    i: number,
+  ): string {
     let classString = ''
     let highlightCount = 0
 
     // If a filter is applied, use filter highlights
-    if (this.filterHighlightArray) {
-      if (this.filterHighlightArray[i]) {
-        highlightCount += this.filterHighlightArray[i]
+    if (filterHighlightArray) {
+      if (filterHighlightArray[i]) {
+        highlightCount += filterHighlightArray[i]
       }
     } else {
-      if ((this.project.heat_vision || this.project.isTeaching) && this.highlightArray[i]) {
-        highlightCount += this.highlightArray[i]
+      if ((projectHeat_vision || projectIsTeaching) && highlightArray[i]) {
+        highlightCount += highlightArray[i]
       }
-      if (this.alwaysHighlightArray[i]) {
-        highlightCount += this.alwaysHighlightArray[i]
+      if (alwaysHighlightArray[i]) {
+        highlightCount += alwaysHighlightArray[i]
       }
     }
-    // Apply focus class to words of focused comments
-    if (this.focusArray[i]) {
-      classString = 'h-f'
-    }
-    //
-    if (i == this.quickSelect.focus || i == this.quickSelect.anchor) {
-      classString += ' quick-select--click'
-    }
+
     return classString + ' h-' + highlightCount
   }
 
   /**
-   * Returns whether a "w" word contains a style class
-   * @param w Word object
+   * Get word focus class (keep it LIGHT)
+   * @param focusArray
+   * @param i word index
    */
-  public wHasStyle(w, style): boolean {
-    return w && w.styles && w.styles.indexOf(style) > -1
+  public focusClass(focusArray, i): string {
+    if (focusArray[i]) {
+      return 'h-f'
+    } else {
+      return ''
+    }
+  }
+
+  /**
+   * Get Quick Select class (keep it LIGHT)
+   * @param quickSelect anchor/focus object
+   * @param i word index
+   */
+  public quickSelectClass(quickSelect, i): string {
+    if (i === quickSelect.focus || i === quickSelect.anchor) {
+      return 'quick-select--click'
+    } else {
+      return ''
+    }
   }
 
   /** Used to determine which level of permission the user has for a specific comment
@@ -1329,8 +1376,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       e = touches[0]
       target = e.target
+    } else if (e.type == 'tap') {
+      let pointers = e['pointers']
+      if (pointers.length < 1) {
+        pointers = e['changedPointers']
+      }
+      e = pointers[0]
+      target = e.target
     } else {
-      // assume click or tap
+      // assume click
     }
 
     function FindPosition(oElement) {
@@ -1348,17 +1402,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     ImgPos = FindPosition(target)
 
-    if (e['center']) {
-      // Tap event handling
-      PosX = e['center'].x
-      PosY = e['center'].y
-    } else if (e['pageX'] || e['pageY']) {
+    if (e['pageX'] || e['pageY']) {
       PosX = e['pageX']
       PosY = e['pageY']
     } else if (e['clientX'] || e['clientY']) {
       PosX = e['clientX'] + document.body.scrollLeft + document.documentElement.scrollLeft
       PosY = e['clientY'] + document.body.scrollTop + document.documentElement.scrollTop
     }
+
     return {
       x: (((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3),
       y: (((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3),
