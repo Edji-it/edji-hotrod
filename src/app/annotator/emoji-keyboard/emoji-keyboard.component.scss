@@ -73,6 +73,8 @@
 .emojionearea .emojionearea-picker .emojionearea-scroll-area {
   overflow-y: scroll !important; /* has to be scroll, not auto */
   -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
 }
 
 .emojionearea .emojionearea-picker.emojionearea-picker-position-bottom {

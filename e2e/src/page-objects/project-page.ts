@@ -24,7 +24,7 @@ export class Project implements PageObjectInterface {
   public addTextReplyBtn = element(by.id('addTextReply'))
   public addEmojiReplyBtn = element(by.id('addEmojiReply'))
   public addAudioReplyBtn = element(by.id('addAudioReply'))
-  public image = element(by.css('article .img-wrap > img'))
+  public image = element(by.css('#annotatorContent .img-wrap > img'))
   public textComment = element(by.css('.new textarea.text-comment-input'))
   public existingTextComment = element(by.css('div.text-comment-input'))
   public textReplyComment = element(by.css('.replyComment.new .text-comment-input'))
