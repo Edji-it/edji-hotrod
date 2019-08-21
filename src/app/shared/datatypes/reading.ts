@@ -16,7 +16,15 @@ export interface Reading extends BaseReading {
 /** The reading as it is returned from the server */
 export interface BaseReading {
   html?: string
-  words?: any[]
+  words?: {
+    str?: string
+    styles?: string[]
+    url?: string
+    a?: boolean // link
+    img?: boolean // image
+    q?: boolean // question
+    s?: boolean // space
+  }[]
   title: string
   instructions?: string
   owner_id?: string

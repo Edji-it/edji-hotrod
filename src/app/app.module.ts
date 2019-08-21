@@ -66,6 +66,7 @@ import {
   ScrollProgressComponent,
   TutorialBoxComponent,
   ResetComponent,
+  PromoBannerComponent,
 } from './shared'
 import { HomeComponent } from './home'
 import { RegisterPageComponent } from './register-page'
@@ -140,6 +141,7 @@ import { TeamPageComponent } from './team-page/team-page.component'
 import { SearchPage } from './search-page/search-page.component'
 import { TeacherFeedbackComponent } from './annotator/teacher-feedback/teacher-feedback.component'
 import { MetricsEffects } from './_reducers/metrics.effects'
+import { CopyService } from './_services/copy.service'
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
@@ -148,15 +150,17 @@ export class MyHammerConfig extends HammerGestureConfig {
     let mc = new Hammer(element, {
       touchAction: 'pan-y',
     })
+    mc.get('pan').set({ enable: false })
     return mc
   }
   overrides = <any>{
     // override default gesture settings
     //  Tap overrides for Chrome v71 sensitivity when making comments
     tap: {
-      time: 2000, // Maximum press time in ms.
-      threshold: 20, //	While doing a tap some time spent moving is allowed.
-      posThreshold: 75, // While tapping some position movement is allowed
+      time: 2000, // default: 250 / Maximum press time in ms.
+      threshold: 5, //	default: 2 / While doing a tap some time spent moving is allowed.
+      posThreshold: 10, // default: 10 / While tapping some position movement is allowed
+      interval: 10, // default: 300 / we don't care about supporting double taps
     },
   }
 }
@@ -166,6 +170,7 @@ const APP_PROVIDERS = [
   // ...APP_RESOLVER_PROVIDERS,
   // AppState,
   AuthService,
+  CopyService,
   DashboardGuardService,
   ReadingService,
   MediaService,
@@ -271,6 +276,7 @@ const routerOptions: ExtraOptions = {
     LicenseWelcomeComponent,
     ReadingRecapComponent,
     TeamPageComponent,
+    PromoBannerComponent,
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],

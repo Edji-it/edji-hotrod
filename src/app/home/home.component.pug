@@ -1,6 +1,7 @@
 nav-bar
 //- Image block with header text
 .container-fluid
+  promo-banner
   .row.navy.has-sparks
       .sparks
       .col-md-4.promo-panel
@@ -45,10 +46,10 @@ nav-bar
       .col-md-8.mt-4.nopadding.text-center
         .promo-video-thumb((click)="showPromoVideoModal = true")
           .icon.icon-play
-          img(src="/assets/images/thumbnail-first-reading--lg.jpg")
+          img(src="/assets/images/thumbnail-literacy-is-essential--lg.png")
       .col-md-4.my-4(style="min-height:120px; padding-left: 0px; padding-right: 0px;")
         .col__center-content.guide-video-heading
-          p.h1.mb-0 See how easy it is to create and share your first Edji Reading
+          p.h1.mb-0 Learn how Edji gives teachers powerful, real-time insights
     .row.promo-row.promo-row__no-btm-padding
       .col-md-6
         .col__center-fix
@@ -142,7 +143,7 @@ edji-reset-pass(*ngIf="showPassModal", (closeModal)="showPassModal = !showPassMo
       .modal-body
         .embed-responsive.embed-responsive-16by9
           iframe.embed-responsive-item(
-              src="//www.youtube.com/embed/GPB8i8H8IBc?autoplay=1",
+              src="//www.youtube.com/embed/F9LgNtwnsZw?autoplay=1",
               frameborder="0",
               allow="autoplay; encrypted-media",
               allowfullscreen

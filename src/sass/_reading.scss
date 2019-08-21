@@ -13,30 +13,52 @@ $readingBorder: 1px solid #dcdcdc;
 $focusUnderlineWidth: 3px;
 $adjustedLineHeight: $readingLineHeight - $focusUnderlineWidth - 1px;
 
-article {
-  padding-bottom: 50px;
+.reading-page {
+  transition: transform $slidingPaneTime linear;
+  transform: translate3d(0, 0, -1px);
+
+  @media (max-width: $medium-screen - 1px) {
+    padding-left: 60px;
+    &.sliding-out {
+      transform: translate3d(calc(100% - 20px), 0%, -1px);
+    }
+  }
+
+  // iPad
+  @media (min-width: $medium-screen) and (max-width: $large-screen) {
+    padding-left: 60px;
+    &.sliding-out {
+      transform: translate3d(300px, 0%, -1px);
+    }
+  }
+}
+
+.content {
+  font-family: $base-font-family;
   line-height: $adjustedLineHeight;
+  font-size: $readingFontSize;
+  padding-bottom: 50px;
   margin-top: 22px;
   min-height: 90%;
-  font-size: $readingFontSize;
   display: block;
   position: relative;
   max-width: 100%;
 }
 
-article.content {
+.content.content--active {
   margin-top: 0px;
   margin-left: 50px;
   word-break: break-word;
 
-  .sliding-out & {
-    // Static width comment pane, flexible margin
-    @media (min-width: $medium-screen) and (max-width: $large-screen) {
-      // 768px - 992px
-      max-width: calc(100% - 330px);
-      margin-left: auto;
-    }
-  }
+  // .sliding-out & {
+  // REMOVED: Flexible width content causes heavy/expensive reflow on moib
+  // Static width comment pane, flexible margin
+  // @media (min-width: $medium-screen) and (max-width: $large-screen) {
+  //   // 768px - 992px
+  //   max-width: calc(100% - 330px);
+  //   margin-left: auto;
+  // }
+  // }
   // Flexible width comment pane, static margin
   @media all and (min-width: $large-screen) {
     // 992px
@@ -62,7 +84,8 @@ article.content {
   }
 }
 
-.w {
+.w,
+.content .w {
   // Styles applied by word
   user-select: text;
   -webkit-user-select: text;
@@ -113,16 +136,17 @@ article.content {
 
   &.H1,
   &.h1 {
-    font-size: 32px;
+    font-size: $readingH1Size;
   }
 
   &.H2,
   &.h2 {
-    font-size: 24px;
+    font-size: $readingH2Size;
   }
 
   &.h3,
   &.h3 {
+    font-size: $readingH3Size;
     font-weight: bold;
   }
 
@@ -140,12 +164,17 @@ article.content {
   }
 }
 
+.a.w {
+  &:hover,
+  &:focus {
+    border-bottom: none !important;
+  }
+}
+
 a.w {
   padding-top: 0px !important;
   border-bottom: 0px solid transparent !important;
-  // &:hover, &:focus {
-  // 	border-bottom: none !important;
-  // }
+
   &:after {
     display: none;
   }
@@ -163,8 +192,15 @@ a.w {
 }
 
 // Styles for ANNOTATABLE content
-.active-content {
+.content--active {
   @extend %canSelectText;
+  // Needed to prevent tap bindings from blocking scrolling
+  touch-action: pan-y;
+
+  &.archived {
+    pointer-events: none;
+    margin-top: 90px; // allow room for archive alert
+  }
 
   & .w.img {
     cursor: default;
@@ -222,7 +258,7 @@ header {
   min-width: 180px;
 }
 
-.article-wrap {
+.content--active__wrap {
   position: relative;
   margin-top: 36px;
   margin-bottom: 20px;
@@ -243,7 +279,7 @@ section.search {
   height: auto;
 }
 
-// article.content {
+// .content.content--active {
 // 	position: relative;
 // }
 
@@ -266,9 +302,6 @@ section.search {
 
   & .reading-list-item-title {
     margin-bottom: 0px;
-  }
-
-  &:hover {
   }
 }
 
@@ -358,6 +391,18 @@ section.search {
   min-height: 350px;
   padding: 6px 0px;
   cursor: text;
+
+  // Display overrides for miscellaneous content
+  & > * {
+    font-family: $base-font-family;
+    font-size: $readingFontSize;
+    line-height: $adjustedLineHeight;
+    max-width: 100%;
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 0.5em;
+    height: auto;
+  }
 }
 // Styles for reading editor should replicate style of actual reading page
 .ta-bind {
@@ -380,7 +425,7 @@ section.search {
   left: -1.2em;
 }
 
-/******************************************* 
+/*******************************************
 
   Highlight Class Generation
 
@@ -491,9 +536,12 @@ $quickBlue: #6fbaf887; //#55aef7;
 .w {
   background-position: center;
 
-  &:hover:not(.archived) {
-    cursor: pointer;
-    border-bottom: $focusUnderlineWidth solid $hoverBlue;
+  @media (min-width: $medium-screen) {
+    // Hover styles are both awkward and a little heavy on mobile
+    &:hover {
+      cursor: pointer;
+      border-bottom: $focusUnderlineWidth solid $hoverBlue;
+    }
   }
 
   // "h-f" is also needed because it takes longer to apply than the quick select class
@@ -548,7 +596,7 @@ $quickBlue: #6fbaf887; //#55aef7;
 }
 
 // Focus Highlight styles (for on comment hover)
-article.content .w.h-f {
+.content.content--active .w.h-f {
   // background: blue;
   // transition: background-color linear 400ms;
   border-bottom: $focusUnderlineWidth solid #969696;
@@ -561,7 +609,7 @@ article.content .w.h-f {
   }
 }
 
-article.content {
+.content.content--active {
   &.quick-select--begin .w.h-f {
     border-bottom-style: dotted;
     border-color: $quickBlue;
@@ -570,22 +618,6 @@ article.content {
 
   &.quick-select--end .w.h-f {
     border-bottom-style: solid;
-  }
-}
-
-.reading-page {
-  transition: transform $slidingPaneTime linear;
-  &:not(.sliding-out) {
-    transform: translate3d(0, 0, 0);
-  }
-  // background: #fff;
-  // box-shadow: 0 3px 9px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); //0px 2px 3px 0px rgba(0,0,0, 0.1);
-  // padding: 40px 60px 50px 35px;
-  @media (max-width: $medium-screen) {
-    padding-left: 60px;
-    &.sliding-out {
-      transform: translate3d(calc(100% - 20px), 0%, -1px);
-    }
   }
 }
 
@@ -602,24 +634,13 @@ article.content {
 }
 
 .content,
-article.content,
+.content.content--active,
 .medium-editor-element {
   //font-family: 'Georgia', serif;
   font-family: $base-font-family;
   font-size: $readingFontSize;
   line-height: $adjustedLineHeight;
   color: #333;
-
-  & > * {
-    font-family: $base-font-family;
-    font-size: $readingFontSize;
-    line-height: $adjustedLineHeight;
-    max-width: 100%;
-    padding: 0px;
-    margin: 0px;
-    margin-bottom: 0.5em;
-    height: auto;
-  }
 
   & > .w {
     margin-bottom: 0px;

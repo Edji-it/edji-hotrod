@@ -4,18 +4,18 @@ h1.joined-header.no-flow(for="projectCodeInput") Joined Readings
 form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.value)")
   .input-group.input-group-lg.pb-2
     input#projectCodeInputJoinDash.form-control(
-      name="ProjectCodeInput", 
-      [formControl]="codeForm.controls['projectCode']", 
-      type="text", 
-      style="text-align: center;", 
-      placeholder="🔑 Code", 
+      name="ProjectCodeInput",
+      [formControl]="codeForm.controls['projectCode']",
+      type="text",
+      style="text-align: center;",
+      placeholder="🔑 Code",
       aria-describedby="add-project-code"
     )
     .input-group-append
       button#buttonJoinProject.btn.btn-primary(
-        [class.loading]="joinLoading", 
-        type="submit", 
-        name="Join", 
+        [class.loading]="joinLoading",
+        type="submit",
+        name="Join",
         href="#"
       ) Join
   .alert.alert-info(*ngIf="!codeForm.controls['projectCode'].pristine && codeForm.controls['projectCode'].hasError('required')")
@@ -27,11 +27,11 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
   .col-12.col-sm-3
     .mb-2
       .btn.btn-filter(
-          [innerHtml]="':sparkles: Recently Created' | emojione", 
+          [innerHtml]="':sparkles: Recently Created' | emojione",
           [class.active]="activeFilter === 'recent'",
           (click)="loadFilter('recent')"
         )
-  .col-8.col-sm-6.item-list.joined-list
+  .col-12.col-lg-6.col-md-9.col-sm-6.item-list.joined-list
     //- Show messaging if no Projects exist
     .alert.alert-info(role="alert", *ngIf="!loading && projects.length < 1 && !errorObject.projectError")
       h4.alert-heading No Joined Readings Yet...
@@ -43,7 +43,7 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
       | &nbsp;{{errorObject.projectError}}
     ng-container(*ngFor="let project of projects")
       .list-item.list-item--button.project-card(
-            [routerLink]="['/project', project._id]", 
+            [routerLink]="['/project', project._id]",
             [class.hide]="!project.createdAt",
             [class.archived]="project.archived"
           )
@@ -53,8 +53,8 @@ form.pb-4.hidden-md-up([formGroup]="codeForm", (ngSubmit)="addSession(codeForm.v
           .icon.icon-folder
         .reading-title
           .reading-title--center-row
-            h1.small {{ project.reading ? project.reading.title : ''}} 
-              span(*ngIf="project.reading && !project.reading.title") 
+            h1.small {{ project.reading ? project.reading.title : ''}}
+              span(*ngIf="project.reading && !project.reading.title")
                 i Untitled
               span.reading-project--label {{project.label}}
         div(style="clear:both; line-height: 18px; padding: 10px 0px 0px;")

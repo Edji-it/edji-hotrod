@@ -203,9 +203,45 @@ export class ReadingService {
     return queryString
   }
 
-  public setReadingObj(reading: any): void {
+  /**
+   * Returns whether a "w" word contains a style class
+   * @param w Word object
+   */
+  public wHasStyle(w, style): boolean {
+    return w && w.styles && w.styles.indexOf(style) > -1
+  }
+
+  public setReadingObj(reading: Reading): void {
     if (!reading._id) {
       return
+    }
+    // Decorate word objects
+    let wordCount = reading.words.length
+    for (let i = 0; i < wordCount; i++) {
+      let w = reading.words[i]
+      // Spaces
+      if (!(w && w.styles) || this.wHasStyle(w.styles, 'space')) {
+        w = {}
+        w.s = true
+      }
+      // Links - only apply if url is available!
+      if (this.wHasStyle(w, 'a') && w.url) {
+        w.a = true
+        w.url = w.url.indexOf('//') > -1 ? w.url : '//' + w.url
+      }
+      // Images
+      if (this.wHasStyle(w, 'img')) {
+        w.img = true
+      }
+      // Questions
+      if (this.wHasStyle(w, 'question')) {
+        w.q = true
+      }
+      reading.words[i] = w
+    }
+    if (reading._id) {
+      this.readingValue = reading
+      this.readingSource.next(this.readingValue)
     }
     // Check for PDF words
     // if (reading.words && reading.words.length > 0) {

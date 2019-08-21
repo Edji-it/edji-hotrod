@@ -84,7 +84,7 @@ describe('Project Page', () => {
     it('should make a comment on an image by clicking on image', async () => {
       // Find and click on image
       browser.wait(EC.presenceOf(project.image), 10000, 'never found the image')
-      await browser.executeScript('window.scrollTo(0, document.querySelector("article .img-wrap > img").scrollTop);')
+      await browser.executeScript('window.scrollTo(0, document.querySelector("#annotatorContent .img-wrap > img").scrollTop);')
       browser.wait(EC.elementToBeClickable(project.image), 5000, 'never scrolled and saw the image')
       project.image.click()
       // click the tool tip
