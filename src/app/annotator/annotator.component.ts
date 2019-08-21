@@ -1352,15 +1352,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  // /**
-  //  * Returns whether a "w" word contains a style class
-  //  * @param w Word object
-  //  */
-  // public wHasStyle(styles, style): boolean {
-  //   // console.log('wHasStyle')
-  //   return w && w.styles && w.styles.indexOf(style) > -1
-  // }
-
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object
    */
@@ -1418,7 +1409,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       PosX = e['clientX'] + document.body.scrollLeft + document.documentElement.scrollLeft
       PosY = e['clientY'] + document.body.scrollTop + document.documentElement.scrollTop
     }
-    
+
     return {
       x: (((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3),
       y: (((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3),
