@@ -1480,8 +1480,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param focusArray
    * @param i word index
    */
-  public focusClass(focusArray, i): string {
-    if (focusArray[i]) {
+  public focusClass(focusArray, i: number, bi?: number): string {
+    // Apply focus class to words of focused comments
+    if (focusArray[i] === true || (bi && (focusArray[i] && focusArray[i][bi]))) {
       return 'h-f'
     } else {
       return ''
