@@ -116,7 +116,7 @@ export class MediaService {
       ocrQueryParam = '?ocr=false'
     }
 
-    this.http.put(`${this.imageService}/v1/pdf${ocrQueryParam}`, file).subscribe(
+    this._http.put(`${this.imageService}/v1/pdf${ocrQueryParam}`, file).subscribe(
       res => {
         let doc = res || {}
         uploadSource.next(doc)
