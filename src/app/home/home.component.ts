@@ -8,7 +8,7 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { Ng4TwitterTimelineService } from './twitter-timeline'
-import { AuthService, ProjectService } from '../_services'
+import { AuthService, ProjectService, CopyService } from '../_services'
 
 @Component({
   // The selector is what angular internally uses
@@ -49,6 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     fb: FormBuilder,
     private _title: Title,
     private ng4TwitterTimelineService: Ng4TwitterTimelineService,
+    private _copy: CopyService,
   ) {}
 
   ngOnInit() {

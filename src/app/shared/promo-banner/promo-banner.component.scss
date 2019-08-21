@@ -1,0 +1,39 @@
+@keyframes swipe-in {
+  0% {
+    max-height: 0px;
+  }
+  100% {
+    max-height: 500px;
+  }
+}
+
+.promo-banner {
+  margin: 1.5em 0;
+  max-height: 500px;
+  animation: swipe-in 500ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease;
+  position: relative;
+}
+
+.promo-message {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.promo-graphic {
+  display: inline-block;
+  max-height: 125px;
+  width: auto;
+}
+
+.promo-heading {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.promo-subheading {
+  font-size: 14px;
+  margin-bottom: 0.5em;
+}

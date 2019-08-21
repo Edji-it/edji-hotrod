@@ -1,6 +1,7 @@
 #top
 nav-bar
 .container-fluid
+  promo-banner([currentPage]="'hero'")
   //- Promo row
   .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
     .sparks
@@ -40,6 +41,9 @@ nav-bar
           img.card-img-top(src='/assets/images/hero-lg.png')
           h2.card-title Edji Hero
           //- $5<span class="small"> / month or </span>
+          p.small.hero-color-text(*ngIf="offerDetails")
+            i.icon.icon-gift.mr-1
+            span([innerHtml]="offerDetails")
           span.pricing
             | $5
             span.small  / month

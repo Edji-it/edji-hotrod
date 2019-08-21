@@ -58,7 +58,7 @@ export class TeamPageComponent implements OnInit {
       title: 'Office Administrator',
       photo: '/assets/images/promo/headshot-sprocket.jpg',
       emoji: ':gear:',
-      book: 'How to Talk to Your Cat about Gun Safety',
+      book: 'Cat in the Hat',
     },
     {
       name: 'Cynder Hicklin-Pumper',
@@ -72,7 +72,7 @@ export class TeamPageComponent implements OnInit {
       title: 'Head of Security',
       photo: '/assets/images/promo/headshot-kelvin.jpg',
       emoji: ':feet:',
-      book: 'Squirrel Hunting Made Simple',
+      book: 'Outwitting Squirrels',
     },
   ]
 

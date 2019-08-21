@@ -3,13 +3,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Store } from '@ngrx/store'
 
 // Project Dependencies
-import { AuthService } from '../_services'
+import { AuthService, CopyService } from '../_services'
 import { Subscription } from 'rxjs'
 import { User } from '../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 import { AppState } from './../_reducers'
 import { IncrementMetric } from '../_reducers/metrics.reducers'
-import { map, take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators'
 @Component({
   selector: 'hero-pricing',
   templateUrl: './hero-pricing.component.pug',
@@ -28,6 +28,8 @@ export class HeroPricingComponent implements OnInit {
     free_override?: string
     hero_override?: string
   } = {}
+  // Personal Hero license sitewide offer
+  public offerDetails: string
 
   public featureValues = [
     {
@@ -139,8 +141,9 @@ export class HeroPricingComponent implements OnInit {
     private _auth: AuthService,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
-    private store: Store<AppState>
-  ) { }
+    private store: Store<AppState>,
+    private _copy: CopyService,
+  ) {}
 
   ngOnInit() {
     // Workaround for handling "jump to" fragment/anchor
@@ -152,6 +155,11 @@ export class HeroPricingComponent implements OnInit {
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
+      }),
+      this._copy.activePromotions.subscribe(promo => {
+        if (promo.offerDetails) {
+          this.offerDetails = promo.offerDetails
+        }
       }),
     )
 
