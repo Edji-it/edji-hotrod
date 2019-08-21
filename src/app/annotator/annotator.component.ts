@@ -858,8 +858,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.highlightY = focusY - scrollOffset + readingPad
       this.optionsShow = true
     } else {
-      this.clearQuickSelect()
-      this.optionsShow = false
+      this.hideCommentOptions()
     }
   }
 

@@ -11,7 +11,6 @@ scroll-progress([scrollProgress]="currentScroll")
 )
     .text-options(
         *ngIf="directCommentOptions.length > 0",
-        (blur)="hideCommentOptions($event)",
         [style.top]="highlightY + 'px'",
         [ngClass]="{ 'active' : optionsShow }"
     )
