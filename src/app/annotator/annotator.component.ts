@@ -1386,8 +1386,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       e = touches[0]
       target = e.target
+    } else if (e.type == 'tap') {
+      let pointers = e['pointers']
+      if (pointers.length < 1) {
+        pointers = e['changedPointers']
+      }
+      e = pointers[0]
+      target = e.target
     } else {
-      // assume click or tap
+      // assume click
     }
 
     function FindPosition(oElement) {
@@ -1405,17 +1412,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     ImgPos = FindPosition(target)
 
-    if (e['center']) {
-      // Tap event handling
-      PosX = e['center'].x
-      PosY = e['center'].y
-    } else if (e['pageX'] || e['pageY']) {
+    if (e['pageX'] || e['pageY']) {
       PosX = e['pageX']
       PosY = e['pageY']
     } else if (e['clientX'] || e['clientY']) {
       PosX = e['clientX'] + document.body.scrollLeft + document.documentElement.scrollLeft
       PosY = e['clientY'] + document.body.scrollTop + document.documentElement.scrollTop
     }
+    
     return {
       x: (((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3),
       y: (((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3),
