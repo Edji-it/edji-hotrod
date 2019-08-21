@@ -216,9 +216,12 @@ export class ReadingService {
     let wordCount = reading.words.length
     for (let i = 0; i < wordCount; i++) {
       let w = reading.words[i]
-      // Spaces
-      if (!(w && w.styles) || this.wHasStyle(w.styles, 'space')) {
+      if (!w) {
+        // spaces at one time were saved as 'null'
         w = {}
+      }
+      // Spaces
+      if (!w.styles || this.wHasStyle(w, 'space')) {
         w.s = true
       }
       // Links - only apply if url is available!
