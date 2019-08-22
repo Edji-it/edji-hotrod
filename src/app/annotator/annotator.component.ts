@@ -382,7 +382,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 comment.box,
               )
               // Make sure we've removed the highlight focus
-              this.unfocusHighlight(comment.start, comment.end)
+              this.unfocusHighlight(comment.start, comment.end, comment.box)
               this.commentsByIndexRemove(comment._id, wIndex, cIndex)
               if (comment.replies && comment.replies.length > 0) {
                 this.removeRepliesFromComments(comment)
@@ -404,6 +404,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.user._id === comment.user_id || this.project.teacher_id == comment.user_id,
                 comment.start,
                 comment.end,
+                comment.box,
               )
               this.commentsByIndexAdd(comment, wIndex, true)
             }
@@ -952,41 +953,37 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Add new highlights to local array
    */
-  incrementHighlights(alwaysHighlight: boolean, start: number, end: number, bstart?: number, bend?: number): void {
-    console.log('Increment!', bstart, bend)
-    if (!bstart) {
-      bstart = 0
-      bend = 0
-    }
-    for (let bi = bstart; bi <= bend; bi++) {
-      if (alwaysHighlight) {
-        for (var i = start; i <= end; i++) {
-          if (this.alwaysHighlightArray[i]) {
-            if (!this.alwaysHighlightArray[i][bi]) this.alwaysHighlightArray[i][bi] = 0
-            this.alwaysHighlightArray[i][bi]++
-          } else {
-            if (!this.alwaysHighlightArray[i]) this.alwaysHighlightArray[i] = []
-            this.alwaysHighlightArray[i][bi] = 1
-          }
-        }
-      } else {
-        for (var i = start; i <= end; i++) {
-          if (this.highlightArray[i]) {
-            if (!this.highlightArray[i][bi]) this.highlightArray[i][bi] = 0
-            this.highlightArray[i][bi]++
-          } else {
-            if (!this.highlightArray[i]) this.highlightArray[i] = []
-            this.highlightArray[i][bi] = 1
-          }
-        }
-      }
-    }
+  incrementHighlights(
+    alwaysHighlight: boolean,
+    start: number,
+    end: number,
+    box?: { start: number; end: number },
+  ): void {
+    this.updateHighlights(1, alwaysHighlight, start, end, box)
   }
 
   /**
-   * Removes highlights from local array
+   * Remove highlights from local array
    */
-  decrementHighlights(alwaysHighlight: boolean, start: number, end: number, box: { start: number; end: number }): void {
+  decrementHighlights(
+    alwaysHighlight: boolean,
+    start: number,
+    end: number,
+    box?: { start: number; end: number },
+  ): void {
+    this.updateHighlights(-1, alwaysHighlight, start, end, box)
+  }
+
+  /**
+   * Updates highlight array
+   */
+  updateHighlights(
+    increment: number,
+    alwaysHighlight: boolean,
+    start: number,
+    end: number,
+    box: { start: number; end: number },
+  ): void {
     if (!box) {
       // We process non-box comments at index 0 in highlight arrays
       box = {
@@ -998,19 +995,23 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       if (alwaysHighlight) {
         for (var i = start; i <= end; i++) {
           if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi] > 0) {
-            this.alwaysHighlightArray[i][bi]--
+            this.alwaysHighlightArray[i][bi] += increment
           } else {
-            if (!this.alwaysHighlightArray[i]) this.alwaysHighlightArray[i] = []
-            this.alwaysHighlightArray[i][bi] = 0
+            if (!this.alwaysHighlightArray[i]) {
+              this.alwaysHighlightArray[i] = []
+            }
+            this.alwaysHighlightArray[i][bi] = increment > 0 ? increment : 0
           }
         }
       } else {
         for (var i = start; i <= end; i++) {
           if (this.highlightArray[i] && this.highlightArray[i][bi] > 0) {
-            this.highlightArray[i][bi]--
+            this.highlightArray[i][bi] += increment
           } else {
-            if (!this.highlightArray[i]) this.highlightArray[i] = []
-            this.highlightArray[i][bi] = 0
+            if (!this.highlightArray[i]) {
+              this.highlightArray[i] = []
+            }
+            this.highlightArray[i][bi] = increment > 0 ? increment : 0
           }
         }
       }
@@ -1284,9 +1285,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!(span.start >= 0) || !(span.end >= 0)) {
       return
     }
-
+    console.log('increment?', span)
     // Increment highlight array
-    this.incrementHighlights(true, span.start, span.end, span.boxStart, span.boxEnd)
+    this.incrementHighlights(true, span.start, span.end, { start: span.boxStart, end: span.boxEnd })
 
     // Tell the server we've got a comment!
     this.createComment(span, type)
@@ -1460,15 +1461,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         highlightCount += this.filterHighlightArray[i][bi]
       }
     } else {
+      // Show student highlights
       if (
         (this.project.heat_vision || this.project.isTeaching) &&
         this.highlightArray[i] &&
         this.highlightArray[i][bi]
       ) {
         highlightCount += this.highlightArray[i][bi]
-      } else if ((this.project.heat_vision || this.project.isTeaching) && this.highlightArray[i]) {
-        highlightCount += <number>this.highlightArray[i]
       }
+      // Show user's own highlights and teacher highlights
       if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi]) {
         highlightCount += this.alwaysHighlightArray[i][bi]
       }
