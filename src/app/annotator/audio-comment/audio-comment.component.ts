@@ -116,10 +116,10 @@ export class AudioCommentComponent implements OnInit {
   public waves
   public wavePos: number = 0
   // Change the next variable to control maximum audio comment length in milliseconds
-  public timeLimit: number = 30000
+  public timeLimit: number = 60000
   // Change the next variable to control the frequency at which the playback/recording currentTime evaluates
   private INTERVAL_GAP: number = 500
-  private MAX_SECONDS: number = 30
+  private MAX_SECONDS: number = this.timeLimit / 1000
 
   public isInitialized: boolean = false
   public countdownI: number = -3
@@ -128,11 +128,11 @@ export class AudioCommentComponent implements OnInit {
     '-2': 'Ready',
     '-1': 'Set',
     0: 'Go!',
-    25: '5 Seconds Left',
-    26: '4 Seconds Left',
-    27: '3 Seconds Left',
-    28: '2 Seconds Left',
-    29: '1 Second Left',
+    55: '5 Seconds Left',
+    56: '4 Seconds Left',
+    57: '3 Seconds Left',
+    58: '2 Seconds Left',
+    59: '1 Second Left',
   }
   public countdownInterval: any
 
