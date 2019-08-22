@@ -379,6 +379,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.user._id === comment.user_id || this.project.teacher_id == comment.user_id,
                 comment.start,
                 comment.end,
+                comment.box,
               )
               // Make sure we've removed the highlight focus
               this.unfocusHighlight(comment.start, comment.end)
@@ -985,12 +986,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Removes highlights from local array
    */
-  decrementHighlights(alwaysHighlight: boolean, start: number, end: number, bstart?: number, bend?: number): void {
-    if (!bstart) {
-      bstart = 0
-      bend = 0
+  decrementHighlights(alwaysHighlight: boolean, start: number, end: number, box: { start: number; end: number }): void {
+    if (!box) {
+      // We process non-box comments at index 0 in highlight arrays
+      box = {
+        start: 0,
+        end: 0,
+      }
     }
-    for (let bi = bstart; bi <= bend; bi++) {
+    for (let bi = box.start; bi <= box.end; bi++) {
       if (alwaysHighlight) {
         for (var i = start; i <= end; i++) {
           if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi] > 0) {
@@ -1156,7 +1160,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   removeComment(comment, index: number, commentIndex: number) {
     // Remove Highlights
-    this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end)
+    this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end, comment.box)
     // Remove local comment object
     this.commentsByIndexRemove(comment._id, index, commentIndex)
     this.unfocusHighlight(comment.start, comment.end)
@@ -1178,7 +1182,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   inactivateComment(): void {
     if (this._comments.activeComment.start) {
-      this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
+      this.unfocusHighlight(
+        this._comments.activeComment.start,
+        this._comments.activeComment.end,
+        this._comments.activeComment.box,
+      )
       this._comments.activeComment.active = false
       this._comments.activeComment = <EdjiComment>{}
     }
@@ -1272,7 +1280,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   addCommentOfType(type: string): void {
     // Get selection indices
     let span = this.getSelectionSpan()
-    console.log('ADD!', span)
+
     if (!(span.start >= 0) || !(span.end >= 0)) {
       return
     }
@@ -1384,6 +1392,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       for (let bi = boxes.start; bi <= boxes.end; bi++) {
         this.focusArray[start][bi] = value
       }
+      console.log('focus for boxes!', this.focusArray[start], boxes)
     }
   }
 

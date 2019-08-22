@@ -157,7 +157,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     //- Image Hotspots: Show hotspot for each comment
                     .hotspot(
                         *ngFor="let comment of commentsByIndex[i]",
-                        [class.hidden]="!_projects.isCommentVisible(comment)",
+                        [class.hidden]="!_projects.isCommentVisible(comment) || comment.box",
                         [style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'",
                         [style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"
                     )
