@@ -11,7 +11,7 @@ export interface DocumentSpark {
   }
   error?: any
   // Client-side only
-  requestedTime?: string
+  requestedTime?: number
   expired?: boolean
   disableWords?: boolean
 }
