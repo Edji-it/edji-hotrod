@@ -1,9 +1,9 @@
 .container
-    .row.promo-banner(*ngIf="promo.heading")
-        .col-md-8
+    .row.no-gutters.promo-banner(*ngIf="promo.heading")
+        .col-xs-12.col-md-8.message-col
             .promo-message
                 h1.promo-heading.mb-1 {{ promo.heading }}
                 p.promo-subheading([innerHtml]="promo.subheading")
                 a.btn.btn-hero.btn-sm(*ngIf="displayLink", [attr.href]="promo.link", [innerHtml]="promo.linkText")
-        .col-4.text-center
+        .col-xs-12.col-md-4.text-center
             img.promo-graphic(*ngIf="graphic", [src]="graphic")

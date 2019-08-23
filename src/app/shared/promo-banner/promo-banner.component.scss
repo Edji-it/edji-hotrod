@@ -1,3 +1,5 @@
+@import '../../../sass/base/variables';
+
 @keyframes swipe-in {
   0% {
     max-height: 0px;
@@ -17,9 +19,16 @@
 }
 
 .promo-message {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  padding: 1.5em 0;
+  @media (min-width: $tablet) {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.message-col {
+  min-height: 4em;
 }
 
 .promo-graphic {
