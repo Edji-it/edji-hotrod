@@ -44,7 +44,7 @@ export class UploadPdfModalComponent implements OnInit {
     // Check existing Uploaded Docs for any not yet marked as converted
     this.uploadedDocs.forEach(doc => {
       if (doc.converted === false) {
-        this.checkConversion(doc.uuid)
+        this.checkConversion(doc.uuid, doc.hostname)
       }
     })
 
@@ -121,11 +121,11 @@ export class UploadPdfModalComponent implements OnInit {
   }
 
   // Run check until document is confirmed as processed
-  checkConversion(fileId: any): void {
+  checkConversion(fileId: any, hostname?: string): void {
     let ONE_HOUR = 60 * 60 * 1000
 
     this._media
-      .pdfCheck(fileId)
+      .pdfCheck(fileId, hostname)
       .pipe(take(1))
       .subscribe(
         data => {
@@ -195,7 +195,7 @@ export class UploadPdfModalComponent implements OnInit {
     // Save document object
     this.saveUploadedDocs()
     // Check if document is done converting
-    this.checkConversion(data.uuid)
+    this.checkConversion(data.uuid, data.hostname)
   }
 
   // Save Uploaded Doc list to localStorage AND user object
