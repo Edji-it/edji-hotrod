@@ -134,7 +134,7 @@ export class MediaService {
     if (!hostname) {
       hostname = this.pdfBucket
     }
-    return this._http.get(hostname + '/pdf/' + fileId + '/spark.json').pipe(
+    return <Observable<DocumentSpark>>this._http.get(hostname + '/pdf/' + fileId + '/spark.json').pipe(
       map(data => {
         return data || {}
       }),
