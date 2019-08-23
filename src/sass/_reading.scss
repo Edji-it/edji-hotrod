@@ -609,6 +609,30 @@ $quickBlue: #6fbaf887; //#55aef7;
   }
 }
 
+.w-box-preview {
+  position: absolute;
+  left: calc(100% + 2px);
+  top: 0px;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: visible;
+  width: 40px;
+  height: 40px;
+
+  & .icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  &:hover {
+    background: $light-gray;
+  }
+
+  &:hover ~ .w-box {
+    background: $quickBlue;
+  }
+}
+
 .content.content--active {
   &.quick-select--begin .w.h-f {
     border-bottom-style: dotted;

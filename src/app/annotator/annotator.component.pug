@@ -136,6 +136,12 @@ scroll-progress([scrollProgress]="currentScroll")
                 .img-wrap(*ngIf="w.img")
                     //- Word/Hit Boxes
                     ng-container(*ngIf="w.boxes")
+                        //- Preview word locations
+                        .w-box-preview.hover--tooltip
+                            .icon.icon-word-boxes
+                            .tooltip-wrap
+                                .tooltip
+                                    .tooltip-title Click on words to highlight text!
                         //- @todo REMOVE adjustments for bad data
                         .w.w-box(
                             *ngFor="let box of w.boxes; let bi = index",
