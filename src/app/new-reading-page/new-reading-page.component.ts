@@ -6,7 +6,15 @@ import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
-import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService, MessageService, MediaService } from '../_services'
+import {
+  AuthService,
+  ProjectService,
+  ReadingService,
+  UtilToolService,
+  AcademyService,
+  MessageService,
+  MediaService,
+} from '../_services'
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
@@ -83,7 +91,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   // Used for processing reading
   public words: any[] = []
   public previousWordY: number = 0
-  public pdfJSON: any[] = []
+  public imageDataCache: { url: string; data: { word_boxes: any } }[] = [] // Temporary store for image data, so we don't have to continuosly GET it
 
   // Configuration Options for Medium Editor
   public mediumEditorConfig: any = {
@@ -181,7 +189,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _academy: AcademyService,
     private _messages: MessageService,
-    private _media: MediaService
+    private _media: MediaService,
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -449,7 +457,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * Pushes text nodes as formatted objects into this.words
    * @param element Root element to start crawling from
    */
-  private extractTextNodes(els: any, ancestorTags?: string[], ignoreText?: boolean) {
+  private async extractTextNodes(els: any, ancestorTags?: string[], ignoreText?: boolean) {
     // This functional can except an array for nodes or a singular node
     // If singular, pop into an array
     if (!els) {
@@ -488,21 +496,28 @@ export class NewReadingPage implements OnInit, OnDestroy {
         let imgObj = {
           str: '', // to be used for image title
           url: imgUrl,
-          styles: ['img']
+          styles: ['img'],
         }
-
-        // Determine if we have OCR JSON data for a PDF
-        let boxData = this.pdfJSON.find(pdfJSON => {
-          return pdfJSON.url.substr(0, pdfJSON.url.lastIndexOf(".")) == imgUrl.substr(0, imgUrl.lastIndexOf("."))
+        /**
+         * Processing for including OCR data
+         */
+        let imgDataUrl = element.getAttribute('edji-data-src')
+        let imgData
+        // Determine if we have OCR JSON data for image already
+        imgData = this.imageDataCache.find(data => {
+          return data.url === imgDataUrl
         })
-        console.log(boxData)
-
-        // if we get a match on the url (without file extension), 
-        // then we know the JSON data lines up and we will add it to the words object for this image
-        if (boxData && boxData.json) {
-          imgObj['boxes'] = boxData.json.word_boxes
+        // Try to get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
+        if (!imgData || !imgData.data) {
+          imgData = { url: imgDataUrl }
+          imgData.data = await this._media.getPdfJsonData(imgDataUrl).toPromise()
+          // Store image data locally so we don't need to GET on each save
+          this.imageDataCache.push(imgData)
         }
-        console.log(imgObj)
+        // Attach word "boxes" to the word
+        if (imgData && imgData.data && imgData.data.word_boxes) {
+          imgObj['boxes'] = imgData.data.word_boxes
+        }
         this.words.push(imgObj)
       }
 
@@ -525,7 +540,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
         let rootWordTags = inheritedTags.slice()
         rootWordTags.indexOf('br') > -1 && rootWordTags.splice(rootWordTags.indexOf('br'), 1)
         // Split text inside child nodes
-        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
+        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
           return el.replace(/([\n])/g, '')
         })
         // If empty element, push a spacer word to reflect that
@@ -908,21 +923,21 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * Takes an array of objects with a title and a url for an Image, formats, then inserts into reading
    * @param images Array of image objects to be inserted
    */
-  public addImages(images: { title: string; url: string }[]) {
+  public addImages(images: { title: string; url: string; data?: string }[]) {
+    console.log('Add images...', images)
+    // conveninent image tag builder
+    function buildImageTag(image: { url?: string; title?: string; data?: string }): string {
+      if (image.data) {
+        return '<img src="' + image.url + '" title="' + image.title + '" edji-data-src="' + image.data + '" />'
+      } else {
+        return '<img src="' + image.url + '" title="' + image.title + '" />'
+      }
+    }
+
     if (this.insertNode && this.insertNode.parentNode) {
       // If there is a reference node for cursor position, insert at cursor
       images.forEach(async image => {
-        let imgString = '<img src="' + image.url + '" title="' + image.title + '" />'
-
-        // get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
-        let pdfUrl = image.url.substr(0, image.url.lastIndexOf(".")) + '.json'
-        // pdfUrl = 'http://pdf-dev.edji.it/96867346-2a97-4394-99a6-6db358e0aff4/5983175d-bddb-48a2-acf9-9add5ca3bbe7-0.json'
-        let pdfJSON = await this._media.getPdfJsonData(pdfUrl).toPromise()
-        // console.log(pdfJSON)
-        if (pdfJSON) {
-          this.pdfJSON.push({ url: pdfUrl, json: pdfJSON })
-        }
-
+        let imgString = buildImageTag(image)
         this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
         this.insertAfter(this.insertNode.parentNode, '<p>&#65279;</p>', this.insertNode)
       })
@@ -930,16 +945,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       // If no reference node (field has not been interacted with) insert image at end
       let imgString = ''
       images.forEach(async image => {
-        imgString += '<img src="' + image.url + '" title="' + image.title + '" /><p>&#65279;</p>'
-
-        // get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
-        let pdfUrl = image.url.substr(0, image.url.lastIndexOf(".")) + '.json'
-        // pdfUrl = 'http://pdf-dev.edji.it/96867346-2a97-4394-99a6-6db358e0aff4/5983175d-bddb-48a2-acf9-9add5ca3bbe7-0.json'
-        let pdfJSON = await this._media.getPdfJsonData(pdfUrl).toPromise()
-        // console.log(pdfJSON)
-        if (pdfJSON) {
-          this.pdfJSON.push({ url: pdfUrl, json: pdfJSON })
-        }
+        imgString += buildImageTag(image) + '<p>&#65279;</p>'
       })
       this.readingHtml[this.readingHtml.length - 1].text += imgString
     }
