@@ -30,15 +30,17 @@ export class UploadPdfModalComponent implements OnInit {
   public pdfFileInputId: string = 'pdfFileInput'
   public confirmDelete: boolean = false
 
-  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) { }
+  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {}
 
   ngOnInit() {
     // Load previously uploaded docs
+    let previousDocs = []
     if (this._locker.get('uploadedDocs')) {
-      this.uploadedDocs = this._locker.get('uploadedDocs')
+      previousDocs = this._locker.get('uploadedDocs')
     } else if (this._auth.getUser().media && this._auth.getUser().media.documents) {
-      this.uploadedDocs = this._auth.getUser().media.documents
+      previousDocs = this._auth.getUser().media.documents
     }
+
     // Check existing Uploaded Docs for any not yet marked as converted
     this.uploadedDocs.forEach(doc => {
       if (doc.converted === false) {
@@ -226,6 +228,19 @@ export class UploadPdfModalComponent implements OnInit {
     let images = []
     pages.forEach(page => {
       images.push({ url: page })
+    })
+    this.returnImage.emit(images)
+    this.closeModal.emit()
+  }
+
+  /**
+   * Insert PDF pages with OCR data
+   * - Attaches additional property
+   */
+  insertPagesWithData(pages: { image: string; data: string }[]): void {
+    let images = []
+    pages.forEach(page => {
+      images.push({ url: page.image, data: page.data })
     })
     this.returnImage.emit(images)
     this.closeModal.emit()
