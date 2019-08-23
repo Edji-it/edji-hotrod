@@ -28,16 +28,6 @@
                 span.input-group-append
                   button#pdfBrowseButton.btn.btn-default.btn-file(type="button", (click)="browseInput.click()") Browse
                     input(#browseInput, [attr.id]="pdfFileInputId", type="file", accept=".pdf", (change)="updateUploadFile()", style="display:none;")
-            //- give user the option to gather word position detail via ocr
-            .form-group
-              .input-group 
-                input(
-                  name="enableOCR",
-                  [(ngModel)]="enableOCR",
-                  type="checkbox",
-                  value=""
-                )
-                label Enable Word Identification
             .form-group
               label Title
               input(name="title", [(ngModel)]="title", type="text")
@@ -71,6 +61,10 @@
                   button.btn.btn-primary.e2e-insert-doc((click)="insertPages(doc)")
                     | Insert {{ doc.pages.length }} Page
                     span(*ngIf="doc.pages.length > 1") s
+                //- Display if OCR/word highlighting is available, and allow user to turn it off
+                .btn.btn-sm.highlight-toggle(*ngIf="doc.pdf && doc.pdf.converted", (click)="toggleWordHighlights(doc)")
+                  span(*ngIf="!doc.disableWords", [innerHtml]="':white_check_mark: Word highlights enabled' | emojione")
+                  span(*ngIf="doc.disableWords") &mdash; Word highlights disabled
               //- The pages of the PDF
               .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
                 img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")

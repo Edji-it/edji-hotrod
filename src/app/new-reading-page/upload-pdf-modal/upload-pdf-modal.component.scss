@@ -154,3 +154,14 @@ $pdfThumbHeight: 250px;
     opacity: 1;
   }
 }
+
+.highlight-toggle {
+  background: rgba(0, 0, 0, 0.02);
+  text-align: left;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  padding: 1em;
+  height: 3em;
+}

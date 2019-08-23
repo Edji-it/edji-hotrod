@@ -502,21 +502,23 @@ export class NewReadingPage implements OnInit, OnDestroy {
          * Processing for including OCR data
          */
         let imgDataUrl = element.getAttribute('edji-data-src')
-        let imgData
-        // Determine if we have OCR JSON data for image already
-        imgData = this.imageDataCache.find(data => {
-          return data.url === imgDataUrl
-        })
-        // Try to get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
-        if (!imgData || !imgData.data) {
-          imgData = { url: imgDataUrl }
-          imgData.data = await this._media.getPdfJsonData(imgDataUrl).toPromise()
-          // Store image data locally so we don't need to GET on each save
-          this.imageDataCache.push(imgData)
-        }
-        // Attach word "boxes" to the word
-        if (imgData && imgData.data && imgData.data.word_boxes) {
-          imgObj['boxes'] = imgData.data.word_boxes
+        if (imgDataUrl) {
+          let imgData
+          // Determine if we have OCR JSON data for image already
+          imgData = this.imageDataCache.find(data => {
+            return data.url === imgDataUrl
+          })
+          // Try to get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
+          if (!imgData || !imgData.data) {
+            imgData = { url: imgDataUrl }
+            imgData.data = await this._media.getPdfJsonData(imgDataUrl).toPromise()
+            // Store image data locally so we don't need to GET on each save
+            this.imageDataCache.push(imgData)
+          }
+          // Attach word "boxes" to the word
+          if (imgData && imgData.data && imgData.data.word_boxes) {
+            imgObj['boxes'] = imgData.data.word_boxes
+          }
         }
         this.words.push(imgObj)
       }

@@ -231,13 +231,14 @@ export class UploadPdfModalComponent implements OnInit {
    * @param index? optional, individual page index
    */
   insertPages(doc: DocumentSpark, index?: number): void {
+    console.log('INsert!', index)
     let images: { url: string; data?: string }[] = []
-    if (!index) {
+    if (typeof index === 'undefined') {
       // Loop over pages if inserting whole doc
       doc.pages.forEach((page, index) => {
         let image = { url: page }
         // If pdf data is available, attach it
-        if (doc.pdf.converted) {
+        if (doc.pdf.converted && !doc.disableWords) {
           image['data'] = doc.pdf.pages[index]
         }
         images.push(image)
@@ -246,7 +247,7 @@ export class UploadPdfModalComponent implements OnInit {
       // otherwise insert page at index
       let image = { url: doc.pages[index] }
       // If pdf data is available, attach it
-      if (doc.pdf.converted) {
+      if (doc.pdf.converted && !doc.disableWords) {
         image['data'] = doc.pdf.pages[index]
       }
       images.push(image)
@@ -254,5 +255,19 @@ export class UploadPdfModalComponent implements OnInit {
 
     this.returnImage.emit(images)
     this.closeModal.emit()
+  }
+
+  /**
+   * Toggle whether to use word highlights for a doc
+   * - Storing as a preference on the spark allows for maintaining behavior
+   */
+  toggleWordHighlights(doc: DocumentSpark) {
+    if (doc.pdf && doc.pdf.converted) {
+      if (!doc.disableWords) {
+        doc.disableWords = true
+      } else {
+        doc.disableWords = false
+      }
+    }
   }
 }
