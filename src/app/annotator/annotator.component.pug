@@ -139,10 +139,10 @@ scroll-progress([scrollProgress]="currentScroll")
                         //- @todo REMOVE adjustments for bad data
                         .w.w-box(
                             *ngFor="let box of w.boxes; let bi = index",
-                            [style.top]="box.y + '%'",
+                            [style.top]="box.y*.748 + '%'",
                             [style.height]="box.h + '%'",
-                            [style.left]="box.x + '%'",
-                            [style.width]="box.w + '%'",
+                            [style.left]="box.x*.748 + '%'",
+                            [style.width]="box.w*.748 + '%'",
                             [attr.w-index]="i",
                             [attr.index]="bi",
                             [ngClass]="[getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i, bi), getBoxQuickSelect(i, bi), focusClass(focusArray, i, bi)]"
