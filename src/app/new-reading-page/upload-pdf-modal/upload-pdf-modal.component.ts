@@ -5,6 +5,7 @@ import { take } from 'rxjs/operators'
 import { MediaService, AuthService } from '../../_services'
 import { DeletePdfMiniModal } from './delete-pdf-mini-modal/delete-pdf-mini-modal.component'
 import { LockerService } from '../../_services/locker.service'
+import { DocumentSpark } from '../../shared/datatypes'
 
 @Component({
   selector: 'upload-pdf-modal',
@@ -224,32 +225,34 @@ export class UploadPdfModalComponent implements OnInit {
       )
   }
 
-  insertPages(pages: any[]): void {
-    let images = []
-    pages.forEach(page => {
-      images.push({ url: page })
-    })
-    this.returnImage.emit(images)
-    this.closeModal.emit()
-  }
-
   /**
-   * Insert PDF pages with OCR data
-   * - Attaches additional property
+   * Output images (w/ data)
+   * @param doc Document record from user's media
+   * @param index? optional, individual page index
    */
-  insertPagesWithData(pages: { image: string; data: string }[]): void {
-    let images = []
-    pages.forEach(page => {
-      images.push({ url: page.image, data: page.data })
-    })
-    this.returnImage.emit(images)
-    this.closeModal.emit()
-  }
+  insertPages(doc: DocumentSpark, index?: number): void {
+    let images: { url: string; data?: string }[] = []
+    if (!index) {
+      // Loop over pages if inserting whole doc
+      doc.pages.forEach((page, index) => {
+        let image = { url: page }
+        // If pdf data is available, attach it
+        if (doc.pdf.converted) {
+          image['data'] = doc.pdf.pages[index]
+        }
+        images.push(image)
+      })
+    } else {
+      // otherwise insert page at index
+      let image = { url: doc.pages[index] }
+      // If pdf data is available, attach it
+      if (doc.pdf.converted) {
+        image['data'] = doc.pdf.pages[index]
+      }
+      images.push(image)
+    }
 
-  insertImage(url: string): void {
-    let page = []
-    page.push({ url: url })
-    this.returnImage.emit(page)
+    this.returnImage.emit(images)
     this.closeModal.emit()
   }
 }

@@ -54,7 +54,7 @@
           h3.pb-2 Select an uploaded PDF to add to your Reading
           .upload-list-item(*ngFor="let doc of uploadedDocs; let i = index", [class.new]="newDocsIds.indexOf(doc.uuid) > -1")
             //- Display doc pages if available
-            .card-group(*ngIf="(doc.pages || doc.pages_data) && i < 10")
+            .card-group(*ngIf="doc.pages && doc.pages[0] && i < 10")
               //- Delete PDF Mini Modal
               delete-pdf-mini-modal(*ngIf="doc.confirmDelete", (confirm)="removeUploadedDoc(doc)", (dismiss)="doc.confirmDelete = false")
               //- Title Card
@@ -68,31 +68,16 @@
                   span.doc-title(*ngIf="!doc.title") 
                     i Untitled
                   //- Insert legacy PDF
-                  button.btn.btn-primary.e2e-insert-doc(
-                    *ngIf="!doc.pages_data || !doc.pages_data[0]",
-                    (click)="insertPages(doc.pages)"
-                  )
+                  button.btn.btn-primary.e2e-insert-doc((click)="insertPages(doc)")
                     | Insert {{ doc.pages.length }} Page
                     span(*ngIf="doc.pages.length > 1") s
-                  //- Insert PDF with OCR/data
-                  button.btn.btn-primary.e2e-insert-doc(
-                    *ngIf="doc.pages_data && doc.pages_data[0]",
-                    (click)="insertPagesWithData(doc.pages_data)"
-                  )
-                    | Insert {{ doc.pages_data.length }} Page
-                    span(*ngIf="doc.pages_data.length > 1") s
-              //- The pages of the PDF (without OCR)
-              .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertImage(url)")
+              //- The pages of the PDF
+              .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
                 img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
                 .card-img-overlay.overlay-on-hover
                   button.btn.btn-primary.card__center-overlay Insert
-              //- The pages of the PDF (with OCR/data)
-              .card.document-card(*ngFor="let page_data of doc.pages_data; let i = index", (click)="insertPagesWithData([page_data])")
-                img.card-img-top.img-fluid([src]="page_data.image", [alt]="'Page ' + (i + 1)")
-                .card-img-overlay.overlay-on-hover
-                  button.btn.btn-primary.card__center-overlay Insert
             //- Display conversion message if doc isn't ready
-            .card-group.card-group--placeholder(*ngIf="doc.converted == false")
+            .card-group.card-group--placeholder(*ngIf="doc.converted != true")
               .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired")
                 i.icon.icon-loading.group-alert__icon
                 b Converting Document

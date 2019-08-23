@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService } from '.'
+import { DocumentSpark } from '../shared/datatypes'
 
 @Injectable()
 export class MediaService {
@@ -129,7 +130,7 @@ export class MediaService {
     return uploadSource.asObservable()
   }
 
-  public pdfCheck(fileId: string, hostname?: string): Observable<any> {
+  public pdfCheck(fileId: string, hostname?: string): Observable<DocumentSpark> {
     if (!hostname) {
       hostname = this.pdfBucket
     }
