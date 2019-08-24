@@ -41,13 +41,6 @@ export class UploadPdfModalComponent implements OnInit {
       previousDocs = this._auth.getUser().media.documents
     }
 
-    // Check existing Uploaded Docs for any not yet marked as converted
-    this.uploadedDocs.forEach(doc => {
-      if (doc.converted === false) {
-        this.checkConversion(doc.uuid, doc.hostname)
-      }
-    })
-
     // Get the latest uploaded docs
     this._auth
       .refreshUser()
@@ -55,6 +48,13 @@ export class UploadPdfModalComponent implements OnInit {
       .subscribe((user: any) => {
         if (user.media && user.media.documents) {
           this.uploadedDocs = user.media.documents
+
+          // Check existing Uploaded Docs for any not yet marked as converted
+          this.uploadedDocs.forEach(doc => {
+            if (doc.converted !== true && !doc.expired) {
+              this.checkConversion(doc)
+            }
+          })
         }
       })
   }
@@ -98,7 +98,6 @@ export class UploadPdfModalComponent implements OnInit {
 
     this._media.uploadPdf(this.file).subscribe(
       data => {
-        console.log('uploadPdf:', data)
         this.uploading = false
         // Set converted property
         data.converted = false
@@ -120,26 +119,48 @@ export class UploadPdfModalComponent implements OnInit {
   }
 
   // Run check until document is confirmed as processed
-  checkConversion(fileId: any, hostname?: string): void {
-    let ONE_HOUR = 60 * 60 * 1000
+  checkConversion(doc): void {
+    let EXPIRE_TIME = 10 * 60 * 1000 // 10 min
+    let fileId = doc.uuid
 
-    this._media
-      .pdfCheck(fileId, hostname)
-      .pipe(take(1))
-      .subscribe(
-        data => {
-          if (data.converted === true) {
-            // Mark document as converted
-            this.newDocsIds.push(data.uuid)
-            this.updateUploadedDoc(data)
-          } else if (data.error) {
-            // Pass doc with error
-            this.updateUploadedDoc(data)
-          } else if (!data.requestedTime || Date.now() - data.requestedTime > ONE_HOUR) {
-            // If this is old, expire the document
-            data.expired = true
-            this.updateUploadedDoc(data)
-          } else {
+    if (doc && doc.pages && doc.pages[0]) {
+      // Assume if document has page values, it is converted and stored
+      doc.converted = true
+      // this.updateUploadedDoc(doc)
+    } else if (!fileId) {
+      // If no UUID is passed, assume corrupt/old  data
+      doc.expired = true
+      // this.updateUploadedDoc(doc)
+    } else {
+      this._media
+        .pdfCheck(fileId)
+        .pipe(take(1))
+        .subscribe(
+          data => {
+            if (data.converted === true) {
+              // Mark document as converted
+              this.newDocsIds.push(data.uuid)
+              this.updateUploadedDoc(data)
+            } else if (data.error) {
+              // Pass doc with error
+              this.updateUploadedDoc(data)
+            } else if (doc.requestedTime && Date.now() - doc.requestedTime > EXPIRE_TIME) {
+              // If this is old, expire the document
+              data.expired = true
+              this.updateUploadedDoc(data)
+            } else {
+              // Ensure doc has requestedTime for next round
+              if (!doc.requestedTime) {
+                doc.requestedTime = data.updatedTime ? data.updatedTime : Date.now()
+                this.updateUploadedDoc(doc)
+              }
+              // Check again later
+              setTimeout(() => {
+                this.checkConversion(doc)
+              }, 3000)
+            }
+          },
+          err => {
             // Check again later
             setTimeout(() => {
               this.checkConversion(fileId)
@@ -155,7 +176,7 @@ export class UploadPdfModalComponent implements OnInit {
   // Update a single document, and propagate changes
   updateUploadedDoc(updatedDoc: any) {
     this.uploadedDocs.forEach((doc, index) => {
-      if (updatedDoc.uuid === doc.uuid) {
+      if (updatedDoc.uuid === doc.uuid || updatedDoc._id === doc._id) {
         Object.assign(this.uploadedDocs[index], updatedDoc)
       }
     })
@@ -194,7 +215,7 @@ export class UploadPdfModalComponent implements OnInit {
     // Save document object
     this.saveUploadedDocs()
     // Check if document is done converting
-    this.checkConversion(data.uuid, data.hostname)
+    this.checkConversion(data)
   }
 
   // Save Uploaded Doc list to localStorage AND user object
@@ -229,14 +250,13 @@ export class UploadPdfModalComponent implements OnInit {
    * @param index? optional, individual page index
    */
   insertPages(doc: DocumentSpark, index?: number): void {
-    console.log('INsert!', index)
     let images: { url: string; data?: string }[] = []
     if (typeof index === 'undefined') {
       // Loop over pages if inserting whole doc
       doc.pages.forEach((page, index) => {
         let image = { url: page }
         // If pdf data is available, attach it
-        if (doc.pdf.converted && !doc.disableWords) {
+        if (doc.pdf.converted && !doc.disable_words) {
           image['data'] = doc.pdf.pages[index]
         }
         images.push(image)
@@ -245,7 +265,7 @@ export class UploadPdfModalComponent implements OnInit {
       // otherwise insert page at index
       let image = { url: doc.pages[index] }
       // If pdf data is available, attach it
-      if (doc.pdf.converted && !doc.disableWords) {
+      if (doc.pdf.converted && !doc.disable_words) {
         image['data'] = doc.pdf.pages[index]
       }
       images.push(image)
@@ -261,10 +281,10 @@ export class UploadPdfModalComponent implements OnInit {
    */
   toggleWordHighlights(doc: DocumentSpark) {
     if (doc.pdf && doc.pdf.converted) {
-      if (!doc.disableWords) {
-        doc.disableWords = true
+      if (!doc.disable_words) {
+        doc.disable_words = true
       } else {
-        doc.disableWords = false
+        doc.disable_words = false
       }
     }
   }

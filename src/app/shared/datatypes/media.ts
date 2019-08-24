@@ -2,7 +2,7 @@ export interface DocumentSpark {
   uuid?: string
   pages?: string[]
   converted: boolean
-  updatedTime?: string
+  updatedTime?: number
   pdf?: {
     location?: string
     converted: boolean
@@ -13,5 +13,5 @@ export interface DocumentSpark {
   // Client-side only
   requestedTime?: number
   expired?: boolean
-  disableWords?: boolean
+  disable_words?: boolean
 }

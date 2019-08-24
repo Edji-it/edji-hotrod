@@ -12,7 +12,7 @@
           .alert.alert-info
             b Hint
             | PDF's in Edji use dot comments, just like images. If you would like to learn how to convert your
-            | PDF to plain text so your students can highlight, 
+            | PDF to plain text so your students can highlight,
             a.link(target="_blank",
               href="http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/")
               | check out our Guide page here
@@ -33,9 +33,9 @@
               input(name="title", [(ngModel)]="title", type="text")
               .button__row
                 button#buttonBeginPdfUpload.btn.btn-primary(
-                  (click)="beginUpload()", 
-                  type="submit", 
-                  [disabled]="noUploadAllowed", 
+                  (click)="beginUpload()",
+                  type="submit",
+                  [disabled]="noUploadAllowed",
                   [class.loading]="uploading"
                 )
                   | Upload
@@ -55,26 +55,26 @@
                 //- Title & Insert Button
                 .card__center-overlay
                   span.doc-title(*ngIf="doc.title") {{ doc.title }}
-                  span.doc-title(*ngIf="!doc.title") 
+                  span.doc-title(*ngIf="!doc.title")
                     i Untitled
                   //- Insert legacy PDF
                   button.btn.btn-primary.e2e-insert-doc((click)="insertPages(doc)")
                     | Insert {{ doc.pages.length }} Page
                     span(*ngIf="doc.pages.length > 1") s
                 //- Display if OCR/word highlighting is available, and allow user to turn it off
-                .btn.btn-sm.highlight-toggle.hover-parent(*ngIf="doc.pdf && doc.pdf.converted", (click)="toggleWordHighlights(doc)")
-                  .icon.icon-word-boxes([class.inactive]="doc.disableWords")
-                  .hover-show--block {{ doc.disableWords ? 'Enable?' : 'Disable?' }}
-                  span(*ngIf="!doc.disableWords") Word highlights enabled
-                  span(*ngIf="doc.disableWords") Word highlights disabled
+                .btn.btn-sm.highlight-toggle.hover-parent(*ngIf="doc.pdf && doc.pdf.pages && doc.pdf.pages[0]", (click)="toggleWordHighlights(doc)")
+                  .icon.icon-word-boxes([class.inactive]="doc.disable_words")
+                  .hover-show--block {{ doc.disable_words ? 'Enable?' : 'Disable?' }}
+                  span(*ngIf="!doc.disable_words") Word highlights enabled
+                  span(*ngIf="doc.disable_words") Word highlights disabled
               //- The pages of the PDF
               .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
                 img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
                 .card-img-overlay.overlay-on-hover
                   button.btn.btn-primary.card__center-overlay Insert
             //- Display conversion message if doc isn't ready
-            .card-group.card-group--placeholder(*ngIf="doc.converted == false")
-              .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired")
+            .card-group.card-group--placeholder(*ngIf="doc.converted != true")
+              .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired && !doc.error")
                 i.icon.icon-loading.group-alert__icon
                 b Converting Document
                 br
@@ -84,13 +84,17 @@
                   span(aria-hidden="true") &times;
                 b Document conversion timed out
                 br
-                | Please try again later, or with a different file. If this problem persists, please
-                a(href="mailto:support@edji.it") contact us
-                | .
+                | Please try again later, or with a different file. If this problem persists, please <a href="mailto:support@edji.it">contact us</a>.
+              .alert.alert-warning.group-alert(*ngIf="doc.error")
+                button.close((click)="removeUploadedDoc(doc)", type="button", data-dismiss="alert", aria-label="Close")
+                  span(aria-hidden="true") &times;
+                b Error converting
+                br
+                | Please try again later, or with a different file. If this problem persists, please <a href="mailto:support@edji.it">contact us</a>.
               .card.title-card
                 .card__center-overlay
                   span.doc-title(*ngIf="doc.title") {{ doc.title }}
-                  span.doc-title(*ngIf="!doc.title") 
+                  span.doc-title(*ngIf="!doc.title")
                     i Untitled
                   button.btn.btn-primary([disabled]="true") Insert X Pages
               .card.card-placeholder(*ngFor="let card of [0, 1, 2, 3]")
