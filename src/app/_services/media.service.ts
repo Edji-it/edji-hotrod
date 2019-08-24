@@ -10,7 +10,7 @@ import { DocumentSpark } from '../shared/datatypes'
 @Injectable()
 export class MediaService {
   private imageService: string = '//grapple-dev.edji.it'
-  private pdfBucket: string = '//image-dev.edji.it/pdf'
+  private pdfBucket: string = '//image-dev.edji.it/documents'
   private flakUrl: string = '//flak-dev.edji.it'
 
   constructor(private _http: HttpClient, private _auth: AuthService) {
@@ -117,9 +117,10 @@ export class MediaService {
     let uploadSource = new Subject()
     this._http.get(this.flakUrl + '/storage/signed_url?file_name=' + file.name).subscribe(
       (s3data: { signed_request: string; url: string }) => {
-        this._http.put(s3data.signed_request, file).subscribe(
+        let putUrl = s3data.signed_request.replace('https://', '//')
+        this._http.put(putUrl, file).subscribe(
           res => {
-            uploadSource.next({ url: s3data.url })
+            uploadSource.next(s3data)
           },
           error => {
             uploadSource.error(error)
@@ -138,7 +139,7 @@ export class MediaService {
     if (!hostname) {
       hostname = this.pdfBucket
     }
-    return <Observable<DocumentSpark>>this._http.get(hostname + '/pdf/' + fileId + '/spark.json').pipe(
+    return <Observable<DocumentSpark>>this._http.get(hostname + '/' + fileId + '/spark.json').pipe(
       map(data => {
         return data || {}
       }),
