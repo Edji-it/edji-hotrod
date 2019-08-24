@@ -11,18 +11,21 @@ import { DocumentSpark } from '../shared/datatypes'
 export class MediaService {
   private imageService: string = '//grapple-dev.edji.it'
   private pdfBucket: string = '//image-dev.edji.it/pdf'
+  private flakUrl: string = '//flak-dev.edji.it'
 
   constructor(private _http: HttpClient, private _auth: AuthService) {
     // Check to see if prod or dev environment
     if (window.location.host.indexOf('dev.edji.it') > -1) {
       this.imageService = '//grapple-dev.edji.it'
       this.pdfBucket = '//image-dev.edji.it'
+      this.flakUrl = '//flak-dev.edji.it'
     } else if (
       window.location.host.indexOf('edji.it') > -1 ||
       window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1
     ) {
       this.imageService = '//grapple.edji.it'
       this.pdfBucket = '//image.edji.it'
+      this.flakUrl = '//flak.edji.it'
     }
   }
 
@@ -105,14 +108,24 @@ export class MediaService {
     return uploadSource.asObservable()
   }
 
-  public uploadPdf(file: File, disableOCR: boolean): Observable<any> {
-
+  /**
+   * Upload PDF
+   * @param file PDF to upload
+   */
+  public uploadPdf(file: File): Observable<any> {
     let uploadSource = new Subject()
-
-    this._http.put(`${this.imageService}/v1/pdf`, file).subscribe(
+    this._http.get(this.flakUrl + '/storage/signed_url?file_type=pdf').subscribe(
       res => {
-        let doc = res || {}
-        uploadSource.next(doc)
+        let s3data = res
+
+        this._http.put(s3data['signedRequest'], file).subscribe(
+          res => {
+            uploadSource.next({ url: s3data['url'] })
+          },
+          error => {
+            uploadSource.error(error)
+          },
+        )
       },
       error => {
         uploadSource.error(error)
