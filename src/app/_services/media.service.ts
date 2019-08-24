@@ -110,17 +110,16 @@ export class MediaService {
 
   /**
    * Upload PDF
+   * - Gets signed URL from Flak, then begins uploading PDF
    * @param file PDF to upload
    */
   public uploadPdf(file: File): Observable<any> {
     let uploadSource = new Subject()
-    this._http.get(this.flakUrl + '/storage/signed_url?file_type=pdf').subscribe(
-      res => {
-        let s3data = res
-
-        this._http.put(s3data['signedRequest'], file).subscribe(
+    this._http.get(this.flakUrl + '/storage/signed_url?file_name=' + file.name).subscribe(
+      (s3data: { signed_request: string; url: string }) => {
+        this._http.put(s3data.signed_request, file).subscribe(
           res => {
-            uploadSource.next({ url: s3data['url'] })
+            uploadSource.next({ url: s3data.url })
           },
           error => {
             uploadSource.error(error)
