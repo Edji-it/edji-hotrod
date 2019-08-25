@@ -126,11 +126,9 @@ export class UploadPdfModalComponent implements OnInit {
     if (doc && doc.pages && doc.pages[0]) {
       // Assume if document has page values, it is converted and stored
       doc.converted = true
-      // this.updateUploadedDoc(doc)
     } else if (!fileId) {
       // If no UUID is passed, assume corrupt/old  data
       doc.expired = true
-      // this.updateUploadedDoc(doc)
     } else {
       this._media
         .pdfCheck(fileId)
@@ -163,14 +161,12 @@ export class UploadPdfModalComponent implements OnInit {
           err => {
             // Check again later
             setTimeout(() => {
-              this.checkConversion(fileId)
-            }, 1500)
-          }
-        },
-        err => {
-          console.error(err)
-        },
-      )
+              this.checkConversion(doc)
+            }, 3000)
+            console.error(err)
+          },
+        )
+    }
   }
 
   // Update a single document, and propagate changes
@@ -204,7 +200,7 @@ export class UploadPdfModalComponent implements OnInit {
 
     // and now overwrite the list of docs in user prefs so that this carries across page loads.
     this._auth.forceUpdateDocuments(this.uploadedDocs).subscribe(() => {
-      this.uploadedDocs = this._auth.getUser().media.documents
+      // Document already removed
     })
   }
 
@@ -256,7 +252,7 @@ export class UploadPdfModalComponent implements OnInit {
       doc.pages.forEach((page, index) => {
         let image = { url: page }
         // If pdf data is available, attach it
-        if (doc.pdf.converted && !doc.disable_words) {
+        if (doc.pdf && doc.pdf.pages && !doc.disable_words) {
           image['data'] = doc.pdf.pages[index]
         }
         images.push(image)
@@ -265,12 +261,11 @@ export class UploadPdfModalComponent implements OnInit {
       // otherwise insert page at index
       let image = { url: doc.pages[index] }
       // If pdf data is available, attach it
-      if (doc.pdf.converted && !doc.disable_words) {
+      if (doc.pdf && doc.pdf.pages && !doc.disable_words) {
         image['data'] = doc.pdf.pages[index]
       }
       images.push(image)
     }
-
     this.returnImage.emit(images)
     this.closeModal.emit()
   }
@@ -280,7 +275,7 @@ export class UploadPdfModalComponent implements OnInit {
    * - Storing as a preference on the spark allows for maintaining behavior
    */
   toggleWordHighlights(doc: DocumentSpark) {
-    if (doc.pdf && doc.pdf.converted) {
+    if (doc.pdf && doc.pdf.pages) {
       if (!doc.disable_words) {
         doc.disable_words = true
       } else {
