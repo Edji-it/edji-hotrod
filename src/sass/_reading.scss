@@ -227,15 +227,11 @@ a.w {
   }
 
   & .w .img-wrap > img {
-    $highlightWidth: 4px;
     cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer;
-    // outline: $highlightWidth solid transparent;
-    // border: 3px solid #fff;
+    max-width: 100%;
     border: 1px solid #efefef;
     border-radius: 3px;
-    max-width: calc(100% - #{$highlightWidth * 2});
     height: auto;
-    margin: $highlightWidth;
   }
 }
 
