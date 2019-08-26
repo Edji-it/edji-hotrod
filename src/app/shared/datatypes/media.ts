@@ -5,8 +5,6 @@ export interface DocumentSpark {
   updatedTime?: number
   pdf?: {
     location?: string
-    converted: boolean
-    convertTime?: string
     pages?: string[]
   }
   error?: any
@@ -14,4 +12,18 @@ export interface DocumentSpark {
   requestedTime?: number
   expired?: boolean
   disable_words?: boolean
+}
+
+export interface DocumentAnalysisData {
+  page: 0
+  word_boxes: WordBox[]
+  doc_conversion?: any
+}
+
+export interface WordBox {
+  x: number
+  y: number
+  w: number
+  h: number
+  str: string
 }

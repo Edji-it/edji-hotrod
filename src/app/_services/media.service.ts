@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService } from '.'
-import { DocumentSpark } from '../shared/datatypes'
+import { DocumentSpark, DocumentAnalysisData } from '../shared/datatypes'
 
 @Injectable()
 export class MediaService {
@@ -78,7 +78,7 @@ export class MediaService {
         error => {
           uploadSource.error(error)
         },
-      )
+    )
 
     return uploadSource.asObservable()
   }
@@ -103,7 +103,7 @@ export class MediaService {
         error => {
           uploadSource.error(error)
         },
-      )
+    )
 
     return uploadSource.asObservable()
   }
@@ -135,13 +135,13 @@ export class MediaService {
     return uploadSource.asObservable()
   }
 
-  public pdfCheck(fileId: string, hostname?: string): Observable<DocumentSpark> {
+  public getDocumentSpark(fileId: string, hostname?: string): Observable<DocumentSpark> {
     if (!hostname) {
       hostname = this.pdfBucket
     }
-    return <Observable<DocumentSpark>>this._http.get(hostname + '/' + fileId + '/spark.json').pipe(
+    return this._http.get(hostname + '/' + fileId + '/spark.json').pipe(
       map(data => {
-        return data || {}
+        return <DocumentSpark>data
       }),
     )
   }
@@ -150,11 +150,11 @@ export class MediaService {
    * Returns a JSON object of the PDF from OCR Service
    * @param url location of the PDF OCR JSON data (lot of acronyms in a row there)
    */
-  public getPdfJsonData(url: string): Observable<any> {
+  public getDocumentData(url: string): Observable<DocumentAnalysisData> {
     // , this._auth.getOptions()
     return this._http.get(url).pipe(
       map(data => {
-        return data || {}
+        return <DocumentAnalysisData>data
       }),
     )
   }

@@ -30,7 +30,7 @@ export class UploadPdfModalComponent implements OnInit {
   public pdfFileInputId: string = 'pdfFileInput'
   public confirmDelete: boolean = false
 
-  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {}
+  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) { }
 
   ngOnInit() {
     // Load previously uploaded docs
@@ -131,7 +131,7 @@ export class UploadPdfModalComponent implements OnInit {
       doc.expired = true
     } else {
       this._media
-        .pdfCheck(fileId)
+        .getDocumentSpark(fileId)
         .pipe(take(1))
         .subscribe(
           data => {
@@ -165,7 +165,7 @@ export class UploadPdfModalComponent implements OnInit {
             }, 3000)
             console.error(err)
           },
-        )
+      )
     }
   }
 
@@ -237,7 +237,7 @@ export class UploadPdfModalComponent implements OnInit {
         error => {
           console.log(error)
         },
-      )
+    )
   }
 
   /**

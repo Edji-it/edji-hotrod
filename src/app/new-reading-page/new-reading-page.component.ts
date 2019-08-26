@@ -343,7 +343,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           console.error(err)
         },
-      )
+    )
   }
 
   /**
@@ -511,7 +511,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // Try to get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
           if (!imgData || !imgData.data) {
             imgData = { url: imgDataUrl }
-            imgData.data = await this._media.getPdfJsonData(imgDataUrl).toPromise()
+            imgData.data = await this._media.getDocumentData(imgDataUrl).toPromise()
             // Store image data locally so we don't need to GET on each save
             this.imageDataCache.push(imgData)
           }
@@ -542,7 +542,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
         let rootWordTags = inheritedTags.slice()
         rootWordTags.indexOf('br') > -1 && rootWordTags.splice(rootWordTags.indexOf('br'), 1)
         // Split text inside child nodes
-        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
+        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
           return el.replace(/([\n])/g, '')
         })
         // If empty element, push a spacer word to reflect that
