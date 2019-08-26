@@ -926,7 +926,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * @param images Array of image objects to be inserted
    */
   public addImages(images: { title: string; url: string; data?: string }[]) {
-    console.log('Add images...', images)
     // conveninent image tag builder
     function buildImageTag(image: { url?: string; title?: string; data?: string }): string {
       if (image.data) {
