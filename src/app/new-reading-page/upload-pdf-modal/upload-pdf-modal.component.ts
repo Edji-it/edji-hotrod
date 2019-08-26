@@ -172,7 +172,8 @@ export class UploadPdfModalComponent implements OnInit {
   // Update a single document, and propagate changes
   updateUploadedDoc(updatedDoc: any) {
     this.uploadedDocs.forEach((doc, index) => {
-      if (updatedDoc.uuid === doc.uuid || updatedDoc._id === doc._id) {
+      // We prefer "uuid", but when first uploading (or in the case of old data), we may only have the Mongo id
+      if ((updatedDoc.uuid && updatedDoc.uuid === doc.uuid) || (updatedDoc._id && updatedDoc._id === doc._id)) {
         Object.assign(this.uploadedDocs[index], updatedDoc)
       }
     })
