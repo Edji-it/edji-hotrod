@@ -17,14 +17,14 @@ export class MediaService {
     // Check to see if prod or dev environment
     if (window.location.host.indexOf('dev.edji.it') > -1) {
       this.imageService = '//grapple-dev.edji.it'
-      this.pdfBucket = '//image-dev.edji.it'
+      this.pdfBucket = '//image-dev.edji.it/documents'
       this.flakUrl = '//flak-dev.edji.it'
     } else if (
       window.location.host.indexOf('edji.it') > -1 ||
       window.location.host.indexOf('dvscf5tf91syg.cloudfront.net') > -1
     ) {
       this.imageService = '//grapple.edji.it'
-      this.pdfBucket = '//image.edji.it'
+      this.pdfBucket = '//image.edji.it/documents'
       this.flakUrl = '//flak.edji.it'
     }
   }
