@@ -57,9 +57,21 @@ describe('NewReadingPage', () => {
         const app = fixture.debugElement.componentInstance
         expect(app).toBeTruthy()
     }))
-    // it(`should have as title 'app'`, async(() => {
-    //   const fixture = TestBed.createComponent(AppComponent)
-    //   const app = fixture.debugElement.componentInstance
-    //   expect(app.title).toEqual('app')
-    // }))
+
+    /**
+     * Test that handling an inserted image with a data property attaches a data attribute
+     */
+    it('should attach data property for images with OCR data', async(() => {
+        const exampleImageArray = [{
+            title: "Test Image",
+            url: "//image-dev.edji.it/documents/example-id/example-id.png",
+            data: "//image-dev.edji.it/documents/example-id/example-id-0.json"
+        }]
+        const fixture = TestBed.createComponent(NewReadingPage)
+        let component = fixture.componentInstance
+        // Insert image data into Reading
+        component.addImages(exampleImageArray)
+        // We expect the image tags to be attached to the readingHtml
+        expect(component.readingHtml[0].text).toContain('edji-data-src="//image-dev.edji.it/documents/example-id/example-id-0.json"')
+    }))
 })
