@@ -343,7 +343,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           console.error(err)
         },
-    )
+      )
   }
 
   /**
@@ -475,7 +475,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
         ancestorTags = []
       }
       let inheritedTags = ancestorTags.slice()
-
       // let nodes = element.childNodes
       // Detect line breaks
       let currentTop = this.getNodeY(element) ? this.getNodeY(element) : this.previousWordY
@@ -493,11 +492,13 @@ export class NewReadingPage implements OnInit, OnDestroy {
 
       if (tagName === 'img') {
         let imgUrl = element.getAttribute('src')
-        let imgObj = {
+        let imgWordObj = {
           str: '', // to be used for image title
           url: imgUrl,
-          styles: ['img'],
+          styles: [],
         }
+        // Use "img" styles to indicate an image tag
+        imgWordObj.styles.push('img')
         /**
          * Processing for including OCR data
          */
@@ -517,10 +518,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
           }
           // Attach word "boxes" to the word
           if (imgData && imgData.data && imgData.data.word_boxes) {
-            imgObj['boxes'] = imgData.data.word_boxes
+            imgWordObj['boxes'] = imgData.data.word_boxes
           }
         }
-        this.words.push(imgObj)
+        this.words.push(imgWordObj)
       }
 
       if (tagName === 'a' && !ignoreText) {
@@ -542,7 +543,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
         let rootWordTags = inheritedTags.slice()
         rootWordTags.indexOf('br') > -1 && rootWordTags.splice(rootWordTags.indexOf('br'), 1)
         // Split text inside child nodes
-        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
+        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
           return el.replace(/([\n])/g, '')
         })
         // If empty element, push a spacer word to reflect that
@@ -558,14 +559,18 @@ export class NewReadingPage implements OnInit, OnDestroy {
           let nodeWord = nodeWords[wIndex]
           let word = {
             str: nodeWord,
-            styles: [].concat(inheritedTags),
+            styles: [],
           }
+          // Set inherited tags
+          word.styles = word.styles.concat(inheritedTags)
           let addBr = false
-          if (index == 0 && wIndex == 0) {
-            word.styles.push(tagName + '-a')
-          }
-          if (index == els.length - 1 && wIndex == nodeWords.length - 1) {
-            word.styles.push(tagName + '-z')
+          if (tagName) {
+            if (index == 0 && wIndex == 0) {
+              word.styles.push(tagName + '-a')
+            }
+            if (index == els.length - 1 && wIndex == nodeWords.length - 1) {
+              word.styles.push(tagName + '-z')
+            }
           }
           if (typeof word.str == 'string' && word.str.trim().length < 1) {
             // As a space saving technique, we save spaces as empty object
@@ -703,7 +708,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * Interprets reading html and decorates reading properties
    * @param readingForm "raw" reading from form fields
    */
-  private formatReading(readingForm: any): Reading {
+  public formatReading(readingForm: any): Reading {
     // Create reading object to submit based on form object parameter
     let reading: Reading = Object.assign({}, readingForm)
     // Clear parsed words array
@@ -711,7 +716,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.questions = []
 
     // Process reading html into useful Words Array
-    let editors = this.el.nativeElement.querySelectorAll('#angularMediumEditor')
+    let editors: any = document.querySelectorAll('#readingPageForm #angularMediumEditor')
     let concatHtml = ''
     // Loop through Medium-Editor elements, and get child elements???
 
