@@ -133,11 +133,11 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                     [commentContext]="commentContext"
                 )
             //- Text that was commented on
-            .list-item.mobileHighlight-card.h-1(*ngIf="!isImage && !readingReport", data-test="commentAnnotatedText")
+            .list-item.mobileHighlight-card.h-1(*ngIf="!isImageSpot && !readingReport", data-test="commentAnnotatedText")
                 blockquote
                     | {{ comment.text ? comment.text : '...'}}
             //- Image comment handling
-            .list-item.mobileHighlight-card_liImage.h-1(*ngIf="isImage && !readingReport")
+            .list-item.mobileHighlight-card.h-1(*ngIf="isImageSpot && !readingReport")
                 .mobileHighlight-card_image Image
             //- button.mobileHighlight-card_button((tap)="getImagePos(comment.start)") View&nbsp;&#8594;
             //- Comment action buttons

@@ -16,6 +16,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   public lineCount: number = 1
   public indexOnLine: number = 1
   public repliesShowing: boolean = false
+  public isImageSpot: boolean = false
 
   private justSaved: boolean = false
   private isLoading: boolean = false
@@ -88,6 +89,10 @@ export class CommentComponent implements OnInit, OnDestroy {
       if (this.comment.lineCount) {
         this.lineCount = this.comment.lineCount
       }
+    }
+    // Identify if it's an image spot comment
+    if (this.comment.loc && typeof this.comment.loc.x == 'number' && !this.comment.text && !this.comment.box) {
+      this.isImageSpot = true
     }
 
     /** Set the current user every time it changes */

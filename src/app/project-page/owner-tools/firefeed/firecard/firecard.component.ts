@@ -12,7 +12,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
   private currentReading: Reading
   private subscriptions: Subscription[] = []
   private yPos: number = 0
-  public isImage: boolean = false
+  public isImageSpot: boolean = false
   public secondsAgo: number = 0
   public audio
   public myCanvas
@@ -38,10 +38,12 @@ export class FirecardComponent implements OnInit, OnDestroy {
           if (reading._id) {
             this.currentReading = reading
             if (
-              this.currentReading.words[this.fireComment.start] &&
-              this.currentReading.words[this.fireComment.start].styles[0] === 'img'
+              this.fireComment.loc &&
+              typeof this.fireComment.loc.x == 'number' &&
+              !this.fireComment.text &&
+              !this.fireComment.box
             ) {
-              this.isImage = true
+              this.isImageSpot = true
             }
           }
         },
