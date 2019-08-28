@@ -276,6 +276,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub: Subscription) => {
       sub.unsubscribe()
     })
+    // Remove rendered reading element (used in formatReading())
+    let renderedEl = document.querySelector('#renderedReading')
+    if (renderedEl && renderedEl.parentElement) {
+      renderedEl.parentElement.removeChild(renderedEl)
+    }
   }
 
   /**
