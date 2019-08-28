@@ -58,7 +58,7 @@
             .text-right
                 p.reply-text-right {{ repliesById[comment._id] && repliesById[comment._id].length }}
                 img.reply-icon(src="assets/images/icon-comment-white.svg")
-    //- END .comment-input-wrapper          
+    //- END .comment-input-wrapper
     .comment__save(
         *ngIf="comment.active",
         (tap)="deactivate(comment)",
@@ -92,9 +92,9 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             [innerHtml]="':white_check_mark:' | emojione"
         )
         .user-icon(
-                *ngIf="!readingReport", 
+                *ngIf="!readingReport",
                 [class.selected]="comment.selected",
-                [class.has-teacher-tag]="comment.authorIsTeacher", 
+                [class.has-teacher-tag]="comment.authorIsTeacher",
                 [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
             )
             span.user-icon__initials {{comment.author.substring(0,2)}}
@@ -133,7 +133,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                     [commentContext]="commentContext"
                 )
             //- Text that was commented on
-            .list-item.mobileHighlight-card.h-1(*ngIf="!isImage && !readingReport")
+            .list-item.mobileHighlight-card.h-1(*ngIf="!isImage && !readingReport", data-test="commentAnnotatedText")
                 blockquote
                     | {{ comment.text ? comment.text : '...'}}
             //- Image comment handling
@@ -146,7 +146,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                     i.icon.icon-draft.icon-draft__comment
                 ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1 && !((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
                     button#addReply.btn.btn-xs-action.btn--reply(
-                        (tap)="toggleReplies()", 
+                        (tap)="toggleReplies()",
                         [class.has-reply]="hasReplies(comment)",
                         [class.text-only]="repliesShowing"
                     )

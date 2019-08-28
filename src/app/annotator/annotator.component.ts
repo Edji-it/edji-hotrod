@@ -764,7 +764,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.optionsShow = false
         let boxIndex: number = parseInt(target.getAttribute('index'))
         let wordIndex: number = parseInt(target.getAttribute('w-index'))
-        if (this.quickSelect.boxes && this.quickSelect.boxes.start && !this.quickSelect.boxes.end) {
+        if (
+          this.quickSelect.boxes &&
+          typeof this.quickSelect.boxes.start != 'undefined' &&
+          !this.quickSelect.boxes.end
+        ) {
           // indicates box index
           this.quickSelect.boxes.end = boxIndex
         } else {
@@ -782,7 +786,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.focusHighlight(wordIndex, wordIndex, null, {
           start: this.quickSelect.boxes.start,
-          end: this.quickSelect.boxes.end,
+          end: this.quickSelect.boxes.end ? this.quickSelect.boxes.end : this.quickSelect.boxes.start,
         })
       } else {
         // Set click coordinates
@@ -861,7 +865,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       !target.classList.contains('question') &&
       !target.classList.contains('br')
     ) {
-      console.log('Quick select detection!')
       /**
        * Quick Select
        * - Runs when words are tapped
@@ -1024,7 +1027,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param type What kind of comment: emoji, text...
    */
   createComment(span: SelectionSpan, type: string): void {
-    let isBox = span.boxStart && span.boxEnd
+    let isBox = typeof span.boxStart == 'number' && typeof span.boxEnd == 'number'
     // We need to make sure they aren't already editing a comment
     this.inactivateComment()
 
@@ -1066,7 +1069,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // remove coords
       delete comment.loc
     }
-    console.log('Create!', comment)
     // Tell server we've added a comment
     this._projects
       .saveComment(comment)
@@ -1208,7 +1210,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     let end: number
     let span: SelectionSpan
 
-    if (this.quickSelect.boxes && this.quickSelect.boxes.word) {
+    if (this.quickSelect.boxes && typeof this.quickSelect.boxes.word == 'number') {
       // Image/PDF hit/word box
       start = this.quickSelect.boxes.word
     } else if (
@@ -1227,7 +1229,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function (node: any): number {
+      let getNodeIndex = function(node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1261,7 +1263,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     span = { start: start, end: end }
     // Attach box indices
-    if (this.quickSelect.boxes && this.quickSelect.boxes.start) {
+    if (this.quickSelect.boxes && typeof this.quickSelect.boxes.start == 'number') {
       span.boxStart = this.quickSelect.boxes.start
       span.boxEnd = this.quickSelect.boxes.end ? this.quickSelect.boxes.end : span.boxStart
     }
@@ -1283,10 +1285,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!(span.start >= 0) || !(span.end >= 0)) {
       return
     }
-    console.log('increment?', span)
     // Increment highlight array
     this.incrementHighlights(true, span.start, span.end, { start: span.boxStart, end: span.boxEnd })
-
     // Tell the server we've got a comment!
     this.createComment(span, type)
   }
@@ -1319,7 +1319,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
           return el.replace(/([\n])/g, '')
         })
 
@@ -1489,7 +1489,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public focusClass(focusArray, i: number, bi?: number): string {
     // Apply focus class to words of focused comments
-    if (focusArray[i] === true || (bi && (focusArray[i] && focusArray[i][bi]))) {
+    if (focusArray[i] === true || (typeof bi == 'number' && (focusArray[i] && focusArray[i][bi]))) {
       return 'h-f'
     } else {
       return ''
