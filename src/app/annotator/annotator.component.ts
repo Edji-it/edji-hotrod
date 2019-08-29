@@ -751,6 +751,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     let hitImage: boolean
     let hitBox: boolean
+    let wordIndex: number
     if (target.classList) {
       hitImage = target.classList.contains('reading-image')
       hitBox = target.classList.contains('w-box')
@@ -764,7 +765,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.optionsShow = false
         this.imageHotspotPlaceholder.preview = false
         let boxIndex: number = parseInt(target.getAttribute('index'))
-        let wordIndex: number = parseInt(target.getAttribute('w-index'))
+        wordIndex = parseInt(target.getAttribute('w-index'))
         if (
           this.quickSelect.boxes &&
           typeof this.quickSelect.boxes.start != 'undefined' &&
@@ -792,21 +793,24 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       } else {
         // Set click coordinates
         this.imageCoords = this.getRelativeCoords(event)
-        // when they click the picture, we need to create the selection for them
-        let range = Rangy.createRange()
-        range.selectNodeContents(target['parentNode'])
-        // this makes sure there are no other selections made
-        sel.setSingleRange(range)
         // When tapping image, clear in progress Quick Select
         this.clearQuickSelect()
+        // Set word index
+        wordIndex = target.getAttribute('index')
         // Create placeholder spot
         this.imageHotspotPlaceholder = {
-          index: target.getAttribute('index'),
+          index: wordIndex,
           x: this.imageCoords['x'],
           y: this.imageCoords['y'],
           preview: true,
         }
       }
+      // Set selection for image comments
+      // when they click the picture, we need to create the selection for them
+      let range = Rangy.createRange()
+      range.selectNodeContents(target['parentNode'])
+      // this makes sure there are no other selections made
+      sel.setSingleRange(range)
     } else {
       delete this.quickSelect.boxes
       // Functions as "click outside" for images
@@ -847,10 +851,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Set y position of comment options
       this.highlightY = focusY - scrollOffset + readingPad
       // Adjust y position for image comments
-      if (this.imageHotspotPlaceholder.preview == true) {
-        let yOnImage = this.imageHeight[this.imageHotspotPlaceholder.index]
+      if (this.imageHotspotPlaceholder.preview == true || !!this.quickSelect.boxes) {
+        let yOnImage = this.imageHeight[wordIndex]
         // Offset 10px to line up with hotspot
-        this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y / 100) * yOnImage - 10
+        this.highlightY = this.highlightY + (this.imageCoords.y / 100) * yOnImage - 10
       }
       // Show comment options
       this.optionsShow = true
