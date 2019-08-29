@@ -762,6 +762,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Determine SPOT or BOX
       if (hitBox) {
         this.optionsShow = false
+        this.imageHotspotPlaceholder.preview = false
         let boxIndex: number = parseInt(target.getAttribute('index'))
         let wordIndex: number = parseInt(target.getAttribute('w-index'))
         if (
@@ -818,20 +819,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    if (
+    let textSelected: boolean =
       sel &&
-      (this.imageHotspotPlaceholder.preview || this.quickSelect.boxes || sel.toString()) &&
+      sel.toString() &&
       ((sel.focusNode.classList && sel.focusNode.classList.contains('w')) ||
-        (sel.focusNode.parentNode.classList.contains('w') ||
-          sel.focusNode.parentNode.classList.contains('img-wrap'))) &&
-      ((sel.anchorNode.classList && sel.anchorNode.classList.contains('w')) ||
-        (sel.anchorNode.parentNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('img-wrap')))
-    ) {
+        sel.focusNode.parentNode.classList.contains('w'))
+
+    if (textSelected || this.imageHotspotPlaceholder.preview || !!this.quickSelect.boxes) {
       /**
        * Make sure selection exists, and is within highlightable content
        * - Runs when:
-       *      - Regular selection is being made
+       *      - Regular text selection is being made
        *      - Image hotspot is made
+       *      - Image word box highlight is made
        * - Should:
        *      - Clear Quick Select
        */
