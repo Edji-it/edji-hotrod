@@ -301,5 +301,10 @@ export class UploadPdfModalComponent implements OnInit {
         doc.disable_words = false
       }
     }
+    // Track PDF word highlight toggle
+    this.angulartics.eventTrack.next({
+      action: 'newReading_pdf_toggleWordHighlights' + (doc.disable_words ? 'Off' : 'On'),
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
   }
 }

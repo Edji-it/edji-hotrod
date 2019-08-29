@@ -259,9 +259,9 @@ export class ProjectService {
     return this._http
       .get(
         this._auth.getUrl() +
-        '/api/v1/projects/' +
-        encodeURIComponent(projectCode) +
-        '?pop[]=reading_id&pop[]=teacher&pop[]=co_owners',
+          '/api/v1/projects/' +
+          encodeURIComponent(projectCode) +
+          '?pop[]=reading_id&pop[]=teacher&pop[]=co_owners',
         this._auth.getOptions(),
       )
       .pipe(
@@ -780,8 +780,18 @@ export class ProjectService {
         reading_owner: this.project.owner_id,
       })
       // fire an analytic event here for tracking purposes
+      let contextTarget = ''
+      if (commentContext === 'comment') {
+        if (comment.loc && typeof comment.loc.x == 'number' && !comment.text && !comment.box) {
+          contextTarget = 'OnImageSpot'
+        } else if (comment.box) {
+          contextTarget = 'OnImageWord'
+        } else {
+          contextTarget = 'OnText'
+        }
+      }
       this.angulartics.eventTrack.next({
-        action: commentContext + '_' + comment.type + '_create',
+        action: commentContext + '_' + comment.type + contextTarget + '_create',
         properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
       })
     }
