@@ -6,6 +6,7 @@ import { MediaService, AuthService } from '../../_services'
 import { DeletePdfMiniModal } from './delete-pdf-mini-modal/delete-pdf-mini-modal.component'
 import { LockerService } from '../../_services/locker.service'
 import { DocumentSpark } from '../../shared/datatypes'
+import { Angulartics2 } from 'angulartics2'
 
 @Component({
   selector: 'upload-pdf-modal',
@@ -30,7 +31,12 @@ export class UploadPdfModalComponent implements OnInit {
   public pdfFileInputId: string = 'pdfFileInput'
   public confirmDelete: boolean = false
 
-  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) { }
+  constructor(
+    private _locker: LockerService,
+    private _media: MediaService,
+    private _auth: AuthService,
+    private angulartics: Angulartics2,
+  ) {}
 
   ngOnInit() {
     // Load previously uploaded docs
@@ -116,6 +122,12 @@ export class UploadPdfModalComponent implements OnInit {
           '<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.'
       },
     )
+
+    // Track PDF Upload event
+    this.angulartics.eventTrack.next({
+      action: 'newReading_pdf_upload',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
   }
 
   // Run check until document is confirmed as processed
@@ -165,7 +177,7 @@ export class UploadPdfModalComponent implements OnInit {
             }, 3000)
             console.error(err)
           },
-      )
+        )
     }
   }
 
@@ -238,7 +250,7 @@ export class UploadPdfModalComponent implements OnInit {
         error => {
           console.log(error)
         },
-    )
+      )
   }
 
   /**
@@ -267,6 +279,12 @@ export class UploadPdfModalComponent implements OnInit {
       }
       images.push(image)
     }
+    // Track PDF instert event
+    this.angulartics.eventTrack.next({
+      action: 'newReading_pdf_insert' + (images.length > 1 ? 'Page' : 'All'),
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
+    // Send images to New Reading
     this.returnImage.emit(images)
     this.closeModal.emit()
   }
