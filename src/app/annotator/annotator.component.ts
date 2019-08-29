@@ -1453,43 +1453,33 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // If a filter is applied, use filter highlights
-    if (this.filterHighlightArray) {
-      if (this.filterHighlightArray[i] && this.filterHighlightArray[i][bi]) {
-        highlightCount += this.filterHighlightArray[i][bi]
+    if (filterHighlightArray) {
+      if (filterHighlightArray[i] && filterHighlightArray[i][bi]) {
+        highlightCount += filterHighlightArray[i][bi]
       }
     } else {
       // Show student highlights
-      if (
-        (this.project.heat_vision || this.project.isTeaching) &&
-        this.highlightArray[i] &&
-        this.highlightArray[i][bi]
-      ) {
-        highlightCount += this.highlightArray[i][bi]
+      if ((projectHeat_vision || projectIsTeaching) && highlightArray[i] && highlightArray[i][bi]) {
+        highlightCount += highlightArray[i][bi]
       }
       // Show user's own highlights and teacher highlights
-      if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi]) {
-        highlightCount += this.alwaysHighlightArray[i][bi]
+      if (alwaysHighlightArray[i] && alwaysHighlightArray[i][bi]) {
+        highlightCount += alwaysHighlightArray[i][bi]
       }
     }
 
     return classString + ' h-' + highlightCount
   }
 
-  getBoxQuickSelect(i: number, bi: number): string {
-    if (this.quickSelect.boxes && (bi == this.quickSelect.boxes.start || bi == this.quickSelect.boxes.end)) {
-      return 'quick-select--click'
-    }
-    return ''
-  }
-
   /**
    * Get word focus class (keep it LIGHT)
+   * => Pure function, all vars provided as arguments
    * @param focusArray
    * @param i word index
    */
   public focusClass(focusArray, i: number, bi?: number): string {
     // Apply focus class to words of focused comments
-    if (focusArray[i] === true || (typeof bi == 'number' && (focusArray[i] && focusArray[i][bi]))) {
+    if (focusArray[i] === true || (typeof bi == 'number' && (focusArray[i] && focusArray[i][bi] === true))) {
       return 'h-f'
     } else {
       return ''
@@ -1498,11 +1488,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Get Quick Select class (keep it LIGHT)
+   * => Pure function, all vars provided as arguments
    * @param quickSelect anchor/focus object
    * @param i word index
+   * @param bi (optional) word Box index
    */
-  public quickSelectClass(quickSelect, i): string {
+  public quickSelectClass(quickSelect, i, bi?): string {
     if (i === quickSelect.focus || i === quickSelect.anchor) {
+      return 'quick-select--click'
+    } else if (quickSelect.boxes && (bi == quickSelect.boxes.start || bi == quickSelect.boxes.end)) {
       return 'quick-select--click'
     } else {
       return ''

@@ -149,7 +149,7 @@ scroll-progress([scrollProgress]="currentScroll")
                             [style.width]="box.w + '%'",
                             [attr.w-index]="i",
                             [attr.index]="bi",
-                            [ngClass]="[getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i, bi), getBoxQuickSelect(i, bi), focusClass(focusArray, i, bi)]"
+                            [ngClass]="[getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i, bi), quickSelectClass(quickSelect, i, bi), focusClass(focusArray, i, bi)]"
                         )
                     //- Placeholder image hotspot
                     .hotspot(
