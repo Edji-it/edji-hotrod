@@ -589,6 +589,8 @@ $quickBlue: #6fbaf887; //#55aef7;
   // Prevent text from "washing out" by blending
   background-blend-mode: multiply !important;
   mix-blend-mode: multiply;
+  // Allows for GPU optimization
+  transform: translate3d(0, 0, 1px);
 }
 
 // Focus Highlight styles (for on comment hover)
