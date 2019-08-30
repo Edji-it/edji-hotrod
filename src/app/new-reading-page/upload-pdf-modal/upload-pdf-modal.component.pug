@@ -18,6 +18,7 @@
               | check out our Guide page here
             | .
           .alert.alert-success(*ngIf="wordHighlightsEnabled")
+            .badge.badge-success.badge-dot
             b([innerHtml]="':tada: Now with word highlighting!' | emojione")
             | You and your students can highlight the text in newly uploaded PDFs.
           h3.pb-2 Upload a new PDF to add

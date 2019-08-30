@@ -126,6 +126,7 @@ nav-bar(
               //- Upload PDF Button
                   - Opens Modal
               a#buttonUploadPdf.btn.btn-icon--plain((click)="showPdfUploadModal = true")
+                .badge.badge-success.badge-dot(*ngIf="newWordHighlights")
                 img(title="Add PDF" src="/assets/images/icon-pdf.svg")
               //- Insert Question Button (Hero) - NOT DONE
                   - Modal not needed.

@@ -14,6 +14,7 @@ import {
   AcademyService,
   MessageService,
   MediaService,
+  SecretSwitchesService,
 } from '../_services'
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
@@ -178,6 +179,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
     dynamicTitleMaxItems: 4,
   }
 
+  /**
+   * TEMP: New feature flag (word highlights)
+   */
+  public newWordHighlights: boolean
+
   constructor(
     private _route: ActivatedRoute,
     private _readings: ReadingService,
@@ -190,6 +196,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _academy: AcademyService,
     private _messages: MessageService,
     private _media: MediaService,
+    private _switches: SecretSwitchesService,
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -267,6 +274,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
+      this._switches.secretSwitchesUpdates.subscribe(switches => {
+        if (switches['pdfWordHighlighting']) {
+          this.newWordHighlights = switches['pdfWordHighlighting']
+        }
+      }),
     )
 
     this._title.setTitle('Edji | New Reading')
