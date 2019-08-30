@@ -2,11 +2,12 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { MediaService, AuthService } from '../../_services'
+import { MediaService, AuthService, SecretSwitchesService } from '../../_services'
 import { DeletePdfMiniModal } from './delete-pdf-mini-modal/delete-pdf-mini-modal.component'
 import { LockerService } from '../../_services/locker.service'
 import { DocumentSpark } from '../../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'upload-pdf-modal',
@@ -18,6 +19,7 @@ export class UploadPdfModalComponent implements OnInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() returnImage: EventEmitter<any> = new EventEmitter()
 
+  private subscriptions: Subscription[] = []
   private newDocsIds: string[] = []
   private uploadUrl: string = '//grapple-dev.edji.it'
   public selectedIndex: number = 0
@@ -31,11 +33,18 @@ export class UploadPdfModalComponent implements OnInit {
   public pdfFileInputId: string = 'pdfFileInput'
   public confirmDelete: boolean = false
 
+  /**
+   * Temporary: PDF word highlight flag
+   * @todo Clean out after full roll out
+   */
+  public wordHighlightsEnabled: boolean
+
   constructor(
     private _locker: LockerService,
     private _media: MediaService,
     private _auth: AuthService,
     private angulartics: Angulartics2,
+    private _switches: SecretSwitchesService,
   ) {}
 
   ngOnInit() {
@@ -63,6 +72,14 @@ export class UploadPdfModalComponent implements OnInit {
           })
         }
       })
+
+    this.subscriptions.push(
+      this._switches.secretSwitchesUpdates.subscribe(switches => {
+        if (switches['pdfWordHighlighting']) {
+          this.wordHighlightsEnabled = switches['pdfWordHighlighting']
+        }
+      }),
+    )
   }
 
   // Set 'file' variable and validate file
@@ -265,7 +282,8 @@ export class UploadPdfModalComponent implements OnInit {
       doc.pages.forEach((page, index) => {
         let image = { url: page }
         // If pdf data is available, attach it
-        if (doc.pdf && doc.pdf.pages && !doc.disable_words) {
+        // TEMP: Word Highlight secret switch
+        if (this.wordHighlightsEnabled && doc.pdf && doc.pdf.pages && !doc.disable_words) {
           image['data'] = doc.pdf.pages[index]
         }
         images.push(image)
