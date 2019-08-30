@@ -768,6 +768,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         wordIndex = parseInt(target.getAttribute('w-index'))
         if (
           this.quickSelect.boxes &&
+          this.quickSelect.boxes.word === wordIndex &&
           typeof this.quickSelect.boxes.start != 'undefined' &&
           !this.quickSelect.boxes.end
         ) {
