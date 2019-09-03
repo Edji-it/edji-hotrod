@@ -409,12 +409,14 @@ export class AuthService implements CanActivate {
 
             // Loop through and merge arrays
             let propsToCheck = ['prefs', 'media']
+            let childPropsToOverwrite = ['recentEmoji']
             for (let n = 0; n < propsToCheck.length; n++) {
               let propA = propsToCheck[n]
               for (let prop in mergedUser[propA]) {
                 if (
                   mergedUser[propA][prop] &&
-                  Object.prototype.toString.call(mergedUser[propA][prop]) === '[object Array]'
+                  Object.prototype.toString.call(mergedUser[propA][prop]) === '[object Array]' &&
+                  childPropsToOverwrite.indexOf(prop) < 0
                 ) {
                   if (updatedUser[propA] && updatedUser[propA][prop]) {
                     mergedUser[propA][prop] = updatedUser[propA][prop].concat(mergedUser[propA][prop])
