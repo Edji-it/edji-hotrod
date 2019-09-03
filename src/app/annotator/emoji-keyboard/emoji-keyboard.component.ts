@@ -48,6 +48,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   public filtersLastIndex: number = 1
 
   // For search
+  public searchTerm: string = ''
   public allEmoji: string[] = []
   public emojiResults: string[] = []
 
@@ -95,6 +96,9 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
    * Fired when active state of Keyboard is toggled off
    */
   onInactivated() {
+    // Clear search
+    this.searchTerm = ""
+    this.emojiResults = []
     // Update user object with recent emoji
     let user = this._auth.getUser()
     if (!user.prefs) {
