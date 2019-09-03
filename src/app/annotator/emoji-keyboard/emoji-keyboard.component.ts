@@ -861,7 +861,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     if (this._auth.getUser().prefs && this._auth.getUser().prefs.recentEmoji) {
       this.emojifilters[0].emoji = this._auth.getUser().prefs.recentEmoji
     }
-    this.filtersLastIndex = this.emojifilters.length - 1
+    this.filtersLastIndex = this.emojifilters.length
     // Build "all" emoji array for searching against
     this.emojifilters.forEach(filter => {
       if (filter.emoji && filter.emoji[0]) {
@@ -928,6 +928,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   goToCategory(index): void {
     let scrollOffset = this.emojiScrollArea.nativeElement.querySelector('#category' + index).offsetTop
     this.emojiScrollArea.nativeElement.scrollTop = scrollOffset
+    this.scrollAreaOffset = this.emojifilters[index]['scrollY']
   }
 
   scrollUpdate(event) {
