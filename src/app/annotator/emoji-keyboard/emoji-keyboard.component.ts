@@ -851,17 +851,46 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   ]
   public filtersLastIndex: number = 1
 
-  constructor(private _locker: LockerService, private _auth: AuthService, private _comments: CommentService) {}
+  // For search
+  public allEmoji: string[] = []
+  public emojiResults: string[] = []
+
+  constructor(private _locker: LockerService, private _auth: AuthService, private _comments: CommentService) { }
 
   ngOnInit() {
     if (this._auth.getUser().prefs && this._auth.getUser().prefs.recentEmoji) {
       this.emojifilters[0].emoji = this._auth.getUser().prefs.recentEmoji
     }
     this.filtersLastIndex = this.emojifilters.length - 1
+    // Build "all" emoji array for searching against
+    this.emojifilters.forEach(filter => {
+      if (filter.emoji && filter.emoji[0]) {
+        this.allEmoji = this.allEmoji.concat(filter.emoji)
+      }
+    })
   }
 
   ngAfterViewInit() {
     this.updateScrollValues()
+  }
+
+
+  /**
+   * Filters all emoji for those matching search term
+   * @param searchTerm emoji short code
+   */
+  getEmojiResults(searchTerm: string) {
+    if (!searchTerm) {
+      this.emojiResults = []
+      return
+    }
+    // Assume spaces are underscores
+    searchTerm = searchTerm.replace(' ', '_')
+    // Set to lowercase
+    searchTerm = searchTerm.toLowerCase()
+    this.emojiResults = this.allEmoji.filter(name => {
+      return name.indexOf(searchTerm) > -1
+    })
   }
 
   /**
