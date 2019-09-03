@@ -585,7 +585,6 @@ export var emojiFilters: EmojiFilter[] = [
       'computer',
       'keyboard',
       'desktop',
-      'video_game',
       'printer',
       'mouse_three_button',
       'trackball',

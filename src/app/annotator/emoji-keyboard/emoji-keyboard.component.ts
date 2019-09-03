@@ -53,6 +53,12 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
 
   constructor(private _locker: LockerService, private _auth: AuthService, private _comments: CommentService) {
     this.emojifilters = emojiFilters
+    // Build "all" emoji array for searching against
+    this.emojifilters.forEach((filter, index) => {
+      if (filter.emoji && filter.emoji[0] && index != 0) { // We exclude the recent emoji array 
+        this.allEmoji = this.allEmoji.concat(filter.emoji)
+      }
+    })
   }
 
   ngOnInit() {
@@ -60,12 +66,6 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
       this.emojifilters[0].emoji = this._auth.getUser().prefs.recentEmoji
     }
     this.filtersLastIndex = this.emojifilters.length
-    // Build "all" emoji array for searching against
-    this.emojifilters.forEach(filter => {
-      if (filter.emoji && filter.emoji[0]) {
-        this.allEmoji = this.allEmoji.concat(filter.emoji)
-      }
-    })
   }
 
   ngAfterViewInit() {
