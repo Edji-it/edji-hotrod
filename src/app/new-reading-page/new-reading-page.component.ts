@@ -57,6 +57,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public showHeroParam: boolean = false
   public showReadingPreviewModal: boolean
 
+  // Used to show large reading warning
+  // APPROXIMATE VALUES not designed for user facing display
+  public wordCount: number = 0
+  public wordBoxCount: number = 0
+
   public errorObject = {
     readingError: '',
   }
@@ -536,6 +541,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // Attach word "boxes" to the word
           if (imgData && imgData.data && imgData.data.word_boxes) {
             imgWordObj['boxes'] = imgData.data.word_boxes
+            this.wordBoxCount += imgWordObj['boxes'].length
           }
         }
         this.words.push(imgWordObj)
@@ -731,6 +737,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
     // Clear parsed words array
     this.words = []
     this.questions = []
+    // Clear stat values
+    this.wordCount = 0
+    this.wordBoxCount = 0
 
     // Process reading html into useful Words Array
     let editors: any = document.querySelectorAll('#readingPageForm #angularMediumEditor')
@@ -787,6 +796,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
       // Loop through all Reading html elements
       this.extractTextNodes(renderHtml)
     }
+    // Track current word count (divide by two to roughly remove spaces)
+    this.wordCount = (this.words.length + 1) / 2
 
     delete reading['label']
     // reading.html = this.readingHtml
@@ -835,6 +846,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       return false
     } else {
       // Update save state: Attempting to save
+      this.errorObject = { readingError: '' }
       this.saveState = 'saving'
     }
     // Prepare Reading object
@@ -1134,6 +1146,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this.readingHtml[i].question.new = true
       this.readingHtml[i].question.question_number = i
     }
+    setTimeout(() => {
+      // Trigger formatReading to fetch image data and check word counts
+      this.formatReading(this.reading.html)
+    })
   }
 
   /**
