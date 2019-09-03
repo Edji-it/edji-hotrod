@@ -955,12 +955,13 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     // Update recent emojis
     if (index < 0) {
       this.emojifilters[0].emoji.unshift(emojiLabel)
-      if (this.emojifilters[0].emoji.length > 20) {
-        this.emojifilters[0].emoji.pop()
-      }
     } else {
       this.emojifilters[0].emoji.splice(index, 1)
       this.emojifilters[0].emoji.unshift(emojiLabel)
+    }
+    // Limit to 20
+    if (this.emojifilters[0].emoji.length > 20) {
+      this.emojifilters[0].emoji = this.emojifilters[0].emoji.slice(0, 19)
     }
     // Save to localstorage (which is then saved to the user object)
     this._locker.set('recentEmojis', this.emojifilters[0].emoji)
