@@ -918,6 +918,10 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
 
   onActivated() {
     document.querySelector('.main').className = 'main keyboard-adjust'
+    // Update filter scroll positions after loading all emoji
+    setTimeout(() => {
+      this.updateScrollValues()
+    }, 500)
   }
 
   // When clicking a category, jump to that section
