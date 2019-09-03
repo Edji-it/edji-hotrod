@@ -80,7 +80,7 @@
             .card-group.card-group--placeholder(*ngIf="doc.converted != true")
               .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired && !doc.error")
                 i.icon.icon-loading.group-alert__icon
-                b Converting Document
+                b Preparing your PDF
                 br
                 | Thank you for your patience! Some documents, especially those with many pages, can take several minutes.
               .alert.alert-warning.group-alert(*ngIf="doc.expired")
