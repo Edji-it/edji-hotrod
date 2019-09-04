@@ -149,7 +149,7 @@ export class UploadPdfModalComponent implements OnInit {
 
   // Run check until document is confirmed as processed
   checkConversion(doc): void {
-    let EXPIRE_TIME = 10 * 60 * 1000 // 10 min
+    let EXPIRE_TIME = 5 * 60 * 1000 // 5 min (Server will timeout within 4 min)
     let fileId = doc.uuid
 
     if (doc && doc.pages && doc.pages[0]) {
@@ -164,6 +164,9 @@ export class UploadPdfModalComponent implements OnInit {
         .pipe(take(1))
         .subscribe(
           data => {
+            // Get date value in ms for comparison
+            let requestedTime = new Date(doc.requestedTime).getUTCMilliseconds()
+
             if (data.converted === true) {
               // Mark document as converted
               this.newDocsIds.push(data.uuid)
@@ -171,7 +174,7 @@ export class UploadPdfModalComponent implements OnInit {
             } else if (data.error) {
               // Pass doc with error
               this.updateUploadedDoc(data)
-            } else if (doc.requestedTime && Date.now() - doc.requestedTime > EXPIRE_TIME) {
+            } else if (requestedTime && Date.now() - requestedTime > EXPIRE_TIME) {
               // If this is old, expire the document
               data.expired = true
               this.updateUploadedDoc(data)

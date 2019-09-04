@@ -92,7 +92,7 @@ nav-bar(
             //- Too large warning
             .alert.alert-warning(*ngIf="(wordCount + wordBoxCount) > 3000")
               b Reading may be too large
-              p Readings with too much content may perform slowly, especially on older devices. Exceeding 3000+ words or using too many word-heavy PDF pages will display this warning. For the best, snappy Edji experience, please reduce the amount of content.
+              p.mb-0 Readings with too much content may perform slowly, especially on older devices. Exceeding 3000+ words or using too many word-heavy PDF pages will display this warning. For the best, snappy Edji experience, please reduce the amount of content.
             div(*ngFor="let readingPart of readingHtml; let i=index")
               edji-question(
                 *ngIf="readingPart.question",
