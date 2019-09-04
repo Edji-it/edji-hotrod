@@ -712,7 +712,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   clearQuickSelect(): void {
-    if (this.quickSelect.anchor != null) {
     if (this.quickSelect.anchor != null || this.quickSelect.boxes) {
       // We can safely clear all highlight values
       this.focusArray = []
