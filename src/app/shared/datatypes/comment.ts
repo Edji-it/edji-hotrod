@@ -34,6 +34,12 @@ export interface BaseComment {
   url?: string
   text?: string
   loc?: { x: number; y: number }
+  box?: {
+    start: number;
+    end: number;
+    start_x: number;
+    start_y: number;
+  } // Hit box/word indices for images/pdfs
   lineY?: number // Used to get comments for a line (annotator, comment pane)
   imageY?: number // Used for positioning of comments in rows on images
   reply_to?: string

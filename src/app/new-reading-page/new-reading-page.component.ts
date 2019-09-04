@@ -6,7 +6,16 @@ import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
-import { AuthService, ProjectService, ReadingService, UtilToolService, AcademyService, MessageService } from '../_services'
+import {
+  AuthService,
+  ProjectService,
+  ReadingService,
+  UtilToolService,
+  AcademyService,
+  MessageService,
+  MediaService,
+  SecretSwitchesService,
+} from '../_services'
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
@@ -48,6 +57,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public showHeroParam: boolean = false
   public showReadingPreviewModal: boolean
 
+  // Used to show large reading warning
+  // APPROXIMATE VALUES not designed for user facing display
+  public wordCount: number = 0
+  public wordBoxCount: number = 0
+
   public errorObject = {
     readingError: '',
   }
@@ -83,6 +97,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   // Used for processing reading
   public words: any[] = []
   public previousWordY: number = 0
+  public imageDataCache: { url: string; data: { word_boxes: any } }[] = [] // Temporary store for image data, so we don't have to continuosly GET it
 
   // Configuration Options for Medium Editor
   public mediumEditorConfig: any = {
@@ -169,6 +184,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
     dynamicTitleMaxItems: 4,
   }
 
+  /**
+   * TEMP: New feature flag (word highlights)
+   */
+  public newWordHighlights: boolean
+
   constructor(
     private _route: ActivatedRoute,
     private _readings: ReadingService,
@@ -179,7 +199,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _title: Title,
     private _auth: AuthService,
     private _academy: AcademyService,
-    private _messages: MessageService
+    private _messages: MessageService,
+    private _media: MediaService,
+    private _switches: SecretSwitchesService,
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -257,6 +279,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
+      this._switches.secretSwitchesUpdates.subscribe(switches => {
+        if (switches['pdfWordHighlighting']) {
+          this.newWordHighlights = switches['pdfWordHighlighting']
+        }
+      }),
     )
 
     this._title.setTitle('Edji | New Reading')
@@ -266,6 +293,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub: Subscription) => {
       sub.unsubscribe()
     })
+    // Remove rendered reading element (used in formatReading())
+    let renderedEl = document.querySelector('#renderedReading')
+    if (renderedEl && renderedEl.parentElement) {
+      renderedEl.parentElement.removeChild(renderedEl)
+    }
   }
 
   /**
@@ -333,7 +365,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           console.error(err)
         },
-      )
+    )
   }
 
   /**
@@ -447,7 +479,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * Pushes text nodes as formatted objects into this.words
    * @param element Root element to start crawling from
    */
-  private extractTextNodes(els: any, ancestorTags?: string[], ignoreText?: boolean) {
+  private async extractTextNodes(els: any, ancestorTags?: string[], ignoreText?: boolean) {
     // This functional can except an array for nodes or a singular node
     // If singular, pop into an array
     if (!els) {
@@ -465,7 +497,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
         ancestorTags = []
       }
       let inheritedTags = ancestorTags.slice()
-
       // let nodes = element.childNodes
       // Detect line breaks
       let currentTop = this.getNodeY(element) ? this.getNodeY(element) : this.previousWordY
@@ -482,11 +513,38 @@ export class NewReadingPage implements OnInit, OnDestroy {
       }
 
       if (tagName === 'img') {
-        this.words.push({
+        let imgUrl = element.getAttribute('src')
+        let imgWordObj = {
           str: '', // to be used for image title
-          url: element.getAttribute('src'),
-          styles: ['img'],
-        })
+          url: imgUrl,
+          styles: [],
+        }
+        // Use "img" styles to indicate an image tag
+        imgWordObj.styles.push('img')
+        /**
+         * Processing for including OCR data
+         */
+        let imgDataUrl = element.getAttribute('edji-data-src')
+        if (imgDataUrl) {
+          let imgData
+          // Determine if we have OCR JSON data for image already
+          imgData = this.imageDataCache.find(data => {
+            return data.url === imgDataUrl
+          })
+          // Try to get the json data for pdf (if legacy file or user skips OCR, this will be undefined)
+          if (!imgData || !imgData.data) {
+            imgData = { url: imgDataUrl }
+            imgData.data = await this._media.getDocumentData(imgDataUrl).toPromise()
+            // Store image data locally so we don't need to GET on each save
+            this.imageDataCache.push(imgData)
+          }
+          // Attach word "boxes" to the word
+          if (imgData && imgData.data && imgData.data.word_boxes) {
+            imgWordObj['boxes'] = imgData.data.word_boxes
+            this.wordBoxCount += imgWordObj['boxes'].length
+          }
+        }
+        this.words.push(imgWordObj)
       }
 
       if (tagName === 'a' && !ignoreText) {
@@ -524,14 +582,18 @@ export class NewReadingPage implements OnInit, OnDestroy {
           let nodeWord = nodeWords[wIndex]
           let word = {
             str: nodeWord,
-            styles: [].concat(inheritedTags),
+            styles: [],
           }
+          // Set inherited tags
+          word.styles = word.styles.concat(inheritedTags)
           let addBr = false
-          if (index == 0 && wIndex == 0) {
-            word.styles.push(tagName + '-a')
-          }
-          if (index == els.length - 1 && wIndex == nodeWords.length - 1) {
-            word.styles.push(tagName + '-z')
+          if (tagName) {
+            if (index == 0 && wIndex == 0) {
+              word.styles.push(tagName + '-a')
+            }
+            if (index == els.length - 1 && wIndex == nodeWords.length - 1) {
+              word.styles.push(tagName + '-z')
+            }
           }
           if (typeof word.str == 'string' && word.str.trim().length < 1) {
             // As a space saving technique, we save spaces as empty object
@@ -669,15 +731,18 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * Interprets reading html and decorates reading properties
    * @param readingForm "raw" reading from form fields
    */
-  private formatReading(readingForm: any): Reading {
+  public formatReading(readingForm: any): Reading {
     // Create reading object to submit based on form object parameter
     let reading: Reading = Object.assign({}, readingForm)
     // Clear parsed words array
     this.words = []
     this.questions = []
+    // Clear stat values
+    this.wordCount = 0
+    this.wordBoxCount = 0
 
     // Process reading html into useful Words Array
-    let editors = this.el.nativeElement.querySelectorAll('#angularMediumEditor')
+    let editors: any = document.querySelectorAll('#readingPageForm #angularMediumEditor')
     let concatHtml = ''
     // Loop through Medium-Editor elements, and get child elements???
 
@@ -731,6 +796,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
       // Loop through all Reading html elements
       this.extractTextNodes(renderHtml)
     }
+    // Track current word count (divide by two to roughly remove spaces)
+    this.wordCount = (this.words.length + 1) / 2
 
     delete reading['label']
     // reading.html = this.readingHtml
@@ -779,6 +846,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       return false
     } else {
       // Update save state: Attempting to save
+      this.errorObject = { readingError: '' }
       this.saveState = 'saving'
     }
     // Prepare Reading object
@@ -891,19 +959,28 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * Takes an array of objects with a title and a url for an Image, formats, then inserts into reading
    * @param images Array of image objects to be inserted
    */
-  public addImages(images: { title: string; url: string }[]) {
+  public addImages(images: { title: string; url: string; data?: string }[]) {
+    // conveninent image tag builder
+    function buildImageTag(image: { url?: string; title?: string; data?: string }): string {
+      if (image.data) {
+        return '<img src="' + image.url + '" title="' + image.title + '" edji-data-src="' + image.data + '" />'
+      } else {
+        return '<img src="' + image.url + '" title="' + image.title + '" />'
+      }
+    }
+
     if (this.insertNode && this.insertNode.parentNode) {
       // If there is a reference node for cursor position, insert at cursor
-      images.forEach(image => {
-        let imgString = '<img src="' + image.url + '" title="' + image.title + '" />'
+      images.forEach(async image => {
+        let imgString = buildImageTag(image)
         this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
         this.insertAfter(this.insertNode.parentNode, '<p>&#65279;</p>', this.insertNode)
       })
     } else {
       // If no reference node (field has not been interacted with) insert image at end
       let imgString = ''
-      images.forEach(image => {
-        imgString += '<img src="' + image.url + '" title="' + image.title + '" /><p>&#65279;</p>'
+      images.forEach(async image => {
+        imgString += buildImageTag(image) + '<p>&#65279;</p>'
       })
       this.readingHtml[this.readingHtml.length - 1].text += imgString
     }
@@ -1069,6 +1146,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this.readingHtml[i].question.new = true
       this.readingHtml[i].question.question_number = i
     }
+    setTimeout(() => {
+      // Trigger formatReading to fetch image data and check word counts
+      this.formatReading(this.reading.html)
+    })
   }
 
   /**
@@ -1086,6 +1167,13 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (this.validateReading(form)) {
       this.showReadingPreviewModal = true
     }
+  }
+
+  /**
+   * Calculates if reading is potentially too heavy
+   */
+  public isLargeReading(wordCount, wordBoxCount) {
+    return (wordCount + wordBoxCount) > 3000
   }
 }
 

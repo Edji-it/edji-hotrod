@@ -73,8 +73,8 @@ describe('Project Page', () => {
       project.emojiCommentSave.click()
 
       // delete the comment
-      browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, 'could not find delete button')
-      project.emojiCommentDelete.click()
+      browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
+      project.commentDelete.click()
 
       // close the comment pane
       browser.wait(EC.elementToBeClickable(project.closePane), 5000, 'could not find close pane button')
@@ -84,7 +84,9 @@ describe('Project Page', () => {
     it('should make a comment on an image by clicking on image', async () => {
       // Find and click on image
       browser.wait(EC.presenceOf(project.image), 10000, 'never found the image')
-      await browser.executeScript('window.scrollTo(0, document.querySelector("#annotatorContent .img-wrap > img").scrollTop);')
+      await browser.executeScript(
+        'window.scrollTo(0, document.querySelector("#annotatorContent .img-wrap > img").scrollTop);',
+      )
       browser.wait(EC.elementToBeClickable(project.image), 5000, 'never scrolled and saw the image')
       project.image.click()
       // click the tool tip
@@ -102,8 +104,8 @@ describe('Project Page', () => {
         .perform()
 
       // delete the comment
-      browser.wait(EC.elementToBeClickable(project.emojiCommentDelete), 5000, 'could not find delete button')
-      project.emojiCommentDelete.click()
+      browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
+      project.commentDelete.click()
       // make sure it's deleted
       browser.wait(EC.invisibilityOf(project.textCommentInput), 5000, 'text comment never went away after deleting it')
       // close the comment pane
@@ -149,10 +151,14 @@ describe('Project Page', () => {
       project.audioPause.click()
 
       // Delete the audio comment
-      browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
-      project.commentDelete.click()
+      browser.wait(EC.elementToBeClickable(project.commentDeleteLast), 5000, 'could not find delete button')
+      project.commentDeleteLast.click()
       // Verify the audio comment is gone
-      browser.wait(EC.invisibilityOf(project.commentDelete), 5000, 'audio comment never went away after deleting it')
+      browser.wait(
+        EC.invisibilityOf(project.commentDeleteLast),
+        5000,
+        'audio comment never went away after deleting it',
+      )
     })
 
     it('should make a reply comment as a logged in user', () => {
@@ -246,7 +252,11 @@ describe('Project Page', () => {
       project.getPage(`test-live?comment=${commentId}`)
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
       // verify the query param shows up in the url
-      browser.wait(EC.urlContains(`?comment=${commentId}`), 15000, 'live comment query param never showed in project url')
+      browser.wait(
+        EC.urlContains(`?comment=${commentId}`),
+        15000,
+        'live comment query param never showed in project url',
+      )
       // verify the comment pane opens
       browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
       // verify we scroll to the reply and can see it
@@ -257,11 +267,73 @@ describe('Project Page', () => {
       project.getPage(`test-live?comment=${replyId}&parent=${commentId}`)
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
       // verify the query param shows up in the url
-      browser.wait(EC.urlContains(`?comment=${replyId}&parent=${commentId}`), 15000, 'live reply query param never showed in project url')
+      browser.wait(
+        EC.urlContains(`?comment=${replyId}&parent=${commentId}`),
+        15000,
+        'live reply query param never showed in project url',
+      )
       // verify the comment pane opens
       browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
       // verify we scroll to the reply and can see it
-      browser.wait(EC.visibilityOf(element(by.css(`.replyCommentBlock[replyId="${replyId}"]`))), 5000, 'never found the reply')
+      browser.wait(
+        EC.visibilityOf(element(by.css(`.replyCommentBlock[replyId="${replyId}"]`))),
+        5000,
+        'never found the reply',
+      )
+    })
+  })
+
+  describe('Word highlight comment on a PDF image', async () => {
+    beforeAll(() => {
+      project.getPage('test-pdf')
+      guestForm.loginAsGuest()
+      browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
+    })
+
+    afterAll(() => {
+      sidebar.logout()
+    })
+
+    it('should make a comment on an image by clicking two word boxes', async () => {
+      // Find and click on image
+      browser.wait(EC.presenceOf(project.image), 10000, 'never found the image')
+      await browser.executeScript(
+        'window.scrollTo(0, document.querySelector("#annotatorContent .img-wrap > img").scrollTop);',
+      )
+      let firstWordBox = project.imageWordBoxes.first()
+      let thirdWordBox = project.imageWordBoxes.get(2)
+      browser.wait(EC.elementToBeClickable(firstWordBox), 5000, 'did not find clickable word boxes')
+      firstWordBox.click()
+      browser.sleep(200) // allow for quick select animation
+      thirdWordBox.click()
+      browser.sleep(200) // allow for quick select animation
+      // Verify word boxes gained focus higlight class
+      expect(firstWordBox.getAttribute('class')).toContain('h-f')
+      expect(thirdWordBox.getAttribute('class')).toContain('h-f')
+      // click the tool tip
+      project.addTextComment()
+      // add some text to the comment
+      browser.wait(EC.presenceOf(project.textCommentInput), 5000, "couldn't see the text comment")
+      browser
+        .actions()
+        .sendKeys('test comment')
+        .perform()
+      // Press ENTER to save
+      browser
+        .actions()
+        .sendKeys(protractor.Key.ENTER)
+        .perform()
+      // Verify selected text from PDF display with comment
+      let annotatedText = await project.commentAnnotatedText.getText()
+      expect(annotatedText).toContain('Page Page Page')
+      // delete the comment
+      browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
+      project.commentDelete.click()
+      // make sure it's deleted
+      browser.wait(EC.invisibilityOf(project.textCommentInput), 5000, 'text comment did not go away after deleting it')
+      // close the comment pane
+      browser.wait(EC.elementToBeClickable(project.closePane), 5000, 'could not find close pane button')
+      project.closePane.click()
     })
   })
 })

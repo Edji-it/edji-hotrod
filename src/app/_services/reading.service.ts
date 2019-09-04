@@ -212,6 +212,9 @@ export class ReadingService {
   }
 
   public setReadingObj(reading: Reading): void {
+    if (!reading._id) {
+      return
+    }
     // Decorate word objects
     let wordCount = reading.words.length
     for (let i = 0; i < wordCount; i++) {
@@ -243,6 +246,54 @@ export class ReadingService {
       this.readingValue = reading
       this.readingSource.next(this.readingValue)
     }
+    // Check for PDF words
+    // if (reading.words && reading.words.length > 0) {
+    //   for (let i = 0; i < reading.words.length; i++) {
+    //     let word = reading.words[i]
+    //     if (word.ocr) {
+    //       this.getDataForPDF(word.ocr.id, word.ocr.page).then(boxes => {
+    //         word.boxes = boxes
+    //       })
+    //     }
+    //   }
+    // }
+    // console.log('Updated reading: ', reading)
+    this.readingValue = reading
+    this.readingSource.next(this.readingValue)
+  }
+
+  /**
+   * @todo add pdf data type
+   */
+  public getDataForPDF(id: string, page: number): Promise<any> {
+    /**
+     * @todo where should we handle adding PDF data?
+     * examples: pdf_article-parse.json, KyburzResume-parse.json, EdSurge-parse.json
+     */
+
+    return this._http
+      .get('/assets/test-pdf/pdf_article-parse.json')
+      .pipe(
+        map(data => {
+          let wordBoxes = []
+          let pages = data['ParsedResults']
+          let overlay = pages[page - 1] && pages[page - 1]['TextOverlay'] ? pages[page - 1]['TextOverlay'] : {}
+          overlay['Lines'] &&
+            overlay['Lines'].forEach((line: { Words: any; MaxHeight: any; MinTop: any }) => {
+              wordBoxes = wordBoxes.concat(line.Words)
+            })
+          // WordText	Name:
+          // Left	97
+          // Top	97
+          // Height	9
+          // Width	38
+          return wordBoxes
+        }),
+      )
+      .toPromise()
+    // .catch(err => {
+    //   return { error: err }
+    // })
   }
 
   // Pull all versions of a particular reading
