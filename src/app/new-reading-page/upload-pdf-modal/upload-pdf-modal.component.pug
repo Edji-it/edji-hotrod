@@ -1,0 +1,106 @@
+#uploadModal.modal
+  .modal-dialog.modal-lg
+    .modal-content
+      form
+        //- MODAL HEADER
+        .modal-header
+          h4.modal-title Add a PDF
+          button.close.btn-icon--round((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
+            span(aria-hidden="true") &times;
+        //- MODAL BODY
+        .modal-body
+          .alert.alert-info(*ngIf="!wordHighlightsEnabled")
+            b Hint
+            | PDF's in Edji use dot comments, just like images. If you would like to learn how to convert your
+            | PDF to plain text so your students can highlight,
+            a.link(target="_blank",
+              href="http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/")
+              | check out our Guide page here
+            | .
+          .alert.alert-success(*ngIf="wordHighlightsEnabled")
+            .badge.badge-success.badge-dot
+            b([innerHtml]="':tada: Now with word highlighting!' | emojione")
+            | You and your students can highlight the text in newly uploaded PDFs.
+          h3.pb-2 Upload a new PDF to add
+          form
+            .form-group
+              label File
+              .input-group
+                .file-name.form-control((click)="browseInput.click()")
+                  span.placeholder(*ngIf="!file || !file.name || file.name.length < 1") Select a PDF to upload...
+                  | {{ file ? file.name : '' }}
+                span.input-group-append
+                  button#pdfBrowseButton.btn.btn-default.btn-file(type="button", (click)="browseInput.click()") Browse
+                    input(#browseInput, [attr.id]="pdfFileInputId", type="file", accept=".pdf", (change)="updateUploadFile()", style="display:none;")
+            .form-group
+              label Title
+              input(name="title", [(ngModel)]="title", type="text")
+              .button__row
+                button#buttonBeginPdfUpload.btn.btn-primary(
+                  (click)="beginUpload()",
+                  type="submit",
+                  [disabled]="noUploadAllowed",
+                  [class.loading]="uploading"
+                )
+                  | Upload
+          .alert.alert-warning(*ngIf="errorMsg", [innerHtml]="errorMsg")
+          //- LISTING OF ALL UPLOADED PDFS
+          h3.pb-2 Select an uploaded PDF to add to your Reading
+          .upload-list-item(*ngFor="let doc of uploadedDocs; let i = index", [class.new]="newDocsIds.indexOf(doc.uuid) > -1")
+            //- Display doc pages if available
+            .card-group(*ngIf="doc.pages && doc.pages[0] && i < 10")
+              //- Delete PDF Mini Modal
+              delete-pdf-mini-modal(*ngIf="doc.confirmDelete", (confirm)="removeUploadedDoc(doc)", (dismiss)="doc.confirmDelete = false")
+              //- Title Card
+              #titleCard.card.title-card
+                //- Delete Button
+                #pdfDelBtn.icon-button.btn--delete-pdf(title="Delete PDF", (click)="doc.confirmDelete = !doc.confirmDelete")
+                  span([innerHtml]="':x:' | emojione")
+                //- Title & Insert Button
+                .card__center-overlay
+                  span.doc-title(*ngIf="doc.title") {{ doc.title }}
+                  span.doc-title(*ngIf="!doc.title")
+                    i Untitled
+                  //- Insert legacy PDF
+                  button.btn.btn-primary.e2e-insert-doc((click)="insertPages(doc)")
+                    | Insert {{ doc.pages.length }} Page
+                    span(*ngIf="doc.pages.length > 1") s
+                //- Display if OCR/word highlighting is available, and allow user to turn it off
+                .btn.btn-sm.highlight-toggle.hover-parent(*ngIf="wordHighlightsEnabled && doc.pdf && doc.pdf.pages && doc.pdf.pages[0]", (click)="toggleWordHighlights(doc)")
+                  .icon.icon-word-boxes([class.inactive]="doc.disable_words")
+                  .hover-show--block {{ doc.disable_words ? 'Enable?' : 'Disable?' }}
+                  span(*ngIf="!doc.disable_words") Word highlights enabled
+                  span(*ngIf="doc.disable_words") Word highlights disabled
+              //- The pages of the PDF
+              .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
+                img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
+                .card-img-overlay.overlay-on-hover
+                  button.btn.btn-primary.card__center-overlay Insert
+            //- Display conversion message if doc isn't ready
+            .card-group.card-group--placeholder(*ngIf="doc.converted != true")
+              .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired && !doc.error")
+                i.icon.icon-loading.group-alert__icon
+                b Preparing your PDF
+                br
+                | Thank you for your patience! Some documents, especially those with many pages, can take several minutes.
+              .alert.alert-warning.group-alert(*ngIf="doc.expired")
+                button.close((click)="removeUploadedDoc(doc)", type="button", data-dismiss="alert", aria-label="Close")
+                  span(aria-hidden="true") &times;
+                b Document conversion timed out
+                br
+                | Please try again later, or with a different file. If this problem persists, please <a href="mailto:support@edji.it">contact us</a>.
+              .alert.alert-warning.group-alert(*ngIf="doc.error")
+                button.close((click)="removeUploadedDoc(doc)", type="button", data-dismiss="alert", aria-label="Close")
+                  span(aria-hidden="true") &times;
+                b Error converting
+                br
+                | Please try again later, or with a different file. If this problem persists, please <a href="mailto:support@edji.it">contact us</a>.
+              .card.title-card
+                .card__center-overlay
+                  span.doc-title(*ngIf="doc.title") {{ doc.title }}
+                  span.doc-title(*ngIf="!doc.title")
+                    i Untitled
+                  button.btn.btn-primary([disabled]="true") Insert X Pages
+              .card.card-placeholder(*ngFor="let card of [0, 1, 2, 3]")
+                .card-img-top &nbsp;
+        .modal-footer

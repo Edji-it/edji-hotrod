@@ -227,15 +227,11 @@ a.w {
   }
 
   & .w .img-wrap > img {
-    $highlightWidth: 4px;
     cursor: crosshair; //url('/assets/images/cursor-image.png'), pointer;
-    // outline: $highlightWidth solid transparent;
-    // border: 3px solid #fff;
+    max-width: 100%;
     border: 1px solid #efefef;
     border-radius: 3px;
-    max-width: calc(100% - #{$highlightWidth * 2});
     height: auto;
-    margin: $highlightWidth;
   }
 }
 
@@ -497,8 +493,8 @@ $nextB: 68;
 }
 
 $commentFadeOpacity: 0.35;
-$hoverBlue: #c4e4ff;
-$quickBlue: #55aef7;
+$hoverBlue: #b5deffc7;
+$quickBlue: #6fbaf887; //#55aef7;
 
 /**
  * WIP: Does not work on iOS Safari
@@ -551,7 +547,7 @@ $quickBlue: #55aef7;
     // TO-DO: Material ripple style
     // background: $hoverBlue radial-gradient(circle, $quickBlue 1%, $quickBlue 5%, transparent 5%) center;
     // animation: material-ripple 300ms;
-    background: $hoverBlue;
+    background-color: $hoverBlue;
     animation: quick-select-pulse 1s;
     animation-fill-mode: forwards;
     animation-timing-function: ease;
@@ -561,7 +557,7 @@ $quickBlue: #55aef7;
   &.img,
   &.question,
   &.br {
-    background: transparent !important;
+    background-color: transparent !important;
     border-color: transparent !important;
     animation: none !important;
 
@@ -580,6 +576,23 @@ $quickBlue: #55aef7;
   }
 }
 
+// Word/hit boxes on images/pdfs
+.w-box {
+  // background: rgba(red, 0.3);
+  // border: 1px solid hotpink;
+  padding: 4px 2px;
+  margin-top: 0px;
+  margin-left: -1px;
+  position: absolute;
+  display: block;
+  border-bottom-color: transparent;
+  // Prevent text from "washing out" by blending
+  background-blend-mode: multiply !important;
+  mix-blend-mode: multiply;
+  // Allows for GPU optimization
+  transform: translate3d(0, 0, 1px);
+}
+
 // Focus Highlight styles (for on comment hover)
 .content.content--active .w.h-f {
   // background: blue;
@@ -594,11 +607,35 @@ $quickBlue: #55aef7;
   }
 }
 
+.w-box-preview {
+  position: absolute;
+  left: calc(100% + 2px);
+  top: 0px;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: visible;
+  width: 40px;
+  height: 40px;
+
+  & .icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  &:hover {
+    background: $light-gray;
+  }
+
+  &:hover ~ .w-box {
+    background: $quickBlue;
+  }
+}
+
 .content.content--active {
   &.quick-select--begin .w.h-f {
     border-bottom-style: dotted;
     border-color: $quickBlue;
-    background: $hoverBlue;
+    background-color: $hoverBlue;
   }
 
   &.quick-select--end .w.h-f {

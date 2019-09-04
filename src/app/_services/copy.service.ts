@@ -28,6 +28,7 @@ export class CopyService {
       apiKey: 'keypBiIZw05gzqcD5',
     })
 
+    // Copy Management Base
     this.base = this._airtable.base('appYs5u4FfbKNkcX5')
 
     // Fetch promotion copy base

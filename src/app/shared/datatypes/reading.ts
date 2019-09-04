@@ -24,6 +24,7 @@ export interface BaseReading {
     img?: boolean // image
     q?: boolean // question
     s?: boolean // space
+    boxes?: any[]
   }[]
   title: string
   instructions?: string
