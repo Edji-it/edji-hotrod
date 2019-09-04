@@ -37,7 +37,7 @@ export class SecretSwitchesService {
     enabled_annoucement_toast?: string
     enabled_annoucement_toast_link?: string
     enable_for_user_emails?: string // comma separated
-  }
+  }[] = []
 
   constructor(private _auth: AuthService) {
     this.secretSwitchesUpdates = this.secretSwitchesSource.asObservable()
@@ -96,7 +96,6 @@ export class SecretSwitchesService {
         this.secretSwitches[feature.feature_key] = true
       }
     })
-    console.log(this.secretSwitches)
     // Emit switch update
     this.secretSwitchesSource.next(this.secretSwitches)
   }

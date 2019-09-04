@@ -89,6 +89,9 @@ describe('NewReadingPage', () => {
             getCurrentUser: () => {
               return of({ username: 'Tester' })
             },
+            getEnv: () => {
+              return 'dev'
+            }
           },
         },
         { provide: ProjectService, useValue: {} },
@@ -111,7 +114,7 @@ describe('NewReadingPage', () => {
         },
         { provide: Hammer, useValue: {} },
         { provide: Angulartics2, useValue: {} },
-        { provide: Angulartics2GoogleGlobalSiteTag, useValue: { startTracking: () => {} } },
+        { provide: Angulartics2GoogleGlobalSiteTag, useValue: { startTracking: () => { } } },
         FormBuilder,
       ],
       imports: [RouterTestingModule, ReactiveFormsModule, FormsModule],
