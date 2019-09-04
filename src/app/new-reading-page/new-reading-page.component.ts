@@ -365,7 +365,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           console.error(err)
         },
-      )
+    )
   }
 
   /**
@@ -566,7 +566,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
         let rootWordTags = inheritedTags.slice()
         rootWordTags.indexOf('br') > -1 && rootWordTags.splice(rootWordTags.indexOf('br'), 1)
         // Split text inside child nodes
-        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
+        let nodeWords = element.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
           return el.replace(/([\n])/g, '')
         })
         // If empty element, push a spacer word to reflect that
@@ -1167,6 +1167,13 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (this.validateReading(form)) {
       this.showReadingPreviewModal = true
     }
+  }
+
+  /**
+   * Calculates if reading is potentially too heavy
+   */
+  public isLargeReading(wordCount, wordBoxCount) {
+    return (wordCount + wordBoxCount) > 3000
   }
 }
 

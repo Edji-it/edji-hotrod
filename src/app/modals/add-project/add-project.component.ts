@@ -21,6 +21,7 @@ export class AddProjectModal implements OnInit {
   @Input() heading: string
   @Input() subheading: string
   @Input() groupLabel: string
+  @Input() largeReadingWarning: boolean
 
   public projectForm: FormGroup
   public formSubmitted: boolean = false
@@ -40,7 +41,7 @@ export class AddProjectModal implements OnInit {
     private _fb: FormBuilder,
     private _auth: AuthService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.user = this._auth.getUser()

@@ -90,7 +90,7 @@ nav-bar(
             //- Reading Content section
             p.sub-label Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.
             //- Too large warning
-            .alert.alert-warning(*ngIf="(wordCount + wordBoxCount) > 3000")
+            .alert.alert-warning(*ngIf="isLargeReading(wordCount, wordBoxCount)")
               b Reading may be too large
               p.mb-0 Readings with too much content may perform slowly, especially on older devices. Exceeding 3000+ words or using too many word-heavy PDF pages will display this warning. For the best, snappy Edji experience, please reduce the amount of content.
             div(*ngFor="let readingPart of readingHtml; let i=index")
@@ -198,6 +198,7 @@ hot-add-project-modal.modal-will-fade(
   [subheading]="'Your Reading has been saved! Now create your first group to publish this Reading and share with students.'",
   [reading]="reading",
   [groupLabel]="'Group 1'",
+  [largeReadingWarning]="isLargeReading(wordCount, wordBoxCount)",
   (groupSaved)="finalizeShare(readingForm.value, $event)",
   (closeModal)="showFirstGroupModal = false"
 )
