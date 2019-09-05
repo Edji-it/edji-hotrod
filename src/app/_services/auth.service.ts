@@ -415,7 +415,7 @@ export class AuthService implements CanActivate {
               for (let prop in mergedUser[propA]) {
                 if (
                   mergedUser[propA][prop] &&
-                  Object.prototype.toString.call(mergedUser[propA][prop]) === '[object Array]' &&
+                  mergedUser[propA][prop] instanceof Array &&
                   childPropsToOverwrite.indexOf(prop) < 0
                 ) {
                   if (updatedUser[propA] && updatedUser[propA][prop]) {
