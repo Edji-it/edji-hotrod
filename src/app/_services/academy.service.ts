@@ -40,7 +40,7 @@ export class AcademyService implements CanActivate {
    */
   public acceptLicense(licenseId: string, query: { type?: string } = {}): Observable<AcceptLicenseResponse> {
     return this._http.put<AcceptLicenseResponse>(
-      `${this._auth.getUrl()}/api/v1/licenses/${licenseId}/accept${query ? stringify(query) : ''}`,
+      `${this._auth.getUrl()}/api/v1/licenses/${licenseId}/accept?${query ? stringify(query) : ''}`,
       {},
       {
         headers: new HttpHeaders({
@@ -162,7 +162,7 @@ export class AcademyService implements CanActivate {
         map(data => {
           return data.licenses
         }),
-      )
+    )
   }
 
   /**
