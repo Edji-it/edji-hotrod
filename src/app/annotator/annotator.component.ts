@@ -1084,7 +1084,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   inactivateComment(): void {
-    if (typeof (this._comments.activeComment.start) != 'undefined') {
+    if (this._comments.activeComment.start !== undefined) {
       this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
       this._comments.activeComment.active = false
       this._comments.activeComment = <EdjiComment>{}
