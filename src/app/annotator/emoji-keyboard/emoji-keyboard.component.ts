@@ -4,7 +4,7 @@ import { take } from 'rxjs/operators'
 // Project Dependencies
 import { AuthService, CommentService } from '../../_services'
 import { LockerService } from '../../_services/locker.service'
-import { EmojiFilter, emojiFilters } from './emoji-values';
+import { EmojiFilter, emojiFilters } from './emoji-values'
 
 @Component({
   selector: 'emoji-keyboard',
@@ -56,7 +56,8 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     this.emojifilters = emojiFilters
     // Build "all" emoji array for searching against
     this.emojifilters.forEach((filter, index) => {
-      if (filter.emoji && filter.emoji[0] && index != 0) { // We exclude the recent emoji array 
+      if (filter.emoji && filter.emoji[0] && index != 0) {
+        // We exclude the recent emoji array
         this.allEmoji = this.allEmoji.concat(filter.emoji)
       }
     })
@@ -72,7 +73,6 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.updateScrollValues()
   }
-
 
   /**
    * Filters all emoji for those matching search term
@@ -97,7 +97,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
    */
   onInactivated() {
     // Clear search
-    this.searchTerm = ""
+    this.searchTerm = ''
     this.emojiResults = []
     // Update user object with recent emoji
     let user = this._auth.getUser()
@@ -120,7 +120,12 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
 
   onActivated() {
     document.querySelector('.main').className = 'main keyboard-adjust'
-    // Update filter scroll positions after loading all emoji
+    /**
+     * When set to active, keyboard loads all remaining emoji
+     * We want to update the scroll values (used by categories), once:
+     * - Icon/image (<i>) elements exist in the DOM (does not need to wait for images to load)
+     * - Keyboard animation is complete
+     */
     setTimeout(() => {
       this.updateScrollValues()
     }, 500)
