@@ -45,7 +45,7 @@ export class UploadPdfModalComponent implements OnInit {
     private _auth: AuthService,
     private angulartics: Angulartics2,
     private _switches: SecretSwitchesService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Load previously uploaded docs
@@ -165,7 +165,7 @@ export class UploadPdfModalComponent implements OnInit {
         .subscribe(
           data => {
             // Get date value in ms for comparison
-            let requestedTime = new Date(doc.requestedTime).getUTCMilliseconds()
+            let requestedTime = Date.parse(doc.requestedTime)
 
             if (data.converted === true) {
               // Mark document as converted
@@ -176,8 +176,8 @@ export class UploadPdfModalComponent implements OnInit {
               this.updateUploadedDoc(data)
             } else if (requestedTime && Date.now() - requestedTime > EXPIRE_TIME) {
               // If this is old, expire the document
-              data.expired = true
-              this.updateUploadedDoc(data)
+              doc.expired = true
+              this.updateUploadedDoc(doc)
             } else {
               // Ensure doc has requestedTime for next round
               if (!doc.requestedTime) {
@@ -197,7 +197,7 @@ export class UploadPdfModalComponent implements OnInit {
             }, 3000)
             console.error(err)
           },
-        )
+      )
     }
   }
 
@@ -270,7 +270,7 @@ export class UploadPdfModalComponent implements OnInit {
         error => {
           console.log(error)
         },
-      )
+    )
   }
 
   /**
