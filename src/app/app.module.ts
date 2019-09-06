@@ -25,7 +25,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() {}
+  constructor() { }
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -69,7 +69,7 @@ import {
   PromoBannerComponent,
 } from './shared'
 import { HomeComponent } from './home'
-import { RegisterPageComponent } from './register-page'
+import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
 import { LoginForm, GuestForm, RegisterFormComponent } from './forms'
 
 import {
@@ -205,6 +205,7 @@ const routerOptions: ExtraOptions = {
     ClickOutsideDirective,
     RedeemToken,
     RegisterPageComponent,
+    CreateProfilePageComponent,
     CommentPaneComponent,
     CommentComponent,
     TeacherFeedbackComponent,
@@ -311,4 +312,4 @@ const routerOptions: ExtraOptions = {
     APP_PROVIDERS,
   ],
 }) //@NgModule
-export class AppModule {}
+export class AppModule { }

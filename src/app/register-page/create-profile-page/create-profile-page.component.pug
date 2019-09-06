@@ -1,0 +1,21 @@
+#top
+nav-bar
+.container-fluid
+  .row.navy-gradient.has-sparks
+    .sparks
+    .col-sm-2.col-md-3
+    .col-sm-8.col-md-6.col-pad.on-dark
+      h1.center.on-dark Create Profile
+        //-   #msgReferral.alert.alert-success(
+        //-     *ngIf="successObject.referral", 
+        //-     [innerHtml]=" '<strong>Congratulations!</strong> :tada: <br>' + referringUserName + ' thought you would really like Edji. Sign up and make your first reading to receive 20% off Hero today!' | emojione"
+        //-   )
+        //-   #msgConversion.alert.alert-info(*ngIf="tempUserId")
+        //-     b To use all of Edji, create a full account!
+        //-     | Don't worry, you'll keep the readings you've joined and comments you've made so far.
+      hot-register-form(
+        [readingToAdd]="readingToAdd",
+        [projectToAdd]="projectToAdd",
+        [tempUserId]="tempUserId",
+        [referralId]="referralId"
+      )
