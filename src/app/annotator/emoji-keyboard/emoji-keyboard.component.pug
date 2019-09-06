@@ -13,11 +13,15 @@
 					.input-group-prepend-icon
 						i.icon.icon-search
 					input.form-control(
-						type="text", 
-						[(ngModel)]="searchTerm", 
+						type="text",
+						[(ngModel)]="searchTerm",
 						(keyup)="getEmojiResults(searchTerm)",
 						placeholder="Search emoji"
 					)
+					.form-control-clear.form-control-clear--in-field.icon.icon-close(
+            *ngIf="searchTerm",
+            (tap)="searchTerm = ''"
+          )
 				.emojionearea-emojis-list(*ngIf="searchTerm")
 					.emojionearea-category#categorySearch
 						i.emojibtn(*ngFor='let emoji of emojiResults', (tap)="addEmoji(':' + emoji + ':')", role='button', [attr.dataname]="':' + emoji + ':'", [innerHtml]="':' + emoji + ':' | emojione")

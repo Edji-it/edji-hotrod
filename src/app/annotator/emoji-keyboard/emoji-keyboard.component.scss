@@ -151,4 +151,14 @@
 .input--emoji-search {
   margin: 10px 10px 5px 10px;
   max-width: calc(100% - 17px);
+
+  @media (min-width: $desktop) {
+    position: sticky;
+    margin-top: -32px;
+    z-index: 8000;
+    left: 35%;
+    right: 35%;
+    width: 30%;
+    top: -32px;
+  }
 }
