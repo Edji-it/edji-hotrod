@@ -46,9 +46,9 @@
           .alert.alert-warning(*ngIf="errorMsg", [innerHtml]="errorMsg")
           //- LISTING OF ALL UPLOADED PDFS
           h3.pb-2 Select an uploaded PDF to add to your Reading
-          .upload-list-item(*ngFor="let doc of uploadedDocs; let i = index", [class.new]="newDocsIds.indexOf(doc.uuid) > -1")
+          .upload-list-item(*ngFor="let doc of uploadedDocs | slice:0:15; let i = index", [class.new]="newDocsIds.indexOf(doc.uuid) > -1")
             //- Display doc pages if available
-            .card-group(*ngIf="doc.pages && doc.pages[0] && i < 10")
+            .card-group(*ngIf="doc.converted == true")
               //- Delete PDF Mini Modal
               delete-pdf-mini-modal(*ngIf="doc.confirmDelete", (confirm)="removeUploadedDoc(doc)", (dismiss)="doc.confirmDelete = false")
               //- Title Card

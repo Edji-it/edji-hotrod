@@ -176,8 +176,8 @@ export class UploadPdfModalComponent implements OnInit {
               this.updateUploadedDoc(data)
             } else if (requestedTime && Date.now() - requestedTime > EXPIRE_TIME) {
               // If this is old, expire the document
-              data.expired = true
-              this.updateUploadedDoc(data)
+              doc.expired = true
+              this.updateUploadedDoc(doc)
             } else {
               // Ensure doc has requestedTime for next round
               if (!doc.requestedTime) {
