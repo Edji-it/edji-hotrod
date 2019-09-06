@@ -70,7 +70,7 @@ import {
 } from './shared'
 import { HomeComponent } from './home'
 import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
-import { LoginForm, GuestForm, RegisterFormComponent } from './forms'
+import { LoginForm, GuestForm, RegisterFormComponent, ProfileFormComponent } from './forms'
 
 import {
   LoginModal,
@@ -223,6 +223,7 @@ const routerOptions: ExtraOptions = {
     AccountComponent,
     LoginForm,
     RegisterFormComponent,
+    ProfileFormComponent,
     GuestForm,
     LoginModal,
     LoginRegisterModal,
