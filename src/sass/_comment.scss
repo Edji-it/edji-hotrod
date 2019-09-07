@@ -896,6 +896,7 @@ textarea.text-comment-input,
   }
 
   .mobileBound .text-comment & {
+    user-select: all !important;
     max-height: none !important;
     min-height: 30px;
     padding-bottom: 8px;
