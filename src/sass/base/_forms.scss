@@ -451,3 +451,11 @@ tr.selectable {
     border-color: $green;
   }
 }
+
+// For using form on non-white background
+.form-block {
+  color: #000;
+  background: #fff;
+  padding: $base-pad;
+  border-radius: 4px; // 1/2 of modal border radius
+}

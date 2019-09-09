@@ -12,7 +12,7 @@ import { AuthService } from "src/app/_services";
 })
 export class SchoolSelectorComponent implements OnInit, AfterViewInit {
 
-    @Input() formControl: FormControl
+    @Input() formControlAlias: FormControl
 
     @ViewChild('schoolInput', { static: false }) input: ElementRef
 
@@ -53,7 +53,7 @@ export class SchoolSelectorComponent implements OnInit, AfterViewInit {
             const searching =
                 this.input &&
                 debouncedInput.subscribe(async val => {
-                    let searchText = this.formControl.value
+                    let searchText = this.formControlAlias.value
                     if (searchText !== '') {
                         try {
                             let schoolResults: any[] = []
@@ -90,6 +90,6 @@ export class SchoolSelectorComponent implements OnInit, AfterViewInit {
         this.schoolInfo.school_id = school.nces_school_id
         this.schoolInfo.school_name = school.school_name
         // update the form with the selected school
-        this.formControl.setValue(school.school_name)
+        this.formControlAlias.setValue(school.school_name)
     }
 }
