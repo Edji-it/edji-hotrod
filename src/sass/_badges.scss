@@ -80,3 +80,22 @@
   overflow: hidden;
   display: inline-block;
 }
+
+.badge-dot {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 0.5em;
+  width: 0.5em;
+  padding: 5px;
+  border-radius: 50%;
+
+  .alert & {
+    right: 100%;
+    transform: translate3d(50%, -50%, 0);
+  }
+
+  &:empty {
+    display: block;
+  }
+}

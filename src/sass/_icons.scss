@@ -499,6 +499,14 @@ $iconGrayOpacity: 0.6;
   }
 }
 
+.icon-word-boxes {
+  @include icon('icon-word-boxes.svg');
+
+  &.inactive {
+    @include icon('icon-word-boxes--off.svg');
+  }
+}
+
 // Misc Icon Styles
 // *****************************************************
 

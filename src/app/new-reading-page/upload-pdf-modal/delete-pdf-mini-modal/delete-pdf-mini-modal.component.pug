@@ -1,0 +1,10 @@
+#confirmDelete.confirm-delete-mini-modal
+  .confirm-delete-dialog
+    .modal-content
+      .confirm-delete-header
+        h4.confirm-delete-title Are you sure you want to delete this PDF?
+      .confirm-delete-body
+        | If you do, you won't be able to recover it.
+        .btn-row(style="padding-top: 15px;")
+          button.btn((click)="dismiss.emit()", type="button") Cancel
+          button#pdfDelBtnConfirm((click)="confirm.emit()", type="button") Delete

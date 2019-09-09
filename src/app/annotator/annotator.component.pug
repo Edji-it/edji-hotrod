@@ -88,7 +88,7 @@ scroll-progress([scrollProgress]="currentScroll")
         #annotatorContent.content.content--active.pt-4(
             (tap)="showCommentOptions($event)",
             (clickOutside)="hideCommentOptions()",
-            [ngClass]="[ quickSelect.anchor != null ? 'quick-select--begin' : '', quickSelect.focus != null ? 'quick-select--end':'', project.archived ? 'archived' : '']"
+            [ngClass]="[ (quickSelect.anchor != null || quickSelect.boxes)? 'quick-select--begin' : '', (quickSelect.focus != null || (quickSelect.boxes && quickSelect.boxes.end)) ? 'quick-select--end':'']"
             #activeContent
         )
             //- Reading Group Instructions
@@ -105,8 +105,8 @@ scroll-progress([scrollProgress]="currentScroll")
                     [class.hidden]="!_projects.isCommentVisible(comment)",
                     [class.spec-owner]="comment.user_id === project.teacher_id",
                     [comment]="comment",
-                    (mouseenter)='focusHighlight(comment.start, comment.end, comment.loc)',
-                    (mouseleave)='unfocusHighlight(comment.start, comment.end, comment.loc)',
+                    (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
+                    (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
                     [readOnly]="comment.user_id !== user._id",
                     [userPermission]="getCommentPermissions(comment)",
                     [isActive]="comment.active ? true : false",
@@ -118,8 +118,8 @@ scroll-progress([scrollProgress]="currentScroll")
                     (collapseLine)="expandLine($event, false)",
                     (toggleCommentPane)="toggleCommentPane($event, comment)",
                     (commentReply)="discReplyFire(comment)",
-                    [class.imageComment]="comment['loc']",
-                    [style.top]="comment['loc'] ? comment.imageY + 'px' : '0px'"
+                    [class.imageComment]="comment.imageY",
+                    [style.top]="comment.imageY ? comment.imageY + 'px' : '0px'"
                 ) <!-- edji-comment -->
                 //- Link Words: If a word is actually a link, handle it differently
                 a.w(
@@ -132,6 +132,25 @@ scroll-progress([scrollProgress]="currentScroll")
                 //- Non-link Words, show content
                 | {{ w.s ? '&nbsp;' : (!w.a ? w.str : '') }}
                 .img-wrap(*ngIf="w.img")
+                    //- Word/Hit Boxes
+                    ng-container(*ngIf="w.boxes")
+                        //- Preview word locations
+                        .w-box-preview.hover--tooltip
+                            .icon.icon-word-boxes
+                            .tooltip-wrap
+                                .tooltip
+                                    .tooltip-title Click on words to highlight text!
+                        //- @todo REMOVE adjustments for bad data
+                        .w.w-box(
+                            *ngFor="let box of w.boxes; let bi = index",
+                            [style.top]="box.y + '%'",
+                            [style.height]="box.h + '%'",
+                            [style.left]="box.x + '%'",
+                            [style.width]="box.w + '%'",
+                            [attr.w-index]="i",
+                            [attr.index]="bi",
+                            [ngClass]="[getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i, bi), quickSelectClass(quickSelect, i, bi), focusClass(focusArray, i, bi)]"
+                        )
                     //- Placeholder image hotspot
                     .hotspot(
                         *ngIf="imageHotspotPlaceholder.index == i && (imageHotspotPlaceholder.focus || imageHotspotPlaceholder.preview)",
@@ -142,7 +161,7 @@ scroll-progress([scrollProgress]="currentScroll")
                     //- Image Hotspots: Show hotspot for each comment
                     .hotspot(
                         *ngFor="let comment of commentsByIndex[i]",
-                        [class.hidden]="!_projects.isCommentVisible(comment)",
+                        [class.hidden]="!_projects.isCommentVisible(comment) || comment.box",
                         [style.top]="comment['loc'] ? comment['loc']['y'] + '%' : '0%'",
                         [style.left]="comment['loc'] ? comment['loc']['x'] + '%' : '0%'"
                     )

@@ -6,7 +6,7 @@ import { AuthService, LockerService, MediaService } from '../../_services'
 
 @Component({
   selector: 'upload-picture-modal',
-  templateUrl: './upload-picture-modal.component.html',
+  templateUrl: './upload-picture-modal.component.pug',
   styleUrls: ['./upload-picture-modal.component.scss'],
 })
 export class UploadModalComponent implements OnInit {
@@ -23,7 +23,7 @@ export class UploadModalComponent implements OnInit {
   public noUploadAllowed: boolean = true
   public errorMsg: string = ''
 
-  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) {}
+  constructor(private _locker: LockerService, private _media: MediaService, private _auth: AuthService) { }
 
   ngOnInit() {
     // Load previously uploaded images
@@ -79,7 +79,7 @@ export class UploadModalComponent implements OnInit {
         this.uploading = false
       },
     )
-  } // beginUpload()
+  }
 
   /**
    * Add upload URL to array and localStorage
@@ -115,10 +115,10 @@ export class UploadModalComponent implements OnInit {
           console.log(error)
         },
       )
-  } // addUploadUrl
+  }
 
   insertImage(imageIndex: number): void {
     this.returnImage.emit([this.uploadedImages[imageIndex]])
     this.closeModal.emit()
-  } // insertImage
+  }
 }

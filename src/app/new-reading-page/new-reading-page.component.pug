@@ -1,33 +1,33 @@
 nav-bar(
-    [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'", 
+    [pageTitle]="reading._id ? 'Edit Reading' : 'New Reading'",
     [canPublish]="true",
     [saveState]="saveState",
     (saveAction)="saveReading(readingForm.value)",
     (shareAction)="verifyCanShare(readingForm.value)",
     (previewAction)="openReadingPreview(readingForm.value)"
   )
-  //- (saveAction)="saveReading(readingForm.value)", 
+  //- (saveAction)="saveReading(readingForm.value)",
 .container.pt-4
   .row
     .col-sm-12
       form([formGroup]="readingForm")
-        .reading-page
+        #readingPageForm.reading-page
           //- Error and Success Messaging
           p.alert.alert-danger(*ngIf="error.length > 0",  [innerHtml]="error | emojione")
           #msgDraftSaved.alert.alert-success.alert-readings.alert-dismissable(role="alert", *ngIf="showAlert") {{ successObject.readingSuccess }}
-            a.close(href="#", (click)="showAlert=false") × 
+            a.close(href="#", (click)="showAlert=false") ×
           .alert.alert-danger.alert-readings(role="alert", *ngIf="errorObject.readingError") {{ errorObject.readingError }}
           //- Title Section
           .form-group
             label
               span Title
               input#readingTitle.form-control.title-input.h1.form-item--editor.mTitle(
-                  type="text", 
-                  placeholder="Reading Title...", 
+                  type="text",
+                  placeholder="Reading Title...",
                   [formControl]="readingForm.controls['title']",
                   (keyup)="changeMonitor()"
                 )
-              #errorTitle.alert.alert-danger(*ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)") 
+              #errorTitle.alert.alert-danger(*ngIf="readingForm.controls['title'].hasError('required') && (readingForm.controls['title'].dirty || submitted)")
                 b No Title
                 | Please give your Reading a title!
           //- Public Flag
@@ -42,9 +42,9 @@ nav-bar(
                     title="Allow anyone to find this Reading in Discover"
                   )
                   input.form-check-input(
-                      type="radio", 
-                      name="publicFlag", 
-                      value="true", 
+                      type="radio",
+                      name="publicFlag",
+                      value="true",
                       [formControl]="readingForm.controls['public']",
                       checked
                     )
@@ -56,7 +56,7 @@ nav-bar(
                   )
                   input.form-check-input(
                       type="radio",
-                      name="publicFlag", 
+                      name="publicFlag",
                       value="false",
                       [formControl]="readingForm.controls['public']"
                     )
@@ -66,7 +66,7 @@ nav-bar(
             label Grade Level
               p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
             grade-selector(formControlName="grade_levels", (click)="changeMonitor()")
-            #errorTitle.alert.alert-danger.mt-2(*ngIf="readingForm.controls['grade_levels'].hasError('required') && (readingForm.controls['grade_levels'].dirty || submitted)") 
+            #errorTitle.alert.alert-danger.mt-2(*ngIf="readingForm.controls['grade_levels'].hasError('required') && (readingForm.controls['grade_levels'].dirty || submitted)")
               b No Grades Selected
               | Please select the range of grade levels this Reading is best suited for.
           //- Subject Selector
@@ -74,7 +74,7 @@ nav-bar(
             label Subject
             .input-group
             ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
-            #errorTitle.alert.alert-danger.mt-2(*ngIf="readingForm.controls['subjects'].hasError('required') && (readingForm.controls['subjects'].dirty || submitted)") 
+            #errorTitle.alert.alert-danger.mt-2(*ngIf="readingForm.controls['subjects'].hasError('required') && (readingForm.controls['subjects'].dirty || submitted)")
               b No Subjects Selected
               | Please select at least one Subject area that this Reading applies to.
           //- Reading Group Instructions section
@@ -89,9 +89,13 @@ nav-bar(
             label Reading Content
             //- Reading Content section
             p.sub-label Select text to see formatting options. Use the insert buttons on the left to add images and PDFs.
+            //- Too large warning
+            .alert.alert-warning(*ngIf="isLargeReading(wordCount, wordBoxCount)")
+              b Reading may be too large
+              p.mb-0 Readings with too much content may perform slowly, especially on older devices. Exceeding 3000+ words or using too many word-heavy PDF pages will display this warning. For the best, snappy Edji experience, please reduce the amount of content.
             div(*ngFor="let readingPart of readingHtml; let i=index")
               edji-question(
-                *ngIf="readingPart.question", 
+                *ngIf="readingPart.question",
                 (questionDelete)="deleteQuestion(i)",
                 [question]="readingPart.question",
                 (questionUpdate)="updateQ(readingPart.question,$event)",
@@ -106,7 +110,7 @@ nav-bar(
                 (mouseup)="contentChange($event)",
                 [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
                 [attr.rindex]="i")
-            #errorContent.alert.alert-danger(*ngIf="submitted && readingIsBlank") 
+            #errorContent.alert.alert-danger(*ngIf="submitted && readingIsBlank")
               b No Content
               | Please give your Reading some content!
             //- Editor Insert Options
@@ -116,16 +120,17 @@ nav-bar(
             .editor-button-bar.hidden-md-down([class.hide]="editorToolbarHidden", [style.top]="editorToolbarY + 'px'")
               //- Insert Label
               span.editor-button-bar__title Insert
-              //- Upload Image Button 
+              //- Upload Image Button
                   - Opens Modal.
               a#buttonUploadImage.btn.btn-icon--plain(
                   (click)="showUploadModal = true",
                   data-test="buttonUploadImage"
                 )
                 img(title="Add Picture" src="/assets/images/icon-picture.svg")
-              //- Upload PDF Button 
+              //- Upload PDF Button
                   - Opens Modal
               a#buttonUploadPdf.btn.btn-icon--plain((click)="showPdfUploadModal = true")
+                .badge.badge-success.badge-dot(*ngIf="newWordHighlights")
                 img(title="Add PDF" src="/assets/images/icon-pdf.svg")
               //- Insert Question Button (Hero) - NOT DONE
                   - Modal not needed.
@@ -134,26 +139,26 @@ nav-bar(
             //- Mobile Insert Buttons
             .editor-button-bar.hidden-lg-up([class.hide]="editorToolbarHidden")
               //- Insert Label
-              //- Upload Image Button 
+              //- Upload Image Button
                   - Opens Modal.
               .insert-options-group--mobile([class.btn-group-show--animation]="insertOptionShow")
                 a#buttonUploadImageMobile.btn.btn-icon--circle-shadow.insert-options--mobile(
-                  (tap)="showUploadModal = true; insertOptionShow=!insertOptionShow", 
+                  (tap)="showUploadModal = true; insertOptionShow=!insertOptionShow",
                   [class.btn-show--animation]="insertOptionShow",
                   data-test="buttonUploadImage"
                 )
                   img(title="Add Picture", src="/assets/images/icon-picture.svg", [class.hide]="!insertOptionShow")
-                //- Upload PDF Button 
+                //- Upload PDF Button
                     - Opens Modal
                 a#buttonUploadPdfMobile.btn.btn-icon--circle-shadow.insert-options--mobile(
-                  (tap)="showPdfUploadModal = true; insertOptionShow=!insertOptionShow", 
+                  (tap)="showPdfUploadModal = true; insertOptionShow=!insertOptionShow",
                   [class.btn-show--animation]="insertOptionShow"
                 )
                   img(title="Add PDF", src="/assets/images/icon-pdf.svg", [class.hide]="!insertOptionShow")
                 //- Insert Question Button (Hero) - NOT DONE
                     - Modal not needed.
                 a#buttonInsertQuestionMobile.btn.btn-icon--circle-shadow.insert-options--mobile(
-                  (tap)="addQuestionInLine(); insertOptionShow=!insertOptionShow", 
+                  (tap)="addQuestionInLine(); insertOptionShow=!insertOptionShow",
                   [class.btn-show--animation]="insertOptionShow"
                 )
                   img(title="Add Question", src="/assets/images/icon-add-question.svg", [class.hide]="!insertOptionShow")
@@ -168,8 +173,8 @@ nav-bar(
 
 .fixed-btn-row--SE
   tutorial-box([tutorialName]="'newReading'",
-    [pageObjs]="guideContent", 
-    [pager]="guideStepNo", 
+    [pageObjs]="guideContent",
+    [pager]="guideStepNo",
     (pageChange)="guideStepNo = $event")
 
 //- Modals
@@ -178,7 +183,7 @@ upload-pdf-modal.modal-will-fade([class.show]="showPdfUploadModal", (returnImage
 //- Confirm if user wants to archive a past reading
 hot-confirm-archive-modal.modal-will-fade(
   *ngIf="showConfirmArchiveModal",
-  [class.show]="showConfirmArchiveModal", 
+  [class.show]="showConfirmArchiveModal",
   (confirmArchive)="showConfirmArchiveModal=false; showFirstGroupModal = true",
   (declineArchive)="showConfirmArchiveModal=false",
   (goHero)="showHeroParam=true",
@@ -188,19 +193,20 @@ hot-confirm-archive-modal.modal-will-fade(
 //- Create First Group
 hot-add-project-modal.modal-will-fade(
   *ngIf="showFirstGroupModal",
-  [class.show]="showFirstGroupModal", 
+  [class.show]="showFirstGroupModal",
   [heading]="'Create and Share First Group'",
   [subheading]="'Your Reading has been saved! Now create your first group to publish this Reading and share with students.'",
-  [reading]="reading", 
+  [reading]="reading",
   [groupLabel]="'Group 1'",
+  [largeReadingWarning]="isLargeReading(wordCount, wordBoxCount)",
   (groupSaved)="finalizeShare(readingForm.value, $event)",
   (closeModal)="showFirstGroupModal = false"
 )
 //- Go Hero!
 hero-subscribe-modal.modal-will-fade(
   *ngIf="showHeroSubModal",
-  [class.show]="showHeroSubModal", 
-  (closeModal)="showHeroSubModal=false", 
+  [class.show]="showHeroSubModal",
+  (closeModal)="showHeroSubModal=false",
   (heroWasBorn)="router.navigate(['/dashboard'])"
 )
 //- Reading Preview Modal

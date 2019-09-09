@@ -5,7 +5,7 @@ import { LoginModal } from '../components'
 export class Project implements PageObjectInterface {
   /*
   Last Mod: 8 Aug 2017
-  
+
   Easily reference parts of the project page test page.
   */
   private EC = protractor.ExpectedConditions
@@ -25,6 +25,7 @@ export class Project implements PageObjectInterface {
   public addEmojiReplyBtn = element(by.id('addEmojiReply'))
   public addAudioReplyBtn = element(by.id('addAudioReply'))
   public image = element(by.css('#annotatorContent .img-wrap > img'))
+  public imageWordBoxes = element.all(by.css('#annotatorContent .img-wrap .w-box'))
   public textComment = element(by.css('.new textarea.text-comment-input'))
   public existingTextComment = element(by.css('div.text-comment-input'))
   public textReplyComment = element(by.css('.replyComment.new .text-comment-input'))
@@ -41,6 +42,7 @@ export class Project implements PageObjectInterface {
   public getEmojiFromKeyboard = (locator: string) => element(by.css('emoji-keyboard')).element(by.css(locator))
   public textCommentInput = element(by.css('textarea.text-comment-input'))
   public word = (index: string | number) => element(by.css(`.w[index='${index}']`))
+  public commentAnnotatedText = element(by.css('[data-test="commentAnnotatedText"]'))
 
   // Audio Comment test variables
   public audioPlay = element(by.css('edji-comment:not(.hidden) audio-comment #audioPlay'))
@@ -56,9 +58,9 @@ export class Project implements PageObjectInterface {
   public avatarAudio = element(by.css('.user-icon.avatar-audio'))
   public avatarTextReply = element(by.css('.user-icon.avatar-text .comment__button--mobile.avatar__reply'))
   public mobileTextReply = element(by.css('edji-comment:not(.hidden) .hidden-lg-up.comment__button--mobile'))
-  public commentDelete = element.all(by.css('edji-comment .e2e-delete-button')).last()
+  public commentDelete = element(by.css('edji-comment .e2e-delete-button'))
+  public commentDeleteLast = element.all(by.css('edji-comment .e2e-delete-button')).last()
   public addReplyBtn = element(by.id('addReply'))
-  public emojiCommentDelete = element(by.css('edji-comment .e2e-delete-button'))
   public closePane = element(by.css('.sliding-pane-comment__header button.close'))
 
   public getPage(id: string): void {
