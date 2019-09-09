@@ -423,6 +423,7 @@ tr.selectable {
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
+  background: #fff;
 
   & .emoji {
     filter: grayscale(100%);

@@ -1,9 +1,10 @@
 
 .profile-card
-    .user-icon__initials AB
-    .h1 First Last
+    .user-icon--large
+        span.user-icon__initials {{ getInitials(profileForm) }}
+    .h1([innerHtml]="getProfileName(profileForm)")
 
-form#registerForm([formGroup]="profileForm", (ngSubmit)="register(profileForm.value)")
+form#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfile(profileForm.value)")
     .form-group
         label(for="firstNameInput") First Name
         input#firstNameInput(type="text", [formControl]="profileForm.controls['firstName']", tabindex="0", [placeholder]="userCopy.firstName")
@@ -12,3 +13,40 @@ form#registerForm([formGroup]="profileForm", (ngSubmit)="register(profileForm.va
         label(for="lastNameInput") Last Name
         input#lastNameInput(type="text", [formControl]="profileForm.controls['lastName']", tabindex="0", [placeholder]="userCopy.lastName")
         div#msgUsernameRequired.alert.alert-info(*ngIf="profileForm.controls['lastName'].hasError('required') && profileForm.controls['lastName'].dirty") Please add your last name.
+    .form-group
+        label Using as?
+            p.sub-label Teachers blah blah
+        .input-group
+            .form-check.pl-0
+            //- Public option
+            label#readingMakePublic.form-check-label.form-check-btn(
+                [class.active]="profileForm.controls['accountRole'].value == 'student'",
+                title="Allow anyone to find this Reading in Discover"
+                )
+                input.form-check-input(
+                    type="radio",
+                    name="accountRoleFlag",
+                    value="student",
+                    [formControl]="profileForm.controls['accountRole']",
+                    checked
+                )
+                span([innerHTML]="':writing_hand: Student' | emojione")
+            //- Private option
+            label#readingMakePrivate.form-check-label.form-check-btn(
+                [class.active]="profileForm.controls['accountRole'].value == 'teacher'",
+                title="Hide this Reading from Discover"
+                )
+                input.form-check-input(
+                    type="radio",
+                    name="accountRoleFlag",
+                    value="teacher",
+                    [formControl]="profileForm.controls['accountRole']"
+                )
+                span([innerHTML]="':apple: Teacher' | emojione")
+            //- Other Options
+            label#readingMakePrivate.form-check-label.form-check-btn
+                span([innerHTML]="'Other'")
+    .form-group
+        label School/District
+    .button__row
+        button#buttonCreateProfile.btn.btn-primary(title="Make sure you've completed all the fields!", type="submit", [class.loading]="profileLoading", [disabled]="!profileForm.valid", tabindex="0") Go to Dashboard

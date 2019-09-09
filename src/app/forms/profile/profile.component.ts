@@ -59,10 +59,33 @@ export class ProfileFormComponent implements OnInit {
             {
                 firstName: [null, Validators.required],
                 lastName: [null, Validators.required],
+                accountRole: ['student', Validators.required]
             }
         )
     }
 
     ngOnInit() { }
 
+    getProfileName(form): string {
+        let first = '<i>My</i>'
+        let last = '<i>Profile</i>'
+        if (form.controls['firstName'].value) {
+            first = form.controls['firstName'].value
+        }
+        if (form.controls['lastName'].value) {
+            last = form.controls['lastName'].value
+        }
+        return first + ' ' + last
+    }
+
+    getInitials(form): string {
+        let initials = ''
+        if (form.controls['firstName'].value) {
+            initials = form.controls['firstName'].value[0]
+        }
+        if (form.controls['lastName'].value) {
+            initials += form.controls['lastName'].value[0]
+        }
+        return initials
+    }
 }

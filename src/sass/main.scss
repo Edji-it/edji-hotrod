@@ -534,3 +534,10 @@ input[type='password'].input-noborder:focus {
     margin-top: -65px;
   }
 }
+
+// Registration Profile Card
+.profile-card {
+  .h1 i {
+    color: $medium-gray;
+  }
+}
