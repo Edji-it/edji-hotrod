@@ -76,12 +76,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public focusOverride: boolean = false
 
   // Indices highlighted by users other than owner or current user
-  public highlightArray: number[] = []
+  public highlightArray: number[] | number[][] = []
   // Indices highlighted by current user or reading owner
-  public alwaysHighlightArray: number[] = []
+  public alwaysHighlightArray: number[][] = []
   // Indices for highlights of a selected filter
-  public filterHighlightArray: number[]
-  public focusArray: boolean[] = []
+  public filterHighlightArray: number[][]
+  public focusArray: (boolean | boolean[])[] = []
+  // Word/Hit boxes on images
+  /**
+   * @todo add layered highlighting to boxes
+   */
+  // public boxHighlightArray: number[][]
+  // public boxAlwaysHighlightArray: number[][]
+  // public boxFilterHighlightArray: number[][]
 
   // Line Count
   public lineCountRunning: boolean = false
@@ -112,7 +119,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public commentHeightPos = 0
   private renderTimeout = 3000
 
-  public imageCoords = {}
+  public imageCoords: { x?: number; y?: number } = {}
   public imageHotspotPlaceholder: any = {
     index: -1,
     x: 0,
@@ -158,9 +165,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public window: any
   public audioSupportError: boolean = false
 
-  public quickSelect: { anchor: number; focus: number } = {
+  public quickSelect: { anchor: number; focus: number; boxes?: { word: number; start: number; end?: number } } = {
     anchor: null,
     focus: null,
+    boxes: null,
   }
 
   // For debouncing/wait on showCommentOptions
@@ -371,9 +379,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.user._id === comment.user_id || this.project.teacher_id == comment.user_id,
                 comment.start,
                 comment.end,
+                comment.box,
               )
               // Make sure we've removed the highlight focus
-              this.unfocusHighlight(comment.start, comment.end)
+              this.unfocusHighlight(comment.start, comment.end, comment.box)
               this.commentsByIndexRemove(comment._id, wIndex, cIndex)
               if (comment.replies && comment.replies.length > 0) {
                 this.removeRepliesFromComments(comment)
@@ -395,6 +404,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.user._id === comment.user_id || this.project.teacher_id == comment.user_id,
                 comment.start,
                 comment.end,
+                comment.box,
               )
               this.commentsByIndexAdd(comment, wIndex, true)
             }
@@ -702,12 +712,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   clearQuickSelect(): void {
-    if (this.quickSelect.anchor != null) {
+    if (this.quickSelect.anchor != null || this.quickSelect.boxes) {
       // We can safely clear all highlight values
       this.focusArray = []
     }
-    this.quickSelect.focus = null
-    this.quickSelect.anchor = null
+    this.quickSelect = {
+      focus: null,
+      anchor: null,
+    }
   }
 
   /**
@@ -734,26 +746,74 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Handle creating selection and coordinates for comments on images
+     * + Spot highlights
+     * + Word/hit box highlights
      */
-    if (target.classList && target.classList.contains('reading-image') && target['parentNode']) {
-      // When tapping image, clear in progress Quick Select
-      this.clearQuickSelect()
+    let hitImage: boolean
+    let hitBox: boolean
+    let wordIndex: number
+    if (target.classList) {
+      hitImage = target.classList.contains('reading-image')
+      hitBox = target.classList.contains('w-box')
+    }
+
+    if ((hitImage || hitBox) && target['parentNode']) {
+      //  Clear current focus style
+      this.focusArray = []
+      // Determine SPOT or BOX
+      if (hitBox) {
+        this.optionsShow = false
+        this.imageHotspotPlaceholder.preview = false
+        let boxIndex: number = parseInt(target.getAttribute('index'))
+        wordIndex = parseInt(target.getAttribute('w-index'))
+        if (
+          this.quickSelect.boxes &&
+          this.quickSelect.boxes.word === wordIndex &&
+          typeof this.quickSelect.boxes.start != 'undefined' &&
+          !this.quickSelect.boxes.end
+        ) {
+          // indicates box index
+          this.quickSelect.boxes.end = boxIndex
+        } else {
+          // Clear and begin new Quick Select
+          this.clearQuickSelect()
+          this.quickSelect.boxes = {
+            word: wordIndex,
+            start: boxIndex,
+          }
+        }
+        // Only get coordinates for first word
+        if (!this.quickSelect.boxes.end || this.quickSelect.boxes.end < this.quickSelect.boxes.start) {
+          // Set click coordinates from box
+          this.imageCoords = this.getBoxCoords(target)
+        }
+        this.focusHighlight(wordIndex, wordIndex, null, {
+          start: this.quickSelect.boxes.start,
+          end: this.quickSelect.boxes.end ? this.quickSelect.boxes.end : this.quickSelect.boxes.start,
+        })
+      } else {
+        // Set click coordinates
+        this.imageCoords = this.getRelativeCoords(event)
+        // When tapping image, clear in progress Quick Select
+        this.clearQuickSelect()
+        // Set word index
+        wordIndex = target.getAttribute('index')
+        // Create placeholder spot
+        this.imageHotspotPlaceholder = {
+          index: wordIndex,
+          x: this.imageCoords['x'],
+          y: this.imageCoords['y'],
+          preview: true,
+        }
+      }
+      // Set selection for image comments
       // when they click the picture, we need to create the selection for them
-      this.imageCoords = this.getRelativeCoords(event)
       let range = Rangy.createRange()
       range.selectNodeContents(target['parentNode'])
-
-      // Create placeholder spot
-      this.imageHotspotPlaceholder = {
-        index: target.getAttribute('index'),
-        x: this.imageCoords['x'],
-        y: this.imageCoords['y'],
-        preview: true,
-      }
-
       // this makes sure there are no other selections made
       sel.setSingleRange(range)
     } else {
+      delete this.quickSelect.boxes
       // Functions as "click outside" for images
       this.optionsShow = false
       this.imageHotspotPlaceholder.preview = false
@@ -764,26 +824,25 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    /**
-     * Make sure selection exists, and is within highlightable content
-     * - Runs when:
-     *      - Regular selection is being made
-     *      - Image hotspot is made
-     * - Should:
-     *      - Clear Quick Select
-     */
-    if (
+    let textSelected: boolean =
       sel &&
-      (this.imageHotspotPlaceholder.preview || sel.toString()) &&
+      sel.toString() &&
       ((sel.focusNode.classList && sel.focusNode.classList.contains('w')) ||
-        (sel.focusNode.parentNode.classList.contains('w') ||
-          sel.focusNode.parentNode.classList.contains('img-wrap'))) &&
-      ((sel.anchorNode.classList && sel.anchorNode.classList.contains('w')) ||
-        (sel.anchorNode.parentNode.classList.contains('w') || sel.anchorNode.parentNode.classList.contains('img-wrap')))
-    ) {
+        sel.focusNode.parentNode.classList.contains('w'))
+
+    if (textSelected || this.imageHotspotPlaceholder.preview || !!this.quickSelect.boxes) {
+      /**
+       * Make sure selection exists, and is within highlightable content
+       * - Runs when:
+       *      - Regular text selection is being made
+       *      - Image hotspot is made
+       *      - Image word box highlight is made
+       * - Should:
+       *      - Clear Quick Select
+       */
       let focusY
       // Clear Quick Select
-      this.clearQuickSelect()
+      !this.quickSelect.boxes && this.clearQuickSelect()
       // Find Y position of selection (for comment options)
       if (!!sel.focusNode.getBoundingClientRect) {
         focusY = sel.focusNode.getBoundingClientRect().top
@@ -793,10 +852,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Set y position of comment options
       this.highlightY = focusY - scrollOffset + readingPad
       // Adjust y position for image comments
-      if (this.imageHotspotPlaceholder.preview == true) {
-        let yOnImage = this.imageHeight[this.imageHotspotPlaceholder.index]
+      if (this.imageHotspotPlaceholder.preview == true || !!this.quickSelect.boxes) {
+        let yOnImage = this.imageHeight[wordIndex]
         // Offset 10px to line up with hotspot
-        this.highlightY = this.highlightY + (this.imageHotspotPlaceholder.y / 100) * yOnImage - 10
+        this.highlightY = this.highlightY + (this.imageCoords.y / 100) * yOnImage - 10
       }
       // Show comment options
       this.optionsShow = true
@@ -900,44 +959,66 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Add new highlights to local array
    */
-  incrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
-    if (alwaysHighlight) {
-      for (var i = start; i <= end; i++) {
-        if (this.alwaysHighlightArray[i]) {
-          this.alwaysHighlightArray[i]++
-        } else {
-          this.alwaysHighlightArray[i] = 1
-        }
-      }
-    } else {
-      for (var i = start; i <= end; i++) {
-        if (this.highlightArray[i]) {
-          this.highlightArray[i]++
-        } else {
-          this.highlightArray[i] = 1
-        }
-      }
-    }
+  incrementHighlights(
+    alwaysHighlight: boolean,
+    start: number,
+    end: number,
+    box?: { start: number; end: number },
+  ): void {
+    this.updateHighlights(1, alwaysHighlight, start, end, box)
   }
 
   /**
-   * Removes highlights from local array
+   * Remove highlights from local array
    */
-  decrementHighlights(alwaysHighlight: boolean, start: number, end: number): void {
-    if (alwaysHighlight) {
-      for (var i = start; i <= end; i++) {
-        if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i] > 0) {
-          this.alwaysHighlightArray[i]--
-        } else {
-          this.alwaysHighlightArray[i] = 0
-        }
+  decrementHighlights(
+    alwaysHighlight: boolean,
+    start: number,
+    end: number,
+    box?: { start: number; end: number },
+  ): void {
+    this.updateHighlights(-1, alwaysHighlight, start, end, box)
+  }
+
+  /**
+   * Updates highlight array
+   */
+  updateHighlights(
+    increment: number,
+    alwaysHighlight: boolean,
+    start: number,
+    end: number,
+    box: { start: number; end: number },
+  ): void {
+    if (!box) {
+      // We process non-box comments at index 0 in highlight arrays
+      box = {
+        start: 0,
+        end: 0,
       }
-    } else {
-      for (var i = start; i <= end; i++) {
-        if (this.highlightArray[i] && this.highlightArray[i] > 0) {
-          this.highlightArray[i]--
-        } else {
-          this.highlightArray[i] = 0
+    }
+    for (let bi = box.start; bi <= box.end; bi++) {
+      if (alwaysHighlight) {
+        for (var i = start; i <= end; i++) {
+          if (this.alwaysHighlightArray[i] && this.alwaysHighlightArray[i][bi] > 0) {
+            this.alwaysHighlightArray[i][bi] += increment
+          } else {
+            if (!this.alwaysHighlightArray[i]) {
+              this.alwaysHighlightArray[i] = []
+            }
+            this.alwaysHighlightArray[i][bi] = increment > 0 ? increment : 0
+          }
+        }
+      } else {
+        for (var i = start; i <= end; i++) {
+          if (this.highlightArray[i] && this.highlightArray[i][bi] > 0) {
+            this.highlightArray[i][bi] += increment
+          } else {
+            if (!this.highlightArray[i]) {
+              this.highlightArray[i] = []
+            }
+            this.highlightArray[i][bi] = increment > 0 ? increment : 0
+          }
         }
       }
     }
@@ -950,26 +1031,48 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param end Index of last word
    * @param type What kind of comment: emoji, text...
    */
-  createComment(start: number, end: number, type: string): void {
+  createComment(span: SelectionSpan, type: string): void {
+    let isBox = typeof span.boxStart == 'number' && typeof span.boxEnd == 'number'
     // We need to make sure they aren't already editing a comment
     this.inactivateComment()
 
-    // STEP: We're prepping a comment to send to ProjectService for saving.
-
+    // Attach highlighted text to comment
     let text: string = ''
-    for (var i = start; i <= end; i++) {
-      text += this.reading.words[i] && this.reading.words[i].str ? this.reading.words[i].str : ' '
+    if (!isBox) {
+      // Regular text highlight
+      for (let i = span.start; i <= span.end; i++) {
+        text += this.reading.words[i] && this.reading.words[i].str ? this.reading.words[i].str : ' '
+      }
+    } else {
+      // Text/hit-box in image/pdf highlight
+      for (let i = span.start; i <= span.end; i++) {
+        let page = this.reading.words[i]
+        for (let bi = span.boxStart; bi <= span.boxEnd; bi++) {
+          text += page.boxes[bi] && page.boxes[bi]['str'] ? page.boxes[bi]['str'] + ' ' : ''
+        }
+      }
     }
     // We don't want trailing whitespaces saved for highlighted text
     text = text.trim()
     // Build comment
     let comment = <EdjiComment>{
       data: '',
-      start: start,
-      end: end,
+      start: span.start,
+      end: span.end,
       type: type,
       text: text,
       loc: this.imageCoords,
+    }
+    // Attach box indices
+    if (isBox) {
+      comment.box = {
+        start: span.boxStart,
+        end: span.boxEnd,
+        start_x: this.imageCoords.x,
+        start_y: this.imageCoords.y,
+      }
+      // remove coords
+      delete comment.loc
     }
     // Tell server we've added a comment
     this._projects
@@ -979,7 +1082,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         if (comment._id) {
           // Add setting to trigger focus on new comment
           comment.new = true // this is basically to tell our test cases which comment was just made
-          this.commentsByIndexAdd(comment, start)
+          this.commentsByIndexAdd(comment, comment.start)
         } else {
           console.warn("Didn't get a comment back from server!")
         }
@@ -1063,7 +1166,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   removeComment(comment, index: number, commentIndex: number) {
     // Remove Highlights
-    this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end)
+    this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end, comment.box)
     // Remove local comment object
     this.commentsByIndexRemove(comment._id, index, commentIndex)
     this.unfocusHighlight(comment.start, comment.end)
@@ -1085,7 +1188,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   inactivateComment(): void {
     if (this._comments.activeComment.start !== undefined) {
-      this.unfocusHighlight(this._comments.activeComment.start, this._comments.activeComment.end)
+      this.unfocusHighlight(
+        this._comments.activeComment.start,
+        this._comments.activeComment.end,
+        this._comments.activeComment.box,
+      )
       this._comments.activeComment.active = false
       this._comments.activeComment = <EdjiComment>{}
     }
@@ -1103,11 +1210,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Returns Start and End word indices of text selection
    * @description Provides start/end AND clears selection
    */
-  getSelectionSpan(): any {
+  getSelectionSpan(): SelectionSpan {
     let start: number
     let end: number
+    let span: SelectionSpan
 
-    if (this.imageHotspotPlaceholder && this.imageHotspotPlaceholder.preview && this.imageHotspotPlaceholder.index) {
+    if (this.quickSelect.boxes && typeof this.quickSelect.boxes.word == 'number') {
+      // Image/PDF hit/word box
+      start = this.quickSelect.boxes.word
+    } else if (
+      this.imageHotspotPlaceholder &&
+      this.imageHotspotPlaceholder.preview &&
+      this.imageHotspotPlaceholder.index
+    ) {
       // Image Selection
       start = this.imageHotspotPlaceholder.index
     } else if (this.quickSelect.anchor != null) {
@@ -1151,8 +1266,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!end && end != 0) {
       end = start
     }
-
-    return { start: start, end: end }
+    span = { start: start, end: end }
+    // Attach box indices
+    if (this.quickSelect.boxes && typeof this.quickSelect.boxes.start == 'number') {
+      span.boxStart = this.quickSelect.boxes.start
+      span.boxEnd = this.quickSelect.boxes.end ? this.quickSelect.boxes.end : span.boxStart
+    }
+    // Make sure box start and end are sequential
+    if (span.boxStart > span.boxEnd) {
+      span.boxEnd = [span.boxStart, (span.boxStart = span.boxEnd)][0] // Swap start and end values
+    }
+    return span
   }
 
   /**
@@ -1162,15 +1286,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   addCommentOfType(type: string): void {
     // Get selection indices
     let span = this.getSelectionSpan()
+
     if (!(span.start >= 0) || !(span.end >= 0)) {
       return
     }
-
     // Increment highlight array
-    this.incrementHighlights(true, span.start, span.end)
-
+    this.incrementHighlights(true, span.start, span.end, { start: span.boxStart, end: span.boxEnd })
     // Tell the server we've got a comment!
-    this.createComment(span.start, span.end, type)
+    this.createComment(span, type)
   }
 
   /**
@@ -1248,21 +1371,46 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Adds focus text highlighted for the relevant comment
-   * @param start Index for first word
-   * @param end Index for last word
+   * Update focusArray for a specified selection
+   * @param value true or false - are you adding or removing focus?
    */
-  private focusHighlight(start, end, location?: any): void {
-    if (this.optionsShow == true) {
-      return
-    }
+  private updateFocusArray(value: boolean, start: number, end: number, boxes?: { start: number; end: number }): void {
     // Make sure start and end are in order
     if (start > end) {
       end = [start, (start = end)][0] // Swap start and end values
     }
-    for (var i = start; i <= end; i++) {
-      this.focusArray[i] = true
+    if (!boxes) {
+      for (var i = start; i <= end; i++) {
+        this.focusArray[i] = value
+      }
+    } else {
+      // Handle box highlighting
+      this.focusArray[start] = []
+      // let boxEnd = boxes.end || boxes.start
+      if (!boxes.end) {
+        boxes.end = boxes.start
+      }
+      if (boxes.start > boxes.end) {
+        boxes.end = [boxes.start, (boxes.start = boxes.end)][0] // Swap start and end values
+      }
+      for (let bi = boxes.start; bi <= boxes.end; bi++) {
+        this.focusArray[start][bi] = value
+      }
     }
+  }
+
+  /**
+   * Adds focus text highlighted for the relevant comment
+   * @param start Index for first word
+   * @param end Index for last word
+   */
+  public focusHighlight(start, end, location?: any, boxes?: { start: number; end: number }): void {
+    if (this.optionsShow == true) {
+      return
+    }
+    // Apply focus underline
+    this.updateFocusArray(true, start, end, boxes)
+    // Hot-spot focus
     if (location && location.x && location.y) {
       this.imageHotspotPlaceholder = {
         index: start,
@@ -1278,17 +1426,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param start Index for first word
    * @param end Index for last word
    */
-  private unfocusHighlight(start, end, location?: any): void {
+  public unfocusHighlight(start, end, location?: any, boxes?: { start: number; end: number }): void {
     if (this.focusOverride) {
       return
     }
-    // Make sure start and end are in order
-    if (start > end) {
-      end = [start, (start = end)][0] // Swap start and end values
-    }
-    for (var i = start; i <= end; i++) {
-      this.focusArray[i] = false
-    }
+    // Remove focus underline
+    this.updateFocusArray(false, start, end, boxes)
+    // Remove hot-spot focus
     this.imageHotspotPlaceholder['focus'] = false
   }
 
@@ -1305,21 +1449,27 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     highlightArray,
     alwaysHighlightArray,
     i: number,
+    bi?: number,
   ): string {
     let classString = ''
     let highlightCount = 0
+    if (!bi) {
+      bi = 0
+    }
 
     // If a filter is applied, use filter highlights
     if (filterHighlightArray) {
-      if (filterHighlightArray[i]) {
-        highlightCount += filterHighlightArray[i]
+      if (filterHighlightArray[i] && filterHighlightArray[i][bi]) {
+        highlightCount += filterHighlightArray[i][bi]
       }
     } else {
-      if ((projectHeat_vision || projectIsTeaching) && highlightArray[i]) {
-        highlightCount += highlightArray[i]
+      // Show student highlights
+      if ((projectHeat_vision || projectIsTeaching) && highlightArray[i] && highlightArray[i][bi]) {
+        highlightCount += highlightArray[i][bi]
       }
-      if (alwaysHighlightArray[i]) {
-        highlightCount += alwaysHighlightArray[i]
+      // Show user's own highlights and teacher highlights
+      if (alwaysHighlightArray[i] && alwaysHighlightArray[i][bi]) {
+        highlightCount += alwaysHighlightArray[i][bi]
       }
     }
 
@@ -1328,11 +1478,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Get word focus class (keep it LIGHT)
+   * => Pure function, all vars provided as arguments
    * @param focusArray
    * @param i word index
    */
-  public focusClass(focusArray, i): string {
-    if (focusArray[i]) {
+  public focusClass(focusArray, i: number, bi?: number): string {
+    let hasBi = typeof bi == 'number'
+    // Apply focus class to words of focused comments
+    if ((!hasBi && focusArray[i] === true) || (hasBi && (focusArray[i] && focusArray[i][bi] === true))) {
       return 'h-f'
     } else {
       return ''
@@ -1341,11 +1494,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Get Quick Select class (keep it LIGHT)
+   * => Pure function, all vars provided as arguments
    * @param quickSelect anchor/focus object
    * @param i word index
+   * @param bi (optional) word Box index
    */
-  public quickSelectClass(quickSelect, i): string {
+  public quickSelectClass(quickSelect, i, bi?): string {
     if (i === quickSelect.focus || i === quickSelect.anchor) {
+      return 'quick-select--click'
+    } else if (quickSelect.boxes && (bi == quickSelect.boxes.start || bi == quickSelect.boxes.end)) {
       return 'quick-select--click'
     } else {
       return ''
@@ -1360,9 +1517,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
+   * For image hit/word box comments: Determines relative middle of word
+   */
+  private getBoxCoords(el: HTMLElement): { x: number; y: number } {
+    let top = parseFloat(el.style.top.replace('%', '').replace('px', ''))
+    let left = parseFloat(el.style.left.replace('%', '').replace('px', ''))
+    let height = parseFloat(el.style.height.replace('%', '').replace('px', ''))
+    let width = parseFloat(el.style.width.replace('%', '').replace('px', ''))
+
+    return { x: left + width / 2, y: top + height / 2 }
+  }
+
+  /**
    * For image comments: Determines relative location of hotspot
    */
-  private getRelativeCoords(e: Event): any {
+  private getRelativeCoords(e: Event): { x: number; y: number } {
     let target = e.target
     let PosX = 0
     let PosY = 0
@@ -1411,8 +1580,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     return {
-      x: (((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3),
-      y: (((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3),
+      x: parseFloat((((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3)),
+      y: parseFloat((((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3)),
     }
   }
 
@@ -1620,6 +1789,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.feedbackForUser.push(feedback)
     }
   }
+}
+
+interface SelectionSpan {
+  start: number
+  end: number
+  boxStart?: number
+  boxEnd?: number
 }
 
 export type toastType = 'feedback' | 'reply'

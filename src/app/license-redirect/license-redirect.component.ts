@@ -18,6 +18,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
 
   public user: User
   public invitationId: string
+  public tokenType: string
   public academyName: string = 'Academy'
 
   public errorKey: string = ''
@@ -29,22 +30,22 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     private _locker: LockerService,
     private _academy: AcademyService,
     public _util: UtilToolService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
-    )
-
-    this.subscriptions.push(
       this.route.params.subscribe(params => {
-        this.invitationId = params['license_id']
+        this.invitationId = params.license_id
       }),
-      this.route.queryParams.subscribe(queryParams => {
-        if (queryParams['academy']) {
-          this.academyName = queryParams['academy']
+      this.route.queryParams.subscribe(query => {
+        if (query.academy) {
+          this.academyName = query.academy
+        }
+        if (query.tokenType) {
+          this.tokenType = query.tokenType
         }
       }),
     )
@@ -89,7 +90,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     }
     // tell the server we need to process the license on the user
     this._academy
-      .acceptLicense(this.invitationId)
+      .acceptLicense(this.invitationId, this.tokenType ? { type: this.tokenType } : undefined)
       .pipe(take(1))
       .subscribe(
         (userWithLicense: any) => {
@@ -106,13 +107,16 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
         },
         err => {
           console.error(err)
+          let caught = false
           if (err.status === 403 && err.error.error === 'invite not found for email') {
             this.errorKey = 'serverError'
+            caught = true
           }
           if (err.status === 403 && err.error.error === 'invalid license') {
             this.errorKey = 'invalidLicense'
+            caught = true
           }
-          if (err.status === 500) {
+          if (err.status === 500 || !caught) {
             this.errorKey = 'licenseProcessError'
           }
         },

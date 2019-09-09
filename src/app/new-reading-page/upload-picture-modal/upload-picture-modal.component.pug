@@ -1,0 +1,44 @@
+#uploadModal.modal
+  .modal-dialog
+    .modal-content
+      form
+        .modal-header
+          h4.modal-title Add a Picture
+          button.close.btn-icon--round(
+            (click)="closeModal.emit()",
+            type="button",
+            data-dismiss="modal",
+            aria-label="Close"
+          )
+            span(aria-hidden="true") &times;
+        .modal-body
+          form
+            label.btn.btn-default.btn-file(#browseBtn) Browse
+              input#imageFileInput(
+                type="file",
+                accept=".jpg,.png,.gif,.jpeg,.svg",
+                (change)="updateUploadFile()",
+                style="display:none;"
+              )
+            .file-name((click)="browseBtn.click()")
+              span.placeholder(*ngIf="!this.file || !this.file.name || this.file.name.length < 1") Select image to upload...
+              | {{ this.file ? this.file.name : '' }}
+            button#buttonBeginImageUpload.btn.btn-primary(
+              (click)="beginUpload()",
+              type="submit",
+              [class.loading]="uploading"
+            ) Upload
+          .alert.alert-warning(*ngIf="errorMsg") {{ errorMsg }}
+          hr
+          p#status Select an image to insert into your Reading
+          .card-columns
+            ng-container(*ngFor="let image of uploadedImages; let i = index")
+              .card.upload-list-item(
+                *ngIf="i < 30",
+                (click)="insertImage(i)",
+                [class.new]="newImgUrls.indexOf(image.url) > -1"
+              )
+                img.card-img-top.img-fluid([src]="image.url", [title]="image.title")
+                .card-img-overlay.overlay-on-hover
+                  button.btn.btn-primary.btn--center-overlay Insert
+        .modal-footer

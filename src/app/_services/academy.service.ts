@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, interval, Subscription, Subject } from 'rxjs'
 import { map } from 'rxjs/operators'
+import { stringify } from 'querystring'
 
 // project dependancies
 import { AuthService } from 'src/app/_services'
@@ -37,9 +38,9 @@ export class AcademyService implements CanActivate {
    * Accepts a license that is shared with the user
    * @param licenseId _id of the license to accept
    */
-  public acceptLicense(licenseId: string): Observable<AcceptLicenseResponse> {
+  public acceptLicense(licenseId: string, query: { type?: string } = {}): Observable<AcceptLicenseResponse> {
     return this._http.put<AcceptLicenseResponse>(
-      this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/accept',
+      `${this._auth.getUrl()}/api/v1/licenses/${licenseId}/accept?${query ? stringify(query) : ''}`,
       {},
       {
         headers: new HttpHeaders({
@@ -161,7 +162,7 @@ export class AcademyService implements CanActivate {
         map(data => {
           return data.licenses
         }),
-      )
+    )
   }
 
   /**
