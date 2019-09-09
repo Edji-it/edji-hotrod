@@ -59,7 +59,8 @@ export class ProfileFormComponent implements OnInit {
             {
                 firstName: [null, Validators.required],
                 lastName: [null, Validators.required],
-                accountRole: ['student', Validators.required]
+                accountRole: ['student', Validators.required],
+                school: [null, Validators.required],
             }
         )
     }

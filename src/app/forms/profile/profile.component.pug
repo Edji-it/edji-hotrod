@@ -48,5 +48,6 @@ form#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfile(profileFo
                 span([innerHTML]="'Other'")
     .form-group
         label School/District
+        hot-school-selector([formControl]="profileForm.controls['school']")
     .button__row
         button#buttonCreateProfile.btn.btn-primary(title="Make sure you've completed all the fields!", type="submit", [class.loading]="profileLoading", [disabled]="!profileForm.valid", tabindex="0") Go to Dashboard

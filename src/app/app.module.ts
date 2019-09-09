@@ -67,6 +67,7 @@ import {
   TutorialBoxComponent,
   ResetComponent,
   PromoBannerComponent,
+  SchoolSelectorComponent
 } from './shared'
 import { HomeComponent } from './home'
 import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
@@ -279,6 +280,7 @@ const routerOptions: ExtraOptions = {
     ReadingRecapComponent,
     TeamPageComponent,
     PromoBannerComponent,
+    SchoolSelectorComponent
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],
