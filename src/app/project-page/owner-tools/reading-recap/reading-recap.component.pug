@@ -17,9 +17,9 @@
         button#closeReadingRecap.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
           span(aria-hidden='true') &times;
         //- button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
-        //- button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
+        button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
   .container.px-3(*ngIf="currentUser.hero_status")
-    #readingReport.p-4
+    #readingReport.p-4(style="background:#fff;")
       //- Header Block
       .row
         .col-9
