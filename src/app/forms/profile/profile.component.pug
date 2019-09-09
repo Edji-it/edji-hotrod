@@ -1,7 +1,8 @@
-h1.on-dark.center
-//- p(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
-//- p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
-//- h3.text-center.my-4 Register with a firstName and password
+
+.profile-card
+    .user-icon__initials AB
+    .h1 First Last
+
 form#registerForm([formGroup]="profileForm", (ngSubmit)="register(profileForm.value)")
     .form-group
         label(for="firstNameInput") First Name

@@ -1,0 +1,18 @@
+@import '../../../sass/base/variables';
+
+.profile-card {
+    width: 100%;
+    display: block;
+    background: #fff;
+    box-shadow: 5px -1px 2px rgba(0,0,0,0.3);
+    padding: $base-pad;
+    margin-bottom: $base-pad;
+
+    &, & .h1 {
+        color: #000;
+    }
+}
+
+.user-icon__initials {
+    float: left;
+}
