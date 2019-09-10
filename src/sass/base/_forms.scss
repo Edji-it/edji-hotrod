@@ -458,4 +458,10 @@ tr.selectable {
   background: #fff;
   padding: $base-pad;
   border-radius: 4px; // 1/2 of modal border radius
+  margin-top: $base-pad;
+  margin-bottom: $base-pad;
+  
+  & .form-group {
+    margin-bottom: 0rem;
+  }
 }

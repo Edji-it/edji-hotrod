@@ -4,18 +4,11 @@ p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
 div.text-center.mt-4
     edji-oauth-row([signUp]="true")
     hr
-    p.text-divider or
-h3.text-center.my-4 Register with a username and password
-form#registerForm([formGroup]="registerForm", (ngSubmit)="register(registerForm.value)")
-    .form-group
-        label(for="usernameInput") Username
-        input#usernameInput(type="text", [formControl]="registerForm.controls['username']", tabindex="0", [placeholder]="userCopy.username")
-        div#msgUsernameRequired.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('required') && registerForm.controls['username'].dirty") Enter a unique username! It should not contain spaces.
-        #msgUsernameIncorrect.alert.alert-info(*ngIf="registerForm.controls['username'].hasError('usernameIncorrect') && registerForm.controls['username'].dirty") Your username cannot be an email address...
-    .form-group
-        label(for="fullnameInput") Full Name
-        input#fullnameInput(type="text", [formControl]="registerForm.controls['fullname']", tabindex="0", [placeholder]="userCopy.fullname")
-        #msgFullnameRequired.alert.alert-info(*ngIf="registerForm.controls['fullname'].hasError('required') && registerForm.controls['fullname'].dirty") What should we call you?
+    p.text-divider.on-dark or
+form.form-block#registerForm([formGroup]="registerForm", (ngSubmit)="register(registerForm.value)")
+    h3.text-center.mb-4
+        .d-inline-block.mr-2([innerHtml]="':envelope:' | emojione")
+        | Sign Up with Email
     .form-group
         label(for="emailInput") Email
         input#emailInput(type="text", [formControl]="registerForm.controls['email']", tabindex="0", [placeholder]="userCopy.email")
@@ -23,20 +16,21 @@ form#registerForm([formGroup]="registerForm", (ngSubmit)="register(registerForm.
         #msgEmailIncorrect.alert.alert-info(*ngIf="registerForm.controls['email'].hasError('emailIncorrect') && registerForm.controls['email'].dirty") We don't think that's an email...
     .form-group
         label(for="passwordInput") Password
-        input#passwordInput(type="password", [formControl]="registerForm.controls['password']", tabindex="0", pattern=".{6,}", placeholder="Put a password here!")
+        input#passwordInput(type="password", [formControl]="registerForm.controls['password']", tabindex="0", pattern=".{6,}", placeholder="6 or more characters")
         #msgPasswordRequired.alert.alert-info(*ngIf="registerForm.controls['password'].invalid && registerForm.controls['password'].dirty") Every good account has a password with 6 or more characters
     .form-group
-        label(for="passwordConfirmInput") Password Confirm
-        input#passwordConfirmInput(type="password", [formControl]="registerForm.controls['passwordConfirm']", tabindex="0", placeholder="Type that password again!")
+        label(for="passwordConfirmInput") Confirm Password
+        input#passwordConfirmInput(type="password", [formControl]="registerForm.controls['passwordConfirm']", tabindex="0", placeholder="Confirm, just to be sure")
         //- <!--<div id="msgPasswordConfirmRequired" *ngIf="registerForm.controls['passwordConfirm'].hasError('required') && registerForm.controls['passwordConfirm'].dirty" class="alert alert-info">After your passwords match, you can Edji!</div>-->
         #msgMismatch.alert.alert-info(*ngIf="registerForm.hasError('mismatch')") After your passwords match, you can Edji!
-
-    p#termsText.text-center.pb-2 
-        | By registering for Edji, you agree to our 
-        a#registerPrivacyLink.link--light(href="http://guide.edji.it/index.php/privacy-terms/", target="_blank") Privacy Policy
-        =' and ' 
-        a#registerTermsLink.link--light(href="http://guide.edji.it/index.php/terms-of-use/", target="_blank") Terms of Use
-        | .
+    .form-group
+        p.float-left.mr-2.mt-1([innerHtml]="':ballot_box_with_check:' | emojione")
+        p#termsText.label.text-muted
+            | By registering for Edji, you agree to our 
+            a#registerPrivacyLink.link(href="http://guide.edji.it/index.php/privacy-terms/", target="_blank") Privacy Policy
+            =' and ' 
+            a#registerTermsLink.link(href="http://guide.edji.it/index.php/terms-of-use/", target="_blank") Terms of Use
+            | .
 
     //- <!-- Error Messages -->
     #msgDuplicateUsername.alert.alert-info(*ngIf="errorObject.duplicateUsername", [innerHtml]=" '<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it.' | emojione")
@@ -45,5 +39,5 @@ form#registerForm([formGroup]="registerForm", (ngSubmit)="register(registerForm.
     #msgBadUsername.alert.alert-warning(*ngIf="errorObject.badUsername", [innerHtml]="errorObject.badUsername | emojione")
     #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError") Oh no! Something went wrong, and we aren't sure exactly what.
 
-    .button__row
+    .button__row.right
         button#buttonRegister.btn.btn-primary(title="Make sure you've completed all the fields!", type="submit", [class.loading]="registerLoading", [disabled]="!registerForm.valid", tabindex="0") Register!
