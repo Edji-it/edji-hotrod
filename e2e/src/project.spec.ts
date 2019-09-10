@@ -52,8 +52,10 @@ describe('Project Page', () => {
       // Find text to select
       browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, 'never found words to click on')
       // Select words using Quick Highlight by clicking
-      project.word(26).click()
-      project.word(30).click()
+      let firstWord = project.word(26)
+      let lastWord = project.word(30)
+      firstWord.click()
+      lastWord.click()
       // Add emoji comment
       project.addEmojiComment()
       // Select emojis
@@ -65,12 +67,16 @@ describe('Project Page', () => {
       project.getEmojiFromKeyboard(".emojionearea-filter[title='Objects']").click()
 
       // Use emoji keyboard filter, and type an emoji from further down
-      const dollaDolla = project.getEmojiFromKeyboard("[dataname=':dollar:'")
+      const dollaDolla = project.getEmojiFromKeyboard("[dataname=':dollar:']")
       browser.wait(EC.elementToBeClickable(dollaDolla), 5000, 'never scrolled to the dollars emoji')
       dollaDolla.click()
 
       // Save emoji comment
       project.emojiCommentSave.click()
+
+      // Verify commented word has highlight (1) class
+      expect(firstWord.getAttribute('class')).toContain('h-1')
+      expect(lastWord.getAttribute('class')).toContain('h-1')
 
       // delete the comment
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
@@ -307,7 +313,7 @@ describe('Project Page', () => {
       browser.sleep(200) // allow for quick select animation
       thirdWordBox.click()
       browser.sleep(200) // allow for quick select animation
-      // Verify word boxes gained focus higlight class
+      // Verify word boxes gained focus highlight class
       expect(firstWordBox.getAttribute('class')).toContain('h-f')
       expect(thirdWordBox.getAttribute('class')).toContain('h-f')
       // click the tool tip
