@@ -1,12 +1,14 @@
 @import '../../../sass/base/variables';
 
 .profile-card {
+    position: relative;
     width: 100%;
     display: block;
     background: #fff;
     box-shadow: -1px 2px 15px rgb(11, 108, 164);
     padding: $base-pad;
     margin-bottom: $base-pad;
+    padding-left: 95px;
 
     &, & .h1 {
         color: #000;
@@ -19,4 +21,11 @@
 
 .user-icon__initials {
     float: left;
+}
+
+.user-icon--large {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: $base-pad;
 }

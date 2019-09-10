@@ -3,6 +3,9 @@
     .user-icon--large
         span.user-icon__initials {{ getInitials(profileForm) }}
     .h1([innerHtml]="getProfileName(profileForm)")
+    .label.small.text-muted(*ngIf="profileForm.controls['school'] && profileForm.controls['school'].value")
+        i.icon.icon-school
+        | {{ ' ' + profileForm.controls['school'].value }}
 
 form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfile(profileForm.value)")
     .row
@@ -18,7 +21,7 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
                 div#msgUsernameRequired.alert.alert-info(*ngIf="profileForm.controls['lastName'].hasError('required') && profileForm.controls['lastName'].dirty") Please add your last name.
     .form-group
         label Using as?
-            p.sub-label If you are in the classroom, please select how you will be using Edji.
+            p.sub-label Please select how you will be using Edji.
         .input-group
             .form-check.pl-0
                 //- Public option

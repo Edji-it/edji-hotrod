@@ -473,6 +473,10 @@ $iconGrayOpacity: 0.6;
   @include icon('icon-save-small.svg');
 }
 
+.icon-school {
+  @include icon('icon-school.svg');
+}
+
 .icon-search {
   @include icon('icon-search.svg');
 }
