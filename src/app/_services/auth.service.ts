@@ -149,6 +149,10 @@ export class AuthService implements CanActivate {
     ) {
       user.isStudent = true
     }
+    // Determine if user has completed required profile fields
+    if (user.type !== 'temp' && !user.fullname && (!user.identities || user.identities.length < 1)) {
+      user.profileIncomplete = true
+    }
     // Determine if user is an Academy Admin
     if (user && user.license_ids && user.license_ids[0]) {
       this.fetchAcademies(user)
@@ -702,12 +706,12 @@ export class AuthService implements CanActivate {
 
     return this._http.post<any>(
       this.baseUrl +
-        '/api/v1/users/tokens/' +
-        resetObject.type +
-        '/' +
-        resetObject.token +
-        '/?user_id=' +
-        resetObject.userId,
+      '/api/v1/users/tokens/' +
+      resetObject.type +
+      '/' +
+      resetObject.token +
+      '/?user_id=' +
+      resetObject.userId,
       { [resetObject.type]: resetObject.newValue },
       {
         headers: newHeaders,

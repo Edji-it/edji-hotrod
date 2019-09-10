@@ -2,6 +2,7 @@
 export interface User extends BaseUser {
   isLoggedIn: boolean
   isStudent?: boolean
+  profileIncomplete?: boolean
   type?: string
   createdAt: Date
   updatedAt: Date

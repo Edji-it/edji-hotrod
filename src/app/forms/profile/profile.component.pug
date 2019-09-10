@@ -26,10 +26,9 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
             p.sub-label Please select how you will be using Edji.
         .input-group
             .form-check.pl-0
-                //- Public option
-                label#readingMakePublic.form-check-label.form-check-btn(
-                    [class.active]="profileForm.controls['accountRole'].value == 'student'",
-                    title="Allow anyone to find this Reading in Discover"
+                //- Student option
+                label#typeStudentInput.form-check-label.form-check-btn.hover--tooltip(
+                    [class.active]="profileForm.controls['accountRole'].value == 'student'"
                     )
                     input.form-check-input(
                         type="radio",
@@ -38,10 +37,12 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
                         [formControl]="profileForm.controls['accountRole']"
                     )
                     span([innerHTML]="':writing_hand: Student' | emojione")
-                //- Private option
-                label#readingMakePrivate.form-check-label.form-check-btn(
-                    [class.active]="profileForm.controls['accountRole'].value == 'teacher'",
-                    title="Hide this Reading from Discover"
+                    .tooltip-wrap
+                        .tooltip
+                            .tooltip-title Focused on reading and have limited sharing abilities
+                //- Teacher option
+                label#typeTeacherInput.form-check-label.form-check-btn.hover--tooltip(
+                    [class.active]="profileForm.controls['accountRole'].value == 'teacher'"
                     )
                     input.form-check-input(
                         type="radio",
@@ -50,8 +51,10 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
                         [formControl]="profileForm.controls['accountRole']"
                     )
                     span([innerHTML]="':apple: Teacher' | emojione")
-                //- label#readingMakePrivate.form-check-label.form-check-btn
-                //-     span([innerHTML]="'Other'")
+                    .tooltip-wrap
+                        .tooltip
+                            .tooltip-title Focused on created and managing readings
+                //- Other Identity options
                 ng-container(*ngIf="showMoreIdentities")
                     label.form-check-label.form-check-btn(
                         *ngFor="let identity of moreIdentities",

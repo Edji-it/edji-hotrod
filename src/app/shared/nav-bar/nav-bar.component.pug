@@ -88,7 +88,7 @@
         .avatar__drop-down.list-group(*ngIf="showAvatarDropdown", [class.visible]="showAvatarDropdown")
           .arrow
           //- Account
-          button#accountButton.list-group-item.list-group-item-action(type="button", (click)="openAccount()") {{ user.fullname }}
+          button#accountButton.list-group-item.list-group-item-action(*ngIf="user.fullname", type="button", (click)="openAccount()") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
           button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()")

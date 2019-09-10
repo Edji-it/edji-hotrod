@@ -57,8 +57,7 @@ export class RegisterFormComponent implements OnInit {
 
     this.registerForm = _fb.group(
       {
-        username: [null, [Validators.required, this.usernameValidator]],
-        fullname: [null, Validators.required],
+        // fullname: [null, Validators.required],
         email: [null, [Validators.required, this.emailValidator]],
         password: [null, [Validators.required, Validators.minLength(6)]],
         passwordConfirm: [null, Validators.required],
@@ -111,6 +110,8 @@ export class RegisterFormComponent implements OnInit {
       formValue.referred_by = this.referralId
     }
 
+    formValue.fullname = ''
+
     // Attempt to register this user.
     this._auth
       .register(formValue)
@@ -119,39 +120,40 @@ export class RegisterFormComponent implements OnInit {
         (data: any) => {
           this.registerLoading = false
           if (data.user) {
-            if (this.readingToAdd && this.tempUserId) {
-              this._auth
-                .convertTempUser(this.tempUserId)
-                .pipe(take(1))
-                .subscribe(
-                  () => {
-                    this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
-                  },
-                  err => {
-                    console.error(err)
-                    this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
-                  },
-                )
-            } else if (this.tempUserId) {
-              this._auth
-                .convertTempUser(this.tempUserId)
-                .pipe(take(1))
-                .subscribe(
-                  () => {
-                    this._router.navigate(['/dashboard/read'])
-                  },
-                  err => {
-                    console.error(err)
-                    // should also have an error put on the dashboard
-                    this._router.navigate(['/dashboard/read'])
-                  },
-                )
-            } else if (this.noRedirect) {
-              this.registerSuccess.emit(data.user)
-            } else {
-              // default case where nothing special happens
-              this._router.navigate(['/dashboard/read'])
-            }
+            this._router.navigate(['/register/profile'])
+            // if (this.readingToAdd && this.tempUserId) {
+            //   this._auth
+            //     .convertTempUser(this.tempUserId)
+            //     .pipe(take(1))
+            //     .subscribe(
+            //       () => {
+            //         this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
+            //       },
+            //       err => {
+            //         console.error(err)
+            //         this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
+            //       },
+            //     )
+            // } else if (this.tempUserId) {
+            //   this._auth
+            //     .convertTempUser(this.tempUserId)
+            //     .pipe(take(1))
+            //     .subscribe(
+            //       () => {
+            //         this._router.navigate(['/dashboard/read'])
+            //       },
+            //       err => {
+            //         console.error(err)
+            //         // should also have an error put on the dashboard
+            //         this._router.navigate(['/dashboard/read'])
+            //       },
+            //     )
+            // } else if (this.noRedirect) {
+            //   this.registerSuccess.emit(data.user)
+            // } else {
+            //   // default case where nothing special happens
+            //   this._router.navigate(['/dashboard/read'])
+            // }
           }
 
           // If there is a failure with registering the user...

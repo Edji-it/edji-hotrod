@@ -417,16 +417,15 @@ tr.selectable {
 
 .form-check-btn {
   float: left;
-  margin-right: 5px;
-  margin-bottom: 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
   border: 1px solid $midGray;
   border-radius: 16px;
-  // box-shadow: 0px 2px 2px rgba($medium-gray, 0.4);
-  overflow: hidden;
   cursor: pointer;
   background: #fff;
-
-  // transition: border linear 0.2s, box-shadow linear 0.2s;
+  // allow use of tooltip
+  position: relative;
+  overflow: visible; 
 
   &:hover, &:focus {
     border-color: rgba($green, 0.5);
@@ -493,8 +492,9 @@ tr.selectable {
   background: #fff;
 
   &.form-check-label {
-    padding: 0px 15px;
-    color: $gray;
+    font-weight: 400;
+    padding: 0px 7.5px;
+    color: $medium-gray;
     line-height: 32px;
   }
 

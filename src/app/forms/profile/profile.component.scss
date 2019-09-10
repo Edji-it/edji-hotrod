@@ -25,7 +25,7 @@
 
 .user-icon--large {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    top: calc(50% - 21px);
+    // transform: translateY(-50%);
     left: $base-pad;
 }
