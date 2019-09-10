@@ -45,11 +45,26 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
                         [formControl]="profileForm.controls['accountRole']"
                     )
                     span([innerHTML]="':apple: Teacher' | emojione")
+                //- label#readingMakePrivate.form-check-label.form-check-btn
+                //-     span([innerHTML]="'Other'")
+                ng-container(*ngIf="showMoreIdentities")
+                    label.form-check-label.form-check-btn(
+                        *ngFor="let identity of moreIdentities",
+                        [attr.id]="identity.id",
+                        [class.active]="profileForm.controls['accountRole'].value == identity.name",
+                    )
+                        input.form-check-input(
+                            type="radio",
+                            name="accountRole",
+                            [value]="identity.name",
+                            [formControl]="profileForm.controls['accountRole']"
+                        )
+                        span([innerHTML]="identity.displayName | emojione")
                 //- Other Options
-                label#readingMakePrivate.form-check-label.form-check-btn
-                    span([innerHTML]="'Other'")
-    .form-group(*ngIf="profileForm.controls['accountRole'].value == 'teacher'")
+                label.form-check-label.form-check-link((click)="showMoreIdentities = !showMoreIdentities")
+                    | {{ !showMoreIdentities ? 'Other?' : 'Hide' }}
+    .form-group(*ngIf="isSchoolStaff(profileForm.controls['accountRole'].value)")
         label School/District
         hot-school-selector(name="school", [formControlAlias]="profileForm.controls['school']")
-    .button__row
+    .button__row.right
         button#buttonCreateProfile.btn.btn-primary(title="Make sure you've completed all the fields!", type="submit", [class.loading]="profileLoading", [disabled]="!profileForm.valid", tabindex="0") Go to Dashboard

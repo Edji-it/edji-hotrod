@@ -45,6 +45,17 @@ export class ProfileFormComponent implements OnInit {
 
     public userCopy: any
 
+    public moreIdentities = [
+        { name: 'administrator', id: 'typeAdministratorInput', displayName: ':clipboard: Administrator', emoji: ':clipboard:' },
+        { name: 'coach', id: 'typeTechCoachInput', displayName: ':computer: Tech Coach', emoji: ':computer:' },
+        { name: 'business', id: 'typeBusinessInput', displayName: ':briefcase: Business', emoji: ':briefcase:' },
+        { name: 'personal', id: 'typePersonalInput', displayName: ':books: Personal', emoji: ':books:' },
+        { name: 'robot', id: 'typeRobotInput', displayName: ':robot_face: Robot', emoji: ':robot_face:' },
+        { name: 'other', id: 'typeOtherInput', displayName: ':sparkles: Other', emoji: ':sparkles:' },
+    ]
+
+    public showMoreIdentities: boolean
+
     constructor(
         private _auth: AuthService,
         private _project: ProjectService,
@@ -88,5 +99,9 @@ export class ProfileFormComponent implements OnInit {
             initials += form.controls['lastName'].value[0]
         }
         return initials
+    }
+
+    isSchoolStaff(identity: string): boolean {
+        return ['teacher', 'administrator', 'coach'].indexOf(identity) > -1
     }
 }
