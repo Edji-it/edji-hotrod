@@ -13,12 +13,14 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
             .form-group
                 label(for="firstNameInput") First Name
                 input#firstNameInput(type="text", [formControl]="profileForm.controls['firstName']", tabindex="0", [placeholder]="userCopy.firstName")
-                div#msgUsernameRequired.alert.alert-info(*ngIf="profileForm.controls['firstName'].hasError('required') && profileForm.controls['firstName'].dirty") Please add your first name.
+                
         .col.pl-1
             .form-group
                 label(for="lastNameInput") Last Name
                 input#lastNameInput(type="text", [formControl]="profileForm.controls['lastName']", tabindex="0", [placeholder]="userCopy.lastName")
-                div#msgUsernameRequired.alert.alert-info(*ngIf="profileForm.controls['lastName'].hasError('required') && profileForm.controls['lastName'].dirty") Please add your last name.
+        .col-12
+            #msgFirstNameRequired.alert.alert-info(*ngIf="profileForm.controls['firstName'].hasError('required') && profileForm.controls['firstName'].dirty") Please add your first name.
+            #msgLastNameRequired.alert.alert-info(*ngIf="profileForm.controls['lastName'].hasError('required') && profileForm.controls['lastName'].dirty") Please add your last name.
     .form-group
         label Using as?
             p.sub-label Please select how you will be using Edji.

@@ -513,4 +513,8 @@ tr.selectable {
   & .form-group {
     margin-bottom: 0rem;
   }
+
+  & .alert {
+    margin-bottom: $base-pad;
+  }
 }
