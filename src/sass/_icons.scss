@@ -583,7 +583,7 @@ $iconGrayOpacity: 0.6;
   background-size: 100% 100%;
   position: absolute;
   top: 350px;
-  z-index: $zMid + 2000;
+  z-index: $zMid + 999;
   left: 264px;
 
   // Hide on mobile for now
