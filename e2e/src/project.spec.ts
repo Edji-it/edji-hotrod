@@ -50,14 +50,14 @@ describe('Project Page', () => {
       let grinningEmoji = project.getEmojiFromKeyboard("[dataname=':grinning:']")
       // Code for making a comment
       // Find text to select
-      browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, 'never found words to click on')
+      browser.wait(EC.elementToBeClickable(element(by.css(".w[index='26']"))), 10000, 'never found words to click on')
       // Select words using Quick Highlight by clicking
       let firstWord = project.word(26)
       let lastWord = project.word(30)
       firstWord.click()
-      browser.sleep(200) // allow for quick select animation
+      browser.sleep(300) // allow for quick select animation
       lastWord.click()
-      browser.sleep(200) // allow for quick select animation
+      browser.sleep(300) // allow for quick select animation
       // Add emoji comment
       project.addEmojiComment()
       // Select emojis
