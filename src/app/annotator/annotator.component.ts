@@ -382,7 +382,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 comment.box,
               )
               // Make sure we've removed the highlight focus
-              this.unfocusHighlight(comment.start, comment.end, comment.box)
+              this.unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)
               this.commentsByIndexRemove(comment._id, wIndex, cIndex)
               if (comment.replies && comment.replies.length > 0) {
                 this.removeRepliesFromComments(comment)
@@ -990,7 +990,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     end: number,
     box: { start: number; end: number },
   ): void {
-    if (!box) {
+    if (!box || typeof (box.start) != 'number') {
       // We process non-box comments at index 0 in highlight arrays
       box = {
         start: 0,
@@ -1596,14 +1596,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public discReplyFire(comment) {
     this.replyComment = comment
     this.focusOverride = true
-    this.focusHighlight(comment.start, comment.end, comment.loc)
+    this.focusHighlight(comment.start, comment.end, comment.loc, comment.box)
     this.showDiscussions = true
   }
 
   public hideDiscussions(comment: any) {
     this.showDiscussions = false
     this.focusOverride = false
-    this.unfocusHighlight(comment.start, comment.end, comment.loc)
+    this.unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)
   }
 
   /**

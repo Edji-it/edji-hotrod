@@ -50,10 +50,15 @@ describe('Project Page', () => {
       let grinningEmoji = project.getEmojiFromKeyboard("[dataname=':grinning:']")
       // Code for making a comment
       // Find text to select
-      browser.wait(EC.elementToBeClickable(element(by.css(".w[index='18']"))), 10000, 'never found words to click on')
+      browser.wait(EC.elementToBeClickable(element(by.css(".w[index='26']"))), 10000, 'never found words to click on')
       // Select words using Quick Highlight by clicking
-      project.word(26).click()
-      project.word(30).click()
+      let firstWord = project.word(26)
+      let middleWord = project.word(28)
+      let lastWord = project.word(30)
+      firstWord.click()
+      browser.sleep(300) // allow for quick select animation
+      lastWord.click()
+      browser.sleep(300) // allow for quick select animation
       // Add emoji comment
       project.addEmojiComment()
       // Select emojis
@@ -65,13 +70,17 @@ describe('Project Page', () => {
       project.getEmojiFromKeyboard(".emojionearea-filter[title='Objects']").click()
 
       // Use emoji keyboard filter, and type an emoji from further down
-      const dollaDolla = project.getEmojiFromKeyboard("[dataname=':dollar:'")
+      const dollaDolla = project.getEmojiFromKeyboard("[dataname=':dollar:']")
       browser.wait(EC.elementToBeClickable(dollaDolla), 5000, 'never scrolled to the dollars emoji')
       dollaDolla.click()
 
       // Save emoji comment
       project.emojiCommentSave.click()
-
+      // Wait for keyboard animation and highlight paint cycle
+      browser.sleep(200)
+      // Verify commented words have highlight (1) class
+      expect(firstWord.getAttribute('class')).toContain('h-1', 'highlight class not found on first word clicked')
+      expect(middleWord.getAttribute('class')).toContain('h-1', 'highlight class not found on word in between words clicked')
       // delete the comment
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
       project.commentDelete.click()
@@ -307,7 +316,7 @@ describe('Project Page', () => {
       browser.sleep(200) // allow for quick select animation
       thirdWordBox.click()
       browser.sleep(200) // allow for quick select animation
-      // Verify word boxes gained focus higlight class
+      // Verify word boxes gained focus highlight class
       expect(firstWordBox.getAttribute('class')).toContain('h-f')
       expect(thirdWordBox.getAttribute('class')).toContain('h-f')
       // click the tool tip
