@@ -6,6 +6,7 @@
   "homepage": "https://edji.it/",
   "scripts": {
     "ng": "ng",
+    "deploy:branch": "ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev": "yarn release && ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev:minor": "yarn release --release-as minor && ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev:major": "yarn release --release-as major && ng build --prod && grunt push:dev && grunt cloudfront:dev",

@@ -201,7 +201,12 @@ edji-comment {
       display: block !important;
     }
   }
-}
+
+  blockquote {
+    @extend %textSelect;
+    cursor: text;
+  }
+} // .comment
 
 .comment-input-wrapper {
   border: $commentBorder;
@@ -896,7 +901,8 @@ textarea.text-comment-input,
   }
 
   .mobileBound .text-comment & {
-    user-select: all !important;
+    user-select: text !important;
+    cursor: text;
     max-height: none !important;
     min-height: 30px;
     padding-bottom: 8px;
