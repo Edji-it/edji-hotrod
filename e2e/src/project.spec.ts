@@ -55,7 +55,9 @@ describe('Project Page', () => {
       let firstWord = project.word(26)
       let lastWord = project.word(30)
       firstWord.click()
+      browser.sleep(200) // allow for quick select animation
       lastWord.click()
+      browser.sleep(200) // allow for quick select animation
       // Add emoji comment
       project.addEmojiComment()
       // Select emojis
@@ -77,8 +79,8 @@ describe('Project Page', () => {
       // Wait for keyboard animation and highlight paint cycle
       browser.sleep(400)
       // Verify commented word has highlight (1) class
-      expect(firstWord.getAttribute('class')).toContain('h-1')
-      expect(lastWord.getAttribute('class')).toContain('h-1')
+      expect(firstWord.getAttribute('class')).toContain('h-1', 'highlight class not found on first word clicked')
+      expect(lastWord.getAttribute('class')).toContain('h-1', 'highlight class not found on last word clicked')
 
       // delete the comment
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
