@@ -168,6 +168,7 @@ describe('Discover Feed', () => {
       let readingTitle = await discover.firstFeedTitle.getText()
       discover.firstFeedReading.click()
       browser.wait(EC.elementToBeClickable(discover.shareReadingBtn), 5000, 'share reading button was not clickable')
+      browser.sleep(200) // wait for preview to load
       discover.shareReadingBtn.click()
       browser.wait(
         EC.invisibilityOf(discover.readingPreview),
