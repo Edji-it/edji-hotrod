@@ -53,6 +53,7 @@ describe('Project Page', () => {
       browser.wait(EC.elementToBeClickable(element(by.css(".w[index='26']"))), 10000, 'never found words to click on')
       // Select words using Quick Highlight by clicking
       let firstWord = project.word(26)
+      let middleWord = project.word(28)
       let lastWord = project.word(30)
       firstWord.click()
       browser.sleep(300) // allow for quick select animation
@@ -75,13 +76,11 @@ describe('Project Page', () => {
 
       // Save emoji comment
       project.emojiCommentSave.click()
-
       // Wait for keyboard animation and highlight paint cycle
-      browser.sleep(400)
-      // Verify commented word has highlight (1) class
+      browser.sleep(200)
+      // Verify commented words have highlight (1) class
       expect(firstWord.getAttribute('class')).toContain('h-1', 'highlight class not found on first word clicked')
-      expect(lastWord.getAttribute('class')).toContain('h-1', 'highlight class not found on last word clicked')
-
+      expect(middleWord.getAttribute('class')).toContain('h-1', 'highlight class not found on word in between words clicked')
       // delete the comment
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
       project.commentDelete.click()
