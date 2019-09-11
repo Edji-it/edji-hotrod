@@ -37,7 +37,7 @@ jobs:
             sudo apt-get -f install -y
             sudo dpkg -i google-chrome-stable_current_amd64.deb
             yarn install
-            node node_modules/protractor/bin/webdriver-manager update
+            node node_modules/protractor/bin/webdriver-manager update --versions.chrome=$(google-chrome --version | cut -d ' ' -f 3)
 
       - save_cache:
           paths:

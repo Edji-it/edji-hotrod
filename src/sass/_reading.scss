@@ -14,11 +14,11 @@ $focusUnderlineWidth: 3px;
 $adjustedLineHeight: $readingLineHeight - $focusUnderlineWidth - 1px;
 
 .reading-page {
-  transition: transform $slidingPaneTime linear;
-  transform: translate3d(0, 0, -1px);
 
   @media (max-width: $medium-screen - 1px) {
     padding-left: 60px;
+    transition: transform $slidingPaneTime linear;
+    transform: translate3d(0, 0, -1px);
     &.sliding-out {
       transform: translate3d(calc(100% - 20px), 0%, -1px);
     }
@@ -27,6 +27,8 @@ $adjustedLineHeight: $readingLineHeight - $focusUnderlineWidth - 1px;
   // iPad
   @media (min-width: $medium-screen) and (max-width: $large-screen) {
     padding-left: 60px;
+    transition: transform $slidingPaneTime linear;
+    transform: translate3d(0, 0, -1px);
     &.sliding-out {
       transform: translate3d(300px, 0%, -1px);
     }
