@@ -74,6 +74,8 @@ describe('Project Page', () => {
       // Save emoji comment
       project.emojiCommentSave.click()
 
+      // Wait for keyboard animation and highlight paint cycle
+      browser.sleep(400)
       // Verify commented word has highlight (1) class
       expect(firstWord.getAttribute('class')).toContain('h-1')
       expect(lastWord.getAttribute('class')).toContain('h-1')
