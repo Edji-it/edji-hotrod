@@ -63,6 +63,7 @@ describe('Discover Feed', () => {
     reset()
     discover.getPage()
     // View following feed
+    browser.wait(EC.elementToBeClickable(discover.filterFollowing), 5000, '"Following" filter did not become clickable')
     discover.filterFollowing.click()
     browser.wait(discover.hasClass(discover.filterFollowing, 'active'), 5000, 'following filter never became active')
     browser.wait(EC.presenceOf(discover.followEdjiMsg), 7500, 'never saw message to follow Edji')
@@ -78,16 +79,10 @@ describe('Discover Feed', () => {
 
   it('should see the follow Edji account in following feed after unfollowing Edji', () => {
     discover.toggleFollowEdji(false)
-    // Reload feed
-    reset()
-    discover.getPage()
-    browser.wait(
-      EC.elementToBeClickable(discover.firstFeedReading),
-      5000,
-      'never saw first reading in discover feed public view',
-    )
-    // View following feed
-    discover.filterFollowing.click()
+    browser.sleep(500)
+    // Reload page
+    browser.refresh() // this additionally tests that we are using URL params correctly
+    // Should still be on Following feed - check for message
     browser.wait(EC.presenceOf(discover.followEdjiMsg), 7500, 'never saw message to follow Edji')
     browser.wait(EC.stalenessOf(discover.firstFeedReading), 5000, 'should not see any readings in following feed')
   })
@@ -115,7 +110,7 @@ describe('Discover Feed', () => {
       discover.closeReadingPreview()
     })
 
-    it('should open reading preview and edit a reading then save it', async () => {
+    it('should open reading preview and edit a reading then save it', () => {
       browser.wait(
         EC.elementToBeClickable(discover.firstFeedReading),
         5000,
@@ -140,6 +135,7 @@ describe('Discover Feed', () => {
       let newReadingTitle = `rp - ${new Date().valueOf()}`
       newReading.titleInput.clear()
       newReading.titleInput.sendKeys(newReadingTitle)
+      newReading.publicButton.click() // Blur title
       // Hit save
       newReading.clickShareAndArchive()
       // Finalize
@@ -156,9 +152,10 @@ describe('Discover Feed', () => {
       // also need to wait until the draft cards load in for us to check the title
       browser.wait(EC.elementToBeClickable(dashboard.firstDraftCard), 7000, 'reading draft cards never loaded')
       // Check title of most recent readings
-      // browser.wait(EC.visibilityOf(element(by.cssContainingText('.reading-title__text', newReadingTitle))), 5000, 'the newly created reading title did not match the first reading in the dashboard')
-      let foundTitle = await discover.validateReadingTitle(newReadingTitle)
-      expect(foundTitle).toBeTruthy('the newly created reading title did not match the first reading in the dashboard')
+      discover.validateReadingTitle(newReadingTitle).then(foundTitle => {
+        expect(foundTitle).toBeTruthy('the newly created reading title did not match the first reading in the dashboard')
+      })
+
       reset()
       discover.getPage()
     })
