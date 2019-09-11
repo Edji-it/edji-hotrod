@@ -21,7 +21,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "e2e:ci": "protractor-flake --parser standard --max-attempts=3 -- e2e/protractor-circleci.conf.js",
-    "e2e:dev": "protractor-flake --parser standard --max-attempts=3 -- e2e/protractor.conf.js",
+    "e2e:dev": "protractor-flake --parser standard --max-attempts=1 -- e2e/protractor.conf.js",
     "e2e:headless": "ng e2e --protractor-config e2e/protractor-circleci.conf.js",
     "e2e:mobile": "ng e2e --protractor-config e2e/protractor-mobile.conf.js",
     "release": "yarn standard-version",
