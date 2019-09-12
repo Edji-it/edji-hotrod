@@ -105,9 +105,9 @@ export class OAuthComponent implements OnInit {
     if (alreadyLinked) {
       this.routeAfterOAuth()
     } else if (this.currentUser && this.currentUser.isLoggedIn) {
-      this.loginWithOauth()
-    } else {
       this.linkAfterLogin()
+    } else {
+      this.loginWithOauth()
     }
   }
 

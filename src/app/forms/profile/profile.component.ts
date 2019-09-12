@@ -55,24 +55,34 @@ export class ProfileFormComponent implements OnInit {
 
     constructor(
         private _auth: AuthService,
-        private _project: ProjectService,
         private _fb: FormBuilder,
-        private _title: Title,
-        private _locker: LockerService,
         private _router: Router,
     ) {
+        // Used for prefilled values
+        let userSoFar = this._auth.getUser()
+        let prefillFirst = ''
+        let prefillLast = ''
+        if (userSoFar.fullname) {
+            let i = userSoFar.fullname.indexOf(' ')
+            prefillFirst = userSoFar.fullname.slice(0, i)
+            prefillLast = userSoFar.fullname.slice(i + 1)
+        }
+
+        // Used for placeholder values in template
         this.userCopy = new Copy().getUserCopy()
 
         this.profileForm = _fb.group(
             {
-                firstname: ['', Validators.required],
-                lastname: ['', Validators.required],
+                firstname: [prefillFirst, Validators.required],
+                lastname: [prefillLast, Validators.required],
                 accountRole: ['student', Validators.required],
                 school: [null],
             }, {
                 validator: this.schoolValidator
             }
         )
+        // Init Initials
+        this.setInitials(this.profileForm)
     }
 
     ngOnInit() { }

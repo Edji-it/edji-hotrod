@@ -150,7 +150,7 @@ export class AuthService implements CanActivate {
       user.isStudent = true
     }
     // Determine if user has completed required profile fields
-    if (user.type !== 'temp' && !user.fullname && (!user.identities || user.identities.length < 1)) {
+    if (user.type !== 'temp' && (!user.fullname || !user.identities || user.identities.length < 1)) {
       user.profileIncomplete = true
     }
     // Determine if user is an Academy Admin
