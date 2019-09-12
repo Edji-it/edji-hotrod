@@ -124,11 +124,11 @@ export class RegisterFormComponent implements OnInit {
               .pipe(take(1))
               .subscribe(
                 () => {
-                  this._router.navigate(['/register/profile'], { queryParams: { copyId: this.readingToAdd } })
+                  this._router.navigate(['/register/profile'], { queryParams: { reading: this.readingToAdd } })
                 },
                 err => {
                   console.error(err)
-                  this._router.navigate(['/register/profile'], { queryParams: { copyId: this.readingToAdd } })
+                  this._router.navigate(['/register/profile'], { queryParams: { reading: this.readingToAdd } })
                 },
               )
           } else if (this.tempUserId) {

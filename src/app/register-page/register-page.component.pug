@@ -11,8 +11,10 @@ nav-bar
         [innerHtml]=" '<strong>Congratulations!</strong> :tada: <br>' + referringUserName + ' thought you would really like Edji. Sign up and make your first reading to receive 20% off Hero today!' | emojione"
       )
       #msgConversion.alert.alert-info(*ngIf="tempUserId")
-        b To use all of Edji, create a full account!
+        b To use all of Edji, create a full account
         | Don't worry, you'll keep the readings you've joined and comments you've made so far.
+        p.mt-1.mb-0(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
+        p.mt-1.mb-0(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
       hot-register-form(
         [readingToAdd]="readingToAdd",
         [projectToAdd]="projectToAdd",

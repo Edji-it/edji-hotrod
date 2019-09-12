@@ -6,11 +6,11 @@ nav-bar
     .col-sm-2.col-md-3
     .col-sm-8.col-md-6.col-pad.on-dark
         h1.on-dark Create My Profile
-            //-   #msgReferral.alert.alert-success(
-            //-     *ngIf="successObject.referral", 
-            //-     [innerHtml]=" '<strong>Congratulations!</strong> :tada: <br>' + referringUserName + ' thought you would really like Edji. Sign up and make your first reading to receive 20% off Hero today!' | emojione"
-            //-   )
-            //-   #msgConversion.alert.alert-info(*ngIf="tempUserId")
-            //-     b To use all of Edji, create a full account!
-            //-     | Don't worry, you'll keep the readings you've joined and comments you've made so far.
-        hot-profile-form()
+        #msgConversion.alert.alert-info(*ngIf="readingToAdd || projectToAdd")
+          b Hooray! You now have a full Edji account!
+          p.mt-1.mb-0(*ngIf="readingToAdd") Just a few more details, and you can edit your reading.
+          p.mt-1.mb-0(*ngIf="projectToAdd") Just a few more details, and you can access your Reading on your dashboard.
+        hot-profile-form(
+          [readingToAdd]="readingToAdd",
+          [projectToAdd]="projectToAdd"
+        )

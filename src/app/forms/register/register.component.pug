@@ -1,6 +1,4 @@
 h1.on-dark.center(*ngIf="!registerSuccess", [innerHtml]="'Your Edji Adventure Begins :tada:' | emojione")
-p(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
-p(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
 div.text-center.mt-4
     edji-oauth-row([signUp]="true")
     hr

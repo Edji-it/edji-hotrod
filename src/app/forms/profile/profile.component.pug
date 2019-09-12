@@ -100,4 +100,6 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
             [class.loading]="profileFormLoading", 
             [disabled]="!profileForm.valid", 
             tabindex="0"
-        ) Go to Dashboard
+        )
+            span(*ngIf="!readingToAdd") Go to Dashboard
+            span(*ngIf="readingToAdd") To My Reading
