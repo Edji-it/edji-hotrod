@@ -83,7 +83,7 @@
     .outer-circle--large.float-right(*ngIf="user.isLoggedIn", [class.active]="showAvatarDropdown")
       .avatar__wrap
         #avatarActionIcon.user-icon--large.pointer.float-right((click)="showAvatarDropdown=!showAvatarDropdown", (clickOutside)="showAvatarDropdown=false")
-          span.user-icon__initials {{user.fullname.substring(0,2)}}
+          span.user-icon__initials {{ user.initials }}
           span.hero-tag.avatar-bottom(*ngIf="user.hero_status", title="Hero Powers Activated") H
         .avatar__drop-down.list-group(*ngIf="showAvatarDropdown", [class.visible]="showAvatarDropdown")
           .arrow

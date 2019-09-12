@@ -56,6 +56,8 @@ export class ProfileFormComponent implements OnInit {
 
     public showMoreIdentities: boolean
 
+    public initials: string = ''
+
     constructor(
         private _auth: AuthService,
         private _project: ProjectService,
@@ -90,7 +92,7 @@ export class ProfileFormComponent implements OnInit {
         return first + ' ' + last
     }
 
-    getInitials(form): string {
+    setInitials(form): string {
         let initials = ''
         if (form.controls['firstName'].value) {
             initials = form.controls['firstName'].value[0]
@@ -98,10 +100,25 @@ export class ProfileFormComponent implements OnInit {
         if (form.controls['lastName'].value) {
             initials += form.controls['lastName'].value[0]
         }
+        this.initials = initials
+        // Update user object to display in Nav
+        this.tempLocalUserUpdate("initials", initials)
         return initials
     }
 
     isSchoolStaff(identity: string): boolean {
         return ['teacher', 'administrator', 'coach'].indexOf(identity) > -1
+    }
+
+    /**
+     * Update local user property for display while editing (eg. initials)
+     * @param property "initials"
+     * @param value "AB"
+     */
+    tempLocalUserUpdate(property, value) {
+        let user = this._auth.getUser()
+        user[property] = value
+        // This only updates the user locally, but will save update to DB when user finished
+        this._auth.setUser(user)
     }
 }

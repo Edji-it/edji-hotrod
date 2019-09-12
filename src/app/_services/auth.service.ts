@@ -157,6 +157,10 @@ export class AuthService implements CanActivate {
     if (user && user.license_ids && user.license_ids[0]) {
       this.fetchAcademies(user)
     }
+    // If user does not have initials, set them
+    if (user && !user.initials && user.fullname) {
+      user.initials = user.fullname.substring(0, 2)
+    }
     //  Store user object
     this.currentUserSource.next(user)
     this._locker.set('user', user)

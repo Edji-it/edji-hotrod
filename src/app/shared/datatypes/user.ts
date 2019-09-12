@@ -24,10 +24,15 @@ export interface PublicUser {
 interface BaseUser {
   _id: string
   username: string
+  firstname: string
+  lastname: string
+  // fullname and initials are generally derived from first and last
+  initials: string
   fullname: string
   email: string
   identities?: string[]
   hero_status?: boolean
+  avatar?: string
   prefs?: {
     recentEmoji?: string[]
     onboarding?: {
@@ -49,7 +54,6 @@ interface BaseUser {
     images?: { title: string; url: string }[]
     documents?: { title: string; pages: string[] }[]
   }
-  avatar?: string
   referred_by?: string
   license_ids?: string[]
   institution_ids?: string[]

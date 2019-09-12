@@ -1,7 +1,7 @@
 
 .profile-card
     .user-icon--large
-        span.user-icon__initials {{ getInitials(profileForm) }}
+        span.user-icon__initials {{ initials }}
     .h1([innerHtml]="getProfileName(profileForm)")
     .label.small.text-muted(*ngIf="profileForm.controls['school'] && profileForm.controls['school'].value")
         i.icon.icon-school
@@ -12,12 +12,24 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
         .col.pr-1
             .form-group
                 label(for="firstNameInput") First Name
-                input#firstNameInput(type="text", [formControl]="profileForm.controls['firstName']", tabindex="0", [placeholder]="userCopy.firstName")
+                input#firstNameInput(
+                    type="text", 
+                    [formControl]="profileForm.controls['firstName']", 
+                    tabindex="0", 
+                    [placeholder]="userCopy.firstName",
+                    (keyup)="setInitials(profileForm)"
+                )
                 
         .col.pl-1
             .form-group
                 label(for="lastNameInput") Last Name
-                input#lastNameInput(type="text", [formControl]="profileForm.controls['lastName']", tabindex="0", [placeholder]="userCopy.lastName")
+                input#lastNameInput(
+                    type="text", 
+                    [formControl]="profileForm.controls['lastName']", 
+                    tabindex="0", 
+                    [placeholder]="userCopy.lastName",
+                    (keyup)="setInitials(profileForm)"
+                )
         .col-12
             #msgFirstNameRequired.alert.alert-info(*ngIf="profileForm.controls['firstName'].hasError('required') && profileForm.controls['firstName'].dirty") Please add your first name.
             #msgLastNameRequired.alert.alert-info(*ngIf="profileForm.controls['lastName'].hasError('required') && profileForm.controls['lastName'].dirty") Please add your last name.
