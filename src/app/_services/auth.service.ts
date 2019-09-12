@@ -414,7 +414,6 @@ export class AuthService implements CanActivate {
         .subscribe(
           currentUser => {
             let mergedUser = Object.assign({}, currentUser)
-
             // Loop through and merge arrays
             let propsToCheck = ['prefs', 'media']
             for (let n = 0; n < propsToCheck.length; n++) {

@@ -41,16 +41,11 @@ export class CreateProfilePageComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = []
 
     public successObject: {
-        referral?: boolean
     } = {}
-    public referringUserName: string = ''
 
-    //   /** The reading id that the user wanted to make a copy of */
-    //   public readingToAdd: string
-    //   public projectToAdd: string
-    //   /** The project id that the user wanted to add to the dashboard */
-    //   public tempUserId: string
-    //   public referralId: string
+    /** The reading id that the user wanted to make a copy of */
+    public readingToAdd: string
+    public projectToAdd: string
 
     constructor(
         private _auth: AuthService,
@@ -70,37 +65,12 @@ export class CreateProfilePageComponent implements OnInit, OnDestroy {
 
         this._title.setTitle('Edji | Create Profile')
 
-        // if (typeof this.referralId != 'undefined' && this.referralId != '') {
-        //   // Preserve (and display) referral
-        //   this.setReferral(this.referralId)
-        // } else if (this._locker.get('referral_id')) {
-        //   // Restore referral if user browsed away from /register
-        //   this.referralId = this._locker.get('referral_id')
-        //   this.setReferral(this.referralId)
-        // }
-    }
-
-    /**
-     * Set referral id, and display referral message
-     * @param referralId
-     */
-    setReferral(referralId: string): void {
-        // Store the referral_id in the locker in case the user signs up with oauth
-        this._locker.set('referral_id', referralId)
-        // We're going to ask the server to get the user that referred this new one so we can show a name
         this.subscriptions.push(
-            this._auth.getUserByReferralId(referralId).subscribe(
-                user => {
-                    this.referringUserName = user.fullname
-                },
-                err => {
-                    // If the servor throws an error, then let's make sure the copy is at least protected
-                    this.referringUserName = 'A special someone'
-                },
-            ),
+            this.route.queryParams.subscribe(queryParams => {
+                this.readingToAdd = queryParams['reading']
+                this.projectToAdd = queryParams['project']
+            }),
         )
-        // We need to activate the success object so we can show the user a friendly message
-        this.successObject.referral = true
     }
 
     ngOnDestroy() {

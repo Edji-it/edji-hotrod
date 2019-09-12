@@ -118,10 +118,39 @@ export class RegisterFormComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.registerLoading = false
-          if (data.user) {
+          if (this.readingToAdd && this.tempUserId) {
+            this._auth
+              .convertTempUser(this.tempUserId)
+              .pipe(take(1))
+              .subscribe(
+                () => {
+                  this._router.navigate(['/register/profile'], { queryParams: { copyId: this.readingToAdd } })
+                },
+                err => {
+                  console.error(err)
+                  this._router.navigate(['/register/profile'], { queryParams: { copyId: this.readingToAdd } })
+                },
+              )
+          } else if (this.tempUserId) {
+            this._auth
+              .convertTempUser(this.tempUserId)
+              .pipe(take(1))
+              .subscribe(
+                () => {
+                  this._router.navigate(['/register/profile'])
+                },
+                err => {
+                  console.error(err)
+                  // should also have an error put on the dashboard
+                  this._router.navigate(['/register/profile'])
+                },
+              )
+          } else if (this.noRedirect) {
+            this.registerSuccess.emit(data.user)
+          } else {
+            // default case where nothing special happens
             this._router.navigate(['/register/profile'])
           }
-
           // If there is a failure with registering the user...
         },
         (err) => {

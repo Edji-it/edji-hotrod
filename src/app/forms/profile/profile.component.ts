@@ -21,12 +21,8 @@ export class ProfileFormComponent implements OnInit {
     /** The reading id that the user wanted to make a copy of */
     @Input() readingToAdd: string
     @Input() projectToAdd: string
-    /** The project id that the user wanted to add to the dashboard */
-    @Input() tempUserId: string
-    @Input() referralId: string
-    @Input() noRedirect: boolean
 
-    @Output() registerSuccess: EventEmitter<any> = new EventEmitter()
+    @Output() profileSuccess: EventEmitter<any> = new EventEmitter()
 
     private subscriptions: Subscription[] = []
 
@@ -147,38 +143,11 @@ export class ProfileFormComponent implements OnInit {
     }
 
     handleProfileCompleteRouting(data): void {
-        if (this.readingToAdd && this.tempUserId) {
-            this._auth
-                .convertTempUser(this.tempUserId)
-                .pipe(take(1))
-                .subscribe(
-                    () => {
-                        this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
-                    },
-                    err => {
-                        console.error(err)
-                        this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
-                    },
-                )
-        } else if (this.tempUserId) {
-            this._auth
-                .convertTempUser(this.tempUserId)
-                .pipe(take(1))
-                .subscribe(
-                    () => {
-                        this._router.navigate(['/dashboard/read'])
-                    },
-                    err => {
-                        console.error(err)
-                        // should also have an error put on the dashboard
-                        this._router.navigate(['/dashboard/read'])
-                    },
-                )
-        } else if (this.noRedirect) {
-            this.registerSuccess.emit(data.user)
+        if (this.readingToAdd) {
+            this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
         } else {
             // default case where nothing special happens
-            this._router.navigate(['/dashboard/read'])
+            this._router.navigate(['/dashboard'])
         }
     }
 
@@ -198,15 +167,17 @@ export class ProfileFormComponent implements OnInit {
         if (this.schoolInfo && this.isSchoolStaff(form.accountRole)) {
             user.school = this.schoolInfo
         }
-
+        console.log(user)
         // Update user will fetch most recent user object, update properties given
-        this._auth.updateUser(form)
+        this._auth.updateUser(user)
             .pipe(take(1))
             .subscribe(
                 data => {
+                    this.profileFormLoading = false
                     this.handleProfileCompleteRouting(data)
                 },
                 err => {
+                    this.profileFormLoading = false
                     let error = err.error
                     // If the full name has bad words
                     if (error.validationErrors.fullname === 'badWords') {
