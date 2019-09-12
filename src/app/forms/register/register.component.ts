@@ -35,7 +35,6 @@ export class RegisterFormComponent implements OnInit {
     duplicateUsername?: boolean
     duplicateEmail?: boolean
     serverError?: boolean
-    badName?: string
     badUsername?: string
   } = {}
   public successObject: {
@@ -121,39 +120,6 @@ export class RegisterFormComponent implements OnInit {
           this.registerLoading = false
           if (data.user) {
             this._router.navigate(['/register/profile'])
-            // if (this.readingToAdd && this.tempUserId) {
-            //   this._auth
-            //     .convertTempUser(this.tempUserId)
-            //     .pipe(take(1))
-            //     .subscribe(
-            //       () => {
-            //         this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
-            //       },
-            //       err => {
-            //         console.error(err)
-            //         this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
-            //       },
-            //     )
-            // } else if (this.tempUserId) {
-            //   this._auth
-            //     .convertTempUser(this.tempUserId)
-            //     .pipe(take(1))
-            //     .subscribe(
-            //       () => {
-            //         this._router.navigate(['/dashboard/read'])
-            //       },
-            //       err => {
-            //         console.error(err)
-            //         // should also have an error put on the dashboard
-            //         this._router.navigate(['/dashboard/read'])
-            //       },
-            //     )
-            // } else if (this.noRedirect) {
-            //   this.registerSuccess.emit(data.user)
-            // } else {
-            //   // default case where nothing special happens
-            //   this._router.navigate(['/dashboard/read'])
-            // }
           }
 
           // If there is a failure with registering the user...
@@ -163,11 +129,6 @@ export class RegisterFormComponent implements OnInit {
           this.registerLoading = false
           let errorCaught: boolean = false
           if (error.validationErrors) {
-            // If the full name has bad words
-            if (error.validationErrors.fullname === 'badWords') {
-              this.errorObject.badName = ':anguished: Would you mind choosing another name?'
-              errorCaught = true
-            }
             // if the username has bad words
             if (error.validationErrors.username === 'badWords') {
               this.errorObject.badUsername = ':anguished: Would you mind choosing another username?'

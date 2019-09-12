@@ -35,7 +35,6 @@ form.form-block#registerForm([formGroup]="registerForm", (ngSubmit)="register(re
     //- <!-- Error Messages -->
     #msgDuplicateUsername.alert.alert-info(*ngIf="errorObject.duplicateUsername", [innerHtml]=" '<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it.' | emojione")
     #msgDuplicateEmail.alert.alert-info(*ngIf="errorObject.duplicateEmail", [innerHtml]=" '<strong>Wow!</strong> :grin: Looks like that email is already signed up! Would you mind choosing another one?' | emojione")
-    #msgBadName.alert.alert-warn(*ngIf="errorObject.badName", [innerHtml]="errorObject.badName | emojione")
     #msgBadUsername.alert.alert-warning(*ngIf="errorObject.badUsername", [innerHtml]="errorObject.badUsername | emojione")
     #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError") Oh no! Something went wrong, and we aren't sure exactly what.
 

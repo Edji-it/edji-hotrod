@@ -4,7 +4,7 @@ import { take, debounceTime, map } from 'rxjs/operators'
 import { fromEvent } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
-import { User } from './../../shared/datatypes'
+import { User, UserSchoolDistrict } from './../../shared/datatypes'
 import { AuthService, BumblebeeService, AcademyService, MailchimpService } from './../../_services'
 import { ALLSPARK } from 'src/app/app.constants'
 
@@ -25,14 +25,14 @@ export class UserDetailsUpdateModal implements OnInit {
     id: string
     checkboxCopy: string
   }[] = [
-    { name: 'student', id: 'typeStudentInput', checkboxCopy: 'Student :writing_hand:' },
-    { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: 'Teacher :apple:' },
-    { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: 'Tech Coach/Administrator :clipboard:' },
-    { name: 'business', id: 'typeBusinessInput', checkboxCopy: 'Business Application :briefcase:' },
-    { name: 'personal', id: 'typePersonalInput', checkboxCopy: 'Personal Reading Platform :books:' },
-    { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
-    { name: 'other', id: 'typeOtherInput', checkboxCopy: 'Other :sparkles:' },
-  ]
+      { name: 'student', id: 'typeStudentInput', checkboxCopy: 'Student :writing_hand:' },
+      { name: 'teacher', id: 'typeTeacherInput', checkboxCopy: 'Teacher :apple:' },
+      { name: 'administrator', id: 'typeAdministratorInput', checkboxCopy: 'Tech Coach/Administrator :clipboard:' },
+      { name: 'business', id: 'typeBusinessInput', checkboxCopy: 'Business Application :briefcase:' },
+      { name: 'personal', id: 'typePersonalInput', checkboxCopy: 'Personal Reading Platform :books:' },
+      { name: 'robot', id: 'typeRobotInput', checkboxCopy: "I'm a robot. :robot_face:" },
+      { name: 'other', id: 'typeOtherInput', checkboxCopy: 'Other :sparkles:' },
+    ]
   public identitySelect: boolean = true
   private existingUser: boolean
 
@@ -45,18 +45,13 @@ export class UserDetailsUpdateModal implements OnInit {
     header: string
     body: string
   } = {
-    header: 'Before you begin',
-    body: 'Help us customize your experience. Are you a...',
-  }
+      header: 'Before you begin',
+      body: 'Help us customize your experience. Are you a...',
+    }
 
   public schools: any[]
   public schoolSuggestShow: boolean
-  public schoolInfo: {
-    school_name: string
-    school_id: string
-    district_name: string
-    district_id: string
-  } = {
+  public schoolInfo: UserSchoolDistrict = {
     school_name: '',
     school_id: '',
     district_name: '',
@@ -126,7 +121,7 @@ export class UserDetailsUpdateModal implements OnInit {
     }
 
     // Set school and phone if we have it
-    let schoolInfo: schoolDistrict
+    let schoolInfo: UserSchoolDistrict
     let phone = ''
     let contactMe = false
     if (form.value.school) {
@@ -297,11 +292,4 @@ export class UserDetailsUpdateModal implements OnInit {
     // update the form with the selected school
     this.userDetailsForm.controls.school.setValue(school.school_name)
   }
-}
-
-interface schoolDistrict {
-  school_id: string
-  school_name: string
-  district_id: string
-  district_name: string
 }

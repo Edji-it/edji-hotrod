@@ -405,7 +405,7 @@ export class AuthService implements CanActivate {
    * - Cannot be passed password
    * - NOTE: Prevents user from being outright replaced, and merges instead of overwrites.
    */
-  public updateUser(updatedUser: any): Observable<any> {
+  public updateUser(updatedUser: any): Observable<{ user?: User }> {
     return new Observable(observer => {
       //observer.next(true)
       // Before we update the user, make sure we have the latest copy
@@ -481,8 +481,8 @@ export class AuthService implements CanActivate {
               )
               .toPromise()
               .then(
-                user => {
-                  observer.next(user)
+                data => {
+                  observer.next(data)
                 },
                 error => {
                   observer.error(error)

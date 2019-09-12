@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, ElementRef, AfterViewInit, Output, EventEmitter } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { fromEvent } from "rxjs";
 import { debounceTime, map } from "rxjs/operators";
 import { AuthService } from "src/app/_services";
+import { UserSchoolDistrict } from "../datatypes";
 
 
 @Component({
@@ -13,22 +14,18 @@ import { AuthService } from "src/app/_services";
 export class SchoolSelectorComponent implements OnInit, AfterViewInit {
 
     @Input() formControlAlias: FormControl
+    @Output() schoolDistrictChange: EventEmitter<UserSchoolDistrict> = new EventEmitter()
 
     @ViewChild('schoolInput', { static: false }) input: ElementRef
 
     public schools: any[]
     public schoolSuggestShow: boolean
-    public schoolInfo: {
-        school_name: string
-        school_id: string
-        district_name: string
-        district_id: string
-    } = {
-            school_name: '',
-            school_id: '',
-            district_name: '',
-            district_id: '',
-        }
+    public schoolInfo: UserSchoolDistrict = {
+        school_name: '',
+        school_id: '',
+        district_name: '',
+        district_id: '',
+    }
 
     constructor(private _auth: AuthService) {
 
@@ -54,6 +51,8 @@ export class SchoolSelectorComponent implements OnInit, AfterViewInit {
                 this.input &&
                 debouncedInput.subscribe(async val => {
                     let searchText = this.formControlAlias.value
+                    // Set custom school name to text input
+                    this.updateCustomSchool(searchText)
                     if (searchText !== '') {
                         try {
                             let schoolResults: any[] = []
@@ -91,5 +90,26 @@ export class SchoolSelectorComponent implements OnInit, AfterViewInit {
         this.schoolInfo.school_name = school.school_name
         // update the form with the selected school
         this.formControlAlias.setValue(school.school_name)
+        // Output value ready to add to user object
+        this.schoolDistrictChange.next(this.schoolInfo)
+    }
+
+    /**
+     * Update User-ready school info when manually typing
+     */
+    public updateCustomSchool(customSchool): void {
+        // let districtNameVal = this.schoolInfo.district_name
+        if (this.schoolInfo.school_name === '') {
+            this.schoolInfo.district_name = customSchool
+        } else {
+            // Clear previously selected if user types after clicking on one
+            this.schoolInfo = {
+                school_name: '',
+                school_id: '',
+                district_name: customSchool,
+                district_id: '',
+            }
+        }
+        this.schoolDistrictChange.next(this.schoolInfo)
     }
 }

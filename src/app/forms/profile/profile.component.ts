@@ -10,6 +10,7 @@ import { Copy } from '../../shared'
 import { ALLSPARK } from '../../app.constants'
 import { take } from 'rxjs/operators'
 import { Title } from '@angular/platform-browser'
+import { User, UserSchoolDistrict } from 'src/app/shared/datatypes';
 
 @Component({
     selector: 'hot-profile-form',
@@ -31,13 +32,10 @@ export class ProfileFormComponent implements OnInit {
 
     public profileForm: FormGroup
     public profileFormLoading: boolean = false
-    // public errorObject: {
-    //     duplicateUsername?: boolean
-    //     duplicateEmail?: boolean
-    //     serverError?: boolean
-    //     badName?: string
-    //     badUsername?: string
-    // } = {}
+    public errorObject: {
+        serverError?: boolean
+        badName?: string
+    } = {}
     // public successObject: {
     //     referral?: boolean
     // } = {}
@@ -57,6 +55,7 @@ export class ProfileFormComponent implements OnInit {
     public showMoreIdentities: boolean
 
     public initials: string = ''
+    public schoolInfo: UserSchoolDistrict
 
     constructor(
         private _auth: AuthService,
@@ -70,35 +69,52 @@ export class ProfileFormComponent implements OnInit {
 
         this.profileForm = _fb.group(
             {
-                firstName: ['', Validators.required],
-                lastName: ['', Validators.required],
+                firstname: ['', Validators.required],
+                lastname: ['', Validators.required],
                 accountRole: ['student', Validators.required],
-                school: [null, Validators.required],
+                school: [null],
+            }, {
+                validator: this.schoolValidator
             }
         )
     }
 
     ngOnInit() { }
 
-    getProfileName(form): string {
-        let first = '<i>My</i>'
-        let last = '<i>Profile</i>'
-        if (form.controls['firstName'].value) {
-            first = form.controls['firstName'].value
+    /** 
+     * Validates if school is required
+     * @returns error which should be assigned to the school input
+     */
+    private schoolValidator(group: FormGroup): any {
+        let role = group.get('accountRole').value
+        let school = group.get('school').value
+        if (ALLSPARK.SCHOOL_IDENTITIES.includes(role) && !school) {
+            return { schoolRequired: true }
+        } else {
+            return null
         }
-        if (form.controls['lastName'].value) {
-            last = form.controls['lastName'].value
+    }
+
+
+    getProfileName(form): string {
+        let first = '<i>My</i>' // placeholder values
+        let last = '<i>Profile</i>'
+        if (form.controls['firstname'].value) {
+            first = form.controls['firstname'].value
+        }
+        if (form.controls['lastname'].value) {
+            last = form.controls['lastname'].value
         }
         return first + ' ' + last
     }
 
     setInitials(form): string {
         let initials = ''
-        if (form.controls['firstName'].value) {
-            initials = form.controls['firstName'].value[0]
+        if (form.controls['firstname'].value) {
+            initials = form.controls['firstname'].value[0]
         }
-        if (form.controls['lastName'].value) {
-            initials += form.controls['lastName'].value[0]
+        if (form.controls['lastname'].value) {
+            initials += form.controls['lastname'].value[0]
         }
         this.initials = initials
         // Update user object to display in Nav
@@ -107,7 +123,15 @@ export class ProfileFormComponent implements OnInit {
     }
 
     isSchoolStaff(identity: string): boolean {
-        return ['teacher', 'administrator', 'coach'].indexOf(identity) > -1
+        return ALLSPARK.SCHOOL_IDENTITIES.indexOf(identity) > -1
+    }
+
+    /**
+     * Handles school selector output
+     */
+    updateSchoolInfo(schoolInfo: UserSchoolDistrict) {
+        // Save school info locally to be processed by updateProfile()
+        this.schoolInfo = schoolInfo
     }
 
     /**
@@ -120,5 +144,78 @@ export class ProfileFormComponent implements OnInit {
         user[property] = value
         // This only updates the user locally, but will save update to DB when user finished
         this._auth.setUser(user)
+    }
+
+    handleProfileCompleteRouting(data): void {
+        if (this.readingToAdd && this.tempUserId) {
+            this._auth
+                .convertTempUser(this.tempUserId)
+                .pipe(take(1))
+                .subscribe(
+                    () => {
+                        this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
+                    },
+                    err => {
+                        console.error(err)
+                        this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
+                    },
+                )
+        } else if (this.tempUserId) {
+            this._auth
+                .convertTempUser(this.tempUserId)
+                .pipe(take(1))
+                .subscribe(
+                    () => {
+                        this._router.navigate(['/dashboard/read'])
+                    },
+                    err => {
+                        console.error(err)
+                        // should also have an error put on the dashboard
+                        this._router.navigate(['/dashboard/read'])
+                    },
+                )
+        } else if (this.noRedirect) {
+            this.registerSuccess.emit(data.user)
+        } else {
+            // default case where nothing special happens
+            this._router.navigate(['/dashboard/read'])
+        }
+    }
+
+    /**
+     * Save users profile, and continue on
+     */
+    updateProfile(form): void {
+        this.errorObject = {}
+        this.profileFormLoading = true
+
+        let user: User = this._auth.getUser()
+        user.firstname = form.firstname
+        user.lastname = form.lastname
+        user.fullname = form.firstname + ' ' + form.lastname
+        user.identities = [form.accountRole]
+        user.initials = this.initials
+        if (this.schoolInfo && this.isSchoolStaff(form.accountRole)) {
+            user.school = this.schoolInfo
+        }
+
+        // Update user will fetch most recent user object, update properties given
+        this._auth.updateUser(form)
+            .pipe(take(1))
+            .subscribe(
+                data => {
+                    this.handleProfileCompleteRouting(data)
+                },
+                err => {
+                    let error = err.error
+                    // If the full name has bad words
+                    if (error.validationErrors.fullname === 'badWords') {
+                        this.errorObject.badName = ':anguished: Would you mind choosing another name?'
+                    } else {
+                        console.error(err)
+                        this.errorObject.serverError = true
+                    }
+                }
+            )
     }
 }

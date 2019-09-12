@@ -4,78 +4,78 @@ export class Copy {
       {
         username: 'pokemaster',
         fullname: 'Ash Ketchum',
-        firstName: 'Ash',
-        lastName: 'Ketchum',
+        firstname: 'Ash',
+        lastname: 'Ketchum',
         email: 'ash@ketchum.all',
       },
       {
         username: 'spongedude',
         fullname: 'Spongebob Squarepants',
-        firstName: 'Spongebob',
-        lastName: 'Squarepants',
+        firstname: 'Spongebob',
+        lastname: 'Squarepants',
         email: 'spongebob@bottom.sea',
       },
       {
         username: 'atomboy',
         fullname: 'Jimmy Neutron',
-        firstName: 'Jimmy',
-        lastName: 'Neutron',
+        firstname: 'Jimmy',
+        lastname: 'Neutron',
         email: 'jimmy@boygenius.edu',
       },
       {
         username: 'scooby_snack',
         fullname: 'Scooby Dooby Doo',
-        firstName: 'Scooby',
-        lastName: 'Doo',
+        firstname: 'Scooby',
+        lastname: 'Doo',
         email: 'scooby@mysterymachine.co',
       },
       {
         username: 'yabbadabbadoo',
         fullname: 'Fred Flintstone',
-        firstName: 'Fred',
-        lastName: 'Flintstone',
+        firstname: 'Fred',
+        lastname: 'Flintstone',
         email: 'fred.flinstone@slaterockgravel.co',
       },
       {
         username: 'spaceman15',
         fullname: 'George Jetson',
-        firstName: 'George',
-        lastName: 'Jetson',
+        firstname: 'George',
+        lastname: 'Jetson',
         email: 'george.jetson@spacelyspacesprockets.com',
       },
       {
         username: 'RespectTheWand',
         fullname: 'Wanda Venus Fairywinkle-Cosma',
-        firstName: 'Wanda',
-        lastName: 'Fairywinkle-Cosma',
+        firstname: 'Wanda',
+        lastname: 'Fairywinkle-Cosma',
         email: 'wanda@fairygodparents.com',
       },
       {
         username: 'iExplore',
         fullname: 'Dora Márquez',
-        firstName: 'Dora',
-        lastName: 'Márquez',
+        firstname: 'Dora',
+        lastname: 'Márquez',
         email: 'dora@explorer.gov',
       },
       {
         username: 'PoorRichard',
         fullname: 'Benjamin Franklin',
-        firstName: 'Benjamin',
-        lastName: 'Franklin',
+        firstname: 'Benjamin',
+        lastname: 'Franklin',
         email: 'ben@whitehouse.gov'
       },
       {
         username: 'OccupyMars',
         fullname: 'Elon Musk',
-        firstName: 'Elon',
-        lastName: 'Musk',
+        firstname: 'Elon',
+        lastname: 'Musk',
         email: 'elon@spacex.com'
       },
       {
         username: 'EloquentPen',
         fullname: 'Jane Austen',
-        firstName: 'Jane',
-        lastName: 'Austen',
+        firstname: 'Jane',
+        lastname: 'Austen',
         email: 'jane@northangerabbey.co.uk'
       }
     ],
@@ -91,7 +91,7 @@ export class Copy {
 export interface CopyUser {
   username: string
   fullname: string
-  firstName: string
-  lastName: string
+  firstname: string
+  lastname: string
   email: string
 }
