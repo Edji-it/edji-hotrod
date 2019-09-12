@@ -1,11 +1,12 @@
 {
   "name": "edji-hotrod",
-  "version": "4.12.2",
+  "version": "4.12.7",
   "description": "Hot Rod is Edji's roaring Front End!",
   "author": "Edji, Inc.",
   "homepage": "https://edji.it/",
   "scripts": {
     "ng": "ng",
+    "deploy:branch": "ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev": "yarn release && ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev:minor": "yarn release --release-as minor && ng build --prod && grunt push:dev && grunt cloudfront:dev",
     "deploy:dev:major": "yarn release --release-as major && ng build --prod && grunt push:dev && grunt cloudfront:dev",
@@ -20,7 +21,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "e2e:ci": "protractor-flake --parser standard --max-attempts=3 -- e2e/protractor-circleci.conf.js",
-    "e2e:dev": "protractor-flake --parser standard --max-attempts=3 -- e2e/protractor.conf.js",
+    "e2e:dev": "protractor-flake --parser standard --max-attempts=1 -- e2e/protractor.conf.js",
     "e2e:headless": "ng e2e --protractor-config e2e/protractor-circleci.conf.js",
     "e2e:mobile": "ng e2e --protractor-config e2e/protractor-mobile.conf.js",
     "release": "yarn standard-version",

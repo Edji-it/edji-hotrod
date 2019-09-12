@@ -8,7 +8,23 @@
 				i.keyboard-btn((tap)='clearEmoji()', style='float: right;')
 					| Clear
 				i.keyboard-btn((tap)='deleteLastEmoji()', style='float: right; padding-top: 2px;font-size:21.25px;', [innerHtml]="':back:' | emojione")
-			.emojionearea-scroll-area(#emojiscrollarea='', (window:resize)='updateScrollValues()', (scroll)='scrollUpdate($event)')
+			.emojionearea-scroll-area(#emojiScrollArea, (window:resize)='updateScrollValues()', (scroll)='scrollUpdate($event)')
+				.input-group.input-group-sm.input--emoji-search
+					.input-group-prepend-icon
+						i.icon.icon-search
+					input.form-control(
+						type="text",
+						[(ngModel)]="searchTerm",
+						(keyup)="getEmojiResults(searchTerm)",
+						placeholder="Search emoji"
+					)
+					.form-control-clear.form-control-clear--in-field.icon.icon-close(
+            *ngIf="searchTerm",
+            (tap)="searchTerm = ''"
+          )
+				.emojionearea-emojis-list(*ngIf="searchTerm")
+					.emojionearea-category#categorySearch
+						i.emojibtn(*ngFor='let emoji of emojiResults', (tap)="addEmoji(':' + emoji + ':')", role='button', [attr.dataname]="':' + emoji + ':'", [innerHtml]="':' + emoji + ':' | emojione")
 				.emojionearea-emojis-list
 					//- slice: Reduce tap bindings and image load when keyboard is not active
 					.emojionearea-category(*ngFor='let category of emojifilters | slice:0:(isActive ? filtersLastIndex : 2); let i = index', [attr.id]="'category' + i")

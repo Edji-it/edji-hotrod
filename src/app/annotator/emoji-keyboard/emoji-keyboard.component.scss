@@ -44,7 +44,7 @@
 
 .emojionearea-emojis-list {
   // Pushes emoji below filter bar, and gives space at the bottom to indicate the end of the list
-  padding: 35px 0px;
+  // padding: 35px 0px;
 }
 
 .keyboard-btn {
@@ -71,6 +71,7 @@
 
 .emojionearea-scroll-area,
 .emojionearea .emojionearea-picker .emojionearea-scroll-area {
+  padding: 35px 0px;
   overflow-y: scroll !important; /* has to be scroll, not auto */
   -webkit-overflow-scrolling: touch !important;
   touch-action: pan-y;
@@ -127,7 +128,8 @@
   .emojionearea .emojionearea-picker .emojionearea-filters .emojionearea-filter {
     height: 20px;
     width: 22px;
-    margin: 0px 0.5px;
+    margin: 7px 3px 0;
+    padding: 0px;
   }
   .keyboard-btn {
     margin: 0 1px;
@@ -142,5 +144,21 @@
   img.emojioneemoji.keyboard-emoji-mobile {
     width: 32px !important;
     height: 32px !important;
+  }
+}
+
+// Search styles
+.input--emoji-search {
+  margin: 10px 10px 5px 10px;
+  max-width: calc(100% - 17px);
+
+  @media (min-width: $desktop) {
+    position: sticky;
+    margin-top: -32px;
+    z-index: 8000;
+    left: 35%;
+    right: 35%;
+    width: 30%;
+    top: -32px;
   }
 }
