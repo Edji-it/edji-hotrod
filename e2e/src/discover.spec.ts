@@ -127,10 +127,11 @@ describe('Discover Feed', () => {
         5000,
         'never arrived to the new reading page with existing reading',
       )
-
+      // sleep() excuse: wait for title field to populate and save
+      browser.sleep(1000)
       // grab the title of the reading for which we are editing and compare the two
       let titleValue = discover.getInputFieldText(newReading.titleInput)
-      // expect(readingTitle == titleValue).toBeTruthy('the new reading we are about to create does not match what we just got from the discover feed')
+      expect(titleValue).toEqual(readingTitle, 'the new reading we are about to create does not match what we just got from the discover feed')
 
       let newReadingTitle = `rp - ${new Date().valueOf()}`
       newReading.titleInput.clear()
@@ -148,14 +149,13 @@ describe('Discover Feed', () => {
       sidebar.logo.click()
       // .sleep() excuse: A previously loaded reading card causes the subsequent wait to fire too early
       browser.sleep(1000)
-      browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // also need to wait until the draft cards load in for us to check the title
       browser.wait(EC.elementToBeClickable(dashboard.firstDraftCard), 7000, 'reading draft cards never loaded')
+      browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 5000, 'never got back to the dashboard')
       // Check title of most recent readings
-      discover.validateReadingTitle(newReadingTitle).then(foundTitle => {
-        expect(foundTitle).toBeTruthy('the newly created reading title did not match the first reading in the dashboard')
-      })
-
+      let foundTitle = discover.validateReadingTitle(newReadingTitle)
+      expect(foundTitle).toBeTruthy('the newly created reading title did not match the first reading in the dashboard')
+      // With title checked, return to the dashboard
       reset()
       discover.getPage()
     })
