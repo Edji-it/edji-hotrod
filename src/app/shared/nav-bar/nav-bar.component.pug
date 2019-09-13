@@ -210,6 +210,7 @@
         .input-group-append
           button#buttonJoinProject.btn.btn-primary(
             [class.loading]="joinLoading",
+            [disabled]="!projectCode",
             type="button",
             (click)="joinSession(projectCode)",
             name="Join",

@@ -259,9 +259,9 @@ export class ProjectService {
     return this._http
       .get(
         this._auth.getUrl() +
-          '/api/v1/projects/' +
-          encodeURIComponent(projectCode) +
-          '?pop[]=reading_id&pop[]=teacher&pop[]=co_owners',
+        '/api/v1/projects/' +
+        encodeURIComponent(projectCode) +
+        '?pop[]=reading_id&pop[]=teacher&pop[]=co_owners',
         this._auth.getOptions(),
       )
       .pipe(
@@ -655,6 +655,10 @@ export class ProjectService {
    * @returns Observable which will have error if response is invalid
    */
   public validateProjectCode(projectCode: string): Observable<any> {
+    if (!projectCode) {
+      return of(new Error('Please provide a valid code'))
+    }
+
     projectCode = encodeURIComponent(projectCode.toLowerCase())
 
     return this._http.get<validateProjectCodeResponse>(
