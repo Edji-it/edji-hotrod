@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs'
 import { Router, ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
-import { AuthService, ProjectService, LockerService } from '../../_services'
+import { AuthService, ProjectService, LockerService, MailchimpService, AcademyService, BumblebeeService } from '../../_services'
 import { Copy } from '../../shared'
 import { ALLSPARK } from '../../app.constants'
 import { take } from 'rxjs/operators'
@@ -59,7 +59,11 @@ export class ProfileFormComponent implements OnInit {
         private _auth: AuthService,
         private _fb: FormBuilder,
         private _router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private _angulartics: Angulartics2,
+        private _chimp: MailchimpService,
+        private _academy: AcademyService,
+        private _bumble: BumblebeeService
     ) {
         // Used for prefilled values
         let userSoFar = this._auth.getUser()
@@ -163,6 +167,10 @@ export class ProfileFormComponent implements OnInit {
         this._auth.setUser(user)
     }
 
+    /**
+     * Bring the user to their dashboard, or where they were headed
+     * @param data Registration user response
+     */
     handleProfileCompleteRouting(data): void {
         if (this.readingToAdd) {
             this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
@@ -171,6 +179,43 @@ export class ProfileFormComponent implements OnInit {
         } else {
             // default case where nothing special happens
             this._router.navigate(['/dashboard'])
+        }
+    }
+
+    /**
+     * The user now has a full account!
+     * - Track the event
+     * @param user 
+     */
+    reportUserCreated(user) {
+        // Track registration via GA
+        this._angulartics.eventTrack.next({
+            action: 'registration',
+            properties: {
+                category: this._auth.setAnalyticEventCategory(),
+                label: this._auth.setAnalyticEventLabel(),
+            },
+        })
+        if (!user.identities) {
+            console.error("User was created without identities array")
+            return
+        }
+        // If NOT student, add to mailing list and Pipo
+        if (!user.identities.includes('student')) {
+            this._chimp.addToNewUsersList(user)
+            // send the data to Pipo to track registrations if they are a teacher
+            this._academy.pipoEvent({
+                // standard event info:
+                event_name: 'registration',
+                user_id: user._id,
+                teacher: true,
+                hero: user.hero_status || false,
+                institution_id: user.institution_ids || [],
+            })
+            // If not student or a teacher, their account is complete and we should report it
+            if (!user.identities.includes('teacher')) {
+                this._bumble.sendUserDetails(user)
+            }
         }
     }
 
@@ -197,6 +242,9 @@ export class ProfileFormComponent implements OnInit {
             .subscribe(
                 data => {
                     this.profileFormLoading = false
+                    // User Profile completion events
+                    this.reportUserCreated(data.user)
+                    // Bring the user to their dashboard, or where they were headed
                     this.handleProfileCompleteRouting(data)
                 },
                 err => {

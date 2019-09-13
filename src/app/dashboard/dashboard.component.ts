@@ -80,10 +80,10 @@ export class DashboardComponent implements OnInit {
 
     this._title.setTitle('Edji | Dashboard')
 
-    // To be updated for "Where did you hear about us?"
-    // if (!this.currentUser.isStudent) {
-    //   this.showUserDetailsModal = true
-    // }
+    // Ask teachers "Where did you hear about us?"
+    if (!this.currentUser.isStudent && (!this.currentUser.heard_about_us || !this.currentUser.heard_about_us.source)) {
+      this.showUserDetailsModal = true
+    }
 
     this.subscriptions.push(
       this._auth.currentUser.subscribe(user => {
@@ -120,11 +120,5 @@ export class DashboardComponent implements OnInit {
   public userDetailsAdded(): void {
     // Dismiss details modal
     this.showUserDetailsModal = false
-    // Check which dashboard a new user should land on
-    if (!this.currentUser.isStudent) {
-      this._router.navigate(['/dashboard/create'])
-    } else {
-      this._router.navigate(['/dashboard/read'])
-    }
   }
 }

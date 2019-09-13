@@ -1,57 +1,29 @@
 .modal.fade#userDetailsModal([class.show]="showModal", *ngIf="showModal")
   .modal-dialog
-    form.modal-content([formGroup]="userDetailsForm", (ngSubmit)="formSubmit(userDetailsForm)")
+    form.modal-content([formGroup]="heardFromForm", (ngSubmit)="formSubmit(heardFromForm)")
       .modal-header
-        h4.modal-title {{ modalHeadings.header }}
+        h4.modal-title([innerHTML]="modalHeadings.header | emojione")
         button(*ngIf="messages.success", type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
           span(aria-hidden="true") &times;
       .modal-body
-        div(*ngIf="identitySelect")
-          p {{ modalHeadings.body }}
-          #accountTypeGroup.input-group.py-2(*ngFor="let identity of identities")
-                .custom-control.custom-checkbox([attr.id]="identity.id")
-                  input.custom-control-input(
-                    [attr.id]="'input-' + identity.id",
-                    type="checkbox",
-                    [formControl]="userDetailsForm.controls['identities'].controls[identity.name]",
-                    value=""
-                  )
-                  label.custom-control-label([attr.for]="'input-' + identity.id", style="font-size:16px; margin: 0 5px;", [innerHtml]="identity.checkboxCopy | emojione")
-          .alert.alert-info(*ngIf="userDetailsForm.controls['identities'].dirty && userDetailsForm.controls['identities'].invalid") Please select at least one box!
-          .alert.alert-success(*ngIf="messages.success", [innerHtml]=" ':heavy_check_mark: Thanks! Have fun reading with Edji!' | emojione ")
-        div(*ngIf="!identitySelect")
-          p {{ modalHeadings.body }}
-          .form-group
-            label(for="schoolInput") School/District
-            input#schoolInput(type="text", [formControl]="userDetailsForm.controls['school']", tabindex="0", placeholder="My District", #schoolInput, [ngClass]="[ schoolSuggestShow ? 'marginZero' :' ' ]", autocomplete="off")
-            ul#schoolSuggest.list-group(*ngIf="schoolSuggestShow && schools.length > 0", (clickOutside)="schoolSuggestShow=false")
-              li.list-group-item(*ngFor="let school of schools", (click)="setSchoolInfo(school._source)")
-                p.m-0.school-name {{ school._source.school_name }}
-                p.m-0.district-name {{ school._source.district }}
-            #msgSchoolRequired.alert.alert-info(*ngIf="userDetailsForm.controls['school'].hasError('required') && userDetailsForm.controls['school'].dirty") Enter your School District here
-          .form-group
-            label(for="phoneInput") Phone Number
-              small &nbsp; [Optional]
-            input#phoneInput(type="text", [formControl]="userDetailsForm.controls['phone']", tabindex="0", placeholder="123-456-7890")
-            #msgPhoneIncorrect.alert.alert-info(*ngIf="userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty") We don't think that's a phone number...
-          .form-group
-            .custom-control.custom-checkbox()
-                input.custom-control-input(
-                  id="salesCanContact",
-                  type="checkbox",
-                  [formControl]="userDetailsForm.controls['sales_can_contact']",
-                  value=""
-                )
-                label.custom-control-label(for="salesCanContact", style="padding-top:2px;") I am interested in learning more about Edji Academy for my school
+        .form-group
+          p([innerHTML]="modalHeadings.body | emojione")
+        .form-group
+          label(for="sourceInput") Where did you hear about us?
+          select.custom-select#sourceInput([formControl]="heardFromForm.controls['source']")
+            option([value]="undefined", disabled, selected) Select...
+            option(*ngFor="let option of sourceOptions", [value]="option", [innerHTML]="option")
+          input.form-control(*ngIf="heardFromForm.controls['source'].value === 'Other'",
+            type="text", 
+            placeholder="Somewhere else?", 
+            [formControl]="heardFromForm.controls['detail']"
+          )
+          #msgSourceRequired.alert.alert-info(*ngIf="heardFromForm.controls['source'].hasError('required') && heardFromForm.controls['source'].dirty")
+            | Could you please share where you heard about us?
       .modal-footer
-        button#submitDetailsButton.btn.btn-primary(
-          *ngIf="identitySelect && !messages.success", 
-          type="submit", 
-          [disabled]="userDetailsForm.controls['identities'].invalid"
-        ) Next
+        //- button.btn.btn-link((click)="closeModal.emit()")
+        //-   | Later
         button#finalSubmitButton.btn.btn-primary(
-          *ngIf="!identitySelect && !messages.success", 
           type="submit", 
-          [disabled]="userDetailsForm.controls['school'].invalid || (userDetailsForm.controls['phone'].hasError('phoneIncorrect') && userDetailsForm.controls['phone'].dirty)"
-        ) Done
-        button.btn.btn-secondary(*ngIf="messages.success", type="button") Close
+          [disabled]="heardFromForm.controls['source'].invalid"
+        ) Let's Go

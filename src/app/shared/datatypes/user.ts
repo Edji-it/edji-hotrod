@@ -33,6 +33,10 @@ interface BaseUser {
   identities?: string[]
   hero_status?: boolean
   avatar?: string
+  heard_about_us?: {
+    source?: string
+    detail?: string
+  }
   prefs?: {
     recentEmoji?: string[]
     onboarding?: {
