@@ -16,8 +16,6 @@ nav-bar
         p.mt-1.mb-0(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
         p.mt-1.mb-0(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
       hot-register-form(
-        [readingToAdd]="readingToAdd",
-        [projectToAdd]="projectToAdd",
         [tempUserId]="tempUserId",
         [referralId]="referralId"
       )

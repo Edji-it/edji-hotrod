@@ -10,7 +10,4 @@ nav-bar
           b Hooray! You now have a full Edji account!
           p.mt-1.mb-0(*ngIf="readingToAdd") Just a few more details, and you can edit your reading.
           p.mt-1.mb-0(*ngIf="projectToAdd") Just a few more details, and you can access your Reading on your dashboard.
-        hot-profile-form(
-          [readingToAdd]="readingToAdd",
-          [projectToAdd]="projectToAdd"
-        )
+        hot-profile-form()

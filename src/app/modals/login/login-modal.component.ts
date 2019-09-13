@@ -30,11 +30,12 @@ export class LoginModal implements AfterViewInit, OnInit {
   public initialized: boolean
 
   constructor(
-    private _project: ProjectService, 
-    private _socket: SocketService, 
+    private _project: ProjectService,
+    private _socket: SocketService,
     private _auth: AuthService,
     private router: Router,
-  ) {}
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     if (this.loginOnly) {
@@ -83,6 +84,18 @@ export class LoginModal implements AfterViewInit, OnInit {
         )
     } else {
       this.closeModal.emit('preview')
+    }
+  }
+
+  /**
+   * Handles routing to Register page
+   */
+  public goToRegister() {
+    let params = this.route.snapshot.queryParams
+    if (params['preview']) {
+      this.router.navigate(['/register'], { queryParams: { preview: params['preview'] } })
+    } else {
+      this.router.navigate(['/register'])
     }
   }
 

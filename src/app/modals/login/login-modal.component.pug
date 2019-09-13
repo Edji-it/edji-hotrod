@@ -23,4 +23,4 @@
       .modal-footer(*ngIf='!guestLogin && loginOnly')
         p I don't have an account, but want to register!
         div
-          button.btn.btn-secondary#goToRegistration((click)="router.navigate(['/register'])") Register
+          button.btn.btn-secondary#goToRegistration((click)="goToRegister()") Register

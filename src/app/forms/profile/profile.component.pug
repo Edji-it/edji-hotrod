@@ -101,5 +101,6 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
             [disabled]="!profileForm.valid", 
             tabindex="0"
         )
-            span(*ngIf="!readingToAdd") Go to Dashboard
+            span(*ngIf="!readingToAdd && !readingToPreview") See My Dashboard
+            span(*ngIf="readingToPreview") To Shared Reading
             span(*ngIf="readingToAdd") To My Reading

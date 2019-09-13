@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Subscription } from 'rxjs'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
 import { AuthService, ProjectService, LockerService } from '../../_services'
@@ -19,9 +19,6 @@ import { User, UserSchoolDistrict } from 'src/app/shared/datatypes';
 })
 export class ProfileFormComponent implements OnInit {
     /** The reading id that the user wanted to make a copy of */
-    @Input() readingToAdd: string
-    @Input() projectToAdd: string
-
     @Output() profileSuccess: EventEmitter<any> = new EventEmitter()
 
     private subscriptions: Subscription[] = []
@@ -53,10 +50,16 @@ export class ProfileFormComponent implements OnInit {
     public initials: string = ''
     public schoolInfo: UserSchoolDistrict
 
+    // Redirect params
+    public readingToAdd: string
+    public readingToPreview: string
+    public projectToAdd: string
+
     constructor(
         private _auth: AuthService,
         private _fb: FormBuilder,
         private _router: Router,
+        private route: ActivatedRoute
     ) {
         // Used for prefilled values
         let userSoFar = this._auth.getUser()
@@ -85,7 +88,15 @@ export class ProfileFormComponent implements OnInit {
         this.setInitials(this.profileForm)
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.subscriptions.push(
+            this.route.queryParams.subscribe(queryParams => {
+                this.readingToAdd = queryParams['reading']
+                this.readingToPreview = queryParams['preview']
+                this.projectToAdd = queryParams['project']
+            }),
+        )
+    }
 
     /** 
      * Validates if school is required
@@ -155,6 +166,8 @@ export class ProfileFormComponent implements OnInit {
     handleProfileCompleteRouting(data): void {
         if (this.readingToAdd) {
             this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
+        } else if (this.readingToPreview) {
+            this._router.navigate(['/discover'], { queryParams: { preview: this.readingToPreview } })
         } else {
             // default case where nothing special happens
             this._router.navigate(['/dashboard'])

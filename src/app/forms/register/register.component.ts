@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Subscription } from 'rxjs'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
 import { AuthService, ProjectService, LockerService } from '../../_services'
@@ -17,10 +17,6 @@ import { Title } from '@angular/platform-browser'
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterFormComponent implements OnInit {
-  /** The reading id that the user wanted to make a copy of */
-  @Input() readingToAdd: string
-  @Input() projectToAdd: string
-  /** The project id that the user wanted to add to the dashboard */
   @Input() tempUserId: string
   @Input() referralId: string
   @Input() noRedirect: boolean
@@ -28,6 +24,11 @@ export class RegisterFormComponent implements OnInit {
   @Output() registerSuccess: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
+
+  /** Redirect params */
+  public readingToAdd: string
+  public readingToPreview: string
+  public projectToAdd: string
 
   public registerForm: FormGroup
   public registerLoading: boolean = false
@@ -51,6 +52,7 @@ export class RegisterFormComponent implements OnInit {
     private _title: Title,
     private _locker: LockerService,
     private _router: Router,
+    private route: ActivatedRoute
   ) {
     this.userCopy = new Copy().getUserCopy()
 
@@ -65,7 +67,15 @@ export class RegisterFormComponent implements OnInit {
     )
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.subscriptions.push(
+      this.route.queryParams.subscribe(queryParams => {
+        this.readingToAdd = queryParams['reading']
+        this.readingToPreview = queryParams['preview']
+        this.projectToAdd = queryParams['project']
+      }),
+    )
+  }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   /** Validates that the passwords are equal and assigns error if not
@@ -145,6 +155,8 @@ export class RegisterFormComponent implements OnInit {
                   this._router.navigate(['/register/profile'])
                 },
               )
+          } else if (this.readingToPreview) {
+            this._router.navigate(['/register/profile'], { queryParams: { preview: this.readingToPreview } })
           } else if (this.noRedirect) {
             this.registerSuccess.emit(data.user)
           } else {
