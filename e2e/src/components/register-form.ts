@@ -24,6 +24,11 @@ export class RegisterForm {
   public otherOption = element(by.id('typeOtherInput'))
   public confirmProfile = element(by.id('buttonCreateProfile'))
 
+  // School selector
+  public schoolInput = element(by.id('schoolInput'))
+  public schoolSuggest = element(by.id('schoolSuggest'))
+  public firstSchoolSuggest = element.all(by.css('#schoolSuggest li')).first()
+
   /**
    * Tests all Registration Form errors
    */
@@ -49,7 +54,10 @@ export class RegisterForm {
   /**
    * Register a User
    */
-  public submit(username?: string, firstname?: string, lastname?: string, email?: string, password?: string): void {
+  public submit(type?: string, username?: string, firstname?: string, lastname?: string, email?: string, password?: string): void {
+    if (!type) {
+      type = 'robot'
+    }
     // If login function not passed credentials, default to teacher user
     if (!username) {
       username = 'BOT-' + new Date().valueOf()
@@ -74,8 +82,6 @@ export class RegisterForm {
 
     // Ensure form is clear
     this.clear()
-    // this.usernameInput.sendKeys(username)
-    // this.fullnameInput.sendKeys(fullname)
     this.emailInput.sendKeys(email)
     this.passwordInput.sendKeys(password)
     this.passwordConfirmInput.sendKeys(password)
@@ -98,11 +104,37 @@ export class RegisterForm {
     // Select identity
     this.otherIdentities.click()
     browser.wait(this.EC.elementToBeClickable(this.robotOption), 3000, 'other identity options did not become available')
-    this.robotOption.click()
+    if (type === 'teacher') {
+      this.teacherOption.click()
+    } else if (type === 'student') {
+      this.studentOption.click()
+    } else {
+      this.robotOption.click()
+    }
     // If teacher, select school
-
-
+    if (type === 'teacher' || type === 'administrator' || type === 'coach') {
+      // enter a school district name if they are a teacher or admin account type
+      this.schoolInput.sendKeys('District Edji')
+      // make sure the suggested schools/districts list shows
+      browser.wait(
+        this.EC.elementToBeClickable(this.schoolSuggest),
+        5000,
+        "school suggestion list never loaded",
+      )
+      // select the first result
+      browser.wait(
+        this.EC.elementToBeClickable(this.firstSchoolSuggest),
+        5000,
+        "first school suggestion never loaded",
+      )
+      this.firstSchoolSuggest.click()
+    }
+    // Submit!
+    browser.wait(
+      this.EC.elementToBeClickable(this.confirmProfile),
+      5000,
+      "Final 'Submit' button not clickable after entering school district or identity",
+    )
     this.confirmProfile.click()
-
   }
 }
