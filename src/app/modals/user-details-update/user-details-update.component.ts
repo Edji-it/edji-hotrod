@@ -92,29 +92,27 @@ export class UserDetailsUpdateModal implements OnInit {
       detail: detail
     }
 
-    console.log(heard_from)
-
-    // this._auth
-    //   .updateUser({ heard_about_us: heard_from })
-    //   .pipe(take(1))
-    //   .subscribe(
-    //     (res: any) => {
-    //       this._auth.setUser(res.user)
-    //       this.messages.success = true
-    //       // Close the modal
-    //       this.closeModal.emit()
-    //       // Currently assuming only teachers are entering details
-    //       // Tell Bumblebee/Slack!
-    //       if (this.existingUser) {
-    //         this._bumble.sendUserDetails(res.user, 'additionalDetails')
-    //       } else {
-    //         this._bumble.sendUserDetails(res.user)
-    //       }
-    //     },
-    //     err => {
-    //       console.error(err)
-    //     },
-    //   )
+    this._auth
+      .updateUser({ heard_about_us: heard_from })
+      .pipe(take(1))
+      .subscribe(
+        (res: any) => {
+          this._auth.setUser(res.user)
+          this.messages.success = true
+          // Close the modal
+          this.closeModal.emit()
+          // Currently assuming only teachers are entering details
+          // Tell Bumblebee/Slack!
+          if (this.existingUser) {
+            this._bumble.sendUserDetails(res.user, 'additionalDetails')
+          } else {
+            this._bumble.sendUserDetails(res.user)
+          }
+        },
+        err => {
+          console.error(err)
+        },
+      )
   }
 
   /**
