@@ -12,7 +12,7 @@
           label(for="sourceInput") Where did you hear about us?
           select.custom-select#sourceInput([formControl]="heardFromForm.controls['source']")
             option([value]="undefined", disabled, selected) Select...
-            option(*ngFor="let option of sourceOptions", [value]="option", [innerHTML]="option")
+            option(*ngFor="let option of sourceOptions", data-test="sourceOption", [value]="option", [innerHTML]="option")
           input.form-control(*ngIf="heardFromForm.controls['source'].value === 'Other'",
             type="text", 
             placeholder="Somewhere else?", 
@@ -23,7 +23,8 @@
       .modal-footer
         //- button.btn.btn-link((click)="closeModal.emit()")
         //-   | Later
-        button#finalSubmitButton.btn.btn-primary(
+        button.btn.btn-primary(
           type="submit", 
-          [disabled]="heardFromForm.controls['source'].invalid"
+          [disabled]="heardFromForm.controls['source'].invalid",
+          data-text="userDetailsSubmit"
         ) Let's Go

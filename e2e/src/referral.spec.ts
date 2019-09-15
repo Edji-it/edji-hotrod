@@ -151,7 +151,7 @@ describe('Share', () => {
       // Created user should land on Dashboard
       browser.wait(EC.urlContains('dashboard'), 5000, 'referred user failed to register')
       // Confirm account type
-      userDetails.confirmBot('teacher')
+      userDetails.addDetails()
       // Open referrals modal
       sidebar.clickReferralButton()
       // Verify user has not received referral credit

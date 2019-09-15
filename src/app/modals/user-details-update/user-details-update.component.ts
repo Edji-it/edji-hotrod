@@ -54,11 +54,17 @@ export class UserDetailsUpdateModal implements OnInit {
       source: [null, Validators.required],
       detail: [null]
     })
+    this.currentUser = this._auth.getUser()
+    // If not teacher, display generic copy
+    if (!this.currentUser.identities.includes('teacher')) {
+      this.modalHeadings = {
+        header: ':tada: Welcome to Edji!',
+        body: 'We are happy to have you, one more question and you\'ll be on your way.'
+      }
+    }
   }
 
   ngOnInit() {
-    this.currentUser = this._auth.getUser()
-
     // Check if their account was created today
     let createdDate = new Date(this.currentUser.createdAt).setHours(0, 0, 0, 0)
     let todaysDate = new Date().setHours(0, 0, 0, 0)

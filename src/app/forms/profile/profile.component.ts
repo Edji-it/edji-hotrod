@@ -212,10 +212,6 @@ export class ProfileFormComponent implements OnInit {
                 hero: user.hero_status || false,
                 institution_id: user.institution_ids || [],
             })
-            // If not student or a teacher, their account is complete and we should report it
-            if (!user.identities.includes('teacher')) {
-                this._bumble.sendUserDetails(user)
-            }
         }
     }
 

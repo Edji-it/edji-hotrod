@@ -81,7 +81,7 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
                         )
                         span([innerHTML]="identity.displayName | emojione")
                 //- Other Options
-                label.form-check-label.form-check-link((click)="showMoreIdentities = !showMoreIdentities")
+                label.form-check-label.form-check-link((click)="showMoreIdentities = !showMoreIdentities", data-test="toggleOtherIdentities")
                     | {{ !showMoreIdentities ? 'Other?' : 'Hide' }}
     .form-group(*ngIf="isSchoolStaff(profileForm.controls['accountRole'].value)")
         label School/District
