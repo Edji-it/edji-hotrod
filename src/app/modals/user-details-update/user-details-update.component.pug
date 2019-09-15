@@ -12,8 +12,8 @@
           label(for="sourceInput") Where did you hear about us?
           select.custom-select#sourceInput([formControl]="heardFromForm.controls['source']")
             option([value]="undefined", disabled, selected) Select...
-            option(*ngFor="let option of sourceOptions", data-test="sourceOption", [value]="option", [innerHTML]="option")
-          input.form-control(*ngIf="heardFromForm.controls['source'].value === 'Other'",
+            option(*ngFor="let option of sourceOptions", data-test="sourceOption", [value]="option.source", [innerHTML]="option.display")
+          input.form-control(*ngIf="heardFromForm.controls['source'].value === 'other'",
             type="text", 
             placeholder="Somewhere else?", 
             [formControl]="heardFromForm.controls['detail']"

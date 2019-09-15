@@ -32,17 +32,17 @@ export class UserDetailsUpdateModal implements OnInit {
       body: 'We are excited to have you. One more question, and we will leave you to the teaching.',
     }
 
-  public sourceOptions: string[] = [
-    'Friend or colleague',
-    'Twitter',
-    'Facebook',
-    'Podcast',
-    'Blog article',
-    'Professional development',
-    'AVID training',
-    'EdCamp',
-    'Conference',
-    'Other'
+  public sourceOptions: { source: string, display: string }[] = [
+    { source: 'friend', display: 'Friend or colleague' },
+    { source: 'twitter', display: 'Twitter' },
+    { source: 'facebook', display: 'Facebook' },
+    { source: 'avid', display: 'AVID training' },
+    { source: 'podcast', display: 'Podcast' },
+    { source: 'blog', display: 'Blog article' },
+    { source: 'pd', display: 'Professional development' },
+    { source: 'edcamp', display: 'EdCamp' },
+    { source: 'conference', display: 'Conference' },
+    { source: 'other', display: 'Other' }
   ]
 
   constructor(
@@ -78,33 +78,43 @@ export class UserDetailsUpdateModal implements OnInit {
    * @param form 
    */
   private formSubmit(form: FormGroup): void {
+    let detail = form.value.detail
+
+    if (!detail) {
+      let selectedSource = this.sourceOptions.find(option => {
+        return option.source == form.value.source
+      })
+      detail = selectedSource.display
+    }
 
     let heard_from = {
       source: form.value.source,
-      detail: form.value.detail ? form.value.detail : ''
+      detail: detail
     }
 
-    this._auth
-      .updateUser({ heard_about_us: heard_from })
-      .pipe(take(1))
-      .subscribe(
-        (res: any) => {
-          this._auth.setUser(res.user)
-          this.messages.success = true
-          // Close the modal
-          this.closeModal.emit()
-          // Currently assuming only teachers are entering details
-          // Tell Bumblebee/Slack!
-          if (this.existingUser) {
-            this._bumble.sendUserDetails(res.user, 'additionalDetails')
-          } else {
-            this._bumble.sendUserDetails(res.user)
-          }
-        },
-        err => {
-          console.error(err)
-        },
-      )
+    console.log(heard_from)
+
+    // this._auth
+    //   .updateUser({ heard_about_us: heard_from })
+    //   .pipe(take(1))
+    //   .subscribe(
+    //     (res: any) => {
+    //       this._auth.setUser(res.user)
+    //       this.messages.success = true
+    //       // Close the modal
+    //       this.closeModal.emit()
+    //       // Currently assuming only teachers are entering details
+    //       // Tell Bumblebee/Slack!
+    //       if (this.existingUser) {
+    //         this._bumble.sendUserDetails(res.user, 'additionalDetails')
+    //       } else {
+    //         this._bumble.sendUserDetails(res.user)
+    //       }
+    //     },
+    //     err => {
+    //       console.error(err)
+    //     },
+    //   )
   }
 
   /**
