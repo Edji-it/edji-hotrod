@@ -39,8 +39,6 @@ export class RegisterForm {
    * + Useful for ensuring there are no lingering values
    */
   public clear(): void {
-    // this.usernameInput.clear()
-    // this.firstnameInput.clear()
     this.emailInput.clear()
     this.passwordInput.clear()
     this.passwordConfirmInput.clear()
