@@ -409,7 +409,7 @@ export class SearchPage implements OnInit {
   public closeLoginModal(context?: string): void {
     this.showLoginModal = false
     if (context === 'preview') {
-      this.router.navigate(['/discover' + (this.isSearching ? '/search' : '')], { queryParams: this.loginParams })
+      this.showReadingPreviewModal = true
     }
   }
 }
