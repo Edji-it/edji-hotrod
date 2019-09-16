@@ -50,6 +50,7 @@ import {
   DashboardGuardService,
   MailchimpService,
   StateService,
+  UserDetailsService
 } from './_services'
 // import { ReuseStrategy } from './route-reuse-strategy'
 
@@ -183,6 +184,7 @@ const APP_PROVIDERS = [
   BumblebeeService,
   MailchimpService,
   StateService,
+  UserDetailsService,
   {
     provide: HAMMER_GESTURE_CONFIG,
     useClass: MyHammerConfig,

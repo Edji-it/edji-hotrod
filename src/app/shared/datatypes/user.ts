@@ -13,6 +13,8 @@ export interface PublicUser {
   _id: string
   username?: string
   fullname: string
+  initials?: string
+  avatar?: string
   hero_status?: boolean
   userType?: string
 }
