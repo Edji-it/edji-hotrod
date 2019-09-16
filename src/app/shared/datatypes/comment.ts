@@ -64,7 +64,7 @@ export enum CommentPermissions {
 
 export interface UserCommentStats {
   _id: string
-  fullname: string
+  fullname?: string
   comment_count: number
   reply_count: number
   emoji_comment_count: number

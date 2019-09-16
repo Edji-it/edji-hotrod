@@ -11,6 +11,10 @@ import { SocketService } from './socket.service'
 import { CommentStats, EdjiComment, Project, User, PublicUser } from '../shared/datatypes'
 import { ReadingService } from './reading.service'
 import { AcademyService } from './academy.service'
+import { UserDetailsService } from './user-details.service';
+import { Store } from '@ngrx/store';
+import { PublicUsersState } from '../_reducers/user-details.reducers';
+import * as publicUserActions from '../_reducers/user-details.actions';
 
 @Injectable()
 export class ProjectService {
@@ -22,7 +26,7 @@ export class ProjectService {
 
   /** project will be given out as observable */
   private project: any = { title: 'initial value' }
-  private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project)
+  public currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project)
   public currentProject: Observable<any> = this.currentProjectSource.asObservable()
   // Maintain local Project data and its updates in this service
 
@@ -89,6 +93,7 @@ export class ProjectService {
     private _readings: ReadingService,
     private angulartics: Angulartics2,
     private _academy: AcademyService,
+    private store: Store<PublicUsersState>
   ) {
     // needs to be constructed here or else it returns undefined
     this._commentStats = new CommentStats()
@@ -298,9 +303,10 @@ export class ProjectService {
           this.project = project
           this.currentProjectSource.next(this.project)
           // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
-          if ((project.students_ids.length > 0 || project.temp_ids.length > 0) && this.project.isTeaching) {
-            this.getUserInfoFromProject(project)
-          }
+          // if ((project.students_ids.length > 0 || project.temp_ids.length > 0) && this.project.isTeaching) {
+          // this.getUserInfoFromProject(project)
+          this.store.dispatch(new publicUserActions.List({ students_ids: project.students_ids, temp_ids: project.temp_ids }))
+          // }
           // Return the project along the current Observable
           return this.project
         }),
@@ -357,36 +363,38 @@ export class ProjectService {
    * Pulls in fullname and username for students and temp users for leaderboard and
    * @param project current project the user is on
    */
-  public getUserInfoFromProject(project: Project) {
-    this._auth.getUserInfoByProject(project.students_ids, project.temp_ids).subscribe(
-      userInfo => {
-        userInfo = userInfo.users
-        // attach the basic user information to each students_id
-        this.project.students = this.project.students_ids.map(obj => {
-          return userInfo.find(el => {
-            return el._id === obj
-          })
-        })
-        // attach the basic user information to each temp_id
-        this.project.temps = this.project.temp_ids.map(obj => {
-          return userInfo.find(el => {
-            return el._id === obj
-          })
-        })
-        this.currentProjectSource.next(this.project)
-        this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
-      },
-      error => {
-        console.error(error)
-      },
-    )
-  }
+  // public getUserInfoFromProject(project: Project) {
+  //   this._users.getUserDetails(project.students_ids, project.temp_ids).subscribe(
+  //     users => {
+  //       // attach the basic user information to each students_id
+  //       this.project.students = this.project.students_ids.map(obj => {
+  //         return users.find(el => {
+  //           return el._id === obj
+  //         })
+  //       })
+  //       // attach the basic user information to each temp_id
+  //       this.project.temps = this.project.temp_ids.map(obj => {
+  //         return users.find(el => {
+  //           return el._id === obj
+  //         })
+  //       })
+  //       this.currentProjectSource.next(this.project)
+  //       this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
+  //     },
+  //     error => {
+  //       console.error(error)
+  //     },
+  //   )
+  // }
 
   /**
    * Adds user information to the student that just joined the project so we can see them on the leaderboard
    * @param groupUpdate the object that contains user properties to properly add student to leaderboard
    */
   private addUserInfoToProject(groupUpdate: any) {
+    /**
+     * @todo ADD "ADD" EFFECT
+     */
     // Make sure student and temp arrays exist
     if (!this.project.students) this.project.students = []
     if (!this.project.temps) this.project.temps = []

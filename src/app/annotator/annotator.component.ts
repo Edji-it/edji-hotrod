@@ -34,6 +34,7 @@ import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
 
+
 @Component({
   selector: 'annotator',
   templateUrl: './annotator.component.pug',

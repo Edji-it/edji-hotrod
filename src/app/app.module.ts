@@ -144,6 +144,7 @@ import { SearchPage } from './search-page/search-page.component'
 import { TeacherFeedbackComponent } from './annotator/teacher-feedback/teacher-feedback.component'
 import { MetricsEffects } from './_reducers/metrics.effects'
 import { CopyService } from './_services/copy.service'
+import { UserDetailsEffects } from './_reducers/user-details.effects';
 
 // Configure Hammer.js
 export class MyHammerConfig extends HammerGestureConfig {
@@ -310,6 +311,7 @@ const routerOptions: ExtraOptions = {
     NgxPageScrollModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([MetricsEffects]),
+    EffectsModule.forRoot([UserDetailsEffects])
   ],
   providers: [
     // expose our Services and Providers into Angular's dependency injection

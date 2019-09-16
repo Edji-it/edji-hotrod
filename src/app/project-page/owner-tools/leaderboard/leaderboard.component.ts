@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
-import { CommentStats, Reading, User, Project, PublicUser } from './../../../shared/datatypes'
+import { CommentStats, Reading, User, Project, PublicUser, iCommentStats, UserCommentStats } from './../../../shared/datatypes'
 import { ProjectService, ReadingService, AuthService } from '../../../_services'
 import { CommentFilter } from '../../../_services/project.service'
 
@@ -166,7 +166,7 @@ export class LeaderboardComponent implements OnInit {
   /**
    * Is Student Filtered
    */
-  public isStudentFiltered(student: PublicUser): boolean {
+  public isStudentFiltered(student: UserCommentStats): boolean {
     if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
       return this.appliedFilter.propertyFilters.user_id.test(student._id)
     } else {
@@ -178,7 +178,7 @@ export class LeaderboardComponent implements OnInit {
    * Returns if user is co-teacher
    * @param student id
    */
-  public isStudentCoTeacher(student: PublicUser): boolean {
+  public isStudentCoTeacher(student: UserCommentStats): boolean {
     return this.currentProject.co_owner_ids && this.currentProject.co_owner_ids.indexOf(student._id) > -1
   }
 

@@ -23,8 +23,11 @@ export class UserDetailsService {
    * @param student_ids array of student ids
    * @param temp_ids array of temp user ids
    */
-  public getUserDetails(students_ids?: any[], temp_ids?: any[]): Observable<any> {
+  public getUserDetails(action: { students_ids?: any[], temp_ids?: any[] }): Observable<PublicUser[]> {
     let search_params: string = ''
+    let students_ids = action.students_ids
+    let temp_ids = action.temp_ids
+    console.log("Get user details!", students_ids)
     // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
     if (students_ids.length > 0 && students_ids[0].hasOwnProperty('_id')) {
       let length = students_ids.length
@@ -53,10 +56,10 @@ export class UserDetailsService {
       .pipe(map(userInfo => {
         let users = userInfo['users']
 
-        // Update user details state
-        users.forEach(user => {
-          this.cachePublicUser(user)
-        })
+        // // Update user details state
+        // users.forEach(user => {
+        //   this.cachePublicUser(user)
+        // })
 
         return users
       }))

@@ -64,7 +64,7 @@ export class CommentStats {
         emoji_comment_count: 0,
         text_comment_count: 0,
         audio_comment_count: 0,
-        fullname: student.fullname,
+        // fullname: student.fullname,
         comments: [],
         status: 'offline',
       })
@@ -82,7 +82,7 @@ export class CommentStats {
         emoji_comment_count: 0,
         text_comment_count: 0,
         audio_comment_count: 0,
-        fullname: student.fullname,
+        // fullname: student.fullname,
         comments: [],
         status: 'offline',
       })
@@ -114,7 +114,7 @@ export class CommentStats {
           emoji_comment_count: 0,
           text_comment_count: 0,
           audio_comment_count: 0,
-          fullname: student.fullname,
+          // fullname: student.fullname,
           comments: [],
           status: 'offline',
           questions: studentQuestions
@@ -139,7 +139,7 @@ export class CommentStats {
           emoji_comment_count: 0,
           text_comment_count: 0,
           audio_comment_count: 0,
-          fullname: student.fullname,
+          // fullname: student.fullname,
           comments: [],
           status: 'offline',
           questions: studentQuestions
@@ -187,7 +187,7 @@ export class CommentStats {
     if (!student && difference > 0) {
       this._stats.userStats.push({
         _id: comment.user_id,
-        fullname: comment.author,
+        // fullname: comment.author,
         comment_count: isReply ? 0 : 1,
         reply_count: isReply ? 1 : 0,
         emoji_comment_count: comment.type === 'emoji' && !isReply ? 1 : 0,
