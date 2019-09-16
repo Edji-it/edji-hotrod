@@ -71,8 +71,12 @@ export class ProfileFormComponent implements OnInit {
         let prefillLast = ''
         if (userSoFar.fullname) {
             let i = userSoFar.fullname.indexOf(' ')
-            prefillFirst = userSoFar.fullname.slice(0, i)
-            prefillLast = userSoFar.fullname.slice(i + 1)
+            if (i > 0) {
+                prefillFirst = userSoFar.fullname.slice(0, i)
+                prefillLast = userSoFar.fullname.slice(i + 1)
+            } else {
+                prefillFirst = userSoFar.fullname
+            }
         }
 
         // Used for placeholder values in template
