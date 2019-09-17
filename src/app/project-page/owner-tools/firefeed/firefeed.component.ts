@@ -3,7 +3,8 @@ import { Subscription } from 'rxjs'
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 
 // Project dependencies
-import { ProjectService, ReadingService } from '../../../_services'
+import { ReadingService } from '../../../_services'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'hot-firefeed',
@@ -18,7 +19,7 @@ export class FirefeedComponent implements OnInit, OnDestroy {
   private project: Project
   public currentReading: Reading
 
-  constructor(private _projects: ProjectService, private _readings: ReadingService) {}
+  constructor(private projectStore: ProjectStore, private _readings: ReadingService) { }
 
   ngOnInit() {
     // Subscribe to the reading
@@ -34,7 +35,7 @@ export class FirefeedComponent implements OnInit, OnDestroy {
     )
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push(
-      this._projects.currentProject.subscribe(
+      this.projectStore.currentProject.subscribe(
         project => {
           if (project) {
             this.project = project

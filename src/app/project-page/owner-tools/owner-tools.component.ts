@@ -4,9 +4,10 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ProjectService, ReadingService, SocketService } from '../../_services'
+import { AuthService, ReadingService, SocketService } from '../../_services'
 import { CommentStats, Project, Reading } from './../../shared/datatypes'
 import { ActivatedRoute } from '@angular/router'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'owner-tools',
@@ -33,14 +34,14 @@ export class OwnerToolsComponent implements OnInit {
   public powersLoading: any = {}
 
   constructor(
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _auth: AuthService,
     private _socket: SocketService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
     private _route: ActivatedRoute,
   ) {
-    this.commentStats = this._projects.commentStats
+    this.commentStats = this.projectStore.commentStats
   }
 
   ngOnInit() {
@@ -59,7 +60,7 @@ export class OwnerToolsComponent implements OnInit {
           console.error(error)
         },
       ),
-      this._projects.currentProject.subscribe(
+      this.projectStore.currentProject.subscribe(
         project => {
           // For transitioning how the server handles teacher/owner ids
           if (!project.owner_id || typeof project.owner_id != 'string') {
@@ -112,7 +113,7 @@ export class OwnerToolsComponent implements OnInit {
     let updateObj: any = {}
     updateObj[powerName] = turnOn
 
-    this._projects
+    this.projectStore
       .update(updateObj, this.currentProject._id)
       .pipe(take(1))
       .subscribe(project => {

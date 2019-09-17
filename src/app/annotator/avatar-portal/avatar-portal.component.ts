@@ -4,7 +4,8 @@ import { EdjiComment } from '../../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { ProjectService, AuthService } from '../../_services'
+import { AuthService } from '../../_services'
+import { ProjectStore } from 'src/app/_store';
 
 enum playState {
   inactive,
@@ -43,11 +44,11 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
 
   @Output() toggleCommentPane = new EventEmitter()
 
-  constructor(private _projects: ProjectService, private angulartics: Angulartics2, private _auth: AuthService) {}
+  constructor(private projectStore: ProjectStore, private angulartics: Angulartics2, private _auth: AuthService) { }
 
   ngOnInit() {
     this.subscriptions.push(
-      this._projects.commentByPos.subscribe(commentsByPos => {
+      this.projectStore.commentByPos.subscribe(commentsByPos => {
         this.commentsByPos = commentsByPos
       }),
     )
@@ -57,7 +58,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     }
     // Subscribe to updates to the reply reference object
     this.subscriptions.push(
-      this._projects.repliesById.subscribe(
+      this.projectStore.repliesById.subscribe(
         repliesById => {
           this.repliesById = repliesById
         },

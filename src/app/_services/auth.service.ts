@@ -948,7 +948,7 @@ export class AuthService implements CanActivate {
    * @param student_ids array of student ids
    * @param temp_ids array of temp user ids
    */
-  public getUserInfoByProject(students_ids?: any[], temp_ids?: any[]): Observable<any> {
+  public getPublicUsers(students_ids?: any[], temp_ids?: any[]): Observable<any> {
     let search_params: string = ''
     // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
     if (students_ids.length > 0 && students_ids[0].hasOwnProperty('_id')) {

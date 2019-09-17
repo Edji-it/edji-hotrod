@@ -1,9 +1,12 @@
 import { Subscription } from 'rxjs'
-import { Project } from '../../shared/datatypes'
 import { Router } from '@angular/router'
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core'
-import { UtilToolService, ProjectService } from './../../_services'
 import { ActivatedRoute } from '@angular/router'
+
+// Internal
+import { ProjectStore } from 'src/app/_store';
+import { Project } from '../../shared/datatypes'
+import { UtilToolService, ProjectService } from './../../_services'
 
 @Component({
   selector: 'share-code',
@@ -22,13 +25,13 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private _util: UtilToolService,
-    private _projects: ProjectService,
-  ) {}
+    private projectStore: ProjectStore,
+  ) { }
 
   ngOnInit() {
     // Subscribe to current Project data
     this.subscriptions.push(
-      this._projects.currentProject.subscribe(
+      this.projectStore.currentProject.subscribe(
         project => {
           this.currentProject = project
         },

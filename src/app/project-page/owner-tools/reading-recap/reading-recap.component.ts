@@ -7,11 +7,12 @@ import { DropdownModule } from 'primeng/dropdown'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { CommentFilter, ProjectService } from 'src/app/_services/project.service'
+import { CommentFilter } from 'src/app/_services/project.service'
 import { User, Project, EdjiComment, CommentStats } from '../../../shared/datatypes'
 import { AuthService, AcademyService, SocketService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'hot-reading-recap',
@@ -64,7 +65,7 @@ export class ReadingRecapComponent implements OnInit {
   private teacherId: string
 
   constructor(
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _auth: AuthService,
     private _fb: FormBuilder,
     private _academy: AcademyService,
@@ -97,7 +98,7 @@ export class ReadingRecapComponent implements OnInit {
     ),
       // Get Project from project service
       this.subscriptions.push(
-        this._projects.currentProject.subscribe(
+        this.projectStore.currentProject.subscribe(
           project => {
             if (project) {
               this.project = project
@@ -285,7 +286,7 @@ export class ReadingRecapComponent implements OnInit {
     projectToUpdate.report_evals.push(evalObj)
 
     // update the project with the new evaluation, create the pdf, and then email it out
-    this._projects.update(projectToUpdate, this.project._id).subscribe(project => {
+    this.projectStore.update(projectToUpdate, this.project._id).subscribe(project => {
       // update our project so evaluation shows in the page
       this.evaluations.push(evalObj)
 
@@ -338,7 +339,7 @@ export class ReadingRecapComponent implements OnInit {
     projectToUpdate.report_evals.push(evalObj)
 
     // update the project with the new evaluation, create the pdf, and then email it out
-    this._projects.update(projectToUpdate, this.project._id).subscribe(project => {
+    this.projectStore.update(projectToUpdate, this.project._id).subscribe(project => {
       const newEval = project.report_evals[project.report_evals.length - 1]
       // update our project so evaluation shows in the page
       this.evaluations.push(newEval)

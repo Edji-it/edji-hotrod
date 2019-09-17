@@ -1,7 +1,10 @@
 import { Subscription } from 'rxjs'
-import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core'
-import { CommentService, ProjectService, ReadingService, SocketService } from '../../../../_services'
+
+// Internal
+import { EdjiComment, Reading } from '../../../../shared/datatypes'
+import { CommentService, ReadingService, SocketService } from '../../../../_services'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'hot-firecard',
@@ -28,8 +31,8 @@ export class FirecardComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _socket: SocketService,
     private _comments: CommentService,
-    private _projects: ProjectService,
-  ) {}
+    private projectStore: ProjectStore,
+  ) { }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -54,7 +57,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     )
 
     this.subscriptions.push(
-      this._projects.lastWordUpdateState.subscribe(lastWord => {
+      this.projectStore.lastWordUpdateState.subscribe(lastWord => {
         this.lastWord = lastWord
       }),
     )
@@ -105,7 +108,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
   public getImagePos(imageIndex) {
     // If the image index is further down than the last word rendered, send out a request to update the lastWord
     if (imageIndex > this.lastWord) {
-      this._projects.lastWordUpdateSubj.next(imageIndex)
+      this.projectStore.lastWordUpdateSubj.next(imageIndex)
       setTimeout(() => {
         this.scrollToImage(imageIndex)
       }, 1)

@@ -33,6 +33,7 @@ import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './.
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
+import { ProjectStore } from '../_store';
 
 @Component({
   selector: 'annotator',
@@ -180,7 +181,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private element: ElementRef,
     private _readings: ReadingService,
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _auth: AuthService,
     private _socket: SocketService,
     private _util: UtilToolService,
@@ -255,7 +256,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     // Make sure we broadcast lastWord position out to listening components
-    this._projects.lastWordUpdateSubj.next(this.lastWord)
+    this.projectStore.lastWordUpdateSubj.next(this.lastWord)
 
     this.annotatorPaper = document.getElementById('emojiAnnotator')
     this.annotatorContent = document.getElementById('annotatorContent')
@@ -282,10 +283,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         },
       ),
       // Get Project from project service
-      this._projects.currentProject.subscribe(
+      this.projectStore.currentProject.subscribe(
         project => {
           if (project.archived) {
-            this._projects.filterByUser(this.user)
+            this.projectStore.filterByUser(this.user)
           }
           if (project) {
             let initialLoad = this.project._id != project._id
@@ -330,18 +331,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         },
       ),
       // Get filtered highlights for comment filters
-      this._projects.filterUpdates.subscribe(filter => {
+      this.projectStore.filterUpdates.subscribe(filter => {
         if (filter) {
           this.filterHighlightArray = filter.filterHighlightArray
         } else {
           this.filterHighlightArray = null
         }
         // Re-evaluate comment line counts
-        this._projects.buildCommentsByPos()
+        this.projectStore.buildCommentsByPos()
       }),
     )
     /** Run-once logic to initialize the comment-based arrays and stats */
-    let processedCommentData = this._projects.processComments(this.project)
+    let processedCommentData = this.projectStore.processComments(this.project)
     this.commentsByIndex = processedCommentData.commentsByIndex
     this.alwaysHighlightArray = processedCommentData.highlightArrays.alwaysHighlightArray
     this.highlightArray = processedCommentData.highlightArrays.highlightArray
@@ -367,7 +368,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           }
 
           // If comment is updated to be empty, we consider a "DRAFT", and deleted to other users
-          if (this._projects.isCommentHiddenDraft(commentUpdate.comment)) {
+          if (this.projectStore.isCommentHiddenDraft(commentUpdate.comment)) {
             commentUpdate.action = 'DELETE'
           }
 
@@ -390,7 +391,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             if (comment.questionId && this.project.isTeaching) {
               // in this case we got an answer, so we need to update comment stats
-              this._projects.recalculateAnswers(comment, false)
+              this.projectStore.recalculateAnswers(comment, false)
             }
           } else if (commentUpdate.action === 'UPDATE') {
             if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
@@ -413,7 +414,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             if (comment.questionId && this.project.isTeaching) {
               // in this case we got an answer, so we need to update comment stats
-              this._projects.recalculateAnswers(comment, true)
+              this.projectStore.recalculateAnswers(comment, true)
             }
           } else if (commentUpdate.action === 'CREATE') {
             // Socket updates don't come through with a timestamp
@@ -427,7 +428,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             this.commentsByIndexAdd(comment, wIndex, true)
             if (comment.questionId && this.project.isTeaching) {
               // in this case we got an answer, so we need to update comment stats
-              this._projects.recalculateAnswers(comment, true)
+              this.projectStore.recalculateAnswers(comment, true)
             }
           }
         },
@@ -442,7 +443,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
         // Re-evaluate comment line counts
-        this._projects.buildCommentsByPos()
+        this.projectStore.buildCommentsByPos()
         // We send the message here because we only care to show it when the user has the reading loaded
         this.showHeatVisionToast(this.project.heat_vision)
       }),
@@ -484,7 +485,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Subscribe to updates on where to move the lastWord for the infinity scroll
     this.subscriptions.push(
-      this._projects.lastWordUpdateState.subscribe(lastWord => {
+      this.projectStore.lastWordUpdateState.subscribe(lastWord => {
         this.lastWord = lastWord + this.lastWordImageOffset
       }),
     )
@@ -542,7 +543,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           if (commentEl.comment.start > this.lastWord) {
             this.lastWord = commentEl.comment.start + 800
             // Make sure we broadcast lastWord position out to listening components
-            this._projects.lastWordUpdateSubj.next(this.lastWord)
+            this.projectStore.lastWordUpdateSubj.next(this.lastWord)
           }
           // Hack that follows same settimeout as the below for updating image heights
           // We have to wait for images and questions to load in order for the scroll on load to be accurate
@@ -592,7 +593,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (bottomOfArticle - distanceFromViewport < bottomOfView) {
       this.lastWord += 800
       // Make sure we broadcast lastWord position out to listening components
-      this._projects.lastWordUpdateSubj.next(this.lastWord)
+      this.projectStore.lastWordUpdateSubj.next(this.lastWord)
       // Re-run the line positions so comment avatars show up in the right spot
       this.setLinePositions()
     }
@@ -930,10 +931,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Fired by Output from the Comment Component
-   * - References _projects.commentByPos
+   * - References projectStore.commentByPos
    */
   expandLine(lineY: number, forceSet?: boolean) {
-    let commentsByPos = this._projects.commentByPosSource
+    let commentsByPos = this.projectStore.commentByPosSource
     // If collapsing a line, make sure to deactivate all comments
     if (forceSet === false) {
       this._comments.deactivateAllComments()
@@ -1075,7 +1076,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       delete comment.loc
     }
     // Tell server we've added a comment
-    this._projects
+    this.projectStore
       .saveComment(comment)
       .then(comment => {
         // We add the comment from the service because it has an Id
@@ -1123,7 +1124,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    this._projects.commentStats.addCommentToStats(commentPointer, 1)
+    this.projectStore.commentStats.addCommentToStats(commentPointer, 1)
   }
 
   /**
@@ -1146,7 +1147,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     // Project service handles stats updates as well, but we need to handle socket updates
     if (commentCopy) {
-      this._projects.commentStats.addCommentToStats(commentCopy, -1)
+      this.projectStore.commentStats.addCommentToStats(commentCopy, -1)
     }
     // Remove from index reference object
     for (let i = 0; i < this.commentsByIndex[index].length; i++) {
@@ -1156,7 +1157,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     // Update line counts
-    this._projects.buildCommentsByPos()
+    this.projectStore.buildCommentsByPos()
   }
 
   /**
@@ -1637,7 +1638,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         commentComp.setLineY()
       }
       // Set up comments by line for Comment Pane
-      this._projects.buildCommentsByPos()
+      this.projectStore.buildCommentsByPos()
       // Done!
       this.lineNumRunning = false
     }
@@ -1675,7 +1676,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
-      this._projects.commentPaneStateSubj.next(true)
+      this.projectStore.commentPaneStateSubj.next(true)
     } else {
       // Clear Comment ID/deep link params
       this.clearQueryParams()
@@ -1686,7 +1687,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.commentPane = false
       // reset our icon arrow position
       this.commentHeightPos = 0
-      this._projects.commentPaneStateSubj.next(false)
+      this.projectStore.commentPaneStateSubj.next(false)
       // Run the standard comment inactivation to reset variables and do things like close the Keyboard
       this.inactivateComment()
     }
@@ -1719,8 +1720,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Sort through the comment types and do the apppropriate pre-delete action
 
     if (this._comments.commentContext !== 'answer') {
-      this._projects
-        .deleteComment(comment)
+      this.projectStore
+        .removeComment(comment)
         .then(data => {
           // Tell the modal to close on successful delete
           this._comments.commentDeleted()
@@ -1730,10 +1731,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           console.error(error)
         })
     } else {
-      this._projects
-        .deleteAnswer(comment)
+      this.projectStore
+        .removeAnswer(comment)
         .then(data => {
-          this._projects.removeAnswerFromAnswers(comment)
+          this.projectStore.removeAnswerFromAnswers(comment)
           // Tell the modal to close on successful delete
           this._comments.commentDeleted()
         })

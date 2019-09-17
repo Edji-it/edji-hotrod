@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs'
 // Project Dependencies
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from '../datatypes'
 import { CommentService, AuthService, ProjectService, ReadingService, SocketService } from '../../_services'
+import { ProjectStore } from 'src/app/_store';
 
 enum ResponseType {
   OpenEnded = 0,
@@ -76,7 +77,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
   private project: Project
 
   constructor(
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _readings: ReadingService,
     private _auth: AuthService,
     private _comments: CommentService,
@@ -100,7 +101,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
 
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push(
-      this._projects.currentProject.subscribe(
+      this.projectStore.currentProject.subscribe(
         project => {
           if (project) {
             this.project = project
@@ -114,7 +115,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
 
     // Subscribe to updates to the answer reference object
     this.subscriptions.push(
-      this._projects.answersById.subscribe(
+      this.projectStore.answersById.subscribe(
         answersById => {
           this.answersById = answersById
         },
@@ -220,7 +221,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
     let isReadingOwner = this.project.isTeaching
     let isAnswerer = answer.user_id === this.user._id
     // isCommentVisible accounts for comment filters
-    return (isReadingOwner || isAnswerer) && this._projects.isCommentVisible(answer)
+    return (isReadingOwner || isAnswerer) && this.projectStore.isCommentVisible(answer)
   }
 
   ngOnDestroy() {

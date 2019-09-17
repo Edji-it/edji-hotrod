@@ -15,9 +15,10 @@ import {
 } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, ProjectService, CommentService, SocketService } from '../../_services'
+import { AuthService, CommentService, SocketService } from '../../_services'
 import { Angulartics2 } from 'angulartics2'
 import { CommentComponent } from 'src/app/annotator/comment/comment.component'
+import { ProjectStore } from 'src/app/_store';
 @Component({
   selector: 'comment-pane',
   templateUrl: './comment-pane.component.pug',
@@ -71,18 +72,18 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
   @Output() commentReply = new EventEmitter()
 
   constructor(
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _socket: SocketService,
     public el: ElementRef,
     private _auth: AuthService,
     private _comments: CommentService,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Subscribe to updates to the comment by line number position array
     this.subscriptions.push(
-      this._projects.commentByPos.subscribe(
+      this.projectStore.commentByPos.subscribe(
         commentByPos => {
           this.commentByPos = commentByPos
         },
@@ -95,7 +96,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
         this.user = user
       }),
       // Subscribe to updates from that project once we're subscribed to the reading
-      this._projects.currentProject.subscribe(
+      this.projectStore.currentProject.subscribe(
         project => {
           if (project) {
             this.project = project
@@ -105,7 +106,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
-      this._projects.commentPaneState.subscribe(paneState => {
+      this.projectStore.commentPaneState.subscribe(paneState => {
         this.visible = paneState
         if (paneState) {
           this.evaluateShouldScroll()
@@ -115,7 +116,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
         }
       }),
       // Subscribe to updates to the reply reference object
-      this._projects.repliesById.subscribe(
+      this.projectStore.repliesById.subscribe(
         repliesById => {
           this.repliesById = repliesById
         },
@@ -140,7 +141,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this.reply.selected = false
     }
     this.hideComment.emit()
-    this._projects.commentPaneStateSubj.next(false)
+    this.projectStore.commentPaneStateSubj.next(false)
     document.body.classList.remove('body__lock-scroll')
   }
 
@@ -197,7 +198,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
 
   commentActivationEmitter(shouldActivate, comment?: any) {
     let wordIndex = comment.start
-    let commentsByIndex = this._projects.commentsByIndex
+    let commentsByIndex = this.projectStore.commentsByIndex
 
     let commentIndex = 0
 
@@ -259,7 +260,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     }
 
     // Tell the server we've added a comment.
-    this._projects
+    this.projectStore
       .saveComment(this.replyCommentNew)
       .then(comment => {
         this.angulartics.eventTrack.next({
@@ -268,7 +269,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
         })
         comment.active = true
         this._comments.activeComment = comment
-        this._projects.addCommentToReplies(comment)
+        this.projectStore.addCommentToReplies(comment)
       })
       .catch(error => {
         // TRACK EXCEPTION

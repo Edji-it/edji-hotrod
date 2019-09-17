@@ -53,6 +53,12 @@ import {
 } from './_services'
 // import { ReuseStrategy } from './route-reuse-strategy'
 
+// Store Services
+import {
+  ProjectStore,
+  ProjectListStore
+} from './_store'
+
 // Directives
 import { MediumEditorModule } from 'angular2-medium-editor'
 import { MultiselectDropdownModule } from './_directives'
@@ -177,6 +183,8 @@ const APP_PROVIDERS = [
   MediaService,
   MessageService,
   ProjectService,
+  ProjectStore,
+  ProjectListStore,
   CommentService,
   SocketService,
   UtilToolService,

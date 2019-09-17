@@ -4,8 +4,9 @@ import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ProjectService } from './../../_services'
+import { AuthService } from './../../_services'
 import { User } from '../../shared/datatypes'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'hot-add-project-modal',
@@ -37,7 +38,7 @@ export class AddProjectModal implements OnInit {
   public loading: boolean
 
   constructor(
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _fb: FormBuilder,
     private _auth: AuthService,
     private angulartics: Angulartics2,
@@ -75,7 +76,7 @@ export class AddProjectModal implements OnInit {
 
     if (formValue.customCode) {
       // Validate custom codes
-      this._projects.validateProjectCode(formValue.customCode).subscribe(
+      this.projectStore.join(formValue.customCode).subscribe(
         data => {
           if (data.found) {
             // this actually means that the code already exists, so we give the user an error here
@@ -125,7 +126,7 @@ export class AddProjectModal implements OnInit {
       code: formValue.customCode,
       group_instructions: formValue.groupInstructions,
     }
-    this._projects.create(this.reading._id, newProject).subscribe(
+    this.projectStore.create(this.reading._id, newProject).subscribe(
       project => {
         if (project._id) {
           project.new = true
