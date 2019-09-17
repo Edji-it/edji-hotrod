@@ -17,13 +17,16 @@ export class UserAvatarComponent implements OnInit {
   // (ID only supported within Project currently)
   @Input() userId: string
   @Input() userDetails: PublicUser
+  @Input() showName: boolean
 
   private userSubscription: Subscription
 
   public user: PublicUser
-  public initials: string
+  public initials: string = ''
+  public fullname: string = ''
 
   constructor(private projectStore: ProjectStore) {
+
   }
 
   ngOnInit() {
@@ -34,10 +37,10 @@ export class UserAvatarComponent implements OnInit {
           return user
         }
       )).subscribe((user: PublicUser) => {
-        console.log("User update", user)
         if (user) {
           this.user = user
           this.initials = user.initials
+          this.fullname = user.fullname
         }
       })
     }

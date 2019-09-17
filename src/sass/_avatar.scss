@@ -28,10 +28,11 @@ $largeAvatarSize: 50px;
   border-radius: 50%;
   background: #cfcfcf;
   text-align: center;
-  float: left;
+  display: inline-block;
   margin-right: 10px;
   // Center on line offset
-  margin-top: -4px;
+  // margin-top: -4px;
+  vertical-align: middle;
   cursor: default;
 
   & span {
@@ -140,6 +141,10 @@ $largeAvatarSize: 50px;
     visibility: visible;
     opacity: 1;
   }
+}
+
+.user-icon__fullname {
+  vertical-align: middle;
 }
 
 // Mobile specific fixes for user icon
