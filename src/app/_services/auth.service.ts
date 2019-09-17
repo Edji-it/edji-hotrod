@@ -159,7 +159,8 @@ export class AuthService implements CanActivate {
     }
     // If user does not have initials, set them
     if (user && !user.initials && user.fullname) {
-      user.initials = user.fullname.substring(0, 2)
+      let names = user.fullname.split(' ')
+      user.initials = names[0][0] + (names[1] ? names[1][0] : '')
     }
     //  Store user object
     this.currentUserSource.next(user)

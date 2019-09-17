@@ -9,7 +9,7 @@ import { RouterModule, PreloadAllModules } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 // Project Dependencies
-import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent, MessageToastsComponent, ShareLinkComponent } from './shared'
+import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent, MessageToastsComponent, ShareLinkComponent, UserAvatarComponent } from './shared'
 import { ROUTES } from './app.routes'
 // Pipes
 import {
@@ -47,6 +47,7 @@ let SHARED_DECLARATIONS = [
   ShareSocialIconsComponent,
   SortByDatePipe,
   SubjectPipe,
+  UserAvatarComponent,
   UserInitialsPipe,
   HotChartHzbarComponent,
   HotChartGaugeComponent,

@@ -12,6 +12,8 @@ export interface User extends BaseUser {
 export interface PublicUser {
   _id: string
   username?: string
+  initials?: string
+  avatar?: string
   fullname: string
   hero_status?: boolean
   userType?: string

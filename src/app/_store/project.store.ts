@@ -13,13 +13,19 @@ export class ProjectStore {
 
     // For verifying comment ownership on heat vision
     private user: any
-    private userInfo: any
 
-    /** project will be given out as observable */
+    /**
+     * Project Store: This value is the source of truth 
+     **/
     private project: any = { title: 'initial value' }
     private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project)
     public currentProject: Observable<any> = this.currentProjectSource.asObservable()
-    // Maintain local Project data and its updates in this service
+
+    /**
+     * Subset: Observable for changes on project users
+     */
+    private joinedUsersSource: BehaviorSubject<PublicUser[]> = new BehaviorSubject<PublicUser[]>([])
+    public joinedUsers: Observable<PublicUser[]> = this.joinedUsersSource.asObservable()
 
     /**
      * VERY IMPORTANT: please don't construct more than one of these (please)
@@ -187,6 +193,29 @@ export class ProjectStore {
     }
 
     /**
+     * Use for Project Modifications
+     * - Broadcasts changes to Selector and Permutation observables
+     * @param action Change being made
+     * @param project Updated project value
+     */
+    private projectStoreAction(action: ProjectAction, project: Project): void {
+        this.project = project
+        // Handle different action types
+        switch (action) {
+            case ProjectAction.UpdateUsers:
+                // Concat and update
+                let users = this.project.students || []
+                users = users.concat(this.project.temps)
+                // Include teacher
+                users.push(this.project.teacher)
+                this.joinedUsersSource.next(users)
+            case ProjectAction.Update:
+            default:
+                this.currentProjectSource.next(this.project)
+        }
+    }
+
+    /**
      * Adds a user to a project code and updates currentProject observable
      * @param projectCode Short project code
      * @returns observable with project data
@@ -197,6 +226,11 @@ export class ProjectStore {
                 map((data: any) => {
                     let project = data.project //can later have local setter to do validation/data manipulation before passing through observable
                     let teacher = project.teacher
+                    // Decorate teacher, if needed
+                    if (!teacher.initials && teacher.fullname) {
+                        let names = teacher.fullname.split(' ')
+                        teacher.initials = names[0][0] + (names[1] ? names[1][0] : '')
+                    }
                     // Decorate project if archived
                     project = decorateArchivedProject(project)
                     // Decorate with isTeaching
@@ -224,8 +258,7 @@ export class ProjectStore {
                     })
                     project.comments.reverse()
                     // Now that our project comments are ready, set it to the shared source!
-                    this.project = project
-                    this.currentProjectSource.next(this.project)
+                    this.projectStoreAction(ProjectAction.Update, project)
                     // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
                     if ((project.students_ids.length > 0 || project.temp_ids.length > 0) && this.project.isTeaching) {
                         this.updateProjectUsers(project)
@@ -248,7 +281,7 @@ export class ProjectStore {
                 for (let key of Object.keys(updatedProperties)) {
                     this.project[key] = updatedProperties[key]
                 }
-                this.currentProjectSource.next(this.project)
+                this.projectStoreAction(ProjectAction.Update, this.project)
                 return this.project
             }),
         )
@@ -270,8 +303,7 @@ export class ProjectStore {
         project.isTeaching = isTeacher || isCoOwner
         // Update observable
         if (emit) {
-            // Check teacher id
-            this.currentProjectSource.next(project)
+            this.projectStoreAction(ProjectAction.Update, project)
         }
         return project
     }
@@ -321,7 +353,7 @@ export class ProjectStore {
             this.project.co_owner_ids.push(newOwner._id)
             this.project.co_owners.push(newOwner)
             this.project.owners.push(newOwner)
-            this.currentProjectSource.next(this.project)
+            this.projectStoreAction(ProjectAction.Update, this.project)
         }
     }
 
@@ -368,8 +400,6 @@ export class ProjectStore {
         this.filterUpdatesSource.next(this.activeFilter)
     }
 
-
-
     /**
      * Provide a getter for the private commentStats object
      */
@@ -403,7 +433,7 @@ export class ProjectStore {
             })
         }
         // update the project info across the app for the teacher based on this update
-        this.currentProjectSource.next(this.project)
+        this.projectStoreAction(ProjectAction.Update, this.project)
         this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
     }
 
@@ -895,6 +925,13 @@ export class ProjectStore {
         this._auth.getPublicUsers(project.students_ids, project.temp_ids).subscribe(
             userInfo => {
                 userInfo = userInfo.users
+                // Ensure PublicUsers have initials
+                userInfo[0] && userInfo.forEach(user => {
+                    if (user && !user.initials && user.fullname) {
+                        let names = user.fullname.split(' ')
+                        user.initials = names[0][0] + (names[1] ? names[1][0] : '')
+                    }
+                })
                 // attach the basic user information to each students_id
                 this.project.students = this.project.students_ids.map(obj => {
                     return userInfo.find(el => {
@@ -907,8 +944,8 @@ export class ProjectStore {
                         return el._id === obj
                     })
                 })
-                this.currentProjectSource.next(this.project)
                 this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
+                this.projectStoreAction(ProjectAction.UpdateUsers, this.project)
             },
             error => {
                 console.error(error)
@@ -985,4 +1022,10 @@ export class ProjectStore {
         this.commentByPosSubject.next(this.commentByPosSource)
     }
 
+}
+
+
+export const enum ProjectAction {
+    Update = '[Project] Update',
+    UpdateUsers = '[Project] Update Users'
 }
