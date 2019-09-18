@@ -2,6 +2,7 @@
 
 $defaultAvatarSize: 28px;
 $largeAvatarSize: 50px;
+$mediumAvatarSize: 36px;
 
 @keyframes border-pulsate {
   0% {
@@ -53,6 +54,19 @@ $largeAvatarSize: 50px;
     transition: border-color ease 1s;
     animation: border-pulsate 2s ease-in-out 4;
   }
+  &--medium {
+    @extend .user-icon;
+    height: $mediumAvatarSize;
+    width: $mediumAvatarSize;
+    line-height: $mediumAvatarSize - 8px;
+    overflow: hidden;
+    position: relative;
+
+    & span {
+      line-height: $mediumAvatarSize;
+      font-size: 16px;
+    }
+  }
   &--large {
     @extend .user-icon;
     height: $largeAvatarSize;
@@ -61,7 +75,7 @@ $largeAvatarSize: 50px;
     overflow: hidden;
     position: relative;
     & span {
-      font-size: 20px;
+      font-size: 21px;
     }
   }
   &.nav-avatar {
@@ -165,19 +179,6 @@ $largeAvatarSize: 50px;
 
 .user-icon__fullname {
   vertical-align: middle;
-}
-
-// Mobile specific fixes for user icon
-.mobileBlock-mobile-comment {
-  &.user-icon {
-    height: 40px;
-    width: 40px;
-    margin-top: 18px;
-  }
-  &.user-icon span {
-    line-height: 40px;
-    font-size: 20px;
-  }
 }
 
 .outer-circle {

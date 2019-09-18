@@ -16,12 +16,23 @@ export class UserAvatarComponent implements OnInit {
   // Can load with either PublicUser or User id 
   // (ID only supported within Project currently)
   @Input() userId: string
-  @Input() userDetails: PublicUser
+  @Input() set userDetails(user: PublicUser) {
+    this._userDetails = user
+    this.setDisplayProperties(user)
+  }
+  get userDetails() {
+    return this._userDetails
+  }
+  // Display/style inputs (treat as static)
   @Input() showName: boolean
+  @Input() size: string // 'medium', 'large'
 
   private userSubscription: Subscription
+  private _userDetails: PublicUser
 
   public user: PublicUser
+
+  // Display properties
   public initials: string = ''
   public fullname: string = ''
 
@@ -37,16 +48,20 @@ export class UserAvatarComponent implements OnInit {
           return user
         }
       )).subscribe((user: PublicUser) => {
-        if (user) {
-          this.user = user
-          this.initials = user.initials
-          this.fullname = user.fullname
-        }
+        this.setDisplayProperties(user)
       })
     }
   }
 
   ngOnDestroy() {
 
+  }
+
+  setDisplayProperties(user: PublicUser) {
+    if (user) {
+      this.user = user
+      this.initials = user.initials
+      this.fullname = user.fullname
+    }
   }
 }

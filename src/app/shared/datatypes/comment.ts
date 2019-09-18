@@ -12,7 +12,6 @@ export interface EdjiComment extends BaseComment {
   expanded: boolean
   project_id: string
   active: boolean
-  showAvatar: boolean
   authorIsTeacher: boolean
   imagePos: number
   selected: boolean

@@ -1,3 +1,3 @@
-.user-icon
+.user-icon([class.user-icon--medium]="size === 'medium'", [class.user-icon--large]="size === 'large'")
     span.user-icon__initials {{ initials }}
 span.user-icon__fullname(*ngIf="showName") {{ fullname }}

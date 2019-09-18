@@ -47,7 +47,7 @@
                   )
               //--Reply input--
               .reply-row
-                .comment__avatar.show.reply__avatar {{ user.fullname.substr(0,2).toUpperCase()}}
+                user-avatar.comment__avatar.show([userDetails]="user")
                 .reply-input__line
                 .replyInput Add a Reply
                 //--Add reply buttons--

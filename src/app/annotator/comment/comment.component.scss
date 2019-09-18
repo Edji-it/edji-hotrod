@@ -73,12 +73,22 @@ $tablet-width: 768px;
   float: right;
 }
 
+// Vertically align avatar with comment box
+user-avatar {
+  margin-top: 14px;
+  display: inline-block;
+}
+
+.comment__reply-avatar {
+  margin-top: 2px;
+}
+
 .mobileBlock-mobile-comment {
   &.mobileBlock {
     width: calc(100% - 50px);
   }
   &.mobileBound {
-    padding: 0px 0px 10px;
+    padding: 10px 0px;
   }
 }
 
@@ -113,8 +123,8 @@ $tablet-width: 768px;
 
 .mobileBlock {
   width: calc(100% - 35px);
-  // float: right;
-  margin-left: 50px;
+  display: inline-block;
+  vertical-align: top;
 
   & .comment-input-wrapper {
     border-radius: 4px 4px 0 0;

@@ -40,6 +40,11 @@
 
 .reply-row {
   position: relative;
+  
+  & user-avatar {
+    left: 0px;
+    top: 10px;
+  }
 }
 
 .replyHighlight-card {

@@ -612,10 +612,6 @@ export class ProjectStore {
             // preset authorIsTeacher for existing data
             comment.authorIsTeacher = true
         }
-        // get the user help decorate the comment
-        if (comment.user_id === user._id || comment.authorIsTeacher) {
-            comment.showAvatar = true
-        }
         // if (comment.loc && comment.loc.y && comment.text==="") {
         //     comment.imagePos = Math.round(comment.loc.y/8)*8
         // }
@@ -721,8 +717,6 @@ export class ProjectStore {
         // Clean frontend only properties
         delete answer['active']
         delete answer['new']
-        delete answer['showAvatar']
-
         // Get the url of this project that we're saving to.
         if (!answer.user_id) {
             answer.user_id = this._auth.getUser()._id

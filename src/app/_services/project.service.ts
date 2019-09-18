@@ -142,7 +142,6 @@ export class ProjectService {
     // Clean frontend only properties
     delete comment['active']
     delete comment['new']
-    delete comment['showAvatar']
 
     return this._http
       .put(this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments', comment, this._auth.getOptions())
