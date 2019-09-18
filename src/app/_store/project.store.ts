@@ -7,6 +7,7 @@ import { Angulartics2 } from 'angulartics2';
 import { CommentStats, EdjiComment, PublicUser, Project, User } from '../shared/datatypes';
 import { CommentFilter, AuthService, SocketService, CommentPropertyFilters, ProjectService, AcademyService, MessageService } from '../_services';
 import { decorateArchivedProject } from './project.decorators'
+import { generateInitialsFromName } from './user.decorators'
 
 @Injectable()
 export class ProjectStore {
@@ -922,8 +923,7 @@ export class ProjectStore {
                 // Ensure PublicUsers have initials
                 userInfo[0] && userInfo.forEach(user => {
                     if (user && !user.initials && user.fullname) {
-                        let names = user.fullname.split(' ')
-                        user.initials = names[0][0] + (names[1] ? names[1][0] : '')
+                        user.initials = generateInitialsFromName(user.fullname)
                     }
                 })
                 // attach the basic user information to each students_id

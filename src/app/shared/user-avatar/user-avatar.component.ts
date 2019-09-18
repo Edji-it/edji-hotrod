@@ -1,11 +1,11 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { PublicUser } from '../datatypes';
-import { ProjectStore } from 'src/app/_store';
 import { map } from 'rxjs/operators';
 
 // Project Dependencies
-
+import { PublicUser } from '../datatypes';
+import { ProjectStore } from 'src/app/_store';
+import { generateInitialsFromName } from 'src/app/_store/user.decorators';
 
 @Component({
   selector: 'user-avatar',
@@ -60,8 +60,16 @@ export class UserAvatarComponent implements OnInit {
   setDisplayProperties(user: PublicUser) {
     if (user) {
       this.user = user
-      this.initials = user.initials
       this.fullname = user.fullname
+      /**
+       * @todo once search/discover uses a store for data, initials should be 
+       * fully handled upstream and this should be removed
+       */
+      if (user.initials) {
+        this.initials = user.initials
+      } else {
+        this.initials = generateInitialsFromName(user.fullname)
+      }
     }
   }
 }

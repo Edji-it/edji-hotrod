@@ -1,7 +1,7 @@
 import { Project } from "../shared/datatypes";
 
 /**
- * Decorators
+ * Project/Group Decorators
  * - Shared data manipulators
  * - Pure functions
  */

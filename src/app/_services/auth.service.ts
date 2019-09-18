@@ -12,6 +12,7 @@ import { LockerService } from '../_services/locker.service'
 
 import { environment } from '../../environments/environment'
 import { AcademyService } from './academy.service'
+import { generateInitialsFromName } from '../_store/user.decorators';
 const { version: appVersion } = require('../../../package.json')
 
 declare var gtag: any
@@ -159,8 +160,7 @@ export class AuthService implements CanActivate {
     }
     // If user does not have initials, set them
     if (user && !user.initials && user.fullname) {
-      let names = user.fullname.split(' ')
-      user.initials = names[0][0] + (names[1] ? names[1][0] : '')
+      user.initials = generateInitialsFromName(user.fullname)
     }
     //  Store user object
     this.currentUserSource.next(user)
