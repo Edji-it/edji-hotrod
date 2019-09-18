@@ -31,7 +31,7 @@ $mediumAvatarSize: 36px;
   background: #cfcfcf;
   text-align: center;
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 8px;
   // Center on line offset
   // margin-top: -4px;
   vertical-align: middle;
@@ -60,6 +60,7 @@ $mediumAvatarSize: 36px;
     @extend .user-icon;
     height: $mediumAvatarSize;
     width: $mediumAvatarSize;
+    margin-right: 10px;
     line-height: $mediumAvatarSize - 8px;
     overflow: hidden;
     position: relative;

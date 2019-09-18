@@ -18,14 +18,3 @@
         margin-bottom: 0px;
     }
 }
-
-.user-icon__initials {
-    float: left;
-}
-
-.user-icon--large {
-    position: absolute;
-    top: calc(50% - 21px);
-    // transform: translateY(-50%);
-    left: $base-pad;
-}

@@ -1,6 +1,5 @@
 .fireBound
-  .user-icon.firefeed
-    .user-icon__initials {{fireComment && fireComment.author && fireComment.author.substring(0,2)}}
+  user-avatar([userId]="fireComment.user_id")
   .fireBlock
     .list-item.list-item--block.fireTime-card
       | {{fireComment.author}}

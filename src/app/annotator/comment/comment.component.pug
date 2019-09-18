@@ -90,7 +90,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
         [class.saved]="justSaved",
         [class.active]="comment.active",
         [class.readonly]="readOnly",
-        [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
+        [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'comment-block--align-top':'' ]"
     )
         .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
             *ngIf="comment.active && !readOnly && !readingReport",

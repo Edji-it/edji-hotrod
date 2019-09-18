@@ -310,7 +310,18 @@ $mobileBoundVPad: 40px;
 
 .mobileBlock--reading-recap {
   margin: 0;
-  width: 100% !important;
+  width: calc(100% - 46px) !important;
+}
+
+/**
+  * @todo transition from "mobileBlock" to "comment-block", and clean up with media selectors
+ **/
+.comment-block--align-top {
+  padding-top: 0px !important;
+
+  & user-avatar {
+    margin-top: 0px !important;
+  }
 }
 
 .action-separator {

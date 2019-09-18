@@ -87,7 +87,7 @@
           hr.mt-0
       //- Comment Block
       .row(*ngFor="let recapComment of comments; let i = index")
-        .col-3
+        .col-3.pr-0
           edji-comment(
             [readOnly]="true",
             [comment]="recapComment",
