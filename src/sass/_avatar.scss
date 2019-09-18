@@ -91,8 +91,23 @@ $largeAvatarSize: 50px;
     content: '';
     color: #cdcdcd !important;
   }
-  // Classes for the comment avatars with tooltips:
-  & .tooltipbody {
+}
+
+.user-icon__wrap {
+  // Using the wrap assumes the icon is being used out of text flow
+  & .user-icon {
+    margin-right: 0px;
+    border: 1px solid #fff; // allows clean overlapping of icons
+    cursor: pointer;
+
+    &:hover {
+      border-color: $selectedOrange;
+    }
+  }
+
+   // Classes for the comment avatars with tooltips:
+   & .tooltipbody {
+    font-family: 'Open Sans', Arial;
     visibility: hidden;
     width: 160px;
     background-color: #fff;
@@ -102,8 +117,8 @@ $largeAvatarSize: 50px;
     padding: 7px;
     position: absolute;
     z-index: 1;
-    bottom: 168%;
-    left: -67px;
+    bottom: 140%;
+    left: -64px;
     opacity: 0;
     transition: opacity 0.4s;
     font-size: 9px;
@@ -123,9 +138,10 @@ $largeAvatarSize: 50px;
   & .tooltipemoji {
     font-size: 16px;
     display: inherit;
+    margin-top: 6px;
   }
-  & .tooltiptext {
-    margin-top: 4px;
+  & .tooltiptext, & .tooltipblank {
+    margin-top: 6px;
     color: #000;
     text-align: left;
     font-size: 10px;
@@ -135,6 +151,10 @@ $largeAvatarSize: 50px;
       margin-bottom: 0;
       font-size: 11px;
     }
+  }
+  & .tooltipblank {
+    color: #cdcdcd;
+    font-style: italic;
   }
   // If user-icon is hovered on comment avatar, display the tooltip
   &:hover .tooltipbody {

@@ -1,5 +1,5 @@
 //- Desktop Avatar Icons
-.user-icon.pointer.hidden-sm-down(
+.user-icon__wrap.pointer.hidden-sm-down(
   *ngIf="indexOnLine<9",
   (tap)='triggerCommentPane(true)',
   [ngClass]="['avatar-count-' + indexOnLine, 'avatar-' + comment.type]",
@@ -7,10 +7,13 @@
   [class.mobileBlock-mobile-comment]="commentMobile",
   [class.has-teacher-tag]="comment.authorIsTeacher"
 )
+  user-avatar(*ngIf="indexOnLine<8", [userId]="comment.user_id")
   span.tooltipbody(*ngIf="indexOnLine<8")
     .tooltip-title([class.inline-center]="comment.type == 'audio'")
       | {{comment.author}}
-    span.tooltipemoji(*ngIf="comment.type == 'emoji' || !comment.type", [innerHtml]="comment.data | emojione")
+    .tooltipblank(*ngIf="!comment.data")
+      | Empty draft
+    .tooltipemoji(*ngIf="comment.type == 'emoji' || !comment.type", [innerHtml]="comment.data | emojione")
     .tooltiptext.block-with-text(*ngIf="comment.type == 'text'", [innerHtml]="comment.data | linkify | emojione")
     span.tooltipaudio(*ngIf="comment.type == 'audio'")
       button#audioPlay.btn-audio(
@@ -25,8 +28,8 @@
         i.icon-pause
   span.tooltipbody(*ngIf="indexOnLine==8")
     .tooltiptext.tooltipcount {{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length}} Comments
-  span.user-icon__initials(*ngIf="indexOnLine<8") {{comment.author.substring(0,2)}}
-  span.user-icon__overflow(*ngIf="indexOnLine==8") +{{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length - 7}}
+  .user-icon(*ngIf="indexOnLine==8", style="background: #fff;")
+    .user-icon__overflow +{{commentsByPos[comment.lineY] && commentsByPos[comment.lineY].length - 7}}
   .reply-tag(*ngIf="repliesById[comment._id] && repliesById[comment._id].length>0")
     | {{repliesById[comment._id].length}}
 

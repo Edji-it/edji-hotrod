@@ -26,6 +26,7 @@
 
 .block-with-text {
   @include multiLineEllipsis($lineHeight: 12px, $lineCount: 2, $bgColor: white);
+  text-align: left;
 }
 
 .btn-audio {
@@ -39,4 +40,8 @@
 
 .tooltipaudio {
   float: right;
+}
+
+.user-icon__wrap {
+  margin-top: -6px;
 }

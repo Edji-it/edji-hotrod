@@ -1017,9 +1017,12 @@ $avatarZIndexStart: 990;
 
 div.avatar-count-8 {
   background: #fff;
-  border: 1px solid #cfcfcf;
   border-radius: 50%;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   box-shadow: none;
+
+  & .user-icon {
+    border: 1px solid #cfcfcf;
+  }
 }
