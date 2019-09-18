@@ -33,7 +33,7 @@ export class ProfileFormComponent implements OnInit {
     //     referral?: boolean
     // } = {}
     // public userReferral: any = {}
-
+    public user: User = <User>{}
     public userCopy: any
 
     public moreIdentities = [
@@ -103,6 +103,11 @@ export class ProfileFormComponent implements OnInit {
                 this.readingToPreview = queryParams['preview']
                 this.projectToAdd = queryParams['project']
             }),
+            this._auth.getCurrentUser().subscribe(
+                user => {
+                    this.user = user
+                }
+            )
         )
     }
 

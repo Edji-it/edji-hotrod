@@ -1,9 +1,8 @@
 
 .profile-card
-    .user-icon--large
-        span.user-icon__initials {{ initials }}
+    user-avatar([userDetails]="user", [size]="'large'")
     .h1([innerHtml]="getProfileName(profileForm)")
-    .label.small.text-muted(*ngIf="profileForm.controls['school'] && profileForm.controls['school'].value")
+    .label.small.text-muted.mb-0(*ngIf="profileForm.controls['school'] && profileForm.controls['school'].value")
         i.icon.icon-school
         | {{ ' ' + profileForm.controls['school'].value }}
 

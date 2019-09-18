@@ -10,6 +10,13 @@
     margin-bottom: $base-pad;
     padding-left: 95px;
 
+    & user-avatar {
+        position: absolute;
+        top: 50%;
+        left: $base-pad;
+        transform: translateY(-50%);
+    }
+
     &, & .h1 {
         color: #000;
     }
