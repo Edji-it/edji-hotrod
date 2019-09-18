@@ -1,6 +1,7 @@
 @import './base/variables';
 
 $defaultAvatarSize: 28px;
+$profileAvatarSize: 150px;
 $largeAvatarSize: 50px;
 $mediumAvatarSize: 36px;
 
@@ -35,6 +36,7 @@ $mediumAvatarSize: 36px;
   // margin-top: -4px;
   vertical-align: middle;
   cursor: default;
+  object-fit: cover; // Needed for images
 
   & span {
     font-family: 'Open Sans';
@@ -76,6 +78,19 @@ $mediumAvatarSize: 36px;
     position: relative;
     & span {
       font-size: 21px;
+    }
+  }
+  &--profile {
+    @extend .user-icon;
+    height: $profileAvatarSize;
+    width: $profileAvatarSize;
+    line-height: $profileAvatarSize - 8px;
+    overflow: hidden;
+    position: relative;
+    margin-right: 0px;
+    & span {
+      font-weight: 400;
+      font-size: 70px;
     }
   }
   &.nav-avatar {

@@ -35,6 +35,7 @@ export class UserAvatarComponent implements OnInit {
   // Display properties
   public initials: string = ''
   public fullname: string = ''
+  public avatar: string = ''
 
   constructor(private projectStore: ProjectStore) {
 
@@ -61,6 +62,9 @@ export class UserAvatarComponent implements OnInit {
     if (user) {
       this.user = user
       this.fullname = user.fullname
+      if (user.avatar) {
+        this.avatar = user.avatar
+      }
       /**
        * @todo once search/discover uses a store for data, initials should be 
        * fully handled upstream and this should be removed
