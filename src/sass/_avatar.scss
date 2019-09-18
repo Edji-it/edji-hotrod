@@ -81,7 +81,7 @@ $mediumAvatarSize: 36px;
   &.nav-avatar {
     margin-top: 0.5em;
   }
-  &.pointer {
+  &.pointer, .pointer > & {
     cursor: pointer;
   }
   &__initials,

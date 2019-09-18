@@ -82,9 +82,12 @@
     //- User Menu: Logged in Actions
     .outer-circle--large.float-right(*ngIf="user.isLoggedIn", [class.active]="showAvatarDropdown")
       .avatar__wrap
-        #avatarActionIcon.user-icon--large.pointer.float-right((click)="showAvatarDropdown=!showAvatarDropdown", (clickOutside)="showAvatarDropdown=false")
-          span.user-icon__initials {{ user.initials }}
-          span.hero-tag.avatar-bottom(*ngIf="user.hero_status", title="Hero Powers Activated") H
+        user-avatar#avatarActionIcon.pointer.float-right(
+          [userDetails]="user",
+          [size]="'large'",
+          (click)="showAvatarDropdown=!showAvatarDropdown", 
+          (clickOutside)="showAvatarDropdown=false"
+        )
         .avatar__drop-down.list-group(*ngIf="showAvatarDropdown", [class.visible]="showAvatarDropdown")
           .arrow
           //- Account
