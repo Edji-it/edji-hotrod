@@ -142,18 +142,11 @@ export class AuthService implements CanActivate {
     user.isLoggedIn = true
     // Set convenience "isStudent" flag
     // + Default guest/temp to student flag
-    if (
-      user.type === 'temp' ||
-      (user.identities &&
-        user.identities.includes('student') &&
-        !['teacher', 'administrator'].some(id => user.identities.includes(id))) // checks if they're anything in the array
-    ) {
-      user.isStudent = true
-    }
+    let studentId = user.identities && user.identities.includes('student')
+    let notSchoolStaff = studentId && !['teacher', 'administrator', 'coach'].some(id => user.identities.includes(id))
+    user.isStudent = user.type === 'temp' || (studentId && notSchoolStaff)
     // Determine if user has completed required profile fields
-    if (user.type !== 'temp' && (!user.fullname || !user.identities || user.identities.length < 1)) {
-      user.profileIncomplete = true
-    }
+    user.profileIncomplete = (user.type !== 'temp' && (!user.fullname || !user.identities || user.identities.length < 1))
     // Determine if user is an Academy Admin
     if (user && user.license_ids && user.license_ids[0]) {
       this.fetchAcademies(user)
