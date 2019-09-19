@@ -59,7 +59,7 @@ export class UserAvatarComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.userSubscription.unsubscribe()
+    this.userSubscription && this.userSubscription.unsubscribe()
   }
 
   setDisplayProperties(user: PublicUser) {
