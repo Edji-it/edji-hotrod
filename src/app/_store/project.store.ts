@@ -168,7 +168,7 @@ export class ProjectStore {
                 */
             this._auth.clearAll.subscribe(clear => {
                 if (clear) {
-                    this.currentProjectSource.next({ title: '' })
+                    this.projectStoreDispatch(ProjectAction.ClearSuccess, { title: '' })
                 }
             }),
         )
@@ -198,12 +198,16 @@ export class ProjectStore {
     private projectStoreDispatch(effect: ProjectAction, project): void {
         // Handle different effect types
         switch (effect) {
+            case ProjectAction.ClearSuccess:
+                this.joinedUsersSource.next([])
+                this.currentProjectSource.next(project)
             case ProjectAction.UpdateUsersSuccess:
                 // Concat and update
                 let users = project.students || []
                 users = users.concat(project.temps)
                 // Include teacher
                 users.push(project.teacher)
+                // joinedUsers and currentProject are separates states
                 this.joinedUsersSource.next(users)
             case ProjectAction.UpdateSuccess:
             default:
@@ -925,6 +929,7 @@ export class ProjectStore {
         let tempIds = project.temp_ids || []
         this._auth.getPublicUsers(studentIds, tempIds).subscribe(
             userInfo => {
+                let currentProject = this.currentProjectSource.getValue()
                 userInfo = userInfo.users
                 // Ensure PublicUsers have initials
                 userInfo[0] && userInfo.forEach(user => {
@@ -933,19 +938,19 @@ export class ProjectStore {
                     }
                 })
                 // attach the basic user information to each students_id
-                project.students = project.students_ids.map(obj => {
+                currentProject.students = currentProject.students_ids.map(obj => {
                     return userInfo.find(el => {
                         return el._id === obj
                     })
                 })
                 // attach the basic user information to each temp_id
-                project.temps = project.temp_ids.map(obj => {
+                currentProject.temps = currentProject.temp_ids.map(obj => {
                     return userInfo.find(el => {
                         return el._id === obj
                     })
                 })
-                this._commentStats.addUsersToStats(this.commentStats._stats, project)
-                this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
+                this._commentStats.addUsersToStats(this.commentStats._stats, currentProject)
+                this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, currentProject)
             },
             error => {
                 console.error(error)
@@ -1028,6 +1033,7 @@ export class ProjectStore {
 
 
 export const enum ProjectAction {
+    ClearSuccess = '[Project] Clear Success',
     UpdateSuccess = '[Project] Update Success',
     UpdateUsersSuccess = '[Project] Update Users Success'
 }
