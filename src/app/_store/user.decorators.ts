@@ -14,6 +14,10 @@ import { PublicUser, User } from "../shared/datatypes";
  * @return initials
  */
 export function generateInitialsFromName(fullname: string): string {
-    let names = fullname.split(' ')
-    return names[0][0] + (names[1] ? names[1][0] : '')
+    if (fullname && fullname.length > 0) {
+        let names = fullname.split(' ')
+        return names[0][0] + (names[1] ? names[1][0] : '')
+    } else {
+        return ''
+    }
 }

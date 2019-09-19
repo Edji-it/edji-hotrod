@@ -18,6 +18,8 @@ import { User, UserSchoolDistrict } from 'src/app/shared/datatypes';
     styleUrls: ['./profile.component.scss'],
 })
 export class ProfileFormComponent implements OnInit {
+    @Input() noRedirect: boolean
+    @Input() submitCopy: string = 'See My Dashboard'
     /** The reading id that the user wanted to make a copy of */
     @Output() profileSuccess: EventEmitter<any> = new EventEmitter()
 
@@ -185,6 +187,8 @@ export class ProfileFormComponent implements OnInit {
             this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
         } else if (this.readingToPreview) {
             this._router.navigate(['/discover'], { queryParams: { preview: this.readingToPreview } })
+        } else if (this.noRedirect) {
+            // do nothing
         } else {
             // default case where nothing special happens
             this._router.navigate(['/dashboard'])
@@ -251,6 +255,8 @@ export class ProfileFormComponent implements OnInit {
                     this.reportUserCreated(data.user)
                     // Bring the user to their dashboard, or where they were headed
                     this.handleProfileCompleteRouting(data)
+                    // Emit via output
+                    this.profileSuccess.emit(data.user)
                 },
                 err => {
                     this.profileFormLoading = false
