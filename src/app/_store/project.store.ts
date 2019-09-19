@@ -139,7 +139,7 @@ export class ProjectStore {
                 */
             this._socket.groupUpdate.subscribe(groupUpdate => {
                 if (groupUpdate.type === 'groupUsers') {
-                    this.addUserInfoToProject(groupUpdate)
+                    this.addJoinedUser(groupUpdate)
                 } else if (groupUpdate.type === 'coteacherPromote') {
                     this.addProjectOwner(groupUpdate.user)
                 } else if (groupUpdate.type === 'updateUserStatus' && this.user._id === this.currentProjectSource.getValue().teacher_id) {
@@ -260,7 +260,7 @@ export class ProjectStore {
                     // Now that our project comments are ready, set it to the shared source!
                     this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
                     // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
-                    this.updateGroupUsers(project)
+                    this.updateJoinedUsers(project)
                     // Return the project along the current Observable
                     return project
                 }),
@@ -415,31 +415,6 @@ export class ProjectStore {
      */
     get commentStats(): CommentStats {
         return this._commentStats
-    }
-
-    /**
-     * Adds user information to the student that just joined the project so we can see them on the leaderboard
-     * @param groupUpdate the object that contains user properties to properly add student to leaderboard
-     */
-    private addUserInfoToProject(groupUpdate: any) {
-        if (!groupUpdate.user || !groupUpdate.user._id) {
-            console.error('[Project Store] Attempted adding undefined user')
-        }
-        let project = this.currentProjectSource.getValue()
-        // Make sure student and temp arrays exist
-        if (project.students) project.students = []
-        if (project.temps) project.temps = []
-        // if the student that joined is registered, here is their info
-        if (groupUpdate.userType && groupUpdate.userType === 'registered') {
-            project.students.push(groupUpdate.user)
-        }
-        // if the student that joined is a temp, here is their info
-        if (groupUpdate.userType && groupUpdate.userType === 'temp') {
-            project.temps.push(groupUpdate.user)
-        }
-        // update the project info across the app for the teacher based on this update
-        this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
-        this._commentStats.addUsersToStats(this.commentStats._stats, project)
     }
 
     /**
@@ -924,7 +899,7 @@ export class ProjectStore {
      * Pulls in fullname and username for students and temp users for leaderboard and
      * @param project current project the user is on
      */
-    private updateGroupUsers(project: Project) {
+    private updateJoinedUsers(project: Project) {
         let studentIds = project.students_ids || []
         let tempIds = project.temp_ids || []
         this._auth.getPublicUsers(studentIds, tempIds).subscribe(
@@ -956,6 +931,31 @@ export class ProjectStore {
                 console.error(error)
             },
         )
+    }
+
+    /**
+     * Adds user information to the student that just joined the project so we can see them on the leaderboard
+     * @param groupUpdate the object that contains user properties to properly add student to leaderboard
+     */
+    private addJoinedUser(groupUpdate: any) {
+        if (!groupUpdate.user || !groupUpdate.user._id) {
+            console.error('[Project Store] Attempted adding undefined user')
+        }
+        let project = this.currentProjectSource.getValue()
+        // Make sure student and temp arrays exist
+        if (project.students) project.students = []
+        if (project.temps) project.temps = []
+        // if the student that joined is registered, here is their info
+        if (groupUpdate.userType && groupUpdate.userType === 'registered') {
+            project.students.push(groupUpdate.user)
+        }
+        // if the student that joined is a temp, here is their info
+        if (groupUpdate.userType && groupUpdate.userType === 'temp') {
+            project.temps.push(groupUpdate.user)
+        }
+        // update the project info across the app for the teacher based on this update
+        this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
+        this._commentStats.addUsersToStats(this.commentStats._stats, project)
     }
 
     /**
