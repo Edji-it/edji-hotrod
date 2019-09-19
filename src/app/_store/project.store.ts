@@ -943,15 +943,13 @@ export class ProjectStore {
         }
         let project = this.currentProjectSource.getValue()
         // Make sure student and temp arrays exist
-        if (project.students) project.students = []
-        if (project.temps) project.temps = []
-        // if the student that joined is registered, here is their info
-        if (groupUpdate.userType && groupUpdate.userType === 'registered') {
-            project.students.push(groupUpdate.user)
-        }
+        if (!project.students) project.students = []
+        if (!project.temps) project.temps = []
         // if the student that joined is a temp, here is their info
-        if (groupUpdate.userType && groupUpdate.userType === 'temp') {
+        if (groupUpdate.user.type && groupUpdate.user.type === 'temp') {
             project.temps.push(groupUpdate.user)
+        } else {
+            project.students.push(groupUpdate.user)
         }
         // update the project info across the app for the teacher based on this update
         this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
