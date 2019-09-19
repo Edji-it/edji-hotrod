@@ -140,7 +140,7 @@ export class ProfileFormComponent implements OnInit {
         return first + ' ' + last
     }
 
-    setInitials(form): string {
+    public setInitials(form): string {
         let initials = ''
         if (form.controls['firstname'].value) {
             initials = form.controls['firstname'].value[0]
@@ -154,14 +154,14 @@ export class ProfileFormComponent implements OnInit {
         return initials
     }
 
-    isSchoolStaff(identity: string): boolean {
+    public isSchoolStaff(identity: string): boolean {
         return ALLSPARK.SCHOOL_IDENTITIES.indexOf(identity) > -1
     }
 
     /**
      * Handles school selector output
      */
-    updateSchoolInfo(schoolInfo: UserSchoolDistrict) {
+    public updateSchoolInfo(schoolInfo: UserSchoolDistrict) {
         // Save school info locally to be processed by updateProfile()
         this.schoolInfo = schoolInfo
     }
@@ -171,7 +171,7 @@ export class ProfileFormComponent implements OnInit {
      * @param property "initials"
      * @param value "AB"
      */
-    tempLocalUserUpdate(property, value) {
+    private tempLocalUserUpdate(property, value) {
         let user = this._auth.getUser()
         user[property] = value
         // This only updates the user locally, but will save update to DB when user finished
@@ -182,7 +182,7 @@ export class ProfileFormComponent implements OnInit {
      * Bring the user to their dashboard, or where they were headed
      * @param data Registration user response
      */
-    handleProfileCompleteRouting(data): void {
+    private handleProfileCompleteRouting(data): void {
         if (this.readingToAdd) {
             this._router.navigate(['/new-reading'], { queryParams: { copyId: this.readingToAdd } })
         } else if (this.readingToPreview) {
@@ -200,7 +200,7 @@ export class ProfileFormComponent implements OnInit {
      * - Track the event
      * @param user 
      */
-    reportUserCreated(user) {
+    private reportUserCreated(user) {
         // Track registration via GA
         this._angulartics.eventTrack.next({
             action: 'registration',
@@ -231,7 +231,7 @@ export class ProfileFormComponent implements OnInit {
     /**
      * Save users profile, and continue on
      */
-    updateProfile(form): void {
+    public updateProfile(form): void {
         this.errorObject = {}
         this.profileFormLoading = true
 
