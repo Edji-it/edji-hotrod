@@ -45,8 +45,12 @@ export class UserAvatarComponent implements OnInit {
     if (!this.userDetails && this.userId) {
       this.userSubscription = this.projectStore.joinedUsers.pipe(map(
         (users: PublicUser[]) => {
-          let user: PublicUser = users.find(user => { return user._id === this.userId })
-          return user
+          if (users && users[0]) {
+            let user: PublicUser = users.find(user => { return user._id === this.userId })
+            return user
+          } else {
+            return {}
+          }
         }
       )).subscribe((user: PublicUser) => {
         this.setDisplayProperties(user)
@@ -55,7 +59,7 @@ export class UserAvatarComponent implements OnInit {
   }
 
   ngOnDestroy() {
-
+    this.userSubscription.unsubscribe()
   }
 
   setDisplayProperties(user: PublicUser) {
