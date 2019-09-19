@@ -46,16 +46,14 @@ export class ProjectStore {
      *  Updated Reference Object
      * Reference comment replies by comment id
      */
-    private repliesByIdSource: any = {}
-    private repliesByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.repliesByIdSource)
+    private repliesByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>({})
     public repliesById: Observable<any> = this.repliesByIdSubject.asObservable()
 
     /**
      *  Updated Reference Object
      * Reference answers by question id
      */
-    private answersByIdSource: any = {}
-    private answersByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.answersByIdSource)
+    private answersByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>({})
     public answersById: Observable<any> = this.answersByIdSubject.asObservable()
 
     /**
@@ -181,12 +179,10 @@ export class ProjectStore {
      */
     private initializeProjectObservables() {
         // Reset the answers observable
-        this.answersByIdSource = {}
-        this.answersByIdSubject.next(this.answersByIdSource)
+        this.answersByIdSubject.next({})
 
         // Reset the replies observable
-        this.repliesByIdSource = {}
-        this.repliesByIdSubject.next(this.repliesByIdSource)
+        this.repliesByIdSubject.next({})
     }
 
     /**
@@ -610,30 +606,32 @@ export class ProjectStore {
     } // private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][]
 
     public addCommentToReplies(comment: EdjiComment): void {
+        let repliesById = this.repliesByIdSubject.getValue()
         let skipAdd = false
         if (comment.reply_to) {
-            if (!this.repliesByIdSource[comment.reply_to]) {
-                this.repliesByIdSource[comment.reply_to] = []
+            if (!repliesById[comment.reply_to]) {
+                repliesById[comment.reply_to] = []
             }
             // Double check comment doesn't exist
-            for (let reply of this.repliesByIdSource[comment.reply_to]) {
+            for (let reply of repliesById[comment.reply_to]) {
                 if (reply._id == comment._id) {
                     skipAdd = true
                 }
             }
             if (!skipAdd) {
-                this.repliesByIdSource[comment.reply_to].push(comment)
-                this.repliesByIdSubject.next(this.repliesByIdSource)
+                repliesById[comment.reply_to].push(comment)
+                this.repliesByIdSubject.next(repliesById)
             }
         }
     } // public addCommentToReplies(comment: EdjiComment): void
 
     public removeCommentFromReplies(comment: EdjiComment): void {
-        if (comment.reply_to && this.repliesByIdSource[comment.reply_to]) {
-            for (let i = 0; i < this.repliesByIdSource[comment.reply_to].length; i++) {
-                if (this.repliesByIdSource[comment.reply_to][i]._id === comment._id) {
-                    this.repliesByIdSource[comment.reply_to].splice(i, 1)
-                    this.repliesByIdSubject.next(this.repliesByIdSource)
+        let repliesById = this.repliesByIdSubject.getValue()
+        if (comment.reply_to && repliesById[comment.reply_to]) {
+            for (let i = 0; i < repliesById[comment.reply_to].length; i++) {
+                if (repliesById[comment.reply_to][i]._id === comment._id) {
+                    repliesById[comment.reply_to].splice(i, 1)
+                    this.repliesByIdSubject.next(repliesById)
                 }
             }
         }
@@ -646,37 +644,39 @@ export class ProjectStore {
      * @param answer the answer you want added to the array
      */
     public addAnswerToAnswers(answer: EdjiComment): void {
+        let answersById = this.answersByIdSubject.getValue()
         let skipAdd = false
         if (answer.questionId) {
-            if (!this.answersByIdSource[answer.questionId]) {
-                this.answersByIdSource[answer.questionId] = []
+            if (!answersById[answer.questionId]) {
+                answersById[answer.questionId] = []
             }
             // Double check comment doesn't exist
-            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++) {
-                let answerExist = this.answersByIdSource[answer.questionId][i]
+            for (let i = 0; i < answersById[answer.questionId].length; i++) {
+                let answerExist = answersById[answer.questionId][i]
                 if (answerExist._id === answer._id) {
                     if (this.user._id !== answer.user_id) {
                         // Don't update users own answers from socket
                         // - Case: Pointer the emoji keyboard relies on breaks if you do so
-                        this.answersByIdSource[answer.questionId][i] = answer
+                        answersById[answer.questionId][i] = answer
                     }
                     skipAdd = true
                 }
             }
             if (!skipAdd) {
-                this.answersByIdSource[answer.questionId].push(answer)
+                answersById[answer.questionId].push(answer)
             }
             // Update observable
-            this.answersByIdSubject.next(this.answersByIdSource)
+            this.answersByIdSubject.next(answersById)
         }
     } // public addAnswerToAnswers(answer: EdjiComment): void
 
     public removeAnswerFromAnswers(answer: EdjiComment): void {
+        let answersById = this.answersByIdSubject.getValue()
         if (answer.questionId) {
-            for (let i = 0; i < this.answersByIdSource[answer.questionId].length; i++) {
-                if (this.answersByIdSource[answer.questionId][i]._id === answer._id) {
-                    this.answersByIdSource[answer.questionId].splice(i, 1)
-                    this.answersByIdSubject.next(this.answersByIdSource)
+            for (let i = 0; i < answersById[answer.questionId].length; i++) {
+                if (answersById[answer.questionId][i]._id === answer._id) {
+                    answersById[answer.questionId].splice(i, 1)
+                    this.answersByIdSubject.next(answersById)
                 }
             } // for
         }
