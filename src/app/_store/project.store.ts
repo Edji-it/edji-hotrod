@@ -142,7 +142,7 @@ export class ProjectStore {
                 * groupUpdate.type is the identifier for specific events
                 */
             this._socket.groupUpdate.subscribe(groupUpdate => {
-                if (groupUpdate.type === 'refreshLeaderboard' && this.project.isTeaching) {
+                if (groupUpdate.type === 'groupUsers') {
                     this.addUserInfoToProject(groupUpdate)
                 } else if (groupUpdate.type === 'coteacherPromote') {
                     this.addProjectOwner(groupUpdate.user)
@@ -195,22 +195,22 @@ export class ProjectStore {
 
     /**
      * Use for Project Modifications
-     * - Broadcasts changes to Selector and Permutation observables
-     * @param action Change being made
+     * - Broadcasts changes to "Selector" and "Permutation" observables
+     * @param effect Change being made
      * @param project Updated project value
      */
-    private projectStoreAction(action: ProjectAction, project: Project): void {
+    private projectStoreDispatch(effect: ProjectAction, project): void {
         this.project = project
-        // Handle different action types
-        switch (action) {
-            case ProjectAction.UpdateUsers:
+        // Handle different effect types
+        switch (effect) {
+            case ProjectAction.UpdateUsersSuccess:
                 // Concat and update
                 let users = this.project.students || []
                 users = users.concat(this.project.temps)
                 // Include teacher
                 users.push(this.project.teacher)
                 this.joinedUsersSource.next(users)
-            case ProjectAction.Update:
+            case ProjectAction.UpdateSuccess:
             default:
                 this.currentProjectSource.next(this.project)
         }
@@ -259,11 +259,9 @@ export class ProjectStore {
                     })
                     project.comments.reverse()
                     // Now that our project comments are ready, set it to the shared source!
-                    this.projectStoreAction(ProjectAction.Update, project)
+                    this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
                     // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
-                    if ((project.students_ids.length > 0 || project.temp_ids.length > 0) && this.project.isTeaching) {
-                        this.updateProjectUsers(project)
-                    }
+                    this.updateGroupUsers(project)
                     // Return the project along the current Observable
                     return this.project
                 }),
@@ -282,7 +280,7 @@ export class ProjectStore {
                 for (let key of Object.keys(updatedProperties)) {
                     this.project[key] = updatedProperties[key]
                 }
-                this.projectStoreAction(ProjectAction.Update, this.project)
+                this.projectStoreDispatch(ProjectAction.UpdateSuccess, this.project)
                 return this.project
             }),
         )
@@ -304,7 +302,7 @@ export class ProjectStore {
         project.isTeaching = isTeacher || isCoOwner
         // Update observable
         if (emit) {
-            this.projectStoreAction(ProjectAction.Update, project)
+            this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
         }
         return project
     }
@@ -337,6 +335,16 @@ export class ProjectStore {
             return of({ status: 'success' }) // mock response
         } else {
             return this._project.addUserToProject(projectId)
+                .pipe(map(data => {
+                    // Success! Handle update to store
+                    // our socket event takes a bit of user information to setup the event
+                    let publicUser = this._auth.getPublicUser()
+                    // fire the socket event so the teacher knows we just got another student
+                    this._socket.groupUpdateEvent({
+                        type: 'groupUsers',
+                        user: publicUser
+                    })
+                }))
         }
     }
 
@@ -354,7 +362,7 @@ export class ProjectStore {
             this.project.co_owner_ids.push(newOwner._id)
             this.project.co_owners.push(newOwner)
             this.project.owners.push(newOwner)
-            this.projectStoreAction(ProjectAction.Update, this.project)
+            this.projectStoreDispatch(ProjectAction.UpdateSuccess, this.project)
         }
     }
 
@@ -413,28 +421,22 @@ export class ProjectStore {
      * @param groupUpdate the object that contains user properties to properly add student to leaderboard
      */
     private addUserInfoToProject(groupUpdate: any) {
+        if (!groupUpdate.user || !groupUpdate.user._id) {
+            console.error('[Project Store] Attempted adding undefined user')
+        }
         // Make sure student and temp arrays exist
         if (!this.project.students) this.project.students = []
         if (!this.project.temps) this.project.temps = []
         // if the student that joined is registered, here is their info
         if (groupUpdate.userType && groupUpdate.userType === 'registered') {
-            this.project.students.push({
-                _id: groupUpdate._id,
-                fullname: groupUpdate.fullname,
-                username: groupUpdate.username,
-                userType: groupUpdate.userType,
-            })
+            this.project.students.push(groupUpdate.user)
         }
         // if the student that joined is a temp, here is their info
         if (groupUpdate.userType && groupUpdate.userType === 'temp') {
-            this.project.temps.push({
-                _id: groupUpdate._id,
-                fullname: groupUpdate.fullname,
-                userType: groupUpdate.userType,
-            })
+            this.project.temps.push(groupUpdate.user)
         }
         // update the project info across the app for the teacher based on this update
-        this.projectStoreAction(ProjectAction.Update, this.project)
+        this.projectStoreDispatch(ProjectAction.UpdateSuccess, this.project)
         this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
     }
 
@@ -916,8 +918,10 @@ export class ProjectStore {
      * Pulls in fullname and username for students and temp users for leaderboard and
      * @param project current project the user is on
      */
-    public updateProjectUsers(project: Project) {
-        this._auth.getPublicUsers(project.students_ids, project.temp_ids).subscribe(
+    private updateGroupUsers(project: Project) {
+        let studentIds = project.students_ids || []
+        let tempIds = project.temp_ids || []
+        this._auth.getPublicUsers(studentIds, tempIds).subscribe(
             userInfo => {
                 userInfo = userInfo.users
                 // Ensure PublicUsers have initials
@@ -939,7 +943,7 @@ export class ProjectStore {
                     })
                 })
                 this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
-                this.projectStoreAction(ProjectAction.UpdateUsers, this.project)
+                this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, this.project)
             },
             error => {
                 console.error(error)
@@ -1020,6 +1024,6 @@ export class ProjectStore {
 
 
 export const enum ProjectAction {
-    Update = '[Project] Update',
-    UpdateUsers = '[Project] Update Users'
+    UpdateSuccess = '[Project] Update Success',
+    UpdateUsersSuccess = '[Project] Update Users Success'
 }

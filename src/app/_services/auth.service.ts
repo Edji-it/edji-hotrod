@@ -5,7 +5,7 @@ import { map, take, catchError } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 // Project Dependencies
-import { User } from '../shared/datatypes'
+import { User, PublicUser } from '../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { LockerService } from '../_services/locker.service'
@@ -286,6 +286,14 @@ export class AuthService implements CanActivate {
     }
 
     return user
+  }
+
+  /**
+   * Return public version of current user
+   */
+  public getPublicUser(): PublicUser {
+    let user = this.getUser()
+    return (({ _id, type, username, fullname, initials, avatar }) => ({ _id, type, username, fullname, initials, avatar }))(user)
   }
 
   public getCurrentUser(): Observable<User> {
