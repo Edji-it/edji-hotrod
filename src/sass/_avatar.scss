@@ -36,7 +36,9 @@ $mediumAvatarSize: 36px;
   // margin-top: -4px;
   vertical-align: middle;
   cursor: default;
-  object-fit: cover; // Needed for images
+  // Needed for images
+  overflow: hidden;
+  object-fit: cover; 
 
   & span {
     font-family: 'Open Sans';
