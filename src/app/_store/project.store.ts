@@ -18,8 +18,7 @@ export class ProjectStore {
     /**
      * Project Store: This value is the source of truth 
      **/
-    private project: any = { title: 'initial value' }
-    private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>(this.project)
+    private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>({ title: 'initial value' })
     public currentProject: Observable<any> = this.currentProjectSource.asObservable()
 
     /**
@@ -143,7 +142,7 @@ export class ProjectStore {
                     this.addUserInfoToProject(groupUpdate)
                 } else if (groupUpdate.type === 'coteacherPromote') {
                     this.addProjectOwner(groupUpdate.user)
-                } else if (groupUpdate.type === 'updateUserStatus' && this.user._id === this.project.teacher_id) {
+                } else if (groupUpdate.type === 'updateUserStatus' && this.user._id === this.currentProjectSource.getValue().teacher_id) {
                     this.commentStats.userStatus(groupUpdate.user, groupUpdate.status)
                 }
             }),
@@ -152,7 +151,8 @@ export class ProjectStore {
                 * commentStats is initialized here, so we observe the state changes from other components and services here
                 */
             this._academy.userStatus.subscribe(userStatus => {
-                if (this.user._id === this.project.teacher_id) {
+                let project = this.currentProjectSource.getValue()
+                if (this.user._id === project.teacher_id) {
                     this.commentStats.userStatus(this.user, userStatus.status)
                 } else {
                     // emit the socket back to the teacher
@@ -168,8 +168,7 @@ export class ProjectStore {
                 */
             this._auth.clearAll.subscribe(clear => {
                 if (clear) {
-                    this.project = { title: '' }
-                    this.currentProjectSource.next(this.project)
+                    this.currentProjectSource.next({ title: '' })
                 }
             }),
         )
@@ -197,19 +196,18 @@ export class ProjectStore {
      * @param project Updated project value
      */
     private projectStoreDispatch(effect: ProjectAction, project): void {
-        this.project = project
         // Handle different effect types
         switch (effect) {
             case ProjectAction.UpdateUsersSuccess:
                 // Concat and update
-                let users = this.project.students || []
-                users = users.concat(this.project.temps)
+                let users = project.students || []
+                users = users.concat(project.temps)
                 // Include teacher
-                users.push(this.project.teacher)
+                users.push(project.teacher)
                 this.joinedUsersSource.next(users)
             case ProjectAction.UpdateSuccess:
             default:
-                this.currentProjectSource.next(this.project)
+                this.currentProjectSource.next(project)
         }
     }
 
@@ -260,7 +258,7 @@ export class ProjectStore {
                     // Get and attach user information to the students_ids and temp_ids if we have at least 1 of either
                     this.updateGroupUsers(project)
                     // Return the project along the current Observable
-                    return this.project
+                    return project
                 }),
             )
     }
@@ -273,12 +271,13 @@ export class ProjectStore {
     public update(updateObj: any, projectId: string): Observable<any> {
         return this._project.put(updateObj, projectId).pipe(
             map(data => {
+                let project = this.currentProjectSource.getValue()
                 let updatedProperties = data
                 for (let key of Object.keys(updatedProperties)) {
-                    this.project[key] = updatedProperties[key]
+                    project[key] = updatedProperties[key]
                 }
-                this.projectStoreDispatch(ProjectAction.UpdateSuccess, this.project)
-                return this.project
+                this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
+                return project
             }),
         )
     }
@@ -350,16 +349,17 @@ export class ProjectStore {
      * @calls currentProjectSource
      */
     public addProjectOwner(newOwner: PublicUser): void {
+        let project = this.currentProjectSource.getValue()
         // Ensure co_owner_ids array exists
-        if (!this.project.co_owner_ids) {
-            this.project.co_owner_ids = []
+        if (!project.co_owner_ids) {
+            project.co_owner_ids = []
         }
         // Push user into co-owner array
-        if (this.project.co_owner_ids.indexOf(newOwner._id) === -1) {
-            this.project.co_owner_ids.push(newOwner._id)
-            this.project.co_owners.push(newOwner)
-            this.project.owners.push(newOwner)
-            this.projectStoreDispatch(ProjectAction.UpdateSuccess, this.project)
+        if (project.co_owner_ids.indexOf(newOwner._id) === -1) {
+            project.co_owner_ids.push(newOwner._id)
+            project.co_owners.push(newOwner)
+            project.owners.push(newOwner)
+            this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
         }
     }
 
@@ -421,20 +421,21 @@ export class ProjectStore {
         if (!groupUpdate.user || !groupUpdate.user._id) {
             console.error('[Project Store] Attempted adding undefined user')
         }
+        let project = this.currentProjectSource.getValue()
         // Make sure student and temp arrays exist
-        if (!this.project.students) this.project.students = []
-        if (!this.project.temps) this.project.temps = []
+        if (project.students) project.students = []
+        if (project.temps) project.temps = []
         // if the student that joined is registered, here is their info
         if (groupUpdate.userType && groupUpdate.userType === 'registered') {
-            this.project.students.push(groupUpdate.user)
+            project.students.push(groupUpdate.user)
         }
         // if the student that joined is a temp, here is their info
         if (groupUpdate.userType && groupUpdate.userType === 'temp') {
-            this.project.temps.push(groupUpdate.user)
+            project.temps.push(groupUpdate.user)
         }
         // update the project info across the app for the teacher based on this update
-        this.projectStoreDispatch(ProjectAction.UpdateSuccess, this.project)
-        this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
+        this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
+        this._commentStats.addUsersToStats(this.commentStats._stats, project)
     }
 
     /**
@@ -498,7 +499,7 @@ export class ProjectStore {
      * @param commentObj proto comment to save
      */
     public saveComment(commentObj: EdjiComment): Promise<any> {
-        let projectId: string = this.project._id
+        let project: Project = this.currentProjectSource.getValue()
         let comment = Object.assign({}, commentObj)
 
         if (!comment.user_id) {
@@ -512,9 +513,9 @@ export class ProjectStore {
         // Add comment ID if passed
         // Tell other Project viewers comment changed, using Socket
         if (comment._id) {
-            this._socket.updateComment(comment, 'UPDATE', this.project._id)
+            this._socket.updateComment(comment, 'UPDATE', project._id)
         } else {
-            this._socket.updateComment(comment, 'CREATE', this.project._id)
+            this._socket.updateComment(comment, 'CREATE', project._id)
 
             // need to set a comment context to discern between comments and replies for pipo event
             let commentContext = 'comment'
@@ -527,15 +528,15 @@ export class ProjectStore {
                 // standard event info:
                 event_name: 'comment_action',
                 user_id: this.user._id,
-                teacher: this.project.isTeaching,
+                teacher: project.isTeaching,
                 hero: this.user.hero_status || false,
                 institution_id: this.user.institution_ids || [],
                 // event-specific info:
-                reading_id: this.project.reading_id._id,
-                group_id: this.project._id,
+                reading_id: project.reading_id._id,
+                group_id: project._id,
                 action_type: commentContext,
                 comment_type: comment.type,
-                reading_owner: this.project.owner_id,
+                reading_owner: project.owner_id,
             })
             // fire an analytic event here for tracking purposes
             let contextTarget = ''
@@ -553,14 +554,15 @@ export class ProjectStore {
                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
             })
         }
-        return this._project.putComment(projectId, comment)
+        return this._project.putComment(project._id, comment)
     }
 
     /**
        * Removes comment from its project
+       * @todo buildCommentsByPos should be triggered by Action
        */
     public removeComment(comment: EdjiComment): Promise<any> {
-        let projectId = this.project._id
+        let project = this.currentProjectSource.getValue()
         // need to set a comment context to discern between comments and replies for analytic event
         let commentContext = 'comment'
         if (comment.reply_to && comment.reply_to !== '') {
@@ -572,21 +574,21 @@ export class ProjectStore {
             properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
         })
 
-        return this._project.deleteComment(projectId, comment)
+        return this._project.deleteComment(project._id, comment)
             .pipe(
                 map(data => {
                     // Tell other Project views that the comment is gone
-                    this._socket.updateComment(comment, 'DELETE', this.project._id)
+                    this._socket.updateComment(comment, 'DELETE', project._id)
                     // Update stats
                     this.commentStats.addCommentToStats(comment, -1)
 
-                    for (var i = 0; i <= this.project.comments.length; i++) {
-                        if (this.project.comments[i] && this.project.comments[i]._id === comment._id) {
+                    for (var i = 0; i <= project.comments.length; i++) {
+                        if (project.comments[i] && project.comments[i]._id === comment._id) {
                             // Remove comment from local object
-                            this.project.comments.splice(i, 1)
+                            project.comments.splice(i, 1)
                         }
                     }
-
+                    this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
                     this.buildCommentsByPos()
                     return data
                 }),
@@ -606,8 +608,8 @@ export class ProjectStore {
         comment.project_id = project._id
         // Is this a teacher comment?
         if (
-            comment.user_id === this.project.teacher_id ||
-            (this.project.co_owner_ids && this.project.co_owner_ids.indexOf(comment.user_id) > -1)
+            comment.user_id === project.teacher_id ||
+            (project.co_owner_ids && project.co_owner_ids.indexOf(comment.user_id) > -1)
         ) {
             // preset authorIsTeacher for existing data
             comment.authorIsTeacher = true
@@ -709,10 +711,10 @@ export class ProjectStore {
      * @param answerObj Answer of EdjiComment datatype
      */
     public saveAnswer(answerObj: EdjiComment): Promise<any> {
-        let projectId: string = this.project._id
+        let project: Project = this.currentProjectSource.getValue()
         let answer = Object.assign({}, answerObj)
 
-        answer.project_id = projectId // Tell the answer what project it's a part of
+        answer.project_id = project._id // Tell the answer what project it's a part of
 
         // Clean frontend only properties
         delete answer['active']
@@ -729,24 +731,24 @@ export class ProjectStore {
         // Add comment ID if passed
         // Tell other Project viewers comment changed, using Socket
         if (answer._id) {
-            this._socket.updateComment(answer, 'UPDATE', this.project._id)
+            this._socket.updateComment(answer, 'UPDATE', project._id)
         } else {
-            this._socket.updateComment(answer, 'CREATE', this.project._id)
+            this._socket.updateComment(answer, 'CREATE', project._id)
 
             // add the comment creation event to pipo
             this._academy.pipoEvent({
                 // standard event info:
                 event_name: 'comment_action',
                 user_id: this.user._id,
-                teacher: this.project.isTeaching,
+                teacher: project.isTeaching,
                 hero: this.user.hero_status || false,
                 institution_id: this.user.institution_ids || [],
                 // event-specific info:
-                reading_id: this.project.reading_id._id,
-                group_id: this.project._id,
+                reading_id: project.reading_id._id,
+                group_id: project._id,
                 action_type: 'answer',
                 comment_type: answer.type,
-                reading_owner: this.project.owner_id,
+                reading_owner: project.owner_id,
             })
             // fire an analytic event here for tracking purposes
             this.angulartics.eventTrack.next({
@@ -754,7 +756,7 @@ export class ProjectStore {
                 properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
             })
         }
-        return this._project.putAnswer(projectId, answer)
+        return this._project.putAnswer(project._id, answer)
     }
 
     /**
@@ -762,17 +764,18 @@ export class ProjectStore {
      * - Project page should subscribe to the currentProject Observable to receive these updates
      */
     public removeAnswer(answer: EdjiComment): Promise<any> {
+        let project = this.currentProjectSource.getValue()
         // fire an analytic event here for tracking purposes
         this.angulartics.eventTrack.next({
             action: 'answer_' + answer.type + '_delete',
             properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
         })
 
-        return this._project.deleteAnswer(this.project, answer)
+        return this._project.deleteAnswer(project, answer)
             .pipe(
                 map(data => {
                     // Tell other Project views that the comment is gone
-                    this._socket.updateComment(answer, 'DELETE', this.project._id)
+                    this._socket.updateComment(answer, 'DELETE', project._id)
                     this.removeAnswerFromAnswers(answer)
                     return data
                 }),
@@ -855,8 +858,9 @@ export class ProjectStore {
         } else {
             // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
             let heatVisible = true
+            let project = this.currentProjectSource.getValue()
             if (!initiateComments) {
-                heatVisible = this.project.heat_vision || this.project.isTeaching
+                heatVisible = project.heat_vision || project.isTeaching
             }
             // Your own comments and the Owner/Teacher's comments are ALWAYS visible
             let alwaysVisible = comment.user_id == this.user._id || comment.authorIsTeacher
@@ -892,11 +896,12 @@ export class ProjectStore {
      */
     private generateCommentFilter(propertyFilters: CommentPropertyFilters, displayType: string, displayName: string) {
         let commentFilter = <CommentFilter>{}
+        let project = this.currentProjectSource.getValue()
         commentFilter.propertyFilters = propertyFilters
         commentFilter.displayType = displayType
         commentFilter.displayName = displayName
         // Get copy of comments
-        let comments = this.project.comments.slice()
+        let comments = project.comments.slice()
         let filterHighlightArray = []
         comments.forEach(comment => {
             // Filter out comments
@@ -928,19 +933,19 @@ export class ProjectStore {
                     }
                 })
                 // attach the basic user information to each students_id
-                this.project.students = this.project.students_ids.map(obj => {
+                project.students = project.students_ids.map(obj => {
                     return userInfo.find(el => {
                         return el._id === obj
                     })
                 })
                 // attach the basic user information to each temp_id
-                this.project.temps = this.project.temp_ids.map(obj => {
+                project.temps = project.temp_ids.map(obj => {
                     return userInfo.find(el => {
                         return el._id === obj
                     })
                 })
-                this._commentStats.addUsersToStats(this.commentStats._stats, this.project)
-                this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, this.project)
+                this._commentStats.addUsersToStats(this.commentStats._stats, project)
+                this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
             },
             error => {
                 console.error(error)
@@ -963,9 +968,9 @@ export class ProjectStore {
             .pipe(take(1))
             .pipe(
                 map(data => {
-                    this.project = data
-                    this.currentProjectSource.next(this.project)
-                    return this.project
+                    project = data
+                    this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
+                    return project
                 }),
             )
     }
@@ -978,7 +983,8 @@ export class ProjectStore {
      * @param answerChange toggling the answer value
      */
     public recalculateAnswers(answer: any, answerChange: boolean): void {
-        this.commentStats.recalculateAnswers(answer, answerChange, this.project)
+        let project = this.currentProjectSource.getValue()
+        this.commentStats.recalculateAnswers(answer, answerChange, project)
     }
 
     /**
@@ -986,10 +992,11 @@ export class ProjectStore {
      * - Uses lineY values on the comments as the "position" value
      */
     public buildCommentsByPos(): void {
+        let project = this.currentProjectSource.getValue()
         // Re-initialize the comment by position array
         this.commentByPosSource = []
         // Copy then reverse the array
-        let commentsArray = this.project.comments ? this.project.comments.slice().reverse() : []
+        let commentsArray = project.comments ? project.comments.slice().reverse() : []
         // Loop through each comment to group comments together by line number
         let len2 = commentsArray.length
         for (let i = 0; i < len2; i++) {
@@ -999,9 +1006,9 @@ export class ProjectStore {
             let dataInComment =
                 (comment.data && comment.data != '') || (comment.url && comment.url != '') || comment.user_id == this.user._id
             // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
-            let heatVisible = this.project.heat_vision || this.project.isTeaching
+            let heatVisible = project.heat_vision || project.isTeaching
             // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-            let alwaysVisible = comment.user_id == this.user._id || comment.user_id == this.project.teacher_id
+            let alwaysVisible = comment.user_id == this.user._id || comment.user_id == project.teacher_id
 
             if (comment && !comment.reply_to && !comment.questionId && comment.lineY && this.isCommentVisible(comment)) {
                 // lineY is determined by each individual CommentComponent
