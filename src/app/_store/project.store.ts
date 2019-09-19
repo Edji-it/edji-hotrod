@@ -94,9 +94,6 @@ export class ProjectStore {
     ) {
         // needs to be constructed here or else it returns undefined
         this._commentStats = new CommentStats()
-        this._socket.commentUpdates.subscribe(update => {
-            // console.log(update)
-        })
 
         /** Set the current user every time it changes */
         this.subscriptions.push(
