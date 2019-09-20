@@ -4,6 +4,7 @@ import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { ProjectService, SocketService, AuthService } from './../../_services'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'hot-login-modal',
@@ -30,11 +31,12 @@ export class LoginModal implements AfterViewInit, OnInit {
   public initialized: boolean
 
   constructor(
-    private _project: ProjectService, 
-    private _socket: SocketService, 
+    private projectStore: ProjectStore,
+    private _socket: SocketService,
     private _auth: AuthService,
     private router: Router,
-  ) {}
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     if (this.loginOnly) {
@@ -51,30 +53,12 @@ export class LoginModal implements AfterViewInit, OnInit {
 
   onLoginSuccess() {
     if (this.projectId) {
-      this._project
+      this.projectStore
         .addUserToProject(this.projectId)
         .pipe(take(1))
         .subscribe(
           () => {
             this.closeModal.emit()
-
-            // our socket event takes a bit of user information to setup the event
-            let currentUser = this._auth.getUser()
-            let username = ''
-            let userType = 'temp'
-            if (currentUser.type !== 'temp') {
-              username = currentUser.username
-              userType = 'registered'
-            }
-
-            // fire the socket event so the teacher knows we just got another student
-            this._socket.groupUpdateEvent({
-              type: 'refreshLeaderboard',
-              _id: currentUser._id,
-              fullname: currentUser.fullname,
-              username: username,
-              userType: userType,
-            })
           },
           err => {
             console.error(err)
@@ -83,6 +67,18 @@ export class LoginModal implements AfterViewInit, OnInit {
         )
     } else {
       this.closeModal.emit('preview')
+    }
+  }
+
+  /**
+   * Handles routing to Register page
+   */
+  public goToRegister() {
+    let params = this.route.snapshot.queryParams
+    if (params['preview']) {
+      this.router.navigate(['/register'], { queryParams: { preview: params['preview'] } })
+    } else {
+      this.router.navigate(['/register'])
     }
   }
 

@@ -53,6 +53,12 @@ import {
 } from './_services'
 // import { ReuseStrategy } from './route-reuse-strategy'
 
+// Store Services
+import {
+  ProjectStore,
+  ProjectListStore
+} from './_store'
+
 // Directives
 import { MediumEditorModule } from 'angular2-medium-editor'
 import { MultiselectDropdownModule } from './_directives'
@@ -67,10 +73,11 @@ import {
   TutorialBoxComponent,
   ResetComponent,
   PromoBannerComponent,
+  SchoolSelectorComponent
 } from './shared'
 import { HomeComponent } from './home'
-import { RegisterPageComponent } from './register-page'
-import { LoginForm, GuestForm, RegisterFormComponent } from './forms'
+import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
+import { LoginForm, GuestForm, RegisterFormComponent, ProfileFormComponent } from './forms'
 
 import {
   LoginModal,
@@ -176,6 +183,8 @@ const APP_PROVIDERS = [
   MediaService,
   MessageService,
   ProjectService,
+  ProjectStore,
+  ProjectListStore,
   CommentService,
   SocketService,
   UtilToolService,
@@ -205,6 +214,7 @@ const routerOptions: ExtraOptions = {
     ClickOutsideDirective,
     RedeemToken,
     RegisterPageComponent,
+    CreateProfilePageComponent,
     CommentPaneComponent,
     CommentComponent,
     TeacherFeedbackComponent,
@@ -222,6 +232,7 @@ const routerOptions: ExtraOptions = {
     AccountComponent,
     LoginForm,
     RegisterFormComponent,
+    ProfileFormComponent,
     GuestForm,
     LoginModal,
     LoginRegisterModal,
@@ -277,6 +288,7 @@ const routerOptions: ExtraOptions = {
     ReadingRecapComponent,
     TeamPageComponent,
     PromoBannerComponent,
+    SchoolSelectorComponent
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],

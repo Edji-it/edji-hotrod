@@ -1,0 +1,27 @@
+@import '../../../sass/base/variables';
+
+.profile-card {
+    position: relative;
+    width: 100%;
+    display: block;
+    background: #fff;
+    box-shadow: -1px 2px 15px rgb(11, 108, 164);
+    padding: $base-pad;
+    margin-bottom: $base-pad;
+    padding-left: 95px;
+
+    & user-avatar {
+        position: absolute;
+        top: 50%;
+        left: $base-pad;
+        transform: translateY(-50%);
+    }
+
+    &, & .h1 {
+        color: #000;
+    }
+
+    & .h1 {
+        margin-bottom: 0px;
+    }
+}

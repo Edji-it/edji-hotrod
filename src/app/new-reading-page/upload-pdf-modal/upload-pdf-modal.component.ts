@@ -197,7 +197,7 @@ export class UploadPdfModalComponent implements OnInit {
             }, 3000)
             console.error(err)
           },
-      )
+        )
     }
   }
 
@@ -262,15 +262,15 @@ export class UploadPdfModalComponent implements OnInit {
       .updateUser(user)
       .pipe(take(1))
       .subscribe(
-        user => {
-          if (user.documents) {
+        data => {
+          if (data.user && data.user.media && data.user.media.documents) {
             this.uploadedDocs = user.media.documents
           }
         },
         error => {
           console.log(error)
         },
-    )
+      )
   }
 
   /**

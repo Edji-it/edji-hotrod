@@ -6,6 +6,11 @@ $editorToolbarRadius: 0px;
 $editorToolbarBg: #fff;
 $editorToolbarShadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
 
+medium-editor.content {
+  margin-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
 .medium-editor-toolbar-actions {
   box-shadow: $editorToolbarShadow;
   border-radius: $editorToolbarRadius;

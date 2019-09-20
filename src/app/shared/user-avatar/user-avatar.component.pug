@@ -1,0 +1,9 @@
+.user-icon(
+    [ngClass]="['user-icon--' + size]"
+)
+    span.user-icon__initials {{ initials }}
+    //- @todo enabling avatars
+    //- span.user-icon__initials(*ngIf="!avatar") {{ initials }}
+    //- img([src]="avatar")
+    span.hero-tag.avatar-bottom(*ngIf="size === 'large' && user.hero_status", title="Hero Powers Activated") H
+span.user-icon__fullname(*ngIf="showName") {{ fullname }}

@@ -4,7 +4,7 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
   .row.navy-gradient.has-sparks(*ngIf="!errorKey && !user.isLoggedIn")
     .sparks
     .col-sm-2
-    .col-sm-8.col-pad.on-dark
+    .col-sm-8.col-pad
       .row.mt-5
           .col-10
             ng-container(*ngIf="login")
@@ -18,7 +18,7 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
             button.float-right.btn.btn-primary(*ngIf="!login", (click)="login=true") Login
       .mt-5
         .row
-          .col-12(*ngIf="login")
+          .col-12.on-dark(*ngIf="login")
             edji-oauth-row
             hr
             p.text-divider(style="background:#17436c;") or
@@ -27,8 +27,20 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
           .col-12(*ngIf="!login")
             //- On Registration, user will be updated via Observable
             hot-register-form([noRedirect]="true", (registerSuccess)="userRegistered($event)")
+  //- Complete profile
+  .row.navy-gradient.has-sparks(*ngIf="user.profileIncomplete")
+    .sparks
+    .col-sm-2
+    .col-sm-8.col-pad
+      .row.mt-5
+        .col-10
+          h1.mb-1.on-dark Complete Profile
+          p.mb-4.on-dark([innerHtml]="'In order to join your academy, you will need a complete profile :sparkles:' | emojione")
+      .row
+        .col-12
+          hot-profile-form([noRedirect]="true", [submitCopy]="'Continue Joining Academy'")
   //- Confirm License
-  .row.navy-gradient.has-sparks.row-xl-pad(*ngIf="!errorKey && user.isLoggedIn")
+  .row.navy-gradient.has-sparks.row-xl-pad(*ngIf="!errorKey && user.isLoggedIn && !user.profileIncomplete")
     .sparks
     .col-lg-8.offset-lg-2.col-md-10.offset-md-1.col-sm-12.offset-sm-0
       h1.on-dark Confirm Invite to <i>{{academyName}}</i>

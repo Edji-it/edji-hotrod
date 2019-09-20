@@ -159,7 +159,7 @@ nav-bar([showDashboardOptions]="true")
                 <ng-template let-reading pTemplate="item" let-i="index">
                    .col-12.feed__reading(*ngIf="reading")
                         .feed__reading-data.mb-2(*ngIf="reading.owner")
-                            .comment__avatar.mb-0 {{reading.owner.fullname.substr(0,2).toUpperCase()}}
+                            user-avatar([userDetails]="reading.owner")
                             follow-tag(
                                 [owner]="reading.owner",
                                 (followEvent)="!user.isLoggedIn ? showLoginModal = true : ''"

@@ -46,7 +46,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   private readingType: string = 'newReading' // used for analytics purposes
   private autosaveTimer
-  public selectedReading: Reading
+  public previewReading: Reading
 
   // Trigger booleans
   public showAlert: boolean = false
@@ -365,7 +365,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // TRACK EXCEPTION
           console.error(err)
         },
-    )
+      )
   }
 
   /**
@@ -1143,7 +1143,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.readingHtml[0].text = tmpArray[0]
     for (let i = 1; i < tmpArray.length; i++) {
       this.readingHtml.push({ text: tmpArray[i], question: this.reading.questions[i - 1] })
-      this.readingHtml[i].question.new = true
       this.readingHtml[i].question.question_number = i
     }
     setTimeout(() => {
@@ -1162,7 +1161,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   }
 
   public openReadingPreview(form: any): void {
-    this.selectedReading = this.formatReading(form)
+    this.previewReading = this.formatReading(form)
     // Check it reading is ready to Share
     if (this.validateReading(form)) {
       this.showReadingPreviewModal = true

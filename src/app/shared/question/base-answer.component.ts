@@ -4,7 +4,8 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from '../datatypes'
-import { CommentService, AuthService, ProjectService, ReadingService } from '../../_services'
+import { CommentService, AuthService, ReadingService } from '../../_services'
+import { ProjectStore } from 'src/app/_store';
 
 export abstract class BaseAnswerComponent implements OnInit {
   /*
@@ -26,7 +27,7 @@ export abstract class BaseAnswerComponent implements OnInit {
   public user: User
 
   constructor(
-    private _projects: ProjectService,
+    private _projectStore: ProjectStore,
     private _readings: ReadingService,
     private _auth: AuthService,
     private _comments: CommentService,
@@ -35,7 +36,7 @@ export abstract class BaseAnswerComponent implements OnInit {
     this.user = this._auth.getUser()
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   // Ask ProjectService to tell the server to save this comment.
   public saveAnswer(newAnswer: EdjiComment): void {
@@ -55,13 +56,13 @@ export abstract class BaseAnswerComponent implements OnInit {
     })
 
     // Tell the server we've added an answer
-    this._projects
+    this._projectStore
       .saveAnswer(newAnswer)
       .then(answer => {
         answer.active = true
         this._comments.activeComment = answer
-        this._projects.addAnswerToAnswers(answer)
-        this._projects.saveAnswer(answer)
+        this._projectStore.addAnswerToAnswers(answer)
+        this._projectStore.saveAnswer(answer)
       })
       .catch(error => {
         console.error(error)

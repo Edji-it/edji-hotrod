@@ -147,11 +147,11 @@ describe('Share', () => {
       // Verify user lands on Registration page
       browser.wait(EC.urlContains('register'), 5000, 'referral link never landed on registration page')
       // Attempt registration
-      registerForm.submit()
+      registerForm.submit('teacher')
       // Created user should land on Dashboard
       browser.wait(EC.urlContains('dashboard'), 5000, 'referred user failed to register')
       // Confirm account type
-      userDetails.confirmBot('teacher')
+      userDetails.addDetails()
       // Open referrals modal
       sidebar.clickReferralButton()
       // Verify user has not received referral credit

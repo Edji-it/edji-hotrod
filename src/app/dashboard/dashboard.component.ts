@@ -80,7 +80,8 @@ export class DashboardComponent implements OnInit {
 
     this._title.setTitle('Edji | Dashboard')
 
-    if (this.userProfileIncomplete()) {
+    // Ask teachers "Where did you hear about us?"
+    if (!this.currentUser.isStudent && (!this.currentUser.heard_about_us || !this.currentUser.heard_about_us.source)) {
       this.showUserDetailsModal = true
     }
 
@@ -91,7 +92,7 @@ export class DashboardComponent implements OnInit {
       this._copy.activePromotions.subscribe(promo => {
         if (promo.toastMessage && promo.promotionTitle) {
           if (
-            !this.userProfileIncomplete() &&
+            !this.currentUser.profileIncomplete &&
             !this.currentUser.hero_status &&
             !this.currentUser.isStudent &&
             this._locker.get(promo.promotionTitle) != true
@@ -113,37 +114,11 @@ export class DashboardComponent implements OnInit {
     )
   }
 
-  private userProfileIncomplete(): boolean {
-    if (this.currentUser.type === 'temp') {
-      return false
-    }
-
-    // incomplete initialized as false and passed through filters until
-    let incomplete: boolean = false
-    if (!this.currentUser.identities || this.currentUser.identities.length < 1) {
-      incomplete = true
-    }
-    if (
-      ((this.currentUser.identities && this.currentUser.identities.includes('teacher')) ||
-        (this.currentUser.identities && this.currentUser.identities.includes('administrator'))) &&
-      (this.currentUser.school && !this.currentUser.school.district_name && !this.currentUser['school_name']) // @deprecated property check of school_name
-    ) {
-      incomplete = true
-    }
-    return incomplete
-  }
-
   /**
    * Handle display changes after user details are added
    */
   public userDetailsAdded(): void {
     // Dismiss details modal
     this.showUserDetailsModal = false
-    // Check which dashboard a new user should land on
-    if (!this.currentUser.isStudent) {
-      this._router.navigate(['/dashboard/create'])
-    } else {
-      this._router.navigate(['/dashboard/read'])
-    }
   }
 }

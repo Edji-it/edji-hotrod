@@ -823,21 +823,12 @@ $progressStart: 51px;
 }
 
 .comment__avatar {
-  background: #adadad;
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
-  border-radius: 50%;
   position: absolute;
   left: -32px;
   text-align: center;
   top: 1px;
   pointer-events: none;
-  opacity: 0;
-  color: white;
   transition: opacity 0.2s linear;
-  font-size: 12px;
-  font-weight: bold;
 
   &.show {
     opacity: 1;
@@ -1001,11 +992,8 @@ $avatarZIndexStart: 990;
     left: #{($avatarOffset * $z) + $avatarMargin};
     z-index: $avatarZIndexStart - $z;
 
-    &.user-icon {
-      box-shadow: 0px 1px 2px 2px rgba(0, 0, 0, 0.05);
-      border: 2px solid transparent;
+    &.user-icon__wrap {
       &:hover {
-        border: 2px solid #eca736;
         z-index: 991;
       }
       &.active {
@@ -1017,9 +1005,12 @@ $avatarZIndexStart: 990;
 
 div.avatar-count-8 {
   background: #fff;
-  border: 1px solid #cfcfcf;
   border-radius: 50%;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   box-shadow: none;
+
+  & .user-icon {
+    border: 1px solid #cfcfcf;
+  }
 }

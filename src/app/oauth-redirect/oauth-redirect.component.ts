@@ -89,7 +89,22 @@ export class OAuthComponent implements OnInit {
 
     this.oAuthToken = decodeURIComponent(encodedToken)
 
-    if (this.currentUser && this.currentUser.isLoggedIn) {
+    /**
+     * Check if user has already linked their account
+     * - This also functions as a safety if the connection is interrupted or refreshed while redirecting
+     */
+    let alreadyLinked: boolean
+    if (this.currentUser && this.currentUser.isLoggedIn && this.currentUser.oauth) {
+      this.currentUser.oauth.forEach(oauthObj => {
+        if (oauthObj.type === this.loginType) {
+          alreadyLinked = true
+        }
+      })
+    }
+
+    if (alreadyLinked) {
+      this.routeAfterOAuth()
+    } else if (this.currentUser && this.currentUser.isLoggedIn) {
       this.linkAfterLogin()
     } else {
       this.loginWithOauth()
@@ -105,11 +120,6 @@ export class OAuthComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         res => {
-          // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
-          if (this.licenseId !== '' && this.licenseId.length > 0) {
-            this._router.navigate(['/license/accept/' + this.licenseId])
-            return
-          }
           // fire an analytic event here for tracking purposes
           this.angulartics.eventTrack.next({
             action: 'login',
@@ -118,7 +128,7 @@ export class OAuthComponent implements OnInit {
               label: this._auth.setAnalyticEventLabel(),
             },
           })
-          this._router.navigateByUrl(this.redirectRouteUrl)
+          this.routeAfterOAuth()
         },
         err => {
           console.error(err)
@@ -157,11 +167,26 @@ export class OAuthComponent implements OnInit {
             message: 'Successfully linked your Edji account',
           })
           // Account successfully linked!
-          this._router.navigate(['/dashboard'])
+          this.routeAfterOAuth()
         },
         error => {
           this.messages.linkError = true
         },
       )
+  }
+
+
+  /**
+   * Route after authorization
+   */
+  routeAfterOAuth(): void {
+    // if we are coming here from a landing page like the license accept, then the success case should take us back to that landing page again
+    if (this.licenseId !== '' && this.licenseId.length > 0) {
+      this._router.navigate(['/license/accept/' + this.licenseId])
+    } else if (this.redirectRouteUrl) {
+      this._router.navigateByUrl(this.redirectRouteUrl)
+    } else {
+      this._router.navigate(['/dashboard'])
+    }
   }
 }

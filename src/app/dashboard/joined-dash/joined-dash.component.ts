@@ -5,7 +5,9 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService, ProjectService } from '../../_services'
+import { AuthService } from '../../_services'
+import { ProjectStore } from 'src/app/_store';
+import { ProjectListStore } from 'src/app/_store/project-list.store';
 
 @Component({
   selector: 'edji-joined-dash',
@@ -39,7 +41,8 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
     public router: Router,
     private route: ActivatedRoute,
     private _auth: AuthService,
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
+    private projectListStore: ProjectListStore,
     private angulartics: Angulartics2,
     fb: FormBuilder,
   ) {
@@ -89,7 +92,7 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
       this.currentPageNo = paging.page
     }
 
-    this._projects.getJoined(filters).subscribe(
+    this.projectListStore.listJoined(filters).subscribe(
       data => {
         this.loading = false
         this.total = data.total
@@ -123,7 +126,7 @@ export class JoinedDashComponent implements OnInit, OnDestroy {
   public addSession(formValue: any): void {
     this.joinLoading = true
 
-    this._projects.setCurrentProject(formValue.projectCode).subscribe(
+    this.projectStore.setCurrentProject(formValue.projectCode).subscribe(
       project => {
         this.joinLoading = false
         this.router.navigate(['/project', project._id])

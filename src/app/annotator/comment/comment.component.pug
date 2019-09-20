@@ -21,7 +21,13 @@
         | {{ comment.author }}
         .comment__time.text-right(*ngIf="reply && replyRef") &nbsp;{{ comment.createdAt | edjidate:'timeAgo':null }}
         .comment__time.text-right(*ngIf="reply && !replyRef") &nbsp;{{ comment.updatedAt | edjidate:'timeAgo':null }}
-    .comment__avatar(*ngIf="comment.author",[class.show]="comment.showAvatar || reply", [class.selected]="comment.selected") {{comment.author.substr(0,2).toUpperCase()}}
+    //- Reply user icon
+    user-avatar.comment__avatar.comment__reply-avatar(
+        *ngIf="comment.author", 
+        [class.show]="reply", 
+        [class.selected]="comment.selected",
+        [userId]="comment.user_id"
+    )
     .comment-input-wrapper([ngClass]="[ replyRef ? 'replyCommentHandler' : '', comment.type + '' ]")
         //- Swap between different comment types
         emoji-comment(
@@ -84,20 +90,14 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
         [class.saved]="justSaved",
         [class.active]="comment.active",
         [class.readonly]="readOnly",
-        [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
+        [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'comment-block--align-top':'' ]"
     )
         .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
             *ngIf="comment.active && !readOnly && !readingReport",
             (tap)="deactivate(comment)",
             [innerHtml]="':white_check_mark:' | emojione"
         )
-        .user-icon(
-                *ngIf="!readingReport",
-                [class.selected]="comment.selected",
-                [class.has-teacher-tag]="comment.authorIsTeacher",
-                [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '' ]"
-            )
-            span.user-icon__initials {{comment.author.substring(0,2)}}
+        user-avatar([userId]="comment.user_id", [size]="'medium'")
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'mobileBlock--reading-recap' : '' ]")
             .list-item.list-item--block.mobileTime-card(*ngIf="!readingReport")
                 | {{comment.author}}

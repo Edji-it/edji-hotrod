@@ -98,6 +98,7 @@ nav-bar(
                 *ngIf="readingPart.question",
                 (questionDelete)="deleteQuestion(i)",
                 [question]="readingPart.question",
+                [editor]="true",
                 (questionUpdate)="updateQ(readingPart.question,$event)",
                 (keyup)="contentChange($event)",
                 (mouseup)="contentChange($event)",
@@ -212,7 +213,7 @@ hero-subscribe-modal.modal-will-fade(
 //- Reading Preview Modal
 hot-reading-preview-modal(
   *ngIf="showReadingPreviewModal",
-  [reading]="selectedReading",
+  [reading]="previewReading",
   [user]="user",
   (closeModal)="showReadingPreviewModal=false",
   (createSuccess)="verifyCanShare($event)",

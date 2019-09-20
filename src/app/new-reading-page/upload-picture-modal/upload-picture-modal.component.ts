@@ -106,8 +106,8 @@ export class UploadModalComponent implements OnInit {
       .updateUser(user)
       .pipe(take(1))
       .subscribe(
-        user => {
-          if (user.media) {
+        data => {
+          if (data.user && data.user.media) {
             this.uploadedImages = user.media.images
           }
         },

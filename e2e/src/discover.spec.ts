@@ -136,7 +136,7 @@ describe('Discover Feed', () => {
       let newReadingTitle = `rp - ${new Date().valueOf()}`
       newReading.titleInput.clear()
       newReading.titleInput.sendKeys(newReadingTitle)
-      newReading.publicButton.click() // Blur title
+      newReading.privateButton.click() // Blur title
       // Hit save
       newReading.clickShareAndArchive()
       // Finalize
@@ -172,8 +172,8 @@ describe('Discover Feed', () => {
         5000,
         'reading preview never dismissed after clicking share button',
       )
-      // Hit save
-      newReading.clickShareAndArchive()
+      // Confirm archiving
+      newReading.confirmArchive()
       // Finalize
       newReading.createGroupButtonClick()
       // Wait for navigation to hit project page after save

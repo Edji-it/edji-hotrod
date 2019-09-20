@@ -7,20 +7,18 @@ import { take } from 'rxjs/operators'
 // Project Dependencies
 import {
   AuthService,
-  ProjectService,
   SocketService,
-  PowerToggle,
   ReadingService,
   SecretSwitchesService,
   UtilToolService,
   Secrets,
   AcademyState,
   Academy,
-  MessageService,
   MessageToast,
 } from '../../_services'
 import { User, Project } from '../datatypes'
 import { AutosaveState } from '../../new-reading-page'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'nav-bar',
@@ -120,7 +118,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     private _socket: SocketService,
     public _router: Router,
     private angulartics: Angulartics2,
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _readings: ReadingService,
     public _util: UtilToolService,
     private _secret: SecretSwitchesService,
@@ -192,7 +190,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     if (this.showProjectInfo) {
       this.subscriptions.push(
         // Subscribe to current Project data
-        this._projects.currentProject.subscribe(
+        this.projectStore.currentProject.subscribe(
           project => {
             this.currentProject = project
             this.createdDate = new Date(project.createdAt).toDateString()
@@ -297,7 +295,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   //   // we only want to check the validate route if there is a custom code - otherwise let it go through
   //   if (shareObj.customCode) {
   //     // does the project exist? this call will actually fail if it does
-  //     this._projects.validateProjectCode(shareObj.customCode)
+  //     this.projectStore.validateProjectCode(shareObj.customCode)
   //     .pipe(take(1))
   //     .subscribe((res) => {
   //       // this is actually an error in this case! lol. If the code IS valid, we want them NOT to try and make a reading
@@ -330,7 +328,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   private joinSession(code: string): void {
     // console.log("first call", code);
     this.joinLoading = true
-    this._projects.validateProjectCode(code).subscribe(
+    this.projectStore.join(code).subscribe(
       data => {
         console.log('data', data)
         this.joinLoading = false
@@ -461,7 +459,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // set heat vision to loading
     this.sliderBtnLoading.heat = true
 
-    this._projects
+    this.projectStore
       .update({ heat_vision: toggleTo }, this.currentProject._id)
       .pipe(take(1))
       .subscribe(project => {

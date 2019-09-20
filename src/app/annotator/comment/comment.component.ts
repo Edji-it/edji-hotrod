@@ -2,10 +2,10 @@ import { Subscription } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, CommentService, ProjectService, SocketService } from '../../_services'
+import { AuthService, CommentService, SocketService } from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
-import { ActivatedRoute } from '@angular/router'
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'edji-comment',
@@ -76,12 +76,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Output() toggleCommentPane = new EventEmitter<boolean>()
 
   constructor(
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _comments: CommentService,
     private _auth: AuthService,
     public el: ElementRef,
     private _socket: SocketService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Set initial values if passed
@@ -104,7 +104,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
     // Subscribe to updates to the reply reference object
     this.subscriptions.push(
-      this._projects.repliesById.subscribe(
+      this.projectStore.repliesById.subscribe(
         repliesById => {
           this.repliesById = repliesById
         },
@@ -116,7 +116,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
     // Subscribe to updates from that project once we're subscribed to the reading
     this.subscriptions.push(
-      this._projects.currentProject.subscribe(
+      this.projectStore.currentProject.subscribe(
         project => {
           if (project) {
             this.project = project
@@ -143,7 +143,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
     // Change mobile icon state if pane closes
     this.subscriptions.push(
-      this._projects.commentPaneState.subscribe(paneState => {
+      this.projectStore.commentPaneState.subscribe(paneState => {
         // We can ONLY use this subscription to CLEAR the indicatesPane var to *false*
         if (paneState === false) {
           this.indicatesPane = false
@@ -152,7 +152,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     )
 
     this.subscriptions.push(
-      this._projects.commentByPos.subscribe(commentsByPos => {
+      this.projectStore.commentByPos.subscribe(commentsByPos => {
         this.commentsByPos = commentsByPos
         this.updateLineCount()
       }),
@@ -278,12 +278,12 @@ export class CommentComponent implements OnInit, OnDestroy {
       if (this.commentContext === 'reply') {
         // If this is a reply comment
         this.isLoading = true
-        this._projects.addCommentToReplies(this.comment)
+        this.projectStore.addCommentToReplies(this.comment)
       } else {
         // If it is a regular comment.
         this.isLoading = true
       } // else
-      this._projects
+      this.projectStore
         .saveComment(this.comment)
         .then(comment => {
           this.isLoading = false
@@ -309,14 +309,14 @@ export class CommentComponent implements OnInit, OnDestroy {
         })
     } else {
       this.isLoading = true
-      this._projects.addAnswerToAnswers(this.comment)
-      this._projects
+      this.projectStore.addAnswerToAnswers(this.comment)
+      this.projectStore
         .saveAnswer(this.comment)
         .then(answer => {
           this.isLoading = false
 
           this.commentUpdated.emit()
-          this._projects.addAnswerToAnswers(answer)
+          this.projectStore.addAnswerToAnswers(answer)
 
           this.justSaved = true
           setTimeout(() => {
@@ -333,8 +333,8 @@ export class CommentComponent implements OnInit, OnDestroy {
   // Deletes comment via Project service, which updates the local Project object
   public deleteComment(comment: any): void {
     if (this.commentContext !== 'answer') {
-      this._projects
-        .deleteComment(comment)
+      this.projectStore
+        .removeComment(comment)
         .then(data => {
           // Tell Annotator to destroy this comment element!
           this.showDeleteModal = false
@@ -344,10 +344,10 @@ export class CommentComponent implements OnInit, OnDestroy {
           console.error(error)
         })
     } else {
-      this._projects
-        .deleteAnswer(comment)
+      this.projectStore
+        .removeAnswer(comment)
         .then(data => {
-          this._projects.removeAnswerFromAnswers(this.comment)
+          this.projectStore.removeAnswerFromAnswers(this.comment)
           this.showDeleteModal = false
         })
         .catch(error => {
@@ -416,7 +416,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     // When displaying in comment pane, comment MUST have line y
     if (!this.comment.lineY) {
       this.setLineY()
-      this._projects.buildCommentsByPos()
+      this.projectStore.buildCommentsByPos()
     }
     if (!this.commentPaneActive) {
       if (comment.selected) {

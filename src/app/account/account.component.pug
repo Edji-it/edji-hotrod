@@ -4,15 +4,11 @@ nav-bar([showDashboardOptions]="true")
   .column.col-sm-3
     h1.profile-title Profile
     //- Profile Pic block
-    .profile-pic-container
-      //- User Profile Pic
-      span.profile-pic
-        //- Avatar picture
-        img#avatarImg.profile-pic(*ngIf="getAvatar()", [src]="getAvatar()")
-        span#userInitials(*ngIf="!getAvatar()") {{currentUser.fullname | userinitials}}
+    .profile-pic-container.text-center
+      user-avatar([userDetails]="currentUser", [size]="'profile'")
       //- Edit Profile Picture Button 
       //-   - Opens UploadProfPicModal -->
-      //-   THIS IS NOT READY TO EXPOSE
+      //-  @todo enabling avatars
       //- button#editAvatarBtn.btn.btn-sm.edit-btn(*ngIf="currentUser.hero_status", type="button", (click)="showUploadProfPicModal= true;") Edit
   //- Text Column
   .column.col-sm-9

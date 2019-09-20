@@ -6,6 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 import { BaseAnswerComponent } from '../base-answer.component'
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from '../../datatypes'
 import { CommentService, AuthService, ProjectService, ReadingService } from '../../../_services'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'open-ended-answers',
@@ -32,16 +33,16 @@ export class OpenEndedAnswersComponent extends BaseAnswerComponent {
 
   constructor(
     // This needs to be here because of inheritance from BaseAnswerComponent.
-    private projects: ProjectService,
+    private projectStore: ProjectStore,
     private readings: ReadingService,
     private auth: AuthService,
     private comments: CommentService,
     private angulartics: Angulartics2,
   ) {
-    super(projects, readings, auth, comments, angulartics)
+    super(projectStore, readings, auth, comments, angulartics)
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   // Tell the server we've got ourselves a new answer, aka a new EdjiComment
   public outputAnswer(type: string): void {

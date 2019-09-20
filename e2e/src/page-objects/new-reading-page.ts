@@ -91,6 +91,7 @@ export class NewReading implements PageObjectInterface {
   } // getPage() : void
 
   public addNewReading(): void {
+    browser.wait(this.EC.elementToBeClickable(element(by.css('[data-test="navShareReadingBtn"]'))), 3000, 'share button in nav was not clickable when creating new reading')
     // Click the share button for new reading no matter if it is on desktop or mobile
     this.addButton.isPresent().then(result => {
       if (result) {
@@ -226,12 +227,12 @@ export class NewReading implements PageObjectInterface {
     })
   }
 
-  public clickShareAndArchive(): void {
-    // Click share button
-    this.addNewReading()
+  public confirmArchive(): void {
     // Wait for a modal to appear (either archive or create group)
     let modal = element(by.css('.modal.show'))
     browser.wait(this.EC.visibilityOf(modal), 5000, 'archive or group modal did not show after clicking Share')
+    // sleep() reason - Allow for modal fade-in
+    browser.sleep(400)
     // Click the confirm archive reading button for new reading
     this.confirmArchiveButton.isPresent().then(result => {
       if (result) {
@@ -245,6 +246,13 @@ export class NewReading implements PageObjectInterface {
         })
       }
     })
+  }
+
+  public clickShareAndArchive(): void {
+    // Click share button
+    this.addNewReading()
+    // Confirm archive, if applicable
+    this.confirmArchive()
   }
 
   public createGroupButtonClick(): void {

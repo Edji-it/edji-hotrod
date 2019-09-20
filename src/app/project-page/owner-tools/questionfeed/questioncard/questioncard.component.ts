@@ -1,7 +1,10 @@
 import { Subscription } from 'rxjs'
-import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, AfterViewInit } from '@angular/core'
-import { CommentService, ProjectService, ReadingService, SocketService } from '../../../../_services'
+
+// Internal
+import { EdjiComment, Reading } from '../../../../shared/datatypes'
+import { ReadingService, SocketService } from '../../../../_services'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'hot-questioncard',
@@ -18,11 +21,11 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
   public answersById: any = {}
 
   constructor(
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     public el: ElementRef,
     private _readings: ReadingService,
     private _socket: SocketService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -57,7 +60,7 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
 
     // Subscribe to updates to the answer reference object
     this.subscriptions.push(
-      this._projects.answersById.subscribe(
+      this.projectStore.answersById.subscribe(
         answersById => {
           this.answersById = answersById
         },

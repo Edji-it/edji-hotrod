@@ -107,7 +107,7 @@ describe('Project Page as an owner using reading report: ', () => {
       'send evaluation button never became clickable',
     )
     // Scroll to button at bottom of form
-    browser.executeScript('document.querySelector("#sendEvalBtn").scrollIntoView()').then(function() {
+    browser.executeScript('document.querySelector("#sendEvalBtn").scrollIntoView()').then(function () {
       // Send Feedback
       element(by.id('sendEvalBtn')).click()
     })
@@ -126,7 +126,7 @@ describe('Project Page as an owner using reading report: ', () => {
   })
 
   it('should verify you can open the dropdown for student selection and change the student', () => {
-    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function() {
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
       // Select first student
       browser.wait(EC.elementToBeClickable(recapStudentDropdown), 5000, 'recap student selector never became clickable')
       recapStudentDropdown.click()
@@ -155,18 +155,11 @@ describe('Project Page as an owner using reading report: ', () => {
     browser.wait(EC.elementToBeClickable(secondStudent), 3000, 'never saw second student in the dropdown')
     secondStudent.click()
     // verify the audio comment count is 0 for the second student (Josh)
-    element
-      .all(by.css('.count-block.count-block__audio'))
-      .count()
-      .then(count => {
-        expect(count == 0).toBeTruthy(
-          'Audio count value on the reading report was supposed to change on student selection change',
-        )
-      })
+    browser.wait(EC.invisibilityOf(element(by.css('.count-block.count-block__audio'))), 3000, 'student without audio comments still showed audio comment bar')
   })
 
   it('should close the report and make sure it closes', () => {
-    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function() {
+    browser.executeScript('document.querySelector(".reading-recap").scrollTo(0,0);').then(function () {
       // Close Reading Report
       browser.wait(EC.elementToBeClickable(element(by.id('closeReadingRecap'))), 3000, 'never saw close button')
       element(by.id('closeReadingRecap')).click()

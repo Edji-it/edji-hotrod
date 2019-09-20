@@ -417,20 +417,40 @@ tr.selectable {
 
 .form-check-btn {
   float: left;
-  margin-right: 5px;
-  margin-bottom: 5px;
-  border: 2px solid $light-gray;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border: 1px solid $midGray;
   border-radius: 16px;
-  overflow: hidden;
   cursor: pointer;
+  background: #fff;
+  // allow use of tooltip
+  position: relative;
+  overflow: visible; 
 
-  & .emoji {
-    filter: grayscale(100%);
+  &:hover, &:focus {
+    border-color: rgba($green, 0.5);
+    box-shadow: none;
+    // transform: translateY(1px);
+    // box-shadow: 5px 0px 0px rgba($green, 0.5);
+  }
+
+  & .emoji, & .emojioneemoji {
+    margin-right: 0.5em;
+    margin-top: -0.2em;
+    filter: grayscale(50%);
+    opacity: 0.5;
+    background: #fff;
+    border-radius: 50%;
+    border: 1px solid $dark-gray;
+    padding: 7px;
+    transition: all ease-out 0.2s;
   }
 
   &.form-check-label {
     padding: 0px 15px;
-    color: $gray;
+    padding-right: calc(15px + 0.25em);
+    color: $dark-gray;
+    font-weight: 400;
     line-height: 32px;
   }
 
@@ -441,12 +461,60 @@ tr.selectable {
   }
 
   &.active {
+    border-style: solid;
+    border-color: $green;
+    background: $btnActionBg;
+    padding-right: 15px;
+    font-weight: 600;
+
     &.form-check-label {
       color: #000;
     }
-    & .emoji {
+    & .emoji,  & .emojioneemoji {
       filter: none;
+      opacity: 1;
+      border-radius: 0px;
+      border: 0px solid transparent;
+      background: transparent;
+      padding: 0px;
     }
-    border-color: $green;
+  }
+}
+
+.form-check-link {
+  float: left;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #fff;
+
+  &.form-check-label {
+    font-weight: 400;
+    padding: 0px 7.5px;
+    color: $medium-gray;
+    line-height: 32px;
+  }
+
+  text-decoration: underline;
+}
+
+// For using form on non-white background
+.form-block {
+  color: #000;
+  background: #fff;
+  padding: $base-pad;
+  border-radius: 4px; // 1/2 of modal border radius
+  margin-top: $base-pad;
+  margin-bottom: $base-pad;
+  
+  & .form-group {
+    margin-bottom: 0rem;
+  }
+
+  & .alert {
+    margin-bottom: $base-pad;
   }
 }

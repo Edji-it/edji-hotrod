@@ -65,14 +65,6 @@ export class AccountComponent implements OnInit, OnDestroy {
     return result
   }
 
-  // Accessor for user.avatar
-  // Get the avatar from the user object
-  public getAvatar(): string {
-    let avatar
-    avatar = this.currentUser.avatar
-    return avatar
-  }
-
   public trackHeroClick(): void {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({

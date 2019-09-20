@@ -82,13 +82,16 @@
     //- User Menu: Logged in Actions
     .outer-circle--large.float-right(*ngIf="user.isLoggedIn", [class.active]="showAvatarDropdown")
       .avatar__wrap
-        #avatarActionIcon.user-icon--large.pointer.float-right((click)="showAvatarDropdown=!showAvatarDropdown", (clickOutside)="showAvatarDropdown=false")
-          span.user-icon__initials {{user.fullname.substring(0,2)}}
-          span.hero-tag.avatar-bottom(*ngIf="user.hero_status", title="Hero Powers Activated") H
+        user-avatar#avatarActionIcon.pointer.float-right(
+          [userDetails]="user",
+          [size]="'large'",
+          (click)="showAvatarDropdown=!showAvatarDropdown", 
+          (clickOutside)="showAvatarDropdown=false"
+        )
         .avatar__drop-down.list-group(*ngIf="showAvatarDropdown", [class.visible]="showAvatarDropdown")
           .arrow
           //- Account
-          button#accountButton.list-group-item.list-group-item-action(type="button", (click)="openAccount()") {{ user.fullname }}
+          button#accountButton.list-group-item.list-group-item-action(*ngIf="user.fullname", type="button", (click)="openAccount()") {{ user.fullname }}
             span.list-icon--right([innerHtml]="':gear:' | emojione")
           //- Refer
           button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()")
@@ -167,11 +170,11 @@
     //- New Reading actions
     .nav__btn-wrap(*ngIf="canPublish")
       //- Share button: Desktop
-      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down((click)="this.shareAction.emit()", [class.active]="showShareTooltip")
+      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down((click)="this.shareAction.emit()", [class.active]="showShareTooltip", data-test="navShareReadingBtn")
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
       //- Share button: Mobile
-      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.shareAction.emit()", [class.active]="showShareTooltip")
+      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.shareAction.emit()", [class.active]="showShareTooltip", data-test="navShareReadingBtn")
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
     //- Reading Preview
@@ -210,6 +213,7 @@
         .input-group-append
           button#buttonJoinProject.btn.btn-primary(
             [class.loading]="joinLoading",
+            [disabled]="!projectCode",
             type="button",
             (click)="joinSession(projectCode)",
             name="Join",

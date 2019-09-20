@@ -143,8 +143,15 @@ export class SearchPage implements OnInit {
         if (params.from) {
           this.searchParams.first = parseInt(params.from)
         }
-        this.loadFeed()
-        if (params.preview) {
+        /**
+         * Load results
+         * - Not when opening/closing preview if results are already loaded
+         */
+        if (!(this.selectedReading || params.preview) || !this.readings[0]) {
+          this.loadFeed()
+        }
+        // Load Reading Preview
+        if (params.preview && (!this.selectedReading || this.selectedReading._id !== params.preview)) {
           try {
             // the link we generate to open the modal direct only contains a reading _id so we need to get that reading
             this.selectedReading = await this._readings.get(params.preview).toPromise()
@@ -152,6 +159,9 @@ export class SearchPage implements OnInit {
           } catch (err) {
             console.error(err)
           }
+        } else {
+          // Clear selected reading (acts as flag for opening/closing preview)
+          this.selectedReading = undefined
         }
       }),
       this._readings.currentUserReadings.subscribe(
@@ -299,8 +309,12 @@ export class SearchPage implements OnInit {
    * @param reading is the reading we want to open the preview modal on
    */
   public openReadingPreview(reading: Reading): void {
-    this.showReadingPreviewModal = true
-    this.selectedReading = reading
+    // Display logic triggered in route subscription
+    this.router.navigate(['./'], {
+      queryParams: { preview: reading._id },
+      queryParamsHandling: 'merge',
+      relativeTo: this.route
+    })
   }
 
   /**
@@ -383,13 +397,19 @@ export class SearchPage implements OnInit {
     if (login) {
       this.loginParams.preview = this.selectedReading._id
       this.showLoginModal = true
+    } else {
+      this.router.navigate(['./'], {
+        queryParams: { preview: null },
+        queryParamsHandling: 'merge',
+        relativeTo: this.route
+      })
     }
   }
 
   public closeLoginModal(context?: string): void {
     this.showLoginModal = false
     if (context === 'preview') {
-      this.router.navigate(['/discover' + (this.isSearching ? '/search' : '')], { queryParams: this.loginParams })
+      this.showReadingPreviewModal = true
     }
   }
 }

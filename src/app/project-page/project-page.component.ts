@@ -2,10 +2,12 @@ import { Title } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
-
-import { AuthService, ProjectService, ReadingService, SocketService, AudioService, AcademyService } from '../_services'
-import { Project, Reading, User } from './../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
+
+// Internal
+import { AuthService, ReadingService, SocketService, AudioService, AcademyService } from '../_services'
+import { Project, Reading, User } from './../shared/datatypes'
+import { ProjectStore } from '../_store'
 
 @Component({
   // moduleId: module.id,
@@ -40,14 +42,14 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
   constructor(
     private _academy: AcademyService,
     private _router: Router,
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _socket: SocketService,
     private _auth: AuthService,
     private route: ActivatedRoute,
     private _readings: ReadingService,
     private _title: Title,
     private angulartics: Angulartics2,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // this makes the window always render scrolled to the top
@@ -73,7 +75,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     )
 
     // Set current project AND subscribe to updates from that project
-    this._projects.setCurrentProject(idParam).subscribe(
+    this.projectStore.setCurrentProject(idParam).subscribe(
       project => {
         if (project) {
           // If the reading is archived, we'll show them a banner or modal
@@ -92,7 +94,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
           // Join socket + start reading timer
           if (this.user._id && this.project._id && !this.joinedRoom) {
             this.joinRoom(this.user, this.project)
-            this.addToLeaderboard()
+            this.projectStore.addUserToProject(this.project._id)
           }
 
           if (this.project.reading_id && this.project.reading_id['_id']) {
@@ -147,36 +149,13 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     // Start Reading Timer
     this._academy.startReadingTimer(user, project)
     // this will set the user's status on the leaderboard
-    this._projects.commentStats.userStatus(this.user, 'active')
+    this.projectStore.commentStats.userStatus(this.user, 'active')
     if (this.user._id !== this.project.teacher_id) {
       // emit the socket back to the teacher
       this._socket.groupUpdateEvent({
         type: 'updateUserStatus',
         status: 'active',
         user: this.user,
-      })
-    }
-  }
-
-  private addToLeaderboard() {
-    // if they are not a teacher, then send an update to sockets
-    if (this.user._id !== this.project.teacher_id) {
-      // our socket event takes a bit of user information to setup the event
-      let currentUser = this.user
-      let username = ''
-      let userType = 'temp'
-      if (currentUser.type !== 'temp') {
-        username = currentUser.username
-        userType = 'registered'
-      }
-
-      // fire the socket event so the teacher knows we just got another student
-      this._socket.groupUpdateEvent({
-        type: 'refreshLeaderboard',
-        _id: currentUser._id,
-        fullname: currentUser.fullname,
-        username: username,
-        userType: userType,
       })
     }
   }

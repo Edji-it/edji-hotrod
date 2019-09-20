@@ -4,8 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
 import { CommentStats, Reading, User, Project, PublicUser } from './../../../shared/datatypes'
-import { ProjectService, ReadingService, AuthService } from '../../../_services'
+import { ReadingService, AuthService } from '../../../_services'
 import { CommentFilter } from '../../../_services/project.service'
+import { ProjectStore } from 'src/app/_store';
 
 @Component({
   selector: 'hot-leaderboard',
@@ -56,7 +57,7 @@ export class LeaderboardComponent implements OnInit {
 
   constructor(
     private _readings: ReadingService,
-    private _projects: ProjectService,
+    private projectStore: ProjectStore,
     private _auth: AuthService,
     private _route: ActivatedRoute,
     private router: Router,
@@ -78,7 +79,7 @@ export class LeaderboardComponent implements OnInit {
           },
         ),
         // Subscribe to updates to the answer reference object
-        this._projects.answersById.subscribe(
+        this.projectStore.answersById.subscribe(
           answersById => {
             this.answersById = answersById
           },
@@ -87,11 +88,11 @@ export class LeaderboardComponent implements OnInit {
           },
         ),
         // Subscribe to updates to the project
-        this._projects.currentProject.subscribe(project => {
+        this.projectStore.currentProject.subscribe(project => {
           this.currentProject = project
         }),
         // Get Updates about applied comment filters so we can show the user
-        this._projects.filterUpdates.subscribe(filter => {
+        this.projectStore.filterUpdates.subscribe(filter => {
           this.appliedFilter = filter
 
           if (this.commentStats.stats.userStats) {
@@ -120,9 +121,9 @@ export class LeaderboardComponent implements OnInit {
     this.studentSettingsIndex = -1
     // Toggle filter
     if (!this.isStudentFiltered(student)) {
-      this._projects.filterByUser(student)
+      this.projectStore.filterByUser(student)
     } else {
-      this._projects.clearFilters()
+      this.projectStore.clearFilters()
     }
   }
 
@@ -160,7 +161,7 @@ export class LeaderboardComponent implements OnInit {
    * @description clears any applied filters via project service
    */
   public clearFilter(): void {
-    this._projects.clearFilters()
+    this.projectStore.clearFilters()
   }
 
   /**

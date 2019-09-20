@@ -1,21 +1,21 @@
 #top
 nav-bar
 .container-fluid
-  .row.navy-gradient.has-sparks
+  .row.navy-gradient.has-sparks(style="min-height: 850px;")
     .sparks
     .col-sm-2.col-md-3
-    .col-sm-8.col-md-6.col-pad.on-dark
+    .col-sm-8.col-md-6.col-pad
       h1.center.on-dark Register for Edji
       #msgReferral.alert.alert-success(
         *ngIf="successObject.referral", 
         [innerHtml]=" '<strong>Congratulations!</strong> :tada: <br>' + referringUserName + ' thought you would really like Edji. Sign up and make your first reading to receive 20% off Hero today!' | emojione"
       )
       #msgConversion.alert.alert-info(*ngIf="tempUserId")
-        b To use all of Edji, create a full account!
+        b To use all of Edji, create a full account
         | Don't worry, you'll keep the readings you've joined and comments you've made so far.
+        p.mt-1.mb-0(*ngIf="readingToAdd") Your reading will be ready to edit after you sign up!
+        p.mt-1.mb-0(*ngIf="projectToAdd") Your reading will be on the dashboard after you sign up!
       hot-register-form(
-        [readingToAdd]="readingToAdd",
-        [projectToAdd]="projectToAdd",
         [tempUserId]="tempUserId",
         [referralId]="referralId"
       )

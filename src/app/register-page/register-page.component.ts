@@ -61,7 +61,7 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private _title: Title,
     private _locker: LockerService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     // This makes the window always render scrolled to the top

@@ -5,13 +5,14 @@ import { map, take, catchError } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 // Project Dependencies
-import { User } from '../shared/datatypes'
+import { User, PublicUser } from '../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { LockerService } from '../_services/locker.service'
 
 import { environment } from '../../environments/environment'
 import { AcademyService } from './academy.service'
+import { generateInitialsFromName } from '../_store/user.decorators';
 const { version: appVersion } = require('../../../package.json')
 
 declare var gtag: any
@@ -141,17 +142,18 @@ export class AuthService implements CanActivate {
     user.isLoggedIn = true
     // Set convenience "isStudent" flag
     // + Default guest/temp to student flag
-    if (
-      user.type === 'temp' ||
-      (user.identities &&
-        user.identities.includes('student') &&
-        !['teacher', 'administrator'].some(id => user.identities.includes(id))) // checks if they're anything in the array
-    ) {
-      user.isStudent = true
-    }
+    let studentId = user.identities && user.identities.includes('student')
+    let notSchoolStaff = studentId && !['teacher', 'administrator', 'coach'].some(id => user.identities.includes(id))
+    user.isStudent = user.type === 'temp' || (studentId && notSchoolStaff)
+    // Determine if user has completed required profile fields
+    user.profileIncomplete = (user.type !== 'temp' && (!user.fullname || !user.identities || user.identities.length < 1))
     // Determine if user is an Academy Admin
     if (user && user.license_ids && user.license_ids[0]) {
       this.fetchAcademies(user)
+    }
+    // If user does not have initials, set them
+    if (user && !user.initials && user.fullname) {
+      user.initials = generateInitialsFromName(user.fullname)
     }
     //  Store user object
     this.currentUserSource.next(user)
@@ -279,6 +281,14 @@ export class AuthService implements CanActivate {
     return user
   }
 
+  /**
+   * Return public version of current user
+   */
+  public getPublicUser(): PublicUser {
+    let user = this.getUser()
+    return (({ _id, type, username, fullname, initials, avatar }) => ({ _id, type, username, fullname, initials, avatar }))(user)
+  }
+
   public getCurrentUser(): Observable<User> {
     return this.currentUser
   }
@@ -397,7 +407,7 @@ export class AuthService implements CanActivate {
    * - Cannot be passed password
    * - NOTE: Prevents user from being outright replaced, and merges instead of overwrites.
    */
-  public updateUser(updatedUser: any): Observable<any> {
+  public updateUser(updatedUser: any): Observable<{ user?: User }> {
     return new Observable(observer => {
       //observer.next(true)
       // Before we update the user, make sure we have the latest copy
@@ -406,7 +416,6 @@ export class AuthService implements CanActivate {
         .subscribe(
           currentUser => {
             let mergedUser = Object.assign({}, currentUser)
-
             // Loop through and merge arrays
             let propsToCheck = ['prefs', 'media']
             let childPropsToOverwrite = ['recentEmoji']
@@ -475,8 +484,8 @@ export class AuthService implements CanActivate {
               )
               .toPromise()
               .then(
-                user => {
-                  observer.next(user)
+                data => {
+                  observer.next(data)
                 },
                 error => {
                   observer.error(error)
@@ -704,12 +713,12 @@ export class AuthService implements CanActivate {
 
     return this._http.post<any>(
       this.baseUrl +
-        '/api/v1/users/tokens/' +
-        resetObject.type +
-        '/' +
-        resetObject.token +
-        '/?user_id=' +
-        resetObject.userId,
+      '/api/v1/users/tokens/' +
+      resetObject.type +
+      '/' +
+      resetObject.token +
+      '/?user_id=' +
+      resetObject.userId,
       { [resetObject.type]: resetObject.newValue },
       {
         headers: newHeaders,
@@ -941,7 +950,7 @@ export class AuthService implements CanActivate {
    * @param student_ids array of student ids
    * @param temp_ids array of temp user ids
    */
-  public getUserInfoByProject(students_ids?: any[], temp_ids?: any[]): Observable<any> {
+  public getPublicUsers(students_ids?: any[], temp_ids?: any[]): Observable<any> {
     let search_params: string = ''
     // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
     if (students_ids.length > 0 && students_ids[0].hasOwnProperty('_id')) {

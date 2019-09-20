@@ -1,7 +1,9 @@
 @import './base/variables';
 
 $defaultAvatarSize: 28px;
+$profileAvatarSize: 150px;
 $largeAvatarSize: 50px;
+$mediumAvatarSize: 36px;
 
 @keyframes border-pulsate {
   0% {
@@ -28,11 +30,15 @@ $largeAvatarSize: 50px;
   border-radius: 50%;
   background: #cfcfcf;
   text-align: center;
-  float: left;
-  margin-right: 10px;
+  display: inline-block;
+  margin-right: 8px;
   // Center on line offset
-  margin-top: -4px;
+  // margin-top: -4px;
+  vertical-align: middle;
   cursor: default;
+  // Needed for images
+  overflow: hidden;
+  object-fit: cover; 
 
   & span {
     font-family: 'Open Sans';
@@ -52,6 +58,20 @@ $largeAvatarSize: 50px;
     transition: border-color ease 1s;
     animation: border-pulsate 2s ease-in-out 4;
   }
+  &--medium {
+    @extend .user-icon;
+    height: $mediumAvatarSize;
+    width: $mediumAvatarSize;
+    margin-right: 10px;
+    line-height: $mediumAvatarSize - 8px;
+    overflow: hidden;
+    position: relative;
+
+    & span {
+      line-height: $mediumAvatarSize;
+      font-size: 16px;
+    }
+  }
   &--large {
     @extend .user-icon;
     height: $largeAvatarSize;
@@ -60,13 +80,26 @@ $largeAvatarSize: 50px;
     overflow: hidden;
     position: relative;
     & span {
-      font-size: 20px;
+      font-size: 21px;
+    }
+  }
+  &--profile {
+    @extend .user-icon;
+    height: $profileAvatarSize;
+    width: $profileAvatarSize;
+    line-height: $profileAvatarSize - 8px;
+    overflow: hidden;
+    position: relative;
+    margin-right: 0px;
+    & span {
+      font-weight: 400;
+      font-size: 70px;
     }
   }
   &.nav-avatar {
     margin-top: 0.5em;
   }
-  &.pointer {
+  &.pointer, .pointer > & {
     cursor: pointer;
   }
   &__initials,
@@ -74,6 +107,8 @@ $largeAvatarSize: 50px;
     // Text Style
     font-family: 'Open Sans';
     font-weight: 500;
+    font-style: normal;
+    text-decoration: none;
     color: #fff;
     font-size: 12px;
     text-transform: uppercase;
@@ -90,8 +125,23 @@ $largeAvatarSize: 50px;
     content: '';
     color: #cdcdcd !important;
   }
-  // Classes for the comment avatars with tooltips:
-  & .tooltipbody {
+}
+
+.user-icon__wrap {
+  // Using the wrap assumes the icon is being used out of text flow
+  & .user-icon {
+    margin-right: 0px;
+    border: 1px solid #fff; // allows clean overlapping of icons
+    cursor: pointer;
+
+    &:hover {
+      border-color: $selectedOrange;
+    }
+  }
+
+   // Classes for the comment avatars with tooltips:
+   & .tooltipbody {
+    font-family: 'Open Sans', Arial;
     visibility: hidden;
     width: 160px;
     background-color: #fff;
@@ -101,8 +151,8 @@ $largeAvatarSize: 50px;
     padding: 7px;
     position: absolute;
     z-index: 1;
-    bottom: 168%;
-    left: -67px;
+    bottom: 140%;
+    left: -64px;
     opacity: 0;
     transition: opacity 0.4s;
     font-size: 9px;
@@ -122,9 +172,10 @@ $largeAvatarSize: 50px;
   & .tooltipemoji {
     font-size: 16px;
     display: inherit;
+    margin-top: 6px;
   }
-  & .tooltiptext {
-    margin-top: 4px;
+  & .tooltiptext, & .tooltipblank {
+    margin-top: 6px;
     color: #000;
     text-align: left;
     font-size: 10px;
@@ -135,6 +186,10 @@ $largeAvatarSize: 50px;
       font-size: 11px;
     }
   }
+  & .tooltipblank {
+    color: #cdcdcd;
+    font-style: italic;
+  }
   // If user-icon is hovered on comment avatar, display the tooltip
   &:hover .tooltipbody {
     visibility: visible;
@@ -142,17 +197,8 @@ $largeAvatarSize: 50px;
   }
 }
 
-// Mobile specific fixes for user icon
-.mobileBlock-mobile-comment {
-  &.user-icon {
-    height: 40px;
-    width: 40px;
-    margin-top: 18px;
-  }
-  &.user-icon span {
-    line-height: 40px;
-    font-size: 20px;
-  }
+.user-icon__fullname {
+  vertical-align: middle;
 }
 
 .outer-circle {
@@ -201,6 +247,7 @@ $largeAvatarSize: 50px;
   font-weight: 800;
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
   font-size: 8px;
+  font-style: normal;
   position: absolute;
   bottom: -2px;
   left: 50%;
@@ -221,6 +268,7 @@ $largeAvatarSize: 50px;
     font-weight: 800;
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     font-size: 8px;
+    font-style: normal;
     position: absolute;
     bottom: -2px;
     right: -2px;

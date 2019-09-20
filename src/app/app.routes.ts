@@ -5,7 +5,7 @@ import { AuthService, DashboardGuardService } from './_services'
 import { NewReadingPage } from './new-reading-page'
 import { ProjectPageComponent } from './project-page'
 import { HomeComponent } from './home'
-import { RegisterPageComponent } from './register-page'
+import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
 import { AccountComponent } from './account'
 import { DashboardComponent, CreatedDashComponent, JoinedDashComponent } from './dashboard'
 import { NoContentComponent } from './no-content'
@@ -51,6 +51,7 @@ export const ROUTES: Routes = [
   { path: 'read', redirectTo: '/dashboard/read' },
   { path: 'home', component: HomeComponent },
   { path: 'register', component: RegisterPageComponent },
+  { path: 'register/profile', component: CreateProfilePageComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent, canActivate: [AuthService] },
   { path: 'discover/legacy', component: DiscoverFeedComponent, canActivate: [AuthService] },

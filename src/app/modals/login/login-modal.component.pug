@@ -19,8 +19,8 @@
       .modal-footer(*ngIf='!guestLogin && !loginOnly')
         p Wait! I don't want to login, I just want to comment!
         div
-          button#gotoGuestLoginButton((click)='guestLogin = true') Guest Login
+          button.btn.btn-secondary#gotoGuestLoginButton((click)='guestLogin = true') Guest Login
       .modal-footer(*ngIf='!guestLogin && loginOnly')
         p I don't have an account, but want to register!
         div
-          button.btn.btn-secondary#goToRegistration((click)="router.navigate(['/register'])") Register
+          button.btn.btn-secondary#goToRegistration((click)="goToRegister()") Register
