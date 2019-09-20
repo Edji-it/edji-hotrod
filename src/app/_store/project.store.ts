@@ -188,12 +188,12 @@ export class ProjectStore {
     /**
      * Use for Project Modifications
      * - Broadcasts changes to "Selector" and "Permutation" observables
-     * @param effect Change being made
+     * @param action Change being made
      * @param project Updated project value
      */
-    private projectStoreDispatch(effect: ProjectAction, project): void {
-        // Handle different effect types
-        switch (effect) {
+    private projectStoreDispatch(action: ProjectAction, project): void {
+        // Handle different action types
+        switch (action) {
             case ProjectAction.ClearSuccess:
                 this.joinedUsersSource.next([])
                 this.currentProjectSource.next(project)
