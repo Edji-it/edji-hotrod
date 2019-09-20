@@ -22,13 +22,14 @@ form.form-block#registerForm([formGroup]="registerForm", (ngSubmit)="register(re
         //- <!--<div id="msgPasswordConfirmRequired" *ngIf="registerForm.controls['passwordConfirm'].hasError('required') && registerForm.controls['passwordConfirm'].dirty" class="alert alert-info">After your passwords match, you can Edji!</div>-->
         #msgMismatch.alert.alert-info(*ngIf="registerForm.hasError('mismatch')") After your passwords match, you can Edji!
     .form-group
-        p.float-left.mr-2.mt-1([innerHtml]="':ballot_box_with_check:' | emojione")
-        p#termsText.label.text-muted
-            | By registering for Edji, you agree to our 
-            a#registerPrivacyLink.link(href="http://guide.edji.it/index.php/privacy-terms/", target="_blank") Privacy Policy
-            =' and ' 
-            a#registerTermsLink.link(href="http://guide.edji.it/index.php/terms-of-use/", target="_blank") Terms of Use
-            | .
+        .custom-control.custom-checkbox.terms-box
+            input.custom-control-input#termsCheck(type="checkbox", [formControl]="registerForm.controls['termsAgree']")
+            label#termsText.custom-control-label.text-muted(for="termsCheck") 
+                | By registering for Edji, you agree to our 
+                a#registerPrivacyLink.link(href="http://guide.edji.it/index.php/privacy-terms/", target="_blank") Privacy Policy
+                =' and ' 
+                a#registerTermsLink.link(href="http://guide.edji.it/index.php/terms-of-use/", target="_blank") Terms of Use
+                | .
 
     //- <!-- Error Messages -->
     #msgDuplicateUsername.alert.alert-info(*ngIf="errorObject.duplicateUsername", [innerHtml]=" '<strong>Wow!</strong> :grin: Somebody else liked your username so much that they already took it.' | emojione")

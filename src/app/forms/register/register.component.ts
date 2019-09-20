@@ -62,6 +62,7 @@ export class RegisterFormComponent implements OnInit {
         email: [null, [Validators.required, this.emailValidator]],
         password: [null, [Validators.required, Validators.minLength(6)]],
         passwordConfirm: [null, Validators.required],
+        termsAgree: [true, Validators.requiredTrue]
       },
       { validator: this.passwordsEqual },
     )
