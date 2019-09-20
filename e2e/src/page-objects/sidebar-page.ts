@@ -84,6 +84,8 @@ export class Sidebar {
 
   // Click the log out button.
   public clickLogOutButton(): void {
+    // If modals left open, close them
+    this.closeModals()
     // Wait for avatar icon to be clickable
     browser.wait(
       this.EC.elementToBeClickable(this.avatarActionIcon),
