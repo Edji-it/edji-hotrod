@@ -50,7 +50,7 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
                     span([innerHTML]="':writing_hand: Student' | emojione")
                     .tooltip-wrap
                         .tooltip
-                            .tooltip-title Focused on reading and have limited sharing abilities
+                            .tooltip-title I will be mostly reading on Edji
                 //- Teacher option
                 label#typeTeacherInput.form-check-label.form-check-btn.hover--tooltip(
                     [class.active]="profileForm.controls['accountRole'].value == 'teacher'"
@@ -64,7 +64,7 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
                     span([innerHTML]="':apple: Teacher' | emojione")
                     .tooltip-wrap
                         .tooltip
-                            .tooltip-title Focused on created and managing readings
+                            .tooltip-title I will be using Edji to teach
                 //- Other Identity options
                 ng-container(*ngIf="showMoreIdentities")
                     label.form-check-label.form-check-btn(
