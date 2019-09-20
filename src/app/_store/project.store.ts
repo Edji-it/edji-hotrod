@@ -902,35 +902,43 @@ export class ProjectStore {
     private updateJoinedUsers(project: Project) {
         let studentIds = project.students_ids || []
         let tempIds = project.temp_ids || []
-        this._auth.getPublicUsers(studentIds, tempIds).subscribe(
-            userInfo => {
-                let currentProject = this.currentProjectSource.getValue()
-                userInfo = userInfo.users
-                // Ensure PublicUsers have initials
-                userInfo[0] && userInfo.forEach(user => {
-                    if (user && !user.initials && user.fullname) {
-                        user.initials = generateInitialsFromName(user.fullname)
-                    }
-                })
-                // attach the basic user information to each students_id
-                currentProject.students = currentProject.students_ids.map(obj => {
-                    return userInfo.find(el => {
-                        return el._id === obj
+        if (studentIds.length > 0 || tempIds.length > 0) {
+            this._auth.getPublicUsers(studentIds, tempIds).subscribe(
+                userInfo => {
+                    let currentProject = this.currentProjectSource.getValue()
+                    userInfo = userInfo.users
+                    // Ensure PublicUsers have initials
+                    userInfo[0] && userInfo.forEach(user => {
+                        if (user && !user.initials && user.fullname) {
+                            user.initials = generateInitialsFromName(user.fullname)
+                        }
                     })
-                })
-                // attach the basic user information to each temp_id
-                currentProject.temps = currentProject.temp_ids.map(obj => {
-                    return userInfo.find(el => {
-                        return el._id === obj
+                    // attach the basic user information to each students_id
+                    currentProject.students = currentProject.students_ids.map(obj => {
+                        return userInfo.find(el => {
+                            return el._id === obj
+                        })
                     })
-                })
-                this._commentStats.addUsersToStats(this.commentStats._stats, currentProject)
-                this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, currentProject)
-            },
-            error => {
-                console.error(error)
-            },
-        )
+                    // attach the basic user information to each temp_id
+                    currentProject.temps = currentProject.temp_ids.map(obj => {
+                        return userInfo.find(el => {
+                            return el._id === obj
+                        })
+                    })
+                    this._commentStats.addUsersToStats(this.commentStats._stats, currentProject)
+                    this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, currentProject)
+                },
+                error => {
+                    console.error(error)
+                },
+            )
+        } else {
+            // Initialize UpdateUsers
+            let currentProject = this.currentProjectSource.getValue()
+            currentProject.students = []
+            currentProject.temps = []
+            this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, currentProject)
+        }
     }
 
     /**
