@@ -11,4 +11,7 @@ nav-bar([showDashboardOptions]="true")
     [pager]="toolTipStepNo",
     (pageChange)="toolTipStepNo = $event"
   )
-hot-user-details-update([showModal]="showUserDetailsModal", (closeModal)="userDetailsAdded()")
+hot-user-details-update(
+  [showModal]="showUserDetailsModal", 
+  (closeModal)="userDetailsAdded()"
+)

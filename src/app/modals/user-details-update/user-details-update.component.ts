@@ -11,7 +11,17 @@ import { AuthService, BumblebeeService } from './../../_services'
   styleUrls: ['user-details-update.component.scss'],
 })
 export class UserDetailsUpdateModal implements OnInit {
-  @Input() showModal: boolean
+  private _showModal: boolean
+  @Input()
+  set showModal(show) {
+    if (show) {
+      this.refreshDisplayValues()
+    }
+    this._showModal = show
+  }
+  get showModal(): boolean {
+    return this._showModal
+  }
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @ViewChild('schoolInput', { static: false }) input: ElementRef
 
@@ -54,17 +64,21 @@ export class UserDetailsUpdateModal implements OnInit {
       source: [null, Validators.required],
       detail: [null]
     })
+  }
+
+  ngOnInit() {
+    this.refreshDisplayValues()
+  }
+
+  private refreshDisplayValues() {
     this.currentUser = this._auth.getUser()
     // If not teacher, display generic copy
-    if (!this.currentUser.identities.includes('teacher')) {
+    if (this.currentUser.identities && !this.currentUser.identities.includes('teacher')) {
       this.modalHeadings = {
         header: ':tada: Welcome to Edji!',
         body: 'We are happy to have you, one more question and you\'ll be on your way.'
       }
     }
-  }
-
-  ngOnInit() {
     // Check if their account was created today
     let createdDate = new Date(this.currentUser.createdAt).setHours(0, 0, 0, 0)
     let todaysDate = new Date().setHours(0, 0, 0, 0)
