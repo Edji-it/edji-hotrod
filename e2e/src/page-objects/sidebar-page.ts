@@ -104,20 +104,14 @@ export class Sidebar {
 
   // Click the log out button.
   public clickAccountButton(): void {
-    this.avatarActionIcon.isPresent().then(result => {
+    // Ensure nav menu icon is clickable
+    browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 3000, 'nav/avatar menu icon was not clickable while going to access account menu option')
+    this.avatarActionIcon.click()
+    this.accountButton.isPresent().then(result => {
       if (result) {
-        this.avatarActionIcon.isDisplayed().then(result => {
+        this.accountButton.isDisplayed().then(result => {
           if (result) {
-            this.avatarActionIcon.click()
-            this.accountButton.isPresent().then(result => {
-              if (result) {
-                this.accountButton.isDisplayed().then(result => {
-                  if (result) {
-                    this.accountButton.click()
-                  }
-                })
-              }
-            })
+            this.accountButton.click()
           }
         })
       }
@@ -126,20 +120,14 @@ export class Sidebar {
 
   // Click nav refferal button
   public clickReferralButton(): void {
-    this.avatarActionIcon.isPresent().then(result => {
+    // Ensure nav menu icon is clickable
+    browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 3000, 'nav/avatar menu icon was not clickable while going to access referral menu option')
+    this.avatarActionIcon.click()
+    this.referralButton.isPresent().then(result => {
       if (result) {
-        this.avatarActionIcon.isDisplayed().then(result => {
+        this.referralButton.isDisplayed().then(result => {
           if (result) {
-            this.avatarActionIcon.click()
-            this.referralButton.isPresent().then(result => {
-              if (result) {
-                this.referralButton.isDisplayed().then(result => {
-                  if (result) {
-                    this.referralButton.click()
-                  }
-                })
-              }
-            })
+            this.referralButton.click()
           }
         })
       }
