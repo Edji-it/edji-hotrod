@@ -232,6 +232,8 @@ export class NewReading implements PageObjectInterface {
     // Wait for a modal to appear (either archive or create group)
     let modal = element(by.css('.modal.show'))
     browser.wait(this.EC.visibilityOf(modal), 5000, 'archive or group modal did not show after clicking Share')
+    // sleep() reason - Allow for modal fade-in
+    browser.sleep(400)
     // Click the confirm archive reading button for new reading
     this.confirmArchiveButton.isPresent().then(result => {
       if (result) {
