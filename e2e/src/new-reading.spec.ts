@@ -41,6 +41,7 @@ describe('New Reading Page', () => {
   it('should add reading when all fields are filled and submitted', () => {
     const uniqueTitle = newReading.titleString
     // Enter sample Reading into form
+    newReading.titleInput.clear()
     newReading.titleInput.sendKeys(uniqueTitle)
     // Make private to avoid needing grade levels and subjecst
     newReading.privateButton.click()
@@ -115,7 +116,7 @@ describe('New Reading Page', () => {
   })
 
   describe('Reading draft', () => {
-    it('should add a reading as a draft and return to the same screen with a reading id', function() {
+    it('should add a reading as a draft and return to the same screen with a reading id', function () {
       // Should begin at New Reading page
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
@@ -148,7 +149,7 @@ describe('New Reading Page', () => {
       browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
     })
 
-    it('should create a draft, and find it on the dashboard after manually saving', function() {
+    it('should create a draft, and find it on the dashboard after manually saving', function () {
       let manualSaveTitle = 'M ' + newReading.titleString
       // Reset user to New Reading
       newReading.getPage()
@@ -188,7 +189,7 @@ describe('New Reading Page', () => {
         .click()
     })
 
-    it('should create a draft, and find it on the dashboard after letting it autosave', function() {
+    it('should create a draft, and find it on the dashboard after letting it autosave', function () {
       let autosaveTitle = 'A ' + newReading.titleString
       // Reset user to New Reading
       newReading.getPage()
@@ -228,7 +229,7 @@ describe('New Reading Page', () => {
   })
 
   describe('Preview reading formatting', () => {
-    it('should preview basic formatting, and see expected formatting', function() {
+    it('should preview basic formatting, and see expected formatting', function () {
       // Reset user to New Reading
       newReading.getPage()
       // Should begin at New Reading page

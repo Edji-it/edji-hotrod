@@ -170,11 +170,11 @@
     //- New Reading actions
     .nav__btn-wrap(*ngIf="canPublish")
       //- Share button: Desktop
-      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down((click)="this.shareAction.emit()", [class.active]="showShareTooltip")
+      button#addReadingButton.btn.btn-action.nav-bar__btn.hidden-sm-down((click)="this.shareAction.emit()", [class.active]="showShareTooltip", data-test="navShareReadingBtn")
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
       //- Share button: Mobile
-      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.shareAction.emit()", [class.active]="showShareTooltip")
+      button#addReadingButtonMobile.btn.btn-clear.nav-bar__btn.hidden-md-up((click)="this.shareAction.emit()", [class.active]="showShareTooltip", data-test="navShareReadingBtn")
         | Share
         i.icon.icon-megaphone.icon--btn-inline.mr-0
     //- Reading Preview
