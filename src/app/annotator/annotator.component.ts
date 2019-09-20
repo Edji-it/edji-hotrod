@@ -1125,6 +1125,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.projectStore.commentStats.addCommentToStats(commentPointer, 1)
+    // Re-evaluate comment line counts
+    this.projectStore.buildCommentsByPos()
   }
 
   /**
