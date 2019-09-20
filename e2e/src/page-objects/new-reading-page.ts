@@ -227,9 +227,7 @@ export class NewReading implements PageObjectInterface {
     })
   }
 
-  public clickShareAndArchive(): void {
-    // Click share button
-    this.addNewReading()
+  public confirmArchive(): void {
     // Wait for a modal to appear (either archive or create group)
     let modal = element(by.css('.modal.show'))
     browser.wait(this.EC.visibilityOf(modal), 5000, 'archive or group modal did not show after clicking Share')
@@ -248,6 +246,13 @@ export class NewReading implements PageObjectInterface {
         })
       }
     })
+  }
+
+  public clickShareAndArchive(): void {
+    // Click share button
+    this.addNewReading()
+    // Confirm archive, if applicable
+    this.confirmArchive()
   }
 
   public createGroupButtonClick(): void {
