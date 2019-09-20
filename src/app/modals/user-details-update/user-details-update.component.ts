@@ -26,14 +26,13 @@ export class UserDetailsUpdateModal implements OnInit {
   @ViewChild('schoolInput', { static: false }) input: ElementRef
 
   private currentUser: User
-  private heardFromForm: FormGroup
   private existingUser: boolean
 
-  private messages: {
+  public heardFromForm: FormGroup
+  public messages: {
     success?: boolean
     serviceError?: boolean
   } = {}
-
   public modalHeadings: {
     header: string
     body: string
@@ -91,7 +90,7 @@ export class UserDetailsUpdateModal implements OnInit {
    * Submits and closes modal on completion
    * @param form 
    */
-  private formSubmit(form: FormGroup): void {
+  public formSubmit(form: FormGroup): void {
     let detail = form.value.detail
 
     if (!detail) {
