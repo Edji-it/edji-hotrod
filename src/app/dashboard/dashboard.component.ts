@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit {
     if (!this.currentUser.isStudent && (!this.currentUser.heard_about_us || !this.currentUser.heard_about_us.source)) {
       // Check if user was created on/after September 21th (users prior to modalUpdateDate should not see modal)
       let createdDate = new Date(this.currentUser.createdAt)
-      let modalUpdateDate = new Date('20-09-2019')
+      let modalUpdateDate = new Date('2019-09-20')
       if (createdDate > modalUpdateDate) {
         this.showUserDetailsModal = true
       }
