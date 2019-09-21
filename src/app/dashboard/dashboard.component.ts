@@ -82,7 +82,12 @@ export class DashboardComponent implements OnInit {
 
     // Ask teachers "Where did you hear about us?"
     if (!this.currentUser.isStudent && (!this.currentUser.heard_about_us || !this.currentUser.heard_about_us.source)) {
-      this.showUserDetailsModal = true
+      // Check if user was created on/after September 21th (users prior to modalUpdateDate should not see modal)
+      let createdDate = new Date(this.currentUser.createdAt)
+      let modalUpdateDate = new Date('2019-09-20')
+      if (createdDate > modalUpdateDate) {
+        this.showUserDetailsModal = true
+      }
     }
 
     this.subscriptions.push(
