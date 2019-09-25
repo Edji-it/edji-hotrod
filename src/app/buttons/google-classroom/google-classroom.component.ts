@@ -18,6 +18,8 @@ export class GoogleClassroomShareButton implements AfterViewInit {
   @Input()
   instructions = ''
 
+  public labelText: string = 'Classroom'
+
   constructor() { }
 
   ngAfterViewInit() {
@@ -35,6 +37,6 @@ export class GoogleClassroomShareButton implements AfterViewInit {
   }
 
   private googleClassroomShareCallback = (values) => {
-    console.log("Share complete", values)
+    this.labelText = ':white_check_mark: Shared'
   }
 } 
