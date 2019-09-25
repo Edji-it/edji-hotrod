@@ -2,6 +2,8 @@ import { Component, AfterViewInit, Input, ViewEncapsulation } from '@angular/cor
 import { Angulartics2 } from 'angulartics2';
 import { AuthService } from 'src/app/_services';
 
+const LINK_COPY = 'Short Link'
+
 @Component({
   selector: 'edji-copy-link-share',
   templateUrl: './copy-link.component.pug',
@@ -11,7 +13,7 @@ export class CopyLinkShareButton implements AfterViewInit {
   @Input()
   url: string
 
-  public labelText: string = 'Copy Link'
+  public labelText: string = LINK_COPY
 
   constructor(private _angulartics: Angulartics2, private _auth: AuthService) { }
 
@@ -45,7 +47,7 @@ export class CopyLinkShareButton implements AfterViewInit {
     // Show a success alert when the code is copied to their clipboard
     this.labelText = ':white_check_mark: Copied'
     setTimeout(() => {
-      this.labelText = 'Copy Link'
+      this.labelText = LINK_COPY
     }, 3000)
   }
 } 

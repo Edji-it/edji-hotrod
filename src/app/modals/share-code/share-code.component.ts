@@ -35,7 +35,7 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
       this.projectStore.currentProject.subscribe(
         project => {
           this.currentProject = project
-          this.shareUrl = `${location.origin}/#/${this.currentProject.code}`
+          this.shareUrl = `${location.origin}/${this.currentProject.code}`
         },
         error => {
           console.error(error)
