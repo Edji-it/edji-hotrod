@@ -14,13 +14,17 @@ export class GoogleClassroomShareButton implements AfterViewInit {
   @Input()
   url: string
   @Input()
-  title = 'this is my default title' /** @todo remove default here - it should just be an empty string */
+  title = ''
   @Input()
-  instructions = 'default instructions' /** @todo remove default here - it should just be an empty string */
+  instructions = ''
 
   constructor() { }
 
   ngAfterViewInit() {
+    this.renderClassroomButton()
+  }
+
+  private renderClassroomButton() {
     gapi.sharetoclassroom.render('g-sharetoclassroom', {
       size: this.size,
       url: this.url,
@@ -28,17 +32,6 @@ export class GoogleClassroomShareButton implements AfterViewInit {
       body: this.instructions,
       onsharecomplete: this.googleClassroomShareCallback
     })
-
-    // setTimeout(() => {
-    //   // apply styles
-    //   var w = document.querySelector('#g-sharetoclassroom iframe')['contentDocument']
-    //   // console.log(w)
-    //   var s = document.createElement('style')
-    //   s.innerHTML = this.iframeStyle
-    //   s.type = 'text/css'
-    //   w.head.appendChild(s)
-    // }, 2000)
-    console.log(gapi.sharetoclassroom)
   }
 
   private googleClassroomShareCallback = (values) => {
