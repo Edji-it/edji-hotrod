@@ -1,0 +1,22 @@
+@import '../../../sass/base/variables';
+
+.share-text {
+    text-align: center;
+    width: 100%;
+    font-size: 12px;
+    color: #898989;
+}
+
+.share-button__wrap {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: $base-pad/2;
+
+    & .btn {
+        margin: 0px 15px 6px;
+        width: 32px;
+        height: 32px;
+        line-height: 26px;
+    }
+}

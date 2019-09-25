@@ -16,7 +16,7 @@
         p.text-secondary 
           | Join this Reading by going to&ensp;
           a.link([routerLink]="'/' + currentProject.code", target="_blank") edji.it/{{ currentProject.code }}
-          | &ensp;or entering the code on your dashboard.
+          | &ensp;or entering this code on your dashboard:
         .share-code--block
           .share-code--code.text-code(*ngFor="let codeLetter of currentProject.code.split('')")
             span.sc--c([ngClass]="[ isNumber(codeLetter) ? 'sc--c__green' : '' ]") {{ codeLetter }}
@@ -34,4 +34,15 @@
               i.icon.icon-key
               .btn-slider__value {{ currentProject.code }}
       .modal-footer
-        button#shareCodeModalClose.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close
+        .col-6
+          label.pb-2 Share
+          div
+            edji-google-classroom-share(
+              [url]="shareUrl", 
+              [title]="currentProject.reading_id ? currentProject.reading_id.title : ''", 
+              [instructions]="currentProject.group_instructions ? currentProject.group_instructions : ''"
+            )
+            edji-copy-link-share([url]="shareUrl")
+        .col-6
+          .btn-row.right
+            button#shareCodeModalClose.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close
