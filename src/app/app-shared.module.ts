@@ -22,7 +22,7 @@ import {
 } from './_pipes'
 // ShareCodeComponent has to be imported here due to its living in the nav bar
 import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, LicenseInviteComponent, ShareCodeComponent } from './modals'
-import { GoogleClassroomShareButton } from './buttons'
+import { GoogleClassroomShareButton, CopyLinkShareButton } from './buttons'
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 import { PromoPageComponent } from './promo/promo.component';
@@ -36,6 +36,7 @@ let SHARED_DECLARATIONS = [
   FollowTag,
   FooterComponent,
   GoogleClassroomShareButton,
+  CopyLinkShareButton,
   HeroSubscribeComponent,
   LicenseInviteComponent,
   LinkifyPipe,
