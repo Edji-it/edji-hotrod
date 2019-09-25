@@ -121,6 +121,8 @@ describe('Share', () => {
       browser.wait(EC.visibilityOf(referralStamp5), 3000, 'referral stamp 5 not showing')
       // Begin redeeming reward
       redeemButton.click()
+      // sleep() excuse - Wait for animation of Subscription modal
+      browser.sleep(400)
       // Verify Hero subscription modal opened
       browser.wait(EC.visibilityOf(hero.subscribeModal), 5000, "Hero modal didn't show when redeeming reward")
       // Wait for coupon message
