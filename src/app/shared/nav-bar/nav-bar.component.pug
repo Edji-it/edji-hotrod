@@ -201,7 +201,7 @@
     //- Join Reading Code
     .row.col-4.col-xl-5.nav__join-code.hidden-md-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg
-        input#projectCodeInputNav.form-control(
+        input#projectCodeInputNav.form-control.text-code(
           name="ProjectCodeInput",
           type="text",
           style="text-align: center;",
@@ -235,7 +235,7 @@
 //- .container
 .col-12.nav__join-code--under.hidden-md-up(*ngIf="_router.url.indexOf('/home') > -1")
   .input-group.input-group-lg
-    input#projectCodeInputUnderNav.form-control(
+    input#projectCodeInputUnderNav.form-control.text-code(
       name="ProjectCodeInput",
       type="text",
       style="text-align: center;",
