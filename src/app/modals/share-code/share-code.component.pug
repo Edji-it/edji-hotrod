@@ -24,10 +24,7 @@
             i.icon.icon-key
             | &nbsp;for&nbsp;
             b {{ currentProject.label }}
-        div#g-sharetoclassroom(
-          data-size="32"
-          data-url="https://edji.it/35jz"
-        )
+        edji-google-classroom-share([url]="shareUrl")
         div(*ngIf="showOnNewReading")
           hr
           .text-center

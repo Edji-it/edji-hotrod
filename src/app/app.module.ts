@@ -133,7 +133,7 @@ import { HeroPromoPageComponent } from './hero-promo/hero-promo.component'
 import { HeroPricingComponent } from './hero-pricing/hero-pricing.component'
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component'
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
-import { GoogleButton, CleverButton, GoogleClassroomShareButton } from './buttons'
+import { GoogleButton, CleverButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
 import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
@@ -226,7 +226,6 @@ const routerOptions: ExtraOptions = {
     QuestionComponent,
     CleverButton,
     GoogleButton,
-    GoogleClassroomShareButton,
     OauthRowComponent,
     OpenEndedAnswersComponent,
     AppComponent,

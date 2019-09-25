@@ -5,12 +5,11 @@
  */
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule, PreloadAllModules } from '@angular/router'
+import { RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 // Project Dependencies
 import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent, MessageToastsComponent, ShareLinkComponent, UserAvatarComponent } from './shared'
-import { ROUTES } from './app.routes'
 // Pipes
 import {
   AddClassPipe,
@@ -21,8 +20,9 @@ import {
   SubjectPipe,
   UserInitialsPipe,
 } from './_pipes'
-import { ShareCodeComponent } from './modals/share-code/share-code.component'
-import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, LicenseInviteComponent } from './modals'
+// ShareCodeComponent has to be imported here due to its living in the nav bar
+import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, LicenseInviteComponent, ShareCodeComponent } from './modals'
+import { GoogleClassroomShareButton } from './buttons'
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 import { PromoPageComponent } from './promo/promo.component';
@@ -35,6 +35,7 @@ let SHARED_DECLARATIONS = [
   FeedbackComponent,
   FollowTag,
   FooterComponent,
+  GoogleClassroomShareButton,
   HeroSubscribeComponent,
   LicenseInviteComponent,
   LinkifyPipe,

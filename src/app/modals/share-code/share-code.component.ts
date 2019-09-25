@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router'
 // Internal
 import { ProjectStore } from 'src/app/_store';
 import { Project } from '../../shared/datatypes'
-import { UtilToolService, ProjectService } from './../../_services'
+import { UtilToolService } from './../../_services'
 
 @Component({
   selector: 'share-code',
@@ -20,6 +20,7 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
   private codeLetters: any
   private subscriptions: Subscription[] = []
   public currentProject: Project
+  private shareUrl = ''
 
   constructor(
     private router: Router,
@@ -34,6 +35,7 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
       this.projectStore.currentProject.subscribe(
         project => {
           this.currentProject = project
+          this.shareUrl = `${location.origin}/#/${this.currentProject.code}`
         },
         error => {
           console.error(error)
