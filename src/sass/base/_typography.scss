@@ -2,7 +2,7 @@
 @include fontFace('Open Sans', '../assets/fonts/OpenSans-Regular-webfont', normal, normal);
 @include fontFace('Open Sans', '../assets/fonts/OpenSans-Semibold-webfont', normal, 500);
 @include fontFace('Open Sans', '../assets/fonts/OpenSans-Bold-webfont', normal, 700);
-@include fontFace('Share Tech Mono', '../assets/fonts/ShareTechMono', normal, normal);
+@include fontFace('Inconsolata', '../assets/fonts/Inconsolata', normal, normal);
 
 body {
   color: $base-font-color;
@@ -253,7 +253,7 @@ a.on-dark {
 .text-code {
   font-weight: normal;
   font-style: normal;
-  font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
+  font-family: 'Inconsolata', 'Courier New', Courier, monospace;
 }
 
 // Text colors: Transitioning to latest Bootstrap v4 styles

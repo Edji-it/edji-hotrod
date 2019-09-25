@@ -125,15 +125,11 @@ export class Sidebar {
     // Ensure nav menu icon is clickable
     browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 3000, 'nav/avatar menu icon was not clickable while going to access referral menu option')
     this.avatarActionIcon.click()
-    this.referralButton.isPresent().then(result => {
-      if (result) {
-        this.referralButton.isDisplayed().then(result => {
-          if (result) {
-            this.referralButton.click()
-          }
-        })
-      }
-    })
+    // Select Referral menu option
+    browser.wait(this.EC.elementToBeClickable(this.referralButton), 3000, 'referral menu option did not show in user menu')
+    this.referralButton.click()
+    // sleep() excuse - Wait for modal to fade in
+    browser.sleep(400)
   } // clickAccountButton () : void
 
   public closeModals(): void {
