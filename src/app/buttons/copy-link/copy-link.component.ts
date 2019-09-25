@@ -9,13 +9,41 @@ export class CopyLinkShareButton implements AfterViewInit {
   @Input()
   url: string
 
+  public labelText: string = 'Copy Link'
+
   constructor() { }
 
   ngAfterViewInit() {
 
   }
 
-  private googleClassroomShareCallback = (values) => {
-    console.log("Share complete", values)
+  /**
+   * Copies the referral link to the user's clipboard
+   */
+  public copyLink() {
+    // this._angulartics.eventTrack.next({
+    //   action: 'referral_copy_shareLink',
+    //   properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    // })
+    // Create a new textarea element that we'll not make visible
+    let selBox = document.createElement('textarea')
+    selBox.style.position = 'fixed'
+    selBox.style.left = '0'
+    selBox.style.top = '0'
+    selBox.style.opacity = '0'
+    // Set the value of the textarea to be the share link with their referral code
+    selBox.value = this.url
+    document.body.appendChild(selBox)
+    // Focus on the element text, select the text, and use a copy command
+    selBox.focus()
+    selBox.select()
+    document.execCommand('copy')
+    // Take this hidden element out of the DOM
+    document.body.removeChild(selBox)
+    // Show a success alert when the code is copied to their clipboard
+    this.labelText = ':white_check_mark: Copied'
+    setTimeout(() => {
+      this.labelText = 'Copy Link'
+    }, 3000)
   }
 } 
