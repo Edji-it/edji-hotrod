@@ -5,8 +5,6 @@ import { Angulartics2 } from 'angulartics2';
 import { AuthService } from 'src/app/_services';
 
 declare const gapi: any
-var googleClassroomShareButton: any
-
 @Component({
   selector: 'edji-google-classroom-share',
   templateUrl: './google-classroom.component.pug',
@@ -26,7 +24,7 @@ export class GoogleClassroomShareButton implements AfterViewInit {
   public labelText: string = 'Classroom'
 
   constructor(private _angulartics: Angulartics2, private _auth: AuthService) {
-    googleClassroomShareButton = this
+
   }
 
   ngAfterViewInit() {
@@ -56,12 +54,12 @@ export class GoogleClassroomShareButton implements AfterViewInit {
   }
 
   private googleClassroomStartCallback = () => {
-    googleClassroomShareButton.reportAttempt('shareStart')
+    this.reportAttempt('shareStart')
   }
 
   private googleClassroomShareCallback = () => {
     // Report success
-    googleClassroomShareButton.reportAttempt('shareComplete')
-    googleClassroomShareButton.labelText = ':white_check_mark: Shared'
+    this.reportAttempt('shareComplete')
+    this.labelText = ':white_check_mark: Shared'
   }
 } 
