@@ -1,6 +1,11 @@
 import { Component, AfterViewInit, Input, ViewEncapsulation } from '@angular/core'
+import { Angulartics2 } from 'angulartics2';
+
+// Internal
+import { AuthService } from 'src/app/_services';
 
 declare const gapi: any
+var googleClassroomShareButton: any
 
 @Component({
   selector: 'edji-google-classroom-share',
@@ -20,7 +25,9 @@ export class GoogleClassroomShareButton implements AfterViewInit {
 
   public labelText: string = 'Classroom'
 
-  constructor() { }
+  constructor(private _angulartics: Angulartics2, private _auth: AuthService) {
+    googleClassroomShareButton = this
+  }
 
   ngAfterViewInit() {
     this.renderClassroomButton()
@@ -32,11 +39,29 @@ export class GoogleClassroomShareButton implements AfterViewInit {
       url: this.url,
       title: this.title,
       body: this.instructions,
+      onsharestart: this.googleClassroomStartCallback,
       onsharecomplete: this.googleClassroomShareCallback
     })
   }
 
-  private googleClassroomShareCallback = (values) => {
-    this.labelText = ':white_check_mark: Shared'
+  /**
+   * Report to GA
+   * @param type event type
+   */
+  private reportAttempt(type: string) {
+    this._angulartics.eventTrack.next({
+      action: 'groupCodeModal_googleClassroom_' + type,
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
+  }
+
+  private googleClassroomStartCallback = () => {
+    googleClassroomShareButton.reportAttempt('shareStart')
+  }
+
+  private googleClassroomShareCallback = () => {
+    // Report success
+    googleClassroomShareButton.reportAttempt('shareComplete')
+    googleClassroomShareButton.labelText = ':white_check_mark: Shared'
   }
 } 

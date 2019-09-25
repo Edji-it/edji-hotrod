@@ -1,4 +1,6 @@
 import { Component, AfterViewInit, Input, ViewEncapsulation } from '@angular/core'
+import { Angulartics2 } from 'angulartics2';
+import { AuthService } from 'src/app/_services';
 
 @Component({
   selector: 'edji-copy-link-share',
@@ -11,7 +13,7 @@ export class CopyLinkShareButton implements AfterViewInit {
 
   public labelText: string = 'Copy Link'
 
-  constructor() { }
+  constructor(private _angulartics: Angulartics2, private _auth: AuthService) { }
 
   ngAfterViewInit() {
 
@@ -21,10 +23,10 @@ export class CopyLinkShareButton implements AfterViewInit {
    * Copies the referral link to the user's clipboard
    */
   public copyLink() {
-    // this._angulartics.eventTrack.next({
-    //   action: 'referral_copy_shareLink',
-    //   properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    // })
+    this._angulartics.eventTrack.next({
+      action: 'groupCodeModal_share_copyLink',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
     // Create a new textarea element that we'll not make visible
     let selBox = document.createElement('textarea')
     selBox.style.position = 'fixed'
