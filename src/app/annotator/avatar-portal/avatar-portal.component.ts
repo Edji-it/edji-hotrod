@@ -5,7 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService } from '../../_services'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 enum playState {
   inactive,
@@ -44,7 +44,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
 
   @Output() toggleCommentPane = new EventEmitter()
 
-  constructor(private projectStore: ProjectStore, private angulartics: Angulartics2, private _auth: AuthService) { }
+  constructor(private projectStore: ProjectStore, private angulartics: Angulartics2, private _auth: AuthService) {}
 
   ngOnInit() {
     this.subscriptions.push(

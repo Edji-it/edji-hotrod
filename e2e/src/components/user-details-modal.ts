@@ -10,11 +10,19 @@ export class UserDetailsModal {
 
   public addDetails(): void {
     // Wait for modal to load
-    browser.wait(this.EC.elementToBeClickable(this.sourceInput), 5000, "additional details or source dropdown did not load")
+    browser.wait(
+      this.EC.elementToBeClickable(this.sourceInput),
+      5000,
+      'additional details or source dropdown did not load',
+    )
     // Open dropdown
     this.sourceInput.click()
     // Select first "friend" option
-    browser.wait(this.EC.elementToBeClickable(this.sourceOptions.first()), 3000, "source dropdown options did not become clickable")
+    browser.wait(
+      this.EC.elementToBeClickable(this.sourceOptions.first()),
+      3000,
+      'source dropdown options did not become clickable',
+    )
     this.sourceOptions.first().click()
     // Submit
     this.detailsSubmit.click()

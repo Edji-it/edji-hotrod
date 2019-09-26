@@ -13,4 +13,4 @@
 //   beforeEach(() => {})
 // })
 
-test.skip('skip', () => { })
+test.skip('skip', () => {})

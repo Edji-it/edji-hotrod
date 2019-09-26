@@ -78,7 +78,7 @@ export class MediaService {
         error => {
           uploadSource.error(error)
         },
-    )
+      )
 
     return uploadSource.asObservable()
   }
@@ -103,7 +103,7 @@ export class MediaService {
         error => {
           uploadSource.error(error)
         },
-    )
+      )
 
     return uploadSource.asObservable()
   }

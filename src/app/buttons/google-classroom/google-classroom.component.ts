@@ -1,15 +1,15 @@
 import { Component, AfterViewInit, Input, ViewEncapsulation } from '@angular/core'
-import { Angulartics2 } from 'angulartics2';
+import { Angulartics2 } from 'angulartics2'
 
 // Internal
-import { AuthService } from 'src/app/_services';
+import { AuthService } from 'src/app/_services'
 
 declare const gapi: any
 @Component({
   selector: 'edji-google-classroom-share',
   templateUrl: './google-classroom.component.pug',
   styleUrls: ['./google-classroom.component.scss'],
-  encapsulation: ViewEncapsulation.None // Since Gapi updates the dom, we have to avoid encapsulation
+  encapsulation: ViewEncapsulation.None, // Since Gapi updates the dom, we have to avoid encapsulation
 })
 export class GoogleClassroomShareButton implements AfterViewInit {
   @Input()
@@ -23,9 +23,7 @@ export class GoogleClassroomShareButton implements AfterViewInit {
 
   public labelText: string = 'Classroom'
 
-  constructor(private _angulartics: Angulartics2, private _auth: AuthService) {
-
-  }
+  constructor(private _angulartics: Angulartics2, private _auth: AuthService) {}
 
   ngAfterViewInit() {
     this.renderClassroomButton()
@@ -38,7 +36,7 @@ export class GoogleClassroomShareButton implements AfterViewInit {
       title: this.title,
       body: this.instructions,
       onsharestart: this.googleClassroomStartCallback,
-      onsharecomplete: this.googleClassroomShareCallback
+      onsharecomplete: this.googleClassroomShareCallback,
     })
   }
 
@@ -62,4 +60,4 @@ export class GoogleClassroomShareButton implements AfterViewInit {
     this.reportAttempt('shareComplete')
     this.labelText = ':white_check_mark: Shared'
   }
-} 
+}

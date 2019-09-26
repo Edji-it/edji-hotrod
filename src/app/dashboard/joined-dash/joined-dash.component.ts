@@ -6,8 +6,8 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService } from '../../_services'
-import { ProjectStore } from 'src/app/_store';
-import { ProjectListStore } from 'src/app/_store/project-list.store';
+import { ProjectStore } from 'src/app/_store'
+import { ProjectListStore } from 'src/app/_store/project-list.store'
 
 @Component({
   selector: 'edji-joined-dash',

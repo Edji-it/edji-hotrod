@@ -52,7 +52,7 @@ export class RegisterFormComponent implements OnInit {
     private _title: Title,
     private _locker: LockerService,
     private _router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     this.userCopy = new Copy().getUserCopy()
 
@@ -62,7 +62,7 @@ export class RegisterFormComponent implements OnInit {
         email: [null, [Validators.required, this.emailValidator]],
         password: [null, [Validators.required, Validators.minLength(6)]],
         passwordConfirm: [null, Validators.required],
-        termsAgree: [true, Validators.requiredTrue]
+        termsAgree: [true, Validators.requiredTrue],
       },
       { validator: this.passwordsEqual },
     )
@@ -166,7 +166,7 @@ export class RegisterFormComponent implements OnInit {
           }
           // If there is a failure with registering the user...
         },
-        (err) => {
+        err => {
           let error = err.error
           this.registerLoading = false
           let errorCaught: boolean = false

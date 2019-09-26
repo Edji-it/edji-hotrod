@@ -4,7 +4,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 // Internal
 import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { ReadingService, SocketService } from '../../../../_services'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'hot-questioncard',
@@ -25,7 +25,7 @@ export class QuestioncardComponent implements OnInit, OnDestroy {
     public el: ElementRef,
     private _readings: ReadingService,
     private _socket: SocketService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
