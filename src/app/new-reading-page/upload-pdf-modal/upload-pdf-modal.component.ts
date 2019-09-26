@@ -66,7 +66,7 @@ export class UploadPdfModalComponent implements OnInit {
 
           // Check existing Uploaded Docs for any not yet marked as converted
           this.uploadedDocs.forEach(doc => {
-            if (doc.converted !== true && !doc.expired) {
+            if (doc.converted !== true && !doc.expired && !doc.error) {
               this.checkConversion(doc)
             }
           })
