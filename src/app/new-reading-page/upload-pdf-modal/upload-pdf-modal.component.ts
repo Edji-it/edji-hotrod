@@ -32,6 +32,9 @@ export class UploadPdfModalComponent implements OnInit {
   public errorMsg: string = ''
   public pdfFileInputId: string = 'pdfFileInput'
   public confirmDelete: boolean = false
+  // Toggle Feedback/Report modal
+  public showReportError: boolean = false
+  public reportErrorMsg: string = ''
 
   /**
    * Temporary: PDF word highlight flag
@@ -63,7 +66,6 @@ export class UploadPdfModalComponent implements OnInit {
       .subscribe((user: any) => {
         if (user.media && user.media.documents) {
           this.uploadedDocs = user.media.documents
-
           // Check existing Uploaded Docs for any not yet marked as converted
           this.uploadedDocs.forEach(doc => {
             if (doc.converted !== true && !doc.expired && !doc.error) {
@@ -149,12 +151,18 @@ export class UploadPdfModalComponent implements OnInit {
 
   // Run check until document is confirmed as processed
   checkConversion(doc): void {
-    let EXPIRE_TIME = 5 * 60 * 1000 // 5 min (Server will timeout within 4 min)
     let fileId = doc.uuid
+    let EXPIRE_TIME = 5 * 60 * 1000 // 5 min (Server will timeout within 4 min)
+    let requestedTime = Date.parse(doc.requestedTime)
 
-    if (doc && doc.pages && doc.pages[0]) {
+    if (doc && doc.pages && doc.pages[0] && !doc.error) {
       // Assume if document has page values, it is converted and stored
       doc.converted = true
+    } else if (requestedTime && Date.now() - requestedTime > EXPIRE_TIME) {
+      // If this is old, expire the document
+      // NOTE: Handle expiration here to account for success OR fail on getting Spark
+      doc.expired = true
+      this.updateUploadedDoc(doc)
     } else if (!fileId) {
       // If no UUID is passed, assume corrupt/old  data
       doc.expired = true
@@ -174,10 +182,6 @@ export class UploadPdfModalComponent implements OnInit {
             } else if (data.error) {
               // Pass doc with error
               this.updateUploadedDoc(data)
-            } else if (requestedTime && Date.now() - requestedTime > EXPIRE_TIME) {
-              // If this is old, expire the document
-              doc.expired = true
-              this.updateUploadedDoc(doc)
             } else {
               // Ensure doc has requestedTime for next round
               if (!doc.requestedTime) {
@@ -191,6 +195,11 @@ export class UploadPdfModalComponent implements OnInit {
             }
           },
           err => {
+            // Ensure failing doc has requestedTime for expiration
+            if (!doc.requestedTime) {
+              doc.requestedTime = Date.now()
+              this.updateUploadedDoc(doc)
+            }
             // Check again later
             setTimeout(() => {
               this.checkConversion(doc)
@@ -327,5 +336,25 @@ export class UploadPdfModalComponent implements OnInit {
       action: 'newReading_pdf_toggleWordHighlights' + (doc.disable_words ? 'Off' : 'On'),
       properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
+  }
+
+  /**
+   * Prep report text and open feedback modal
+   * @param doc 
+   */
+  loadReportErrorModal(doc: DocumentSpark) {
+    this.reportErrorMsg = `Any additional details?\n\n\n
+    ***********************************
+      PDF Error Report
+
+      Document Title:
+        ${ doc.title}
+      Document ID:
+        ${ doc.uuid}
+      Request Time: 
+        ${ doc.requestedTime}
+    ***********************************
+    `
+    this.showReportError = true
   }
 }

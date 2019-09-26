@@ -1,4 +1,4 @@
-#uploadModal.modal
+#uploadModal.modal(*ngIf="!showReportError")
   .modal-dialog.modal-lg
     .modal-content
       form
@@ -72,10 +72,16 @@
                   span(*ngIf="!doc.disable_words") Word highlights enabled
                   span(*ngIf="doc.disable_words") Word highlights disabled
                 //- Display if OCR/word highlighting is available, and allow user to turn it off
-                .btn.btn-sm.highlight-toggle.hover-parent(*ngIf="wordHighlightsEnabled && doc.error", (click)="alert('contact')")
+                .btn.btn-sm.highlight-toggle.hover-parent(
+                  *ngIf="wordHighlightsEnabled && doc.error", 
+                  (click)="loadReportErrorModal(doc)"
+                )
                   .icon.icon-word-boxes.error
                   //- .hover-show--block {{ doc.disable_words ? 'Enable?' : 'Disable?' }}
-                  span Word detection failed
+                  span 
+                    | Word detection failed
+                    br
+                    a.link Report Error
               //- The pages of the PDF
               .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
                 img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
@@ -109,3 +115,12 @@
               .card.card-placeholder(*ngFor="let card of [0, 1, 2, 3]")
                 .card-img-top &nbsp;
         .modal-footer
+edji-feedback(
+  *ngIf="showReportError",
+  [showModal]="showReportError",
+  [prefillMessage]='reportErrorMsg',
+  [title]="'Report PDF Upload Error'",
+  [subHeading]="'By reporting this error, you are helping improve Edji. Thank you!'",
+  [optionForContact]="true",
+  (closeModal)="showReportError = false"
+)
