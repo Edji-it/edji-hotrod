@@ -13,21 +13,23 @@
             span(aria-hidden="true") &times;
         .modal-body
           form
-            label.btn.btn-default.btn-file(#browseBtn) Browse
-              input#imageFileInput(
-                type="file",
-                accept=".jpg,.png,.gif,.jpeg,.svg",
-                (change)="updateUploadFile()",
-                style="display:none;"
-              )
-            .file-name((click)="browseBtn.click()")
-              span.placeholder(*ngIf="!this.file || !this.file.name || this.file.name.length < 1") Select image to upload...
-              | {{ this.file ? this.file.name : '' }}
-            button#buttonBeginImageUpload.btn.btn-primary(
-              (click)="beginUpload()",
-              type="submit",
-              [class.loading]="uploading"
-            ) Upload
+            .form-group
+              label.btn.btn-default.btn-file(#browseBtn) Browse
+                input#imageFileInput(
+                  type="file",
+                  accept=".jpg,.png,.gif,.jpeg,.svg",
+                  (change)="updateUploadFile()",
+                  style="display:none;"
+                )
+              .file-name((click)="browseBtn.click()")
+                span.placeholder(*ngIf="!this.file || !this.file.name || this.file.name.length < 1") Select image to upload...
+                | {{ this.file ? this.file.name : '' }}
+              button#buttonBeginImageUpload.btn.btn-primary(
+                (click)="beginUpload()",
+                type="submit",
+                [class.loading]="uploading"
+              ) Upload
+              small.form-text.text-muted Image should be less than <b>5MB</b>, and can be a JPG, PNG, GIF, or SVG
           .alert.alert-warning(*ngIf="errorMsg") {{ errorMsg }}
           hr
           p#status Select an image to insert into your Reading

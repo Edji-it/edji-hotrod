@@ -32,6 +32,7 @@
                 span.input-group-append
                   button#pdfBrowseButton.btn.btn-default.btn-file(type="button", (click)="browseInput.click()") Browse
                     input(#browseInput, [attr.id]="pdfFileInputId", type="file", accept=".pdf", (change)="updateUploadFile()", style="display:none;")
+              small.form-text.text-muted File should be less than <b>10MB</b>, and less than <b>30 pages</b>
             .form-group
               label Title
               input(name="title", [(ngModel)]="title", type="text")
