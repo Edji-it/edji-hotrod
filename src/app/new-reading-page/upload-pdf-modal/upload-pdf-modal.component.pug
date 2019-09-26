@@ -72,21 +72,27 @@
                   span(*ngIf="!doc.disable_words") Word highlights enabled
                   span(*ngIf="doc.disable_words") Word highlights disabled
                 //- Display if OCR/word highlighting is available, and allow user to turn it off
-                .btn.btn-sm.highlight-toggle.hover-parent(
+                .btn.btn-sm.highlight-toggle.has-error.hover-parent(
                   *ngIf="wordHighlightsEnabled && doc.error", 
                   (click)="loadReportErrorModal(doc)"
                 )
                   .icon.icon-word-boxes.error
-                  //- .hover-show--block {{ doc.disable_words ? 'Enable?' : 'Disable?' }}
                   span 
-                    | Word detection failed
+                    | No words found
                     br
-                    a.link Report Error
+                    u.link Report error?
               //- The pages of the PDF
               .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
                 img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
                 .card-img-overlay.overlay-on-hover
                   button.btn.btn-primary.card__center-overlay Insert
+                //- @todo determine pages without words
+                .badge.badge-warning.document-tag.hover-parent(
+                  *ngIf="true",
+                  (click)="loadReportErrorModal(doc)"
+                )
+                  span.hover-hide No Words Found
+                  .hover-show--inline Report error?
             //- Display conversion message if doc isn't ready
             .card-group.card-group--placeholder(*ngIf="doc.converted != true && doc.pdfConverted != true")
               .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired && !doc.error")
