@@ -41,6 +41,7 @@ export class NewReading implements PageObjectInterface {
 
   public uploadImageModalButton = element(by.css('[data-test="buttonUploadImage"]'))
   public imageUploadTrigger = element(by.id('buttonBeginImageUpload'))
+  public imageUploadBrowseButton = element(by.css("[data-test='imageUploadBrowseBtn']"))
   public imageFileInput = element(by.css('#imageFileInput'))
   public uploadedImage = element(by.css('.upload-list-item.new'))
   public emojiAnswerButton = element(by.css('.icon-comment-emoji.icon__answer-type'))

@@ -23,7 +23,7 @@
                   placeholder="Select image to upload..."
                   )
                 .input-group-append
-                  label.mb-0.btn.btn-secondary.btn-file(#browseBtn) Browse
+                  label.mb-0.btn.btn-secondary.btn-file(#browseBtn, data-test='imageUploadBrowseBtn') Browse
                     input#imageFileInput(
                       type="file",
                       accept=".jpg,.png,.gif,.jpeg,.svg",
