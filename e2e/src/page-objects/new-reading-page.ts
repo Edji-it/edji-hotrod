@@ -178,17 +178,16 @@ export class NewReading implements PageObjectInterface {
             )
             this.insertToolToggleButton.click()
           }
-
-          // Click the image upload button
-          browser.wait(
-            this.EC.elementToBeClickable(this.uploadImageModalButton),
-            5000,
-            'image upload modal button never became clickable',
-          )
-          this.uploadImageModalButton.click()
         })
       }
     })
+    // Click the image upload button
+    browser.wait(
+      this.EC.elementToBeClickable(this.uploadImageModalButton),
+      5000,
+      'image upload modal button never became clickable',
+    )
+    this.uploadImageModalButton.click()
   }
 
   // Click the insert question button if we're on a mobile view
