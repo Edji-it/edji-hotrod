@@ -304,25 +304,26 @@ export class UploadPdfModalComponent implements OnInit {
    */
   insertPages(doc: DocumentSpark, index?: number): void {
     let images: { url: string; data?: string }[] = []
+    let buildImageObj = (page, i) => {
+      let image = { url: page }
+      // If pdf data is available, attach it
+      // TEMP: Word Highlight secret switch
+      if (this.wordHighlightsEnabled && doc.pdf && doc.pdf.pages && !doc.disable_words) {
+        let dataUrl = doc.pdf.pages[i]
+        if (dataUrl) {
+          image['data'] = doc.pdf.pages[i]
+        }
+      }
+      return image
+    }
+
     if (typeof index === 'undefined') {
       // Loop over pages if inserting whole doc
       doc.pages.forEach((page, index) => {
-        let image = { url: page }
-        // If pdf data is available, attach it
-        // TEMP: Word Highlight secret switch
-        if (this.wordHighlightsEnabled && doc.pdf && doc.pdf.pages && !doc.disable_words) {
-          image['data'] = doc.pdf.pages[index]
-        }
-        images.push(image)
+        images.push(buildImageObj(page, index))
       })
     } else {
-      // otherwise insert page at index
-      let image = { url: doc.pages[index] }
-      // If pdf data is available, attach it
-      if (doc.pdf && doc.pdf.pages && !doc.disable_words) {
-        image['data'] = doc.pdf.pages[index]
-      }
-      images.push(image)
+      images.push(buildImageObj(doc.pages[index], index))
     }
     // Track PDF instert event
     this.angulartics.eventTrack.next({
