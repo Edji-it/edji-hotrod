@@ -30,13 +30,15 @@
                   span.placeholder(*ngIf="!file || !file.name || file.name.length < 1") Select a PDF to upload...
                   | {{ file ? file.name : '' }}
                 span.input-group-append
-                  button#pdfBrowseButton.btn.btn-default.btn-file(type="button", (click)="browseInput.click()") Browse
+                  button#pdfBrowseButton.btn.btn-secondary.btn-file(type="button", (click)="browseInput.click()") Browse
                     input(#browseInput, [attr.id]="pdfFileInputId", type="file", accept=".pdf", (change)="updateUploadFile()", style="display:none;")
               small.form-text.text-muted File should be less than <b>10MB</b>, and less than <b>30 pages</b>
-            .form-group
-              label Title
-              input(name="title", [(ngModel)]="title", type="text")
-              .button__row
+            .form-group.row.no-gutters
+              .col-9
+                label(for="documentTitle") Title
+                input#documentTitle(name="title", [(ngModel)]="title", type="text")
+              .col-3.text-right
+                label &nbsp;
                 button#buttonBeginPdfUpload.btn.btn-primary(
                   (click)="beginUpload()",
                   type="submit",
@@ -45,6 +47,7 @@
                 )
                   | Upload
           .alert.alert-warning(*ngIf="errorMsg", [innerHtml]="errorMsg")
+          hr
           //- LISTING OF ALL UPLOADED PDFS
           h3.pb-2 Select an uploaded PDF to add to your Reading
           .upload-list-item(*ngFor="let doc of uploadedDocs | slice:0:15; let i = index", [class.new]="newDocsIds.indexOf(doc.uuid) > -1")
