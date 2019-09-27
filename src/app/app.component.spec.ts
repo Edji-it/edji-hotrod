@@ -12,9 +12,9 @@ describe('AppComponent', () => {
       declarations: [AppComponent],
       providers: [
         { provide: AuthService, useValue: {} },
-        { provide: MessageService, useValue: { init: () => {} } },
+        { provide: MessageService, useValue: { init: () => { } } },
         { provide: Angulartics2, useValue: {} },
-        { provide: Angulartics2GoogleGlobalSiteTag, useValue: { startTracking: () => {} } },
+        { provide: Angulartics2GoogleGlobalSiteTag, useValue: { startTracking: () => { } } },
       ],
     }).compileComponents()
   }))
