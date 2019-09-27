@@ -92,10 +92,10 @@
                   button.btn.btn-primary.card__center-overlay Insert
                 //- @todo determine pages without words
                 .badge.badge-warning.document-tag.hover-parent(
-                  *ngIf="true",
+                  *ngIf="hasWordsError(doc, i)",
                   (click)="loadReportErrorModal(doc)"
                 )
-                  span.hover-hide No Words Found
+                  span.hover-hide No words found
                   .hover-show--inline Report error?
             //- Display conversion message if doc isn't ready
             .card-group.card-group--placeholder(*ngIf="doc.converted != true && doc.pdfConverted != true")

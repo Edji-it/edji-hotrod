@@ -283,6 +283,21 @@ export class UploadPdfModalComponent implements OnInit {
   }
 
   /**
+   * Detects if page has pdf error
+   * @param doc 
+   * @param index 
+   */
+  public hasWordsError(doc: DocumentSpark, index: number): boolean {
+    if (doc.pdf && doc.pdf.pages && !doc.disable_words) {
+      if (!doc.pdf.pages[index]) {
+        // Pages that fail OCR individually will return as "null" in the pages array
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
    * Output images (w/ data)
    * @param doc Document record from user's media
    * @param index? optional, individual page index
