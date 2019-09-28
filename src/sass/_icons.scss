@@ -509,6 +509,10 @@ $iconGrayOpacity: 0.6;
   &.inactive {
     @include icon('icon-word-boxes--off.svg');
   }
+
+  &.error {
+    @include icon('icon-word-boxes--error.svg');
+  }
 }
 
 // Misc Icon Styles

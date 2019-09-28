@@ -38,7 +38,7 @@ describe('Reading Media', () => {
   })
 
   describe('PDF upload', () => {
-    it('should upload a PDF to a reading and save it to the reading', function() {
+    it('should upload a PDF to a reading and save it to the reading', function () {
       newReading.openInsertPdfModal()
       // Select File to upload
       let fileToUpload = 'assets/2-pages.pdf'
@@ -64,7 +64,7 @@ describe('Reading Media', () => {
     })
 
     // This following test relies on the previous one for a PDF to delete.
-    it('should delete a PDF that was uploaded', function() {
+    it('should delete a PDF that was uploaded', function () {
       newReading.openInsertPdfModal()
       let delBtn = element(by.id('pdfDelBtn'))
       let confirmDelBtn = element(by.id('pdfDelBtnConfirm'))
@@ -79,12 +79,12 @@ describe('Reading Media', () => {
   })
 
   describe('Image upload', () => {
-    it('should upload an image to a reading and save it to the reading', function() {
+    it('should upload an image to a reading and save it to the reading', function () {
       newReading.openInsertImageModal()
       browser.wait(
-        EC.elementToBeClickable(newReading.imageUploadTrigger),
+        EC.elementToBeClickable(newReading.imageUploadBrowseButton),
         6000,
-        'image upload trigger never became clickable',
+        'image browse button never became clickable',
       )
 
       // Select File to upload

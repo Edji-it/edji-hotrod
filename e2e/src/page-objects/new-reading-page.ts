@@ -41,6 +41,7 @@ export class NewReading implements PageObjectInterface {
 
   public uploadImageModalButton = element(by.css('[data-test="buttonUploadImage"]'))
   public imageUploadTrigger = element(by.id('buttonBeginImageUpload'))
+  public imageUploadBrowseButton = element(by.css("[data-test='imageUploadBrowseBtn']"))
   public imageFileInput = element(by.css('#imageFileInput'))
   public uploadedImage = element(by.css('.upload-list-item.new'))
   public emojiAnswerButton = element(by.css('.icon-comment-emoji.icon__answer-type'))
@@ -178,17 +179,16 @@ export class NewReading implements PageObjectInterface {
             )
             this.insertToolToggleButton.click()
           }
-
-          // Click the image upload button
-          browser.wait(
-            this.EC.elementToBeClickable(this.uploadImageModalButton),
-            5000,
-            'image upload modal button never became clickable',
-          )
-          this.uploadImageModalButton.click()
         })
       }
     })
+    // Click the image upload button
+    browser.wait(
+      this.EC.elementToBeClickable(this.uploadImageModalButton),
+      5000,
+      'image upload modal button never became clickable',
+    )
+    this.uploadImageModalButton.click()
   }
 
   // Click the insert question button if we're on a mobile view

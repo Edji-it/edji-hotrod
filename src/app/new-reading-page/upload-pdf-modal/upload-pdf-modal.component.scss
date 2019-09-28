@@ -93,6 +93,14 @@ $pdfThumbHeight: 250px;
   min-width: 180px;
 }
 
+.document-tag {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+}
+
 .card-group--placeholder {
   overflow: hidden;
 }
@@ -164,6 +172,14 @@ $pdfThumbHeight: 250px;
   width: 100%;
   padding: 1em;
   height: 3em;
+
+  &.has-error {
+    height: 4em;
+  }
+
+  & u, & .link {
+    color: $btnPrimaryColor;
+  }
 
   & .hover-show--block {
     height: 3em;

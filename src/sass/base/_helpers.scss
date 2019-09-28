@@ -79,7 +79,8 @@
 // Show/hide on hover
 .hover-parent {
   .hover-show--inline-block,
-  .hover-show--block {
+  .hover-show--block,
+  .hover-show--inline {
     display: none;
   }
   &:hover {
@@ -88,6 +89,9 @@
     }
     & .hover-show--block {
       display: block;
+    }
+    & .hover-show--inline {
+      display: inline;
     }
     & .hover-hide {
       display: none;
