@@ -90,7 +90,6 @@
                 img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
                 .card-img-overlay.overlay-on-hover
                   button.btn.btn-primary.card__center-overlay Insert
-                //- @todo determine pages without words
                 .badge.badge-warning.document-tag.hover-parent(
                   *ngIf="hasWordsError(doc, i)",
                   (click)="loadReportErrorModal(doc)"
@@ -98,7 +97,7 @@
                   span.hover-hide No words found
                   .hover-show--inline Report error?
             //- Display conversion message if doc isn't ready
-            .card-group.card-group--placeholder(*ngIf="doc.converted != true && doc.pdfConverted != true")
+            .card-group.card-group--placeholder(*ngIf="doc.converted !== true && doc.pdfConverted !== true")
               .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired && !doc.error")
                 i.icon.icon-loading.group-alert__icon
                 b Preparing your PDF
