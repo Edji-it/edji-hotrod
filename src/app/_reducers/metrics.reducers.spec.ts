@@ -3,7 +3,7 @@ import { metricsReducer as reducer, IncrementMetric, SetState } from './metrics.
 
 const initialState = {
   metricsLoaded: false,
-  hero_page_load_count: 0
+  hero_page_load_count: 0,
 }
 
 describe('metrics actions', () => {

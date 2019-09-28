@@ -27,7 +27,7 @@ export class TeamPageComponent implements OnInit {
       title: 'Outreach & Teacher Success',
       photo: '/assets/images/promo/headshot-amanda.jpg',
       emoji: ':crown:',
-      book: "Scrappy Little Nobody",
+      book: 'Scrappy Little Nobody',
     },
     {
       name: 'Brennen Hicklin',
@@ -76,7 +76,7 @@ export class TeamPageComponent implements OnInit {
     },
   ]
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     // Workaround for handling "jump to" fragment/anchor

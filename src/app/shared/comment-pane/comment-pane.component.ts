@@ -18,7 +18,7 @@ import {
 import { AuthService, CommentService, SocketService } from '../../_services'
 import { Angulartics2 } from 'angulartics2'
 import { CommentComponent } from 'src/app/annotator/comment/comment.component'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 @Component({
   selector: 'comment-pane',
   templateUrl: './comment-pane.component.pug',
@@ -78,7 +78,7 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _comments: CommentService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Subscribe to updates to the comment by line number position array

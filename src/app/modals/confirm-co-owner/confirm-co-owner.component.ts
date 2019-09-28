@@ -4,7 +4,7 @@ import { take } from 'rxjs/operators'
 // Project Dependencies
 import { SocketService, MessageService } from '../../_services'
 import { Reading, User } from '../../shared/datatypes'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'edji-confirm-co-owner',
@@ -20,9 +20,9 @@ export class ConfirmCoOwnerModal implements OnInit {
 
   public showError: boolean = false
 
-  constructor(private projectStore: ProjectStore) { }
+  constructor(private projectStore: ProjectStore) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   makeCoOwner(student: User): void {
     this.projectStore.makeCoOwner(student).subscribe(

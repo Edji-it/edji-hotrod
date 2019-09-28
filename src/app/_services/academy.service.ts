@@ -32,7 +32,7 @@ export class AcademyService implements CanActivate {
     private _auth: AuthService,
     private _router: Router,
     private _locker: LockerService,
-  ) { }
+  ) {}
 
   /**
    * Accepts a license that is shared with the user
@@ -162,7 +162,7 @@ export class AcademyService implements CanActivate {
         map(data => {
           return data.licenses
         }),
-    )
+      )
   }
 
   /**
@@ -232,7 +232,7 @@ export class AcademyService implements CanActivate {
   }
 
   /**
-   * Before we start the timer, we'll subscribe to an event that will monitor user activity. 
+   * Before we start the timer, we'll subscribe to an event that will monitor user activity.
    * when the user idles, we'll call on stopReadingTimer and let socket know the user went idle in the reading
    * for the live status indicators. Once the user has activity again, we'll fire another message out to indicate
    * live status and start the timer again
@@ -242,7 +242,7 @@ export class AcademyService implements CanActivate {
       this.userActive = false
       // this will set the user's status on the leaderboard to idle
       this.userStatusSubj.next({
-        status: 'idle'
+        status: 'idle',
       })
     }, 120000) // if the user status indicator is going idle too much, then add more time here!
   }
@@ -252,7 +252,7 @@ export class AcademyService implements CanActivate {
     // this will set the user's status on the leaderboard to active
     if (!this.userActive) {
       this.userStatusSubj.next({
-        status: 'active'
+        status: 'active',
       })
     }
     this.userActive = true

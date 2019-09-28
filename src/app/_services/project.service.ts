@@ -23,9 +23,7 @@ export class ProjectService {
     private _readings: ReadingService,
     private angulartics: Angulartics2,
     private _academy: AcademyService,
-  ) {
-
-  } // constructor
+  ) {} // constructor
 
   /**
    * Pulls projects user has joined, paginated
@@ -47,14 +45,13 @@ export class ProjectService {
     // Populate Teacher to show Reading Creator
     feedParams = feedParams.append('pop', 'teacher')
 
-    return this._http
-      .get<GetProjectsResponse>(this._auth.getUrl() + '/api/v1/projects', {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: this._auth.getToken(),
-        }),
-        params: feedParams,
-      })
+    return this._http.get<GetProjectsResponse>(this._auth.getUrl() + '/api/v1/projects', {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: this._auth.getToken(),
+      }),
+      params: feedParams,
+    })
   }
 
   /**
@@ -63,14 +60,13 @@ export class ProjectService {
    * @returns observable with project data
    */
   public getProject(projectCode: string): Observable<any> {
-    return this._http
-      .get(
-        this._auth.getUrl() +
+    return this._http.get(
+      this._auth.getUrl() +
         '/api/v1/projects/' +
         encodeURIComponent(projectCode) +
         '?pop[]=reading_id&pop[]=teacher&pop[]=co_owners',
-        this._auth.getOptions(),
-      )
+      this._auth.getOptions(),
+    )
   }
 
   /**
@@ -104,8 +100,7 @@ export class ProjectService {
    * @param takes a Project object with the new label
    */
   public post(project: any) {
-    return this._http
-      .post(this._auth.getUrl() + '/api/v1/projects/', project, this._auth.getOptions())
+    return this._http.post(this._auth.getUrl() + '/api/v1/projects/', project, this._auth.getOptions())
   }
 
   /**
@@ -114,8 +109,7 @@ export class ProjectService {
    * @param projectId Project id's string
    */
   public put(updateObj: any, projectId: string): Observable<any> {
-    return this._http
-      .put(this._auth.getUrl() + '/api/v1/projects/' + projectId, updateObj, this._auth.getOptions())
+    return this._http.put(this._auth.getUrl() + '/api/v1/projects/' + projectId, updateObj, this._auth.getOptions())
   }
 
   /** .
@@ -156,11 +150,10 @@ export class ProjectService {
     // Attach replies ids to query string
     search_params = this._auth.arrayParamsToString('reply_ids[]', comment.replies, search_params)
 
-    return this._http
-      .delete(
-        this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments' + search_params,
-        this._auth.getOptions(),
-      )
+    return this._http.delete(
+      this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments' + search_params,
+      this._auth.getOptions(),
+    )
   }
 
   /**
@@ -181,11 +174,10 @@ export class ProjectService {
     let projectId = project._id
     let search_params: string = '?comment_id=' + answer._id
 
-    return this._http
-      .delete(
-        this._auth.getUrl() + '/api/v1/projects/' + projectId + '/answers' + search_params,
-        this._auth.getOptions(),
-      )
+    return this._http.delete(
+      this._auth.getUrl() + '/api/v1/projects/' + projectId + '/answers' + search_params,
+      this._auth.getOptions(),
+    )
   }
 
   /**

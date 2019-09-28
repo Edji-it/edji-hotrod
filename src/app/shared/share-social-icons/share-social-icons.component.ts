@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Angulartics2 } from 'angulartics2';
-import { AuthService } from '../../_services';
+import { Component, OnInit, Input } from '@angular/core'
+import { Angulartics2 } from 'angulartics2'
+import { AuthService } from '../../_services'
 
 @Component({
   selector: 'edji-share-social-icons',
   templateUrl: './share-social-icons.component.pug',
-  styleUrls: ['./share-social-icons.component.scss']
+  styleUrls: ['./share-social-icons.component.scss'],
 })
 export class ShareSocialIconsComponent implements OnInit {
   private _link: string
@@ -26,31 +26,24 @@ export class ShareSocialIconsComponent implements OnInit {
     twitter: '',
     facebook: '',
   }
-  constructor(
-    private _angulartics: Angulartics2,
-    private _auth: AuthService
-  ) { }
+  constructor(private _angulartics: Angulartics2, private _auth: AuthService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   private formatLinks(shareLink: string): SocialLinks {
     let socialLinks = {
       emailSubject: this.subjectCopy,
       emailBody: encodeURIComponent(this.messageCopy + '\n'),
       twitter: encodeURIComponent(this.messageCopy + ' '),
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=`
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=`,
     }
     let email = `mailto:?subject=${socialLinks.emailSubject}&body=${socialLinks.emailBody}`
     let twitter = `https://twitter.com/intent/tweet?text=${socialLinks.twitter}`
 
     return {
-      email:
-        `${email}${encodeURIComponent(shareLink)}`,
-      twitter:
-        `${twitter}${encodeURIComponent(shareLink)}`,
-      facebook:
-        `${socialLinks.facebook}${encodeURIComponent(shareLink)}&amp;src=sdkpreparse`
+      email: `${email}${encodeURIComponent(shareLink)}`,
+      twitter: `${twitter}${encodeURIComponent(shareLink)}`,
+      facebook: `${socialLinks.facebook}${encodeURIComponent(shareLink)}&amp;src=sdkpreparse`,
     }
   }
 

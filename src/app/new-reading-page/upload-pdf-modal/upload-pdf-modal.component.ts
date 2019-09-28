@@ -48,7 +48,7 @@ export class UploadPdfModalComponent implements OnInit {
     private _auth: AuthService,
     private angulartics: Angulartics2,
     private _switches: SecretSwitchesService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Load previously uploaded docs

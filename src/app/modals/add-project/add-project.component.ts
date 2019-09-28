@@ -6,7 +6,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { AuthService } from './../../_services'
 import { User } from '../../shared/datatypes'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'hot-add-project-modal',
@@ -42,7 +42,7 @@ export class AddProjectModal implements OnInit {
     private _fb: FormBuilder,
     private _auth: AuthService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.user = this._auth.getUser()

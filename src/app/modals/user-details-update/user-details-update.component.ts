@@ -37,11 +37,11 @@ export class UserDetailsUpdateModal implements OnInit {
     header: string
     body: string
   } = {
-      header: ':tada: Hooray! Another Teacher!',
-      body: 'We are excited to have you. One more question, and we will leave you to the teaching.',
-    }
+    header: ':tada: Hooray! Another Teacher!',
+    body: 'We are excited to have you. One more question, and we will leave you to the teaching.',
+  }
 
-  public sourceOptions: { source: string, display: string }[] = [
+  public sourceOptions: { source: string; display: string }[] = [
     { source: 'friend', display: 'Friend or colleague' },
     { source: 'twitter', display: 'Twitter' },
     { source: 'facebook', display: 'Facebook' },
@@ -51,17 +51,13 @@ export class UserDetailsUpdateModal implements OnInit {
     { source: 'pd', display: 'Professional development' },
     { source: 'edcamp', display: 'EdCamp' },
     { source: 'conference', display: 'Conference' },
-    { source: 'other', display: 'Other' }
+    { source: 'other', display: 'Other' },
   ]
 
-  constructor(
-    private _auth: AuthService,
-    private _bumble: BumblebeeService,
-    _fb: FormBuilder,
-  ) {
+  constructor(private _auth: AuthService, private _bumble: BumblebeeService, _fb: FormBuilder) {
     this.heardFromForm = _fb.group({
       source: [null, Validators.required],
-      detail: [null]
+      detail: [null],
     })
   }
 
@@ -75,7 +71,7 @@ export class UserDetailsUpdateModal implements OnInit {
     if (this.currentUser.identities && !this.currentUser.identities.includes('teacher')) {
       this.modalHeadings = {
         header: ':tada: Welcome to Edji!',
-        body: 'We are happy to have you, one more question and you\'ll be on your way.'
+        body: "We are happy to have you, one more question and you'll be on your way.",
       }
     }
     // Check if their account was created today
@@ -88,7 +84,7 @@ export class UserDetailsUpdateModal implements OnInit {
 
   /**
    * Submits and closes modal on completion
-   * @param form 
+   * @param form
    */
   public formSubmit(form: FormGroup): void {
     let detail = form.value.detail
@@ -102,7 +98,7 @@ export class UserDetailsUpdateModal implements OnInit {
 
     let heard_from = {
       source: form.value.source,
-      detail: detail
+      detail: detail,
     }
 
     this._auth

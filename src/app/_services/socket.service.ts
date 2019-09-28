@@ -3,7 +3,7 @@ import * as io from 'socket.io-client'
 import { Observable, Subject } from 'rxjs'
 
 import { AuthService } from './auth.service'
-import { userReadingStatus } from '../shared/datatypes';
+import { userReadingStatus } from '../shared/datatypes'
 
 @Injectable()
 export class SocketService {
@@ -136,7 +136,7 @@ export class SocketService {
       let user1 = userList1[i]
       // check the previous users list (if empty, that means we're initializing the project)
       if (len2 > 0) {
-        foundUser = userList2.find((user2) => {
+        foundUser = userList2.find(user2 => {
           return user1.userId === user2.userId
         })
       } else {
@@ -152,7 +152,7 @@ export class SocketService {
       // when checking to see who left the room, check against those that are joining the reading that weren't here previously first
       // that way we do not unintentionally mark the user as offline when they are actually active
       if (statusChange == 'offline' && this.newLiveUsers.length > 0) {
-        newListCheck = this.newLiveUsers.find((newUser) => {
+        newListCheck = this.newLiveUsers.find(newUser => {
           return user1.userId === newUser && newUser.userId
         })
       }
@@ -176,7 +176,7 @@ export class SocketService {
     this.groupUpdateEvent({
       type: 'updateUserStatus',
       status: status,
-      user: { _id: liveUser.userId }
+      user: { _id: liveUser.userId },
     })
   }
 }

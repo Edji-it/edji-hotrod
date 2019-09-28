@@ -5,7 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from '../datatypes'
 import { CommentService, AuthService, ReadingService } from '../../_services'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 export abstract class BaseAnswerComponent implements OnInit {
   /*
@@ -36,7 +36,7 @@ export abstract class BaseAnswerComponent implements OnInit {
     this.user = this._auth.getUser()
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   // Ask ProjectService to tell the server to save this comment.
   public saveAnswer(newAnswer: EdjiComment): void {

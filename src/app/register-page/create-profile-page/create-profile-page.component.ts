@@ -12,9 +12,9 @@ import { ALLSPARK } from './../../app.constants'
 import { LockerService } from '../../_services/locker.service'
 
 @Component({
-    selector: 'edji-register',
-    styles: [
-        `
+  selector: 'edji-register',
+  styles: [
+    `
       .btn-group-wrapper {
         width: 100%;
         text-align: center;
@@ -28,54 +28,53 @@ import { LockerService } from '../../_services/locker.service'
         border: 3px solid #4a92bc;
       }
     `,
-    ],
-    templateUrl: './create-profile-page.component.pug',
+  ],
+  templateUrl: './create-profile-page.component.pug',
 })
 export class CreateProfilePageComponent implements OnInit, OnDestroy {
-    /*
+  /*
     Last Mod: 17 June 2017
   
     The page for registering a user.
     */
 
-    private subscriptions: Subscription[] = []
+  private subscriptions: Subscription[] = []
 
-    public successObject: {
-    } = {}
+  public successObject: {} = {}
 
-    /** The reading id that the user wanted to make a copy of */
-    public readingToAdd: string
-    public projectToAdd: string
+  /** The reading id that the user wanted to make a copy of */
+  public readingToAdd: string
+  public projectToAdd: string
 
-    constructor(
-        private _auth: AuthService,
-        private _router: Router,
-        private _project: ProjectService,
-        private route: ActivatedRoute,
-        private angulartics: Angulartics2,
-        private _fb: FormBuilder,
-        private _title: Title,
-        private _locker: LockerService,
-    ) { }
+  constructor(
+    private _auth: AuthService,
+    private _router: Router,
+    private _project: ProjectService,
+    private route: ActivatedRoute,
+    private angulartics: Angulartics2,
+    private _fb: FormBuilder,
+    private _title: Title,
+    private _locker: LockerService,
+  ) {}
 
-    ngOnInit() {
-        // This makes the window always render scrolled to the top
-        let startEl = document.getElementById('top')
-        startEl && startEl.scrollIntoView()
+  ngOnInit() {
+    // This makes the window always render scrolled to the top
+    let startEl = document.getElementById('top')
+    startEl && startEl.scrollIntoView()
 
-        this._title.setTitle('Edji | Create Profile')
+    this._title.setTitle('Edji | Create Profile')
 
-        this.subscriptions.push(
-            this.route.queryParams.subscribe(queryParams => {
-                this.readingToAdd = queryParams['reading']
-                this.projectToAdd = queryParams['project']
-            }),
-        )
-    }
+    this.subscriptions.push(
+      this.route.queryParams.subscribe(queryParams => {
+        this.readingToAdd = queryParams['reading']
+        this.projectToAdd = queryParams['project']
+      }),
+    )
+  }
 
-    ngOnDestroy() {
-        this.subscriptions.forEach(sub => {
-            sub.unsubscribe()
-        })
-    }
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
+  }
 }

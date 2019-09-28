@@ -6,7 +6,7 @@ import { AuthService } from './auth.service'
 import { ProjectService, ReadingService, SocketService } from './'
 import { Angulartics2 } from 'angulartics2'
 import { EdjiComment, CommentPermissions, Project } from '../shared/datatypes'
-import { ProjectStore } from '../_store';
+import { ProjectStore } from '../_store'
 
 @Injectable()
 export class CommentService {
@@ -34,9 +34,9 @@ export class CommentService {
     private _auth: AuthService,
     private _socket: SocketService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
   /**
    * Deactivates all Comment Components
    * - Fires clearActiveComments observable
@@ -191,7 +191,7 @@ export class CommentService {
     if (this.commentContext !== 'answer') {
       this.projectStore
         .saveComment(comment)
-        .then(comment => { })
+        .then(comment => {})
         .catch(error => {
           console.log(error)
         })

@@ -107,7 +107,11 @@ export class Sidebar {
   // Click the log out button.
   public clickAccountButton(): void {
     // Ensure nav menu icon is clickable
-    browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 3000, 'nav/avatar menu icon was not clickable while going to access account menu option')
+    browser.wait(
+      this.EC.elementToBeClickable(this.avatarActionIcon),
+      3000,
+      'nav/avatar menu icon was not clickable while going to access account menu option',
+    )
     this.avatarActionIcon.click()
     this.accountButton.isPresent().then(result => {
       if (result) {
@@ -123,10 +127,18 @@ export class Sidebar {
   // Click nav refferal button
   public clickReferralButton(): void {
     // Ensure nav menu icon is clickable
-    browser.wait(this.EC.elementToBeClickable(this.avatarActionIcon), 3000, 'nav/avatar menu icon was not clickable while going to access referral menu option')
+    browser.wait(
+      this.EC.elementToBeClickable(this.avatarActionIcon),
+      3000,
+      'nav/avatar menu icon was not clickable while going to access referral menu option',
+    )
     this.avatarActionIcon.click()
     // Select Referral menu option
-    browser.wait(this.EC.elementToBeClickable(this.referralButton), 3000, 'referral menu option did not show in user menu')
+    browser.wait(
+      this.EC.elementToBeClickable(this.referralButton),
+      3000,
+      'referral menu option did not show in user menu',
+    )
     this.referralButton.click()
     // sleep() excuse - Wait for modal to fade in
     browser.sleep(400)

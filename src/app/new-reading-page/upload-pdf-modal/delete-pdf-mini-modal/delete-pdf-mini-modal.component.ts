@@ -11,5 +11,5 @@ export class DeletePdfMiniModal {
   @Output() confirm = new EventEmitter<any>()
   @Output() dismiss = new EventEmitter<any>()
 
-  constructor() { }
+  constructor() {}
 }

@@ -7,7 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 import { AuthService, ReadingService, SocketService } from '../../_services'
 import { CommentStats, Project, Reading } from './../../shared/datatypes'
 import { ActivatedRoute } from '@angular/router'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'owner-tools',

@@ -12,7 +12,7 @@ import { LockerService } from '../_services/locker.service'
 
 import { environment } from '../../environments/environment'
 import { AcademyService } from './academy.service'
-import { generateInitialsFromName } from '../_store/user.decorators';
+import { generateInitialsFromName } from '../_store/user.decorators'
 const { version: appVersion } = require('../../../package.json')
 
 declare var gtag: any
@@ -146,7 +146,7 @@ export class AuthService implements CanActivate {
     let notSchoolStaff = studentId && !['teacher', 'administrator', 'coach'].some(id => user.identities.includes(id))
     user.isStudent = user.type === 'temp' || (studentId && notSchoolStaff)
     // Determine if user has completed required profile fields
-    user.profileIncomplete = (user.type !== 'temp' && (!user.fullname || !user.identities || user.identities.length < 1))
+    user.profileIncomplete = user.type !== 'temp' && (!user.fullname || !user.identities || user.identities.length < 1)
     // Determine if user is an Academy Admin
     if (user && user.license_ids && user.license_ids[0]) {
       this.fetchAcademies(user)
@@ -286,7 +286,14 @@ export class AuthService implements CanActivate {
    */
   public getPublicUser(): PublicUser {
     let user = this.getUser()
-    return (({ _id, type, username, fullname, initials, avatar }) => ({ _id, type, username, fullname, initials, avatar }))(user)
+    return (({ _id, type, username, fullname, initials, avatar }) => ({
+      _id,
+      type,
+      username,
+      fullname,
+      initials,
+      avatar,
+    }))(user)
   }
 
   public getCurrentUser(): Observable<User> {
@@ -713,12 +720,12 @@ export class AuthService implements CanActivate {
 
     return this._http.post<any>(
       this.baseUrl +
-      '/api/v1/users/tokens/' +
-      resetObject.type +
-      '/' +
-      resetObject.token +
-      '/?user_id=' +
-      resetObject.userId,
+        '/api/v1/users/tokens/' +
+        resetObject.type +
+        '/' +
+        resetObject.token +
+        '/?user_id=' +
+        resetObject.userId,
       { [resetObject.type]: resetObject.newValue },
       {
         headers: newHeaders,

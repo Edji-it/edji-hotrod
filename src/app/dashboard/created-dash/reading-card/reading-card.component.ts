@@ -52,7 +52,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private angulartics: Angulartics2,
     private _auth: AuthService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

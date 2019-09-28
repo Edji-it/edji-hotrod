@@ -10,23 +10,23 @@ interface NumericMetrics {
 
 const initialState: MetricsState = {
   metricsLoaded: false,
-  hero_page_load_count: 0
+  hero_page_load_count: 0,
 }
 
 export enum MetricsActions {
   IncrementMetric = '[Metrics] IncrementMetric',
-  SetState = '[Metrics] SetState'
+  SetState = '[Metrics] SetState',
 }
 
 // handled by an effect
 export class IncrementMetric implements Action {
   readonly type = MetricsActions.IncrementMetric
-  constructor(public payload: string) { }
+  constructor(public payload: string) {}
 }
 
 export class SetState implements Action {
   readonly type = MetricsActions.SetState
-  constructor(public payload: MetricsState) { }
+  constructor(public payload: MetricsState) {}
 }
 
 export type MetricsActionsUnion = IncrementMetric | SetState
@@ -36,9 +36,9 @@ export function metricsReducer(state: MetricsState = initialState, action: Metri
     case MetricsActions.SetState:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       }
     default:
       return state
   }
-} 
+}

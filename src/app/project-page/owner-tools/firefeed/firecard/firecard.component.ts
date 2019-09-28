@@ -4,7 +4,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, 
 // Internal
 import { EdjiComment, Reading } from '../../../../shared/datatypes'
 import { CommentService, ReadingService, SocketService } from '../../../../_services'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'hot-firecard',
@@ -32,7 +32,7 @@ export class FirecardComponent implements OnInit, OnDestroy {
     private _socket: SocketService,
     private _comments: CommentService,
     private projectStore: ProjectStore,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

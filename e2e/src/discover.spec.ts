@@ -131,7 +131,10 @@ describe('Discover Feed', () => {
       browser.sleep(1000)
       // grab the title of the reading for which we are editing and compare the two
       let titleValue = discover.getInputFieldText(newReading.titleInput)
-      expect(titleValue).toEqual(readingTitle, 'the new reading we are about to create does not match what we just got from the discover feed')
+      expect(titleValue).toEqual(
+        readingTitle,
+        'the new reading we are about to create does not match what we just got from the discover feed',
+      )
 
       let newReadingTitle = `rp - ${new Date().valueOf()}`
       newReading.titleInput.clear()
@@ -349,11 +352,7 @@ describe('Discover Feed', () => {
         'strategies collection button was not clickable',
       )
       discover.filterStrategies.click()
-      browser.wait(
-        EC.elementToBeClickable(discover.strategiesBanner),
-        5000,
-        'never saw strategies collection',
-      )
+      browser.wait(EC.elementToBeClickable(discover.strategiesBanner), 5000, 'never saw strategies collection')
     })
 
     it('should open strategies collection from the user dashboard', () => {
@@ -365,11 +364,7 @@ describe('Discover Feed', () => {
         'strategies collection button was not clickable',
       )
       dashboard.strategiesBtn.click()
-      browser.wait(
-        EC.elementToBeClickable(discover.strategiesBanner),
-        5000,
-        'never saw strategies collection',
-      )
+      browser.wait(EC.elementToBeClickable(discover.strategiesBanner), 5000, 'never saw strategies collection')
     })
   })
 })
