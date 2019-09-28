@@ -1,4 +1,5 @@
 export interface DocumentSpark {
+  title?: string
   uuid?: string
   pages?: string[]
   converted: boolean

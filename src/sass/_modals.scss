@@ -7,7 +7,7 @@ $modalBodyBg: #fff;
 
 .modal-will-fade {
   &,
-  .modal,
+  & > .modal,
   .modal-content {
     opacity: 0;
     pointer-events: none;
@@ -21,7 +21,7 @@ $modalBodyBg: #fff;
 
   &.show {
     &,
-    .modal,
+    & > .modal,
     .modal-content {
       opacity: 1;
       pointer-events: all;

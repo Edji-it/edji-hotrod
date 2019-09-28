@@ -6,6 +6,12 @@
   background-color: #87d87c;
 }
 
+.badge-warning {
+  &.hover-parent:hover {
+    background-color: #d39e00;
+  }
+}
+
 .badge-teacher {
   background-color: #fff;
   color: #969696;

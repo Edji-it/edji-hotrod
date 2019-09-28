@@ -1,21 +1,22 @@
-.modal-will-fade([class.show]="_util.showFeedbackModal")
+.modal-will-fade([class.show]="_util.showFeedbackModal || showModal")
   .modal
-    .modal-dialog(role="document")
+    .modal-dialog.modal-lg(role="document")
       .modal-content
         .modal-header
-          h4.modal-title How can we help?
+          h4.modal-title {{ title }}
           button.close.btn-icon--round(type="button", (click)="feedbackClose()", aria-label="Close")
             span(aria-hidden="true") &times;
 
         form#feedbackForm([formGroup]="feedbackForm", (ngSubmit)="sendFeedback(feedbackForm.value)") 
           .modal-body
-            p What's on your mind? Maybe you found a problem with our website? Or have questions about how to use Edji? Let us know below!
-            label(for="nameInput") Name
-              input#nameInput(type="text", [placeholder]="userCopy.fullname", [formControl]="feedbackForm.controls['name']", tabindex="0")
-              #msgNameRequired.alert.alert-info(*ngIf="feedbackForm.controls['name'].hasError('required')")
-                strong Info&nbsp;
-                | Let us know who you are!
-
+            p([innerHtml]="subHeading")
+            .form-group
+              label(for="nameInput") Name
+                input#nameInput(type="text", [placeholder]="userCopy.fullname", [formControl]="feedbackForm.controls['name']", tabindex="0")
+                #msgNameRequired.alert.alert-info(*ngIf="feedbackForm.controls['name'].hasError('required')")
+                  strong Info&nbsp;
+                  | Let us know who you are!
+            .form-group
               label(for="emailInput") Email
               input#emailInput(type="text", [placeholder]="userCopy.email", [formControl]="feedbackForm.controls['email']", tabindex="0")
               #msgEmailRequired.alert.alert-info(*ngIf="feedbackForm.controls['email'].hasError('required')")
@@ -24,19 +25,26 @@
               #msgEmailIncorrect.alert.alert-info(*ngIf="!feedbackForm.controls['email'].hasError('required') && feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty")
                 strong Invalid Email&nbsp;
                 | We're not sure that's a real email
-
+            .form-group
               label(for="feedbackInput") Message
               textarea#feedbackInput([formControl]="feedbackForm.controls['content']", maxlength="1000", rows="10", name="content", tabindex="0")
               #msgContentRequired.alert.alert-info(*ngIf="feedbackForm.controls['content'].hasError('required')")
                 strong Message Required&nbsp;
                 | Let us know why you are reaching out!
-              
-              #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
-                strong Server Error!&nbsp;
-                | {{errorObject.serverError}}
+            .mt-2(*ngIf="optionForContact")
+              .custom-control.custom-checkbox
+                input.custom-control-input#contactCheck(
+                  type="checkbox", 
+                  [formControl]="feedbackForm.controls['shouldContact']"
+                )
+                label#termsText.custom-control-label.text-muted(for="contactCheck") 
+                  | I would like to be contacted with updates on this issue
+            #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
+              strong Server Error!&nbsp;
+              | {{errorObject.serverError}}
           .modal-footer
               button.btn.btn-secondary(type="button", (click)="feedbackClose()") Cancel
-              button.btn.btn-primary(type="submit", [disabled]="!feedbackForm.valid", [class.loading]="loading", name="send feedback", tabindex="0") Send Feedback
+              button.btn.btn-primary(type="submit", [disabled]="!feedbackForm.valid", [class.loading]="loading", name="send feedback", tabindex="0") Submit
 
 //- Success Modal
 .modal-will-fade([class.show]="showFeedbackSuccess")

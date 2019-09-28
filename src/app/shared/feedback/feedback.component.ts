@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
@@ -15,9 +15,19 @@ import { Copy } from '..'
   styleUrls: ['./feedback.component.scss'],
 })
 export class FeedbackComponent implements OnInit {
+  @Input()
+  public prefillMessage: string
+  @Input()
+  public showModal: boolean
+  @Input()
+  public title: string = 'How can we help?'
+  @Input()
+  public subHeading: string = 'Found a problem? Have questions? Just want to say hello?\nLet us know below!'
+  @Input()
+  public optionForContact: boolean
+
   @Output()
   private openModal: EventEmitter<any> = new EventEmitter()
-
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter()
 
@@ -51,6 +61,7 @@ export class FeedbackComponent implements OnInit {
       name: [this.user.fullname, Validators.required],
       email: [this.user.email, [Validators.required, this.emailValidator]],
       content: [prevData.content, Validators.required],
+      shouldContact: [true]
     })
 
     this.window = window
@@ -58,6 +69,9 @@ export class FeedbackComponent implements OnInit {
 
   ngOnInit() {
     this.userCopy = new Copy().getUserCopy()
+    if (this.prefillMessage) {
+      this.feedbackForm.controls.content.setValue(this.prefillMessage)
+    }
   }
 
   /** Validates email against the same regex used on the server
@@ -110,6 +124,10 @@ export class FeedbackComponent implements OnInit {
       this._util.getEdjiVersion() +
       '<br>' +
       window.location.href
+    // Attach whether or not they wish to be contacted
+    if (this.optionForContact) {
+      formValue.content += '\n\n*Would like to be contacted with updates:* ' + formValue.shouldContact
+    }
 
     // Only send the user properties we need to bumblebee
     var userSend: any = {
@@ -127,7 +145,6 @@ export class FeedbackComponent implements OnInit {
       type: 'feedback',
       user: userSend,
     }
-
     this._bumblebee
       .sendFeedback(data)
       .pipe(take(1))

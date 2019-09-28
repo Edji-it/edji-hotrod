@@ -401,6 +401,13 @@ section.search {
     margin-bottom: 0.5em;
     height: auto;
   }
+
+  & img {
+    // Match reading display
+    background: #fff;
+    border: 1px solid #efefef;
+    border-radius: 3px;
+  }
 }
 // Styles for reading editor should replicate style of actual reading page
 .ta-bind {
