@@ -369,12 +369,22 @@ export class NewReadingPage implements OnInit, OnDestroy {
   }
 
   /**
+   * Handle content model change hooks
+   * @param newContent 
+   * @param readingPartIndex 
+   */
+  public contentModelChange(newContent, readingPartIndex) {
+    // Trigger autosave
+    this.changeMonitor()
+    // Update model
+    this.readingHtml[readingPartIndex].text = newContent
+  }
+
+  /**
    * Checks on the content field's cursor position
    * - Enables inserting images at cursor position
    */
-  public contentChange(event: Event) {
-    // Trigger autosave
-    this.changeMonitor()
+  public selectionInteraction(event: Event) {
     // Handle insert position
     if (!Rangy) {
       // Clicking the editor before page is finished loading causes a broken reference to Rangy
