@@ -92,7 +92,11 @@ export class NewReading implements PageObjectInterface {
   } // getPage() : void
 
   public addNewReading(): void {
-    browser.wait(this.EC.elementToBeClickable(element(by.css('[data-test="navShareReadingBtn"]'))), 3000, 'share button in nav was not clickable when creating new reading')
+    browser.wait(
+      this.EC.elementToBeClickable(element(by.css('[data-test="navShareReadingBtn"]'))),
+      3000,
+      'share button in nav was not clickable when creating new reading',
+    )
     // Click the share button for new reading no matter if it is on desktop or mobile
     this.addButton.isPresent().then(result => {
       if (result) {

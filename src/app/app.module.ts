@@ -25,7 +25,7 @@ Sentry.init({
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  constructor() { }
+  constructor() {}
   handleError(error) {
     // Post error to Sentry
     Sentry.captureException(error.originalError || error)
@@ -54,10 +54,7 @@ import {
 // import { ReuseStrategy } from './route-reuse-strategy'
 
 // Store Services
-import {
-  ProjectStore,
-  ProjectListStore
-} from './_store'
+import { ProjectStore, ProjectListStore } from './_store'
 
 // Directives
 import { MediumEditorModule } from 'angular2-medium-editor'
@@ -73,7 +70,7 @@ import {
   TutorialBoxComponent,
   ResetComponent,
   PromoBannerComponent,
-  SchoolSelectorComponent
+  SchoolSelectorComponent,
 } from './shared'
 import { HomeComponent } from './home'
 import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
@@ -288,7 +285,7 @@ const routerOptions: ExtraOptions = {
     ReadingRecapComponent,
     TeamPageComponent,
     PromoBannerComponent,
-    SchoolSelectorComponent
+    SchoolSelectorComponent,
   ],
   /** Components which can be dynamically created */
   entryComponents: [UserDetailsUpdateModal],
@@ -323,4 +320,4 @@ const routerOptions: ExtraOptions = {
     APP_PROVIDERS,
   ],
 }) //@NgModule
-export class AppModule { }
+export class AppModule {}

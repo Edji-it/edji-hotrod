@@ -19,11 +19,7 @@ export class BumblebeeService {
     // this.flakUrl = '//localhost:4200'
   }
 
-  public postMessage(options: {
-    target: string
-    message: string
-    target_type?: MessageTarget
-  }): void {
+  public postMessage(options: { target: string; message: string; target_type?: MessageTarget }): void {
     this._http.post(`${this.flakUrl}/bumblebee/messages`, options).toPromise()
   }
 
@@ -33,7 +29,7 @@ export class BumblebeeService {
         .post(this.url + '/newuser', { userDetails: userDetails, sendType: sendType }, this._auth.getOptions())
         .pipe(take(1))
         .subscribe(
-          success => { },
+          success => {},
           error => {
             console.error(error)
           },
@@ -53,7 +49,7 @@ export class BumblebeeService {
         .post(this.url + '/hero', { user: user, action: action }, this._auth.getOptions())
         .pipe(take(1))
         .subscribe(
-          success => { },
+          success => {},
           error => {
             console.error(error)
           },
@@ -67,7 +63,7 @@ export class BumblebeeService {
         .post(this.url + '/error', { error: error }, this._auth.getOptions())
         .pipe(take(1))
         .subscribe(
-          success => { },
+          success => {},
           error => {
             console.error(error)
           },

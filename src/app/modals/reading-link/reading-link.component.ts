@@ -18,10 +18,8 @@ export class ReadingLinkModal implements OnInit {
 
   @Output() private closeModal: EventEmitter<boolean> = new EventEmitter()
 
-  constructor(
-    // imports
-  ) {
-  }
+  constructor() // imports
+  {}
 
   ngOnInit() {
     this.readingLink = `${location.origin}/#/discover?preview=${this.shareReading._id}`
@@ -30,5 +28,4 @@ export class ReadingLinkModal implements OnInit {
   public close() {
     this.closeModal.emit(false)
   }
-
 }

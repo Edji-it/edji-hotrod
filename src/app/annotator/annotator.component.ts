@@ -33,7 +33,7 @@ import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './.
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
-import { ProjectStore } from '../_store';
+import { ProjectStore } from '../_store'
 
 @Component({
   selector: 'annotator',
@@ -991,7 +991,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     end: number,
     box: { start: number; end: number },
   ): void {
-    if (!box || typeof (box.start) != 'number') {
+    if (!box || typeof box.start != 'number') {
       // We process non-box comments at index 0 in highlight arrays
       box = {
         start: 0,
@@ -1237,7 +1237,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
-      let getNodeIndex = function (node: any): number {
+      let getNodeIndex = function(node: any): number {
         // Selections often happen at the text node level, inside the actual element
         // In which case we need to reference its parent node
         // Note: we tried node.hasOwnProperty here and would sometimes get a false true resolution of the if statement... not sure how that is possible
@@ -1327,7 +1327,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         // Found a text node!
 
         // Split text inside child nodes
-        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function (el) {
+        let nodeWords = node.textContent.split(/(?:([^a-zA-Z0-9]))/).filter(function(el) {
           return el.replace(/([\n])/g, '')
         })
 

@@ -80,7 +80,10 @@ describe('Project Page', () => {
       browser.sleep(200)
       // Verify commented words have highlight (1) class
       expect(firstWord.getAttribute('class')).toContain('h-1', 'highlight class not found on first word clicked')
-      expect(middleWord.getAttribute('class')).toContain('h-1', 'highlight class not found on word in between words clicked')
+      expect(middleWord.getAttribute('class')).toContain(
+        'h-1',
+        'highlight class not found on word in between words clicked',
+      )
       // delete the comment
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
       project.commentDelete.click()

@@ -18,7 +18,7 @@ import {
 } from '../../_services'
 import { User, Project } from '../datatypes'
 import { AutosaveState } from '../../new-reading-page'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'nav-bar',
@@ -102,9 +102,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     code?: boolean
     academy?: boolean
   } = {
-      // Default expand code
-      code: true,
-    }
+    // Default expand code
+    code: true,
+  }
   // Nav Slider Button loading states
   public sliderBtnLoading: {
     heat?: boolean

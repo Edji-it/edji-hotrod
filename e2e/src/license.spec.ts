@@ -18,13 +18,17 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     afterEach(() => {
       sidebar.logout()
 
-      browser.manage().logs().get('browser').then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
+      browser
+        .manage()
+        .logs()
+        .get('browser')
+        .then(browserLog => {
+          if (browserLog.length > 0) {
+            browserLog.forEach(log => {
+              console.error(log.message)
+            })
+          }
+        })
     })
 
     it('should log in as a student and not be able to access the academy license manage page', () => {
@@ -72,7 +76,10 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       let activeLicenseVal = element(by.id('activeLicenseCount'))
       browser.wait(EC.visibilityOf(activeLicenseVal), 3000, 'not able to find the active license value')
       activeLicenseVal.getText().then(count => {
-        expect(parseInt(count.substring(0, 1))).toBeGreaterThanOrEqual(1, 'active licenses value should be greater than or equal to 1')
+        expect(parseInt(count.substring(0, 1))).toBeGreaterThanOrEqual(
+          1,
+          'active licenses value should be greater than or equal to 1',
+        )
       })
     })
 
@@ -126,8 +133,8 @@ describe('Academy user that has ability to manage licenses for their academy: ',
     })
   })
 
-  var specificTextToBePresentInElement = function (elementFinder, nameText) {
-    var hasText = function () {
+  var specificTextToBePresentInElement = function(elementFinder, nameText) {
+    var hasText = function() {
       return elementFinder.getText().then(text => {
         return text
       })

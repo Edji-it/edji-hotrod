@@ -62,22 +62,22 @@ export class Copy {
         fullname: 'Benjamin Franklin',
         firstname: 'Benjamin',
         lastname: 'Franklin',
-        email: 'ben@whitehouse.gov'
+        email: 'ben@whitehouse.gov',
       },
       {
         username: 'OccupyMars',
         fullname: 'Elon Musk',
         firstname: 'Elon',
         lastname: 'Musk',
-        email: 'elon@spacex.com'
+        email: 'elon@spacex.com',
       },
       {
         username: 'EloquentPen',
         fullname: 'Jane Austen',
         firstname: 'Jane',
         lastname: 'Austen',
-        email: 'jane@northangerabbey.co.uk'
-      }
+        email: 'jane@northangerabbey.co.uk',
+      },
     ],
   }
 

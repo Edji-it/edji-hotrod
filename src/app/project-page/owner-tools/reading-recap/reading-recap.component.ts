@@ -12,7 +12,7 @@ import { User, Project, EdjiComment, CommentStats } from '../../../shared/dataty
 import { AuthService, AcademyService, SocketService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'hot-reading-recap',
@@ -70,7 +70,7 @@ export class ReadingRecapComponent implements OnInit {
     private _fb: FormBuilder,
     private _academy: AcademyService,
     private angulartics: Angulartics2,
-    private _socket: SocketService
+    private _socket: SocketService,
   ) {
     this.evaluationForm = _fb.group({
       email: [null, [Validators.required, this.emailValidator]],
@@ -298,7 +298,7 @@ export class ReadingRecapComponent implements OnInit {
 
             // user our academy service to package up the email details and send it off to our api if the project successfully updated
             this._academy.sendReadingRecap(formValue, pdfData).subscribe(
-              data => { },
+              data => {},
               error => {
                 console.error(error)
               },
@@ -345,7 +345,7 @@ export class ReadingRecapComponent implements OnInit {
       this.evaluations.push(newEval)
       this._socket.groupUpdateEvent({
         type: 'feedbackUpdate',
-        feedback: newEval
+        feedback: newEval,
       })
     }),
       error => {

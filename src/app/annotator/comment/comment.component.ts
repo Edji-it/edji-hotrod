@@ -81,7 +81,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     public el: ElementRef,
     private _socket: SocketService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Set initial values if passed

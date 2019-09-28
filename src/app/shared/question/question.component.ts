@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 // Project Dependencies
 import { EdjiComment, EdjiQuestion, Project, Reading, User } from '../datatypes'
 import { CommentService, AuthService, ProjectService, ReadingService, SocketService } from '../../_services'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 enum ResponseType {
   OpenEnded = 0,

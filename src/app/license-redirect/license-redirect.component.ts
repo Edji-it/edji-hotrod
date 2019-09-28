@@ -30,7 +30,7 @@ export class LicenseRedirectComponent implements OnInit, OnDestroy {
     private _locker: LockerService,
     private _academy: AcademyService,
     public _util: UtilToolService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
