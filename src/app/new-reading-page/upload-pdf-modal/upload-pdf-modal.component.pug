@@ -91,7 +91,7 @@
                 .card-img-overlay.overlay-on-hover
                   button.btn.btn-primary.card__center-overlay Insert
                 .badge.badge-warning.document-tag.hover-parent(
-                  *ngIf="hasWordsError(doc, i)",
+                  *ngIf="wordHighlightsEnabled && hasWordsError(doc, i)",
                   (click)="loadReportErrorModal(doc)"
                 )
                   span.hover-hide No words found
