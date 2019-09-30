@@ -4,7 +4,7 @@ import { AuthService } from '.'
 
 @Injectable()
 export class DashboardGuardService implements CanActivate {
-  constructor(private router: Router, private _auth: AuthService) { }
+  constructor(private router: Router, private _auth: AuthService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     let user = this._auth.getUser()

@@ -1,24 +1,20 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Angulartics2 } from 'angulartics2';
-import { AuthService } from '../../_services';
+import { Component, OnInit, Input } from '@angular/core'
+import { Angulartics2 } from 'angulartics2'
+import { AuthService } from '../../_services'
 
 @Component({
   selector: 'edji-share-link',
   templateUrl: './share-link.component.pug',
-  styleUrls: ['./share-link.component.scss']
+  styleUrls: ['./share-link.component.scss'],
 })
 export class ShareLinkComponent implements OnInit {
   @Input() link: string
 
   public linkCopySuccess: boolean
 
-  constructor(
-    private _angulartics: Angulartics2,
-    private _auth: AuthService
-  ) { }
+  constructor(private _angulartics: Angulartics2, private _auth: AuthService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   /**
    * Copies the referral link to the user's clipboard

@@ -32,7 +32,7 @@ export class RegisterForm {
   /**
    * Tests all Registration Form errors
    */
-  public testRegisterErrors(): void { }
+  public testRegisterErrors(): void {}
 
   /**
    * Clear registration form
@@ -52,7 +52,14 @@ export class RegisterForm {
   /**
    * Register a User
    */
-  public submit(type?: string, username?: string, firstname?: string, lastname?: string, email?: string, password?: string): void {
+  public submit(
+    type?: string,
+    username?: string,
+    firstname?: string,
+    lastname?: string,
+    email?: string,
+    password?: string,
+  ): void {
     if (!type) {
       type = 'robot'
     }
@@ -94,14 +101,22 @@ export class RegisterForm {
 
     // Should land on Create Profile page
     browser.wait(this.EC.urlContains('register/profile'), 5000, 'first registration form did not land on profile page')
-    browser.wait(this.EC.elementToBeClickable(this.firstnameInput), 3000, 'first name input or profile page did not load')
+    browser.wait(
+      this.EC.elementToBeClickable(this.firstnameInput),
+      3000,
+      'first name input or profile page did not load',
+    )
 
     // Enter name
     this.firstnameInput.sendKeys(firstname)
     this.lastnameInput.sendKeys(lastname)
     // Select identity
     this.otherIdentities.click()
-    browser.wait(this.EC.elementToBeClickable(this.robotOption), 3000, 'other identity options did not become available')
+    browser.wait(
+      this.EC.elementToBeClickable(this.robotOption),
+      3000,
+      'other identity options did not become available',
+    )
     if (type === 'teacher') {
       this.teacherOption.click()
     } else if (type === 'student') {
@@ -114,17 +129,9 @@ export class RegisterForm {
       // enter a school district name if they are a teacher or admin account type
       this.schoolInput.sendKeys('District Edji')
       // make sure the suggested schools/districts list shows
-      browser.wait(
-        this.EC.elementToBeClickable(this.schoolSuggest),
-        5000,
-        "school suggestion list never loaded",
-      )
+      browser.wait(this.EC.elementToBeClickable(this.schoolSuggest), 5000, 'school suggestion list never loaded')
       // select the first result
-      browser.wait(
-        this.EC.elementToBeClickable(this.firstSchoolSuggest),
-        5000,
-        "first school suggestion never loaded",
-      )
+      browser.wait(this.EC.elementToBeClickable(this.firstSchoolSuggest), 5000, 'first school suggestion never loaded')
       this.firstSchoolSuggest.click()
     }
     // Submit!

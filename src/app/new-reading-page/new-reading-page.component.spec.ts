@@ -17,9 +17,6 @@ import {
 } from '../_services'
 import { NewReadingPage } from './new-reading-page.component'
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { SharedModule } from '../app-shared.module'
-import { ActivatedRoute } from '@angular/router'
-import { AppModule } from '../app.module'
 import { EmojiOnePipe } from '../_pipes'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
@@ -91,7 +88,7 @@ describe('NewReadingPage', () => {
             },
             getEnv: () => {
               return 'dev'
-            }
+            },
           },
         },
         { provide: ProjectService, useValue: {} },
@@ -114,7 +111,7 @@ describe('NewReadingPage', () => {
         },
         { provide: Hammer, useValue: {} },
         { provide: Angulartics2, useValue: {} },
-        { provide: Angulartics2GoogleGlobalSiteTag, useValue: { startTracking: () => { } } },
+        { provide: Angulartics2GoogleGlobalSiteTag, useValue: { startTracking: () => {} } },
         FormBuilder,
       ],
       imports: [RouterTestingModule, ReactiveFormsModule, FormsModule],

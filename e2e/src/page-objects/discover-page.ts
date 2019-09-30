@@ -120,13 +120,13 @@ export class Discover implements PageObjectInterface {
   }
 
   getReadingTitle(el: any) {
-    return el.getText().then(function (text: string) {
+    return el.getText().then(function(text: string) {
       return text
     })
   }
 
   getInputFieldText(el: any) {
-    return el.getAttribute('value').then(function (value: string) {
+    return el.getAttribute('value').then(function(value: string) {
       return value
     })
   }

@@ -9,7 +9,15 @@ import { RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 // Project Dependencies
-import { NavBarComponent, FooterComponent, FollowTag, FeedbackComponent, MessageToastsComponent, ShareLinkComponent, UserAvatarComponent } from './shared'
+import {
+  NavBarComponent,
+  FooterComponent,
+  FollowTag,
+  FeedbackComponent,
+  MessageToastsComponent,
+  ShareLinkComponent,
+  UserAvatarComponent,
+} from './shared'
 // Pipes
 import {
   AddClassPipe,
@@ -21,11 +29,17 @@ import {
   UserInitialsPipe,
 } from './_pipes'
 // ShareCodeComponent has to be imported here due to its living in the nav bar
-import { ReferralModalComponent, HeroSubscribeComponent, RequestAcademyModal, LicenseInviteComponent, ShareCodeComponent } from './modals'
+import {
+  ReferralModalComponent,
+  HeroSubscribeComponent,
+  RequestAcademyModal,
+  LicenseInviteComponent,
+  ShareCodeComponent,
+} from './modals'
 import { GoogleClassroomShareButton, CopyLinkShareButton } from './buttons'
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
-import { PromoPageComponent } from './promo/promo.component';
+import { PromoPageComponent } from './promo/promo.component'
 import { ShareSocialIconsComponent } from './shared/share-social-icons/share-social-icons.component'
 
 let SHARED_DECLARATIONS = [
@@ -75,4 +89,4 @@ let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule]
    */
   exports: [SHARED_DECLARATIONS, SHARED_IMPORTS],
 })
-export class SharedModule { }
+export class SharedModule {}

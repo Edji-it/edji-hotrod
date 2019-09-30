@@ -143,7 +143,7 @@ export class HeroPricingComponent implements OnInit {
     private angulartics: Angulartics2,
     private store: Store<AppState>,
     private _copy: CopyService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Workaround for handling "jump to" fragment/anchor

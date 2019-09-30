@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angu
 import { ActivatedRoute } from '@angular/router'
 
 // Internal
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 import { Project } from '../../shared/datatypes'
 import { UtilToolService } from './../../_services'
 
@@ -27,7 +27,7 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _util: UtilToolService,
     private projectStore: ProjectStore,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Subscribe to current Project data

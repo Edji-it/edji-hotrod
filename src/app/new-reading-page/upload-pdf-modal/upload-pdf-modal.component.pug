@@ -1,4 +1,4 @@
-#uploadModal.modal
+#uploadModal.modal(*ngIf="!showReportError")
   .modal-dialog.modal-lg
     .modal-content
       form
@@ -30,12 +30,15 @@
                   span.placeholder(*ngIf="!file || !file.name || file.name.length < 1") Select a PDF to upload...
                   | {{ file ? file.name : '' }}
                 span.input-group-append
-                  button#pdfBrowseButton.btn.btn-default.btn-file(type="button", (click)="browseInput.click()") Browse
+                  button#pdfBrowseButton.btn.btn-secondary.btn-file(type="button", (click)="browseInput.click()") Browse
                     input(#browseInput, [attr.id]="pdfFileInputId", type="file", accept=".pdf", (change)="updateUploadFile()", style="display:none;")
-            .form-group
-              label Title
-              input(name="title", [(ngModel)]="title", type="text")
-              .button__row
+              small.form-text.text-muted File should be less than <b>10MB</b>, and less than <b>30 pages</b>
+            .form-group.row.no-gutters
+              .col-9
+                label(for="documentTitle") Title
+                input#documentTitle(name="title", [(ngModel)]="title", type="text")
+              .col-3.text-right
+                label &nbsp;
                 button#buttonBeginPdfUpload.btn.btn-primary(
                   (click)="beginUpload()",
                   type="submit",
@@ -44,11 +47,12 @@
                 )
                   | Upload
           .alert.alert-warning(*ngIf="errorMsg", [innerHtml]="errorMsg")
+          hr
           //- LISTING OF ALL UPLOADED PDFS
           h3.pb-2 Select an uploaded PDF to add to your Reading
           .upload-list-item(*ngFor="let doc of uploadedDocs | slice:0:15; let i = index", [class.new]="newDocsIds.indexOf(doc.uuid) > -1")
             //- Display doc pages if available
-            .card-group(*ngIf="doc.converted == true")
+            .card-group(*ngIf="doc.converted == true || doc.pdfConverted == true")
               //- Delete PDF Mini Modal
               delete-pdf-mini-modal(*ngIf="doc.confirmDelete", (confirm)="removeUploadedDoc(doc)", (dismiss)="doc.confirmDelete = false")
               //- Title Card
@@ -71,13 +75,29 @@
                   .hover-show--block {{ doc.disable_words ? 'Enable?' : 'Disable?' }}
                   span(*ngIf="!doc.disable_words") Word highlights enabled
                   span(*ngIf="doc.disable_words") Word highlights disabled
+                //- Display if OCR/word highlighting is available, and allow user to turn it off
+                .btn.btn-sm.highlight-toggle.has-error.hover-parent(
+                  *ngIf="wordHighlightsEnabled && doc.error", 
+                  (click)="loadReportErrorModal(doc)"
+                )
+                  .icon.icon-word-boxes.error
+                  span 
+                    | No words found
+                    br
+                    u.link Report error?
               //- The pages of the PDF
               .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
                 img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
                 .card-img-overlay.overlay-on-hover
                   button.btn.btn-primary.card__center-overlay Insert
+                .badge.badge-warning.document-tag.hover-parent(
+                  *ngIf="wordHighlightsEnabled && hasWordsError(doc, i)",
+                  (click)="loadReportErrorModal(doc)"
+                )
+                  span.hover-hide No words found
+                  .hover-show--inline Report error?
             //- Display conversion message if doc isn't ready
-            .card-group.card-group--placeholder(*ngIf="doc.converted != true")
+            .card-group.card-group--placeholder(*ngIf="doc.converted !== true && doc.pdfConverted !== true")
               .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired && !doc.error")
                 i.icon.icon-loading.group-alert__icon
                 b Preparing your PDF
@@ -104,3 +124,12 @@
               .card.card-placeholder(*ngFor="let card of [0, 1, 2, 3]")
                 .card-img-top &nbsp;
         .modal-footer
+edji-feedback(
+  *ngIf="showReportError",
+  [showModal]="showReportError",
+  [prefillMessage]='reportErrorMsg',
+  [title]="'Report PDF Upload Error'",
+  [subHeading]="'By reporting this error, you are helping improve Edji. Thank you!'",
+  [optionForContact]="true",
+  (closeModal)="showReportError = false"
+)

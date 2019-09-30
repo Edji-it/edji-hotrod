@@ -1,13 +1,13 @@
 import { Component, AfterViewInit, Input, ViewEncapsulation } from '@angular/core'
-import { Angulartics2 } from 'angulartics2';
-import { AuthService } from 'src/app/_services';
+import { Angulartics2 } from 'angulartics2'
+import { AuthService } from 'src/app/_services'
 
 const LINK_COPY = 'Short Link'
 
 @Component({
   selector: 'edji-copy-link-share',
   templateUrl: './copy-link.component.pug',
-  styleUrls: ['./copy-link.component.scss']
+  styleUrls: ['./copy-link.component.scss'],
 })
 export class CopyLinkShareButton implements AfterViewInit {
   @Input()
@@ -15,11 +15,9 @@ export class CopyLinkShareButton implements AfterViewInit {
 
   public labelText: string = LINK_COPY
 
-  constructor(private _angulartics: Angulartics2, private _auth: AuthService) { }
+  constructor(private _angulartics: Angulartics2, private _auth: AuthService) {}
 
-  ngAfterViewInit() {
-
-  }
+  ngAfterViewInit() {}
 
   /**
    * Copies the referral link to the user's clipboard
@@ -50,4 +48,4 @@ export class CopyLinkShareButton implements AfterViewInit {
       this.labelText = LINK_COPY
     }, 3000)
   }
-} 
+}

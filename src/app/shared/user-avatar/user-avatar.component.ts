@@ -1,11 +1,11 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { map } from 'rxjs/operators';
+import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { PublicUser } from '../datatypes';
-import { ProjectStore } from 'src/app/_store';
-import { generateInitialsFromName } from 'src/app/_store/user.decorators';
+import { PublicUser } from '../datatypes'
+import { ProjectStore } from 'src/app/_store'
+import { generateInitialsFromName } from 'src/app/_store/user.decorators'
 
 @Component({
   selector: 'user-avatar',
@@ -13,7 +13,7 @@ import { generateInitialsFromName } from 'src/app/_store/user.decorators';
   templateUrl: './user-avatar.component.pug',
 })
 export class UserAvatarComponent implements OnInit {
-  // Can load with either PublicUser or User id 
+  // Can load with either PublicUser or User id
   // (ID only supported within Project currently)
   @Input() userId: string
   @Input() set userDetails(user: PublicUser) {
@@ -37,24 +37,26 @@ export class UserAvatarComponent implements OnInit {
   public fullname: string = ''
   public avatar: string = ''
 
-  constructor(private projectStore: ProjectStore) {
-
-  }
+  constructor(private projectStore: ProjectStore) {}
 
   ngOnInit() {
     if (!this.userDetails && this.userId) {
-      this.userSubscription = this.projectStore.joinedUsers.pipe(map(
-        (users: PublicUser[]) => {
-          if (users && users[0]) {
-            let user: PublicUser = users.find(user => { return user._id === this.userId })
-            return user
-          } else {
-            return {}
-          }
-        }
-      )).subscribe((user: PublicUser) => {
-        this.setDisplayProperties(user)
-      })
+      this.userSubscription = this.projectStore.joinedUsers
+        .pipe(
+          map((users: PublicUser[]) => {
+            if (users && users[0]) {
+              let user: PublicUser = users.find(user => {
+                return user._id === this.userId
+              })
+              return user
+            } else {
+              return {}
+            }
+          }),
+        )
+        .subscribe((user: PublicUser) => {
+          this.setDisplayProperties(user)
+        })
     }
   }
 
@@ -70,7 +72,7 @@ export class UserAvatarComponent implements OnInit {
         this.avatar = user.avatar
       }
       /**
-       * @todo once search/discover uses a store for data, initials should be 
+       * @todo once search/discover uses a store for data, initials should be
        * fully handled upstream and this should be removed
        */
       if (user.initials) {

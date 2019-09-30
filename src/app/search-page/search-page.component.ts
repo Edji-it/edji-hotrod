@@ -70,7 +70,7 @@ export class SearchPage implements OnInit {
 
   public newGroup: Project
   public loginParams: LoginParams = {
-    preview: ''
+    preview: '',
   }
 
   // MAKE SUBJECTS COMPONENT
@@ -99,8 +99,8 @@ export class SearchPage implements OnInit {
     private _academy: AcademyService,
     private route: ActivatedRoute,
     private router: Router,
-    private _locker: LockerService
-  ) { }
+    private _locker: LockerService,
+  ) {}
 
   ngOnInit() {
     if (this.router.url.indexOf('/discover/search') >= 0 || this.searchParams.searchTerm.length > 0) {
@@ -115,7 +115,7 @@ export class SearchPage implements OnInit {
       this.route.queryParams.subscribe(async params => {
         this.loginParams = {
           ...this.loginParams,
-          ...params
+          ...params,
         }
         this.clearFilterVars()
         if (params.q) {
@@ -313,7 +313,7 @@ export class SearchPage implements OnInit {
     this.router.navigate(['./'], {
       queryParams: { preview: reading._id },
       queryParamsHandling: 'merge',
-      relativeTo: this.route
+      relativeTo: this.route,
     })
   }
 
@@ -401,7 +401,7 @@ export class SearchPage implements OnInit {
       this.router.navigate(['./'], {
         queryParams: { preview: null },
         queryParamsHandling: 'merge',
-        relativeTo: this.route
+        relativeTo: this.route,
       })
     }
   }

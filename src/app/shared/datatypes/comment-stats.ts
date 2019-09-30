@@ -103,7 +103,9 @@ export class CommentStats {
       // see if there is a student in the stats list already
       let studentFound = commentStats.userStats.find(el => el._id === student._id)
       // check for answered questions
-      let studentQuestions = project.reading_id.questions ? this.getAnswers(project.reading_id.questions, project.answers, student) : []
+      let studentQuestions = project.reading_id.questions
+        ? this.getAnswers(project.reading_id.questions, project.answers, student)
+        : []
       // add the student if they are not already in the list
       if (!studentFound) {
         commentStats.userStats.push({
@@ -117,7 +119,7 @@ export class CommentStats {
           fullname: student.fullname,
           comments: [],
           status: 'offline',
-          questions: studentQuestions
+          questions: studentQuestions,
         })
       }
     }
@@ -128,7 +130,9 @@ export class CommentStats {
       // see if there is a student in the stats list already
       let studentFound = commentStats.userStats.find(el => el._id === student._id)
       // check for answered questions
-      let studentQuestions = project.reading_id.questions ? this.getAnswers(project.reading_id.questions, project.answers, student) : []
+      let studentQuestions = project.reading_id.questions
+        ? this.getAnswers(project.reading_id.questions, project.answers, student)
+        : []
       // add the student if they are not already in the list
       if (!studentFound) {
         commentStats.userStats.push({
@@ -142,7 +146,7 @@ export class CommentStats {
           fullname: student.fullname,
           comments: [],
           status: 'offline',
-          questions: studentQuestions
+          questions: studentQuestions,
         })
       }
     }
@@ -271,7 +275,7 @@ export class CommentStats {
     let student = this._stats.userStats.find(student => {
       return student._id === _id
     })
-    return student && student.status || 'offline'
+    return (student && student.status) || 'offline'
   }
 
   /**
@@ -348,10 +352,9 @@ export class CommentStats {
       }
       questions.push({
         _id: question._id, // reference
-        answered: ans
+        answered: ans,
       })
     }
     return questions
   }
 }
-

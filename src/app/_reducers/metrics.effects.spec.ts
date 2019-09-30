@@ -21,22 +21,25 @@ describe('metrics effects', () => {
         MetricsEffects,
         provideMockActions(() => actions),
         {
-          provide: StateService, useValue: {
-            getState: () => { },
-            setState: () => { }
-          }
+          provide: StateService,
+          useValue: {
+            getState: () => {},
+            setState: () => {},
+          },
         },
         {
-          provide: BumblebeeService, useValue: {
-            postMessage: () => { }
-          }
+          provide: BumblebeeService,
+          useValue: {
+            postMessage: () => {},
+          },
         },
         {
-          provide: AuthService, useValue: {
-            getUser: () => { }
-          }
-        }
-      ]
+          provide: AuthService,
+          useValue: {
+            getUser: () => {},
+          },
+        },
+      ],
     })
 
     effects = TestBed.get(MetricsEffects)

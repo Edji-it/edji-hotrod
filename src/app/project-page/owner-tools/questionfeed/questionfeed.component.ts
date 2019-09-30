@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 
 // Project dependencies
 import { ReadingService } from '../../../_services'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'hot-questionfeed',
@@ -19,7 +19,7 @@ export class QuestionfeedComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   public currentReading: Reading
 
-  constructor(private projectStore: ProjectStore, private _readings: ReadingService) { }
+  constructor(private projectStore: ProjectStore, private _readings: ReadingService) {}
 
   ngOnInit() {
     // Subscribe to the reading

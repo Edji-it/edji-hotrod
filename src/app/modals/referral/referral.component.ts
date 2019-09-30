@@ -18,7 +18,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   private referralLink: string
   private referralCode: string
-  
+
   public referralBlocks: any = []
   public numberReferrals: number
   public referralIndex: number = -1
@@ -67,7 +67,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
     private _readings: ReadingService,
     private _auth: AuthService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.user = this._auth.getUser()
@@ -134,7 +134,7 @@ export class ReferralModalComponent implements OnInit, OnDestroy {
             message: 'We had some trouble getting your referrals, it might be our fault',
           }
         },
-    )
+      )
   }
   /**
    * Evaluates Referral Progress

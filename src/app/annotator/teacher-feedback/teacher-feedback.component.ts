@@ -14,9 +14,7 @@ export class TeacherFeedbackComponent {
 
   public subscriptions: Subscription[] = []
 
-  constructor(
-    public element: ElementRef,
-  ) { }
+  constructor(public element: ElementRef) {}
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => {

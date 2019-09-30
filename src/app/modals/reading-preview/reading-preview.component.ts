@@ -9,7 +9,7 @@ import { ReadingService, AuthService } from 'src/app/_services'
 @Component({
   selector: 'hot-reading-preview-modal',
   templateUrl: 'reading-preview.component.pug',
-  styleUrls: ['./reading-preview.component.scss']
+  styleUrls: ['./reading-preview.component.scss'],
 })
 export class ReadingPreviewModal implements AfterViewInit, OnInit {
   @Input() reading: Reading
@@ -31,18 +31,18 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     send: string
     actionTitle: string
   } = {
-      share: 'Use',
-      edit: 'Edit',
-      send: 'Send Link',
-      actionTitle: 'Use this Reading'
-    }
+    share: 'Use',
+    edit: 'Edit',
+    send: 'Send Link',
+    actionTitle: 'Use this Reading',
+  }
 
   constructor(
     private _router: Router,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
-    private _auth: AuthService
-  ) { }
+    private _auth: AuthService,
+  ) {}
 
   async ngOnInit() {
     switch (this.context) {
@@ -156,7 +156,7 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
         savedReading = await this._readings.save(saveReading).toPromise()
         this.createdReadingSuccess()
         this.createSuccess.emit(savedReading)
-        // Workaround: Clear scrollbar hiding 
+        // Workaround: Clear scrollbar hiding
         document.body.style.overflow = ''
       } catch (err) {
         console.error(err)
@@ -172,7 +172,7 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   private createdReadingSuccess(): void {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({
-      action: `existingReading_${(this.reading.public ? 'public' : 'private')}_create`,
+      action: `existingReading_${this.reading.public ? 'public' : 'private'}_create`,
       properties: {
         category: this._auth.setAnalyticEventCategory(),
         label: this._auth.setAnalyticEventLabel(),

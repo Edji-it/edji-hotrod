@@ -27,5 +27,5 @@ export const ALLSPARK = {
     '12th Grade',
     'University/College',
   ],
-  SCHOOL_IDENTITIES: <string[]>['teacher', 'administrator', 'coach']
+  SCHOOL_IDENTITIES: <string[]>['teacher', 'administrator', 'coach'],
 }

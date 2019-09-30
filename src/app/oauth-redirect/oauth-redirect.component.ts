@@ -45,7 +45,7 @@ export class OAuthComponent implements OnInit {
     private route: ActivatedRoute,
     private _messages: MessageService,
     private angulartics: Angulartics2,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.currentUser = this._auth.getUser()
@@ -174,7 +174,6 @@ export class OAuthComponent implements OnInit {
         },
       )
   }
-
 
   /**
    * Route after authorization

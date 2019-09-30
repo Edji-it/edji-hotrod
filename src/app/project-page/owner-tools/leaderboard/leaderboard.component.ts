@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { CommentStats, Reading, User, Project, PublicUser } from './../../../shared/datatypes'
 import { ReadingService, AuthService } from '../../../_services'
 import { CommentFilter } from '../../../_services/project.service'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'hot-leaderboard',
@@ -61,7 +61,7 @@ export class LeaderboardComponent implements OnInit {
     private _auth: AuthService,
     private _route: ActivatedRoute,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Subscribe to current user

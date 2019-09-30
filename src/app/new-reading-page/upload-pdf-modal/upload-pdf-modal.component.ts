@@ -32,6 +32,9 @@ export class UploadPdfModalComponent implements OnInit {
   public errorMsg: string = ''
   public pdfFileInputId: string = 'pdfFileInput'
   public confirmDelete: boolean = false
+  // Toggle Feedback/Report modal
+  public showReportError: boolean = false
+  public reportErrorMsg: string = ''
 
   /**
    * Temporary: PDF word highlight flag
@@ -45,7 +48,7 @@ export class UploadPdfModalComponent implements OnInit {
     private _auth: AuthService,
     private angulartics: Angulartics2,
     private _switches: SecretSwitchesService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Load previously uploaded docs
@@ -63,10 +66,9 @@ export class UploadPdfModalComponent implements OnInit {
       .subscribe((user: any) => {
         if (user.media && user.media.documents) {
           this.uploadedDocs = user.media.documents
-
           // Check existing Uploaded Docs for any not yet marked as converted
           this.uploadedDocs.forEach(doc => {
-            if (doc.converted !== true && !doc.expired) {
+            if (doc.converted !== true && !doc.expired && !doc.error) {
               this.checkConversion(doc)
             }
           })
@@ -149,12 +151,18 @@ export class UploadPdfModalComponent implements OnInit {
 
   // Run check until document is confirmed as processed
   checkConversion(doc): void {
-    let EXPIRE_TIME = 5 * 60 * 1000 // 5 min (Server will timeout within 4 min)
     let fileId = doc.uuid
+    let EXPIRE_TIME = 5 * 60 * 1000 // 5 min (Server will timeout within 4 min)
+    let requestedTime = Date.parse(doc.requestedTime)
 
-    if (doc && doc.pages && doc.pages[0]) {
+    if (doc && doc.pages && doc.pages[0] && !doc.error) {
       // Assume if document has page values, it is converted and stored
       doc.converted = true
+    } else if (requestedTime && Date.now() - requestedTime > EXPIRE_TIME) {
+      // If this is old, expire the document
+      // NOTE: Handle expiration here to account for success OR fail on getting Spark
+      doc.expired = true
+      this.updateUploadedDoc(doc)
     } else if (!fileId) {
       // If no UUID is passed, assume corrupt/old  data
       doc.expired = true
@@ -174,10 +182,6 @@ export class UploadPdfModalComponent implements OnInit {
             } else if (data.error) {
               // Pass doc with error
               this.updateUploadedDoc(data)
-            } else if (requestedTime && Date.now() - requestedTime > EXPIRE_TIME) {
-              // If this is old, expire the document
-              doc.expired = true
-              this.updateUploadedDoc(doc)
             } else {
               // Ensure doc has requestedTime for next round
               if (!doc.requestedTime) {
@@ -191,6 +195,11 @@ export class UploadPdfModalComponent implements OnInit {
             }
           },
           err => {
+            // Ensure failing doc has requestedTime for expiration
+            if (!doc.requestedTime) {
+              doc.requestedTime = Date.now()
+              this.updateUploadedDoc(doc)
+            }
             // Check again later
             setTimeout(() => {
               this.checkConversion(doc)
@@ -274,31 +283,47 @@ export class UploadPdfModalComponent implements OnInit {
   }
 
   /**
+   * Detects if page has pdf error
+   * @param doc 
+   * @param index 
+   */
+  public hasWordsError(doc: DocumentSpark, index: number): boolean {
+    if (doc.pdf && doc.pdf.pages && !doc.disable_words) {
+      if (!doc.pdf.pages[index]) {
+        // Pages that fail OCR individually will return as "null" in the pages array
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
    * Output images (w/ data)
    * @param doc Document record from user's media
    * @param index? optional, individual page index
    */
   insertPages(doc: DocumentSpark, index?: number): void {
     let images: { url: string; data?: string }[] = []
+    let buildImageObj = (page, i) => {
+      let image = { url: page }
+      // If pdf data is available, attach it
+      // TEMP: Word Highlight secret switch
+      if (this.wordHighlightsEnabled && doc.pdf && doc.pdf.pages && !doc.disable_words) {
+        let dataUrl = doc.pdf.pages[i]
+        if (dataUrl) {
+          image['data'] = doc.pdf.pages[i]
+        }
+      }
+      return image
+    }
+
     if (typeof index === 'undefined') {
       // Loop over pages if inserting whole doc
       doc.pages.forEach((page, index) => {
-        let image = { url: page }
-        // If pdf data is available, attach it
-        // TEMP: Word Highlight secret switch
-        if (this.wordHighlightsEnabled && doc.pdf && doc.pdf.pages && !doc.disable_words) {
-          image['data'] = doc.pdf.pages[index]
-        }
-        images.push(image)
+        images.push(buildImageObj(page, index))
       })
     } else {
-      // otherwise insert page at index
-      let image = { url: doc.pages[index] }
-      // If pdf data is available, attach it
-      if (doc.pdf && doc.pdf.pages && !doc.disable_words) {
-        image['data'] = doc.pdf.pages[index]
-      }
-      images.push(image)
+      images.push(buildImageObj(doc.pages[index], index))
     }
     // Track PDF instert event
     this.angulartics.eventTrack.next({
@@ -327,5 +352,25 @@ export class UploadPdfModalComponent implements OnInit {
       action: 'newReading_pdf_toggleWordHighlights' + (doc.disable_words ? 'Off' : 'On'),
       properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
+  }
+
+  /**
+   * Prep report text and open feedback modal
+   * @param doc 
+   */
+  loadReportErrorModal(doc: DocumentSpark) {
+    this.reportErrorMsg = `Any additional details?\n\n\n
+    ***********************************
+      PDF Error Report
+
+      Document Title:
+        ${ doc.title}
+      Document ID:
+        ${ doc.uuid}
+      Request Time: 
+        ${ doc.requestedTime}
+    ***********************************
+    `
+    this.showReportError = true
   }
 }

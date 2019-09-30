@@ -4,7 +4,7 @@ import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { ProjectService, SocketService, AuthService } from './../../_services'
-import { ProjectStore } from 'src/app/_store';
+import { ProjectStore } from 'src/app/_store'
 
 @Component({
   selector: 'hot-login-modal',
@@ -35,8 +35,8 @@ export class LoginModal implements AfterViewInit, OnInit {
     private _socket: SocketService,
     private _auth: AuthService,
     private router: Router,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit() {
     if (this.loginOnly) {
