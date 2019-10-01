@@ -986,6 +986,13 @@ export class NewReadingPage implements OnInit, OnDestroy {
         this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
         this.insertAfter(this.insertNode.parentNode, '<p>&#65279;</p>', this.insertNode)
       })
+      // Manually update model where DOM is being manipulated
+      let editor = this.insertNode.closest('medium-editor')
+      let index = editor.getAttribute('rindex')
+      if (editor && index >= 0) {
+        // Update model
+        this.readingHtml[index].text = editor.querySelector('.medium-editor-element').innerHTML
+      }
     } else {
       // If no reference node (field has not been interacted with) insert image at end
       let imgString = ''
