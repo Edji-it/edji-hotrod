@@ -962,8 +962,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     template.innerHTML = htmlString
     // Insert elements after referenceNode
     parent.insertBefore(template.content.firstChild, referenceNode.nextSibling)
-    // this.insertNode = referenceNode.nextSibling
-    this.updateNodeAfterInsert(referenceNode.nextSibling)
+    this.insertNode = referenceNode.nextSibling
   }
 
   /**
@@ -981,11 +980,12 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
 
     if (this.insertNode && this.insertNode.parentNode) {
+      let spacerId = 'spacer' + (new Date).getTime()
       // If there is a reference node for cursor position, insert at cursor
       images.forEach(async image => {
         let imgString = buildImageTag(image)
         this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
-        this.insertAfter(this.insertNode.parentNode, '<p>&#65279;</p>', this.insertNode)
+        this.insertAfter(this.insertNode.parentNode, `<p id=${spacerId}>&#65279;</p>`, this.insertNode)
       })
       // Manually update model where DOM is being manipulated
       let { editor, index } = this.getContainingEditor(this.insertNode)
@@ -993,6 +993,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
       if (editor && index >= 0) {
         // Update model
         this.readingHtml[index].text = editor.querySelector('.medium-editor-element').innerHTML
+        setTimeout(()=> {
+          let spacer = document.getElementById(spacerId)
+          let spacerContents = spacer.firstChild || spacer
+          this.updateNodeAfterInsert(spacerContents)
+        }, 100)
       }
     } else {
       // If no reference node (field has not been interacted with) insert image at end
@@ -1078,7 +1083,17 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.insertNode = newNode
     if (newNode) {
       // Update insert toolbar position
-      this.insertNode.focus()
+      if (this.insertNode.focus) {
+        // If focusable element, such as editor itself, simply focus
+        this.insertNode.focus()
+      } else {
+        // If node within editor, make selection around contents
+        const selection = Rangy.getSelection()
+        const range = Rangy.createRange()
+        range.selectNodeContents(this.insertNode)
+        selection.removeAllRanges()
+        selection.addRange(range)
+      }
       this.selectionInteraction()
       if (newEditorIndexFocus) {
         let question = document.querySelector('edji-question[rindex="'+newEditorIndexFocus+'"]')
@@ -1100,6 +1115,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       let nodeRef = editor ? editor : node
       if (nodeRef.getAttribute && nodeRef.getAttribute('rindex')) {
         index = parseInt(nodeRef.getAttribute('rindex'))
+        editor = nodeRef
         // Found containing editor
         break
       } else if (nodeRef.parentNode) {
