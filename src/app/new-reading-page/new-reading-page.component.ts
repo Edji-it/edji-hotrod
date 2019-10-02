@@ -997,7 +997,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           let spacer = document.getElementById(spacerId)
           let spacerContents = spacer.firstChild || spacer
           this.updateNodeAfterInsert(spacerContents)
-        }, 100)
+        })
       }
     } else {
       // If no reference node (field has not been interacted with) insert image at end
