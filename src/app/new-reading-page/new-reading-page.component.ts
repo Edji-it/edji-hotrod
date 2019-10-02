@@ -954,7 +954,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * Takes an html string, and inserts it after a given element
    * @param parent Parent element of referenceNode
    * @param htmlString String of html content
-   * @param referenceNode Element to insert after
+   * @param referenceNode Element to insert before
    */
   private insertAfter(parent: Element, htmlString: string, referenceNode: Element) {
     // Create elements from html string
@@ -962,7 +962,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
     template.innerHTML = htmlString
     // Insert elements after referenceNode
     parent.insertBefore(template.content.firstChild, referenceNode.nextSibling)
-    this.insertNode = referenceNode.nextSibling
+    // this.insertNode = referenceNode.nextSibling
+    this.updateNodeAfterInsert(referenceNode.nextSibling)
   }
 
   /**
@@ -987,8 +988,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
         this.insertAfter(this.insertNode.parentNode, '<p>&#65279;</p>', this.insertNode)
       })
       // Manually update model where DOM is being manipulated
-      let editor = this.insertNode.closest('medium-editor')
-      let index = editor.getAttribute('rindex')
+      let { editor, index } = this.getContainingEditor(this.insertNode)
+
       if (editor && index >= 0) {
         // Update model
         this.readingHtml[index].text = editor.querySelector('.medium-editor-element').innerHTML
@@ -1058,19 +1059,62 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this.updateQuestionNumbers()
     }
 
+    // Set insert node so user can add multiple questions at once
+    if (newEditorIndex) {
+      setTimeout(() => {
+        this.updateNodeAfterInsert(
+          document.querySelector('medium-editor[rindex="'+newEditorIndex+'"] div'), 
+          newEditorIndex
+        )
+      })
+    }
+  }
 
-
-      // Set insert node so user can add multiple questions at once
-      if (newEditorIndex) {
-        setTimeout(() => {
-          this.insertNode = document.querySelector('medium-editor[rindex="'+newEditorIndex+'"] div')
-          this.insertNode.focus()
-          this.selectionInteraction()
-          let question = document.querySelector('edji-question[rindex="'+newEditorIndex+'"]')
-          let questionY = this.getNodeY(question)- NewReadingPage.EDITOR_TOOLBAR_Y
-          window.scrollTo(0, questionY)
-        })
+  /**
+   * Updates "insertNode" after inserting
+   * - Allows user to repeatedly insert elements
+   */
+  public updateNodeAfterInsert(newNode, newEditorIndexFocus?: number) {
+    this.insertNode = newNode
+    if (newNode) {
+      // Update insert toolbar position
+      this.insertNode.focus()
+      this.selectionInteraction()
+      if (newEditorIndexFocus) {
+        let question = document.querySelector('edji-question[rindex="'+newEditorIndexFocus+'"]')
+        let questionY = this.getNodeY(question)- NewReadingPage.EDITOR_TOOLBAR_Y
+        window.scrollTo(0, questionY)
       }
+    } 
+  }
+
+  /**
+   * Get parent editor reference
+   * @returns containing editor and its index (if found)
+   */
+  public getContainingEditor(node: HTMLScriptElement): { editor: HTMLScriptElement, index: number } {
+    let editor 
+    let index
+    while (!index) {
+      // We don't want to modify the node value passed in
+      let nodeRef = editor ? editor : node
+      if (nodeRef.getAttribute && nodeRef.getAttribute('rindex')) {
+        index = parseInt(nodeRef.getAttribute('rindex'))
+        // Found containing editor
+        break
+      } else if (nodeRef.parentNode) {
+        editor = <HTMLScriptElement>nodeRef.parentNode
+      } else if (nodeRef.closest && nodeRef.closest('medium-editor')) {
+        // Covers case where element in contenteditable is "detached" from DOM
+        console.error('New Reading: Used "closest" to insert (null parentNode)')
+        editor = <HTMLScriptElement>nodeRef.closest('medium-editor')
+      } else {
+        // Fall back to adding question at the end
+        console.error('New Reading: Failed inline insert (no parentNode or closest)')
+        break
+      }
+    }
+    return { editor, index }
   }
 
   /**
@@ -1078,37 +1122,31 @@ export class NewReadingPage implements OnInit, OnDestroy {
    */
   public addQuestionInLine() {
     if (this.insertNode && this.insertNode.parentNode) {
-      let newEditorIndex = 1
-      let containingEditor = this.insertNode
-
-      for (let i = 0; i < 5; i++) {
-        if (containingEditor.getAttribute && containingEditor.getAttribute('rindex')) {
-          newEditorIndex = parseInt(containingEditor.getAttribute('rindex')) + 1
-          // Found containing editor
-          i = 5
-        } else {
-          containingEditor = containingEditor.parentNode
-        }
+      let { editor, index } = this.getContainingEditor(this.insertNode)
+      if (index >= 0) {
+        let newEditorIndex = index + 1
+        // If there is a reference node for cursor position, insert at cursor
+        // Get and clear all elements in the medium editor block after the cursor position
+        let cutHtml = this.cutBlockContentsFromCaret()
+        // Send the 'enter' key
+        const event = new KeyboardEvent('keypress', {
+          key: 'Enter',
+        })
+        document.dispatchEvent(event)
+        // Update model with modified HTML (isn't triggered programmatically)
+        let precedingHtml = editor.querySelector('.medium-editor-element').innerHTML
+        this.readingHtml[index].text = precedingHtml
+        /**
+         * Make the html fragment a real piece of html!
+         * - Closes any tags broken when "cut"
+         */
+        var div = document.createElement('div')
+        div.appendChild(cutHtml.cloneNode(true))
+        var html = div.innerHTML
+        this.addQuestion(html, newEditorIndex)
+      } else {
+        this.addQuestion()
       }
-      // If there is a reference node for cursor position, insert at cursor
-      // Get and clear all elements in the medium editor block after the cursor position
-      let cutHtml = this.cutBlockContentsFromCaret()
-      // Send the 'enter' key
-      const event = new KeyboardEvent('keypress', {
-        key: 'Enter',
-      })
-      document.dispatchEvent(event)
-      // Update model with modified HTML (isn't triggered programmatically)
-      let precedingHtml = containingEditor.querySelector('.medium-editor-element').innerHTML
-      this.readingHtml[newEditorIndex - 1].text = precedingHtml
-      /**
-       * Make the html fragment a real piece of html!
-       * - Closes any tags broken when "cut"
-       */
-      var div = document.createElement('div')
-      div.appendChild(cutHtml.cloneNode(true))
-      var html = div.innerHTML
-      this.addQuestion(html, newEditorIndex)
     } else {
       // If no reference node (field has not been interacted with) insert question at end
       this.addQuestion()
