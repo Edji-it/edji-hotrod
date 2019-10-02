@@ -157,12 +157,11 @@ describe('New Reading Page', () => {
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
       newReading.titleInput.sendKeys(manualSaveTitle)
-      // Make private to avoid needing grade levels and subjecst
-      newReading.privateButton.click()
       // Content fill
       newReading.contentInput.sendKeys(newReading.contentShortString)
       newReading.contentInput.sendKeys(protractor.Key.RETURN)
-      // Manually save
+      // Blur text field AND make private to avoid needing grade levels and subjecst
+      newReading.privateButton.click()
       newReading.draftButton.click()
       // Wait for "saved" confirmation
       browser.wait(
