@@ -982,10 +982,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (this.insertNode && this.insertNode.parentNode) {
       let spacerId = 'spacer' + (new Date).getTime()
       // If there is a reference node for cursor position, insert at cursor
-      images.forEach(async image => {
+      images.forEach(async (image, index) => {
         let imgString = buildImageTag(image)
         this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
-        this.insertAfter(this.insertNode.parentNode, `<p id=${spacerId}>&#65279;</p>`, this.insertNode)
+        this.insertAfter(this.insertNode.parentNode, `<p data-editor="${spacerId + '-' + index}">&#65279;</p>`, this.insertNode)
       })
       // Manually update model where DOM is being manipulated
       let { editor, index } = this.getContainingEditor(this.insertNode)
@@ -994,7 +994,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
         // Update model
         this.readingHtml[index].text = editor.querySelector('.medium-editor-element').innerHTML
         setTimeout(()=> {
-          let spacer = document.getElementById(spacerId)
+          // Use last spacer element as insert node
+          let spacer = document.querySelector(`[data-editor="${spacerId + '-' + (images.length - 1)}"]`)
           let spacerContents = spacer.firstChild || spacer
           this.updateNodeAfterInsert(spacerContents)
         })
