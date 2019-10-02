@@ -290,4 +290,17 @@ export class NewReading implements PageObjectInterface {
       }
     })
   }
+
+  /**
+   * Locates question answer on New Reading or Project page
+   * @param index index of question on page
+   * @param answerType emoji, text, audio
+   */
+  public questionByIndexAnswer(index: number, answerType: string): any {
+    // Locate question
+    let question = element.all(by.css('.question-body')).get(index)
+    expect(question).toBeTruthy('was unable to find question at index ' + index)
+    let answerClass = `.icon-comment-${answerType}.icon__answer-type`
+    return question.element(by.css(answerClass))
+  }
 } // class Login

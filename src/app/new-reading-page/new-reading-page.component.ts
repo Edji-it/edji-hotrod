@@ -1215,10 +1215,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public deleteQuestion(htmlIndex: number) {
     // Append the text after the question to be deleted to the one before it
     this.readingHtml[htmlIndex - 1].text += this.readingHtml[htmlIndex].text
-
     // Remove the question
     this.readingHtml.splice(htmlIndex, 1)
     this.updateQuestionNumbers()
+    // Update selection/insert toolbar
+    this.selectionInteraction()
   }
 
   /**
