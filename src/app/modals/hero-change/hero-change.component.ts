@@ -6,7 +6,7 @@ import { AuthService, BumblebeeService } from './../../_services'
 
 @Component({
   selector: 'hero-change-modal',
-  templateUrl: './hero-change.component.html',
+  templateUrl: './hero-change.component.pug',
   styleUrls: ['./hero-change.component.scss'],
 })
 export class HeroChangeComponent implements OnInit {
