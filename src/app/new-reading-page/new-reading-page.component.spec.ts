@@ -21,7 +21,7 @@ import { EmojiOnePipe } from '../_pipes'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
 
-describe('NewReadingPage', () => {
+fdescribe('NewReadingPage', () => {
   /**
    * Mocked document data for media service call
    */
@@ -45,7 +45,7 @@ describe('NewReadingPage', () => {
     doc_conversion: { ms: 0, mb: 0 },
   }
   // Example editor HTML
-  const exampleReadingHtml = `<div id="readingPageForm" class="reading-page"><div id="angularMediumEditor"><img src="//image-dev.edji.it/documents/76a2027d-0971-40a7-b02b-4caeaf4f0e7e/76a2027d-0971-40a7-b02b-4caeaf4f0e7e-0.png" title="undefined" edji-data-src="//image-dev.edji.it/documents/76a2027d-0971-40a7-b02b-4caeaf4f0e7e/76a2027d-0971-40a7-b02b-4caeaf4f0e7e-0.json"><p>Test Reading!</p></div></div>`
+  const exampleReadingHtml = `<div id="readingPageForm" class="reading-page"><div id="angularMediumEditor"  rindex="0"><div class="me-editable medium-editor-element" contenteditable="true"><img src="//image-dev.edji.it/documents/76a2027d-0971-40a7-b02b-4caeaf4f0e7e/76a2027d-0971-40a7-b02b-4caeaf4f0e7e-0.png" title="undefined" edji-data-src="//image-dev.edji.it/documents/76a2027d-0971-40a7-b02b-4caeaf4f0e7e/76a2027d-0971-40a7-b02b-4caeaf4f0e7e-0.json"><p id="firstParagraph">Test Reading!</p></div></div></div>`
   // Expected Reading object output (Draft)
   const expectedReadingDraftOutput = {
     title: 'Test',
@@ -157,7 +157,7 @@ describe('NewReadingPage', () => {
     let component = fixture.componentInstance
     // To avoid fully rendering the component with bindings, we can mock the editor directly
     document.body.innerHTML = exampleReadingHtml
-    let formattedReadingObj = await component.formatReading({ html: exampleReadingHtml })
+    let formattedReadingObj = await component.formatReading({ text: exampleReadingHtml })
     // Verify word values on formatted output
     expect(formattedReadingObj.words.length).toEqual(expectedReadingDraftOutput.words.length)
     // Verify image word properties
@@ -176,7 +176,7 @@ describe('NewReadingPage', () => {
   it('addQuestion should insert blank question', async () => {
     let fixture = TestBed.createComponent(NewReadingPage)
     let component = fixture.componentInstance
-    component.readingHtml = [{html: exampleReadingHtml}]
+    component.readingHtml = [{text: exampleReadingHtml}]
     // Add a blank question to the end
     component.addQuestion()
     // Verify question on readingHtml
@@ -184,6 +184,35 @@ describe('NewReadingPage', () => {
     expect(component.readingHtml[1].question.new).toBe(true)
     expect(component.readingHtml[1].question.answer_types).toEqual(['emoji', 'text', 'audio'])
     // Verify html object on new block
-    expect(component.readingHtml[1].html).toBeTruthy()
+    expect(component.readingHtml[1].text).toEqual('')
+  })
+
+  /**
+   * Test adding a question in-line
+   * - With insertNode
+   */
+  it('addQuestionInLine should insert blank question in-line', async () => {
+    let fixture = TestBed.createComponent(NewReadingPage)
+    let component = fixture.componentInstance
+    component.readingHtml = [{text: exampleReadingHtml}]
+    // Set pre-rendered editor
+    document.body.innerHTML = exampleReadingHtml
+    // Set insert node
+    component.insertNode = document.getElementById('firstParagraph')
+    // Stubbing the "cut" selection
+    // - This means the first text block will still contain the insert paragraph
+    component['cutBlockContentsFromCaret'] = () => {
+      return document.getElementById('firstParagraph')
+    }
+    // Add a blank question to the middle
+    component.addQuestionInLine()
+    // Verify html before question
+    expect(component.readingHtml[0].text).toBeTruthy()
+    // Verify question on readingHtml
+    expect(component.readingHtml[1].question.prompt).toEqual('')
+    expect(component.readingHtml[1].question.new).toBe(true)
+    expect(component.readingHtml[1].question.answer_types).toEqual(['emoji', 'text', 'audio'])
+    // Verify html from insertNode object in new block
+    expect(component.readingHtml[1].text).toEqual('<p id="firstParagraph">Test Reading!</p>')
   })
 })
