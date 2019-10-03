@@ -164,12 +164,13 @@ describe('New Reading Page', () => {
        */
       newReading.contentInput.sendKeys('Text')
       newReading.contentInput.sendKeys(protractor.Key.RETURN)
-      // Blur text field AND make private to avoid needing grade levels and subjects
+      // Make private to avoid needing grade levels and subjects
       newReading.privateButton.click()
       newReading.draftButton.click()
       // Wait for "saved" confirmation
+      // presenceOf - inline/text elements seem to throw visibilityOf off when using a pipe
       browser.wait(
-        EC.visibilityOf(element(by.id('draftStatusSaved'))),
+        EC.presenceOf(element(by.id('draftStatusSaved'))),
         3000,
         'draft "Saved" confirmation did not appear in nav bar',
       )
