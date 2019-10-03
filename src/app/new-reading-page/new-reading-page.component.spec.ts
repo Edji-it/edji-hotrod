@@ -89,6 +89,9 @@ describe('NewReadingPage', () => {
             getEnv: () => {
               return 'dev'
             },
+            setAnalyticEventCategory: () => { return ' '},
+            setAnalyticEventLabel: () => { return ' '},
+            getAllowedCommentMediaTypes: () => { return ['emoji', 'text', 'audio']}
           },
         },
         { provide: ProjectService, useValue: {} },
@@ -110,7 +113,9 @@ describe('NewReadingPage', () => {
           },
         },
         { provide: Hammer, useValue: {} },
-        { provide: Angulartics2, useValue: {} },
+        { provide: Angulartics2, useValue: {
+          eventTrack: { next: (args: any) => {} }
+        } },
         { provide: Angulartics2GoogleGlobalSiteTag, useValue: { startTracking: () => {} } },
         FormBuilder,
       ],
@@ -163,5 +168,22 @@ describe('NewReadingPage', () => {
     // Verify text word properties
     expect(formattedReadingObj.words[1].str).toEqual('Test')
     expect(formattedReadingObj.words[1].styles).toContain('p')
+  })
+
+  /**
+   * Test adding a question to existing HTML
+   */
+  it('addQuestion should insert blank question', async () => {
+    let fixture = TestBed.createComponent(NewReadingPage)
+    let component = fixture.componentInstance
+    component.readingHtml = [{html: exampleReadingHtml}]
+    // Add a blank question to the end
+    component.addQuestion()
+    // Verify question on readingHtml
+    expect(component.readingHtml[1].question.prompt).toEqual('')
+    expect(component.readingHtml[1].question.new).toBe(true)
+    expect(component.readingHtml[1].question.answer_types).toEqual(['emoji', 'text', 'audio'])
+    // Verify html object on new block
+    expect(component.readingHtml[1].html).toBeTruthy()
   })
 })
