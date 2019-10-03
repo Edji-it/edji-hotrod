@@ -116,11 +116,6 @@ describe('New Reading Page', () => {
   })
 
   describe('Reading draft', () => {
-    afterEach(() => {
-      // Reset loading the New Reading page from the dashboard
-      sidebar.backToDash()
-    })
-
     it('should add a reading as a draft and return to the same screen with a reading id', function() {
       // Should begin at New Reading page
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
@@ -162,6 +157,8 @@ describe('New Reading Page', () => {
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
       newReading.titleInput.sendKeys(manualSaveTitle)
+      // Make private to avoid needing grade levels and subjects
+      newReading.privateButton.click()
       /**
        * Content fill
        * - We need to keep the content short here since sendKeys takes time 
@@ -169,8 +166,11 @@ describe('New Reading Page', () => {
        */
       newReading.contentInput.sendKeys('Text')
       newReading.contentInput.sendKeys(protractor.Key.RETURN)
-      // Make private to avoid needing grade levels and subjects
-      newReading.privateButton.click()
+      browser.wait(
+        EC.elementToBeClickable(newReading.draftButton),
+        1000,
+        '"Save Changes" button did not become clickable'
+      )
       newReading.draftButton.click()
       // Wait for "saved" confirmation
       // presenceOf - inline/text elements seem to throw visibilityOf off when using a pipe
