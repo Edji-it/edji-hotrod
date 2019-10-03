@@ -21,7 +21,7 @@ import { EmojiOnePipe } from '../_pipes'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
 
-fdescribe('NewReadingPage', () => {
+describe('NewReadingPage', () => {
   /**
    * Mocked document data for media service call
    */

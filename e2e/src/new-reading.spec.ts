@@ -116,6 +116,11 @@ describe('New Reading Page', () => {
   })
 
   describe('Reading draft', () => {
+    afterEach(() => {
+      // Reset loading the New Reading page from the dashboard
+      sidebar.backToDash()
+    })
+
     it('should add a reading as a draft and return to the same screen with a reading id', function() {
       // Should begin at New Reading page
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
