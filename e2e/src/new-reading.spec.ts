@@ -157,16 +157,25 @@ describe('New Reading Page', () => {
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
       newReading.titleInput.sendKeys(manualSaveTitle)
-      // Make private to avoid needing grade levels and subjecst
-      newReading.privateButton.click()
-      // Content fill
-      newReading.contentInput.sendKeys(newReading.contentShortString)
+      /**
+       * Content fill
+       * - We need to keep the content short here since sendKeys takes time 
+       * and can cause an overlap with autosave
+       */
+      newReading.contentInput.sendKeys('Text')
       newReading.contentInput.sendKeys(protractor.Key.RETURN)
-      // Manually save
+      // Make private to avoid needing grade levels and subjects
+      newReading.privateButton.click()
+      browser.wait(
+        EC.elementToBeClickable(newReading.draftButton),
+        1000,
+        '"Save Changes" button did not become clickable'
+      )
       newReading.draftButton.click()
       // Wait for "saved" confirmation
+      // presenceOf - inline/text elements seem to throw visibilityOf off when using a pipe
       browser.wait(
-        EC.visibilityOf(element(by.id('draftStatusSaved'))),
+        EC.presenceOf(element(by.id('draftStatusSaved'))),
         3000,
         'draft "Saved" confirmation did not appear in nav bar',
       )
