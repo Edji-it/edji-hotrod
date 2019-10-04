@@ -982,7 +982,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (this.insertNode && this.insertNode.parentNode) {
       let spacerId = 'spacer' + (new Date).getTime()
       // If there is a reference node for cursor position, insert at cursor
-      images.forEach(async (image, index) => {
+      images.forEach((image, index) => {
         let imgString = buildImageTag(image)
         this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
         this.insertAfter(this.insertNode.parentNode, `<p data-editor="${spacerId + '-' + index}">&#65279;</p>`, this.insertNode)
@@ -1003,7 +1003,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     } else {
       // If no reference node (field has not been interacted with) insert image at end
       let imgString = ''
-      images.forEach(async image => {
+      images.forEach(image => {
         imgString += buildImageTag(image) + '<p>&#65279;</p>'
       })
       this.readingHtml[this.readingHtml.length - 1].text += imgString
