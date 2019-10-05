@@ -16,6 +16,7 @@ import { generateInitialsFromName } from '../_store/user.decorators'
 const { version: appVersion } = require('../../../package.json')
 
 declare var gtag: any
+declare var Stripe: any
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -34,6 +35,7 @@ export class AuthService implements CanActivate {
   private user: User
   private currentUserSource: BehaviorSubject<any>
   public currentUser: Observable<any>
+  private stripe: any
 
   private academyState: AcademyState = {}
   private academyStateSource: BehaviorSubject<AcademyState>
@@ -85,6 +87,17 @@ export class AuthService implements CanActivate {
   /** Provides environment variable to the rest of the app */
   public getEnv() {
     return this.ENV
+  }
+
+  /** Provides stripe to the rest of the app */
+  public getStripe() {
+    // Create a Stripe client
+    if (this.getEnv() === 'dev') {
+      this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu')
+    } else {
+      this.stripe = Stripe('pk_live_IOwqaYAERP6biScBTFk3Csrm')
+    }
+    return this.stripe
   }
 
   /** Give out options to any other http-using components or services */
@@ -1081,9 +1094,9 @@ export class AuthService implements CanActivate {
    * Returns customer information including subscriptions, but not payment source
    * @param customer_id the customer ID from Stripe that we store on the user object
    */
-  public getStripeCustomer(): Observable<any> {
+  public getStripeCustomer(customerId: string): Observable<any> {
     return this._http
-      .get<any>(this.baseUrl + '/api/v1/stripe/customers/', {
+      .get<any>(this.baseUrl + `/api/v1/stripe/customers/${customerId}`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: this.getToken(),
@@ -1092,6 +1105,25 @@ export class AuthService implements CanActivate {
       .pipe(
         map(customer => {
           return customer.customer
+        }),
+      )
+  }
+
+  /**
+   * Returns customer information including subscriptions, but not payment source
+   * @param customer_id the customer ID from Stripe that we store on the user object
+   */
+  public getStripeCustomerCard(customerId: string): Observable<any> {
+    return this._http
+      .get<any>(this.baseUrl + `/api/v1/stripe/customers/${customerId}/card`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: this.getToken(),
+        }),
+      })
+      .pipe(
+        map(card => {
+          return card.card
         }),
       )
   }

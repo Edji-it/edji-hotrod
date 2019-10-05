@@ -90,6 +90,7 @@ hero-subscribe-modal.modal-will-fade(
   (heroWasBorn)="_router.navigate(['/dashboard'])"
 )
 hero-change-modal.modal-will-fade(
+  *ngIf="showHeroChangeModal",
   [class.show]="showHeroChangeModal", 
   (closeModal)="showHeroChangeModal = !showHeroChangeModal; updateHeroStatus()"
 )

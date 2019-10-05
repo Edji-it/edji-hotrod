@@ -11,13 +11,22 @@ import { AuthService, BumblebeeService } from './../../_services'
 })
 export class HeroChangeComponent implements OnInit {
   private user: any = {}
-  private isUpdated: boolean = false
-  private updating: boolean = false
+  private isUpdated: boolean
+  private updating: boolean
 
-  public confirmCancel: boolean = false
-  public isCanceled: boolean = false
-  public canceling: boolean = false
+  public confirmCancelShow: boolean
+  public updateCardShow: boolean
+  public subscriptionShow: boolean = true
+
+  public isCanceled: boolean
+  public canceling: boolean
+
   public cancelMsg: string = ''
+
+  public stripe: any
+  public subscriptionPrice: number = 60
+  public cardInfo: any
+  public cardBrand: string = 'visa'
 
   // Form values
   private subtype: string = 'yearly'
@@ -27,9 +36,29 @@ export class HeroChangeComponent implements OnInit {
 
   constructor(private _auth: AuthService, private _bumblebee: BumblebeeService, private angulartics: Angulartics2) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.user = this._auth.getUser()
     this.subtype = 'yearly'
+    this.stripe = this._auth.getStripe()
+    // Create an instance of Elements
+    let elements = this.stripe.elements()
+    console.log(elements)
+
+    try {
+      this.cardInfo = await this._auth.getStripeCustomerCard(this.user.stripe_customer_id).toPromise()
+      this.cardBrand = this.cardInfo.brand.toLowerCase()
+      console.log(this.cardInfo)
+    } catch (err) {
+      console.error(err)
+    }
+
+    try {
+      let customer = await this._auth.getStripeCustomer(this.user.stripe_customer_id).toPromise()
+      this.subscriptionPrice = customer.subscriptions.data[0].plan.amount / 100
+      console.log(customer)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   /**
@@ -38,7 +67,7 @@ export class HeroChangeComponent implements OnInit {
   close(): void {
     // Reset defaults
     this.isUpdated = false
-    this.confirmCancel = false
+    this.confirmCancelShow = false
     this.isCanceled = false
 
     this.closeModal.emit()
@@ -98,5 +127,26 @@ export class HeroChangeComponent implements OnInit {
           console.log(err)
         },
       )
+  }
+
+  public toggleView(view: string): void {
+    this.updateCardShow = false
+    this.confirmCancelShow = false
+    this.subscriptionShow = false
+    switch (view) {
+      case 'subscriptionShow':
+        this.subscriptionShow = true
+        break
+      case 'updateCardShow':
+        this.updateCardShow = true
+        break
+      case 'confirmCancelShow':
+        this.confirmCancelShow = true
+        break
+      default:
+        this.subscriptionShow = true
+        this.updateCardShow = false
+        this.confirmCancelShow = false
+    }
   }
 }

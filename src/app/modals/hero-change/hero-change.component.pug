@@ -5,33 +5,63 @@
         h4.modal-title Hero Subscription
         button.close((click)="close()", type="button") &times;
       .modal-body.pb-0
-        .row(*ngIf="!confirmCancel && !isCanceled")
+        .row(*ngIf="subscriptionShow")
           .col-12
             label Hero Subscription Plan
             table.table.table-hover
-                tr.selectable([class.table-info]="subtype == 'yearly'", (click)="subtype = 'yearly'")
-                  th(scope="row")
-                    label.form-check-label
-                      input#subPlan2.form-check-input([(ngModel)]="subtype", type="radio", name="subscriptionPlan", value="yearly", aria-label="Annual Subscription", checked)
-                      | Yearly
+              tbody
+                tr.selectable.table-success
+                  th(scope="row") Yearly
+                  td.align-middle
+                    p
+                      b ${{subscriptionPrice}}/yr
+                  td.align-middle(colspan="2")
+                    p
+                      | Billed as 
+                      span ${{subscriptionPrice}} 
+                      span every year
             .alert.alert-success(*ngIf="isUpdated")
               strong Subscription Updated
               | Your Hero Subscription was updated.
+            label.mt-2 Your payment method
+            table.table.table-hover
+              tbody
+                tr.selectable.table-secondary
+                  td
+                    div([ngSwitch]="cardInfo && cardInfo.brand")
+                      div(*ngSwitchCase="'American Express'")
+                        img.card-icon(src="/assets/images/icon-amex.png")
+                      div(*ngSwitchCase="'MasterCard'")
+                        img.card-icon(src="/assets/images/icon-mastercard.png")
+                      div(*ngSwitchCase="'Visa'")
+                        img.card-icon(src="/assets/images/icon-visa.png")
+                      div(*ngSwitchCase="'Discover'")
+                        img.card-icon(src="/assets/images/icon-discover.png")
+                      div(*ngSwitchDefault)
+                        img.icon-cc.card-icon(src="/assets/images/icon-generic-cc.png")
+                  td.align-middle(colspan="2")
+                    p.mb-0.txt-sm {{cardInfo && cardInfo.brand}} ending in {{cardInfo && cardInfo.last4}}
+                  td.align-middle(colspan="2")
+                    p.mb-0.txt-sm Expires {{cardInfo && cardInfo.exp_month}}/{{cardInfo && cardInfo.exp_year}}
             .btn-row.right
-              button#subHero.btn.btn-secondary([class.loading]="canceling", (click)="confirmCancel = true") Cancel Subscription
-        .row(*ngIf="confirmCancel && !isCanceled")
+              button#subHero.btn.btn-secondary((click)="toggleView('updateCardShow')") Update Credit Card
+        .row(*ngIf="confirmCancelShow && !isCanceled")
           .col-12
             p Please confirm that you would like to unsubscribe from Edji Hero.
             p You will remain a Hero until the end of your current payment period.
             .alert.alert-warning(*ngIf="cancelMsg", [innerHtml]="cancelMsg")
             .btn-row.center.pt-4
-              button#subHero.btn.btn-hero.w-100((click)="confirmCancel = false") Nevermind, Don't Cancel my Hero Subscription
+              button#subHero.btn.btn-hero.w-100((click)="toggleView('subscriptionShow')") Nevermind, Don't Cancel my Hero Subscription
             .btn-row.center.pt-2
               button#subHero.btn.btn-secondary.w-100([class.loading]="canceling", (click)="cancelSub()") Yes, Please Cancel my Hero Subscription
             hr
         .row(*ngIf="isCanceled")
           .col-12
             p Your Hero subscription has been canceled.
-      .modal-footer
+        .row(*ngIf="updateCardShow")
+
+      .modal-footer.mt-2
+        .btn-row.left
+          button#subHero.btn.btn-hero.btn-faded(*ngIf="subscriptionShow", [class.loading]="canceling", (click)="toggleView('confirmCancelShow')") Cancel Subscription
         .btn-row.right
           button.btn((click)="close()", type="button", data-dismiss="modal") Close
