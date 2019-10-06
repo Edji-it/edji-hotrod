@@ -1,12 +1,33 @@
 @import '../../../sass/base/variables';
 
+.row--badges {
+    & > [class*="col-"] {
+        padding-right: 7.5px;
+        padding-left: 7.5px;
+    }
+}
+
+h2 {
+    margin-bottom: 0px;
+}
+
+.row--partners {
+    margin: 15px 0px;
+    padding: 15px;
+    border: 1px solid #faecb8;
+    border-right: none;
+    border-left: none;
+}
+
 .partner-link {
     // display: inline-block;
     border-bottom: 1px solid transparent;
     // border-radius: 3px;
     cursor: pointer;
     max-width: 200px;
-    min-height: 150px;
+    display: flex;
+    padding: 10px 0px;
+    margin: 0px 10px;
     // filter: grayscale(50%);
 
     &:hover, &:focus {

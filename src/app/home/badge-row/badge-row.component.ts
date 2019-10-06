@@ -9,19 +9,24 @@ import { Component, OnInit } from "@angular/core";
 
     public badges = [
         {
-            name:'AWS EdStart',
-            logo:'/assets/images/promo/logo--aws-edstart.png',
-            link:'https://aws.amazon.com/education/edstart/members/'
+            name:'Student Privacy Pledge Signatory',
+            logo:'/assets/images/promo/logo--privacy-pledge.png',
+            link:'https://studentprivacypledge.org/privacy-pledge/'
         },
         {
-            name:'California Student Data Privacy agreement',
+            name:'California Student Data Privacy Signatory',
             logo:'/assets/images/promo/logo--sdpc.png',
             link:'https://sdpc.a4l.org/about_alliance.php?state=CA'
         },
         {
-            name:'Clever',
+            name:'AWS EdStart Member',
+            logo:'/assets/images/promo/logo--aws-edstart.png',
+            link:'https://aws.amazon.com/education/edstart/members/'
+        },
+        {
+            name:'Clever Featured Application',
             logo:'/assets/images/promo/logo--clever.png',
-            link:'https://clever.com/app-gallery/edji'
+            link:'https://blog.clever.com/2019/04/classroom-reading-made-social-with-edji/'
         },
         {
             name:'MN Cup Semifinalist',
@@ -33,11 +38,6 @@ import { Component, OnInit } from "@angular/core";
             logo:'/assets/images/promo/logo--startup-weekend.png',
             link:'http://communities.techstars.com/usa/twincities/startup-weekend/7442'
         },
-        {
-            name:'Student Privacy Pledge',
-            logo:'/assets/images/promo/logo--privacy-pledge.png',
-            link:'https://studentprivacypledge.org/privacy-pledge/'
-        }
         /**
          * Others we're considering:
          * - AVID? Corbin to ask
