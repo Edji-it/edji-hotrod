@@ -1,0 +1,11 @@
+.row
+    .col-12
+        h2 Partners
+        .row.align-items-center
+            a.col-2.partner-link(
+                *ngFor="let badge of badges",
+                [href]="badge.link",
+                [title]="badge.name",
+                target="_blank"
+            )
+                img([src]="badge.logo")
