@@ -1,9 +1,11 @@
 import { browser, by, element, protractor, ElementFinder } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
 import { reset } from '../utils/browser-methods'
+import { Sidebar } from './sidebar-page';
 
 export class Dashboard implements PageObjectInterface {
   private EC = protractor.ExpectedConditions
+  private sidebar = new Sidebar()
 
   // Public Instance Variables
   public readingCards = element.all(by.css('.reading-card'))
@@ -189,6 +191,20 @@ export class Dashboard implements PageObjectInterface {
         })
       }
     })
+  }
+
+  // Switch to the joined groups tab
+  goToJoinedTab(): void {
+    // Wait for clickable
+    browser.wait(this.EC.elementToBeClickable(this.sidebar.navRead), 3000, 'joined readings tab not found')
+    this.sidebar.navRead.click()
+    browser.wait(
+      this.EC.urlContains('dashboard/read'),
+      3000,
+      'did not browse to joined readings dashboard'
+    )
+    // sleep() excuse - Let readings update and render
+    browser.sleep(500)
   }
 
   /**

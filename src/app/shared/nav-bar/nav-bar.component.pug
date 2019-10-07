@@ -199,7 +199,7 @@
         .icon.icon-check-small
         | Saved
     //- Join Reading Code
-    .row.col-4.col-xl-5.nav__join-code.hidden-md-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
+    .row.col-4.col-xl-5.nav__join-code.hidden-sm-down(*ngIf="(currentPage != 'project') && !canPublish && !hideAccountOptions")
       .input-group.input-group-lg
         input#projectCodeInputNav.form-control.text-code(
           name="ProjectCodeInput",
