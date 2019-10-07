@@ -43,6 +43,7 @@ describe('Dashboard Page as a Hero', () => {
   it('should arrive at dashboard', () => {
     browser.wait(EC.urlContains('dashboard'), 15000, 'never arrived at dashboard')
   })
+
   it('should paginate Created readings', async () => {
     // Wait for Readings to load into Dashboard
     browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 8000, 'never found Created Readings on Dashboard')
@@ -114,6 +115,37 @@ describe('Dashboard Page as a Hero', () => {
       'expected to see at least one project card on the dashboard',
     )
     expect(dashboard.projectCards.count()).toBeGreaterThan(0)
+  })
+
+   // this test relies on the user having at least one project - could do more verification of the project card itself
+   it('should see the join code box at multiple sizes', async () => {
+    // Switch to the created readings tab on mobile (will simply skip if on desktop)
+    dashboard.goToJoinedTab()
+    // Verify code box
+    browser.wait(EC.visibilityOf(dashboard.projectCodeInputNav), 3000, 'no join code box on full-size dashboard')
+    // Stash current size
+    let defaultSize = await browser.manage().window().getSize()
+    // Test window size variations
+    // Small Chromebook
+    await browser.manage().window().setSize(1280, 720)
+    browser.wait(EC.visibilityOf(dashboard.projectCodeInputNav), 3000, 'no join code box on small desktop dashboard')
+    // iPad Landscape
+    await browser.manage().window().setSize(1024, 768)
+    browser.wait(EC.visibilityOf(dashboard.projectCodeInputNav), 3000, 'no join code box on iPad landscape dashboard')
+    // iPad Portrait
+    await browser.manage().window().setSize(798, 1024)
+    browser.wait(EC.visibilityOf(dashboard.projectCodeInputNav), 3000, 'no join code box on iPad portrait dashboard')
+    // Smaller tablet Portrait - Just below breakpoint
+    await browser.manage().window().setSize(760, 1024)
+    browser.wait(EC.visibilityOf(dashboard.projectCodeInput), 3000, 'no join code box on smaller tablet portrait dashboard')
+    // Large Phone, Portrait (Pixel XL)
+    await browser.manage().window().setSize(411, 823)
+    browser.wait(EC.visibilityOf(dashboard.projectCodeInput), 3000, 'no join code box on large phone dashboard')
+    // Small Phone, Portrait (iPhone 6)
+    await browser.manage().window().setSize(375, 667)
+    browser.wait(EC.visibilityOf(dashboard.projectCodeInput), 3000, 'no join code box on small phone dashboard')
+    // Reset window size
+    await browser.manage().window().setSize(defaultSize.width, defaultSize.height)
   })
 
   /* ---- Dashboard Tests ------------------------ */
