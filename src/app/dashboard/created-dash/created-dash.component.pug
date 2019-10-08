@@ -108,13 +108,28 @@
     //- Show readings with date values
     .alert.alert-info.alert-dismissible(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && searchParams.createdCollection === 'recent'")
       .row
-        .col-lg-7
-          h4.alert-heading Create your first reading!
-          p Watch Will show you the basics of creating a Reading to get you started.
-        .col-lg-5.nopadding.text-center
-          .guide-video-thumb((click)="showNewReadingVideoModal = true")
-            .icon.icon-play
-            img(src="/assets/images/thumbnail-first-reading.jpg")
+        .col-12
+          h2.alert-heading Let's get started
+          p To kick things off, let's walk through creating a simple lesson that you can use with your students or keep as an example.
+          label Which type of students will you use Edji with?
+          label.form-check-label.form-check-btn(
+            *ngFor="let cohort of cohortOptions",
+            [class.active]="cohortChoice === cohort"
+          )
+            input.form-check-input(
+                type="radio",
+                name="cohort",
+                (change)="cohortChoice = cohort"                
+              )
+            span {{ cohort }}
+          h1 {{ cohortChoice }}
+        //- .col-lg-7
+        //-   h4.alert-heading Create your first reading!
+        //-   p Watch Will show you the basics of creating a Reading to get you started.
+        //- .col-lg-5.nopadding.text-center
+        //-   .guide-video-thumb((click)="showNewReadingVideoModal = true")
+        //-     .icon.icon-play
+        //-     img(src="/assets/images/thumbnail-first-reading.jpg")
       //- https://youtu.be/GPB8i8H8IBc
     .alert.alert-danger.alert-readings(*ngIf="errorObject.serverError || searchAlerts.serverError", role="alert")
       b Error Loading Readings

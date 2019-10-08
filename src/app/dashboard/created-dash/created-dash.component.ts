@@ -67,6 +67,17 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     notFollowing?: boolean
   } = {}
 
+  // Choose Your Reading onboarding data
+  public cohortOptions: string[] = [
+    'Elementary/Primary',
+    'Middle/Junior High',
+    'High/Secondary',
+    'College/University',
+    'Professional Development'
+  ]
+
+  public cohortChoice: string
+
   // TypeScript public modifiers
   constructor(
     public router: Router,
