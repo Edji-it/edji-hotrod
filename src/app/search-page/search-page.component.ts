@@ -42,7 +42,6 @@ export class SearchPage implements OnInit {
 
   // Modal Toggle
   public showReadingPreviewModal: boolean
-  public showReadingLinkModal: boolean
   public showFirstGroupModal: boolean
   public showConfirmArchiveModal: boolean
   public selectedReading: Reading

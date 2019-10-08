@@ -17,13 +17,13 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
   @Input() context: string = 'created' // 'created' for readings based on already created || 'creator' for brand new readings
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() createSuccess: EventEmitter<Reading> = new EventEmitter()
-  @Output() closeAndLink: EventEmitter<Reading> = new EventEmitter()
 
   // state values
   public initialized: boolean
   public loading: boolean = true
   public loggedIn: boolean = true
   public showLoginModal: boolean
+  public showReadingLinkModal: boolean
 
   public copy: {
     share: string
@@ -96,14 +96,6 @@ export class ReadingPreviewModal implements AfterViewInit, OnInit {
     if (this.context === 'created') {
       this._router.navigate(['/new-reading'], { queryParams: { copyId: this.reading._id } })
     }
-  }
-
-  /**
-   * Open Reading Link modal
-   */
-  public sendReading(reading: Reading): void {
-    this.closeAndLink.emit(reading)
-    this.close()
   }
 
   /**
