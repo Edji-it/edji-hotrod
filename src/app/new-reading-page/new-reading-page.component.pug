@@ -120,7 +120,10 @@ nav-bar(
                 - Insert a Picture or Pdf
                 - (Hero) Insert a Question
             //- Desktop Insert Buttons
-            .editor-button-bar.hidden-md-down([class.hide]="editorToolbarHidden", [style.top]="editorToolbarY + 'px'")
+            #insertBar.editor-button-bar.hidden-md-down(
+              [class.hide]="editorToolbarHidden", 
+              [style.top]="editorToolbarY + 'px'"
+            )
               //- Insert Label
               span.editor-button-bar__title Insert
               //- Upload Image Button

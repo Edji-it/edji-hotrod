@@ -20,6 +20,7 @@ import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/dat
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
 import { Subscription, Observable, interval } from 'rxjs'
+import * as Driver from 'driver.js';
 
 @Component({
   selector: 'new-reading-page',
@@ -165,6 +166,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
     },
   ]
   public guideStepNo: number = 1
+  // Driver.js
+  public driver
   //  IMultiSelectOption[]
   public subjects: any = [
     { id: 'literature', name: 'Language Arts' },
@@ -228,6 +231,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
     // the only way we can get the modal to show is watching the params because saving a draft triggers a reload
     if (this._route.snapshot.queryParams['showHeroParam']) {
       this.showHeroSubModal = true
+    }
+    // If loaded with guide param, show onboarding
+    if (this._route.snapshot.queryParams['guide'] == 'welcome') {
+        this.beginTour()
     }
     if (this.alert) {
       this.successObject.readingSuccess = this.alert
@@ -298,6 +305,45 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (renderedEl && renderedEl.parentElement) {
       renderedEl.parentElement.removeChild(renderedEl)
     }
+  }
+
+  beginTour() {
+    // Trigger guide tooltips
+    this.driver = new Driver({
+      opacity: 0.5,
+      padding: 15
+    })
+
+    // Define the steps for introduction
+    this.driver.defineSteps([
+    {
+      element: '#readingPageForm',
+      popover: {
+        className: 'first-step-popover-class',
+        title: 'Title on Popover',
+        description: 'Body of the popover',
+        position: 'top-center'
+      }
+    },
+    {
+      element: '#insertBar',
+      popover: {
+        title: 'Title on Popover',
+        description: 'Body of the popover',
+        position: 'top'
+      }
+    },
+    {
+      element: '[data-template="firstParagraph"]',
+      popover: {
+        title: 'For "Title of Reading" there just a few sections that need your own content',
+        description: 'Or you can go ahead and use the sample content we\'ve provided',
+        position: 'top'
+      }
+    },
+    ]);
+    // Start the introduction
+    this.driver.start();
   }
 
   /**
