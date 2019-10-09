@@ -17,13 +17,16 @@ export class HeroChangeComponent implements OnInit {
   public confirmCancelShow: boolean
   public updateCardShow: boolean
   public subscriptionShow: boolean = true
+  public updatePaymentSuccess: boolean
 
   public isCanceled: boolean
   public canceling: boolean
+  public loading: boolean
 
   public cancelMsg: string = ''
 
   public stripe: any
+  public card: any
   public subscriptionPrice: number = 60
   public cardInfo: any
   public cardBrand: string = 'visa'
@@ -42,7 +45,27 @@ export class HeroChangeComponent implements OnInit {
     this.stripe = this._auth.getStripe()
     // Create an instance of Elements
     let elements = this.stripe.elements()
-    console.log(elements)
+    let style = {
+      base: {
+        color: '#32325d',
+        lineHeight: '24px',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '16px',
+        '::placeholder': {
+          color: '#aab7c4',
+        },
+      },
+      invalid: {
+        color: '#fa755a',
+        iconColor: '#fa755a',
+      },
+    }
+    // Create an instance of the card Element
+    this.card = elements.create('card', { style: style })
+
+    // Add an instance of the card Element into the `card-element` <div>
+    this.card.mount('#card-element')
 
     try {
       this.cardInfo = await this._auth.getStripeCustomerCard(this.user.stripe_customer_id).toPromise()
@@ -127,6 +150,29 @@ export class HeroChangeComponent implements OnInit {
           console.log(err)
         },
       )
+  }
+
+  /** Let's our service know to update the credit card information  */
+  public updateCard(): void {
+    this.loading = true
+
+    this.stripe.createSource(this.card).then(async result => {
+      if (result.error) {
+        // Inform the user if there was an error
+        var errorElement = document.getElementById('card-errors')
+        errorElement.textContent = result.error.message
+      } else {
+        try {
+          await this._auth.updatePaymentSource(result.source.id, this.user.stripe_customer_id).toPromise()
+          this.updatePaymentSuccess = true
+        } catch (err) {
+          console.error(err)
+          var errorElement = document.getElementById('card-errors')
+          errorElement.textContent = err.message
+        }
+      }
+      this.loading = false
+    })
   }
 
   public toggleView(view: string): void {

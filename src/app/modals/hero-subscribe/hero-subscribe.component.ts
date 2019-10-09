@@ -157,7 +157,7 @@ export class HeroSubscribeComponent implements OnInit {
     }
   }
 
-  private checkout() {
+  public checkout() {
     let eventAction = 'addSubscription'
     if (this.couponCode && this.couponCode.length > 0) {
       eventAction += '-' + this.couponCode

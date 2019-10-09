@@ -819,6 +819,21 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Update payment source on customer
+   */
+  public updatePaymentSource(stripeToken: string, customerId: string): Observable<any> {
+    let data = {
+      token: stripeToken,
+    }
+    return this._http.put<any>(this.baseUrl + `/api/v1/stripe/customers/${customerId}`, data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: this.getToken(),
+      }),
+    })
+  }
+
+  /**
    * Submit payment and subscription type to add plan to user
    */
   public subscribeToHero(stripeToken, couponCode?: string): Observable<HeroCreateResponse> {
