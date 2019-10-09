@@ -40,7 +40,7 @@
                       div(*ngSwitchDefault)
                         img.icon-cc.card-icon(src="/assets/images/icon-generic-cc.png")
                   td.align-middle(colspan="2")
-                    p.mb-0.txt-sm {{cardInfo && cardInfo.brand ? cardInfo.brand : cardInfo.card.brand}} ending in {{cardInfo && cardInfo.last4 ? cardInfo.last4 : cardInfo.card.last4}}
+                    p.mb-0.txt-xs {{cardInfo && cardInfo.brand ? cardInfo.brand : cardInfo.card.brand}} ending in {{cardInfo && cardInfo.last4 ? cardInfo.last4 : cardInfo.card.last4}}
                   td.align-middle(colspan="2")
                     p.mb-0.txt-sm Expires {{cardInfo && cardInfo.exp_month ? cardInfo.exp_month : cardInfo.card.exp_month}}/{{cardInfo && cardInfo.exp_year ? cardInfo.exp_year : cardInfo.card.exp_year}}
             .btn-row.right
