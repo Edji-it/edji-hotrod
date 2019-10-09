@@ -68,15 +68,40 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   } = {}
 
   // Choose Your Reading onboarding data
-  public cohortOptions: string[] = [
+  public cohortOptions: any[] = [
     'Elementary/Primary',
     'Middle/Junior High',
     'High/Secondary',
     'College/University',
-    'Professional Development'
+    'Professional Development',
   ]
+//   { label: 'Elementary/Primary', grades: [0, 1, 2, 3, 4] },
+//   { label: 'Middle/Junior High', grades: [5, 6, 7, 8] },
+//   { label: 'High/Secondary', grades: [9, 10, 11, 12] },
+//   { label: 'College/University', grades: [13] },
+//   { label: 'Professional Development', grades: [13] },
+// ]
 
-  public cohortChoice: string
+  public cohortChoice: any
+  public templateChoices: any[]
+
+  private templates: any[] = [
+    {
+      title: ':mag_right: Reviewing a Concept',
+      cohort: 0,
+      _id: '5d9e1e4f4a572f2134d4d328'
+    },
+    {
+      title: ':mag_right: Parts of Speech',
+      cohort: 0,
+      _id: '5d9e1e4f4a572f2134d4d328'
+    },
+    {
+      title: ':mag_right: Connect with Excerpt',
+      cohort: 0,
+      _id: '5d9e1e4f4a572f2134d4d328'
+    }
+  ]
 
   // TypeScript public modifiers
   constructor(
@@ -281,5 +306,17 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
         console.error(err)
       },
     )
+  }
+
+  public showTemplates(cohort: string, index: number): void {
+    this.cohortChoice = cohort
+    // Pause to let user see their selection
+    // setTimeout(() => {
+
+    // },  500)
+    // Filter templates
+    this.templateChoices = this.templates.filter((template) => {
+      return template.cohort === index
+    })
   }
 }
