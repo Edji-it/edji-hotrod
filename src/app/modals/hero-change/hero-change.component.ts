@@ -29,7 +29,6 @@ export class HeroChangeComponent implements OnInit {
   public card: any
   public subscriptionPrice: number = 60
   public cardInfo: any
-  public cardBrand: string = 'visa'
 
   // Form values
   private subtype: string = 'yearly'
@@ -69,7 +68,6 @@ export class HeroChangeComponent implements OnInit {
 
     try {
       this.cardInfo = await this._auth.getStripeCustomerCard(this.user.stripe_customer_id).toPromise()
-      this.cardBrand = this.cardInfo.brand.toLowerCase()
       console.log(this.cardInfo)
     } catch (err) {
       console.error(err)
