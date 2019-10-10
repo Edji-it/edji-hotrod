@@ -9,19 +9,9 @@ import { Component, OnInit } from "@angular/core";
 
     public badges = [
         {
-            name:'Student Privacy Pledge Signatory',
-            logo:'/assets/images/promo/logo--privacy-pledge.png',
-            link:'https://studentprivacypledge.org/privacy-pledge/'
-        },
-        {
-            name:'California Student Data Privacy Signatory',
-            logo:'/assets/images/promo/logo--sdpc.png',
-            link:'https://sdpc.a4l.org/about_alliance.php?state=CA'
-        },
-        {
             name:'AWS EdStart Member',
             logo:'/assets/images/promo/logo--aws-edstart.png',
-            link:'https://aws.amazon.com/education/edstart/members/'
+            link:'https://aws.amazon.com/education/edstart'
         },
         {
             name:'Clever Featured Application',
@@ -37,6 +27,19 @@ import { Component, OnInit } from "@angular/core";
             name:'Startup Weekend Edu Finalist',
             logo:'/assets/images/promo/logo--startup-weekend.png',
             link:'http://communities.techstars.com/usa/twincities/startup-weekend/7442'
+        },
+        /**
+         * @todo uncomment once confirmed
+         */
+        // {
+        //     name:'Student Privacy Pledge Signatory',
+        //     logo:'/assets/images/promo/logo--privacy-pledge.png',
+        //     link:'https://studentprivacypledge.org/privacy-pledge/'
+        // },
+        {
+            name:'California Student Data Privacy Signatory',
+            logo:'/assets/images/promo/logo--sdpc.png',
+            link:'https://sdpc.a4l.org/about_alliance.php?state=CA'
         },
         /**
          * Others we're considering:

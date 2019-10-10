@@ -1,7 +1,7 @@
 .row.row--partners
     .col-12
         //- h2.center Partners
-        .row.row--badges.align-items-center
+        .row.row--badges.align-items-center.justify-content-center
             .col-sm-4.col-md-2.col-2(*ngFor="let badge of badges")
                 a.partner-link.hover--tooltip(
                     [href]="badge.link",
