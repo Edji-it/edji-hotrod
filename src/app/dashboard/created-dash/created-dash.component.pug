@@ -106,12 +106,15 @@
     <p-paginator [class.disabled]="paginationDisabled" [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
     .mb-4
     //- Show readings with date values
-    .alert.alert-info.alert-dismissible(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && searchParams.createdCollection === 'recent'")
+    .alert.alert-info(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && searchParams.createdCollection === 'recent'")
       .row(*ngIf="!templateChoices")
+        .col-8
+          h2.alert-heading Get Started with a Simple Lesson
+          p To kick things off, let's walk through creating a simple lesson that you can use with your students as a short activity or keep as an example.
+        .col-4.text-right
+          img(src="/assets/images/guide/new-reading.png")
         .col-12
-          h2.alert-heading Let's get started
-          p To kick things off, let's walk through creating a simple lesson that you can use with your students or keep as an example.
-          label Which type of students will you use Edji with?
+          p.font-weight-bolder I primarily teach...
           label.form-check-label.form-check-btn(
             *ngFor="let cohort of cohortOptions; let i = index",
             [class.active]="cohortChoice === cohort"
@@ -124,16 +127,20 @@
             span {{ cohort }}
       .row(*ngIf="templateChoices")
         .col-12
-          h2.alert-heading What should we try?
-          p Great! Here are a couple of templates that could be used:
-          a.template-link(
-            *ngFor="let template of templateChoices",
-            [innerHtml]="template.title | emojione",
-            [routerLink]="['/new-reading/' + template._id]",
-            [queryParams]="{ 'guide':'welcome' }"
-          )
+          h2.alert-heading Get Started with a Simple Lesson
+          p Great, we're excited to help you teach <i>{{cohortChoice}}</i>. 
+          p.font-weight-bolder Which of these examples would you like to try?
+          .my-4
+            a.template-link(
+              *ngFor="let template of templateChoices",
+              [innerHtml]="template.title | emojione",
+              [routerLink]="['/new-reading/' + template._id]",
+              [queryParams]="{ 'guide':'welcome' }"
+            )
         .col-12
-          a.link.small((click)="templateChoices = null") < Back
+          .btn.btn-link.no-margin((click)="templateChoices = null", tabindex="0")
+            i.icon.icon-caret.left
+            | Back
         //- .col-lg-7
         //-   h4.alert-heading Create your first reading!
         //-   p Watch Will show you the basics of creating a Reading to get you started.

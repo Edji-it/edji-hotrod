@@ -323,16 +323,16 @@ export class NewReadingPage implements OnInit, OnDestroy {
       element: '#readingPageForm',
       popover: {
         className: 'first-step-editor-popover',
-        title: 'Title on Popover',
-        description: 'Body of the popover',
+        title: 'Welcome to the New Reading page!',
+        description: 'We\'ve prefilled the editor with the "Reviewing a Concept" template',
         position: 'top-center',
       }
     },
     {
       element: '#insertBar',
       popover: {
-        title: 'Title on Popover',
-        description: 'Body of the popover',
+        title: 'Insert content, such as images!',
+        description: 'The insert toolbar makes it easy to insert images, PDFs, and questions throughout your reading',
         position: 'top'
       }
     },

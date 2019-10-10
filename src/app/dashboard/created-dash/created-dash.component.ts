@@ -92,12 +92,12 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
       _id: '5d9e1e4f4a572f2134d4d328'
     },
     {
-      title: ':mag_right: Parts of Speech',
+      title: ':mega: Parts of Speech',
       cohort: 0,
       _id: '5d9e1e4f4a572f2134d4d328'
     },
     {
-      title: ':mag_right: Connect with Excerpt',
+      title: ':link: Connecting with an Excerpt',
       cohort: 0,
       _id: '5d9e1e4f4a572f2134d4d328'
     }

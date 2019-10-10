@@ -368,6 +368,14 @@ button {
     color: $btnPrimaryColor;
     border-bottom: 1px solid $btnPrimaryColor;
   }
+
+  & .icon {
+    vertical-align: middle;
+  }
+
+  &.no-margin {
+    margin: 0px !important;
+  }
 }
 
 .btn-filter,
