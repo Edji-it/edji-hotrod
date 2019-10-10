@@ -1,5 +1,5 @@
-#readingPreviewModal.modal.fade-in.show
-  .modal-dialog((clickOutside)="close()")
+#readingPreviewModal.modal.modal-will-fade([class.show]="!showReadingLinkModal")
+  .modal-dialog((clickOutside)="!showReadingLinkModal && close()")
     .container
       .modal-content.reading-details(*ngIf="reading['owner']")
         .comment__avatar {{reading['owner'].fullname.substr(0,2).toUpperCase()}}
@@ -68,8 +68,14 @@
                 | Log In
             ng-container(*ngIf="copy.send")
               button#sendReadingLink.btn.btn-clear(
-                (click)="sendReading(reading)",
+                (click)="showReadingLinkModal = true",
                 title="Share a link to this Reading preview"
               )
                 | Link to Preview
                 i.icon.icon-reading-link.mr-0.icon--btn-inline
+//- Reading link modal
+edji-reading-link(
+    *ngIf="showReadingLinkModal", 
+    [reading]="reading",
+    (closeModal)="showReadingLinkModal = false"
+)

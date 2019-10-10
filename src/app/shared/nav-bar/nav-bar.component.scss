@@ -149,6 +149,13 @@ $purple: rgb(150, 40, 255);
     line-height: 36px;
   }
 
+
+  @media (max-width: 800px) {
+    & .btn {
+      margin: 0px 12px !important;
+    }
+  }
+
   @media (max-width: $tablet) {
     & .btn {
       margin: 0px 7.5px !important;
