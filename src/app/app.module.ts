@@ -72,7 +72,7 @@ import {
   PromoBannerComponent,
   SchoolSelectorComponent,
 } from './shared'
-import { HomeComponent } from './home'
+import { HomeComponent, BadgeRowComponent } from './home'
 import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
 import { LoginForm, GuestForm, RegisterFormComponent, ProfileFormComponent } from './forms'
 
@@ -271,6 +271,7 @@ const routerOptions: ExtraOptions = {
     JoinedDashComponent,
     CreatedDashComponent,
     LoginComponent,
+    BadgeRowComponent,
     HomeComponent,
     NoContentComponent,
     UserDetailsUpdateModal,
