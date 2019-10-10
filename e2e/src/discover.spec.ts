@@ -110,6 +110,26 @@ describe('Discover Feed', () => {
       discover.closeReadingPreview()
     })
 
+    it('should access reading link from discover feed and then close it', async () => {
+      browser.wait(
+        EC.elementToBeClickable(discover.firstFeedReading),
+        5000,
+        'first reading in discover feed was not clickable',
+      )
+      discover.firstFeedReading.click()
+      browser.wait(EC.elementToBeClickable(discover.sendReadingLink), 5000, 'send reading link was not clickable')
+      discover.sendReadingLink.click()
+      browser.wait(EC.visibilityOf(discover.copyShareLink), 3000, 'reading share link did not become visible')
+      // Compare id in link with id in URL
+      let currentUrl = await browser.getCurrentUrl()
+      let currentIdParam = currentUrl.slice(currentUrl.indexOf('preview='))
+      let shareUrl = await discover.copyShareLink.getAttribute('value')
+      expect(shareUrl.length).toBeGreaterThan(0)
+      expect(shareUrl).toContain(currentIdParam)
+      // Close link modal
+      discover.shareLinkClose.click()
+    })
+
     it('should open reading preview and edit a reading then save it', () => {
       browser.wait(
         EC.elementToBeClickable(discover.firstFeedReading),
