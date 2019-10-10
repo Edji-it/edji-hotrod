@@ -234,7 +234,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
     // If loaded with guide param, show onboarding
     if (this._route.snapshot.queryParams['guide'] == 'welcome') {
+      
+      setTimeout(() => {
         this.beginTour()
+      }, 5000)
     }
     if (this.alert) {
       this.successObject.readingSuccess = this.alert
@@ -311,7 +314,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     // Trigger guide tooltips
     this.driver = new Driver({
       opacity: 0.5,
-      padding: 15
+      padding: 20
     })
 
     // Define the steps for introduction
@@ -319,10 +322,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
     {
       element: '#readingPageForm',
       popover: {
-        className: 'first-step-popover-class',
+        className: 'first-step-editor-popover',
         title: 'Title on Popover',
         description: 'Body of the popover',
-        position: 'top-center'
+        position: 'top-center',
       }
     },
     {

@@ -235,6 +235,7 @@ button {
   }
 }
 
+%btnPrimary,
 .btn.btn-primary {
   background-color: $btnPrimaryBg;
   // background-image: linear-gradient(180deg, #FFFFFF 7%, $btnPrimaryBg 100%);
@@ -310,6 +311,7 @@ button {
   }
 }
 
+%btnSecondary,
 .btn-secondary {
   color: $btnSecondaryColor;
   border: $btnBorderWidth solid $btnSecondaryColor;

@@ -543,3 +543,27 @@ input[type='password'].input-noborder:focus {
     color: $medium-gray;
   }
 }
+
+// [data-template="firstParagraph"] {
+//   position: absolute;
+// }
+
+button.driver-next-btn,
+div#driver-popover-item .driver-popover-footer .driver-next-btn {
+  @extend .btn;
+  @extend %btnPrimary;
+  @extend .btn-sm;
+}
+
+
+div#driver-popover-item .driver-popover-footer {
+  button.driver-prev-btn, button.driver-close-btn {
+    @extend .btn;
+    @extend %btnSecondary;
+    @extend .btn-sm;
+  }
+}
+
+.first-step-editor-popover {
+  top: 20px !important;
+}
