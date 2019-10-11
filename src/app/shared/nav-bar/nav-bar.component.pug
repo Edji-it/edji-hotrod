@@ -149,7 +149,7 @@
           .nav__btn-slider.has-action([class.expanded]="sliderBtnExpanded['code']")
             i.icon.icon-key((click)="toggleSlider('code')")
               .icon-pill-status
-            .btn-slider__value.text-code((click)="showShareCodeModal = true") {{ currentProject.code }}
+            .btn-slider__value.text-code((click)="showShareCodeModal()") {{ currentProject.code }}
           .tooltip.tooltip--bottom
             .tooltip-title Group Code
       //- Academy Info
@@ -257,12 +257,7 @@
 //- Components in Nav for display on multiple pages
 //- ************************************************
 //- Group share code modal
-share-code(
-  *ngIf="showShareCodeModal",
-  [class.show]="showShareCodeModal",
-  [showOnNewReading]="isNewReading",
-  (closeModal)="showShareCodeModal = false"
-)
+share-code(#shareCodeModal)
 //- Message toast display
 edji-message-toasts([currentPage]="currentPage")
 //- Referrals

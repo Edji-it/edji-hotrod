@@ -547,6 +547,17 @@ $iconGrayOpacity: 0.6;
   height: 2em;
 }
 
+// Badge Icon Styles
+// *****************************************************
+
+.badge-reading-1 {
+  @include icon('badges/first-reading.png');
+}
+
+.badge-comment-1 {
+  @include icon('badges/first-comment.png');
+}
+
 // Acquired font awesome styles
 .fa {
   -moz-osx-font-smoothing: grayscale;

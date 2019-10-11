@@ -515,6 +515,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
        * - In AfterViewInit due to "commentComponents" use
        */
       this.route.queryParams.subscribe(params => {
+        if (params['guide'] === 'welcome'  && !params['readingCodeModal']) {
+          // @todo verify user has not yet created a reading
+          this._messages.sendToast({
+            message: '<b>Success, first reading created</b><br/>Collaboration awaits!',
+            id: 'guide',
+            type: 'first-reading',
+            limitToPage: 'project',
+            requireDismiss: true
+          })
+        }
         // handler for feedback
         if (params['feedback']) {
           let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {

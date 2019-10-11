@@ -168,6 +168,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public guideStepNo: number = 1
   // Driver.js
   public driver
+  public onboardTemplate: boolean
   //  IMultiSelectOption[]
   public subjects: any = [
     { id: 'literature', name: 'Language Arts' },
@@ -234,7 +235,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
     // If loaded with guide param, show onboarding
     if (this._route.snapshot.queryParams['guide'] == 'welcome') {
-      
+      this.onboardTemplate = true
       setTimeout(() => {
         this.beginTour()
       }, 5000)
@@ -941,7 +942,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
               source: this.reading.source,
             })
             // Navigate user to newly created group for reading
-            this.router.navigate(['project', this.newGroup._id], { queryParams: { readingCodeModal: true } })
+            let redirectParams = { readingCodeModal: true }
+            if (this.onboardTemplate) {
+              redirectParams['guide'] = 'welcome'
+            }
+            this.router.navigate(['project', this.newGroup._id], { queryParams: redirectParams })
           } else {
             if (!autosave) {
               this.successObject.readingSuccess = this.successAlert

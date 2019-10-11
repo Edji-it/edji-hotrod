@@ -11,12 +11,12 @@ $modalBodyBg: #fff;
   .modal-content {
     opacity: 0;
     pointer-events: none;
-    transition: opacity ease-in 0.3s;
+    transition: all ease 0.3s;
   }
 
   .modal-content {
     transform: scale(1.1) translateZ(0px);
-    transition: transform ease-in 0.3s;
+    transition: transform ease 0.3s, opacity ease 0.3s;
   }
 
   &.show {
@@ -40,7 +40,7 @@ $modalBodyBg: #fff;
   // display: block;
   display: flex;
   align-items: center;
-  transition: background ease-in 0.3s;
+  transition: all ease-in 0.3s;
 
   // Safari rendering fix
   transform: translateZ(0px);
