@@ -132,4 +132,22 @@ describe('Hero Subscription Management', () => {
       hero.subscribeModalClose.click()
     })
   })
+
+  describe('Change Credit Card Number for Subscribed Hero', () => {
+    afterAll(() => {
+      sidebar.logout()
+    })
+
+    it('should open view/modify modal on account page and change credit card', () => {})
+  })
+
+  describe('Cancel Subscription and Renew', () => {
+    afterAll(() => {
+      sidebar.logout()
+    })
+
+    it('should cancel hero subscription', () => {})
+
+    it('should renew hero subscription that was previously canceled', () => {})
+  })
 })
