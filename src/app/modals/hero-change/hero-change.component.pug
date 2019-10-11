@@ -51,9 +51,9 @@
             p You will remain a Hero until the end of your current payment period.
             .alert.alert-warning(*ngIf="cancelMsg", [innerHtml]="cancelMsg")
             .btn-row.center.pt-4
-              button#subHeroCancelNvmd.btn.btn-hero.w-100((click)="toggleView('subscriptionShow')") Nevermind, Don't Cancel my Hero Subscription
+              button#subHeroCancelNvmd.btn.btn-secondary.w-100((click)="toggleView('subscriptionShow')") Nevermind, Don't Cancel
             .btn-row.center.pt-2
-              button#subHeroCancelConfirm.btn.btn-secondary.w-100([class.loading]="canceling", (click)="cancelSub()") Yes, Please Cancel my Hero Subscription
+              button#subHeroCancelConfirm.btn.btn-primary.w-100([class.loading]="canceling", (click)="cancelSub()") Yes, Please Cancel
             hr
         .row(*ngIf="isCanceled")
           .col-12
@@ -74,5 +74,5 @@
       .modal-footer.mt-2
         .btn-row.left
           button#subHeroCancel.btn.btn-hero.btn-faded(*ngIf="subscriptionShow", [class.loading]="canceling", (click)="toggleView('confirmCancelShow')") Cancel Subscription
-        .btn-row.right
+        .btn-row.right(*ngIf="subscriptionShow")
           button#subClose.btn((click)="close()", type="button", data-dismiss="modal") Close
