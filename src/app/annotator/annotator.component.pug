@@ -12,7 +12,7 @@ scroll-progress([scrollProgress]="currentScroll")
     .text-options(
         *ngIf="directCommentOptions.length > 0",
         [style.top]="highlightY + 'px'",
-        [ngClass]="{ 'active' : optionsShow }"
+        [ngClass]="{ 'active' : optionsShow || optionsForceShow }"
     )
         //- optionsShow
         //- Desktop buttons

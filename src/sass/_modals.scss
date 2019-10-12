@@ -16,6 +16,7 @@ $modalBodyBg: #fff;
 
   .modal-content {
     transform: scale(1.1) translateZ(0px);
+    // Specifying properties to transition on content makes repaints lighter
     transition: transform ease 0.3s, opacity ease 0.3s;
   }
 

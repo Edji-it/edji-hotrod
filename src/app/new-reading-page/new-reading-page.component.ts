@@ -345,6 +345,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
         position: 'top'
       }
     },
+    // Highlight question field
+    // Share button when done!
     ]);
     // Start the introduction
     this.driver.start();

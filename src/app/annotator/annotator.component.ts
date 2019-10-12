@@ -34,6 +34,7 @@ import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
 import { ProjectStore } from '../_store'
+import * as Driver from 'driver.js'
 
 @Component({
   selector: 'annotator',
@@ -107,6 +108,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   // Trigger Booleans
   public showDiscussions: boolean = false
   public optionsShow = false
+  public optionsForceShow = false
   public hideKeyboard = false
 
   // Status Booleans
@@ -524,6 +526,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             limitToPage: 'project',
             requireDismiss: true
           })
+          // Begin commenting tour
+          // setTimeout(() => {
+            this.beginCommentGuide()
+          // }, 3000)
         }
         // handler for feedback
         if (params['feedback']) {
@@ -1801,6 +1807,68 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // the socket update needs to have the latest feedback pushed in
       this.feedbackForUser.push(feedback)
     }
+  }
+
+  /**
+   * Use driver.js to being tour of how to comment
+   */
+   beginCommentGuide () {
+     this.optionsForceShow = true
+
+    let driver = new Driver({
+      opacity: 0.5,
+      padding: 20
+    })
+
+    // Find first considerably long word
+    let exampleWordIndex
+    for (let i = 0; i < this.reading.words.length; i++) {
+      let word: string = this.reading.words[i].str
+      if (word && word.length > 3) {
+        exampleWordIndex = i
+        break;
+      }
+    }
+    // Set focus on example word
+    this.optionsShow = false
+    // this.quickSelect.focus = exampleWordIndex
+    this.quickSelect = { focus: exampleWordIndex, anchor: exampleWordIndex }
+    // this.quickSelect.anchor = exampleWordIndex
+    this.focusHighlight(exampleWordIndex, exampleWordIndex)
+    let word: HTMLElement = document.querySelector('.w[index="'+exampleWordIndex+'"]') as HTMLElement
+    this.highlightY = word.getBoundingClientRect().top
+    console.log("Word selected!", exampleWordIndex, this.quickSelect)
+    // let word: HTMLElement = document.querySelector('.w[index="'+exampleWordIndex+'"]') as HTMLElement
+    // console.log('found word', word)
+    // word && word.click()
+    // this.optionsShow = true
+
+     setTimeout(()=> { console.log('prep')
+      // Define the steps for introduction
+        driver.defineSteps([
+          {
+            element: '#annotatorContent',
+            popover: {
+              className: 'show-text',
+              title: 'Click words to select',
+              description: 'To select text you wish annotate, click on one or two words',
+              position: 'left',
+            }
+          },
+          {
+            element: '.text-options .options',
+            popover: {
+              className: 'popover--comment-options',
+              title: 'Pick your comment type',
+              description: 'Edji readings support text, emoji, and audio annotations',
+              position: 'bottom'
+            },
+          },
+        ]);
+      // Start the introduction
+      driver.start();
+    }, 1000)
+    
   }
 }
 
