@@ -168,7 +168,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
    */
   private buildLicenseLink(license): string {
     if (license.link_tokens && license.owning_institution) {
-      let name = license.owning_institution.name
+      let name = encodeURIComponent(license.owning_institution.name)
       let token = license.link_tokens
       return `${location.origin}/#/license/accept/${token}?academy=${name}&tokenType=academy_token`
     } else {
