@@ -129,7 +129,6 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         joined: licenseUser.license_ids ? licenseUser.license_ids.joined : '',
         type: 'active',
       })
-      console.log(this.licenseUsers)
     }
 
     // Finish up the array with the pending licenses
