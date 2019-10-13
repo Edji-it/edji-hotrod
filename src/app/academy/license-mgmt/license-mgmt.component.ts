@@ -36,6 +36,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     { label: 'Other', value: 'other' },
   ]
 
+  public inviteLink: string = ''
   public showLicenseInviteModal: boolean
   public licenseInvite: FormGroup
   public inviteSuccess: {
@@ -91,6 +92,9 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         let licenseIndex = this.academyState.selected || 0
         this.licenses = licenses
         this.loadLicenseRows(this.licenses[licenseIndex])
+        // Set invite link to first hero license
+        let heroLicenses = licenses.filter(license => { return license.license_type === 'hero' })
+        this.inviteLink = this.buildLicenseLink(heroLicenses[0])
       }),
     )
   }
@@ -148,6 +152,21 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         joined: pendingLicense.expiration,
         type: inviteType,
       })
+    }
+  }
+
+  /**
+   * Generate academy invite link
+   * @param license hero license to use for link
+   */
+  private buildLicenseLink(license): string {
+    if (license.link_tokens && license.owning_institution) {
+      let name = encodeURIComponent(license.owning_institution.name)
+      let token = license.link_tokens
+      return `${location.origin}/#/license/accept/${token}?academy=${name}&tokenType=academy_token`
+    } else {
+      console.error("License Link: Unable to find link token on license")
+      return ''
     }
   }
 

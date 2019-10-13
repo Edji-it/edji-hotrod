@@ -55,7 +55,10 @@ nav-bar([hideAccountOptions]="true", [pageTitle]="'Join Your Academy'")
         .card-body
           .btn-row.text-right
             .btn.btn-secondary((click)="changeAccount()") Use other account
-            .btn.btn-hero((click)="processLicense()") Join Academy
+            .btn.btn-hero(
+              (click)="processLicense()",
+              data-test="joinAcademyBtn"
+            ) Join Academy
       .row-pad
         p.on-dark By joining a Hero Academy, your institution provides you with a license of 
           a.link.on-dark([routerLink]="['/plans']") Edji Hero

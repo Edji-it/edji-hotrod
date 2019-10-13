@@ -92,7 +92,7 @@ describe('Versioning - ', () => {
     browser.wait(
       EC.elementToBeClickable(element(by.css('button[testFindCopyAndEdit="' + uniqueTitle + '"]'))),
       5000,
-      'copy and edit button never became clicakble after options dropdown click',
+      'copy and edit button never became clickable after options dropdown click',
     )
     element(by.css('button[testFindCopyAndEdit="' + uniqueTitle + '"]')).click()
 

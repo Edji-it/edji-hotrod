@@ -95,6 +95,14 @@ nav-bar([showDashboardOptions]="true")
     .container.academy-container.py-4
       .row
         .col-12
+          .academy-name Academy Invite Link
+          .academy-header.font-weight-light Share this link with one or many teachers to give them a license to your Academy
+          .mt-2
+            edji-share-link([link]="inviteLink")
+
+    .container.academy-container.py-4
+      .row
+        .col-12
           .academy-name Request or Update Academy Licenses
           .academy-header.font-weight-light To change your Academy’s number of licenses, update Acadmey information, or for other Hero Academy support, submit your request below.
           form([formGroup]="licenseRequest", (ngSubmit)="sendRequest(licenseRequest)")

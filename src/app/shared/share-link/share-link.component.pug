@@ -3,7 +3,8 @@
     name="ReferralCode",
     type="text",
     disabled="true",
-    value="{{link}}"
+    value="{{link}}",
+    [class.is-valid]="linkCopySuccess"
   )
   .input-group-append
     //- e2e: ngIf on copy button ensures link is ready to copy
@@ -13,5 +14,5 @@
       (click)="copyShareLink('copy')", 
       name="Copy", 
       href="#") Copy
-  small#linkCopySuccess.form-text.text-success(*ngIf="linkCopySuccess")
+  #linkCopySuccess.valid-feedback
     | Link was copied to your clipboard!
