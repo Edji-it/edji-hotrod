@@ -141,8 +141,8 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       browser.wait(EC.elementToBeClickable(mgmt.copyInviteLink), 5000, 'never saw the invite link')
       // Get Academy invite link and save it for later
       let inviteLink = await mgmt.inviteLinkBox.getAttribute('value')
-      // Verify referral link is longer than just "edji.it"
-      expect(inviteLink.length).toBeGreaterThan(5)
+      // Verify invite link contains accept path
+      expect(inviteLink).toContain('/license/accept')
       // Verify clicking "Copy" at least shows a success message
       mgmt.copyInviteLink.click()
       browser.wait(EC.visibilityOf(mgmt.copySuccessMsg), 3000, 'clicking to copy invite link did not show success message')
