@@ -22,7 +22,7 @@ localConf['capabilities']['chromeOptions']['args'] = [
 ]
 
 // Use 3 instances on CircleCI
-localConf['capabilities']['maxInstances'] = 1
+localConf['capabilities']['maxInstances'] = 3
 
 localConf.onPrepare = () => {
   // Add Junit report output for tracking results in Circle
