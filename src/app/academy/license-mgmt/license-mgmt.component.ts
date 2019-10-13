@@ -121,21 +121,15 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
           educatorRole = this.capitalizeFirstLetter(licenseRoles[j].role)
         }
       }
-      let educatorJoined: Date
-      for (var k = 0; k < userLicenseIds.length; k++) {
-        // Set the joined date of the educator for this license
-        if (userLicenseIds[k].license_id === this.license._id) {
-          educatorJoined = userLicenseIds[k].joined
-        }
-      }
       // Push the object properties to the license
       this.licenseUsers.push({
         educator: licenseUser.fullname,
         email: licenseUser.email,
         role: educatorRole,
-        joined: educatorJoined,
+        joined: licenseUser.license_ids ? licenseUser.license_ids.joined : '',
         type: 'active',
       })
+      console.log(this.licenseUsers)
     }
 
     // Finish up the array with the pending licenses
