@@ -34,7 +34,7 @@ nav-bar([showDashboardOptions]="true")
                 td.educator-pending--name {{ licenseUser.educator }}
                   p.small.mb-0 {{licenseUser.email}}
                 td {{ licenseUser.role }}
-                td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
+                td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined ? (licenseUser.joined | edjidate:'timeStamp':'mediumDate') : '-' }}
                 td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") 
                   i Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
                 td.educator-pending.expires(*ngIf="licenseUser.type=='expired'") 
