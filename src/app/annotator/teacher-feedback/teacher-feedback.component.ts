@@ -1,9 +1,6 @@
 import { Component, ElementRef, Input } from '@angular/core'
 import { Subscription } from 'rxjs'
 
-// Project Dependencies
-import { Feedback } from 'src/app/shared/datatypes'
-
 @Component({
   selector: 'edji-teacher-feedback',
   templateUrl: './teacher-feedback.component.pug',

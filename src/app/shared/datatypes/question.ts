@@ -1,3 +1,5 @@
+import { BaseQuestion } from 'edji-types'
+
 import { EdjiComment } from './'
 
 /*
@@ -13,15 +15,6 @@ interface Question extends BaseQuestion {
   question_number: number
   new?: boolean
 } // interface Question
-
-/** The reading as it is returned from the server */
-interface BaseQuestion {
-  _id: string
-  prompt: string
-  answer_types: any[]
-  option_types: any[]
-  answers?: EdjiComment[]
-} //  interface BaseQuestion
 
 // Conduct the logic behind the question in this class
 export class EdjiQuestion implements Question {

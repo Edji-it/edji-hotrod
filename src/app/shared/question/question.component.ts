@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { Subscription } from 'rxjs'
 
 // Project Dependencies
-import { EdjiComment, EdjiQuestion, Project, Reading, User } from '../datatypes'
+import { EdjiComment, EdjiQuestion, Reading, User } from 'edji-types'
 import { CommentService, AuthService, ProjectService, ReadingService, SocketService } from '../../_services'
 import { ProjectStore } from 'src/app/_store'
 

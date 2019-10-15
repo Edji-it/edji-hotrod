@@ -84,6 +84,7 @@
     "@typescript-eslint/parser": "^1.6.0",
     "apply-loader": "^2.0.0",
     "codelyzer": "~4.2.1",
+    "edji-types": "git+ssh://git@github.com/codiak/edji-types.git#1.0.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",

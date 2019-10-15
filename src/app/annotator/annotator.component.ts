@@ -15,6 +15,7 @@ import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
 import { Angulartics2 } from 'angulartics2'
 import { Location } from '@angular/common'
+import { Feedback } from 'edji-types'
 
 // Project Dependencies
 import { CommentComponent } from './comment/comment.component'
@@ -29,7 +30,7 @@ import {
   MessageService,
   AcademyService,
 } from '../_services'
-import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
+import { CommentPermissions, EdjiComment, Reading } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
