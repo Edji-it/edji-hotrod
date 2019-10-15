@@ -7,7 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 // Project Dependencies
 import { AuthService, ReadingService, ProjectService, ReadingQuery } from '../../_services'
 import { User, Reading } from '../../shared/datatypes'
-import { take } from 'rxjs/operators'
+import { take, first } from 'rxjs/operators'
 
 @Component({
   // The selector is what angular internally uses
@@ -68,21 +68,15 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   } = {}
 
   // Choose Your Reading onboarding data
-  public cohortOptions: any[] = [
-    'Elementary/Primary',
-    'Middle/Junior High',
-    'High/Secondary',
-    'College/University',
-    'Professional Development',
-  ]
-//   { label: 'Elementary/Primary', grades: [0, 1, 2, 3, 4] },
-//   { label: 'Middle/Junior High', grades: [5, 6, 7, 8] },
-//   { label: 'High/Secondary', grades: [9, 10, 11, 12] },
-//   { label: 'College/University', grades: [13] },
-//   { label: 'Professional Development', grades: [13] },
-// ]
+  public cohortOptions: CohortValue[] = [
+    { label: 'Elementary/Primary', grades: [0, 1, 2, 3, 4] },
+    { label: 'Middle/Junior High', grades: [5, 6, 7, 8] },
+    { label: 'High/Secondary', grades: [9, 10, 11, 12] },
+    { label: 'College/University', grades: [13] },
+    { label: 'Professional Development', grades: [14] },
+  ];
 
-  public cohortChoice: any
+  public cohortChoice: CohortValue
   public templateChoices: any[]
 
   private templates: any[] = [
@@ -308,15 +302,22 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     )
   }
 
-  public showTemplates(cohort: string, index: number): void {
+  public showTemplates(cohort: CohortValue, index: number): void {
     this.cohortChoice = cohort
+    // Save to user preferences
+    this._auth.updateUser({prefs: { teachingGrades: cohort.grades }})
+      .pipe(first()).subscribe()
     // Pause to let user see their selection
-    // setTimeout(() => {
-
-    // },  500)
-    // Filter templates
-    this.templateChoices = this.templates.filter((template) => {
-      return template.cohort === index
-    })
+    setTimeout(() => {
+      // Filter templates
+      this.templateChoices = this.templates.filter((template) => {
+        return template.cohort === index
+      })
+    },  300)
   }
+}
+
+interface CohortValue {
+  label: string
+  grades: number[]
 }

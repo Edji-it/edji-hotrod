@@ -121,14 +121,14 @@
           )
             input.form-check-input(
                 type="radio",
-                name="cohort",
+                name="cohort.label",
                 (change)="showTemplates(cohort, i)"                
               )
-            span {{ cohort }}
+            span {{ cohort.label }}
       .row(*ngIf="templateChoices")
         .col-12
           h2.alert-heading Get Started with a Simple Lesson
-          p Great, we're excited to help you teach <i>{{cohortChoice}}</i>. 
+          p Great, we're excited to help you teach <i>{{cohortChoice.label}}</i>. 
           p.font-weight-bolder Which of these examples would you like to try?
           .my-4
             a.template-link(
