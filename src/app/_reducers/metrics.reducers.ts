@@ -6,11 +6,15 @@ export interface MetricsState extends NumericMetrics {
 
 interface NumericMetrics {
   hero_page_load_count: number
+  readings_created: number
+  comments_created: number
 }
 
 const initialState: MetricsState = {
   metricsLoaded: false,
   hero_page_load_count: 0,
+  readings_created: 0,
+  comments_created: 0
 }
 
 export enum MetricsActions {

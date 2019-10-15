@@ -356,7 +356,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           let comment = commentUpdate.comment
           let wIndex = comment.start
           let cIndex = -1
+          let selfUpdate = comment.user_id === this.user._id
 
+          if (selfUpdate && commentUpdate.action !== 'DELETE') {
+            // A user's comment edits should not update via sockets
+            // HOWEVER, a teacher can DELETE a user's comments
+            return
+          } 
           // Get local array index
           if (this.commentsByIndex[wIndex]) {
             // faster to cache length
@@ -399,8 +405,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
               this.commentsByIndexUpdate(comment, wIndex, cIndex)
             } else {
-              // Socket updates don't come through with a timestamp
-              comment.createdAt = Date.now()
               // Sometimes an UPDATE comes through for comment not yet created
               // Add highlights to local array
               this.incrementHighlights(
@@ -419,8 +423,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
               this.projectStore.recalculateAnswers(comment, true)
             }
           } else if (commentUpdate.action === 'CREATE') {
-            // Socket updates don't come through with a timestamp
-            comment.createdAt = Date.now()
             // Add highlights to local array
             this.incrementHighlights(
               this.user._id === comment.user_id || this.project.teacher_id == comment.user_id,

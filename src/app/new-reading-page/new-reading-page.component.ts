@@ -21,6 +21,9 @@ import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
 import { Subscription, Observable, interval } from 'rxjs'
 import * as Driver from 'driver.js';
+import { Store } from '@ngrx/store'
+import { AppState } from '../_reducers'
+import { IncrementMetric } from '../_reducers/metrics.reducers'
 
 @Component({
   selector: 'new-reading-page',
@@ -206,6 +209,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _messages: MessageService,
     private _media: MediaService,
     private _switches: SecretSwitchesService,
+    private store: Store<AppState>
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -943,6 +947,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
               subjects: this.reading.subjects,
               source: this.reading.source,
             })
+            // Track reading creation count
+            this.store.dispatch(new IncrementMetric('readings_created'))
             // Navigate user to newly created group for reading
             let redirectParams = { readingCodeModal: true }
             if (this.onboardTemplate) {
