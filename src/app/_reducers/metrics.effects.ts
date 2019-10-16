@@ -62,8 +62,7 @@ export class MetricsEffects {
         default: 
           // Identify if badge was achieved with increment
           let badge = BADGES.find(badge => {
-            console.log(badge)
-            return badge.metric === metric && payload >= badge.value_required
+            return badge.metric === metric && payload === badge.value_required
           })
           // Send associated toast if badge was earned
           if (badge && badge.toast) {

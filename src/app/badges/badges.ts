@@ -21,7 +21,7 @@ export const BADGES: BadgeData[] = [
         toast: {
             type: 'first-comment',
             id: 'firstcomment',
-            message: '<b></b><br/>Boom! First comment<br/>',
+            message: '<b>Well said!</b><br/>You made your first comment',
             requireDismiss: true
         }
     }
