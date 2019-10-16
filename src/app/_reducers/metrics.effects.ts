@@ -5,8 +5,8 @@ import { StateService } from './../_services/state.service'
 import { of } from 'rxjs'
 
 import { MetricsActions, IncrementMetric, SetState, IncrementMetricSuccess } from './metrics.reducers'
-import { BumblebeeService, AuthService } from '../_services'
-import { BadgeService } from '../_services/badge.service'
+import { BumblebeeService, AuthService, MessageService } from '../_services'
+import { BADGES } from '../badges/badges'
 
 @Injectable()
 export class MetricsEffects {
@@ -14,8 +14,8 @@ export class MetricsEffects {
     private actions$: Actions,
     private _state: StateService,
     private _bumblebee: BumblebeeService,
-    private _badge: BadgeService,
     private _auth: AuthService,
+    private _message: MessageService
   ) {}
 
   /** retrieve fresh metrics and dispatch events to set new state */
@@ -46,15 +46,30 @@ export class MetricsEffects {
   incrementMetricSuccess$ = this.actions$.pipe(
     ofType(MetricsActions.IncrementMetricSuccess),
     map(({metric, payload})=> {
-      // Hero Page slack post
-      if (metric == 'hero_page_load_count' && payload > 1) {
-        const user = this._auth.getUser()
-        const email = user && user.email ? user.email : 'no email provided'
-        this._bumblebee.postMessage({
-          target: 'live-data',
-          message: `${email} has loaded the hero page ${payload} times`,
-          target_type: 'channel',
-        })
+      // Handle cases for specific metric increments
+      switch(metric) {
+        case 'hero_page_load_count':
+          // Hero Page slack post
+          if (payload > 1) {
+            const user = this._auth.getUser()
+            const email = user && user.email ? user.email : 'no email provided'
+            this._bumblebee.postMessage({
+              target: 'live-data',
+              message: `${email} has loaded the hero page ${payload} times`,
+              target_type: 'channel',
+            })
+          }
+        default: 
+          // Identify if badge was achieved with increment
+          let badge = BADGES.find(badge => {
+            console.log(badge)
+            return badge.metric === metric && payload >= badge.value_required
+          })
+          // Send associated toast if badge was earned
+          if (badge && badge.toast) {
+            this._message.sendToast(badge.toast)
+          }
+          break
       }
     }),
     catchError(err => {
