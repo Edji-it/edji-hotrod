@@ -247,6 +247,10 @@ $iconGrayOpacity: 0.6;
   }
 }
 
+.icon-flag {
+  @include icon('icon-flag.svg');
+}
+
 .icon-folder {
   @include icon('icon-folder.svg');
 }

@@ -39,6 +39,42 @@
   z-index: $zTop - 1;
 }
 
+.alert--clickable {
+  cursor: pointer;
+
+  &:hover, &:focus {
+    &.alert-info {
+      color: #0f8ea3;
+      background-color: #e4eef0;
+      border-color: #0aabc5;
+    }
+  }
+}
+
+.alert__icon-wrap {
+  color: white;
+  background-color: #8ed9ff;
+  width: 30px;
+  height: 30px;
+  font-size: 21px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 50%;
+  line-height: 28px;
+  position: absolute;
+  top: -15px;
+  left: -15px;
+
+  & .icon {
+    vertical-align: middle;
+  }
+
+  .alert-info & {
+    background-color: #f0fcfe;
+    border: 1px solid #bee5eb;
+  }
+}
+
 .divider--alert {
   position: relative;
   float: left;

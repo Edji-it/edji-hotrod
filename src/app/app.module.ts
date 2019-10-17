@@ -93,6 +93,7 @@ import {
   ConfirmCoOwnerModal,
   ReadingPreviewModal,
   ReadingLinkModal,
+  TutorialGifModalComponent,
 } from './modals'
 import {
   AnnotatorComponent,
@@ -244,6 +245,7 @@ const routerOptions: ExtraOptions = {
     DeleteCommentModal,
     DeleteReadingModal,
     DeleteProjectModal,
+    TutorialGifModalComponent,
     UploadAvatarModal,
     AnnotatorComponent,
     NewReadingPage,

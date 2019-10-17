@@ -1,0 +1,12 @@
+#tutorialGifModal.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title {{ header }}
+        button.close.btn-icon--round((click)='close()', type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') &times;
+      .modal-body
+        img(src="gif")
+        p([innerHtml]="description")
+      .modal-footer
+        button#btnPassResetClose.btn.btn-secondary((click)='close()') Got it!

@@ -161,6 +161,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     },
   ]
   public guideStepNo = 1
+  public onboardGuide: boolean = false
+  public tutorialGifUrl: string = ''
 
   public annotatorPaper: Element
   public annotatorContent: Element
@@ -520,9 +522,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
        */
       this.route.queryParams.subscribe(params => {
         if (params['guide'] === 'welcome'  && !params['readingCodeModal']) {
+          this.onboardGuide = true
           // Begin commenting tour
           // setTimeout(() => {
-            this.beginCommentGuide()
+          // this.beginCommentGuide()
           // }, 3000)
         }
         // handler for feedback
@@ -1807,7 +1810,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Use driver.js to being tour of how to comment
    */
    beginCommentGuide () {
-     this.optionsForceShow = true
 
     let driver = new Driver({
       opacity: 0.5,
