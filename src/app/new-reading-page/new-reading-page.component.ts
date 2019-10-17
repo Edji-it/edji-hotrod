@@ -240,9 +240,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
     // If loaded with guide param, show onboarding
     if (this._route.snapshot.queryParams['guide'] == 'welcome') {
       this.onboardTemplate = true
-      setTimeout(() => {
-        this.beginTour()
-      }, 5000)
     }
     if (this.alert) {
       this.successObject.readingSuccess = this.alert
@@ -319,7 +316,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
     // Trigger guide tooltips
     this.driver = new Driver({
       opacity: 0.5,
-      padding: 20
+      padding: 20,
+      overlayClickNext: true, // prevents overlay close click
+      doneBtnText: 'Done',
+      closeBtnText: 'Skip'
     })
 
     // Define the steps for introduction
@@ -329,8 +329,25 @@ export class NewReadingPage implements OnInit, OnDestroy {
       popover: {
         className: 'first-step-editor-popover',
         title: 'Welcome to the New Reading page!',
-        description: 'We\'ve prefilled the editor with the "Reviewing a Concept" template',
+        description: `We've prefilled the editor with the "${this.reading.title}" template
+          <br/><div class="tooltip-pager__dot active"></div><div class="tooltip-pager__dot"></div>`,
         position: 'top-center',
+      }
+    },
+    {
+      element: '[data-template="firstParagraph"]',
+      popover: {
+        title: `For "${this.reading.title}", look over the text we've provided.`,
+        description: 'Feel free to modify any of the content as you see fit!',
+        position: 'top'
+      }
+    },
+    {
+      element: '#question-1',
+      popover: {
+        title: `What will you ask?`,
+        description: 'Questions are a great way to assess students without answers being shared with the class',
+        position: 'top'
       }
     },
     {
@@ -342,13 +359,12 @@ export class NewReadingPage implements OnInit, OnDestroy {
       }
     },
     {
-      element: '[data-template="firstParagraph"]',
+      element: '#addReadingButton',
       popover: {
-        title: 'For "Title of Reading" there just a few sections that need your own content',
-        description: 'Or you can go ahead and use the sample content we\'ve provided',
-        position: 'top'
+        title: `Press "Share" when you're done`,
+        position: 'bottom-left'
       }
-    },
+    }
     // Highlight question field
     // Share button when done!
     ]);
@@ -413,8 +429,13 @@ export class NewReadingPage implements OnInit, OnDestroy {
             if (this.reading.owner_id) {
               this.ownerId = this.reading.owner_id
             }
-
             this._title.setTitle('Edji | Editing: ' + this.reading.title)
+            // Ready for template tour
+            setTimeout(()=> { // setTimeout ensures content has rendered
+              if (this.onboardTemplate) {
+                this.beginTour()
+              }
+            })
           }
         },
         err => {

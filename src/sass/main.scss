@@ -493,6 +493,11 @@ input[type='password'].input-noborder:focus {
     height: $navHeight;
     width: 100%;
   }
+
+  // Driver.js support
+  &.driver-fix-stacking {
+    position: absolute;
+  }
 }
 
 .e2e-clickaway {
