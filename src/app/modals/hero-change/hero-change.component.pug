@@ -68,7 +68,7 @@
               #card-errors(role="alert")
             .alert.alert-success.mt-1(*ngIf="updatePaymentSuccess")
               | Your payment was succesfully updated!
-            button#pmtChange.btn.btn-primary(*ngIf="!previouslyCancelled", [class.loading]="loading", (click)="updateCard()") Update my Card
+            button#pmtChange.btn.btn-primary([class.loading]="loading", (click)="updateCard()") Update my Card
             .btn-row.right
               button#pmtMethodCancel.btn.btn-secondary((click)="toggleView('subscriptionShow')") Go Back
       .modal-footer.mt-2

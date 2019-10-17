@@ -66,19 +66,22 @@ export class Hero implements PageObjectInterface {
     browser.switchTo().frame(el)
 
     // input the test credit card info
-    browser.wait(this.EC.elementToBeClickable(this.creditCardInput), 3000, 'credit card number field was not clickable')
+    browser.sleep(500)
+    browser.wait(this.EC.elementToBeClickable(this.creditCardInput), 5000, 'credit card number field was not clickable')
     // Click field to ensure form updates
     this.creditCardInput.click()
     this.creditCardInput.sendKeys(this.edjiCreditCard)
+    browser.sleep(500)
     browser.wait(
       this.EC.elementToBeClickable(this.creditCardExpiry),
-      3000,
+      5000,
       'credit card expiry field was not clickable',
     )
     // Click field to ensure form updates
     this.creditCardExpiry.click()
     this.creditCardExpiry.sendKeys(this.edjiCreditExpiry)
-    browser.wait(this.EC.elementToBeClickable(this.creditCardCvc), 3000, 'credit card cvc field was not clickable')
+    browser.sleep(500)
+    browser.wait(this.EC.elementToBeClickable(this.creditCardCvc), 5000, 'credit card cvc field was not clickable')
     this.creditCardCvc.sendKeys(this.edjiCvc)
     // We use an international credit card to avoid zip code entry
     // // Zip/Postal code field animates in, allow for 400ms animation
@@ -91,10 +94,10 @@ export class Hero implements PageObjectInterface {
     // switch back to our main content
     browser.switchTo().defaultContent()
     // Submit form
-    browser.wait(this.EC.elementToBeClickable(this.subscribeButton), 3000, 'never saw Hero subscribe button')
+    browser.wait(this.EC.elementToBeClickable(this.subscribeButton), 6000, 'never saw Hero subscribe button')
     this.subscribeButton.click()
     // Verify we do not see Stripe entry form errors (useful to know when debugging)
-    browser.sleep(1000) // In an ideal world this sleep should be drastically reduced
+    browser.sleep(2000) // In an ideal world this sleep should be drastically reduced
     // let stripeError = element(by.id('card-errors'))
     // browser.wait(
     //   this.EC.invisibilityOf(stripeError),
