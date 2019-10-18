@@ -390,7 +390,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
               grade_levels: this.reading.grade_levels,
               source: this.reading.source,
               public: this.reading.public ? this.reading.public.toString() : 'false',
-              instructions: this.reading.instructions,
+              default_instructions: this.reading.default_instructions,
             })
             this.versionId = this.reading.version_id
             if (this.reading.owner_id) {
