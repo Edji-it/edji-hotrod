@@ -95,8 +95,9 @@ scroll-progress([scrollProgress]="currentScroll")
             .alert.alert-info.alert--margin.alert--clickable(
                 *ngIf="onboardGuide",
                 [class.fade-out]="quickSelect.anchor != null",
-                (click)="tutorialGifUrl = 'something'"
+                (click)="tutorialGifUrl = '/assets/guide/add-highlight-v2.gif'"
             )
+                quick-start-flag
                 | How do I comment?
             //- Reading Group Instructions
             .row.lesson-block(*ngIf="project.group_instructions && project.group_instructions.length > 1")
@@ -269,6 +270,6 @@ edji-tutorial-gif(
     *ngIf="tutorialGifUrl",
     [header]="'How to Comment'",
     [gif]="tutorialGifUrl",
-    [description]="'details'",
+    [description]="'After clicking on image or words, you will be able to select your comment type'",
     (closeModal)="tutorialGifUrl = ''"
 )

@@ -162,7 +162,6 @@
       b No Bookmarked Readings
       p You do not currently have any Created Readings bookmarked!
     .row.loading.e2e-reading-loader(*ngIf="loading")
-    hot-tutorial-reading(*ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && user.type !=='temp' && searchParams.createdCollection === 'recent'")
     //- Sub headings for specific cases
     .row(*ngIf="activeFilter === 'versions'")
       .col-12        
