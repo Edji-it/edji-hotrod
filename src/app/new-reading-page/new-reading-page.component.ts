@@ -20,10 +20,10 @@ import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/dat
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
 import { Subscription, Observable, interval } from 'rxjs'
-import * as Driver from 'driver.js';
 import { Store } from '@ngrx/store'
 import { AppState } from '../_reducers'
 import { IncrementMetric } from '../_reducers/metrics.reducers'
+import { DriverService } from '../_services/driver.service'
 
 @Component({
   selector: 'new-reading-page',
@@ -169,8 +169,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
     },
   ]
   public guideStepNo: number = 1
-  // Driver.js
-  public driver
   public onboardTemplate: boolean
   //  IMultiSelectOption[]
   public subjects: any = [
@@ -209,7 +207,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _messages: MessageService,
     private _media: MediaService,
     private _switches: SecretSwitchesService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private _driver: DriverService
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -313,31 +312,21 @@ export class NewReadingPage implements OnInit, OnDestroy {
   }
 
   beginTour() {
-    // Trigger guide tooltips
-    this.driver = new Driver({
-      opacity: 0.5,
-      padding: 20,
-      overlayClickNext: true, // prevents overlay close click
-      doneBtnText: 'Done',
-      closeBtnText: 'Skip'
-    })
-
-    // Define the steps for introduction
-    this.driver.defineSteps([
+    // Start tour with steps for introduction
+    this._driver.beginTour([
     {
       element: '#readingPageForm',
       popover: {
         className: 'first-step-editor-popover',
         title: 'Welcome to the New Reading page!',
-        description: `We've prefilled the editor with the "${this.reading.title}" template
-          <br/><div class="tooltip-pager__dot active"></div><div class="tooltip-pager__dot"></div>`,
+        description: `We've prefilled the editor with our "${this.reading.title}" lesson`,
         position: 'top-center',
       }
     },
     {
       element: '[data-template="firstParagraph"]',
       popover: {
-        title: `For "${this.reading.title}", look over the text we've provided.`,
+        title: `Look over the provided text`,
         description: 'Feel free to modify any of the content as you see fit!',
         position: 'top'
       }
@@ -361,15 +350,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
     {
       element: '#addReadingButton',
       popover: {
-        title: `Press "Share" when you're done`,
-        position: 'bottom-left'
+        title: `Press "Share" when you're ready to use the reading`,
+        position: 'bottom-right'
       }
     }
-    // Highlight question field
-    // Share button when done!
     ]);
-    // Start the introduction
-    this.driver.start();
   }
 
   /**

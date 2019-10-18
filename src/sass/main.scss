@@ -549,10 +549,7 @@ input[type='password'].input-noborder:focus {
   }
 }
 
-// [data-template="firstParagraph"] {
-//   position: absolute;
-// }
-
+// Driver.js overrides
 button.driver-next-btn,
 div#driver-popover-item .driver-popover-footer .driver-next-btn {
   @extend .btn;
@@ -562,13 +559,43 @@ div#driver-popover-item .driver-popover-footer .driver-next-btn {
 
 
 div#driver-popover-item .driver-popover-footer {
-  button.driver-prev-btn, button.driver-close-btn {
+  button.driver-prev-btn {
     @extend .btn;
     @extend %btnSecondary;
     @extend .btn-sm;
   }
 }
 
+div#driver-popover-item .driver-popover-footer {
+   button.driver-close-btn {
+    @extend .btn;
+    @extend %btnLink;
+    @extend .btn-sm;
+  }
+}
+
 .first-step-editor-popover {
   top: 20px !important;
+}
+
+div#driver-popover-item {
+  & .driver-popover-title{
+    font-family: 'Open Sans';
+    font-size: 19x;
+    font-weight: 600;
+    color: #1d1d1d;
+    margin-bottom: 0.75em;
+    line-height: 1.25em;
+  }
+  
+  & .driver-popover-description {
+    font-family: 'Open Sans';
+    line-height: 1.25em;
+    color: #3d3d3d;
+    font-weight: 500;
+  
+    & center {
+      margin-top: 0.75em;
+    }
+  }
 }

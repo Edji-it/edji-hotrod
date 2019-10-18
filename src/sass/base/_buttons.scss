@@ -47,7 +47,8 @@ button,
   }
 
   &:disabled,
-  &[disabled] {
+  &[disabled], 
+  &.driver-disabled {
     pointer-events: none;
     /* Rectangle Copy 14: */
     background-color: #eaeaea !important;
@@ -333,7 +334,7 @@ button {
     box-shadow: 0 0px 15px 0px rgba($btnSecondaryFocusColor, 0.5);
   }
 
-  &:disabled {
+  &:disabled, &.driver-disabled {
     background: $btnSecondaryBg !important;
 
     &:hover,
@@ -347,7 +348,8 @@ button {
 // Hover and underline style similar to a link
 // Should be used for external linking
 .btn-link,
-.btn.btn-link {
+.btn.btn-link,
+%btnLink {
   background-color: transparent !important;
   padding: 4px 0px !important;
   margin: 0px 15px !important;

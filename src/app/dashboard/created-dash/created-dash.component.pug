@@ -107,8 +107,7 @@
     .mb-4
     //- Show readings with date values
     .alert.alert-info(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && searchParams.createdCollection === 'recent'")
-      .alert__icon-wrap
-        .icon.icon-flag
+      quick-start-flag
       .row(*ngIf="!templateChoices")
         .col-8
           h2.alert-heading Get Started with a Simple Lesson

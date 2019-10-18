@@ -181,6 +181,10 @@
         background: $tooltipColor;
       }
     }
+
+    .driver-popover-description & {
+      pointer-events: none;
+    }
   }
 
   &__left,

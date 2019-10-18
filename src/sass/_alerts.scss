@@ -51,6 +51,11 @@
   }
 }
 
+.alert-heading {
+  line-height: 1.25em;
+  margin: 0.5em 0 1em;
+}
+
 .alert__icon-wrap {
   color: white;
   background-color: #8ed9ff;
@@ -72,6 +77,10 @@
   .alert-info & {
     background-color: #f0fcfe;
     border: 1px solid #bee5eb;
+  }
+
+  &.hover--tooltip:hover {
+    border-color: $blue;
   }
 }
 
