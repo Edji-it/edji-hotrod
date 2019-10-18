@@ -176,12 +176,10 @@ nav-bar(
               p.sub-label (Optional) Provide a link or title for the source of the text.
               .input-group
                 input#readingSource.form-control.form-item--editor.h3.mSource(type="text", placeholder="New Reading Source...", [formControl]="readingForm.controls['source']")
-
-.fixed-btn-row--SE
-  tutorial-box([tutorialName]="'newReading'",
-    [pageObjs]="guideContent",
-    [pager]="guideStepNo",
-    (pageChange)="guideStepNo = $event")
+quick-start-flag(
+  [isCornerTrigger]="true",
+  (click)="beginTour()"
+)
 
 //- Modals
 upload-picture-modal.modal-will-fade([class.show]="showUploadModal", (returnImage)="addImages($event)", (closeModal)="showUploadModal = false")

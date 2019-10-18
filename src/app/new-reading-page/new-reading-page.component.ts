@@ -148,27 +148,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
   }
 
   // Tutorial variables
-  public guideContent: any[] = [
-    {
-      title: 'Use Formatting Styles',
-      image: '/assets/guide/newReading__format.gif',
-      body:
-        'Select text in your Reading Content to use the formatting bar. Add bold, italic, or header styles to make your content pop!',
-    },
-    {
-      title: 'Add Images and PDFs',
-      image: '/assets/guide/newReading__insert.png',
-      body:
-        "PDFs and Images can be inserted into Readings, simply use the Insert bar on the left. Learn more in <a class='link' href='http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/' target='_blank'>our PDF guide</a> and in <a class='link' href='http://guide.edji.it/index.php/2017/05/06/customizing-your-lessons-with-edji-images/' target='_blank'>our Image guide</a>.",
-    },
-    {
-      title: 'Share your Reading',
-      image: '/assets/guide/newReading__share.gif',
-      body:
-        "Click Share when finished and name your first Group to get a code&mdash;don't worry, you can create more Groups later!",
-    },
-  ]
-  public guideStepNo: number = 1
   public onboardTemplate: boolean
   //  IMultiSelectOption[]
   public subjects: any = [
@@ -311,6 +290,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Begins Driver.js tour
+   */
   beginTour() {
     // Start tour with steps for introduction
     this._driver.beginTour([
@@ -319,7 +301,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       popover: {
         className: 'first-step-editor-popover',
         title: 'Welcome to the New Reading page!',
-        description: `We've prefilled the editor with our "${this.reading.title}" lesson`,
+        description: this.onboardTemplate ? `We've prefilled the editor with our "${this.reading.title}" lesson` : `We'll run you through the basics of building a reading`,
         position: 'top-center',
       }
     },
@@ -332,7 +314,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       }
     },
     {
-      element: '#question-1',
+      element: this.onboardTemplate ? '#question-1' : '#buttonInsertQuestion',
       popover: {
         title: `What will you ask?`,
         description: 'Questions are a great way to assess students without answers being shared with the class',
@@ -350,7 +332,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     {
       element: '#addReadingButton',
       popover: {
-        title: `Press "Share" when you're ready to use the reading`,
+        title: `Press "Share" when your reading is ready`,
         position: 'bottom-right'
       }
     }
