@@ -68,7 +68,6 @@ export class HeroChangeComponent implements OnInit {
 
     try {
       this.cardInfo = await this._auth.getStripeCustomerCard(this.user.stripe_customer_id).toPromise()
-      console.log(this.cardInfo)
     } catch (err) {
       console.error(err)
     }
@@ -76,7 +75,6 @@ export class HeroChangeComponent implements OnInit {
     try {
       let customer = await this._auth.getStripeCustomer(this.user.stripe_customer_id).toPromise()
       this.subscriptionPrice = customer.subscriptions.data[0].plan.amount / 100
-      console.log(customer)
     } catch (err) {
       console.error(err)
     }
@@ -162,6 +160,7 @@ export class HeroChangeComponent implements OnInit {
       } else {
         try {
           await this._auth.updatePaymentSource(result.source.id, this.user.stripe_customer_id).toPromise()
+          this.cardInfo = await this._auth.getStripeCustomerCard(this.user.stripe_customer_id).toPromise()
           this.updatePaymentSuccess = true
         } catch (err) {
           console.error(err)

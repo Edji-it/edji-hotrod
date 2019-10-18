@@ -1,6 +1,6 @@
 import { browser, protractor } from 'protractor'
 
-import { Hero, Sidebar, Register } from './page-objects'
+import { Hero, Sidebar, Register, Account } from './page-objects'
 import { LoginForm, RegisterForm, UserDetailsModal } from './components'
 
 let loginForm = new LoginForm()
@@ -10,6 +10,7 @@ let userDetails = new UserDetailsModal()
 let EC = protractor.ExpectedConditions
 let registerForm = new RegisterForm()
 const register = new Register()
+const account = new Account()
 
 const registerAndConfirm = () => {
   register.getPage()
@@ -34,6 +35,20 @@ const logout = () => {
   )
 }
 
+const createAccountAndSubscribeHero = () => {
+  registerAndConfirm()
+  // Navigate to the Hero promo page
+  sidebar.clickHeroLink()
+  // Verify we made it there
+  browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
+  hero.openHeroModalViaCTA()
+  hero.enterCreditCardAndSubmit()
+
+  // wait for awesome button (means we just became a hero), then click it
+  browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
+  hero.confirmedHero.click()
+}
+
 describe('Hero Subscription Management', () => {
   afterEach(() => {
     browser
@@ -43,7 +58,7 @@ describe('Hero Subscription Management', () => {
       .then(browserLog => {
         if (browserLog.length > 0) {
           browserLog.forEach(log => {
-            console.error(log.message)
+            // console.error(log.message)
           })
         }
       })
@@ -55,17 +70,7 @@ describe('Hero Subscription Management', () => {
     })
 
     it('should subscribe to hero with no discount', () => {
-      registerAndConfirm()
-      // Navigate to the Hero promo page
-      sidebar.clickHeroLink()
-      // Verify we made it there
-      browser.wait(EC.urlContains('plans'), 5000, 'never reached the Hero promo page')
-      hero.openHeroModalViaCTA()
-      hero.enterCreditCardAndSubmit()
-
-      // wait for awesome button (means we just became a hero), then click it
-      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 10000, 'never saw Awesome button') // requires a long wait, since we have to wait for stripe and optimus
-      hero.confirmedHero.click()
+      createAccountAndSubscribeHero()
     })
 
     it('should subscribe to hero with a partial discount', () => {
@@ -158,20 +163,73 @@ describe('Hero Subscription Management', () => {
   })
 
   describe('Change Credit Card Number for Subscribed Hero', () => {
-    // afterAll(() => {
-    //   sidebar.logout()
-    // })
+    afterAll(() => {
+      sidebar.logout()
+    })
 
-    it('should open view/modify modal on account page and change credit card', () => {})
+    it('should open view/modify modal on account page and change credit card', async () => {
+      // Helper method to create an account and subscribe to hero
+      createAccountAndSubscribeHero()
+      // Go to Profile Page
+      sidebar.clickAccountButton()
+      // Open Hero Subscription details modal
+      browser.wait(EC.visibilityOf(account.heroModifyBtn), 5000, 'should see modify subscription button')
+      account.heroModifyBtn.click()
+      // Get payment method to compare later
+      let currentPayment = await hero.creditCard.getText()
+      // Open Change Payment Method form
+      browser.wait(EC.visibilityOf(account.heroChangeCC), 5000, 'should see update credit card button')
+      account.heroChangeCC.click()
+      // Update card to new value
+      hero.enterCreditCardAndSubmit(true)
+      browser.wait(
+        EC.visibilityOf(account.heroChangeCC),
+        5000,
+        'should see update credit card button after updating credit card',
+      )
+      // Validate Credit Card has changed
+      let newPayment = await hero.creditCard.getText()
+      let comparePayments = currentPayment === newPayment
+      expect(comparePayments).toBeFalsy()
+    })
   })
 
   describe('Cancel Subscription and Renew', () => {
-    // afterAll(() => {
-    //   sidebar.logout()
-    // })
+    afterAll(() => {
+      sidebar.logout()
+    })
 
-    it('should cancel hero subscription', () => {})
+    it('should cancel hero subscription', () => {
+      // Helper method to create an account and subscribe to hero
+      createAccountAndSubscribeHero()
+      // Go to Profile Page
+      sidebar.clickAccountButton()
+      // Open Hero Subscription details modal
+      browser.wait(EC.visibilityOf(account.heroModifyBtn), 5000, 'should see modify subscription button')
+      account.heroModifyBtn.click()
+      // Cancel the subscription
+      browser.wait(EC.visibilityOf(account.subHeroCancel), 5000, 'should see cancel subscription button')
+      account.subHeroCancel.click()
+      // Confirm cancel
+      browser.wait(EC.visibilityOf(account.subHeroCancelConfirm), 5000, 'should see confirm cancel subscription button')
+      account.subHeroCancelConfirm.click()
+      // Check for canceled confirmation message
+      browser.wait(EC.visibilityOf(account.subCanceled), 5000, 'should see subscription canceled message')
+      // Close the modal
+      browser.wait(EC.visibilityOf(account.subClose), 5000, 'should see close modal button')
+      account.subClose.click()
+    })
 
-    it('should renew hero subscription that was previously canceled', () => {})
+    it('should renew hero subscription that was previously canceled', () => {
+      // Click renew sub button
+      browser.wait(EC.visibilityOf(account.heroResubscribeBtn), 5000, 'should see renew subscription button')
+      account.heroResubscribeBtn.click()
+      // Click resubscribe button
+      browser.wait(EC.visibilityOf(account.subHero), 5000, 'should see resubscribe to hero button')
+      account.subHero.click()
+
+      // wait for awesome button (means we just became a hero), then click it
+      browser.wait(EC.elementToBeClickable(hero.confirmedHero), 5000, 'never saw Awesome button')
+    })
   })
 })

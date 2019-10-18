@@ -49,7 +49,7 @@ nav-bar([showDashboardOptions]="true")
       .col-md-4.pt-3
         button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status && !canceled && !academyHero", (click)="showHeroChangeModal = true") View/Modify
         button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
-        button.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Renew Subscription
+        button#heroResubscribeBtn.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Renew Subscription
     //- Linked Accounts
     .info-group
       label.info-label Linked Accounts
