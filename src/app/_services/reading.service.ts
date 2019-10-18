@@ -379,6 +379,7 @@ export class ReadingService {
         public: reading.public,
         subjects: reading.subjects,
         grade_levels: reading.grade_levels,
+        default_instructions: reading.default_instructions,
         // We reset "createdAt" in New Reading when publishing a draft
         createdAt: reading.createdAt,
       }

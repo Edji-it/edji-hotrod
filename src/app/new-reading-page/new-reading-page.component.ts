@@ -195,7 +195,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       public: ['true'],
       subjects: [[], Validators.required],
       grade_levels: [[], Validators.required],
-      instructions: [null, null],
+      default_instructions: [null, null],
     })
 
     // Define the user object.
@@ -903,16 +903,16 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this.errorObject = { readingError: '' }
       this.saveState = 'saving'
     }
-    // Prepare Reading object
-    let reading = this.formatReading(form)
+    // Prepare Reading object (and save for reference by Add Group modal and openFirstGroup())
+    this.reading = this.formatReading(form)
 
-    this._readings.save(reading).subscribe(
+    this._readings.save(this.reading).subscribe(
       data => {
         if (data._id) {
           // Save for reference by Add Group modal and openFirstGroup()
           this.reading = data
           // Open new group if it is in final version
-          if (reading.draft === false) {
+          if (this.reading.draft === false) {
             // fire an analytic event here for tracking purposes
             this.angulartics.eventTrack.next({
               action: this.readingType + '_' + (this.reading.public ? 'public' : 'private') + '_create',
