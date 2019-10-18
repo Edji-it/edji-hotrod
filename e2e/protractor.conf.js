@@ -17,7 +17,7 @@ exports.config = {
   capabilities: {
     browserName: 'chrome',
     // marionette: true,
-    'goog:chromeOptions': {
+    chromeOptions: {
       args: [
         'show-fps-counter=true',
         'use-fake-ui-for-media-stream',
