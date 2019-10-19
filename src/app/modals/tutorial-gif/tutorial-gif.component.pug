@@ -7,7 +7,7 @@
         button.close.btn-icon--round((click)='close()', type='button', data-dismiss='modal', aria-label='Close')
           span(aria-hidden='true') &times;
       .modal-body
-        img(src="gif")
-        p([innerHtml]="description")
+        img.tutorial-gif([src]="gif")
+        p.mt-4([innerHtml]="description | emojione")
       .modal-footer
         button#btnPassResetClose.btn.btn-secondary((click)='close()') Got it!

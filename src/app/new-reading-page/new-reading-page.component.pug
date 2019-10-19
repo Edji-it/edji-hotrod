@@ -209,6 +209,8 @@ hot-add-project-modal.modal-will-fade(
   [reading]="reading",
   [groupLabel]="'Group 1'",
   [largeReadingWarning]="isLargeReading(wordCount, wordBoxCount)",
+  [showGuideMessage]="onboardTemplate",
+  [hideInstructions]="true",
   (groupSaved)="finalizeShare(readingForm.value, $event)",
   (closeModal)="showFirstGroupModal = false"
 )

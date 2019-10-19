@@ -6,6 +6,7 @@ import { Component, Output, EventEmitter, Input } from '@angular/core'
 @Component({
   selector: 'edji-tutorial-gif',
   templateUrl: 'tutorial-gif.component.pug',
+  styleUrls: ['tutorial-gif.component.scss']
 })
 export class TutorialGifModalComponent {
   @Input() header: string = 'Tutorial'

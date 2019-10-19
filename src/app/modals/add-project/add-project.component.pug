@@ -6,12 +6,15 @@
         button.close((click)='closeModal.emit()', type='button') &times;
       form([formGroup]='projectForm', (ngSubmit)='addProject(projectForm.value)')
         .modal-body.pb-0
-            .form-group(*ngIf='subheading')
-                p {{ subheading }}
-            .form-group(*ngIf='largeReadingWarning')
-                .alert.alert-warning    
-                    b Large Reading
-                    p.mb-0 This reading may have performance issues on slower devices. Consider reducing its size before continuing.
+            .alert.alert-warning(*ngIf='largeReadingWarning')
+                b Large Reading
+                p.mb-0 This reading may have performance issues on slower devices. Consider reducing its size before continuing.
+            .alert.alert-info(*ngIf="showGuideMessage")
+                quick-start-flag
+                b About Reading Groups
+                p Readings on Edji can be shared with multiple groups, and when creating a reading we kick things off with a first group
+            .form-group
+                p(*ngIf='subheading') {{ subheading }}
             .form-group
                 label(for='newProjectLabel') 
                     | Group Name
@@ -21,7 +24,7 @@
                 #msgLabelRequired.alert.alert-warning(*ngIf="formSubmitted && projectForm.controls['label'].hasError('required')", role='alert')
                     b No Name
                     | Groups like to have names!
-            .form-group()
+            .form-group(*ngIf="!hideInstructions")
                 label(for='groupInstructions')
                     | Reading Group Instructions
                     i.icon__tooltip(tooltipPosition="right", pTooltip="Instructions are displayed at the beginning of a Reading, and included in the Recap.", tooltipZIndex="9000")
