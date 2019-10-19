@@ -14,16 +14,41 @@ export class DriverService {
           padding: 20,
           overlayClickNext: true, // prevents overlay close click
           doneBtnText: 'Done',
-          closeBtnText: 'Skip'
+          closeBtnText: 'Skip',
+          onHighlightStarted: (driverEl) => {
+            /**
+             * Special handling for nav bar buttons:
+             * - nav-bar becomes absolutely positioned for highlight
+             * - Page must be scrolled up to see nav bar
+             */
+            let node = driverEl.getNode()
+            if (node['classList'] && node['classList'] .contains('nav-bar__btn')) {
+                window.scrollTo(0,0)
+            }
+          }
         })
     }
 
+    /**
+     * Define steps and begin tour
+     * @note call once elements are rendered on page
+     * @param steps tour steps
+     */
     public beginTour(steps: DriverStep[]): void {
         this.driver.defineSteps(this.processSteps(steps))
         // Begin driver after latest render
         setTimeout(() => {
             this.driver.start()
         })   
+    }
+
+    /**
+     * Clear and end any current tour
+     */
+    public endTour(): void {
+        if (this.driver && this.driver.isActivated) {
+            this.driver.reset()
+        }
     }
 
     private processSteps(steps: DriverStep[]): Driver.Step[] {

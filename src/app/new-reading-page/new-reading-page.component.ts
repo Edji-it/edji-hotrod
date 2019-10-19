@@ -288,6 +288,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (renderedEl && renderedEl.parentElement) {
       renderedEl.parentElement.removeChild(renderedEl)
     }
+    // End tour
+    this._driver.endTour()
   }
 
   /**

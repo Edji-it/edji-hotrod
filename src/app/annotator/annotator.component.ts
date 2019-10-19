@@ -589,7 +589,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
-
     // Clear heat vision message
     this._messages.dismissToast('heat')
     // Clear feedback message
