@@ -173,17 +173,17 @@ describe('Hero Subscription Management', () => {
       // Go to Profile Page
       sidebar.clickAccountButton()
       // Open Hero Subscription details modal
-      browser.wait(EC.visibilityOf(account.heroModifyBtn), 5000, 'should see modify subscription button')
+      browser.wait(EC.elementToBeClickable(account.heroModifyBtn), 5000, 'should see modify subscription button')
       account.heroModifyBtn.click()
       // Get payment method to compare later
       let currentPayment = await hero.creditCard.getText()
       // Open Change Payment Method form
-      browser.wait(EC.visibilityOf(account.heroChangeCC), 5000, 'should see update credit card button')
+      browser.wait(EC.elementToBeClickable(account.heroChangeCC), 5000, 'should see update credit card button')
       account.heroChangeCC.click()
       // Update card to new value
       hero.enterCreditCardAndSubmit(true)
       browser.wait(
-        EC.visibilityOf(account.heroChangeCC),
+        EC.elementToBeClickable(account.heroChangeCC),
         5000,
         'should see update credit card button after updating credit card',
       )
@@ -205,27 +205,31 @@ describe('Hero Subscription Management', () => {
       // Go to Profile Page
       sidebar.clickAccountButton()
       // Open Hero Subscription details modal
-      browser.wait(EC.visibilityOf(account.heroModifyBtn), 5000, 'should see modify subscription button')
+      browser.wait(EC.elementToBeClickable(account.heroModifyBtn), 5000, 'should see modify subscription button')
       account.heroModifyBtn.click()
       // Cancel the subscription
-      browser.wait(EC.visibilityOf(account.subHeroCancel), 5000, 'should see cancel subscription button')
+      browser.wait(EC.elementToBeClickable(account.subHeroCancel), 5000, 'should see cancel subscription button')
       account.subHeroCancel.click()
       // Confirm cancel
-      browser.wait(EC.visibilityOf(account.subHeroCancelConfirm), 5000, 'should see confirm cancel subscription button')
+      browser.wait(
+        EC.elementToBeClickable(account.subHeroCancelConfirm),
+        5000,
+        'should see confirm cancel subscription button',
+      )
       account.subHeroCancelConfirm.click()
       // Check for canceled confirmation message
-      browser.wait(EC.visibilityOf(account.subCanceled), 5000, 'should see subscription canceled message')
+      browser.wait(EC.elementToBeClickable(account.subCanceled), 5000, 'should see subscription canceled message')
       // Close the modal
-      browser.wait(EC.visibilityOf(account.subClose), 5000, 'should see close modal button')
+      browser.wait(EC.elementToBeClickable(account.subClose), 5000, 'should see close modal button')
       account.subClose.click()
     })
 
     it('should renew hero subscription that was previously canceled', () => {
       // Click renew sub button
-      browser.wait(EC.visibilityOf(account.heroResubscribeBtn), 5000, 'should see renew subscription button')
+      browser.wait(EC.elementToBeClickable(account.heroResubscribeBtn), 5000, 'should see renew subscription button')
       account.heroResubscribeBtn.click()
       // Click resubscribe button
-      browser.wait(EC.visibilityOf(account.subHero), 5000, 'should see resubscribe to hero button')
+      browser.wait(EC.elementToBeClickable(account.subHero), 5000, 'should see resubscribe to hero button')
       account.subHero.click()
 
       // wait for awesome button (means we just became a hero), then click it

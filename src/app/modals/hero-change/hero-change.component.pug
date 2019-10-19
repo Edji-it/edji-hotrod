@@ -28,7 +28,7 @@
               tbody
                 tr.selectable.table-secondary
                   td
-                    div([ngSwitch]="cardInfo && cardInfo.brand ? cardInfo.brand : cardInfo.card.brand")
+                    div([ngSwitch]="cardInfo && cardInfo.brand ? cardInfo.brand : cardInfo && cardInfo.card.brand")
                       div(*ngSwitchCase="'American Express'")
                         img.card-icon(src="/assets/images/icon-amex.png")
                       div(*ngSwitchCase="'MasterCard'")
@@ -40,9 +40,9 @@
                       div(*ngSwitchDefault)
                         img.icon-cc.card-icon(src="/assets/images/icon-generic-cc.png")
                   td.align-middle(colspan="2")
-                    p#heroCard.mb-0.txt-xs {{cardInfo && cardInfo.brand ? cardInfo.brand : cardInfo.card.brand}} ending in {{cardInfo && cardInfo.last4 ? cardInfo.last4 : cardInfo.card.last4}}
+                    p#heroCard.mb-0.txt-xs {{cardInfo && cardInfo.brand ? cardInfo.brand : cardInfo && cardInfo.card.brand}} ending in {{cardInfo && cardInfo.last4 ? cardInfo.last4 : cardInfo && cardInfo.card.last4}}
                   td.align-middle(colspan="2")
-                    p.mb-0.txt-sm Expires {{cardInfo && cardInfo.exp_month ? cardInfo.exp_month : cardInfo.card.exp_month}}/{{cardInfo && cardInfo.exp_year ? cardInfo.exp_year : cardInfo.card.exp_year}}
+                    p.mb-0.txt-sm Expires {{cardInfo && cardInfo.exp_month ? cardInfo.exp_month : cardInfo && cardInfo.card.exp_month}}/{{cardInfo && cardInfo.exp_year ? cardInfo.exp_year : cardInfo && cardInfo.card.exp_year}}
             .btn-row.right
               button#pmtUpdate.btn.btn-secondary((click)="toggleView('updateCardShow')") Update Credit Card
         .row(*ngIf="confirmCancelShow && !isCanceled")
