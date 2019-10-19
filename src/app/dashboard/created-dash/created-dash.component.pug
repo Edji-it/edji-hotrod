@@ -135,8 +135,8 @@
             a.template-link(
               *ngFor="let template of templateChoices",
               [innerHtml]="template.title | emojione",
-              [routerLink]="['/new-reading/' + template._id]",
-              [queryParams]="{ 'guide':'welcome' }"
+              [routerLink]="['/new-reading']",
+              [queryParams]="{ 'copyId': template._id, 'guide':'welcome' }"
             )
         .col-12
           .btn.btn-link.no-margin((click)="templateChoices = null", tabindex="0")
