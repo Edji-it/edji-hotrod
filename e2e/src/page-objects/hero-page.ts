@@ -30,23 +30,15 @@ export class Hero implements PageObjectInterface {
   // Stripe references
   public creditCardElement = element(by.id('card-element'))
   public edjiCreditCard = '4000000760000002' // Brazil Credit Card
-  // 424 242 42424
-  // public edjiCreditCard = '4242424242424242'
   public edjiCreditExpiry = '0424'
   public edjiCvc = '242'
   public edjiZip = '42424'
-  // public edjiCreditCard2 = '4012888888881881' // Canada Credit Card
-  public edjiCreditCard2 = '4000000760000002' // Canada Credit Card
-  // public edjiCreditCard2 = '5555555555554444'
+  public edjiCreditCard2 = '4012888888881881' // Canada Credit Card
   public edjiCreditExpiry2 = '0424'
   public edjiCvc2 = '242'
   public edjiZip2 = '42424'
 
   // Stripe iframe inputs
-  // public creditCardInput = element(by.xpath('//input[contains(@name, "cardnumber")]'))
-  // public creditCardExpiry = element(by.xpath('//input[contains(@name, "exp-date")]'))
-  // public creditCardCvc = element(by.xpath('//input[contains(@name, "cvc")]'))
-  // public creditCardZip = element(by.xpath('//input[contains(@name, "postal")]'))
   public creditCardInput = element(by.css('input[name="cardnumber"]'))
   public creditCardExpiry = element(by.css('input[name="exp-date"]'))
   public creditCardCvc = element(by.css('input[name="cvc"]'))
@@ -114,16 +106,7 @@ export class Hero implements PageObjectInterface {
     this.creditCardCvc.click()
     // this.creditCardCvc.sendKeys(edjiCvc)
     await browser.executeScript(`document.querySelector('input[name="cvc"]').value = '${edjiCvc}'`)
-    // Credit Card Zip Code Details
-    // browser.wait(this.EC.elementToBeClickable(this.creditCardZip), 5000, 'credit card zip field was not clickable')
-    // Click field to ensure form updates
-    // this.creditCardZip.click()
-    // this.creditCardZip.sendKeys(edjiZip)
-    // await browser.executeScript(`document.querySelector('input[name="postal"]').value = '${edjiZip}'`)
-    // We use an international credit card to avoid zip code entry
-    // // Zip/Postal code field animates in, allow for 400ms animation
-    // // -> this may change since Stripe handles display
-    // browser.sleep(500)
+
     // switch back to our main content
     browser.switchTo().defaultContent()
     // Submit form
@@ -149,11 +132,5 @@ export class Hero implements PageObjectInterface {
     }
     // Verify we do not see Stripe entry form errors (useful to know when debugging)
     browser.sleep(2000) // In an ideal world this sleep should be drastically reduced
-    // let stripeError = element(by.id('card-errors'))
-    // browser.wait(
-    //   this.EC.invisibilityOf(stripeError),
-    //   3000,
-    //   'error returned by Stripe, card information may not have been entered correctly',
-    // )
   }
 }
