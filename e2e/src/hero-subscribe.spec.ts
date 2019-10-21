@@ -12,7 +12,7 @@ let registerForm = new RegisterForm()
 const register = new Register()
 const account = new Account()
 
-const registerAndConfirm = () => {
+const registerAndConfirm = (): void => {
   register.getPage()
   // Verify user lands on Registration page
   browser.wait(EC.urlContains('register'), 5000, 'referral link never landed on registration page')
@@ -24,7 +24,7 @@ const registerAndConfirm = () => {
   userDetails.addDetails()
 }
 
-const logout = () => {
+const logout = (): void => {
   // Log out referral user
   sidebar.clickLogOutButton()
   // Wait for app to refresh after logout
@@ -35,7 +35,7 @@ const logout = () => {
   )
 }
 
-const createAccountAndSubscribeHero = () => {
+const createAccountAndSubscribeHero = (): void => {
   registerAndConfirm()
   // Navigate to the Hero promo page
   sidebar.clickHeroLink()

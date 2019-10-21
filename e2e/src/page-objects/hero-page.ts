@@ -29,22 +29,28 @@ export class Hero implements PageObjectInterface {
 
   // Stripe references
   public creditCardElement = element(by.id('card-element'))
-  // public edjiCreditCard = '4000000760000002' // Brazil Credit Card
+  public edjiCreditCard = '4000000760000002' // Brazil Credit Card
   // 424 242 42424
-  public edjiCreditCard = '4242424242424242'
+  // public edjiCreditCard = '4242424242424242'
   public edjiCreditExpiry = '0424'
   public edjiCvc = '242'
   public edjiZip = '42424'
-  public edjiCreditCard2 = '5555555555554444'
+  // public edjiCreditCard2 = '4012888888881881' // Canada Credit Card
+  public edjiCreditCard2 = '4000000760000002' // Canada Credit Card
+  // public edjiCreditCard2 = '5555555555554444'
   public edjiCreditExpiry2 = '0424'
   public edjiCvc2 = '242'
   public edjiZip2 = '42424'
 
   // Stripe iframe inputs
-  public creditCardInput = element(by.xpath('//input[contains(@name, "cardnumber")]'))
-  public creditCardExpiry = element(by.xpath('//input[contains(@name, "exp-date")]'))
-  public creditCardCvc = element(by.xpath('//input[contains(@name, "cvc")]'))
-  public creditCardZip = element(by.xpath('//input[contains(@name, "postal")]'))
+  // public creditCardInput = element(by.xpath('//input[contains(@name, "cardnumber")]'))
+  // public creditCardExpiry = element(by.xpath('//input[contains(@name, "exp-date")]'))
+  // public creditCardCvc = element(by.xpath('//input[contains(@name, "cvc")]'))
+  // public creditCardZip = element(by.xpath('//input[contains(@name, "postal")]'))
+  public creditCardInput = element(by.css('input[name="cardnumber"]'))
+  public creditCardExpiry = element(by.css('input[name="exp-date"]'))
+  public creditCardCvc = element(by.css('input[name="cvc"]'))
+  public creditCardZip = element(by.css('input[name="postal"]'))
 
   // get the home page
   getPage(): void {
@@ -64,7 +70,7 @@ export class Hero implements PageObjectInterface {
    * Utility method for switching to the stripe iframe field and putting credit card info in
    * Requires no inputs
    */
-  public enterCreditCardAndSubmit(altCard?: boolean): void {
+  public async enterCreditCardAndSubmit(altCard?: boolean): Promise<void> {
     let edjiCreditCard = this.edjiCreditCard
     let edjiCreditExpiry = this.edjiCreditExpiry
     let edjiCvc = this.edjiCvc
@@ -85,12 +91,12 @@ export class Hero implements PageObjectInterface {
     browser.switchTo().frame(el)
 
     // input the test credit card info
-    browser.sleep(500)
+    browser.sleep(1000)
     browser.wait(this.EC.elementToBeClickable(this.creditCardInput), 5000, 'credit card number field was not clickable')
     // Click field to ensure form updates
     this.creditCardInput.click()
-    this.creditCardInput.sendKeys(edjiCreditCard)
-    browser.sleep(500)
+    // this.creditCardInput.sendKeys(edjiCreditCard)
+    await browser.executeScript(`document.querySelector('input[name="cardnumber"]').value = '${edjiCreditCard}'`)
     // Credit Card Expiration Details
     browser.wait(
       this.EC.elementToBeClickable(this.creditCardExpiry),
@@ -99,19 +105,21 @@ export class Hero implements PageObjectInterface {
     )
     // Click field to ensure form updates
     this.creditCardExpiry.click()
-    this.creditCardExpiry.sendKeys(edjiCreditExpiry)
-    browser.sleep(500)
+    browser.sleep(1000)
+    // this.creditCardExpiry.sendKeys(edjiCreditExpiry)
+    await browser.executeScript(`document.querySelector('input[name="exp-date"]').value = '${edjiCreditExpiry}'`)
     // Credit Card CVC Details
     browser.wait(this.EC.elementToBeClickable(this.creditCardCvc), 5000, 'credit card cvc field was not clickable')
     // Click field to ensure form updates
     this.creditCardCvc.click()
-    this.creditCardCvc.sendKeys(edjiCvc)
-    browser.sleep(500)
+    // this.creditCardCvc.sendKeys(edjiCvc)
+    await browser.executeScript(`document.querySelector('input[name="cvc"]').value = '${edjiCvc}'`)
     // Credit Card Zip Code Details
-    browser.wait(this.EC.elementToBeClickable(this.creditCardZip), 5000, 'credit card zip field was not clickable')
+    // browser.wait(this.EC.elementToBeClickable(this.creditCardZip), 5000, 'credit card zip field was not clickable')
     // Click field to ensure form updates
-    this.creditCardZip.click()
-    this.creditCardZip.sendKeys(edjiZip)
+    // this.creditCardZip.click()
+    // this.creditCardZip.sendKeys(edjiZip)
+    // await browser.executeScript(`document.querySelector('input[name="postal"]').value = '${edjiZip}'`)
     // We use an international credit card to avoid zip code entry
     // // Zip/Postal code field animates in, allow for 400ms animation
     // // -> this may change since Stripe handles display
