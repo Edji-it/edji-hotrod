@@ -29,4 +29,4 @@
     <div class="tooltip__skip" (click)="completeAndDismiss()">Skip</div>
   </div>
 </div>
-<quick-start-flag *ngIf="isCompleted && !forceShow" [isCornerTrigger]="true" (click)="openTutorial()"></quick-start-flag>
+<quick-start-flag *ngIf="(isCompleted || forceHide) && !forceShow" [isCornerTrigger]="true" (click)="openTutorial()"></quick-start-flag>
