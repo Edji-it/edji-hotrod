@@ -1,8 +1,8 @@
-<div *ngIf="!isCompleted || forceShow" class="right-margin-tooltip">
+<div *ngIf="(!isCompleted && !forceHide) || forceShow" class="right-margin-tooltip">
   <div class="mobile-toggle" (tap)="mobileExpanded = !mobileExpanded">
     <i class="icon-caret" [class.down]="mobileExpanded"></i>
     <h2 [innerHtml]="pageObjs && pageObjs[pageNo - 1].title | emojione"></h2>
-    <img class="header-icon" title="Tutorial" src="assets/images/icon-tutorial.svg" />
+    <quick-start-flag></quick-start-flag>
   </div>
   <div *ngIf="pageObjs" class="collapsible" [class.mobile-collapse]="!mobileExpanded">
     <p [innerHtml]="pageObjs[pageNo - 1].body"></p>
@@ -29,10 +29,4 @@
     <div class="tooltip__skip" (click)="completeAndDismiss()">Skip</div>
   </div>
 </div>
-<button
-  *ngIf="isCompleted && !forceShow"
-  (click)="forceShow = true"
-  class="button-lg-round feedback-button hidden-md-down"
->
-  <img title="Tutorial" src="assets/images/icon-tutorial.svg" />
-</button>
+<quick-start-flag *ngIf="isCompleted && !forceShow" [isCornerTrigger]="true" (click)="openTutorial()"></quick-start-flag>

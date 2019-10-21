@@ -4,6 +4,7 @@ import { take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AuthService } from '../../_services'
+import { Angulartics2 } from 'angulartics2'
 
 @Component({
   selector: 'tutorial-box',
@@ -18,6 +19,7 @@ export class TutorialBoxComponent implements OnInit {
   @Input() private pageObjs: any[]
   @Input() private tutorialName: string
   @Input() public forceShow: boolean
+  @Input() public forceHide: boolean
 
   public pageNo: number = 1
   public subscriptions: Subscription[] = []
@@ -43,7 +45,7 @@ export class TutorialBoxComponent implements OnInit {
     this.pageChange.emit(this.pageNo)
   }
 
-  constructor(private _auth: AuthService) {
+  constructor(private _auth: AuthService, private _angulartics: Angulartics2) {
     this.pageChange = new EventEmitter()
     this.dismiss = new EventEmitter()
   }
@@ -75,13 +77,19 @@ export class TutorialBoxComponent implements OnInit {
         user.prefs.onboarding[this.tutorialName].firstDone = Date.now()
       }
     }
-    console.log('Update:', user)
+    // Save progress to user preferences
     this._auth
       .updateUser(user)
       .pipe(take(1))
       .subscribe(data => {
         let user = data.user
       })
+    // Report to GA
+    let action = this.pageNo === this.pageObjs.length ? `_completed` : `_dismissedAt${this.pageNo}Of${this.pageObjs.length}`
+    this._angulartics.eventTrack.next({
+      action: 'tutorialBox_' + this.tutorialName + action,
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
   }
 
   ngOnInit() {
@@ -97,5 +105,17 @@ export class TutorialBoxComponent implements OnInit {
         }
       }),
     )
+  }
+
+  /**
+   * Opens and reports tutorial
+   */
+  openTutorial() {
+    this.forceShow = true
+
+    this._angulartics.eventTrack.next({
+      action: 'tutorialBox_' + this.tutorialName + '_open',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
   }
 }
