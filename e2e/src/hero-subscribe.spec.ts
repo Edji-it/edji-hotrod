@@ -231,7 +231,7 @@ describe('Hero Subscription Management', () => {
       // Click resubscribe button
       browser.wait(EC.elementToBeClickable(account.subHero), 5000, 'should see resubscribe to hero button')
       account.subHero.click()
-
+      browser.sleep(100)
       // wait for awesome button (means we just became a hero), then click it
       browser.wait(EC.elementToBeClickable(hero.confirmedHero), 5000, 'never saw Awesome button')
     })
