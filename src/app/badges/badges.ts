@@ -11,7 +11,6 @@ export const BADGES: BadgeData[] = [
             message: '<b>Success, first reading created</b><br/>Collaboration awaits!',
             id: 'firstReading',
             type: 'first-reading',
-            limitToPage: 'project',
             requireDismiss: true
         }
     },

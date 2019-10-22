@@ -32,7 +32,7 @@ describe('Teacher Onboarding', () => {
   // Toasts
   let firstReadingToast = element(by.css('#firstReading.toast'))
   let firstCommentToast = element(by.css('#firstComment.toast'))
-
+  
   afterEach(() => {
     browser
       .manage()
@@ -108,6 +108,7 @@ describe('Teacher Onboarding', () => {
         newReading.shareCodeModalClose.click()
         // Verify toast appeared
         browser.wait(EC.visibilityOf(firstReadingToast), 3000, 'first reading success toast did not appear')
+        firstReadingToast.element(by.css('.close')).click()
     })
 
     it('should see and open commenting onboarding guide', () => {
@@ -126,9 +127,32 @@ describe('Teacher Onboarding', () => {
         browser.wait(EC.invisibilityOf(commentHintMessage), 3000, 'onboarding commenting hint did not hide when comment made')
         // Verify "first comment" toast appears
         browser.wait(EC.visibilityOf(firstCommentToast), 3000, 'first comment success toast did not appear')
+        firstCommentToast.element(by.css('.close')).click()
     })
 
-    // @todo Back to dashboard
-    // @todo Verify template message no longer shows
+    it('should verify onboarding messages are no longer shown once completed', () => {
+      // Return to dashboard
+      sidebar.backToDash()
+      // Onboarding message should no longer be shown
+      browser.wait(EC.invisibilityOf(gradeLevelsElementary), 3000, 'onboarding still showing grade level selection')
+      browser.wait(EC.invisibilityOf(templateChoiceSection), 3000, 'onboarding still showing templates')
+      // Open New Reading page and check for onboarding messages
+      browser.wait(
+        EC.elementToBeClickable(dashboard.newReadingButton), 
+        3000, 
+        'new reading button did not become clickable'
+      )
+      dashboard.newReadingButton.click()
+      browser.wait(
+        EC.visibilityOf(newReading.titleInput),
+        3000,
+        'new reading page did not load after onboarding'
+      )
+      // Should not see onboarding elements
+      expect(EC.visibilityOf(onboardingDriver)())
+        .toBeFalsy('onboarding driver tooltip showed after completion')
+      expect(EC.visibilityOf(onboardingTooltipNext)())
+        .toBeFalsy('onboarding driver tooltip next button showed after completion')
+    })
   })
 })
