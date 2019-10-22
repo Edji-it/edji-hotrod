@@ -35,6 +35,9 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
 import { ProjectStore } from '../_store'
 import * as Driver from 'driver.js'
+import { Store } from '@ngrx/store'
+import { AppState } from '../_reducers'
+import { getMetricsComments } from '../_reducers/metrics.reducers'
 
 @Component({
   selector: 'annotator',
@@ -139,6 +142,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // For verifying comment ownership
   public user: any
+  public userCommentsCreated: number
 
   // For mobile display of comments
   public foundArray: any[] = []
@@ -197,6 +201,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _router: Router,
     private _academy: AcademyService,
     private location: Location,
+    private store: Store<AppState>
   ) {
     this.window = window
   }
@@ -444,8 +449,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       ),
     )
 
-    // Subscribe to Heat Vision toggle updates
     this.subscriptions.push(
+      // Subscribe to Heat Vision toggle updates
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
         // Re-evaluate comment line counts
@@ -453,6 +458,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         // We send the message here because we only care to show it when the user has the reading loaded
         this.showHeatVisionToast(this.project.heat_vision)
       }),
+      // Subscribe to needed user metrics
+      this.store.select(getMetricsComments)
+        .subscribe(comments_count => {
+          this.userCommentsCreated = comments_count
+        })
     )
 
     /**

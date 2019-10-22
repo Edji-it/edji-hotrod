@@ -25,7 +25,8 @@ export class MetricsEffects {
     switchMap(({ payload }: IncrementMetric) => {
       return this._state.getState('metrics').pipe(
         flatMap(metrics => { 
-          let state = { ...metrics, [payload]: ++metrics[payload], metricsLoaded: true }
+          let newTotal = metrics[payload] ? ++metrics[payload] : 1
+          let state = { ...metrics, [payload]: newTotal, metricsLoaded: true }
           let actions: {type: MetricsActions, payload: any}[] = [new SetState(state)]
           // Allow for effects after increment
           actions.push(new IncrementMetricSuccess(payload, state[payload]))

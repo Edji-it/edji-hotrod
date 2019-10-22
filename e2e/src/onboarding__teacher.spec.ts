@@ -34,17 +34,17 @@ describe('Share', () => {
   let firstCommentToast = element(by.css('#firstComment.toast'))
 
   afterEach(() => {
-    // browser
-    //   .manage()
-    //   .logs()
-    //   .get('browser')
-    //   .then(browserLog => {
-    //     if (browserLog.length > 0) {
-    //       browserLog.forEach(log => {
-    //         console.error(log.message)
-    //       })
-    //     }
-    //   })
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
   })
 
   describe('Register and complete onboarding for New Reading', () => {
@@ -104,7 +104,6 @@ describe('Share', () => {
         newReading.createGroupButtonClick()
         // Verify lesson does have template instructions
         browser.wait(EC.visibilityOf(groupCodeMessage), 5000, 'did not see group code modal onboarding message')
-        browser.sleep(2000)
         // Close group code modal
         newReading.shareCodeModalClose.click()
         // Verify toast appeared
@@ -113,7 +112,6 @@ describe('Share', () => {
 
     it('should see and open commenting onboarding guide', () => {
         // Is margin message present?
-        browser.sleep(2000)
         browser.wait(EC.visibilityOf(commentHintMessage), 3000, 'onboarding commenting hint not visible')
         commentHintMessage.click()
         // Should open tutorial gif on commenting
@@ -124,8 +122,8 @@ describe('Share', () => {
         browser.sleep(400)
         // Make comment
         project.createEmojiComment()
-        // @todo Verify tutorial message hides
-
+        // Verify tutorial message hides
+        browser.wait(EC.invisibilityOf(commentHintMessage), 3000, 'onboarding commenting hint did not hide when comment made')
         // Verify "first comment" toast appears
         browser.wait(EC.visibilityOf(firstCommentToast), 3000, 'first comment success toast did not appear')
     })
