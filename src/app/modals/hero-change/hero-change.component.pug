@@ -67,7 +67,7 @@
               // Used to display form errors
               #card-errors(role="alert")
             #pmtChanged.alert.alert-success.mt-1(*ngIf="updatePaymentSuccess")
-              | Your payment was succesfully updated!
+              | Your payment method was succesfully updated!
             .btn-row.right.mt-3
               button#pmtMethodCancel.btn.btn-secondary((click)="toggleView('subscriptionShow')") Go Back
               button#pmtChange.btn.btn-primary([class.loading]="loading", (click)="updateCard()") Update my Card
