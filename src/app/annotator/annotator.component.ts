@@ -523,10 +523,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.route.queryParams.subscribe(params => {
         if (params['guide'] === 'welcome'  && !params['readingCodeModal']) {
           this.onboardGuide = true
-          // Begin commenting tour
-          // setTimeout(() => {
-          // this.beginCommentGuide()
-          // }, 3000)
         }
         // handler for feedback
         if (params['feedback']) {

@@ -95,7 +95,8 @@ scroll-progress([scrollProgress]="currentScroll")
             .alert.alert-info.alert--margin.alert--clickable(
                 *ngIf="onboardGuide",
                 [class.fade-out]="quickSelect.anchor != null",
-                (click)="tutorialGifUrl = '/assets/guide/add-highlight-v2.gif'"
+                (click)="tutorialGifUrl = '/assets/guide/add-highlight-v2.gif'",
+                data-test="commentHintOnboarding"
             )
                 quick-start-flag
                 | How do I comment?
@@ -230,7 +231,8 @@ scroll-progress([scrollProgress]="currentScroll")
         [pager]="guideStepNo",
         (pageChange)="guideStepNo = $event",
         [class.keyboard-offset]="isEmojiKeyboardActive()",
-        [class.mobile-toolbar-offset]="optionsShow"
+        [class.mobile-toolbar-offset]="optionsShow",
+        [forceHide]="true"
     )
 
 //- Emoji Keyboard: Custom Emoji entry component

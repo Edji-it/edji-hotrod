@@ -1,4 +1,4 @@
-#tutorialGifModal.modal
+.modal(data-test="tutorialGifModal")
   .modal-dialog
     .modal-content
       .modal-header
@@ -10,4 +10,4 @@
         img.tutorial-gif([src]="gif")
         p.mt-4([innerHtml]="description | emojione")
       .modal-footer
-        button#btnPassResetClose.btn.btn-secondary((click)='close()') Got it!
+        button.btn.btn-secondary((click)='close()') Got it!

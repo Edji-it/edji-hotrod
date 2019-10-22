@@ -6,6 +6,6 @@ export class Register implements PageObjectInterface {
 
   // get the login page
   getPage(): void {
-    browser.get('/#/register?switch=google')
+    browser.get('/#/register')
   }
 }

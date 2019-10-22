@@ -13,7 +13,7 @@
             )
           span(aria-hidden="true") &times;
       .modal-body.modal-body-share
-        .alert.alert-info.mx-1(*ngIf="showIntroAlert")
+        .alert.alert-info.mx-1(*ngIf="showIntroAlert", data-test="groupCodeOnboarding")
           quick-start-flag
           b Your lesson is ready to use!
           p Students join Edji readings by entering the short group code in the url or code box

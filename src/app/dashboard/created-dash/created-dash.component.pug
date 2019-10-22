@@ -118,7 +118,8 @@
           p.font-weight-bolder I primarily teach...
           label.form-check-label.form-check-btn(
             *ngFor="let cohort of cohortOptions; let i = index",
-            [class.active]="cohortChoice === cohort"
+            [class.active]="cohortChoice === cohort",
+            [attr.data-test]="'gradesOption' + i"
           )
             input.form-check-input(
                 type="radio",
@@ -127,7 +128,7 @@
               )
             span {{ cohort.label }}
       .row(*ngIf="templateChoices")
-        .col-12
+        .col-12(data-test="templateChoices")
           h2.alert-heading Get Started with a Simple Lesson
           p Great, we're excited to help you teach <i>{{cohortChoice.label}}</i>. 
           p.font-weight-bolder Which of these examples would you like to try?
@@ -136,7 +137,8 @@
               *ngFor="let template of templateChoices",
               [innerHtml]="template.title | emojione",
               [routerLink]="['/new-reading']",
-              [queryParams]="{ 'copyId': template._id, 'guide':'welcome' }"
+              [queryParams]="{ 'copyId': template._id, 'guide':'welcome' }",
+              data-test="templateChoice"
             )
         .col-12
           .btn.btn-link.no-margin((click)="templateChoices = null", tabindex="0")

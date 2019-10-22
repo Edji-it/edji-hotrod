@@ -9,7 +9,7 @@ export const BADGES: BadgeData[] = [
         value_required: 1,
         toast: {
             message: '<b>Success, first reading created</b><br/>Collaboration awaits!',
-            id: 'guide',
+            id: 'firstReading',
             type: 'first-reading',
             limitToPage: 'project',
             requireDismiss: true
@@ -20,7 +20,7 @@ export const BADGES: BadgeData[] = [
         value_required: 1,
         toast: {
             type: 'first-comment',
-            id: 'firstcomment',
+            id: 'firstComment',
             message: '<b>Well said!</b><br/>You made your first comment',
             requireDismiss: true
         }

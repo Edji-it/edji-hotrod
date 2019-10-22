@@ -9,7 +9,7 @@
             .alert.alert-warning(*ngIf='largeReadingWarning')
                 b Large Reading
                 p.mb-0 This reading may have performance issues on slower devices. Consider reducing its size before continuing.
-            .alert.alert-info(*ngIf="showGuideMessage")
+            .alert.alert-info(*ngIf="showGuideMessage", data-test="createGroupOnboarding")
                 quick-start-flag
                 b About Reading Groups
                 p Readings on Edji can be shared with multiple groups, and when creating a reading we kick things off with a first group
