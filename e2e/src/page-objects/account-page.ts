@@ -28,6 +28,16 @@ export class Account implements PageObjectInterface {
 
   // Hero Management
   public heroModifyBtn = element(by.id('heroModifyBtn'))
+  public heroChangeCC = element(by.id('pmtUpdate'))
+  public pmtChange = element(by.id('pmtChange'))
+  public pmtMethodCancel = element(by.id('pmtMethodCancel'))
+  public pmtChangedAlert = element(by.id('pmtChanged'))
+  public subHeroCancel = element(by.id('subHeroCancel'))
+  public subHeroCancelConfirm = element(by.id('subHeroCancelConfirm'))
+  public subCanceled = element(by.id('subCanceled'))
+  public subClose = element(by.id('subClose'))
+  public heroResubscribeBtn = element(by.id('heroResubscribeBtn'))
+  public subHero = element(by.id('subHero'))
 
   public testAvatarToUpload: string = '../../assets/test-avatar/shia.jpg'
 

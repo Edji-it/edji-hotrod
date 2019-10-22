@@ -1,5 +1,8 @@
 import { browser, by, element, protractor, ElementFinder } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
+import { Account } from './account-page'
+
+const account = new Account()
 
 export class Hero implements PageObjectInterface {
   private EC = protractor.ExpectedConditions
@@ -13,6 +16,7 @@ export class Hero implements PageObjectInterface {
   public subscribeModalClose = element(by.css('#upgradeHeroModal .modal-header .close'))
   public couponInput = element(by.id('couponCodeInput'))
   public confirmedHero = element(by.id('confirmedHero'))
+  public creditCard = element(by.id('heroCard'))
   // Validation messages
   public validCouponMsg = element(by.id('validCouponMsg'))
   public invalidCouponMsg = element(by.id('invalidCouponMsg'))
@@ -25,17 +29,20 @@ export class Hero implements PageObjectInterface {
 
   // Stripe references
   public creditCardElement = element(by.id('card-element'))
-  // public edjiCreditCard = '4242 4242 4242 4242 424 242 42424'
   public edjiCreditCard = '4000000760000002' // Brazil Credit Card
   public edjiCreditExpiry = '0424'
   public edjiCvc = '242'
   public edjiZip = '42424'
+  public edjiCreditCard2 = '4012888888881881' // Canada Credit Card
+  public edjiCreditExpiry2 = '0424'
+  public edjiCvc2 = '242'
+  public edjiZip2 = '42424'
 
   // Stripe iframe inputs
-  public creditCardInput = element(by.xpath('//input[contains(@name, "cardnumber")]'))
-  public creditCardExpiry = element(by.xpath('//input[contains(@name, "exp-date")]'))
-  public creditCardCvc = element(by.xpath('//input[contains(@name, "cvc")]'))
-  public creditCardZip = element(by.xpath('//input[contains(@name, "postal")]'))
+  public creditCardInput = element(by.css('input[name="cardnumber"]'))
+  public creditCardExpiry = element(by.css('input[name="exp-date"]'))
+  public creditCardCvc = element(by.css('input[name="cvc"]'))
+  public creditCardZip = element(by.css('input[name="postal"]'))
 
   // get the home page
   getPage(): void {
@@ -55,7 +62,17 @@ export class Hero implements PageObjectInterface {
    * Utility method for switching to the stripe iframe field and putting credit card info in
    * Requires no inputs
    */
-  public enterCreditCardAndSubmit(): void {
+  public async enterCreditCardAndSubmit(altCard?: boolean): Promise<void> {
+    let edjiCreditCard = this.edjiCreditCard
+    let edjiCreditExpiry = this.edjiCreditExpiry
+    let edjiCvc = this.edjiCvc
+    let edjiZip = this.edjiZip
+    if (altCard) {
+      edjiCreditCard = this.edjiCreditCard2
+      edjiCreditExpiry = this.edjiCreditExpiry2
+      edjiCvc = this.edjiCvc2
+      edjiZip = this.edjiZip2
+    }
     // switch to the stripe iframe selectors
     var driver = browser.driver
     var loc = by.css('#card-element iframe')
@@ -66,40 +83,54 @@ export class Hero implements PageObjectInterface {
     browser.switchTo().frame(el)
 
     // input the test credit card info
-    browser.wait(this.EC.elementToBeClickable(this.creditCardInput), 3000, 'credit card number field was not clickable')
+    browser.sleep(1000)
+    browser.wait(this.EC.elementToBeClickable(this.creditCardInput), 5000, 'credit card number field was not clickable')
     // Click field to ensure form updates
     this.creditCardInput.click()
-    this.creditCardInput.sendKeys(this.edjiCreditCard)
+    // this.creditCardInput.sendKeys(edjiCreditCard)
+    await browser.executeScript(`document.querySelector('input[name="cardnumber"]').value = '${edjiCreditCard}'`)
+    // Credit Card Expiration Details
     browser.wait(
       this.EC.elementToBeClickable(this.creditCardExpiry),
-      3000,
+      5000,
       'credit card expiry field was not clickable',
     )
     // Click field to ensure form updates
     this.creditCardExpiry.click()
-    this.creditCardExpiry.sendKeys(this.edjiCreditExpiry)
-    browser.wait(this.EC.elementToBeClickable(this.creditCardCvc), 3000, 'credit card cvc field was not clickable')
-    this.creditCardCvc.sendKeys(this.edjiCvc)
-    // We use an international credit card to avoid zip code entry
-    // // Zip/Postal code field animates in, allow for 400ms animation
-    // // -> this may change since Stripe handles display
-    // browser.sleep(500)
-    // browser.wait(this.EC.elementToBeClickable(this.creditCardZip), 3000, 'credit card zip field was not clickable')
-    // // Click field to ensure form updates
-    // this.creditCardZip.click()
-    // this.creditCardZip.sendKeys(this.edjiZip)
+    browser.sleep(1000)
+    // this.creditCardExpiry.sendKeys(edjiCreditExpiry)
+    await browser.executeScript(`document.querySelector('input[name="exp-date"]').value = '${edjiCreditExpiry}'`)
+    // Credit Card CVC Details
+    browser.wait(this.EC.elementToBeClickable(this.creditCardCvc), 5000, 'credit card cvc field was not clickable')
+    // Click field to ensure form updates
+    this.creditCardCvc.click()
+    // this.creditCardCvc.sendKeys(edjiCvc)
+    await browser.executeScript(`document.querySelector('input[name="cvc"]').value = '${edjiCvc}'`)
+
     // switch back to our main content
     browser.switchTo().defaultContent()
     // Submit form
-    browser.wait(this.EC.elementToBeClickable(this.subscribeButton), 3000, 'never saw Hero subscribe button')
-    this.subscribeButton.click()
+    if (altCard) {
+      browser.wait(
+        this.EC.visibilityOf(account.pmtChange),
+        5000,
+        'should see update my card button when updating credit card',
+      )
+      account.pmtChange.click()
+      // payment success alert
+      browser.wait(
+        this.EC.visibilityOf(account.pmtChangedAlert),
+        5000,
+        'should see success alert after updating credit card',
+      )
+      account.pmtChangedAlert.click()
+      // Go back to default modal view of subscription details
+      account.pmtMethodCancel.click()
+    } else {
+      browser.wait(this.EC.elementToBeClickable(this.subscribeButton), 6000, 'never saw Hero subscribe button')
+      this.subscribeButton.click()
+    }
     // Verify we do not see Stripe entry form errors (useful to know when debugging)
-    browser.sleep(1000) // In an ideal world this sleep should be drastically reduced
-    // let stripeError = element(by.id('card-errors'))
-    // browser.wait(
-    //   this.EC.invisibilityOf(stripeError),
-    //   3000,
-    //   'error returned by Stripe, card information may not have been entered correctly',
-    // )
+    browser.sleep(2000) // In an ideal world this sleep should be drastically reduced
   }
 }

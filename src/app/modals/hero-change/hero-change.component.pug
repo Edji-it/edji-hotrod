@@ -1,0 +1,78 @@
+#upgradeHeroModal.modal.fade-in
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title Hero Subscription
+        button.close((click)="close()", type="button") &times;
+      .modal-body.pb-0
+        .row(*ngIf="subscriptionShow")
+          .col-12
+            label Hero Subscription Plan
+            table.table.table-hover
+              tbody
+                tr.selectable.table-success
+                  th(scope="row") Yearly
+                  td.align-middle
+                    p
+                      b ${{subscriptionPrice}}/yr
+                  td.align-middle(colspan="2")
+                    p
+                      | Billed as 
+                      span ${{subscriptionPrice}} 
+                      span every year
+            .alert.alert-success(*ngIf="isUpdated")
+              strong Subscription Updated
+              | Your Hero Subscription was updated.
+            label.mt-2 Your payment method
+            table.table.table-hover
+              tbody
+                tr.selectable.table-secondary
+                  td
+                    div([ngSwitch]="cardInfo && cardInfo.brand ? cardInfo.brand : cardInfo && cardInfo.card.brand")
+                      div(*ngSwitchCase="'American Express'")
+                        img.card-icon(src="/assets/images/icon-amex.png")
+                      div(*ngSwitchCase="'MasterCard'")
+                        img.card-icon(src="/assets/images/icon-mastercard.png")
+                      div(*ngSwitchCase="'Visa'")
+                        img.card-icon(src="/assets/images/icon-visa.png")
+                      div(*ngSwitchCase="'Discover'")
+                        img.card-icon(src="/assets/images/icon-discover.png")
+                      div(*ngSwitchDefault)
+                        img.icon-cc.card-icon(src="/assets/images/icon-generic-cc.png")
+                  td.align-middle(colspan="2")
+                    p#heroCard.mb-0.txt-xs {{cardInfo && cardInfo.brand ? cardInfo.brand : cardInfo && cardInfo.card.brand}} ending in {{cardInfo && cardInfo.last4 ? cardInfo.last4 : cardInfo && cardInfo.card.last4}}
+                  td.align-middle(colspan="2")
+                    p.mb-0.txt-sm Expires {{cardInfo && cardInfo.exp_month ? cardInfo.exp_month : cardInfo && cardInfo.card.exp_month}}/{{cardInfo && cardInfo.exp_year ? cardInfo.exp_year : cardInfo && cardInfo.card.exp_year}}
+            .btn-row.right
+              button#pmtUpdate.btn.btn-secondary.btn-sm((click)="toggleView('updateCardShow')") Update Credit Card
+        .row(*ngIf="confirmCancelShow && !isCanceled")
+          .col-12
+            p Please confirm that you would like to unsubscribe from Edji Hero.
+            p You will remain a Hero until the end of your current payment period.
+            .alert.alert-warning(*ngIf="cancelMsg", [innerHtml]="cancelMsg")
+            .btn-row.center.pt-4
+              button#subHeroCancelNvmd.btn.btn-secondary.w-100((click)="toggleView('subscriptionShow')") Nevermind, Don't Cancel
+            .btn-row.center.pt-2
+              button#subHeroCancelConfirm.btn.btn-primary.w-100([class.loading]="canceling", (click)="cancelSub()") Yes, Please Cancel
+            hr
+        .row(*ngIf="isCanceled")
+          .col-12
+            p#subCanceled Your Hero subscription has been canceled.
+        .row([class.hide]="!updateCardShow")
+          .col-12
+            label Change your payment method
+            form#payment-form(action="/charge" method="post")
+              #card-element
+              // a Stripe Element will be inserted here.
+              // Used to display form errors
+              #card-errors(role="alert")
+            #pmtChanged.alert.alert-success.mt-1(*ngIf="updatePaymentSuccess")
+              | Your payment was succesfully updated!
+            .btn-row.right.mt-3
+              button#pmtMethodCancel.btn.btn-secondary((click)="toggleView('subscriptionShow')") Go Back
+              button#pmtChange.btn.btn-primary([class.loading]="loading", (click)="updateCard()") Update my Card
+      .modal-footer.mt-2
+        .btn-row.left
+          button#subHeroCancel.btn.btn-hero.btn-faded(*ngIf="subscriptionShow", [class.loading]="canceling", (click)="toggleView('confirmCancelShow')") Cancel Subscription
+        .btn-row.right(*ngIf="subscriptionShow || isCanceled")
+          button#subClose.btn((click)="close()", type="button", data-dismiss="modal") Close

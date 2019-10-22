@@ -8,8 +8,6 @@ import { debounceTime, map, take } from 'rxjs/operators'
 import { AuthService, BumblebeeService, MailchimpService, CopyService } from '../../_services'
 import { User } from 'src/app/shared/datatypes'
 
-declare var Stripe: any
-
 @Component({
   selector: 'hero-subscribe-modal',
   templateUrl: './hero-subscribe.component.pug',
@@ -82,13 +80,8 @@ export class HeroSubscribeComponent implements OnInit {
       },
       { updateOn: 'blur' },
     )
-
-    // Create a Stripe client
-    if (this._auth.getEnv() === 'dev') {
-      this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu')
-    } else {
-      this.stripe = Stripe('pk_live_IOwqaYAERP6biScBTFk3Csrm')
-    }
+    // create a new stripe instance
+    this.stripe = this._auth.getStripe()
 
     if (this.couponCode && this.couponCode.length > 0) {
       this.initWithCoupon = true
@@ -164,7 +157,7 @@ export class HeroSubscribeComponent implements OnInit {
     }
   }
 
-  private checkout() {
+  public checkout() {
     let eventAction = 'addSubscription'
     if (this.couponCode && this.couponCode.length > 0) {
       eventAction += '-' + this.couponCode

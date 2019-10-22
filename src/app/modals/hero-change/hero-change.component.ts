@@ -6,18 +6,29 @@ import { AuthService, BumblebeeService } from './../../_services'
 
 @Component({
   selector: 'hero-change-modal',
-  templateUrl: './hero-change.component.html',
+  templateUrl: './hero-change.component.pug',
   styleUrls: ['./hero-change.component.scss'],
 })
 export class HeroChangeComponent implements OnInit {
   private user: any = {}
-  private isUpdated: boolean = false
-  private updating: boolean = false
+  private isUpdated: boolean
+  private updating: boolean
 
-  public confirmCancel: boolean = false
-  public isCanceled: boolean = false
-  public canceling: boolean = false
+  public confirmCancelShow: boolean
+  public updateCardShow: boolean
+  public subscriptionShow: boolean = true
+  public updatePaymentSuccess: boolean
+
+  public isCanceled: boolean
+  public canceling: boolean
+  public loading: boolean
+
   public cancelMsg: string = ''
+
+  public stripe: any
+  public card: any
+  public subscriptionPrice: number = 60
+  public cardInfo: any
 
   // Form values
   private subtype: string = 'yearly'
@@ -27,9 +38,46 @@ export class HeroChangeComponent implements OnInit {
 
   constructor(private _auth: AuthService, private _bumblebee: BumblebeeService, private angulartics: Angulartics2) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.user = this._auth.getUser()
     this.subtype = 'yearly'
+    this.stripe = this._auth.getStripe()
+    // Create an instance of Elements
+    let elements = this.stripe.elements()
+    let style = {
+      base: {
+        color: '#32325d',
+        lineHeight: '24px',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '16px',
+        '::placeholder': {
+          color: '#aab7c4',
+        },
+      },
+      invalid: {
+        color: '#fa755a',
+        iconColor: '#fa755a',
+      },
+    }
+    // Create an instance of the card Element
+    this.card = elements.create('card', { style: style })
+
+    // Add an instance of the card Element into the `card-element` <div>
+    this.card.mount('#card-element')
+
+    try {
+      this.cardInfo = await this._auth.getStripeCustomerCard(this.user.stripe_customer_id).toPromise()
+    } catch (err) {
+      console.error(err)
+    }
+
+    try {
+      let customer = await this._auth.getStripeCustomer(this.user.stripe_customer_id).toPromise()
+      this.subscriptionPrice = customer.subscriptions.data[0].plan.amount / 100
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   /**
@@ -38,7 +86,7 @@ export class HeroChangeComponent implements OnInit {
   close(): void {
     // Reset defaults
     this.isUpdated = false
-    this.confirmCancel = false
+    this.confirmCancelShow = false
     this.isCanceled = false
 
     this.closeModal.emit()
@@ -98,5 +146,50 @@ export class HeroChangeComponent implements OnInit {
           console.log(err)
         },
       )
+  }
+
+  /** Let's our service know to update the credit card information  */
+  public updateCard(): void {
+    this.loading = true
+
+    this.stripe.createSource(this.card).then(async result => {
+      if (result.error) {
+        // Inform the user if there was an error
+        var errorElement = document.getElementById('card-errors')
+        errorElement.textContent = result.error.message
+      } else {
+        try {
+          await this._auth.updatePaymentSource(result.source.id, this.user.stripe_customer_id).toPromise()
+          this.cardInfo = await this._auth.getStripeCustomerCard(this.user.stripe_customer_id).toPromise()
+          this.updatePaymentSuccess = true
+        } catch (err) {
+          console.error(err)
+          var errorElement = document.getElementById('card-errors')
+          errorElement.textContent = err.message
+        }
+      }
+      this.loading = false
+    })
+  }
+
+  public toggleView(view: string): void {
+    this.updateCardShow = false
+    this.confirmCancelShow = false
+    this.subscriptionShow = false
+    switch (view) {
+      case 'subscriptionShow':
+        this.subscriptionShow = true
+        break
+      case 'updateCardShow':
+        this.updateCardShow = true
+        break
+      case 'confirmCancelShow':
+        this.confirmCancelShow = true
+        break
+      default:
+        this.subscriptionShow = true
+        this.updateCardShow = false
+        this.confirmCancelShow = false
+    }
   }
 }
