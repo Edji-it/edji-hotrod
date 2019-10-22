@@ -167,7 +167,7 @@ describe('New Reading Page', () => {
       // Make private to avoid needing grade levels and subjects
       newReading.privateButton.click()
       browser.wait(
-        EC.elementToBeClickable(newReading.draftButton),
+        EC.visibilityOf(newReading.draftButton),
         1000,
         '"Save Changes" button did not become clickable'
       )
