@@ -18,8 +18,8 @@ export class TutorialBoxComponent implements OnInit {
 
   @Input() private pageObjs: any[]
   @Input() private tutorialName: string
-  @Input() public forceShow: boolean
-  @Input() public forceHide: boolean
+  @Input() public expand: boolean
+  @Input() public forceCollapse: boolean
 
   public pageNo: number = 1
   public subscriptions: Subscription[] = []
@@ -56,7 +56,7 @@ export class TutorialBoxComponent implements OnInit {
     }
     // Hide and emit output for closing box
     this.isCompleted = true
-    this.forceShow = false
+    this.expand = false
     this.dismiss.emit()
     // save completed guide to user object
     let user = this._auth.getUser()
@@ -111,7 +111,7 @@ export class TutorialBoxComponent implements OnInit {
    * Opens and reports tutorial
    */
   openTutorial() {
-    this.forceShow = true
+    this.expand = true
 
     this._angulartics.eventTrack.next({
       action: 'tutorialBox_' + this.tutorialName + '_open',

@@ -232,7 +232,7 @@ scroll-progress([scrollProgress]="currentScroll")
         (pageChange)="guideStepNo = $event",
         [class.keyboard-offset]="isEmojiKeyboardActive()",
         [class.mobile-toolbar-offset]="optionsShow",
-        [forceHide]="true"
+        [forceCollapse]="true"
     )
 
 //- Emoji Keyboard: Custom Emoji entry component

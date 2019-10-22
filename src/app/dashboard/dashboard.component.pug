@@ -9,7 +9,7 @@ nav-bar([showDashboardOptions]="true")
     [tutorialName]="'dashboardOverview'",
     [pageObjs]="toolTipsContent",
     [pager]="toolTipStepNo",
-    [forceHide]="currentUser && !currentUser.isStudent",
+    [forceCollapse]="currentUser && !currentUser.isStudent",
     (pageChange)="toolTipStepNo = $event"
   )
 hot-user-details-update(
