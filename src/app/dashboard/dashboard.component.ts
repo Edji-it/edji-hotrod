@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
         title: 'Copy & Edit',
         image: '/assets/dashboard-tooltips/versioning.png',
         body:
-          'This will create a new version of your reading. This lets you edit a reading you have already made.',
+          'This will create a new version of your reading, allowing you to edit it for a new lesson.',
       },
     ]
 

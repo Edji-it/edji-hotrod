@@ -45,7 +45,6 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
       ),
       this.route.queryParams.subscribe(
         params => {
-          console.log(params)
           // Handle new reading
           if (params.readingCodeModal) {
             this.show = true
