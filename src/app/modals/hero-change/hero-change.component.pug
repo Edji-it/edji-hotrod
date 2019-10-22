@@ -44,7 +44,7 @@
                   td.align-middle(colspan="2")
                     p.mb-0.txt-sm Expires {{cardInfo && cardInfo.exp_month ? cardInfo.exp_month : cardInfo && cardInfo.card.exp_month}}/{{cardInfo && cardInfo.exp_year ? cardInfo.exp_year : cardInfo && cardInfo.card.exp_year}}
             .btn-row.right
-              button#pmtUpdate.btn.btn-secondary((click)="toggleView('updateCardShow')") Update Credit Card
+              button#pmtUpdate.btn.btn-secondary.btn-sm((click)="toggleView('updateCardShow')") Update Credit Card
         .row(*ngIf="confirmCancelShow && !isCanceled")
           .col-12
             p Please confirm that you would like to unsubscribe from Edji Hero.
@@ -68,9 +68,9 @@
               #card-errors(role="alert")
             #pmtChanged.alert.alert-success.mt-1(*ngIf="updatePaymentSuccess")
               | Your payment was succesfully updated!
-            button#pmtChange.btn.btn-primary([class.loading]="loading", (click)="updateCard()") Update my Card
-            .btn-row.right
+            .btn-row.right.mt-3
               button#pmtMethodCancel.btn.btn-secondary((click)="toggleView('subscriptionShow')") Go Back
+              button#pmtChange.btn.btn-primary([class.loading]="loading", (click)="updateCard()") Update my Card
       .modal-footer.mt-2
         .btn-row.left
           button#subHeroCancel.btn.btn-hero.btn-faded(*ngIf="subscriptionShow", [class.loading]="canceling", (click)="toggleView('confirmCancelShow')") Cancel Subscription
