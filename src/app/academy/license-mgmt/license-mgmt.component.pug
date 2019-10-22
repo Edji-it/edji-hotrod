@@ -34,7 +34,7 @@ nav-bar([showDashboardOptions]="true")
                 td.educator-pending--name {{ licenseUser.educator }}
                   p.small.mb-0 {{licenseUser.email}}
                 td {{ licenseUser.role }}
-                td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
+                td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined ? (licenseUser.joined | edjidate:'timeStamp':'mediumDate') : '-' }}
                 td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") 
                   i Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
                 td.educator-pending.expires(*ngIf="licenseUser.type=='expired'") 
@@ -92,6 +92,14 @@ nav-bar([showDashboardOptions]="true")
                     tabindex="0"
                   ) Submit
   .col-md-4.px-2
+    .container.academy-container.py-4
+      .row
+        .col-12
+          .academy-name Academy Invite Link
+          .academy-header.font-weight-light Share this link with one or many teachers to give them a license to your Academy
+          .mt-2
+            edji-share-link([link]="inviteLink")
+
     .container.academy-container.py-4
       .row
         .col-12

@@ -100,15 +100,17 @@ nav-bar(
                 [question]="readingPart.question",
                 [editor]="true",
                 (questionUpdate)="updateQ(readingPart.question,$event)",
-                (keyup)="contentChange($event)",
-                (mouseup)="contentChange($event)",
-                (mousedown)="$event.preventDefault ? $event.preventDefault() : $event.returnValue = false")
+                (keyup)="selectionInteraction($event)",
+                (mouseup)="selectionInteraction($event)",
+                (mousedown)="$event.preventDefault ? $event.preventDefault() : $event.returnValue = false",
+                [attr.rindex]="i")
               medium-editor#angularMediumEditor.content(
                 [editorModel]="readingPart.text",
+                (editorModelChange)="contentModelChange($event, i)",
                 [editorOptions]="mediumEditorConfig",
                 [editorPlaceholder]="getReadingPlaceholder(i)",
-                (keyup)="contentChange($event)",
-                (mouseup)="contentChange($event)",
+                (keyup)="selectionInteraction($event)",
+                (mouseup)="selectionInteraction($event)",
                 [ngClass]="[i<readingHtml.length - 1 ? 'medium-editor__new-question' : '']",
                 [attr.rindex]="i")
             #errorContent.alert.alert-danger(*ngIf="submitted && readingIsBlank")

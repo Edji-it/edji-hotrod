@@ -12,8 +12,18 @@ import { Project, User, Reading } from '../../shared/datatypes'
 })
 export class ReadingLinkModal implements OnInit {
   public readingLink: string
+  private _reading: Reading = { title: '', draft: false, _id: ''}
 
-  @Input('reading') public shareReading: Reading
+  @Input('reading') 
+  set shareReading(reading: Reading) {
+    if (reading) {
+      this._reading = reading
+      this.readingLink = `${location.origin}/#/discover?preview=${this._reading._id}`
+    }
+  }
+  get shareReading(): Reading {
+    return this._reading  
+  }
   @Input() public isCreator: boolean
 
   @Output() private closeModal: EventEmitter<boolean> = new EventEmitter()
@@ -22,7 +32,7 @@ export class ReadingLinkModal implements OnInit {
   {}
 
   ngOnInit() {
-    this.readingLink = `${location.origin}/#/discover?preview=${this.shareReading._id}`
+   
   }
 
   public close() {

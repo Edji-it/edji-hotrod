@@ -36,6 +36,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     { label: 'Other', value: 'other' },
   ]
 
+  public inviteLink: string = ''
   public showLicenseInviteModal: boolean
   public licenseInvite: FormGroup
   public inviteSuccess: {
@@ -91,6 +92,9 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         let licenseIndex = this.academyState.selected || 0
         this.licenses = licenses
         this.loadLicenseRows(this.licenses[licenseIndex])
+        // Set invite link to first hero license
+        let heroLicenses = licenses.filter(license => { return license.license_type === 'hero' })
+        this.inviteLink = this.buildLicenseLink(heroLicenses[0])
       }),
     )
   }
@@ -121,19 +125,12 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
           educatorRole = this.capitalizeFirstLetter(licenseRoles[j].role)
         }
       }
-      let educatorJoined: Date
-      for (var k = 0; k < userLicenseIds.length; k++) {
-        // Set the joined date of the educator for this license
-        if (userLicenseIds[k].license_id === this.license._id) {
-          educatorJoined = userLicenseIds[k].joined
-        }
-      }
       // Push the object properties to the license
       this.licenseUsers.push({
         educator: licenseUser.fullname,
         email: licenseUser.email,
         role: educatorRole,
-        joined: educatorJoined,
+        joined: licenseUser.license_ids ? licenseUser.license_ids.joined : '',
         type: 'active',
       })
     }
@@ -155,6 +152,21 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         joined: pendingLicense.expiration,
         type: inviteType,
       })
+    }
+  }
+
+  /**
+   * Generate academy invite link
+   * @param license hero license to use for link
+   */
+  private buildLicenseLink(license): string {
+    if (license.link_tokens && license.owning_institution) {
+      let name = encodeURIComponent(license.owning_institution.name)
+      let token = license.link_tokens
+      return `${location.origin}/#/license/accept/${token}?academy=${name}&tokenType=academy_token`
+    } else {
+      console.error("License Link: Unable to find link token on license")
+      return ''
     }
   }
 

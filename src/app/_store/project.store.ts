@@ -325,7 +325,12 @@ export class ProjectStore {
    */
   public addUserToProject(projectId: string): Observable<any> {
     let project = this.currentProjectSource.value
-
+    if (!project.temp_ids) {
+      project.temp_ids = []
+    }
+    if (!project.student_ids) {
+      project.student_ids = []
+    }
     // check if student already is in the student_ids or temp_ids arrays
     let alreadyJoined = false
     if (this.user.type && this.user.type === 'temp') {

@@ -5,6 +5,7 @@
   width: auto;
   height: 100%;
   position: relative;
+  z-index: 1; // Ensure overlapping column padding does not prevent clickability
 
   .nav__btn-slider + &,
   & + & {

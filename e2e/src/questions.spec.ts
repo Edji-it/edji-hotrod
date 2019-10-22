@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { browser, protractor } from 'protractor'
+import { browser, protractor, element } from 'protractor'
 import { NewReading, Login, Sidebar, Project, Questions, Dashboard, Home } from './page-objects'
 import { GuestLoginForm } from './components'
 
@@ -50,7 +50,10 @@ describe('Questions', () => {
       newReading.privateButton.click()
       newReading.contentInput1.sendKeys(newReading.qContentString1)
 
-      // Add the 1st question after all text
+      /**
+       * Question 1
+       * Add question 1 after first content added
+       */
       newReading.insertQuestionButtonTap()
 
       // Input the question prompt
@@ -60,7 +63,6 @@ describe('Questions', () => {
         'question prompt input never became clickable',
       )
       newReading.insertQuestionPrompt.sendKeys(newReading.qPrompt1)
-
       // Select the following answer types: 'emoji' & 'text'
       browser.wait(
         EC.elementToBeClickable(newReading.emojiAnswerButton),
@@ -72,15 +74,17 @@ describe('Questions', () => {
 
       // Enter some more content after we add the question before
       newReading.contentInput2.sendKeys(newReading.qContentString2)
-
       // Move the cursor over to insert the next question in the middle of text
       for (let i = 0; i < 7; i++) {
         newReading.contentInput2.sendKeys(protractor.Key.ARROW_LEFT)
       }
-
-      // Add another question, but we will add it in the middle of existing text
+      /**
+       * Question 2
+       * Add question #2, but we will add it in the middle of existing text
+       */
       newReading.insertQuestionButtonTap()
-
+      // Wait for second question to render
+      browser.sleep(500)
       // Input the question prompt
       browser.wait(
         EC.elementToBeClickable(newReading.insertQuestionPrompt),
@@ -88,32 +92,32 @@ describe('Questions', () => {
         'question prompt input never became clickable',
       )
       newReading.insertQuestionPrompt.sendKeys(newReading.qPrompt2)
-
       // Select the following answer types: 'text'
       browser.wait(
         EC.elementToBeClickable(newReading.emojiAnswerButton),
         5000,
         'answer types button never became clickable for the second question',
       )
-      newReading.textAnswerButton.click()
-
+      newReading.questionByIndexAnswer(1,'text')
       // Send the input field more text
       newReading.contentInput2.sendKeys(newReading.qContentString2)
-
-      // Add another question, but we will add it in the middle of existing text
+      /**
+       * Question 3
+       * Add question #3, also in the middle of existing text
+       */
       newReading.insertQuestionButtonTap()
-
-      // Remove the last added question
+      // Remove the question #3
       browser.wait(
-        EC.elementToBeClickable(newReading.questionDelete),
+        EC.visibilityOf(newReading.questionDelete),
         5000,
         'delete question button never became clickable',
       )
-      newReading.questionDelete.click()
-
+      browser.executeScript('document.getElementById("question-2").scrollIntoView()').then(() => {
+        // Delete Question
+        newReading.questionDelete.click()
+      })
       // Make sure we can add a source
       newReading.sourceInput.sendKeys(newReading.qSourceString)
-
       // Submit New Reading
       newReading.clickShareAndArchive()
       browser.wait(
@@ -122,7 +126,6 @@ describe('Questions', () => {
         'finalize reading button never became clickable',
       )
       newReading.finalizeButton.click()
-
       // Should close the reading share code modal after creating a new reading
       browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
 

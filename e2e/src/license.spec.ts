@@ -1,10 +1,12 @@
 import { browser, by, element, protractor } from 'protractor'
 import { Sidebar, Login, Dashboard } from './page-objects'
+import { AcademyMgmt } from './page-objects/academy-mgmt-page';
 
 describe('Academy user that has ability to manage licenses for their academy: ', () => {
   let dashboard = new Dashboard()
   let login = new Login()
   let sidebar = new Sidebar()
+  let mgmt = new AcademyMgmt()
   let EC = protractor.ExpectedConditions
 
   let licenseLoader = element(by.id('licenseMgmtLoader'))
@@ -130,6 +132,23 @@ describe('Academy user that has ability to manage licenses for their academy: ',
         5000,
         'never saw the latest license invite get added',
       )
+    })
+
+    it('should generate a correct invite link', async () => {
+      browser.sleep(5000)
+      // Scroll to top
+      await browser.executeScript('window.scrollTo(0,0);')
+      browser.wait(EC.elementToBeClickable(mgmt.copyInviteLink), 5000, 'never saw the invite link')
+      // Get Academy invite link and save it for later
+      let inviteLink = await mgmt.inviteLinkBox.getAttribute('value')
+      // Verify invite link contains accept path
+      expect(inviteLink).toContain('/license/accept')
+      // Verify clicking "Copy" at least shows a success message
+      mgmt.copyInviteLink.click()
+      browser.wait(EC.visibilityOf(mgmt.copySuccessMsg), 3000, 'clicking to copy invite link did not show success message')
+      // Browse to link
+      browser.get(inviteLink)
+      browser.wait(EC.elementToBeClickable(mgmt.joinAcademyBtn), 5000, 'invite link did show license accept page')
     })
   })
 
