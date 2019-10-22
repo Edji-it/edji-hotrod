@@ -175,18 +175,7 @@ describe('Share', () => {
       newReading.contentInput.sendKeys(newReading.contentShortString)
       newReading.sourceInput.sendKeys(newReading.sourceString)
       // Submit New Reading
-      newReading.clickShareAndArchive()
-      // Group Label has content prefilled, so we clear it
-      browser.wait(
-        EC.elementToBeClickable(newReading.finalizeButton),
-        5000,
-        'finalize reading button never became clickable',
-      )
-      newReading.groupInput.clear()
-      newReading.groupInput.sendKeys(newReading.groupString)
-      newReading.finalizeButton.click()
-      // Should redirect to Project page for new reading
-      browser.wait(EC.urlContains('project'), 10000, 'never arrived at new reading')
+      newReading.finalizeAndSkipToReading()
       // Reset user to dashboard
       sidebar.backToDash()
       /**

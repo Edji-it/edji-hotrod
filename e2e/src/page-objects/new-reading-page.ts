@@ -285,6 +285,8 @@ export class NewReading implements PageObjectInterface {
     // Submit New Reading and complete modals
     this.clickShareAndArchive()
     this.createGroupButtonClick()
+    // Ensure arrived at new reading
+    browser.wait(this.EC.urlContains('project'), 10000, 'never arrived at newly created reading')
     this.shareCodeModalCloseClick()
   }
 
