@@ -3,7 +3,7 @@ import { browser, by, element, protractor } from 'protractor'
 import { Home, Login, Sidebar, Hero, Dashboard, NewReading, Discover } from './page-objects'
 import { LoginForm, RegisterForm, UserDetailsModal } from './components'
 
-describe('Share', () => {
+describe('Referral', () => {
   let login = new Login()
   let loginForm = new LoginForm()
   let registerForm = new RegisterForm()
