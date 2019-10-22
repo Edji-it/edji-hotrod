@@ -22,8 +22,8 @@ import { User } from './../shared/datatypes'
 })
 export class DashboardComponent implements OnInit {
   // Set our default values
-  private currentUser: User
   private subscriptions: Subscription[] = []
+  public currentUser: User
   public mobileShowJoined: boolean = true
   public showUserDetailsModal: boolean = false
 
