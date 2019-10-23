@@ -73,6 +73,6 @@
               button#pmtChange.btn.btn-primary([class.loading]="loading", (click)="updateCard()") Update my Card
       .modal-footer.mt-2
         .btn-row.left
-          button#subHeroCancel.btn.btn-hero.btn-faded(*ngIf="subscriptionShow", [class.loading]="canceling", (click)="toggleView('confirmCancelShow')") Cancel Subscription
+          button#subHeroCancel.btn.btn-link.btn-faded(*ngIf="subscriptionShow", [class.loading]="canceling", (click)="toggleView('confirmCancelShow')") Cancel Subscription
         .btn-row.right(*ngIf="subscriptionShow || isCanceled")
           button#subClose.btn((click)="close()", type="button", data-dismiss="modal") Close
