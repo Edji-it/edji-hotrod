@@ -67,12 +67,12 @@
               // Used to display form errors
               #card-errors(role="alert")
             #pmtChanged.alert.alert-success.mt-1(*ngIf="updatePaymentSuccess")
-              | Your payment was succesfully updated!
+              | Your payment method was succesfully updated!
             .btn-row.right.mt-3
               button#pmtMethodCancel.btn.btn-secondary((click)="toggleView('subscriptionShow')") Go Back
               button#pmtChange.btn.btn-primary([class.loading]="loading", (click)="updateCard()") Update my Card
       .modal-footer.mt-2
         .btn-row.left
-          button#subHeroCancel.btn.btn-hero.btn-faded(*ngIf="subscriptionShow", [class.loading]="canceling", (click)="toggleView('confirmCancelShow')") Cancel Subscription
+          button#subHeroCancel.btn.btn-link.btn-faded(*ngIf="subscriptionShow", [class.loading]="canceling", (click)="toggleView('confirmCancelShow')") Cancel Subscription
         .btn-row.right(*ngIf="subscriptionShow || isCanceled")
           button#subClose.btn((click)="close()", type="button", data-dismiss="modal") Close
