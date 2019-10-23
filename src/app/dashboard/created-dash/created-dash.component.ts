@@ -73,7 +73,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     { label: 'Middle/Junior High', grades: [5, 6, 7, 8] },
     { label: 'High/Secondary', grades: [9, 10, 11, 12] },
     { label: 'College/University', grades: [13] },
-    { label: 'Professional Development', grades: [14] },
+    { label: 'Professional Development', grades: [21] },
   ];
 
   public cohortChoice: CohortValue

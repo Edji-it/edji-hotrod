@@ -7,7 +7,7 @@ import { Observable } from 'rxjs'
 // project imports
 import { MetricsEffects } from './metrics.effects'
 import { IncrementMetric, SetState } from './metrics.reducers'
-import { StateService, BumblebeeService, AuthService } from './../_services'
+import { StateService, BumblebeeService, AuthService, MessageService } from './../_services'
 
 describe('metrics effects', () => {
   let effects: MetricsEffects
@@ -39,6 +39,12 @@ describe('metrics effects', () => {
             getUser: () => {},
           },
         },
+        {
+          provide: MessageService,
+          useValue: {
+            sendToast: (toast) => {}
+          }
+        }
       ],
     })
 
