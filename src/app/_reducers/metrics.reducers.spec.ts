@@ -30,11 +30,12 @@ describe('metrics actions', () => {
       const result = reducer(initialState, action)
       expect(result).toEqual(initialState)
     })
-    it('should overwrite state with new properties', () => {
+    it('should overwrite new properties on state', () => {
       const state: any = { metricsLoaded: true, hero_page_load_count: 3 }
       const action = new SetState(state)
       const result = reducer(initialState, action)
-      expect(result).toEqual(state)
+      const overwritten: any = { ...initialState, ...state }
+      expect(result).toEqual(overwritten)
     })
   })
 })
