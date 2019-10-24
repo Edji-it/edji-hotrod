@@ -202,14 +202,7 @@ hot-reading-preview-modal(
     [user]="user",
     (closeModal)="closeReadingPreview($event)",
     (createSuccess)="readingCreateFromPreviewSuccess($event)",
-    (closeAndLink)="showReadingLinkModal = true",
     [context]="'created'"
-)
-//- Reading link modal
-edji-reading-link(
-    *ngIf="showReadingLinkModal", 
-    [reading]="selectedReading",
-    (closeModal)="showReadingLinkModal = false"
 )
 //- Confirm if user wants to archive a past reading
 hot-confirm-archive-modal.modal-will-fade(

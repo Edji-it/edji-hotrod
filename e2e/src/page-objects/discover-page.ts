@@ -20,6 +20,7 @@ export class Discover implements PageObjectInterface {
   public firstFeedTitle = this.feedTitles.first()
   public readingPreview = element(by.id('readingPreviewModal'))
   public shareReadingBtn = element(by.id('shareReadingButton'))
+  public sendReadingLink = element(by.id('sendReadingLink'))
   public editReadingBtn = element(by.id('editReadingButton'))
   public loginFromPreviewBtn = element(by.id('loginFromPreview'))
   public closeReadingPreviewBtn = element(by.id('readingPreviewClose'))
@@ -35,6 +36,10 @@ export class Discover implements PageObjectInterface {
   public searchCount = element(by.css('[data-test="searchCount"]'))
   public searchInput = element(by.id('readingSearch'))
   public clearSearchBtn = element(by.css('.form-control-clear.icon.icon-close'))
+
+  // Share link modal
+  public copyShareLink = element(by.id('copyShareLink'))
+  public shareLinkClose = element(by.css('#readingLinkModal .close'))
 
   // get the dashboard page
   getPage(): void {

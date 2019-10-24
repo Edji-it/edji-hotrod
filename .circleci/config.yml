@@ -91,3 +91,6 @@ workflows:
       #         only:
       #           - dev
       - unit
+machine:
+  pre:
+    - sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
