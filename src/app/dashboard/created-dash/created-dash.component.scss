@@ -172,14 +172,18 @@ button.new-reading-btn {
   border: 1px solid #cdcdcd;
   background: #fff;
   padding: 10px 15px;
-  margin: 5px auto;
+  margin: 0px auto;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  max-width: 270px;
+  max-width: 330px;
 
   &:hover, &:focus {
     border-color: $blue;
     text-decoration: none;
   }
+}
+
+.template-link__wrap {
+  margin: 5px 7.5px;
 }

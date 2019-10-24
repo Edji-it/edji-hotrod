@@ -81,19 +81,28 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
 
   private templates: any[] = [
     {
-      title: ':mag_right: Reviewing a Concept',
-      cohort: 0,
-      _id: '5d9e1e4f4a572f2134d4d328'
+      title: ':alembic: Scientific Method with Marie Currie',
+      cohort: 5,
+      _id: '5db1c419dafbb218db2a369e',
+      note: 'Concept introduction, Middle to Junior High level'
     },
     {
-      title: ':mega: Parts of Speech',
-      cohort: 0,
-      _id: '5d9e1e4f4a572f2134d4d328'
+      title: ':baseball: Casey at the Bat by E.L. Thayer',
+      cohort: 9,
+      _id: '5db1c741dafbb218db2a370b',
+      note: 'Poetry analysis, High School level'
     },
     {
-      title: ':link: Connecting with an Excerpt',
-      cohort: 0,
-      _id: '5d9e1e4f4a572f2134d4d328'
+      title: ':candy: Favorite Movie Candy By State',
+      cohort: 2,
+      _id: '5db1d5fbdafbb218db2a38bc',
+      note: 'Fun map exploration, Elementary level'
+    },
+    {
+      title: ':school: An Edji Introduction (PD)',
+      cohort: 21,
+      _id: '5db1da04dafbb218db2a3945',
+      note: 'Starter lesson for training other teachers'
     }
   ]
 
