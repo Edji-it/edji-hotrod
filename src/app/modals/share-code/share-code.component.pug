@@ -43,6 +43,7 @@
               [instructions]="currentProject.group_instructions ? currentProject.group_instructions : ''"
             )
             edji-copy-link-share([url]="shareUrl")
+            edji-copy-embed([projectId]="currentProject._id")
         .col-6
           .btn-row.right
             button#shareCodeModalClose.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close

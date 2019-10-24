@@ -36,7 +36,7 @@ import {
   LicenseInviteComponent,
   ShareCodeComponent,
 } from './modals'
-import { GoogleClassroomShareButton, CopyLinkShareButton } from './buttons'
+import { GoogleClassroomShareButton, CopyLinkShareButton, CopyEmbedButton } from './buttons'
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 import { PromoPageComponent } from './promo/promo.component'
@@ -51,6 +51,7 @@ let SHARED_DECLARATIONS = [
   FooterComponent,
   GoogleClassroomShareButton,
   CopyLinkShareButton,
+  CopyEmbedButton,
   HeroSubscribeComponent,
   LicenseInviteComponent,
   LinkifyPipe,
