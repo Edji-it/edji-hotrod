@@ -15,6 +15,7 @@ import {
   MessageService,
   MediaService,
   SecretSwitchesService,
+  AnalyticsService,
 } from '../_services'
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
@@ -187,7 +188,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _media: MediaService,
     private _switches: SecretSwitchesService,
     private store: Store<AppState>,
-    private _driver: DriverService
+    private _driver: DriverService,
+    private _analytics: AnalyticsService
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -295,7 +297,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
   /**
    * Begins Driver.js tour
    */
-  beginTour() {
+  beginTour(cornerTrigger?: boolean) {
+    if (cornerTrigger) {
+      this._analytics.event('onboarding_clickedCornerFlag_newReading')
+    }
     // Start tour with steps for introduction
     this._driver.beginTour([
     {

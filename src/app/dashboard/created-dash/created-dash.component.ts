@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService, ProjectService, ReadingQuery } from '../../_services'
+import { AuthService, ReadingService, ProjectService, ReadingQuery, AnalyticsService } from '../../_services'
 import { User, Reading } from '../../shared/datatypes'
 import { take, first } from 'rxjs/operators'
 
@@ -113,6 +113,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
+    private _analytics: AnalyticsService
   ) {}
 
   ngOnInit() {

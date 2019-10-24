@@ -120,7 +120,8 @@
       //-     label.form-check-label.form-check-btn(
       //-       *ngFor="let cohort of cohortOptions; let i = index",
       //-       [class.active]="cohortChoice === cohort",
-      //-       [attr.data-test]="'gradesOption' + i"
+      //-       [attr.data-test]="'gradesOption' + i",
+      //-       (click)="_analytics.event('onboarding_chooseReading_gradesSelected', cohort.label)"
       //-     )
       //-       input.form-check-input(
       //-           type="radio",
@@ -141,7 +142,8 @@
               a.template-link(
                 [routerLink]="['/new-reading']",
                 [queryParams]="{ 'copyId': template._id, 'guide':'welcome' }",
-                data-test="templateChoice"
+                data-test="templateChoice",
+                (click)="_analytics.event('onboarding_chooseReading_templateSelected', template.title)"
               )
                 span([innerHtml]="template.title | emojione")
                 p.text-muted.small([innerHtml]="template.note")

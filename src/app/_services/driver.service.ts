@@ -6,6 +6,7 @@ import * as Driver from 'driver.js'
 })
 export class DriverService {
     private driver: Driver
+    private tourName: string = ''
 
     constructor() {
         // Set up global driver
@@ -33,6 +34,7 @@ export class DriverService {
      * Define steps and begin tour
      * @note call once elements are rendered on page
      * @param steps tour steps
+     * @param tourName used for analytics reporting
      */
     public beginTour(steps: DriverStep[]): void {
         this.driver.defineSteps(this.processSteps(steps))
