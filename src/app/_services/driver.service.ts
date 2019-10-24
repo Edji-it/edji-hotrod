@@ -1,14 +1,18 @@
 import { Injectable } from "@angular/core";
 import * as Driver from 'driver.js'
 
+// Project Dependencies
+import { AnalyticsService } from "./analytics.service";
+
 @Injectable({
     providedIn: 'root'
 })
 export class DriverService {
     private driver: Driver
     private tourName: string = ''
+    private tourStep: number = 1
 
-    constructor() {
+    constructor(private _analytics: AnalyticsService) {
         // Set up global driver
         this.driver = new Driver({
           opacity: 0.5,
@@ -26,8 +30,20 @@ export class DriverService {
             if (node['classList'] && node['classList'] .contains('nav-bar__btn')) {
                 window.scrollTo(0,0)
             }
+          },
+          onNext: (driverEl) => {
+            this.tourStep++
+            this.reportStep()
+          },
+          onPrevious: (driverEl) => {
+            this.tourStep--
+            this.reportStep()
           }
         })
+    }
+
+    private reportStep(): void {
+        this._analytics.event(`onboarding_${this.tourName}_step${this.tourStep}`)
     }
 
     /**
@@ -36,7 +52,10 @@ export class DriverService {
      * @param steps tour steps
      * @param tourName used for analytics reporting
      */
-    public beginTour(steps: DriverStep[]): void {
+    public beginTour(steps: DriverStep[], tourName?: string): void {
+        // Set tour name for reporting
+        this.tourName = tourName || ''
+        this.tourStep = 1
         this.driver.defineSteps(this.processSteps(steps))
         // Begin driver after latest render
         setTimeout(() => {

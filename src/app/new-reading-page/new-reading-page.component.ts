@@ -340,7 +340,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
         position: 'bottom-right'
       }
     }
-    ]);
+    ], 'chooseReading');
   }
 
   /**
