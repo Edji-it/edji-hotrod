@@ -95,7 +95,7 @@ scroll-progress([scrollProgress]="currentScroll")
             .alert.alert-info.alert--margin.alert--clickable(
                 *ngIf="onboardGuide",
                 [class.fade-out]="quickSelect.anchor != null || userCommentsCreated > 0",
-                (click)="tutorialGifUrl = '/assets/guide/add-highlight-v2.gif'",
+                (click)="tutorialGifUrl = '/assets/guide/add-highlight-v2.gif'; _analytics.event('onboarding_createComment_openHow')",
                 data-test="commentHintOnboarding"
             )
                 quick-start-flag

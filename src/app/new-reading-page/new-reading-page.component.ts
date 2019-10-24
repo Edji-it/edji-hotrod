@@ -2,7 +2,6 @@ import { ActivatedRoute, Router, Params } from '@angular/router'
 import { Title } from '@angular/platform-browser'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core'
-import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
@@ -178,7 +177,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _readings: ReadingService,
     private router: Router,
-    private angulartics: Angulartics2,
     fb: FormBuilder,
     private el: ElementRef,
     private _title: Title,
@@ -233,10 +231,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this.readingType = 'existingReading'
       this.getReading(this.copyId)
       // fire an analytic event here for tracking purposes
-      this.angulartics.eventTrack.next({
-        action: 'discover_reading_retrieve',
-        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-      })
+      if (this.onboardTemplate) {
+        this._analytics.event('discover_reading_retrieve', this.copyId)
+      }
     }
 
     /** Set the current user every time it changes */
@@ -921,13 +918,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
           // Open new group if it is in final version
           if (this.reading.draft === false) {
             // fire an analytic event here for tracking purposes
-            this.angulartics.eventTrack.next({
-              action: this.readingType + '_' + (this.reading.public ? 'public' : 'private') + '_create',
-              properties: {
-                category: this._auth.setAnalyticEventCategory(),
-                label: this._auth.setAnalyticEventLabel(),
-              },
-            })
+            this._analytics.event(this.readingType + '_' + (this.reading.public ? 'public' : 'private') + '_create')
             // Send the data to Pipo to log the new reading
             this._academy.pipoEvent({
               // standard event info:
@@ -955,13 +946,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
               this.successObject.readingSuccess = this.successAlert
               this.showAlert = true
               // fire an analytic event here for tracking purposes
-              this.angulartics.eventTrack.next({
-                action: this.readingType + '_draft_save',
-                properties: {
-                  category: this._auth.setAnalyticEventCategory(),
-                  label: this._auth.setAnalyticEventLabel(),
-                },
-              })
+              this._analytics.event(this.readingType + '_draft_save')
               // Update URL with reading id, now that we have one
               if (this.showHeroParam) {
                 this.router.navigate(['new-reading/' + data._id], {
@@ -1081,10 +1066,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
    */
   public addQuestion(insertHtml?: string, newEditorIndex?: number) {
     // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({
-      action: 'qna_question_added',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
+    this._analytics.event('qna_question_added')
     let answer_types = this._auth.getAllowedCommentMediaTypes()
     let question = <EdjiQuestion>{
       prompt: '',

@@ -13,7 +13,6 @@ import {
 } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
-import { Angulartics2 } from 'angulartics2'
 import { Location } from '@angular/common'
 
 // Project Dependencies
@@ -28,6 +27,7 @@ import {
   UtilToolService,
   MessageService,
   AcademyService,
+  AnalyticsService,
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
@@ -193,14 +193,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _socket: SocketService,
     private _util: UtilToolService,
     public _comments: CommentService,
-    private angulartics: Angulartics2,
     private _audio: AudioService,
     private _messages: MessageService,
     private route: ActivatedRoute,
     private _router: Router,
     private _academy: AcademyService,
     private location: Location,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private _analytics: AnalyticsService
   ) {
     this.window = window
   }
@@ -322,13 +322,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
                   this.audioSupportError = true
                   // if audio is not supported, let analytics know
-                  this.angulartics.eventTrack.next({
-                    action: 'noAudioSupport',
-                    properties: {
-                      category: this._auth.setAnalyticEventCategory(),
-                      label: this._auth.setAnalyticEventLabel(),
-                    },
-                  })
+                  this._analytics.event('noAudioSupport')
                 }
               }
             }
