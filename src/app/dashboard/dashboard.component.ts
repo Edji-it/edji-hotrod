@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
       {
         title: 'The Dashboard',
         image: '/assets/dashboard-tooltips/logo.png',
-        body: 'Welcome to your Dashboard, your Edji hub. Here, you'll find all the readings you have created or are reading!',
+        body: 'Welcome to your Dashboard, your Edji hub. Here, you\'ll find all the readings you have created or are reading!',
       },
       {
         title: 'The Read Tab',
