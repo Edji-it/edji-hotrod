@@ -50,6 +50,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   private readingType: string = 'newReading' // used for analytics purposes
   private autosaveTimer
+  private autosaveDisabled: boolean
   public previewReading: Reading
 
   // Trigger booleans
@@ -187,7 +188,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _switches: SecretSwitchesService,
     private store: Store<AppState>,
     private _driver: DriverService,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -218,6 +219,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
     // If loaded with guide param, show onboarding
     if (this._route.snapshot.queryParams['guide'] == 'welcome') {
       this.onboardTemplate = true
+    }
+    // Option to disable autosave
+    if (this._route.snapshot.queryParams['disable'] == 'autosave') {
+      this.autosaveDisabled = true
     }
     if (this.alert) {
       this.successObject.readingSuccess = this.alert
@@ -299,48 +304,54 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this._analytics.event('onboarding_clickedCornerFlag_newReading')
     }
     // Start tour with steps for introduction
-    this._driver.beginTour([
-    {
-      element: '#readingPageForm',
-      popover: {
-        className: 'first-step-editor-popover',
-        title: 'Welcome to the New Reading page!',
-        description: this.onboardTemplate ? `We've prefilled the editor with our "${this.reading.title}" lesson` : `We'll run you through the basics of building a reading`,
-        position: 'top-center',
-      }
-    },
-    {
-      element: '[data-template="firstParagraph"]',
-      popover: {
-        title: `Look over the provided text`,
-        description: 'Feel free to modify any of the content as you see fit!',
-        position: 'top'
-      }
-    },
-    {
-      element: this.onboardTemplate ? '#question-1' : '#buttonInsertQuestion',
-      popover: {
-        title: `What will you ask?`,
-        description: 'Questions are a great way to assess students without answers being shared with the class',
-        position: 'top'
-      }
-    },
-    {
-      element: '#insertBar',
-      popover: {
-        title: 'Insert content, such as images!',
-        description: 'The insert toolbar makes it easy to insert images, PDFs, and questions throughout your reading',
-        position: 'top'
-      }
-    },
-    {
-      element: '#addReadingButton',
-      popover: {
-        title: `Press "Share" when your reading is ready`,
-        position: 'bottom-right'
-      }
-    }
-    ], 'chooseReading');
+    this._driver.beginTour(
+      [
+        {
+          element: '#readingPageForm',
+          popover: {
+            className: 'first-step-editor-popover',
+            title: 'Welcome to the New Reading page!',
+            description: this.onboardTemplate
+              ? `We've prefilled the editor with our "${this.reading.title}" lesson`
+              : `We'll run you through the basics of building a reading`,
+            position: 'top-center',
+          },
+        },
+        {
+          element: '[data-template="firstParagraph"]',
+          popover: {
+            title: `Look over the provided text`,
+            description: 'Feel free to modify any of the content as you see fit!',
+            position: 'top',
+          },
+        },
+        {
+          element: this.onboardTemplate ? '#question-1' : '#buttonInsertQuestion',
+          popover: {
+            title: `What will you ask?`,
+            description: 'Questions are a great way to assess students without answers being shared with the class',
+            position: 'top',
+          },
+        },
+        {
+          element: '#insertBar',
+          popover: {
+            title: 'Insert content, such as images!',
+            description:
+              'The insert toolbar makes it easy to insert images, PDFs, and questions throughout your reading',
+            position: 'top',
+          },
+        },
+        {
+          element: '#addReadingButton',
+          popover: {
+            title: `Press "Share" when your reading is ready`,
+            position: 'bottom-right',
+          },
+        },
+      ],
+      'chooseReading',
+    )
   }
 
   /**
@@ -352,10 +363,12 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.saveState = 'edited'
     // Clear active timeout
     this.cancelAutosave()
-    // Debounce user activity
-    this.autosaveTimer = setTimeout(() => {
-      this.autosave()
-    }, 5000)
+    if (!this.autosaveDisabled) {
+      // Debounce user activity
+      this.autosaveTimer = setTimeout(() => {
+        this.autosave()
+      }, 5000)
+    }
   }
 
   /**
@@ -402,7 +415,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
             }
             this._title.setTitle('Edji | Editing: ' + this.reading.title)
             // Ready for template tour
-            setTimeout(()=> { // setTimeout ensures content has rendered
+            setTimeout(() => {
+              // setTimeout ensures content has rendered
               if (this.onboardTemplate) {
                 this.beginTour()
               }
@@ -418,14 +432,16 @@ export class NewReadingPage implements OnInit, OnDestroy {
 
   /**
    * Handle content model change hooks
-   * @param newContent 
-   * @param readingPartIndex 
+   * @param newContent
+   * @param readingPartIndex
    */
   public contentModelChange(newContent, readingPartIndex) {
-    // Trigger autosave
-    this.changeMonitor()
-    // Update model
-    this.readingHtml[readingPartIndex].text = newContent
+    if (this.readingHtml[readingPartIndex].text != newContent) {
+      // Trigger autosave
+      this.changeMonitor()
+      // Update model
+      this.readingHtml[readingPartIndex].text = newContent
+    }
   }
 
   /**
@@ -948,13 +964,14 @@ export class NewReadingPage implements OnInit, OnDestroy {
               // fire an analytic event here for tracking purposes
               this._analytics.event(this.readingType + '_draft_save')
               // Update URL with reading id, now that we have one
+              let params = { successAlert: this.successAlert }
               if (this.showHeroParam) {
-                this.router.navigate(['new-reading/' + data._id], {
-                  queryParams: { successAlert: this.successAlert, showHeroParam: this.showHeroParam },
-                })
-              } else {
-                this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
+                params['showHeroParam'] = this.showHeroParam
               }
+              if (this.autosaveDisabled) {
+                params['disable'] = 'autosave'
+              }
+              this.router.navigate(['new-reading/' + data._id], { queryParams: params })
             }
             // Update reading values for continuing to edit
             this.readingId = data._id
@@ -1022,12 +1039,16 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
 
     if (this.insertNode && this.insertNode.parentNode) {
-      let spacerId = 'spacer' + (new Date).getTime()
+      let spacerId = 'spacer' + new Date().getTime()
       // If there is a reference node for cursor position, insert at cursor
       images.forEach((image, index) => {
         let imgString = buildImageTag(image)
         this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
-        this.insertAfter(this.insertNode.parentNode, `<p data-editor="${spacerId + '-' + index}">&#65279;</p>`, this.insertNode)
+        this.insertAfter(
+          this.insertNode.parentNode,
+          `<p data-editor="${spacerId + '-' + index}">&#65279;</p>`,
+          this.insertNode,
+        )
       })
       // Manually update model where DOM is being manipulated
       let { editor, index } = this.getContainingEditor(this.insertNode)
@@ -1035,7 +1056,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       if (editor && index >= 0) {
         // Update model
         this.readingHtml[index].text = editor.querySelector('.medium-editor-element').innerHTML
-        setTimeout(()=> {
+        setTimeout(() => {
           // Use last spacer element as insert node
           let spacer = document.querySelector(`[data-editor="${spacerId + '-' + (images.length - 1)}"]`)
           let spacerContents = spacer.firstChild || spacer
@@ -1108,8 +1129,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (newEditorIndex) {
       setTimeout(() => {
         this.updateNodeAfterInsert(
-          document.querySelector('medium-editor[rindex="'+newEditorIndex+'"] div'), 
-          newEditorIndex
+          document.querySelector('medium-editor[rindex="' + newEditorIndex + '"] div'),
+          newEditorIndex,
         )
       })
     }
@@ -1136,19 +1157,19 @@ export class NewReadingPage implements OnInit, OnDestroy {
       }
       this.selectionInteraction()
       if (newEditorIndexFocus) {
-        let question = document.querySelector('edji-question[rindex="'+newEditorIndexFocus+'"]')
-        let questionY = this.getNodeY(question)- NewReadingPage.EDITOR_TOOLBAR_Y
+        let question = document.querySelector('edji-question[rindex="' + newEditorIndexFocus + '"]')
+        let questionY = this.getNodeY(question) - NewReadingPage.EDITOR_TOOLBAR_Y
         window.scrollTo(0, questionY)
       }
-    } 
+    }
   }
 
   /**
    * Get parent editor reference
    * @returns containing editor and its index (if found)
    */
-  public getContainingEditor(node: HTMLScriptElement): { editor: HTMLScriptElement, index: number } {
-    let editor 
+  public getContainingEditor(node: HTMLScriptElement): { editor: HTMLScriptElement; index: number } {
+    let editor
     let index
     while (!index) {
       // We don't want to modify the node value passed in
@@ -1221,7 +1242,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
         var range = selRange.cloneRange()
         var containingNode = sel.focusNode
         // Locate containing medium-editor-element/contenteditable
-        while (containingNode && (!containingNode.classList || !containingNode.classList.contains('medium-editor-element'))) {
+        while (
+          containingNode &&
+          (!containingNode.classList || !containingNode.classList.contains('medium-editor-element'))
+        ) {
           if (containingNode.parentNode) {
             containingNode = containingNode.parentNode
           } else {

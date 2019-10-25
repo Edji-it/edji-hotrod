@@ -152,8 +152,8 @@ describe('New Reading Page', () => {
     it('should create a draft, and find it on the dashboard after manually saving', function() {
       // Keep title extra short to avoid autosave
       let manualSaveTitle = 'M ' + new Date().valueOf()
-      // Reset user to New Reading
-      newReading.getPage()
+      // Reset user to New Reading (use with autosave disabled)
+      browser.get('/#/new-reading?disable=autosave')
       // Should begin at New Reading page
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
