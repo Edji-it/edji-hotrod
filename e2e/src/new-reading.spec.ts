@@ -150,7 +150,8 @@ describe('New Reading Page', () => {
     })
 
     it('should create a draft, and find it on the dashboard after manually saving', function() {
-      let manualSaveTitle = 'M ' + newReading.titleString
+      // Keep title extra short to avoid autosave
+      let manualSaveTitle = 'M ' + new Date().valueOf()
       // Reset user to New Reading
       newReading.getPage()
       // Should begin at New Reading page
@@ -159,18 +160,14 @@ describe('New Reading Page', () => {
       newReading.titleInput.sendKeys(manualSaveTitle)
       /**
        * Content fill
-       * - We need to keep the content short here since sendKeys takes time 
+       * - We need to keep the content short here since sendKeys takes time
        * and can cause an overlap with autosave
        */
       newReading.contentInput.sendKeys('Text')
       newReading.contentInput.sendKeys(protractor.Key.RETURN)
       // Make private to avoid needing grade levels and subjects
       newReading.privateButton.click()
-      browser.wait(
-        EC.visibilityOf(newReading.draftButton),
-        1000,
-        '"Save Changes" button did not become clickable'
-      )
+      browser.wait(EC.visibilityOf(newReading.draftButton), 1000, '"Save Changes" button did not become clickable')
       newReading.draftButton.click()
       // Wait for "saved" confirmation
       // presenceOf - inline/text elements seem to throw visibilityOf off when using a pipe
