@@ -8,7 +8,7 @@ export const BADGES: BadgeData[] = [
         metric: 'readings_created',
         value_required: 1,
         toast: {
-            message: '<b>Success, first reading created</b><br/>Collaboration awaits!',
+            message: '<b>Made your first reading</b><br/>Collaboration awaits!',
             id: 'firstReading',
             type: 'first-reading',
             requireDismiss: true
@@ -20,7 +20,7 @@ export const BADGES: BadgeData[] = [
         toast: {
             type: 'first-comment',
             id: 'firstComment',
-            message: '<b>Well said!</b><br/>You made your first comment',
+            message: '<b>Made your first comment</b><br/>Well said!',
             requireDismiss: true
         }
     }
