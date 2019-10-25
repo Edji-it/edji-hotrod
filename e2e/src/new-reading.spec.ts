@@ -158,6 +158,8 @@ describe('New Reading Page', () => {
       browser.wait(EC.elementToBeClickable(newReading.titleInput), 5000)
       // Enter sample Reading into form
       newReading.titleInput.sendKeys(manualSaveTitle)
+      // Make private to avoid needing grade levels and subjects
+      newReading.privateButton.click()
       /**
        * Content fill
        * - We need to keep the content short here since sendKeys takes time
@@ -165,11 +167,10 @@ describe('New Reading Page', () => {
        */
       newReading.contentInput.sendKeys('Text')
       newReading.contentInput.sendKeys(protractor.Key.RETURN)
-      // Make private to avoid needing grade levels and subjects
-      newReading.privateButton.click()
       browser.wait(EC.visibilityOf(newReading.draftButton), 1000, '"Save Changes" button did not become clickable')
       newReading.draftButton.click()
-      // Wait for "saved" confirmation
+      // Wait for saved page to navigate
+      browser.sleep(200)
       // presenceOf - inline/text elements seem to throw visibilityOf off when using a pipe
       browser.wait(
         EC.presenceOf(element(by.id('draftStatusSaved'))),
