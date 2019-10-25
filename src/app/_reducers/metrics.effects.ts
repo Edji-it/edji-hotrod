@@ -40,21 +40,8 @@ export class MetricsEffects {
     }),
   )
 
-  /**
-   * Effect for handling an increment
-   */
-  @Effect({ dispatch: false})
-  incrementMetricSuccess$ = this.actions$.pipe(
-    ofType(MetricsActions.IncrementMetricSuccess),
-    map(this.incrementMetricMessages),
-    catchError(err => {
-      console.error(err)
-      return of()
-    })
-  )
-
   // Handle cases for specific metric increments
-  private incrementMetricMessages({metric, payload}) {
+  private incrementMetricMessages = ({metric, payload}) => {
     switch(metric) {
       case 'hero_page_load_count':
         // Hero Page slack post
@@ -80,6 +67,19 @@ export class MetricsEffects {
     }
     return of()
   }
+
+  /**
+   * Effect for handling an increment
+   */
+  @Effect({ dispatch: false})
+  incrementMetricSuccess$ = this.actions$.pipe(
+    ofType(MetricsActions.IncrementMetricSuccess),
+    map(this.incrementMetricMessages),
+    catchError(err => {
+      console.error(err)
+      return of()
+    })
+  )
 
   /** update the metrics state with payload */
   @Effect({ dispatch: false })

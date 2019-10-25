@@ -63,10 +63,11 @@ describe('Teacher Onboarding', () => {
    
     it('should complete dashboard teacher onboarding flow', () => {
         userDetails.addDetails()
+        // @todo restore when adding more template options
         // Wait for onboarding to show
-        browser.wait(EC.elementToBeClickable(gradeLevelsElementary), 3000, 'first onboarding options did not become clickable')
-        // Select first grade levels option
-        gradeLevelsElementary.click()
+        // browser.wait(EC.elementToBeClickable(gradeLevelsElementary), 3000, 'first onboarding options did not become clickable')
+        // // Select first grade levels option
+        // gradeLevelsElementary.click()
         // Template choices
         browser.wait(EC.visibilityOf(templateChoiceSection), 3000, 'onboarding template options did not appear')
         browser.wait(EC.elementToBeClickable(templateChoices.first()), 3000, 'first onboarding template option was not clickable')
