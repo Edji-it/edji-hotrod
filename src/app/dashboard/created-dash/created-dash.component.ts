@@ -74,37 +74,12 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     { label: 'High/Secondary', grades: [9, 10, 11, 12] },
     { label: 'College/University', grades: [13] },
     { label: 'Professional Development', grades: [21] },
-  ];
+  ]
 
   public cohortChoice: CohortValue
   public templateChoices: any[]
 
-  private templates: any[] = [
-    {
-      title: ':alembic: Scientific Method with Marie Currie',
-      cohort: 5,
-      _id: '5db1c419dafbb218db2a369e',
-      note: 'Concept introduction, Middle to Junior High level'
-    },
-    {
-      title: ':baseball: Casey at the Bat by E.L. Thayer',
-      cohort: 9,
-      _id: '5db1c741dafbb218db2a370b',
-      note: 'Poetry analysis, High School level'
-    },
-    {
-      title: ':candy: Favorite Movie Candy By State',
-      cohort: 2,
-      _id: '5db1d5fbdafbb218db2a38bc',
-      note: 'Fun map exploration, Elementary level'
-    },
-    {
-      title: ':school: An Edji Introduction (PD)',
-      cohort: 21,
-      _id: '5db1da04dafbb218db2a3945',
-      note: 'Starter lesson for training other teachers'
-    }
-  ]
+  private templates: { title: string; cohort: number; _id: string; note: string }[] = []
 
   // TypeScript public modifiers
   constructor(
@@ -113,12 +88,40 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _readings: ReadingService,
     private angulartics: Angulartics2,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
   ) {}
 
   ngOnInit() {
     // datalist component intializes by calling loadRecentlyCreated()
     this.loading = true
+    // Set onboarding templates
+    let isDev = this._auth.getEnv() === 'dev'
+    this.templates = [
+      {
+        title: ':alembic: Scientific Method with Marie Currie',
+        cohort: 5,
+        _id: isDev ? '5db1c419dafbb218db2a369e' : '5db47f10ba6d9c002165059e',
+        note: 'Concept introduction, Middle to Junior High level',
+      },
+      {
+        title: ':baseball: Casey at the Bat by E.L. Thayer',
+        cohort: 9,
+        _id: isDev ? '5db1c741dafbb218db2a370b' : '5db480b3590bdf00219b9275',
+        note: 'Poetry analysis, High School level',
+      },
+      {
+        title: ':candy: Favorite Movie Candy By State',
+        cohort: 2,
+        _id: isDev ? '5db1d5fbdafbb218db2a38bc' : '5db481ca590bdf00219b927c',
+        note: 'Fun map exploration, Elementary level',
+      },
+      {
+        title: ':school: An Edji Introduction (PD)',
+        cohort: 21,
+        _id: isDev ? '5db1da04dafbb218db2a3945' : '5db48578ba6d9c0021650750',
+        note: 'Starter lesson for training other teachers',
+      },
+    ]
 
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
@@ -315,15 +318,17 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public showTemplates(cohort: CohortValue, index: number): void {
     this.cohortChoice = cohort
     // Save to user preferences
-    this._auth.updateUser({prefs: { teachingGrades: cohort.grades }})
-      .pipe(first()).subscribe()
+    this._auth
+      .updateUser({ prefs: { teachingGrades: cohort.grades } })
+      .pipe(first())
+      .subscribe()
     // Pause to let user see their selection
     setTimeout(() => {
       // Filter templates
-      this.templateChoices = this.templates.filter((template) => {
+      this.templateChoices = this.templates.filter(template => {
         return template.cohort === index
       })
-    },  300)
+    }, 300)
   }
 }
 
