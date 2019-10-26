@@ -261,34 +261,33 @@ export class NewReading implements PageObjectInterface {
 
   public createGroupButtonClick(): void {
     // Click the create group button to finalize the reading
-    this.finalizeButton.isPresent().then(result => {
-      if (result) {
-        this.finalizeButton.isDisplayed().then(result => {
-          browser.wait(
-            this.EC.elementToBeClickable(this.finalizeButton),
-            5000,
-            'finalize reading button never became clickable',
-          )
-          this.finalizeButton.click()
-        })
-      }
-    })
+    browser.wait(
+      this.EC.elementToBeClickable(this.finalizeButton),
+      5000,
+      'finalize reading button never became clickable',
+    )
+    this.finalizeButton.click()
   }
 
   public shareCodeModalCloseClick(): void {
-    // Click the create group button to finalize the reading
-    this.shareCodeModalClose.isPresent().then(result => {
-      if (result) {
-        this.shareCodeModalClose.isDisplayed().then(result => {
-          browser.wait(
-            this.EC.elementToBeClickable(this.shareCodeModalClose),
-            5000,
-            'share code modal close button never became clickable',
-          )
-          this.shareCodeModalClose.click()
-        })
-      }
-    })
+    browser.wait(
+      this.EC.elementToBeClickable(this.shareCodeModalClose),
+      5000,
+      'share code modal close button never became clickable',
+    )
+    this.shareCodeModalClose.click()
+  }
+  
+  /**
+   * Ultra Convenience: Get from editor to highlightable text
+   */
+  public finalizeAndSkipToReading(): void {
+    // Submit New Reading and complete modals
+    this.clickShareAndArchive()
+    this.createGroupButtonClick()
+    // Ensure arrived at new reading
+    browser.wait(this.EC.urlContains('project'), 10000, 'never arrived at newly created reading')
+    this.shareCodeModalCloseClick()
   }
 
   /**

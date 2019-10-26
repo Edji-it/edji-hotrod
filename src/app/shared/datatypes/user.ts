@@ -40,6 +40,7 @@ interface BaseUser {
     detail?: string
   }
   prefs?: {
+    teachingGrades?: number[]
     recentEmoji?: string[]
     onboarding?: {
       highlighting?: {

@@ -52,9 +52,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   public liveCountSubscription: Subscription
   public showCommentCounts: boolean = false
   public showReferralModal: boolean = false
-  // Share Code modal properties
-  public showShareCodeModal: boolean = false
-  public isNewReading: boolean = false
   // Toggle mobile navigation display
   public mNavShow: boolean = false
   // "Butter Bar" alerts for group code entry
@@ -177,10 +174,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
         this.secretSwitches = this._secret.processSwitches(params)
       }),
       this._route.queryParams.subscribe(queryParams => {
-        if (queryParams.readingCodeModal) {
-          this.showShareCodeModal = true
-          this.isNewReading = true
-        }
         if (queryParams.showRefer) {
           this.showReferralModal = true
         }
@@ -281,45 +274,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
     return links
   }
-
-  // finalizeReadingAndShare(shareObj: ReadingShareObject) {
-  //   this.messages = {}
-  //   this.submitted = true
-  //   this.shareLoading = true
-  //   if (shareObj.groupLabel.length < 1) {
-  //     this.shareLoading = false
-  //     this.messages.groupNameLengthError = true
-  //     return // we should give the user some sort of feedback here
-  //   }
-
-  //   // we only want to check the validate route if there is a custom code - otherwise let it go through
-  //   if (shareObj.customCode) {
-  //     // does the project exist? this call will actually fail if it does
-  //     this.projectStore.validateProjectCode(shareObj.customCode)
-  //     .pipe(take(1))
-  //     .subscribe((res) => {
-  //       // this is actually an error in this case! lol. If the code IS valid, we want them NOT to try and make a reading
-  //       this.shareLoading = false
-  //       this.messages.invalidCode = true
-  //     }, (err) => {
-  //       this.shareLoading = false
-
-  //       // this is actually the successful response :)
-  //       if (err.status == 404) {
-  //         this.shareAction.emit(shareObj)
-  //       } else {
-  //         this.messages.serviceError = true
-  //       }
-  //     })
-  //   } else {
-  //     this.shareAction.emit(shareObj)
-  //     // Nav bar does not manage validation on New Reading, so we make sure the button doesn't get stuck loading
-  //     // Note: The above condition will clear shareLoading in both cases
-  //     setTimeout(() => {
-  //       this.shareLoading = false
-  //     }, 500)
-  //   }
-  // }
 
   /**
    * Validates project and then navigates to project if valid
@@ -471,6 +425,17 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.sliderBtnLoading.heat = false
         }, 500)
       })
+  }
+
+  /**
+   * Show code modal via query param
+   */
+  public showShareCodeModal() {
+    this._router.navigate(['./'], {
+      relativeTo: this._route,
+      queryParams: { readingCodeModal: true },
+      queryParamsHandling: 'merge',
+    })
   }
 }
 

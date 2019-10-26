@@ -6,6 +6,8 @@
 
 @import '../../node_modules/medium-editor/dist/css/medium-editor';
 @import '../../node_modules/primeng/resources/primeng.min.css';
+// Driver.js
+@import '../../node_modules/driver.js/dist/driver.min.css';
 @import './lib/bourbon/_bourbon.scss';
 @import './lib/emojionearea/emojionearea.scss';
 
@@ -491,6 +493,11 @@ input[type='password'].input-noborder:focus {
     height: $navHeight;
     width: 100%;
   }
+
+  // Driver.js support
+  &.driver-fix-stacking {
+    position: absolute;
+  }
 }
 
 .e2e-clickaway {
@@ -540,4 +547,59 @@ input[type='password'].input-noborder:focus {
   .h1 i {
     color: $medium-gray;
   }
+}
+
+// Driver.js overrides
+button.driver-next-btn,
+div#driver-popover-item .driver-popover-footer .driver-next-btn {
+  @extend .btn;
+  @extend %btnPrimary;
+  @extend .btn-sm;
+}
+
+
+div#driver-popover-item .driver-popover-footer {
+  button.driver-prev-btn {
+    @extend .btn;
+    @extend %btnSecondary;
+    @extend .btn-sm;
+  }
+}
+
+div#driver-popover-item .driver-popover-footer {
+   button.driver-close-btn {
+    @extend .btn;
+    @extend %btnLink;
+    @extend .btn-sm;
+  }
+}
+
+.first-step-editor-popover {
+  top: 20px !important;
+}
+
+div#driver-popover-item {
+  & .driver-popover-title{
+    font-family: 'Open Sans';
+    font-size: 19x;
+    font-weight: 600;
+    color: #1d1d1d;
+    margin-bottom: 0.75em;
+    line-height: 1.25em;
+  }
+  
+  & .driver-popover-description {
+    font-family: 'Open Sans';
+    line-height: 1.25em;
+    color: #3d3d3d;
+    font-weight: 500;
+  
+    & center {
+      margin-top: 0.75em;
+    }
+  }
+}
+
+div#driver-highlighted-element-stage {
+  border-radius: 10px;
 }

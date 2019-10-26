@@ -2,7 +2,6 @@ import { ActivatedRoute, Router, Params } from '@angular/router'
 import { Title } from '@angular/platform-browser'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core'
-import { Angulartics2 } from 'angulartics2'
 import { IMultiSelectOption, IMultiSelectSettings } from '../_directives'
 import { take } from 'rxjs/operators'
 
@@ -15,11 +14,16 @@ import {
   MessageService,
   MediaService,
   SecretSwitchesService,
+  AnalyticsService,
 } from '../_services'
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
 import * as Rangy from 'rangy'
 import { Subscription, Observable, interval } from 'rxjs'
+import { Store } from '@ngrx/store'
+import { AppState } from '../_reducers'
+import { IncrementMetric } from '../_reducers/metrics.reducers'
+import { DriverService } from '../_services/driver.service'
 
 @Component({
   selector: 'new-reading-page',
@@ -46,6 +50,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   private readingType: string = 'newReading' // used for analytics purposes
   private autosaveTimer
+  private autosaveDisabled: boolean
   public previewReading: Reading
 
   // Trigger booleans
@@ -144,27 +149,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
   }
 
   // Tutorial variables
-  public guideContent: any[] = [
-    {
-      title: 'Use Formatting Styles',
-      image: '/assets/guide/newReading__format.gif',
-      body:
-        'Select text in your Reading Content to use the formatting bar. Add bold, italic, or header styles to make your content pop!',
-    },
-    {
-      title: 'Add Images and PDFs',
-      image: '/assets/guide/newReading__insert.png',
-      body:
-        "PDFs and Images can be inserted into Readings, simply use the Insert bar on the left. Learn more in <a class='link' href='http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/' target='_blank'>our PDF guide</a> and in <a class='link' href='http://guide.edji.it/index.php/2017/05/06/customizing-your-lessons-with-edji-images/' target='_blank'>our Image guide</a>.",
-    },
-    {
-      title: 'Share your Reading',
-      image: '/assets/guide/newReading__share.gif',
-      body:
-        "Click Share when finished and name your first Group to get a code&mdash;don't worry, you can create more Groups later!",
-    },
-  ]
-  public guideStepNo: number = 1
+  public onboardTemplate: boolean
   //  IMultiSelectOption[]
   public subjects: any = [
     { id: 'literature', name: 'Language Arts' },
@@ -193,7 +178,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _readings: ReadingService,
     private router: Router,
-    private angulartics: Angulartics2,
     fb: FormBuilder,
     private el: ElementRef,
     private _title: Title,
@@ -202,6 +186,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
     private _messages: MessageService,
     private _media: MediaService,
     private _switches: SecretSwitchesService,
+    private store: Store<AppState>,
+    private _driver: DriverService,
+    private _analytics: AnalyticsService,
   ) {
     this.readingForm = fb.group({
       title: [null, Validators.required],
@@ -209,7 +196,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       public: ['true'],
       subjects: [[], Validators.required],
       grade_levels: [[], Validators.required],
-      instructions: [null, null],
+      default_instructions: [null, null],
     })
 
     // Define the user object.
@@ -229,6 +216,14 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (this._route.snapshot.queryParams['showHeroParam']) {
       this.showHeroSubModal = true
     }
+    // If loaded with guide param, show onboarding
+    if (this._route.snapshot.queryParams['guide'] == 'welcome') {
+      this.onboardTemplate = true
+    }
+    // Option to disable autosave
+    if (this._route.snapshot.queryParams['disable'] == 'autosave') {
+      this.autosaveDisabled = true
+    }
     if (this.alert) {
       this.successObject.readingSuccess = this.alert
       this.showAlert = true
@@ -241,10 +236,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this.readingType = 'existingReading'
       this.getReading(this.copyId)
       // fire an analytic event here for tracking purposes
-      this.angulartics.eventTrack.next({
-        action: 'discover_reading_retrieve',
-        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-      })
+      if (this.onboardTemplate) {
+        this._analytics.event('discover_reading_retrieve', this.copyId)
+      }
     }
 
     /** Set the current user every time it changes */
@@ -298,6 +292,66 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (renderedEl && renderedEl.parentElement) {
       renderedEl.parentElement.removeChild(renderedEl)
     }
+    // End tour
+    this._driver.endTour()
+  }
+
+  /**
+   * Begins Driver.js tour
+   */
+  beginTour(cornerTrigger?: boolean) {
+    if (cornerTrigger) {
+      this._analytics.event('onboarding_clickedCornerFlag_newReading')
+    }
+    // Start tour with steps for introduction
+    this._driver.beginTour(
+      [
+        {
+          element: '#readingPageForm',
+          popover: {
+            className: 'first-step-editor-popover',
+            title: 'Welcome to the New Reading page!',
+            description: this.onboardTemplate
+              ? `We've prefilled the editor with our "${this.reading.title}" lesson`
+              : `We'll run you through the basics of building a reading`,
+            position: 'top-center',
+          },
+        },
+        {
+          element: '[data-template="firstParagraph"]',
+          popover: {
+            title: `Look over the provided text`,
+            description: 'Feel free to modify any of the content as you see fit!',
+            position: 'top',
+          },
+        },
+        {
+          element: this.onboardTemplate ? '#question-1' : '#buttonInsertQuestion',
+          popover: {
+            title: `What will you ask?`,
+            description: 'Questions are a great way to assess students without answers being shared with the class',
+            position: 'top',
+          },
+        },
+        {
+          element: '#insertBar',
+          popover: {
+            title: 'Insert content, such as images!',
+            description:
+              'The insert toolbar makes it easy to insert images, PDFs, and questions throughout your reading',
+            position: 'top',
+          },
+        },
+        {
+          element: '#addReadingButton',
+          popover: {
+            title: `Press "Share" when your reading is ready`,
+            position: 'bottom-right',
+          },
+        },
+      ],
+      'chooseReading',
+    )
   }
 
   /**
@@ -309,10 +363,12 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.saveState = 'edited'
     // Clear active timeout
     this.cancelAutosave()
-    // Debounce user activity
-    this.autosaveTimer = setTimeout(() => {
-      this.autosave()
-    }, 5000)
+    if (!this.autosaveDisabled) {
+      // Debounce user activity
+      this.autosaveTimer = setTimeout(() => {
+        this.autosave()
+      }, 5000)
+    }
   }
 
   /**
@@ -351,14 +407,20 @@ export class NewReadingPage implements OnInit, OnDestroy {
               grade_levels: this.reading.grade_levels,
               source: this.reading.source,
               public: this.reading.public ? this.reading.public.toString() : 'false',
-              instructions: this.reading.instructions,
+              default_instructions: this.reading.default_instructions,
             })
             this.versionId = this.reading.version_id
             if (this.reading.owner_id) {
               this.ownerId = this.reading.owner_id
             }
-
             this._title.setTitle('Edji | Editing: ' + this.reading.title)
+            // Ready for template tour
+            setTimeout(() => {
+              // setTimeout ensures content has rendered
+              if (this.onboardTemplate) {
+                this.beginTour()
+              }
+            })
           }
         },
         err => {
@@ -370,14 +432,16 @@ export class NewReadingPage implements OnInit, OnDestroy {
 
   /**
    * Handle content model change hooks
-   * @param newContent 
-   * @param readingPartIndex 
+   * @param newContent
+   * @param readingPartIndex
    */
   public contentModelChange(newContent, readingPartIndex) {
-    // Trigger autosave
-    this.changeMonitor()
-    // Update model
-    this.readingHtml[readingPartIndex].text = newContent
+    if (this.readingHtml[readingPartIndex].text != newContent) {
+      // Trigger autosave
+      this.changeMonitor()
+      // Update model
+      this.readingHtml[readingPartIndex].text = newContent
+    }
   }
 
   /**
@@ -859,24 +923,18 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this.errorObject = { readingError: '' }
       this.saveState = 'saving'
     }
-    // Prepare Reading object
-    let reading = this.formatReading(form)
+    // Prepare Reading object (and save for reference by Add Group modal and openFirstGroup())
+    this.reading = this.formatReading(form)
 
-    this._readings.save(reading).subscribe(
+    this._readings.save(this.reading).subscribe(
       data => {
         if (data._id) {
           // Save for reference by Add Group modal and openFirstGroup()
           this.reading = data
           // Open new group if it is in final version
-          if (reading.draft === false) {
+          if (this.reading.draft === false) {
             // fire an analytic event here for tracking purposes
-            this.angulartics.eventTrack.next({
-              action: this.readingType + '_' + (this.reading.public ? 'public' : 'private') + '_create',
-              properties: {
-                category: this._auth.setAnalyticEventCategory(),
-                label: this._auth.setAnalyticEventLabel(),
-              },
-            })
+            this._analytics.event(this.readingType + '_' + (this.reading.public ? 'public' : 'private') + '_create')
             // Send the data to Pipo to log the new reading
             this._academy.pipoEvent({
               // standard event info:
@@ -891,28 +949,29 @@ export class NewReadingPage implements OnInit, OnDestroy {
               subjects: this.reading.subjects,
               source: this.reading.source,
             })
+            // Track reading creation count
+            this.store.dispatch(new IncrementMetric('readings_created'))
             // Navigate user to newly created group for reading
-            this.router.navigate(['project', this.newGroup._id], { queryParams: { readingCodeModal: true } })
+            let redirectParams = { readingCodeModal: true }
+            if (this.onboardTemplate) {
+              redirectParams['guide'] = 'welcome'
+            }
+            this.router.navigate(['project', this.newGroup._id], { queryParams: redirectParams })
           } else {
             if (!autosave) {
               this.successObject.readingSuccess = this.successAlert
               this.showAlert = true
               // fire an analytic event here for tracking purposes
-              this.angulartics.eventTrack.next({
-                action: this.readingType + '_draft_save',
-                properties: {
-                  category: this._auth.setAnalyticEventCategory(),
-                  label: this._auth.setAnalyticEventLabel(),
-                },
-              })
+              this._analytics.event(this.readingType + '_draft_save')
               // Update URL with reading id, now that we have one
+              let params = { successAlert: this.successAlert }
               if (this.showHeroParam) {
-                this.router.navigate(['new-reading/' + data._id], {
-                  queryParams: { successAlert: this.successAlert, showHeroParam: this.showHeroParam },
-                })
-              } else {
-                this.router.navigate(['new-reading/' + data._id], { queryParams: { successAlert: this.successAlert } })
+                params['showHeroParam'] = this.showHeroParam
               }
+              if (this.autosaveDisabled) {
+                params['disable'] = 'autosave'
+              }
+              this.router.navigate(['new-reading/' + data._id], { queryParams: params })
             }
             // Update reading values for continuing to edit
             this.readingId = data._id
@@ -980,12 +1039,16 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
 
     if (this.insertNode && this.insertNode.parentNode) {
-      let spacerId = 'spacer' + (new Date).getTime()
+      let spacerId = 'spacer' + new Date().getTime()
       // If there is a reference node for cursor position, insert at cursor
       images.forEach((image, index) => {
         let imgString = buildImageTag(image)
         this.insertAfter(this.insertNode.parentNode, imgString, this.insertNode)
-        this.insertAfter(this.insertNode.parentNode, `<p data-editor="${spacerId + '-' + index}">&#65279;</p>`, this.insertNode)
+        this.insertAfter(
+          this.insertNode.parentNode,
+          `<p data-editor="${spacerId + '-' + index}">&#65279;</p>`,
+          this.insertNode,
+        )
       })
       // Manually update model where DOM is being manipulated
       let { editor, index } = this.getContainingEditor(this.insertNode)
@@ -993,7 +1056,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       if (editor && index >= 0) {
         // Update model
         this.readingHtml[index].text = editor.querySelector('.medium-editor-element').innerHTML
-        setTimeout(()=> {
+        setTimeout(() => {
           // Use last spacer element as insert node
           let spacer = document.querySelector(`[data-editor="${spacerId + '-' + (images.length - 1)}"]`)
           let spacerContents = spacer.firstChild || spacer
@@ -1024,10 +1087,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
    */
   public addQuestion(insertHtml?: string, newEditorIndex?: number) {
     // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({
-      action: 'qna_question_added',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
+    this._analytics.event('qna_question_added')
     let answer_types = this._auth.getAllowedCommentMediaTypes()
     let question = <EdjiQuestion>{
       prompt: '',
@@ -1069,8 +1129,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
     if (newEditorIndex) {
       setTimeout(() => {
         this.updateNodeAfterInsert(
-          document.querySelector('medium-editor[rindex="'+newEditorIndex+'"] div'), 
-          newEditorIndex
+          document.querySelector('medium-editor[rindex="' + newEditorIndex + '"] div'),
+          newEditorIndex,
         )
       })
     }
@@ -1097,19 +1157,19 @@ export class NewReadingPage implements OnInit, OnDestroy {
       }
       this.selectionInteraction()
       if (newEditorIndexFocus) {
-        let question = document.querySelector('edji-question[rindex="'+newEditorIndexFocus+'"]')
-        let questionY = this.getNodeY(question)- NewReadingPage.EDITOR_TOOLBAR_Y
+        let question = document.querySelector('edji-question[rindex="' + newEditorIndexFocus + '"]')
+        let questionY = this.getNodeY(question) - NewReadingPage.EDITOR_TOOLBAR_Y
         window.scrollTo(0, questionY)
       }
-    } 
+    }
   }
 
   /**
    * Get parent editor reference
    * @returns containing editor and its index (if found)
    */
-  public getContainingEditor(node: HTMLScriptElement): { editor: HTMLScriptElement, index: number } {
-    let editor 
+  public getContainingEditor(node: HTMLScriptElement): { editor: HTMLScriptElement; index: number } {
+    let editor
     let index
     while (!index) {
       // We don't want to modify the node value passed in
@@ -1182,7 +1242,10 @@ export class NewReadingPage implements OnInit, OnDestroy {
         var range = selRange.cloneRange()
         var containingNode = sel.focusNode
         // Locate containing medium-editor-element/contenteditable
-        while (containingNode && (!containingNode.classList || !containingNode.classList.contains('medium-editor-element'))) {
+        while (
+          containingNode &&
+          (!containingNode.classList || !containingNode.classList.contains('medium-editor-element'))
+        ) {
           if (containingNode.parentNode) {
             containingNode = containingNode.parentNode
           } else {

@@ -14,13 +14,15 @@ import { UtilToolService } from './../../_services'
   styleUrls: ['./share-code.component.scss'],
 })
 export class ShareCodeComponent implements OnInit, OnDestroy {
-  @Input() private showOnNewReading: boolean
-  @Output() closeModal: EventEmitter<any> = new EventEmitter()
-
+  public show: boolean = false
   private codeLetters: any
   private subscriptions: Subscription[] = []
   public currentProject: Project
   private shareUrl = ''
+
+  // Messaging vars
+  public showIntroAlert: boolean
+  public showOnNewReading: boolean
 
   constructor(
     private router: Router,
@@ -41,6 +43,20 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
+      this.route.queryParams.subscribe(
+        params => {
+          // Handle new reading
+          if (params.readingCodeModal) {
+            this.show = true
+          } else {
+            this.show = false
+          }
+          // Handle first reading tutorial
+          if (params.readingCodeModal && params.guide === 'welcome') {
+            this.showIntroAlert = true
+          }
+        }
+      )
     )
   }
 
@@ -62,5 +78,17 @@ export class ShareCodeComponent implements OnInit, OnDestroy {
   private navDashboard() {
     this._util.shareCodeModalClose()
     this.router.navigate(['dashboard'])
+  }
+
+  /**
+   * Close modal
+   */
+  public close(): void {
+    // Clear param
+    this.router.navigate(['./'], {
+      relativeTo: this.route,
+      queryParams: { readingCodeModal: null },
+      queryParamsHandling: 'merge',
+    })
   }
 }

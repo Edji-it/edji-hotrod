@@ -41,6 +41,7 @@ import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 import { PromoPageComponent } from './promo/promo.component'
 import { ShareSocialIconsComponent } from './shared/share-social-icons/share-social-icons.component'
+import { QuickStartFlagComponent } from './shared/quick-start-flag.component'
 
 let SHARED_DECLARATIONS = [
   AddClassPipe,
@@ -67,6 +68,7 @@ let SHARED_DECLARATIONS = [
   UserInitialsPipe,
   HotChartHzbarComponent,
   HotChartGaugeComponent,
+  QuickStartFlagComponent,
 ]
 
 let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule]

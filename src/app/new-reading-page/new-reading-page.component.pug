@@ -78,11 +78,17 @@ nav-bar(
               b No Subjects Selected
               | Please select at least one Subject area that this Reading applies to.
           //- Reading Group Instructions section
-          //- .form-group(*ngIf="user.hero")
-          //-   label Group Instructions
-          //-     p.sub-label Provide your students with instructions for this reading. Instructions can be changed whenever you make a new group
-          //-     .input-group
-          //-       input#readingInstructions.form-control.form-item--editor.h3(type="text", placeholder="Reading Group Instructions", [formControl]="readingForm.controls['instructions']")
+          .form-group
+            label Instructions
+              p.sub-label Provide your students with instructions for this reading. Used as the default for new groups.
+              .input-group
+                textarea#groupInstructions.form-control.form-item--editor(
+                  [formControl]="readingForm.controls['default_instructions']", 
+                  type='text', 
+                  placeholder="For this lesson...",
+                  resize="none",
+                  (keyup)="changeMonitor()"
+                )
           //- Body Section
               - Includes "reading content" and "source"
           .form-group.medium-wrap(style="position:relative;")
@@ -120,7 +126,10 @@ nav-bar(
                 - Insert a Picture or Pdf
                 - (Hero) Insert a Question
             //- Desktop Insert Buttons
-            .editor-button-bar.hidden-md-down([class.hide]="editorToolbarHidden", [style.top]="editorToolbarY + 'px'")
+            #insertBar.editor-button-bar.hidden-md-down(
+              [class.hide]="editorToolbarHidden", 
+              [style.top]="editorToolbarY + 'px'"
+            )
               //- Insert Label
               span.editor-button-bar__title Insert
               //- Upload Image Button
@@ -170,15 +179,13 @@ nav-bar(
           .form-group
             //- Source section
             label Source
-              p.sub-label (Optional) Provide a link or title for the source of the text.
+              p.sub-label Provide a link or title for the source of the text (Optional).
               .input-group
                 input#readingSource.form-control.form-item--editor.h3.mSource(type="text", placeholder="New Reading Source...", [formControl]="readingForm.controls['source']")
-
-.fixed-btn-row--SE
-  tutorial-box([tutorialName]="'newReading'",
-    [pageObjs]="guideContent",
-    [pager]="guideStepNo",
-    (pageChange)="guideStepNo = $event")
+quick-start-flag(
+  [isCornerTrigger]="true",
+  (click)="beginTour(true)"
+)
 
 //- Modals
 upload-picture-modal.modal-will-fade([class.show]="showUploadModal", (returnImage)="addImages($event)", (closeModal)="showUploadModal = false")
@@ -202,6 +209,8 @@ hot-add-project-modal.modal-will-fade(
   [reading]="reading",
   [groupLabel]="'Group 1'",
   [largeReadingWarning]="isLargeReading(wordCount, wordBoxCount)",
+  [showGuideMessage]="onboardTemplate",
+  [hideInstructions]="true",
   (groupSaved)="finalizeShare(readingForm.value, $event)",
   (closeModal)="showFirstGroupModal = false"
 )

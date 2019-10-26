@@ -44,4 +44,5 @@ export interface BaseReading {
   createdAt?: string
   updatedAt?: string
   owner_bookmarked?: boolean
+  default_instructions?: string
 }

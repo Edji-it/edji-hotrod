@@ -247,6 +247,10 @@ $iconGrayOpacity: 0.6;
   }
 }
 
+.icon-flag {
+  @include icon('icon-flag.svg');
+}
+
 .icon-folder {
   @include icon('icon-folder.svg');
 }
@@ -545,6 +549,17 @@ $iconGrayOpacity: 0.6;
   display: inline-block;
   width: 2em;
   height: 2em;
+}
+
+// Badge Icon Styles
+// *****************************************************
+
+.badge-reading-1 {
+  @include icon('badges/first-reading.png');
+}
+
+.badge-comment-1 {
+  @include icon('badges/first-comment.png');
 }
 
 // Acquired font awesome styles

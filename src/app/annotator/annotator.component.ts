@@ -13,7 +13,6 @@ import {
 } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
-import { Angulartics2 } from 'angulartics2'
 import { Location } from '@angular/common'
 
 // Project Dependencies
@@ -28,12 +27,16 @@ import {
   UtilToolService,
   MessageService,
   AcademyService,
+  AnalyticsService,
 } from '../_services'
 import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
 import { ProjectStore } from '../_store'
+import { Store } from '@ngrx/store'
+import { AppState } from '../_reducers'
+import { getMetricsComments } from '../_reducers/metrics.reducers'
 
 @Component({
   selector: 'annotator',
@@ -107,6 +110,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   // Trigger Booleans
   public showDiscussions: boolean = false
   public optionsShow = false
+  public optionsForceShow = false
   public hideKeyboard = false
 
   // Status Booleans
@@ -137,6 +141,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // For verifying comment ownership
   public user: any
+  public userCommentsCreated: number
 
   // For mobile display of comments
   public foundArray: any[] = []
@@ -159,6 +164,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     },
   ]
   public guideStepNo = 1
+  public onboardGuide: boolean = false
+  public tutorialGifUrl: string = ''
 
   public annotatorPaper: Element
   public annotatorContent: Element
@@ -186,13 +193,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _socket: SocketService,
     private _util: UtilToolService,
     public _comments: CommentService,
-    private angulartics: Angulartics2,
     private _audio: AudioService,
     private _messages: MessageService,
     private route: ActivatedRoute,
     private _router: Router,
     private _academy: AcademyService,
     private location: Location,
+    private store: Store<AppState>,
+    private _analytics: AnalyticsService
   ) {
     this.window = window
   }
@@ -314,13 +322,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
                   this.audioSupportError = true
                   // if audio is not supported, let analytics know
-                  this.angulartics.eventTrack.next({
-                    action: 'noAudioSupport',
-                    properties: {
-                      category: this._auth.setAnalyticEventCategory(),
-                      label: this._auth.setAnalyticEventLabel(),
-                    },
-                  })
+                  this._analytics.event('noAudioSupport')
                 }
               }
             }
@@ -354,7 +356,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           let comment = commentUpdate.comment
           let wIndex = comment.start
           let cIndex = -1
+          let selfUpdate = comment.user_id === this.user._id
 
+          if (selfUpdate && commentUpdate.action !== 'DELETE') {
+            // A user's comment edits should not update via sockets
+            // HOWEVER, a teacher can DELETE a user's comments
+            return
+          } 
           // Get local array index
           if (this.commentsByIndex[wIndex]) {
             // faster to cache length
@@ -397,8 +405,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
               this.commentsByIndexUpdate(comment, wIndex, cIndex)
             } else {
-              // Socket updates don't come through with a timestamp
-              comment.createdAt = Date.now()
               // Sometimes an UPDATE comes through for comment not yet created
               // Add highlights to local array
               this.incrementHighlights(
@@ -417,8 +423,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
               this.projectStore.recalculateAnswers(comment, true)
             }
           } else if (commentUpdate.action === 'CREATE') {
-            // Socket updates don't come through with a timestamp
-            comment.createdAt = Date.now()
             // Add highlights to local array
             this.incrementHighlights(
               this.user._id === comment.user_id || this.project.teacher_id == comment.user_id,
@@ -438,8 +442,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       ),
     )
 
-    // Subscribe to Heat Vision toggle updates
     this.subscriptions.push(
+      // Subscribe to Heat Vision toggle updates
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
         // Re-evaluate comment line counts
@@ -447,6 +451,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         // We send the message here because we only care to show it when the user has the reading loaded
         this.showHeatVisionToast(this.project.heat_vision)
       }),
+      // Subscribe to needed user metrics
+      this.store.select(getMetricsComments)
+        .subscribe(comments_count => {
+          this.userCommentsCreated = comments_count
+        })
     )
 
     /**
@@ -515,6 +524,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
        * - In AfterViewInit due to "commentComponents" use
        */
       this.route.queryParams.subscribe(params => {
+        if (params['guide'] === 'welcome'  && !params['readingCodeModal']) {
+          this.onboardGuide = true
+        }
         // handler for feedback
         if (params['feedback']) {
           let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {
@@ -576,7 +588,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
-
     // Clear heat vision message
     this._messages.dismissToast('heat')
     // Clear feedback message

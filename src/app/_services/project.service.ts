@@ -130,7 +130,7 @@ export class ProjectService {
    * Puts a comment to its project
    * @param comment
    */
-  public putComment(projectId: string, comment: EdjiComment): Promise<any> {
+  public putComment(projectId: string, comment: EdjiComment): Observable<any> {
     comment.project_id = projectId // Tell the comment what project it's a part of
 
     // Clean frontend only properties
@@ -139,7 +139,6 @@ export class ProjectService {
 
     return this._http
       .put(this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments', comment, this._auth.getOptions())
-      .toPromise()
   }
 
   /**
