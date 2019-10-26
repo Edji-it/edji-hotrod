@@ -170,15 +170,8 @@ describe('New Reading Page', () => {
       browser.wait(EC.visibilityOf(newReading.draftButton), 1000, '"Save Changes" button did not become clickable')
       newReading.draftButton.click()
       // Wait for saved page to navigate
-      browser.sleep(200)
-      // presenceOf - inline/text elements seem to throw visibilityOf off when using a pipe
-      browser.wait(
-        EC.presenceOf(element(by.id('draftStatusSaved'))),
-        3000,
-        'draft "Saved" confirmation did not appear in nav bar',
-      )
       // Give Optimus/Elastic a BRIEF moment to index the new reading
-      browser.sleep(100)
+      browser.sleep(500)
       // Return to dashboard
       sidebar.backToDash()
       // Give dashboard a second to load
