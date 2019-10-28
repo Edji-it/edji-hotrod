@@ -1,6 +1,8 @@
 import { Component, AfterViewInit, Input, ViewEncapsulation } from '@angular/core'
-import { Angulartics2 } from 'angulartics2'
-import { AuthService, AnalyticsService } from 'src/app/_services'
+
+// Internal
+import { AnalyticsService } from 'src/app/_services'
+import { copyToClipboard } from 'src/app/shared/clipboard'
 
 const LINK_COPY = 'Embed Code'
 
@@ -30,23 +32,9 @@ export class CopyEmbedButton implements AfterViewInit {
   /**
    * Copies the embed code to the user's clipboard
    */
-  public copyLink() {
+  public copyCode() {
     this._analytics.event('groupCodeModal_share_copyEmbed')
-    // Create a new textarea element that we'll not make visible
-    let selBox = document.createElement('textarea')
-    selBox.style.position = 'fixed'
-    selBox.style.left = '0'
-    selBox.style.top = '0'
-    selBox.style.opacity = '0'
-    // Set the value of the textarea to be the share link with their referral code
-    selBox.value = this.embedCode
-    document.body.appendChild(selBox)
-    // Focus on the element text, select the text, and use a copy command
-    selBox.focus()
-    selBox.select()
-    document.execCommand('copy')
-    // Take this hidden element out of the DOM
-    document.body.removeChild(selBox)
+    copyToClipboard(this.embedCode)
     // Show a success alert when the code is copied to their clipboard
     this.labelText = ':white_check_mark: Copied'
     setTimeout(() => {
