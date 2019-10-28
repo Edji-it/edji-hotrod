@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, Input, ViewEncapsulation } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
-import { AuthService } from 'src/app/_services'
+import { AuthService, AnalyticsService } from 'src/app/_services'
 
 const LINK_COPY = 'Embed Code'
 
@@ -13,7 +13,7 @@ export class CopyEmbedButton implements AfterViewInit {
   @Input()
   set projectId(id: string) {
     this.id = id
-    this.embedCode = `<iframe src="${location.origin}/#/embed/${this.id}" style="border:1px #cdcdcd solid; width: 100%; height: 100%; min-height:600px; min-width:800px;" name="Edji Reading" scrolling="auto" align="bottom"></iframe>`
+    this.embedCode = `<iframe src="${location.origin}/#/embed/${this.id}" style="border:1px #cdcdcd solid; border-radius: 5px; width: 100%; height: 100%; min-height:400px; min-width:400px;" name="Edji Reading" scrolling="auto" align="bottom"></iframe>`
   }
   get projectId(): string {
     return this.id
@@ -23,18 +23,15 @@ export class CopyEmbedButton implements AfterViewInit {
   public labelText: string = LINK_COPY
   public embedCode: string = ''
 
-  constructor(private _angulartics: Angulartics2, private _auth: AuthService) {}
+  constructor(private _analytics: AnalyticsService) {}
 
   ngAfterViewInit() {}
 
   /**
-   * Copies the referral link to the user's clipboard
+   * Copies the embed code to the user's clipboard
    */
   public copyLink() {
-    this._angulartics.eventTrack.next({
-      action: 'groupCodeModal_share_copyEmbed',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
+    this._analytics.event('groupCodeModal_share_copyEmbed')
     // Create a new textarea element that we'll not make visible
     let selBox = document.createElement('textarea')
     selBox.style.position = 'fixed'
