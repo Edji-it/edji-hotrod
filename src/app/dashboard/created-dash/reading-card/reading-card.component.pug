@@ -52,7 +52,7 @@
         (click)="showOptions=false;", 
         [routerLink]="['/new-reading/']", 
         [queryParams]="{ copyId: reading._id }",
-        [attr.testFindCopyAndEdit]="reading.title"
+        [attr.data-test]="'copyEdit'+reading.title"
       ) 
         .icon.icon-create
         | &nbsp; Copy and Edit

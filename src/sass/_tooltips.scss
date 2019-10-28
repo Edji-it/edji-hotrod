@@ -130,3 +130,80 @@
   content: '\A';
   white-space: pre;
 }
+
+// Advanced/paginated onboarding tooltips
+.tooltip-pager {
+  display: block;
+  position: relative;
+  height: 30px;
+  width: 100%;
+
+  &__dot-wrap {
+    height: 100%;
+    width: 60%;
+    float: left;
+    text-align: center;
+  }
+
+  &__dot {
+    width: 20px;
+    height: 30px;
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 30px;
+    position: relative;
+    background: transparent;
+
+    &:before {
+      content: ' ';
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      position: absolute;
+      background: rgba($tooltipColor, 0.2);
+      top: 10px;
+      left: 5px;
+    }
+
+    &:hover,
+    &:focus {
+      background: rgba($tooltipColor, 0.1);
+
+      &:before {
+        background: rgba($tooltipColor, 0.6);
+      }
+    }
+
+    &.active {
+      &:before {
+        background: $tooltipColor;
+      }
+    }
+
+    .driver-popover-description & {
+      pointer-events: none;
+    }
+  }
+
+  &__left,
+  &__right {
+    height: 100%;
+    width: 20%;
+    cursor: pointer;
+    float: left;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.05;
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+}

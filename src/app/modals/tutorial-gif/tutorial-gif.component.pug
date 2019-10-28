@@ -1,0 +1,13 @@
+.modal(data-test="tutorialGifModal")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        quick-start-flag
+        h4.modal-title {{ header }}
+        button.close.btn-icon--round((click)='close()', type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') &times;
+      .modal-body
+        img.tutorial-gif([src]="gif")
+        p.mt-4([innerHtml]="description | emojione")
+      .modal-footer
+        button.btn.btn-secondary((click)='close()') Got it!

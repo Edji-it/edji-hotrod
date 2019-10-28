@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, Subscription, Subject, of } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
+import { Store } from '@ngrx/store'
 
 // Internal
 import { CommentStats, EdjiComment, PublicUser, Project, User } from '../shared/datatypes'
@@ -16,6 +17,8 @@ import {
 } from '../_services'
 import { decorateArchivedProject } from './project.decorators'
 import { generateInitialsFromName } from './user.decorators'
+import { AppState } from '../_reducers'
+import { IncrementMetric } from '../_reducers/metrics.reducers'
 
 @Injectable()
 export class ProjectStore {
@@ -94,6 +97,7 @@ export class ProjectStore {
     private angulartics: Angulartics2,
     private _academy: AcademyService,
     private _messages: MessageService,
+    private store: Store<AppState>
   ) {
     // needs to be constructed here or else it returns undefined
     this._commentStats = new CommentStats()
@@ -116,16 +120,12 @@ export class ProjectStore {
               this.removeAnswerFromAnswers(comment)
             }
           } else if (commentUpdate.action === 'UPDATE') {
-            // Socket updates don't come through with a timestamp
-            comment.createdAt = Date.now()
             if (comment.reply_to) {
               this.addCommentToReplies(comment)
             } else if (comment.questionId) {
               this.addAnswerToAnswers(comment)
             }
           } else if (commentUpdate.action === 'CREATE') {
-            // Socket updates don't come through with a timestamp
-            comment.createdAt = Date.now()
             if (comment.reply_to) {
               this.addCommentToReplies(comment)
             } else if (comment.questionId) {
@@ -489,6 +489,7 @@ export class ProjectStore {
   public saveComment(commentObj: EdjiComment): Promise<any> {
     let project: Project = this.currentProjectSource.getValue()
     let comment = Object.assign({}, commentObj)
+    let isUpdate: boolean
 
     if (!comment.user_id) {
       comment.user_id = this._auth.getUser()._id
@@ -496,21 +497,21 @@ export class ProjectStore {
     if (!comment.author) {
       comment.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
     }
-
-    let options = this._auth.getOptions()
-    // Add comment ID if passed
-    // Tell other Project viewers comment changed, using Socket
+    // Identify whether NEW comment or UPDATE to comment
     if (comment._id) {
-      this._socket.updateComment(comment, 'UPDATE', project._id)
+      isUpdate = true
+      // Identify newly created commetns with content
+      // Rounds dates to the nearest 1/10 of a second, since created/updated differ by milliseconds
+      if (comment.createdAt && comment.createdAt.toString().substr(0,21) === comment.updatedAt.toString().substr(0,21)) {
+        this.store.dispatch(new IncrementMetric('comments_created'))
+        
+      }
     } else {
-      this._socket.updateComment(comment, 'CREATE', project._id)
-
       // need to set a comment context to discern between comments and replies for pipo event
       let commentContext = 'comment'
       if (comment.reply_to && comment.reply_to !== '') {
         commentContext = 'reply'
       }
-
       // add the comment creation event to pipo
       this._academy.pipoEvent({
         // standard event info:
@@ -543,6 +544,14 @@ export class ProjectStore {
       })
     }
     return this._project.putComment(project._id, comment)
+      .pipe(map((savedComment: EdjiComment) => {
+        this._socket.updateComment(savedComment, isUpdate ? 'UPDATE':'CREATE', project._id)
+        if (!isUpdate) {
+          this.buildCommentsByPos()
+        }
+        return savedComment
+      }))
+      .toPromise()
   }
 
   /**

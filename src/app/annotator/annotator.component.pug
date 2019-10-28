@@ -12,7 +12,7 @@ scroll-progress([scrollProgress]="currentScroll")
     .text-options(
         *ngIf="directCommentOptions.length > 0",
         [style.top]="highlightY + 'px'",
-        [ngClass]="{ 'active' : optionsShow }"
+        [ngClass]="{ 'active' : optionsShow || optionsForceShow }"
     )
         //- optionsShow
         //- Desktop buttons
@@ -91,6 +91,15 @@ scroll-progress([scrollProgress]="currentScroll")
             [ngClass]="[ (quickSelect.anchor != null || quickSelect.boxes)? 'quick-select--begin' : '', (quickSelect.focus != null || (quickSelect.boxes && quickSelect.boxes.end)) ? 'quick-select--end':'']"
             #activeContent
         )
+            //- Onboarding action
+            .alert.alert-info.alert--margin.alert--clickable(
+                *ngIf="onboardGuide",
+                [class.fade-out]="quickSelect.anchor != null || userCommentsCreated > 0",
+                (click)="tutorialGifUrl = '/assets/guide/add-highlight-v2.gif'; _analytics.event('onboarding_createComment_openHow')",
+                data-test="commentHintOnboarding"
+            )
+                quick-start-flag
+                | How do I comment?
             //- Reading Group Instructions
             .row.lesson-block(*ngIf="project.group_instructions && project.group_instructions.length > 1")
                     .lesson-block__indicator([innerHtml]="':mega:' | emojione")
@@ -222,7 +231,8 @@ scroll-progress([scrollProgress]="currentScroll")
         [pager]="guideStepNo",
         (pageChange)="guideStepNo = $event",
         [class.keyboard-offset]="isEmojiKeyboardActive()",
-        [class.mobile-toolbar-offset]="optionsShow"
+        [class.mobile-toolbar-offset]="optionsShow",
+        [forceCollapse]="true"
     )
 
 //- Emoji Keyboard: Custom Emoji entry component
@@ -256,4 +266,12 @@ hot-del-comment(
     [comment]="_comments.deleteCommentRef",
     (delete)="deleteComment(_comments.deleteCommentRef)",
     (closeModal)="_comments.commentDeleted()"
+)
+// Tutorial gifs
+edji-tutorial-gif(
+    *ngIf="tutorialGifUrl",
+    [header]="'How to Comment'",
+    [gif]="tutorialGifUrl",
+    [description]="'<b>1.</b> Click an image or word<br/><b>2.</b> Select a comment type<br/><b>3.</b> Make your comment to save the highlight'",
+    (closeModal)="tutorialGifUrl = ''"
 )

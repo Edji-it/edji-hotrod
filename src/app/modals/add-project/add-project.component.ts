@@ -23,6 +23,8 @@ export class AddProjectModal implements OnInit {
   @Input() subheading: string
   @Input() groupLabel: string
   @Input() largeReadingWarning: boolean
+  @Input() showGuideMessage: boolean
+  @Input() hideInstructions: boolean
 
   public projectForm: FormGroup
   public formSubmitted: boolean = false
@@ -56,7 +58,7 @@ export class AddProjectModal implements OnInit {
       audioType: true,
       replyType: true,
       customCode: ['', { disabled: !this.isHero }],
-      groupInstructions: '',
+      groupInstructions: this.reading.default_instructions || '',
     })
   }
 

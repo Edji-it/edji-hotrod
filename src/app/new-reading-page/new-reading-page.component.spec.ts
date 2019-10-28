@@ -20,6 +20,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { EmojiOnePipe } from '../_pipes'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
+import { Store } from '@ngrx/store'
 
 describe('NewReadingPage', () => {
   /**
@@ -118,6 +119,7 @@ describe('NewReadingPage', () => {
         } },
         { provide: Angulartics2GoogleGlobalSiteTag, useValue: { startTracking: () => {} } },
         FormBuilder,
+        { provide: Store, useValue: { } }
       ],
       imports: [RouterTestingModule, ReactiveFormsModule, FormsModule],
     }).compileComponents()

@@ -319,7 +319,8 @@ input.form-item--seamless {
   }
 }
 
-input.form-item--editor {
+input.form-item--editor,
+textarea.form-item--editor {
   background: $editorBg;
   border: $editorBorder;
   color: #333;

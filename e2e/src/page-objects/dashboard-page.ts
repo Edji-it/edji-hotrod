@@ -214,6 +214,12 @@ export class Dashboard implements PageObjectInterface {
   deleteReadingByTitle(title: string): void {
     reset()
     this.getPage()
+    // Wait for page to load
+    browser.wait(
+      this.EC.elementToBeClickable(this.firstReadingCard), 
+      5000, 
+      'reading cards did not appear on dashboard while trying to delete'
+    )
     browser.wait(
       this.EC.elementToBeClickable(this.getReadingOptionsByTitle(title)),
       8000,
