@@ -58,6 +58,7 @@ export const ROUTES: Routes = [
   { path: 'discover', component: SearchPage },
   { path: 'discover/search', component: SearchPage },
   { path: 'project/:id', component: ProjectPageComponent },
+  { path: 'embed/:id', component: ProjectPageComponent },
   { path: 'license/accept/:license_id', component: LicenseRedirectComponent, pathMatch: 'full' },
   {
     path: 'license/welcome/:institution_id',
