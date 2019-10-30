@@ -97,7 +97,7 @@ export class ProjectStore {
     private angulartics: Angulartics2,
     private _academy: AcademyService,
     private _messages: MessageService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
   ) {
     // needs to be constructed here or else it returns undefined
     this._commentStats = new CommentStats()
@@ -502,9 +502,11 @@ export class ProjectStore {
       isUpdate = true
       // Identify newly created commetns with content
       // Rounds dates to the nearest 1/10 of a second, since created/updated differ by milliseconds
-      if (comment.createdAt && comment.createdAt.toString().substr(0,21) === comment.updatedAt.toString().substr(0,21)) {
+      if (
+        comment.createdAt &&
+        comment.createdAt.toString().substr(0, 21) === comment.updatedAt.toString().substr(0, 21)
+      ) {
         this.store.dispatch(new IncrementMetric('comments_created'))
-        
       }
     } else {
       // need to set a comment context to discern between comments and replies for pipo event
@@ -543,14 +545,17 @@ export class ProjectStore {
         properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
       })
     }
-    return this._project.putComment(project._id, comment)
-      .pipe(map((savedComment: EdjiComment) => {
-        this._socket.updateComment(savedComment, isUpdate ? 'UPDATE':'CREATE', project._id)
-        if (!isUpdate) {
-          this.buildCommentsByPos()
-        }
-        return savedComment
-      }))
+    return this._project
+      .putComment(project._id, comment)
+      .pipe(
+        map((savedComment: EdjiComment) => {
+          this._socket.updateComment(savedComment, isUpdate ? 'UPDATE' : 'CREATE', project._id)
+          if (!isUpdate) {
+            this.buildCommentsByPos()
+          }
+          return savedComment
+        }),
+      )
       .toPromise()
   }
 
@@ -929,7 +934,6 @@ export class ProjectStore {
       this._auth.getPublicUsers(studentIds, tempIds).subscribe(
         userInfo => {
           let currentProject = this.currentProjectSource.getValue()
-          userInfo = userInfo.users
           // Ensure PublicUsers have initials
           userInfo[0] &&
             userInfo.forEach(user => {
