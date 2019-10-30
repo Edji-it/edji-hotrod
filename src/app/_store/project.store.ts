@@ -112,6 +112,12 @@ export class ProjectStore {
       this._socket.commentUpdates.subscribe(
         commentUpdate => {
           let comment = commentUpdate.comment
+          let selfUpdate = comment.user_id === this.user._id
+          if (selfUpdate && commentUpdate.action !== 'DELETE') {
+            // A user's comment edits should not update via sockets
+            // HOWEVER, a teacher can DELETE a user's comments
+            return
+          }
           // Process different live comment updates
           if (commentUpdate.action === 'DELETE') {
             if (comment.reply_to) {
@@ -641,15 +647,17 @@ export class ProjectStore {
         repliesById[comment.reply_to] = []
       }
       // Double check comment doesn't exist
-      for (let reply of repliesById[comment.reply_to]) {
-        if (reply._id == comment._id) {
+      repliesById[comment.reply_to].forEach((reply, index) => {
+        if (reply && reply._id === comment._id) {
+          // Update with new copy
+          repliesById[comment.reply_to][index] = comment
           skipAdd = true
         }
-      }
+      })
       if (!skipAdd) {
         repliesById[comment.reply_to].push(comment)
-        this.repliesByIdSubject.next(repliesById)
       }
+      this.repliesByIdSubject.next(repliesById)
     }
   } // public addCommentToReplies(comment: EdjiComment): void
 

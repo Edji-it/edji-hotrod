@@ -200,7 +200,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _academy: AcademyService,
     private location: Location,
     private store: Store<AppState>,
-    private _analytics: AnalyticsService
+    private _analytics: AnalyticsService,
   ) {
     this.window = window
   }
@@ -351,6 +351,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Subscribe to comment comment updates
     this.subscriptions.push(
+      /**
+       * @todo consolidate with subscription in Project Store,
+       */
       this._socket.commentUpdates.subscribe(
         commentUpdate => {
           let comment = commentUpdate.comment
@@ -362,7 +365,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             // A user's comment edits should not update via sockets
             // HOWEVER, a teacher can DELETE a user's comments
             return
-          } 
+          }
           // Get local array index
           if (this.commentsByIndex[wIndex]) {
             // faster to cache length
@@ -452,10 +455,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.showHeatVisionToast(this.project.heat_vision)
       }),
       // Subscribe to needed user metrics
-      this.store.select(getMetricsComments)
-        .subscribe(comments_count => {
-          this.userCommentsCreated = comments_count
-        })
+      this.store.select(getMetricsComments).subscribe(comments_count => {
+        this.userCommentsCreated = comments_count
+      }),
     )
 
     /**
@@ -524,7 +526,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
        * - In AfterViewInit due to "commentComponents" use
        */
       this.route.queryParams.subscribe(params => {
-        if (params['guide'] === 'welcome'  && !params['readingCodeModal']) {
+        if (params['guide'] === 'welcome' && !params['readingCodeModal']) {
           this.onboardGuide = true
         }
         // handler for feedback
