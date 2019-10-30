@@ -2,41 +2,45 @@ nav-bar
 //- Image block with header text
 .container-fluid
   promo-banner
-  .row.navy.has-sparks
+  .row
+    .col-md-8.promo-panel.navy.has-sparks
       .sparks
-      .col-md-4.promo-panel
-        .promo-image__wrap
-          img(src="/assets/images/promo-home.svg")
-      .col-md-8.join-panel
-        .col__center-fix
-          .col__center-content.col-pad
-            h1.center.on-dark.promo-header.join-header__top Make Reading Engagement Visible
-            .promo-header__divider
-            //- h1.center.on-dark.promo-header See student thoughts 
-            //-   b live!
-            .button__row.pt-2.promo-button__row
-              a.btn.btn-primary(href="/project/demo") Try an Edji Reading
+        //- .promo-image__wrap
+        //-   img(src="/assets/images/promo-home.svg")
+      h1.jumbo-header Your space-age annotation tool
+    .col-md-4.join-panel
+      .promo-stack Thing
+      .promo-stack Another
+      .promo-stack Last
+      //- .col__center-fix
+      //-   .col__center-content.col-pad
+      //-     //- h1.center.on-dark.promo-header.join-header__top Make Reading Engagement Visible
+      //-     .promo-header__divider
+      //-     //- h1.center.on-dark.promo-header See student thoughts
+      //-     //-   b live!
+      //-     .button__row.pt-2.promo-button__row
+      //-       a.btn.btn-primary(href="/project/demo") Try an Edji Reading
   //- Container with Commenting and Heat Map info & images
   .container
     //- Triple Value Prop
     .row.justify-content-center
       .col--value-prop.col-md-6.col-lg-4
-        h2 
-          | The Fastest Way to 
+        h2
+          | The Fastest Way to
           br
           b Get Students Reading
         img(src="/assets/images/promo/value-prop__fastest.png")
         p Turn any content into a lesson, accessed with a simple code
       .col--value-prop.col-md-6.col-lg-4
-        h2 
-          | The Easiest Way to 
+        h2
+          | The Easiest Way to
           br
           b Annotate Content
         img(src="/assets/images/promo/value-prop__annotate.png")
         p Students highlight and discuss using Emoji, Text or Audio comments
       .col--value-prop.col-md-6.col-lg-4
-        h2 
-          | The Best Way to 
+        h2
+          | The Best Way to
           br
           b See Student Thoughts
         img(src="/assets/images/promo/value-prop__thoughts.png")
@@ -57,9 +61,9 @@ nav-bar
         .col__center-fix
           .promo-text
             h1 Highlight and React
-            p Edji readings revolve around your students interacting with text through comments. As they read, students highlight 
-              | interesting or important parts of the text and leave a comment to express their thoughts about it. 
-            p Comments can be written with text or strings of Emoji that convey complex thoughts. You can see all comments being 
+            p Edji readings revolve around your students interacting with text through comments. As they read, students highlight
+              | interesting or important parts of the text and leave a comment to express their thoughts about it.
+            p Comments can be written with text or strings of Emoji that convey complex thoughts. You can see all comments being
               |made in real time to keep an eye on what your students are thinking.
       .col-md-6.center.nopadding__min-screen
         .row.has-sparks.full-width__min-screen
@@ -69,15 +73,15 @@ nav-bar
         .col__center-fix
           .promo-text
             h1 Pinpoint with Heat Map
-            p Edji lets you stay on top of how your students are reacting in Edji by watching the Heat Map: A real time, 
-              | interactive view, that shows you where each highlight is made. When Highlights overlap, the highlights 
-              | begin to glow. 
-            p A word with one comment is yellow, but a word with 15 comments glows dark red; making it easy to see 
+            p Edji lets you stay on top of how your students are reacting in Edji by watching the Heat Map: A real time,
+              | interactive view, that shows you where each highlight is made. When Highlights overlap, the highlights
+              | begin to glow.
+            p A word with one comment is yellow, but a word with 15 comments glows dark red; making it easy to see
               | what your students care most about in a reading.
       .col-md-6.pull-md-6.center.nopadding__min-screen
         .row.has-sparks.full-width__min-screen
           .flexi-img.img-fluid.promo-img__background.promo-img-2
-  //- .container 
+  //- .container
   //- Sign-up button large and stand-alone
   .row.navy.has-sparks
     .sparks
@@ -118,9 +122,9 @@ nav-bar
         .col__center-fix
           .promo-text
             h1 Hassle Free lessons
-            p Edji lets you craft engaging lessons based on the individual need of your class. If you find text from articles and 
+            p Edji lets you craft engaging lessons based on the individual need of your class. If you find text from articles and
               | journals that reflect your next lesson, you can place it right into an Edji Reading.
-            p You can also insert images, gifs, and PDFs to bring your lessons to life. Lessons you create can be shared 
+            p You can also insert images, gifs, and PDFs to bring your lessons to life. Lessons you create can be shared
               | with others. You can also use the lessons other teachers create from the Discover Feed.
       .col-md-6.pull-md-6.center.nopadding__min-screen
         .row.has-sparks.full-width__min-screen
@@ -150,4 +154,3 @@ edji-reset-pass(*ngIf="showPassModal", (closeModal)="showPassModal = !showPassMo
               allow="autoplay; encrypted-media",
               allowfullscreen
           )
-      

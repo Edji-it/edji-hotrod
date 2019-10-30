@@ -20,6 +20,25 @@ $tablet-width: 768px;
   }
 }
 
+.promo-panel {
+  min-height: 70vh;
+}
+
+.jumbo-header {
+  font-size: 110px;
+  line-height: 1.25em;
+  font-weight: bold;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.promo-stack {
+  height: 33.3%;
+  width: 100%;
+}
+
 .join-panel .col__center-fix {
   min-height: $topPromoMinHeight;
 }
