@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router'
-import { Observable, BehaviorSubject, Subject } from 'rxjs'
-import { map, take, catchError } from 'rxjs/operators'
+import { Observable, BehaviorSubject, Subject, from, forkJoin, of } from 'rxjs'
+import { map, take, catchError, combineAll } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 // Project Dependencies
@@ -11,7 +11,6 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { LockerService } from '../_services/locker.service'
 
 import { environment } from '../../environments/environment'
-import { AcademyService } from './academy.service'
 import { generateInitialsFromName } from '../_store/user.decorators'
 const { version: appVersion } = require('../../../package.json')
 
@@ -986,32 +985,54 @@ export class AuthService implements CanActivate {
    * @param temp_ids array of temp user ids
    */
   public getPublicUsers(students_ids?: any[], temp_ids?: any[]): Observable<any> {
-    let search_params: string = ''
-    // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
-    if (students_ids.length > 0 && students_ids[0].hasOwnProperty('_id')) {
-      let length = students_ids.length
-      for (var i = 0; i < length; i++) {
-        students_ids[i] = students_ids[i]._id
+    let search_params: string[] = []
+    const CHUNK_COUNT = 25
+    // Builds param string(s) based on chunk size
+    let generateChunkedParams = (idArray: any[], key: string) => {
+      // if the ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
+      if (idArray.length > 0 && idArray[0].hasOwnProperty('_id')) {
+        let length = idArray.length
+        for (var i = 0; i < length; i++) {
+          idArray[i] = idArray[i]._id
+        }
+      }
+      // Chunk
+      for (let i = 0, j = idArray.length; i < j; i += CHUNK_COUNT) {
+        let chunkArray = idArray.slice(i, i + CHUNK_COUNT)
+        // do whatever
+        search_params.push(this.arrayParamsToString(key + '[]', chunkArray))
       }
     }
-    // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
-    if (temp_ids.length > 0 && temp_ids[0].hasOwnProperty('_id')) {
-      let length = temp_ids.length
-      for (var i = 0; i < length; i++) {
-        temp_ids[i] = temp_ids[i]._id
-      }
-    }
-    // Attach student ids to query string
-    search_params = this.arrayParamsToString('students_ids[]', students_ids, search_params)
-    // Attach temp ids to query string
-    search_params = this.arrayParamsToString('temp_ids[]', temp_ids, search_params)
-
-    return this._http.get(this.getUrl() + '/api/v1/users/public-details?' + search_params, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: this.getToken(),
+    if (students_ids) generateChunkedParams(students_ids, 'students_ids')
+    if (temp_ids) generateChunkedParams(temp_ids, 'temp_ids')
+    // Make requests for each "chunked" query string
+    return from(search_params).pipe(
+      map(
+        params => <Observable<any>>this._http
+            .get(this.getUrl() + '/api/v1/users/public-details?' + params, {
+              headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: this.getToken(),
+              }),
+            })
+            .pipe(
+              map(data => {
+                return data['users'] || []
+              }),
+              catchError(err => {
+                // Ensure one failed request does not prevent completion
+                console.error(err)
+                return of([])
+              }),
+            ),
+      ),
+      // Merge requests together, and wait for all to complete
+      combineAll(),
+      map(resultArrays => {
+        // Combine result arrays
+        return resultArrays.reduce((result, member) => result.concat(member), [])
       }),
-    })
+    )
   }
 
   /**
