@@ -7,7 +7,7 @@
   [class.mobileBlock-mobile-comment]="commentMobile",
   [class.has-teacher-tag]="comment.authorIsTeacher"
 )
-  user-avatar(*ngIf="indexOnLine<8", [userId]="comment.user_id")
+  user-avatar(*ngIf="indexOnLine<8", [userId]="comment.user_id", [tempName]="comment.author")
   span.tooltipbody(*ngIf="indexOnLine<8")
     .tooltip-title([class.inline-center]="comment.type == 'audio'")
       | {{comment.author}}
@@ -17,12 +17,12 @@
     .tooltiptext.block-with-text(*ngIf="comment.type == 'text'", [innerHtml]="comment.data | linkify | emojione")
     span.tooltipaudio(*ngIf="comment.type == 'audio'")
       button#audioPlay.btn-audio(
-        *ngIf="!isPlaying()", 
+        *ngIf="!isPlaying()",
         (click)="play()"
       )
         i.icon-play
       button#audioPause.btn-audio(
-        *ngIf="isPlaying()", 
+        *ngIf="isPlaying()",
         (click)="pause()"
       )
         i.icon-pause

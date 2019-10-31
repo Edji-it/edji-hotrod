@@ -146,7 +146,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     /**
      * @todo Find a cleaner way to reference the parent page/route
      */
-    if (this._router.url.indexOf('/project') > -1) {
+    if (this._router.url.indexOf('/project') > -1 || this._router.url.indexOf('/embed') > -1) {
       this.currentPage = 'project'
     } else if (this._router.url.indexOf('/home') > -1) {
       this.currentPage = 'home'

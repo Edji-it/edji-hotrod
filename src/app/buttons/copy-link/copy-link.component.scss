@@ -5,6 +5,7 @@
     width: 100%;
     font-size: 12px;
     color: #898989;
+    vertical-align: middle;
 }
 
 .share-button__wrap {
@@ -14,9 +15,10 @@
     margin-right: $base-pad/2;
 
     & .btn {
-        margin: 0px 15px 6px;
-        width: 32px;
-        height: 32px;
-        line-height: 26px;
+        margin: 0px 15px 2px;
+        width: 36px;
+        height: 36px;
+        line-height: 32px;
+        font-size: 22px;
     }
 }

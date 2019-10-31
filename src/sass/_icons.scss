@@ -207,6 +207,10 @@ $iconGrayOpacity: 0.6;
   height: 2em;
 }
 
+.icon-embed {
+  @include icon('icon-embed.svg');
+}
+
 .icon-external {
   @include icon('icon-external-link.svg');
 }
