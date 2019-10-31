@@ -510,6 +510,7 @@ export class ProjectStore {
       // Rounds dates to the nearest 1/10 of a second, since created/updated differ by milliseconds
       if (
         comment.createdAt &&
+        comment.updatedAt &&
         comment.createdAt.toString().substr(0, 21) === comment.updatedAt.toString().substr(0, 21)
       ) {
         this.store.dispatch(new IncrementMetric('comments_created'))
