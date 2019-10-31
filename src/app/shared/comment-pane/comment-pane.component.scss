@@ -40,7 +40,7 @@
 
 .reply-row {
   position: relative;
-  
+
   & user-avatar {
     left: 0px;
     top: 10px;
@@ -121,12 +121,14 @@
 
 .replyButtonGroup {
   width: auto;
-  float: right;
   margin-top: 5px;
   border-radius: 5px;
   border: 2px #dedede dotted;
   padding: 2px;
   margin-top: 8px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
 
   & button {
     float: left;

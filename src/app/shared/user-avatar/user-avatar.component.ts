@@ -16,6 +16,8 @@ export class UserAvatarComponent implements OnInit {
   // Can load with either PublicUser or User id
   // (ID only supported within Project currently)
   @Input() userId: string
+  // Not required, used as fallback fullname for deleted accounts
+  @Input() tempName: string
   @Input() set userDetails(user: PublicUser) {
     this._userDetails = user
     this.setDisplayProperties(user)
@@ -48,6 +50,13 @@ export class UserAvatarComponent implements OnInit {
               let user: PublicUser = users.find(user => {
                 return user._id === this.userId
               })
+              if (!user && this.tempName) {
+                user = {
+                  _id: this.userId,
+                  fullname: this.tempName,
+                  initials: generateInitialsFromName(this.tempName),
+                }
+              }
               return user
             } else {
               return {}
