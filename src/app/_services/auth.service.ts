@@ -991,10 +991,7 @@ export class AuthService implements CanActivate {
     let generateChunkedParams = (idArray: any[], key: string) => {
       // if the ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
       if (idArray.length > 0 && idArray[0].hasOwnProperty('_id')) {
-        let length = idArray.length
-        for (var i = 0; i < length; i++) {
-          idArray[i] = idArray[i]._id
-        }
+        idArray = idArray.map(el => el._id)
       }
       // Chunk
       for (let i = 0, j = idArray.length; i < j; i += CHUNK_COUNT) {
