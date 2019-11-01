@@ -13,7 +13,6 @@ import { AppComponent } from './app.component'
 // Shared Module imports components between modules
 import { SharedModule } from './app-shared.module'
 
-import { Ng4TwitterTimelineModule } from './home/twitter-timeline'
 import { NgxPageScrollModule } from 'ngx-page-scroll'
 
 // Sentry Setup
@@ -72,7 +71,7 @@ import {
   PromoBannerComponent,
   SchoolSelectorComponent,
 } from './shared'
-import { HomeComponent, BadgeRowComponent } from './home'
+import { HomeComponent, BadgeRowComponent, TweetCarouselComponent } from './home'
 import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
 import { LoginForm, GuestForm, RegisterFormComponent, ProfileFormComponent } from './forms'
 
@@ -274,6 +273,7 @@ const routerOptions: ExtraOptions = {
     CreatedDashComponent,
     LoginComponent,
     BadgeRowComponent,
+    TweetCarouselComponent,
     HomeComponent,
     NoContentComponent,
     UserDetailsUpdateModal,
@@ -312,7 +312,6 @@ const routerOptions: ExtraOptions = {
     DataListModule,
     PaginatorModule,
     TooltipModule,
-    Ng4TwitterTimelineModule,
     NgxPageScrollModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([MetricsEffects]),
