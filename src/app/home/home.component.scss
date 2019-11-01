@@ -162,6 +162,10 @@ $navy: #072649;
     line-height: 1.38em;
     margin-top: -2px; // allows for aligned baselines
   }
+
+  &--accent {
+    background: #fff3e4;
+  }
 }
 
 .call-to-action {

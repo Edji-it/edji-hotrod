@@ -37,10 +37,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _project: ProjectService,
     private router: Router,
-    private angulartics: Angulartics2,
     fb: FormBuilder,
     private _title: Title,
-    private _copy: CopyService,
   ) {}
 
   ngOnInit() {
