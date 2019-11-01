@@ -25,18 +25,45 @@ $tablet-width: 768px;
 }
 
 .jumbo-header {
-  font-size: 110px;
   line-height: 1.25em;
   font-weight: bold;
   color: #fff;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  font-size: 96px;
+
+  @media(max-width: $xl-screen) {
+    font-size: 72px;
+  }
+  @media(max-width: $large-screen) {
+    font-size: 64px;
+  }
+  @media(max-width: $medium-screen) {
+    font-size: 55px;
+  }
+  @media(max-width: $small-screen) {
+    font-size: 42px;
+  }
 }
 
 .promo-stack {
   height: 33.3%;
   width: 100%;
+  padding-top: 20%;
+  cursor: pointer;
+
+  &:hover, &:focus {
+    & h2 {
+      color: $btnPrimaryColor;
+    }
+  }
+
+  h2 {
+    font-weight: bold;
+    line-height: 1.25em;
+    color: #072649;
+  }
 }
 
 .join-panel .col__center-fix {

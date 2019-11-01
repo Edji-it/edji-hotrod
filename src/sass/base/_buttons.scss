@@ -47,7 +47,7 @@ button,
   }
 
   &:disabled,
-  &[disabled], 
+  &[disabled],
   &.driver-disabled {
     pointer-events: none;
     /* Rectangle Copy 14: */
@@ -257,6 +257,22 @@ button {
   &:focus,
   &.force-hover {
     box-shadow: 0 0px 15px 0px rgba($btnPrimaryFocusColor, 0.5);
+    background: $btnPrimaryFocusColor;
+    color: #fff;
+  }
+}
+
+.btn-outline-primary {
+  color: $btnPrimaryColor;
+  border-width: $btnBorderWidth;
+  border-style: solid;
+  border-radius: $btnBorderRadius;
+  border-color:$btnPrimaryColor;
+
+  &:hover,
+  &:active,
+  &:focus,
+  &.force-hover {
     background: $btnPrimaryFocusColor;
     color: #fff;
   }

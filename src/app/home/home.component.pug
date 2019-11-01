@@ -9,9 +9,27 @@ nav-bar
         //-   img(src="/assets/images/promo-home.svg")
       h1.jumbo-header Your space-age annotation tool
     .col-md-4.join-panel
-      .promo-stack Thing
-      .promo-stack Another
-      .promo-stack Last
+      .promo-stack(
+          (mouseenter)="focusSection = 1",
+          (mouseleave)="focusSection = 0",
+          (click)="scrollToSection()"
+        )
+        h2 Personalize education on-the-go
+        button.btn.btn-outline-primary([class.force-hover]="focusSection === 1") How?
+      .promo-stack(
+          (mouseenter)="focusSection = 2",
+          (mouseleave)="focusSection = 0",
+          (click)="scrollToSection()"
+        )
+        h2 Increase student engagement
+        button.btn.btn-outline-primary([class.force-hover]="focusSection === 2") How?
+      .promo-stack(
+          (mouseenter)="focusSection = 3",
+          (mouseleave)="focusSection = 0",
+          (click)="scrollToSection()"
+        )
+        h2 Annotate PDFs collaboratively
+        button.btn.btn-outline-primary([class.force-hover]="focusSection === 3") How?
       //- .col__center-fix
       //-   .col__center-content.col-pad
       //-     //- h1.center.on-dark.promo-header.join-header__top Make Reading Engagement Visible
@@ -22,29 +40,49 @@ nav-bar
       //-       a.btn.btn-primary(href="/project/demo") Try an Edji Reading
   //- Container with Commenting and Heat Map info & images
   .container
+    .row
+      .col-12
+        #twitterShowcase.my-4
+          h2.center.twitter-header
+            | What Educators Are Saying
+            i.icon.icon-twitter
+          div.tweet-box(*ngIf="tweets[tweetIndex]")
+            .btn-left.btn.btn-icon--round((click)="pageTweets(-1)")
+              .icon.icon-caret.left
+            .btn-right.btn.btn-icon--round((click)="pageTweets(1)")
+              .icon.icon-caret.right
+            div.tweet
+              .left-quote &ldquo;
+              span([innerHtml]="tweets[tweetIndex].tweet")
+              .right-quote &rdquo;
+            div.author([innerHtml]="tweets[tweetIndex].author")
+        //- ng4-twitter-timeline(
+        //-    [dataSrc]="{sourceType: 'collection', id: '947890483635851267'}",
+        //-    [opts]="{tweetLimit: 10, chrome: { noheader: true }}"
+        //- )
     //- Triple Value Prop
-    .row.justify-content-center
-      .col--value-prop.col-md-6.col-lg-4
-        h2
-          | The Fastest Way to
-          br
-          b Get Students Reading
-        img(src="/assets/images/promo/value-prop__fastest.png")
-        p Turn any content into a lesson, accessed with a simple code
-      .col--value-prop.col-md-6.col-lg-4
-        h2
-          | The Easiest Way to
-          br
-          b Annotate Content
-        img(src="/assets/images/promo/value-prop__annotate.png")
-        p Students highlight and discuss using Emoji, Text or Audio comments
-      .col--value-prop.col-md-6.col-lg-4
-        h2
-          | The Best Way to
-          br
-          b See Student Thoughts
-        img(src="/assets/images/promo/value-prop__thoughts.png")
-        p Live updating comments show you every student thought as its shared
+    //- .row.justify-content-center
+    //-   .col--value-prop.col-md-6.col-lg-4
+    //-     h2
+    //-       | The Fastest Way to
+    //-       br
+    //-       b Get Students Reading
+    //-     img(src="/assets/images/promo/value-prop__fastest.png")
+    //-     p Turn any content into a lesson, accessed with a simple code
+    //-   .col--value-prop.col-md-6.col-lg-4
+    //-     h2
+    //-       | The Easiest Way to
+    //-       br
+    //-       b Annotate Content
+    //-     img(src="/assets/images/promo/value-prop__annotate.png")
+    //-     p Students highlight and discuss using Emoji, Text or Audio comments
+    //-   .col--value-prop.col-md-6.col-lg-4
+    //-     h2
+    //-       | The Best Way to
+    //-       br
+    //-       b See Student Thoughts
+    //-     img(src="/assets/images/promo/value-prop__thoughts.png")
+    //-     p Live updating comments show you every student thought as its shared
     //- Partner badges
     edji-badge-row
     //- Intro video
@@ -97,13 +135,13 @@ nav-bar
             .text-center
               button.btn.btn-primary([routerLink]="['/register']", fragment="top") Get Started
   //- Tweet Row
-  div.mt-4([class.hide]="!tweetsLoaded")
-    .container
-      .row.promo-row
-        .col-12
-          h1 What teachers are saying about Edji!
-          div(style="border:1px solid #eee; padding: 5px; border-radius:5px;")
-            ng4-twitter-timeline([dataSrc]="{sourceType: 'collection', id: '947890483635851267'}", [opts]="{tweetLimit: 10, chrome: { noheader: true }}")
+  //- div.mt-4([class.hide]="!tweetsLoaded")
+  //-   .container
+  //-     .row.promo-row
+  //-       .col-12
+  //-         h1 What teachers are saying about Edji!
+          //- div(style="border:1px solid #eee; padding: 5px; border-radius:5px;")
+            //- ng4-twitter-timeline([dataSrc]="{sourceType: 'collection', id: '947890483635851267'}", [opts]="{tweetLimit: 10, chrome: { noheader: true }}")
   //- Row below promo
   .container
     //- we don't want this content to be fluid, so we give it another container
