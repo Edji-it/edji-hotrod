@@ -3,7 +3,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router } from '@angular/router'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
-import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
@@ -48,8 +47,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._title.setTitle('Edji')
   }
 
-  public scrollToSection(section?) {
-    alert('oh')
+  public scrollToSection(section: number) {
+    let el = document.getElementById('detailSection' + section)
+    el && el.scrollIntoView()
   }
 
   ngOnDestroy() {

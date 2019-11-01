@@ -149,6 +149,19 @@ $navy: #072649;
 .promo-row {
   padding-top: $grid-gutter-width;
   padding-bottom: $grid-gutter-width;
+
+  h2 {
+    font-size: 48px;
+    line-height: 1.1em;
+    font-weight: bold;
+    color: #072649;
+  }
+
+  .sub {
+    font-size: 18px;
+    line-height: 1.38em;
+    margin-top: -2px; // allows for aligned baselines
+  }
 }
 
 .call-to-action {
