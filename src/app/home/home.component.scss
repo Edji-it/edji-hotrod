@@ -47,6 +47,7 @@ $tablet-width: 768px;
 .promo-image__wrap {
   position: relative;
   // opacity: 0.9;
+  min-height: 60vh;
 
   & img {
     // height: 100%;
@@ -75,12 +76,45 @@ $tablet-width: 768px;
     .image-three {
       transition-delay: 0;
     }
+
+
+
+    .heat-demo-toggle .icon {
+      filter: grayscale(0%);
+    }
+    & .toggle-preview {
+      display: none;
+    }
+
+    & .toggle-hover {
+      display: inline;
+    }
   }
 }
 
 .promo-panel {
   min-height: 60vh;
   max-height: 80vh;
+}
+
+.heat-demo-toggle {
+  position: absolute;
+  right: -10px;
+  bottom: 15px;
+  background: #fff;
+  border-radius: 25px;
+  white-space: nowrap;
+  padding: 5px 15px;
+  cursor: pointer;
+
+  .icon {
+    vertical-align: middle;
+    margin: 0px 10px 4px 0px;
+  }
+
+  .toggle-hover {
+    display: none;
+  }
 }
 
 .jumbo-header {
@@ -116,7 +150,7 @@ $tablet-width: 768px;
 .promo-stack {
   height: 33.3%;
   width: 100%;
-  padding-top: 20%;
+  padding-top: 15%;
   cursor: pointer;
 
   &:hover, &:focus {
