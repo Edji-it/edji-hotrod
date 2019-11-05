@@ -18,21 +18,21 @@ nav-bar
           (mouseleave)="focusSection = 0",
           (click)="scrollToSection(1)"
         )
-        h2 Personalize education on-the-go
+        h2 Increase student engagement
         button.btn.btn-outline-primary([class.force-hover]="focusSection === 1") How?
       .promo-stack(
           (mouseenter)="focusSection = 2",
           (mouseleave)="focusSection = 0",
           (click)="scrollToSection(2)"
         )
-        h2 Increase student engagement
+        h2 Annotate anything together
         button.btn.btn-outline-primary([class.force-hover]="focusSection === 2") How?
       .promo-stack(
           (mouseenter)="focusSection = 3",
           (mouseleave)="focusSection = 0",
           (click)="scrollToSection(3)"
         )
-        h2 Annotate PDFs collaboratively
+        h2 Personalize education on-the-go
         button.btn.btn-outline-primary([class.force-hover]="focusSection === 3") How?
       //- .col__center-fix
       //-   .col__center-content.col-pad
@@ -53,49 +53,65 @@ nav-bar
     //- Intro video
     //- .row.promo-row.jumbotron--guide-video
     //-   .col-md-8.mt-4.nopadding.text-center
-    //-     .promo-video-thumb((click)="showPromoVideoModal = true")
-    //-       .icon.icon-play
-    //-       img(src="/assets/images/thumbnail-literacy-is-essential--lg.png")
+
     //-   .col-md-4.my-4(style="min-height:120px; padding-left: 0px; padding-right: 0px;")
     //-     .col__center-content.guide-video-heading
     //-       p.h1.mb-0 Learn how Edji gives teachers powerful, real-time insights
     //- 1st Details Row
-  .container-fluid
-    #detailSection1.row.promo-row
-      .col-md-6
-        h2 Increase student engagement
-        img(src="/assets/images/promo/value-prop__thoughts.png")
-      .col-md-6
-        p.sub Engagement is the #1 reason teachers love Edji. It’s simple: students have more fun and learn more when they can have input.
-        p Edji brings easy engagement to lessons you already have. Your students will love learning on Edji, because their thoughts are seen by you and their peers in a collaborative, social environment.
-        p Students have thoughts, and want to share them. Edji increases student engagement by bringing peer-to-peer collaboration to any lesson.
-    //- 2nd Details Row
-    #detailSection2.row.promo-row.promo-row--accent
-      .col-md-8
-        h2 Personalize education on-the-go
-        .row
-          .col-md-6
-            p.sub You need feedback to personalize education. Edji is your real-time window into student thoughts, helping you identify where students are performing well, and where a student needs an assist.
-          .col-md-6
-            p Without real time data on student thoughts, you’ll always be one step behind on what students are thinking.
-            p Edji is your real-time, hands-off window into student thoughts, helping you identify where students are performing well, and where a student needs an assist.
-      .col-md-4
-        img(src="/assets/images/promo/value-prop__fastest.png")
-    //- 3rd Details Row
-    #detailSection3.row.promo-row
-      .col-md-4
-        h2 Annotate PDFs Collaboratively
-        p.sub Educational content—textbooks, scans, supplementary materials—is often stuck in a PDF format. Free it with Edji.
-      .col-md-4
-        img(src="/assets/images/promo/value-prop__annotate.png")
-      .col-md-4
-        p Edji brings collaborative word highlighting to PDFs. Teachers can upload scanned pages for their students, and interact with the text digitally, as if typed.
-        p Edji has integrated collaborative highlighting allowing a whole class to interact with the same text at the same time — together.
+.container-fluid
+  #detailSection1.row.promo-row
+    .col-md-5
+      h2 Increase student engagement
+      img(src="/assets/images/promo/value-prop__thoughts.png", style="margin-bottom: -100px; max-width: 420px;")
+    .col-md-7
+      div(style="margin-top:60px;")
+        p.sub Do you like happy, engaged students? Edji is the best way to increase student engagement with lessons you already have, by making any lesson into a collaborative, social experience!
+        div(style="margin-top:30px;")
+          //- .offset-md-2
+          p Engagement is the #1 reason teachers love Edji. It’s simple: students have more fun <span class="h-1">and learn more</span> when they can have input.
+          p Edji brings easy engagement to <span class="h-1">lessons you already have</span>. Your students will love learning on Edji, because <span class="h-1">their thoughts are seen</span> by you and their peers in a collaborative, social environment.
+  //- 2nd Details Row
+  #detailSection2.row.promo-row.promo-row--accent
+    //- .col-12
+    .col-md-8
+      h2(style="margin-top: 50px;") Annotate anything together
+      .row
+        .col-md-6
+          p.sub.bold PDFs & <br/>Images & <br/>Gifs & <br/>Web articles
+          p.sub Annotation is better live and together. Use the content you already have, and use Edji to make it a collaborative, engaging experience while you get live data.
+        .col-md-6
+          p.sub What lesson are you planning next?
+          p.sub
+          .btn-row
+            button.btn.btn-primary([routerLink]="['/register']") Upgrade it with Edji
+          //- p Edji brings collaborative word highlighting to PDFs. Teachers can upload scanned pages for their students, and interact with the text digitally, as if typed.
+          //- p Edji has integrated collaborative highlighting allowing a whole class to interact with the same text at the same time — together.
+    .col-md-4
+      //- img(src="/assets/images/promo/value-prop__fastest.png")
+      .promo-video-thumb((click)="showPromoVideoModal = true", style="position: absolute; bottom:50px;")
+        .icon.icon-play
+        img(src="/assets/images/thumbnail-literacy-is-essential--lg.png")
+  //- 3rd Details Row
+  #detailSection3.row.promo-row
+    .col-md-8
+      h2 Personalize education <br/>on-the-go
+    .col-md-4
+    .col-md-4
+      p.sub Without real time data on student thoughts, you’ll always be one step behind on what students are thinking.
+      p.mt-2.sub Instantly see:
+      p.sub &nbsp;Where students struggle
+      p.sub &nbsp;What engages <i>your</i> class
+      p.sub &nbsp;How far have your students read
+    .col-md-4.p-0
+      .align-center.mt-2
+        img(src="/assets/images/promo/homepage-frogs-screenshot.png", style="display: inline-block; box-shadow:0px 5px 25px rgba(0,0,0,0.4); margin-top: -15px; margin-bottom:-100px;")
+    .col-md-4
+      p You need real-time feedback from your students that does not interrupt their learning. Edji is your real-time, hands-off window into student thoughts, helping you identify where students are performing well, and where a student needs an assist.
   //-  Another Sign-up button large and stand-alone
-  .row.navy.has-sparks
+  .row.navy.has-sparks(style="z-index:-1;")
     .sparks
     .col-sm-12
-      .call-to-action
+      .call-to-action(style="margin-top:1.5rem;")
         h1 Want to see a reading on Edji?
         .btn-row
           button.btn.btn-primary.btn-lg([routerLink]="['/project','demo']") View Demo
