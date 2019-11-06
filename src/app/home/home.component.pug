@@ -22,22 +22,34 @@ nav-bar
           (mouseleave)="focusSection = 0",
           (click)="scrollToSection(1)"
         )
-        h2 Increase student engagement
-        button.btn.btn-outline-primary([class.force-hover]="focusSection === 1") How?
+        .col__center-content
+          h2 Increase student engagement
+          button.btn.btn-link(
+            [class.force-hover]="focusSection === 1",
+            [innerHtml]="':chart_with_upwards_trend: Learn how' | emojione"
+          )
       .promo-stack(
           (mouseenter)="focusSection = 2",
           (mouseleave)="focusSection = 0",
           (click)="scrollToSection(2)"
         )
-        h2 Annotate anything together
-        button.btn.btn-outline-primary([class.force-hover]="focusSection === 2") How?
+        .col__center-content
+          h2 Annotate anything together
+          button.btn.btn-link(
+            [class.force-hover]="focusSection === 2",
+            [innerHtml]="':handshake: Learn how' | emojione"
+          )
       .promo-stack(
           (mouseenter)="focusSection = 3",
           (mouseleave)="focusSection = 0",
           (click)="scrollToSection(3)"
         )
-        h2 Personalize education <br/>on-the-go
-        button.btn.btn-outline-primary([class.force-hover]="focusSection === 3") How?
+        .col__center-content
+          h2 Personalize education <br/>on-the-go
+          button.btn.btn-link(
+            [class.force-hover]="focusSection === 3",
+            [innerHtml]="':triangular_ruler: Learn how' | emojione"
+          )
       //- .col__center-fix
       //-   .col__center-content.col-pad
       //-     //- h1.center.on-dark.promo-header.join-header__top Make Reading Engagement Visible

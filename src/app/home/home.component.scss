@@ -47,7 +47,11 @@ $tablet-width: 768px;
 .promo-image__wrap {
   position: relative;
   // opacity: 0.9;
-  min-height: 60vh;
+  min-height: 75vh;
+
+  @media(max-width: $small-screen) {
+    min-height: 60vh;
+  }
 
   & img {
     // height: 100%;
@@ -128,6 +132,8 @@ $tablet-width: 768px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 96px;
+  padding-left: 3%;
+  width: 94%;
 
   color: #072649;
   text-shadow: -4px 3px 0 #fff, 4px 3px 0 #fff;
@@ -140,7 +146,7 @@ $tablet-width: 768px;
     font-size: 72px;
   }
   @media(max-width: $large-screen) {
-    font-size: 64px;
+    font-size: 60px;
   }
   @media(max-width: $medium-screen) {
     font-size: 55px;
@@ -153,23 +159,50 @@ $tablet-width: 768px;
 .promo-stack {
   height: 33.3%;
   width: 100%;
-  padding-top: 10%;
   cursor: pointer;
+  padding: 30px 50px;
+  position: relative;
+
+  & .btn-link {
+    padding-left: 0px !important;
+    margin-left: 0px !important;
+    font-size: 16px;
+    color:#0686ad;
+    border-bottom: 1px solid #0686ad;
+    transition: border 0.2s linear;
+  }
 
   &:hover, &:focus {
-    & h2 {
-      color: $btnPrimaryColor;
+    & h2, & .btn-link {
+      color: $btnPrimaryColor !important;
+      border-color: $btnPrimaryColor !important;
+    }
+
+    & .btn-link {
+      border-width: 3px;
     }
   }
 
   h2 {
     font-weight: bold;
     line-height: 1.25em;
-    color: #072649;
+    color: #0686ad;
+  }
+
+  .col__center-content {
+    width: calc(100% - 100px);
   }
 
   @media (max-width: $phone-width) {
     height: 400px;
+  }
+
+  @media (max-width: $large-screen) {
+    padding: 30px;
+
+    .col__center-content {
+      width: calc(100% - 60px);
+    }
   }
 }
 
@@ -182,6 +215,8 @@ $tablet-width: 768px;
   font-weight: 400;
   margin-bottom: 15px;
   text-shadow: 0 0 4px #000;
+  pointer-events: none; // allow hover on background
+
   &.join-header__top {
     margin-bottom: 12px;
   }
