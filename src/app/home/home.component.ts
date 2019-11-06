@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public scrollToSection(section: number) {
     let el = document.getElementById('detailSection' + section)
-    el && el.scrollIntoView()
+    el && el.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
   ngOnDestroy() {

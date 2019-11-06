@@ -150,7 +150,7 @@ $tablet-width: 768px;
 .promo-stack {
   height: 33.3%;
   width: 100%;
-  padding-top: 15%;
+  padding-top: 10%;
   cursor: pointer;
 
   &:hover, &:focus {
@@ -258,9 +258,9 @@ $navy: #072649;
   }
 
   .sub {
-    font-size: 18px;
-    line-height: 1.38em;
-    margin-top: -2px; // allows for aligned baselines
+    font-size: 24px;
+    line-height: 1.35em;
+    // margin-top: -2px; // allows for aligned baselines
   }
 
   &--accent {
