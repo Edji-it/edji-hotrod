@@ -194,7 +194,9 @@ $tablet-width: 768px;
   }
 
   @media (max-width: $phone-width) {
-    height: 400px;
+    height: 200px;
+    padding: 0px;
+    border-bottom: 1px solid #0686ad;
   }
 
   @media (max-width: $large-screen) {
