@@ -51,8 +51,9 @@ $tablet-width: 768px;
 
   & img {
     // height: 100%;
-    height: $topPromoMinHeight;
+    min-height: $topPromoMinHeight;
     max-width: none !important;
+    width: calc(100% + 160px);
     position: absolute;
     top: -80px;
     left: -80px;

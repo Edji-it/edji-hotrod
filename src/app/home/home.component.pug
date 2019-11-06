@@ -36,7 +36,7 @@ nav-bar
           (mouseleave)="focusSection = 0",
           (click)="scrollToSection(3)"
         )
-        h2 Personalize education on-the-go
+        h2 Personalize education <br/>on-the-go
         button.btn.btn-outline-primary([class.force-hover]="focusSection === 3") How?
       //- .col__center-fix
       //-   .col__center-content.col-pad
@@ -70,23 +70,23 @@ nav-bar
     .col-md-7
       div(style="margin-top:60px;")
         p.sub Do you like happy, engaged students? Edji is the best way to increase student engagement with lessons you already have, by making any lesson into a collaborative, social experience!
-        div(style="margin-top:30px;")
+        div(style="margin-top:20px; max-width: 500px;")
           //- .offset-md-2
           p Engagement is the #1 reason teachers love Edji. It’s simple: students have more fun <span class="h-1">and learn more</span> when they can have input.
           p Edji brings easy engagement to <span class="h-1">lessons you already have</span>. Your students will love learning on Edji, because <span class="h-1">their thoughts are seen</span> by you and their peers in a collaborative, social environment.
   //- 2nd Details Row
   #detailSection2.row.promo-row.promo-row--accent
-    .col-md-8.offset-md-4
+    .col-12
       h2.text-right(style="margin-top: 0px; margin-bottom: 60px;") Annotate anything together
     .col-md-8
       .row
         .col-md-6
           p.sub Whether its a <b>PDF</b>, <b>image</b>, <b>web article</b>, or <b>GIF</b>&mdash;annotation is better live and together.
         .col-md-6
-          p Use the content you already have, and use Edji to make it a collaborative, engaging experience while you get live data.
-          p What lesson are you planning next?
-          .btn-row
-            button.btn.btn-primary([routerLink]="['/register']") Upgrade it with Edji
+          p(style="margin-top:10px;") Use the content you already have, and use Edji to make it a collaborative, engaging experience while you get live data.
+          p
+            b What lesson are you planning next?
+          button.btn.btn-primary([routerLink]="['/register']") Upgrade it with Edji
           //- p Edji brings collaborative word highlighting to PDFs. Teachers can upload scanned pages for their students, and interact with the text digitally, as if typed.
           //- p Edji has integrated collaborative highlighting allowing a whole class to interact with the same text at the same time — together.
     .col-md-4(style="margin-bottom: 30px; min-height: 160px;")
@@ -96,17 +96,26 @@ nav-bar
         img(src="/assets/images/thumbnail-literacy-is-essential--lg.png")
         p.small.text-right.mt-1(style="position: absolute; right: 0px;") Get creative with PDFs in Edji
   //- 3rd Details Row
-  #detailSection3.row.promo-row
+  #detailSection3.row.promo-row(style="z-index: 100; position: relative;")
     .col-md-8
       h2 Personalize education <br/>on-the-go
     .col-md-4
-    .col-md-4
+      //- Spacer
+    .col-md-4.col-xl-3
       p Without real time data on student thoughts, you’ll always be one step behind on what students are thinking.
       p You need real-time feedback from your students that does not interrupt their learning. Edji is your real-time, hands-off window into student thoughts, helping you identify where students are performing well, and where a student needs an assist.
-    .col-md-4.p-0
+    .col-md-4.col-xl-6.p-0
       .align-center.mt-2
-        img(src="/assets/images/promo/homepage-frogs-screenshot.png", style="display: inline-block; box-shadow:0px 5px 25px rgba(0,0,0,0.4); margin-top: -15px; margin-bottom:-100px;")
-    .col-md-4
+        //-spacer image
+        img(
+          src="/assets/images/promo/homepage-frogs-screenshot.png",
+          style="display: block; margin-top: -120px; opacity:0;"
+        )
+        img(
+          src="/assets/images/promo/homepage-frogs-screenshot.png",
+          style="display: inline-block; box-shadow:0px 5px 25px rgba(0,0,0,0.4); margin-top: -15px; position: absolute; bottom: -105px;"
+        )
+    .col-md-4.col-xl-3
       p.mt-2.sub Instantly see:
       p.sub
         span.h-1 Where students struggle
@@ -119,9 +128,9 @@ nav-bar
     .sparks
     .col-sm-12
       .call-to-action(style="margin-top:1.5rem;")
-        h1 Want to see a reading on Edji?
+        h1 Explore a reading on Edji
         .btn-row
-          button.btn.btn-primary.btn-lg([routerLink]="['/project','demo']") View Demo
+          button.btn.btn-primary.btn-lg([routerLink]="['/project','demo']") Join Demo
     //- A catchy d3m0 reading button
 
 edji-reset-pass(*ngIf="showPassModal", (closeModal)="showPassModal = !showPassModal")
