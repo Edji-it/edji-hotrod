@@ -18,7 +18,8 @@ export class TweetCarouselComponent implements OnInit {
     let configList = {
       // id: '947890483635851267',
       // list: { listSlug: 'inspiration', screenName: 'edjinotes' },
-      likes: { screenName: 'edjinotes' },
+      collection: { collection_id: '947890483635851267' },
+      // likes: { screenName: 'edjinotes' },
       domId: 'twitterShowcase',
       maxTweets: 10,
       enableLinks: true,
@@ -33,6 +34,7 @@ export class TweetCarouselComponent implements OnInit {
         console.log(data)
         data.forEach(tweet => {
           tweet.tweet = tweet.tweet.replace(new RegExp('href="', 'g'), 'target="_blank" href="')
+          tweet.author = tweet.author.replace(new RegExp('href="', 'g'), 'target="_blank" href="')
         })
         this.tweets = data
       },

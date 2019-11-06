@@ -191,6 +191,16 @@
             (config.lang || lang) +
             '&rnd=' +
             Math.random()
+        } else if (config.collection !== undefined) {
+          script.src =
+            'https://syndication.twitter.com/timeline/collection?' +
+            'callback=__twttrf.callback&dnt=false' +
+            '&collection_id=' +
+            config.collection.collection_id +
+            '&suppress_response_codes=true&lang=' +
+            (config.lang || lang) +
+            '&rnd=' +
+            Math.random()
         } else {
           script.src =
             'https://cdn.syndication.twimg.com/widgets/timelines/' +
