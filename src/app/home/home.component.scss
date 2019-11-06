@@ -55,8 +55,10 @@ $tablet-width: 768px;
     max-width: none !important;
     width: calc(100% + 160px);
     position: absolute;
-    top: -80px;
+    top: 50%;
     left: -80px;
+    // The assumption is we always have vertical overlap
+    transform: translateY(-50%);
 
     transition: opacity 800ms linear;
   }
@@ -164,6 +166,10 @@ $tablet-width: 768px;
     font-weight: bold;
     line-height: 1.25em;
     color: #072649;
+  }
+
+  @media (max-width: $phone-width) {
+    height: 400px;
   }
 }
 
@@ -295,18 +301,6 @@ $navy: #072649;
   & p {
     color: $dark-gray;
     padding-left: 2em;
-  }
-}
-
-.join-panel {
-  z-index: 6000;
-  // Medium devices (tablets, less than 992px)
-  @media (max-width: 767px) {
-    background: rgba(0, 0, 0, 0.5);
-    height: $topPromoMinHeight;
-    position: absolute;
-    left: 0;
-    top: 0;
   }
 }
 
