@@ -67,7 +67,7 @@ export class TweetCarouselComponent implements OnInit, OnDestroy {
     if (this.tweetInterval) {
       this.tweetInterval.unsubscribe()
     }
-    let secondsCounter = interval(4000)
+    let secondsCounter = interval(6000)
     // Subscribe to begin publishing values
     this.tweetInterval = secondsCounter.subscribe(n => {
       // Skip one interval if recently paged
