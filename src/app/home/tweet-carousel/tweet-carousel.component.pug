@@ -6,8 +6,9 @@ div.tweet-box(*ngIf="tweets[tweetIndex]")
     .icon.icon-caret.left
   .btn-right.btn.btn-icon--round((click)="pageTweets(1)")
     .icon.icon-caret.right
-  div.tweet
-    .left-quote &ldquo;
-    span([innerHtml]="tweets[tweetIndex].tweet")
-    .right-quote &rdquo;
-  div.author([innerHtml]="tweets[tweetIndex].author")
+  .aligner
+    div.tweet
+      .left-quote &ldquo;
+      span([innerHtml]="tweets[tweetIndex].tweet")
+      .right-quote &rdquo;
+    div.author([innerHtml]="tweets[tweetIndex].author")
