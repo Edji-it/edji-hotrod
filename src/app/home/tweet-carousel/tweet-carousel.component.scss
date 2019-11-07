@@ -2,9 +2,10 @@
 
 .twitter-header {
   margin-top: 2*$base-pad;
+  line-height: 1.2em;
 
   & .icon {
-    vertical-align: bottom;
+    margin: -0.7em 0.1em;
   }
 }
 
@@ -19,6 +20,11 @@
   font-family: 'Open Sans', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans';
   text-align: center;
   position: relative;
+
+  @media(max-width: $small-screen) {
+    padding: 30px 15px;
+    margin: 0 -30px;
+  }
 
   .btn-left, .btn-right {
     background: #fff;
@@ -40,6 +46,11 @@
     top: 50%;
     left: 20px;
     padding-right: 9px;
+
+    @media(max-width: $small-screen) {
+      left: -22px;
+      border: 1px solid #89bae5;
+    }
   }
 
   .btn-right {
@@ -47,6 +58,11 @@
     top: 50%;
     right: 20px;
     padding-left: 9px;
+
+    @media(max-width: $small-screen) {
+      right: -22px;
+      border: 1px solid #89bae5;
+    }
   }
 
   .left-quote, .right-quote {
@@ -54,6 +70,10 @@
     font-size: 32px;
     font-weight: bold;
     color: #868686;
+
+    @media(max-width: $small-screen) {
+      display: none;
+    }
   }
 
   .left-quote {
@@ -80,6 +100,11 @@
     & .h-card {
       background: transparent !important;
       text-decoration: underline;
+    }
+
+    @media(max-width: $small-screen) {
+      font-size: 14px;
+      line-height: 18px;
     }
   }
 
