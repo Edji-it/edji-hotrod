@@ -2,7 +2,7 @@
 
 @import '../../sass/base/variables';
 
-$topPromoMinHeight: 900px;
+$topPromoMinHeight: 60vh;
 
 $phone-width-min: 0px;
 $phone-width: 480px;
@@ -63,8 +63,16 @@ $tablet-width: 768px;
     left: -80px;
     // The assumption is we always have vertical overlap
     transform: translateY(-50%);
-
     transition: opacity 800ms linear;
+
+    @media(max-width: $medium-screen) {
+      min-width: 150vw;
+      min-height: 100%;
+    }
+
+    @media(max-width: $small-screen) {
+      min-width: 250vw;
+    }
   }
 
   & .image-two, & .image-three, & .image-two-out {
@@ -146,10 +154,13 @@ $tablet-width: 768px;
     font-size: 60px;
   }
   @media(max-width: $medium-screen) {
-    font-size: 55px;
+    // Larger again due to full width column
+    font-size: 64px;
   }
   @media(max-width: $small-screen) {
     font-size: 42px;
+    padding: 15px;
+    width: 100%;
   }
 }
 
@@ -190,7 +201,7 @@ $tablet-width: 768px;
     width: calc(100% - 100px);
   }
 
-  @media (max-width: $phone-width) {
+  @media (max-width: $medium-screen) {
     height: 200px;
     padding: 0px;
     border-bottom: 1px solid #0686ad;
@@ -201,6 +212,14 @@ $tablet-width: 768px;
 
     .col__center-content {
       width: calc(100% - 60px);
+    }
+  }
+
+  @media (max-width: $small-screen) {
+    padding: 0px;
+
+    .col__center-content {
+      width: 100%;
     }
   }
 }
