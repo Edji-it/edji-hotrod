@@ -134,12 +134,9 @@ $tablet-width: 768px;
   font-size: 96px;
   padding-left: 3%;
   width: 94%;
-
   color: #072649;
   text-shadow: -4px 3px 0 #fff, 4px 3px 0 #fff;
-				//   5px 5px 0 #fff,
-				//  5px -5px 0 #fff,
-        // -5px -5px 0 #fff;
+	pointer-events: none !important; // allow hovering background
 
 
   @media(max-width: $xl-screen) {
