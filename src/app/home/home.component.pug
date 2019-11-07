@@ -20,7 +20,7 @@ nav-bar
       .promo-stack(
           (mouseenter)="focusSection = 1",
           (mouseleave)="focusSection = 0",
-          (click)="scrollToSection(1)"
+          (click)="scrollToSection(1, 'Student Engagement')"
         )
         .col__center-content
           h2 Increase student engagement
@@ -31,7 +31,7 @@ nav-bar
       .promo-stack(
           (mouseenter)="focusSection = 2",
           (mouseleave)="focusSection = 0",
-          (click)="scrollToSection(2)"
+          (click)="scrollToSection(2, 'Annotate Anything')"
         )
         .col__center-content
           h2 Annotate anything together
@@ -42,7 +42,7 @@ nav-bar
       .promo-stack(
           (mouseenter)="focusSection = 3",
           (mouseleave)="focusSection = 0",
-          (click)="scrollToSection(3)"
+          (click)="scrollToSection(3, 'Personalize Education')"
         )
         .col__center-content
           h2 Personalize education <br/>on-the-go

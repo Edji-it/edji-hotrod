@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ProjectService, CopyService } from '../_services'
+import { AuthService, ProjectService, CopyService, AnalyticsService } from '../_services'
 
 @Component({
   selector: 'home',
@@ -39,13 +39,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     private router: Router,
     fb: FormBuilder,
     private _title: Title,
+    public _analytics: AnalyticsService,
   ) {}
 
   ngOnInit() {
     this._title.setTitle('Edji')
   }
 
-  public scrollToSection(section: number) {
+  public scrollToSection(section: number, name: string) {
+    // Track event
+    this._analytics.event('home_detailSection_goTo' + section, name)
     let el = document.getElementById('detailSection' + section)
     el && el.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
