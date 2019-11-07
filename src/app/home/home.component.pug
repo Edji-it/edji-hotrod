@@ -78,7 +78,7 @@ nav-bar
   #detailSection1.row.promo-row
     .col-md-5
       h2 Increase student engagement
-      img(src="/assets/images/promo/value-prop__thoughts.png", style="margin-bottom: -100px; max-width: 420px; width: 100%;")
+      img.section-1__img(src="/assets/images/promo/value-prop__thoughts-2.png")
     .col-md-7
       div(style="margin-top:60px; max-width: 550px")
         p.sub Engagement is the #1 reason teachers love Edji. It’s simple: students have more fun <span class="h-1">and learn more</span> when they can have input.
@@ -88,23 +88,23 @@ nav-bar
           p Edji brings easy engagement to <span class="h-1">lessons you already have</span>. Your students will love learning on Edji, because <span class="h-1">their thoughts are seen</span> by you and their peers in a collaborative, social environment.
   //- 2nd Details Row
   #detailSection2.row.promo-row.promo-row--accent
-    .col-12
-      h2.text-right(style="margin-top: 0px; margin-bottom: 60px;") Annotate anything together
-    .col-md-8
+    .col-12.col-md-8.offset-md-4
+      h2.section-2__header Annotate anything together
+    .col-md-12.col-lg-8
       .row
         .col-md-6
           p.sub Whether its a <b>PDF</b>, <b>image</b>, <b>web article</b>, or <b>GIF</b>&mdash;annotation is better live and together.
         .col-md-6
           p Edji works great in Science, Social Studies, and any content area, to shift the focus from "how to annotate" back to the material you are teaching.
           p(style="margin-top:10px;") Use the content you already have, and use Edji to make it a collaborative, engaging experience while you get live data.
-          p
+          p.section-2__cta
             b What lesson are you planning next?
-          button.btn.btn-primary([routerLink]="['/register']") Upgrade your lesson with Edji
+            button.btn.btn-primary([routerLink]="['/register']") Upgrade your lesson with Edji
           //- p Edji brings collaborative word highlighting to PDFs. Teachers can upload scanned pages for their students, and interact with the text digitally, as if typed.
           //- p Edji has integrated collaborative highlighting allowing a whole class to interact with the same text at the same time — together.
-    .col-md-4(style="margin-bottom: 30px; min-height: 160px;")
+    .col-md-12.col-lg-4(style="margin-bottom: 30px; min-height: 160px;")
       //- img(src="/assets/images/promo/value-prop__fastest.png")
-      .promo-video-thumb((click)="showPromoVideoModal = true", style="position: absolute; top:50%; transform: translateY(-50%);")
+      .promo-video-thumb((click)="showPromoVideoModal = true")
         .icon.icon-play
         img(src="/assets/images/thumbnail-literacy-is-essential--lg.png")
         p.small.text-right.mt-1(style="position: absolute; right: 0px;") Get creative with PDFs in Edji
