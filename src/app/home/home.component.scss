@@ -160,22 +160,23 @@ $tablet-width: 768px;
   color: #072649;
   text-shadow: -4px 3px 0 #fff, 4px 3px 0 #fff;
 	pointer-events: none !important; // allow hovering background
-
+  max-width: calc(100% - 60px);
 
   @media(max-width: $xl-screen) {
     font-size: 72px;
   }
   @media(max-width: $large-screen) {
-    font-size: 60px;
+    font-size: 55px;
   }
   @media(max-width: $medium-screen) {
     // Larger again due to full width column
-    font-size: 64px;
+    font-size: 63px;
   }
   @media(max-width: $small-screen) {
     font-size: 42px;
     padding: 15px;
     width: 100%;
+    max-width: calc(100% - 30px);
   }
 }
 
@@ -344,11 +345,27 @@ $navy: #072649;
 }
 
 .call-to-action {
-  & h1 {
+  margin-top:1.5rem;
+
+  & .h1 {
     color: #fff;
+    @media(max-width: $small-screen) {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
   }
   padding: 50px 0;
   text-align: center;
+
+  @media(max-width: $small-screen) {
+    margin-top: 0px;
+  }
+
+  & .btn-row {
+    @media(max-width: $small-screen) {
+      margin-top: 0px;
+    }
+  }
 }
 
 .col--value-prop {
