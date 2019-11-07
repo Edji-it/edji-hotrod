@@ -81,10 +81,18 @@ $tablet-width: 768px;
   }
 
   & .image-three, & .image-two-out {
-    transition-delay: 500ms;
+    transition-delay: 100ms;
   }
 
   &:hover {
+    .image-two, .image-three, .image-two-out {
+      animation: none;
+    }
+
+    .image-two-out {
+      opacity: 0;
+    }
+
     .image-two, .image-three {
       opacity: 1;
     }
@@ -95,8 +103,13 @@ $tablet-width: 768px;
 
 
 
-    .heat-demo-toggle .icon {
-      filter: grayscale(0%);
+    .heat-demo-toggle {
+      box-shadow: 1px 2px 8px rgb(250, 154, 92);
+      transform: translateY(-1px);
+
+      .icon {
+        filter: grayscale(0%);
+      }
     }
     & .toggle-preview {
       display: none;
@@ -115,13 +128,14 @@ $tablet-width: 768px;
 
 .heat-demo-toggle {
   position: absolute;
-  right: -10px;
+  right: -12.5px;
   bottom: 15px;
   background: #fff;
   border-radius: 25px;
   white-space: nowrap;
   padding: 5px 15px;
   cursor: pointer;
+  transition: all 0.2s linear;
 
   .icon {
     vertical-align: middle;
