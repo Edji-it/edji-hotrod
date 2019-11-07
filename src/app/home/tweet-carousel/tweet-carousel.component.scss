@@ -29,7 +29,7 @@
   @media(max-width: $small-screen) {
     padding: 30px 15px;
     margin: 0 -30px;
-    min-height: 550px;
+    min-height: 500px;
   }
 
   .btn-left, .btn-right {
@@ -89,8 +89,8 @@
   }
   .right-quote {
     position: absolute;
-    bottom: 0px;
-    right: -5px;
+    bottom: 10px;
+    right: -3px;
   }
 
   & .tweet {
@@ -101,16 +101,31 @@
     padding: 20px;
     display: inline-block;
     text-align: center;
-    word-wrap: break-word;
+    word-break: break-word;
+    color: #343434;
+
+    & a {
+      word-break: break-word;
+      color: $twitterBlue;
+      text-decoration: none;
+    }
 
     & .h-card {
       background: transparent !important;
-      text-decoration: underline;
+      text-decoration: none;
+    }
+
+    & a, & .h-card {
+      &:hover, &:focus {
+        $focusBlue: darken($twitterBlue, 15%);
+        color: $focusBlue;
+        border-bottom: 1px solid $focusBlue;
+      }
     }
 
     @media(max-width: $small-screen) {
-      font-size: 14px;
-      line-height: 18px;
+      font-size: 16px;
+      line-height: 20px;
     }
   }
 
