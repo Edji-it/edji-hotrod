@@ -641,6 +641,10 @@ li.promo-list {
   @media(max-width: $large-screen - 1px) {
     padding-right: 0px !important;
   }
+
+  @media(max-width: $small-screen - 1px) {
+    padding-right: $base-pad !important;
+  }
 }
 
 .section-3--col-r {
