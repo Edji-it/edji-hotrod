@@ -593,14 +593,14 @@ li.promo-list {
   width: 100%;
   max-width: 100%;
 
-  @media(max-width: $large-screen) {
+  @media(max-width: $large-screen - 1px) {
     position: absolute;
     bottom: -110px;
     left: -100%;
     max-width: 300%;
     width: 300%;
   }
-  @media(max-width: $medium-screen) {
+  @media(max-width: $medium-screen - 1px) {
     position: relative;
     left: 50%;
     width: 100%;
@@ -609,7 +609,7 @@ li.promo-list {
     bottom: 0;
     transform: translateX(-50%);
   }
-  @media(max-width: $small-screen) {
+  @media(max-width: $small-screen - 1px) {
     max-width: calc(100% - 60px);
   }
 }
@@ -622,7 +622,7 @@ li.promo-list {
   // @media(max-width: $xl-screen) {
   //   padding-bottom: 300%;
   // }
-  @media(max-width: $large-screen) {
+  @media(max-width: $large-screen - 1px) {
     max-width: 200%;
     width: 200%;
     padding-bottom: 260%;
@@ -630,7 +630,7 @@ li.promo-list {
   @media(max-width: 840px) {
     padding-bottom: 295%;
   }
-  @media(max-width: $medium-screen) {
+  @media(max-width: $medium-screen - 1px) {
     display: none;
   }
 }
@@ -638,7 +638,7 @@ li.promo-list {
 .section-3--col-l {
   max-width: 500px;
 
-  @media(max-width: $large-screen) {
+  @media(max-width: $large-screen - 1px) {
     padding-right: 0px !important;
   }
 }
@@ -646,10 +646,12 @@ li.promo-list {
 .section-3--col-r {
   max-width: 500px;
 
-  @media(max-width: $large-screen) {
+  @media(max-width: $large-screen - 1px) {
     padding-left: 0px;
+    margin-left: -15px;
+    padding-right: 5px;
   }
-  @media(max-width: $medium-screen) {
+  @media(max-width: $medium-screen - 1px) {
     padding-left: $base-pad;
   }
 }
