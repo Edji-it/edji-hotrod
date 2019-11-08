@@ -24,7 +24,7 @@
         *ngIf="reading.parent_id"
       ) 
         span.reading-date {{ reading.createdAt | edjidate:'timeAgo':null }} &nbsp;
-        span.reading-version((click)="getVersions(reading.version_id)") 
+        span.reading-version((click)="getVersions(reading.version_id)", [class.disabled]="reading.archived") 
           | Previous Versions
   i.icon.icon-draft.reading-draft(*ngIf="reading['draft']")
   //- The Dropdown Options Menu
@@ -52,14 +52,16 @@
         (click)="showOptions=false;", 
         [routerLink]="['/new-reading/']", 
         [queryParams]="{ copyId: reading._id }",
-        [attr.data-test]="'copyEdit'+reading.title"
+        [attr.data-test]="'copyEdit'+reading.title",
+        [disabled]="reading.archived"
       ) 
         .icon.icon-create
         | &nbsp; Copy and Edit
       //- Reading Link dropdown button
       button.dropdown-item.e2e-reading-link(
         (click)="showOptions=false; showReadingLinkModal=true",
-        [attr.testReadingLink]="reading.title"
+        [attr.testReadingLink]="reading.title",
+        [disabled]="reading.archived"
       ) 
         .icon.icon-reading-link
         | &nbsp; Reading Link
