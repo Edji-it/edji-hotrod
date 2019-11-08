@@ -124,10 +124,6 @@
 .reading-action {
   margin-left: 5px;
   display: inline-block;
-
-  &.disabled {
-    pointer-events: all;
-  }
 }
 
 button.new-reading-btn {
