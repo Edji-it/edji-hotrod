@@ -1,0 +1,14 @@
+h2.center.twitter-header
+  | What Educators Are Saying
+  i.icon.icon-twitter
+div.tweet-box(*ngIf="tweets[tweetIndex]")
+  .btn-left.btn.btn-icon--round((click)="pageTweets(-1)")
+    .icon.icon-caret.left
+  .btn-right.btn.btn-icon--round((click)="pageTweets(1)")
+    .icon.icon-caret.right
+  .aligner
+    div.tweet
+      .left-quote &ldquo;
+      span([innerHtml]="tweets[tweetIndex].tweet")
+      .right-quote &rdquo;
+    div.author([innerHtml]="tweets[tweetIndex].author")

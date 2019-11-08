@@ -47,7 +47,7 @@ button,
   }
 
   &:disabled,
-  &[disabled], 
+  &[disabled],
   &.driver-disabled {
     pointer-events: none;
     /* Rectangle Copy 14: */
@@ -262,6 +262,22 @@ button {
   }
 }
 
+.btn-outline-primary {
+  color: $btnPrimaryColor;
+  border-width: $btnBorderWidth;
+  border-style: solid;
+  border-radius: $btnBorderRadius;
+  border-color:$btnPrimaryColor;
+
+  &:hover,
+  &:active,
+  &:focus,
+  &.force-hover {
+    background: $btnPrimaryFocusColor;
+    color: #fff;
+  }
+}
+
 .btn.btn-action,
 .btn.btn-success {
   background-color: $btnActionBg;
@@ -376,6 +392,10 @@ button {
 
   & .icon {
     vertical-align: middle;
+  }
+
+  & .emojioneemoji {
+    vertical-align: top;
   }
 
   &.no-margin {
