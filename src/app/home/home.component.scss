@@ -85,7 +85,11 @@ $tablet-width: 768px;
   }
 
   &:hover {
-    .image-two, .image-three, .image-two-out {
+    .image-one,
+    .image-two,
+    .image-midway,
+    .image-two-out,
+    .image-three {
       animation: none;
     }
 
