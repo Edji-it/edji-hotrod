@@ -49,8 +49,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   public scrollToSection(section: number, name: string) {
     // Track event
     this._analytics.event('home_detailSection_goTo' + section, name)
-    let el = document.getElementById('detailSection' + section)
-    el && el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    let el = document.getElementById('detailSectionAnchor' + section)
+    el && el.scrollIntoView({ behavior: 'smooth' })
   }
 
   ngOnDestroy() {
