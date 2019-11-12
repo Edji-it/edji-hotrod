@@ -26,10 +26,10 @@ nav-bar
             .btn-row.right
                 button.btn.btn-primary([routerLink]="['/login']") Return to Log In
     .col-sm-12.col-md-8.offset-md-2.mt-4(*ngIf="oAuthToken && messages.duplicate_user")
-        h2 Log in to Link with Clever
+        h2 Log in to Link with {{ loginTypeDisplay }}
         ng-container(*ngIf="!messages.linkError")
             .alert.alert-warning
-                p An Edji user already exists with your Clever email address. If you'd like to link Clever with your existing Edji account, please log in below. 
+                p An Edji user already exists with your {{ loginTypeDisplay }} email address. If you'd like to link {{ loginTypeDisplay }} with your existing Edji account, please log in below. 
                 p If you do not wish to link your account, you may return to the <a class="link" [routerLink]="['/login']">log in page</a> and continue with your Edji account.
             hot-login-form((loginSuccess)="linkAfterLogin($event)", submitText="Log In and Link")
             a.link([routerLink]="['/login']", [queryParams]="{mlink: 'forgot'}") Forgot password?
