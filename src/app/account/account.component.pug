@@ -51,7 +51,8 @@ nav-bar([showDashboardOptions]="true")
         button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
         button#heroResubscribeBtn.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Renew Subscription
     //- Linked Accounts
-    .info-group
+    //- Only showing this section if the user has an account linked, because we are temporarily disabling linking from this page.
+    .info-group(*ngIf="linkedAccounts.clever")
       label.info-label Linked Accounts
       //- Clever linked
       div.mt-2
@@ -66,7 +67,7 @@ nav-bar([showDashboardOptions]="true")
             .tooltip
               .tooltip-title Clever account is linked
         //- Clever NOT linked
-        edji-clever-button(*ngIf="!linkedAccounts.clever", [dark]="true")
+        //- edji-clever-button(*ngIf="!linkedAccounts.clever", [dark]="true")
     //- Reading on Edji since
     .info-group.mt-5
       p.faded Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}
