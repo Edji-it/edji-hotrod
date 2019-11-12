@@ -83,6 +83,7 @@ export class ProfileFormComponent implements OnInit {
     let userSoFar = this._auth.getUser()
     let prefillFirst = ''
     let prefillLast = ''
+    let prefillIdentity = userSoFar.identities ? userSoFar.identities[0] : 'student'
     if (userSoFar.fullname) {
       let i = userSoFar.fullname.indexOf(' ')
       if (i > 0) {
@@ -100,7 +101,7 @@ export class ProfileFormComponent implements OnInit {
       {
         firstname: [prefillFirst, Validators.required],
         lastname: [prefillLast, Validators.required],
-        accountRole: ['student', Validators.required],
+        accountRole: [prefillIdentity, Validators.required],
         school: [null],
       },
       {

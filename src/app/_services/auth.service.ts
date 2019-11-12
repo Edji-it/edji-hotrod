@@ -155,10 +155,17 @@ export class AuthService implements CanActivate {
     // Set convenience "isStudent" flag
     // + Default guest/temp to student flag
     let studentId = user.identities && user.identities.includes('student')
-    let notSchoolStaff = studentId && !['teacher', 'administrator', 'coach'].some(id => user.identities.includes(id))
-    user.isStudent = user.type === 'temp' || (studentId && notSchoolStaff)
+    let schoolStaff = !studentId || ['teacher', 'administrator', 'coach'].some(id => user.identities && user.identities.includes(id))
+    let missingIdentity: boolean = !user.identities || user.identities.length < 1
+    // missingSchool is also used to identify incomplete Clever sign-ups
+    let missingSchool: boolean
+    user.isStudent = user.type === 'temp' || (studentId && !schoolStaff)
+    // Check if School Staff set school value
+    if (schoolStaff) {
+      missingSchool = !user.school || !(user.school.school_name || user.school.district_name)
+    }
     // Determine if user has completed required profile fields
-    user.profileIncomplete = user.type !== 'temp' && (!user.fullname || !user.identities || user.identities.length < 1)
+    user.profileIncomplete = user.type !== 'temp' && (!user.fullname || missingSchool || missingIdentity)
     // Determine if user is an Academy Admin
     if (user && user.license_ids && user.license_ids[0]) {
       this.fetchAcademies(user)
