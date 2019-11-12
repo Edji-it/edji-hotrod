@@ -157,6 +157,7 @@ export class AuthService implements CanActivate {
     let studentId = user.identities && user.identities.includes('student')
     let schoolStaff = !studentId || ['teacher', 'administrator', 'coach'].some(id => user.identities && user.identities.includes(id))
     let missingIdentity: boolean = !user.identities || user.identities.length < 1
+    // missingSchool is also used to identify incomplete Clever sign-ups
     let missingSchool: boolean
     user.isStudent = user.type === 'temp' || (studentId && !schoolStaff)
     // Check if School Staff set school value
