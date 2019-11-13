@@ -12,3 +12,21 @@
     margin-bottom: 2px;
   }
 }
+
+
+// ui-dropdown-panel overrides
+.ui-dropdown-panel .ui-dropdown-list {
+  font-size: 18px !important;
+  min-width: 200px !important;
+  width: 100%;
+  line-height: 25px !important;
+}
+
+.ui-dropdown .ui-dropdown-panel {
+  margin-left: 7px !important;
+}
+
+.ui-dropdown-panel {
+  top: 100% !important;
+  max-height: 90vh !important;
+}

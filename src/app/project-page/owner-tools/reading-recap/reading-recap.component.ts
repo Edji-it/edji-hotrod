@@ -118,7 +118,7 @@ export class ReadingRecapComponent implements OnInit {
                     error => {
                       console.error(error)
                     },
-                  )
+                )
                 // need a 1 millisecond delay for the comment stats getter to evaluate
                 setTimeout(() => {
                   // only run this if we have data for any student
@@ -359,7 +359,8 @@ export class ReadingRecapComponent implements OnInit {
     this.evalLoading = true
     this.saveAsPdf().then(
       pdf => {
-        pdf.save('test' + '.pdf')
+        let name = this.currentStudent.label.replace(' ', '-') + '_Recap'
+        pdf.save(name + '.pdf')
         this.evalLoading = false
       },
       error => {
@@ -378,28 +379,43 @@ export class ReadingRecapComponent implements OnInit {
 
       let htmlRef = '#readingReport'
       let htmlDoc = document.querySelector(htmlRef)
-      var doc = new jsPDF('p', 'px', 'letter')
+      // var doc = new jsPDF('p', 'px', 'letter')
+      let ratio = htmlDoc.clientHeight / htmlDoc.clientWidth
+      let width = htmlDoc.clientWidth
+      let height = htmlDoc.clientHeight
+      // if (ratio > 1) {
+      //   height = 8.5 * ratio
+      // }
+      // 1in margins
+      const M = 36
+      console.log("Height!", height)
+      var doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt', // on-screen "pixels", fix for high-res screens
+        format: [width + M, height + M]
+      })
       // report options to pass in
       let options = {
-        pagesplit: true,
+        // pagesplit: true, // until we style page breaks, leave pagesplit disabled
+        // retina: true,
         margin: {
-          top: 10,
-          bottom: 10,
-          right: 20,
-          left: 20,
+          top: M,
+          bottom: M,
+          right: M,
+          left: M,
         },
-        height: htmlDoc.clientHeight,
-        width: htmlDoc.clientWidth,
+        height: height + 4,
+        width: width + 4
       }
 
       // set the scale to fit the whole report width on a page
-      doc.internal.scaleFactor = 2.4
+      // doc.internal.scaleFactor = 2
 
       // Convert the reading report to a pdf
       doc.addHTML(
         htmlDoc,
-        20,
-        10,
+        M,
+        M,
         options,
         success => {
           document.querySelector('.sliding-pane.from-left.reading-recap.slide-in').scrollTo(0, scrollPos)
