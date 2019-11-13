@@ -64,6 +64,15 @@ nav-bar([showDashboardOptions]="true")
                             (click)="searchParams.activeLibrary = 'public'; searchParams.first=0; updateSearchParams('filter_public')"
                         )
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
+                    //- My District 
+                    div
+                        button#discoverFilterDistrict.btn.btn-filter( 
+                            title="Filter by shared readings in your district",
+                            [class.active]="searchParams.district.length > 0",
+                            (click)="setDistrictParam(); searchParams.first=0; updateSearchParams('filter_district')"
+                        )
+                            i.icon.icon-district-sm(style="vertical-align:middle;")
+                            | My District
                     //- Following 
                     div
                         button#discoverFilterFollowing.btn.btn-filter( 
@@ -72,14 +81,6 @@ nav-bar([showDashboardOptions]="true")
                             (click)="searchParams.activeLibrary = 'following'; searchParams.first=0; updateSearchParams('filter_following')"
                         )
                             span([innerHTML]="':green_heart: Following' | emojione")
-                    //- Academy Libraries
-                    //- div(*ngFor="let academy of academies")
-                    //-     button.btn.btn-filter( 
-                    //-         title="Filter by your academy's library",
-                    //-         [class.active]="searchParams.activeLibrary === 'ACADEMYID'",
-                    //-         (click)="searchParams.activeLibrary = 'ACADEMYID'; updateSearchParams('filter_academy')"
-                    //-     )
-                    //-         span([innerHTML]="':school: Academy Name' | emojione")
                 .form-group
                     label Collections
                     div
@@ -116,6 +117,16 @@ nav-bar([showDashboardOptions]="true")
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="searchParams.subjectFilter", [settings]="subjectDropSettings")
         .col-md-8
             #discoverStrategies.strategies-banner.mb-5.p-3(*ngIf="searchParams.activeLibrary === 'strategies'")
+                .row
+                    .col-2.px-4.py-0
+                        i.icon-strategies-lg.d-inline-block.w-100.h-100
+                    .col-6.p-0
+                        h2.mb-1 Strategy Templates!
+                        p.banner-text.mb-0 Reading strategy templates for trying new approaches in your classroom
+                    .col-4.px-4.py-0
+                        //- , style="max-width: 400px;"
+                        img(src="/assets/images/graphic-strategies.svg") 
+            #discoverMyDistrict.district-header.mb-5.p-3(*ngIf="searchParams.district.length > 0")
                 .row
                     .col-2.px-4.py-0
                         i.icon-strategies-lg.d-inline-block.w-100.h-100

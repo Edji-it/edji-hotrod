@@ -34,7 +34,8 @@ export class SearchPage implements OnInit {
     gradeMin: 0, // defaulted to min grade available
     gradeMax: 13, // defaulted to max grade available
     searchTerm: '', // defaulted to empty
-    activeLibrary: 'public', // defaulted to public
+    activeLibrary: 'public', // defaulted to public,
+    district: '', // defaulted to empty
   }
 
   public rows: number = 15
@@ -230,6 +231,7 @@ export class SearchPage implements OnInit {
     if (this.searchParams.first) {
       filterParams['from'] = this.searchParams.first
     }
+    if (this.searchParams.district) filterParams['district'] = this.searchParams.district
     // fire an analytic event here for tracking purposes
     if (action !== '') {
       this.angulartics.eventTrack.next({
@@ -410,6 +412,13 @@ export class SearchPage implements OnInit {
     if (context === 'preview') {
       this.showReadingPreviewModal = true
     }
+  }
+
+  /**
+   * Validates the school and district_id properties exist on a user before trying to search by that param
+   */
+  public setDistrictParam(): void {
+    this.searchParams.district = this.user.school && this.user.school.district_id ? this.user.school.district_id : ''
   }
 }
 
