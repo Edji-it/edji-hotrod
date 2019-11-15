@@ -28,6 +28,11 @@ export class OwnerToolsComponent implements OnInit {
   public showQuestionFeed: boolean = false
   public showReadingRecap: boolean = false
   public showCoOwnerGuide: boolean = false
+  /**
+   * @todo clean up boolean trap
+   */
+  public showAllComments: boolean = false
+
   public ownerToolBlockHeight: string
 
   // State vars
@@ -124,6 +129,9 @@ export class OwnerToolsComponent implements OnInit {
 
   private showElseFalse(displayPane: string) {
     switch (displayPane) {
+      case 'showAllComments':
+        this.showAllComments = !this.showAllComments
+        break
       case 'showQuestionFeed':
         this.showQuestionFeed = !this.showQuestionFeed
         this.showFireFeed = false

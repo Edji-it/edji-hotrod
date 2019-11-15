@@ -132,6 +132,7 @@ import { DiscoverFeedComponent } from './discover-feed/discover-feed.component'
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { GoogleButton, CleverButton } from './buttons'
 import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
+import { CommentExplorerComponent } from './shared'
 import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
 import { TooltipModule } from 'primeng/tooltip'
@@ -213,6 +214,7 @@ const routerOptions: ExtraOptions = {
     RegisterPageComponent,
     CreateProfilePageComponent,
     CommentPaneComponent,
+    CommentExplorerComponent,
     CommentComponent,
     TeacherFeedbackComponent,
     AvatarPortalComponent,

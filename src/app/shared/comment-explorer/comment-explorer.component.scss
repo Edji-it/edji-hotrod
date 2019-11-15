@@ -1,0 +1,224 @@
+@import '../../../sass/base/variables';
+
+.sliding-pane-comment__header {
+  position: sticky;
+  top: $navOffset + 10px;
+  left: 0px;
+  z-index: 5000;
+  background: #fff;
+  width: 100%;
+}
+
+.header-wrap {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #cdcdcd;
+}
+
+.comment-container {
+  overflow: visible;
+  height: auto;
+  position: relative;
+  width: 100%;
+  display: block;
+  padding-top: $navOffset + $base-pad;
+  z-index: 1000;
+}
+
+.exit-row {
+  display: block;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  width: 70px;
+  height: 100vh;
+  pointer-events: all;
+  background: transparent;
+  z-index: 4000;
+  cursor: pointer;
+}
+
+.reply-row {
+  position: relative;
+
+  & user-avatar {
+    left: 0px;
+    top: 10px;
+  }
+}
+
+.replyHighlight-card {
+  margin: 0;
+  max-width: 100%;
+  border: none;
+  padding: 5px;
+}
+
+.replyHighlight-card_image {
+  float: left;
+  width: 50%;
+  padding: 5px;
+  font-style: italic;
+}
+
+.replyHighlight-card_button {
+  // float: right;
+  width: 50%;
+  padding: 5px;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.replyHighlight-card_liImage {
+  margin: 0;
+  max-width: 100%;
+  border-top: none;
+  padding: 0px;
+}
+
+.replyCommentBlock {
+  height: 75px;
+  width: calc(100% - 32px);
+}
+
+.replyHeaderRow {
+  margin: 0;
+}
+
+.replyCountText {
+  margin: 0;
+  font-size: 12px;
+  color: $gray;
+}
+
+.replyCommentInputBlock {
+  width: calc(100% - 66px);
+}
+
+// $replyContainerHeight: 209px;
+// $replyContainerHeight: 250px;
+// $replyContainerHeight: 203px;
+
+.replyOverflow {
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-right: -20px;
+  padding-right: 20px;
+  // height: calc(100% - $replyContainerHeight);
+}
+
+.replyOverflow-normal {
+  height: calc(100% - 214px);
+}
+
+.replyOverflow-eKey {
+  height: calc(100% - 430px);
+}
+
+.replyContainer {
+  height: 100%;
+}
+
+.replyButtonGroup {
+  width: auto;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 2px #dedede dotted;
+  padding: 2px;
+  margin-top: 8px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+
+  & button {
+    float: left;
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 6px;
+    padding: 3px 0.5px !important;
+    background-color: $bubbleColor !important;
+    text-align: center;
+    z-index: 1000;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+    & i {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.reply__avatar {
+  left: 0;
+  position: absolute;
+  top: 10px;
+}
+
+.replyInput {
+  width: calc(90% - 90px);
+  display: inline-block;
+  // left: 34px;
+  position: relative;
+  // top: 12px;
+  text-align: left;
+  color: darken($gray, 10%);
+
+  margin-left: 30px;
+  padding-left: 5px;
+  font-size: 13px;
+  vertical-align: top;
+  line-height: 48px;
+}
+
+.replies {
+  margin-left: 50px;
+  position: relative;
+
+  label {
+    display: inline-block;
+    color: #5f5f5f;
+  }
+}
+
+.replies__header {
+  // margin-top: -25px;
+  // width: 50%;
+  // display: inline-block;
+  margin-top: -25px;
+  width: 50%;
+  float: left;
+}
+
+.arrow-wrap {
+  // -25px ???
+  width: 32px;
+  display: inline-block;
+}
+
+.arrow-point {
+  width: 10px;
+  margin: 0px 8.5px;
+  height: auto;
+  vertical-align: top;
+}
+
+.arrow-line {
+  width: 2px;
+  height: calc(100% - 50px);
+  background: #a9efbc;
+  position: absolute;
+  top: -20px;
+  left: 13px;
+}
+
+.reply-input__line {
+  width: 0px;
+  height: 50px;
+  border-left: 2px dotted #a9efbc;
+  position: absolute;
+  bottom: calc(100% - 20px);
+  left: 13px;
+  z-index: -1;
+}

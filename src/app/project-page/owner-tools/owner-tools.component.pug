@@ -32,6 +32,14 @@
     i#toggleFirefeed.icon-fire-feed(*ngIf="currentProject")
     span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
     label Feed
+  //- All Comments
+  button.btn.owner-tools__btn(
+    type="button",
+    (tap)="showElseFalse('showAllComments')",
+  )
+    i#toggleAllComments.icon-fire-feed
+    span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
+    label All
   //- Question Feed toggle
   div(*ngIf="currentReading.questions && currentReading.questions.length>0")
     button.btn.owner-tools__btn.btn-hv(
@@ -96,6 +104,11 @@
         //- label Questions
   a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="ownerToolShow=!ownerToolShow")
     span(style="font-size: 11px;") Tools
+
+//- All/My Comments display
+comment-explorer(
+  [visible]="showAllComments"
+)
 
 //- Leaderboard goes here
 hot-leaderboard(

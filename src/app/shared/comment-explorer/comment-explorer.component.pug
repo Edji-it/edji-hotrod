@@ -1,0 +1,62 @@
+.sliding-pane-comment.from-left(*ngIf="visible", #commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
+  .sliding-pane-comment__header.container-fluid
+    .row
+      .col-12
+        .header-wrap
+          button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
+            span(aria-hidden="true") ×
+          p.pt-1 Comments on Line
+  .comment-container.container-fluid.pb-4(
+    [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
+  )
+    .row
+      .col-12
+        div(*ngFor="let comment of comments; let i = index")
+          edji-comment(
+            [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
+            [class.spec-owner]="comment.user_id === project.teacher_id",
+            [readOnly]="comment.user_id !== user._id",
+            [userPermission]="getCommentPermissions(comment)",
+            [commentPaneActive]="true",
+            [comment]="comment",
+            [commentMobile]="true",
+            [commentMobileFirst]="i<1",
+            (commentActivation)="commentActivationEmitter($event, comment)",
+            (commentUpdated)="commentUpdatedEmitter()",
+            (commentReply)="commentReplyEmitter($event)",
+            style="display: initial;"
+          )
+          ng-container(*ngIf="repliesToggleById[comment._id]")
+            .replies([ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? '' : 'replyOverflow-normal' ]")
+              .replies__header
+                .arrow-wrap
+                  img.arrow-point(src="assets/images/reply-triangle.png")
+                  .arrow-line
+              ng-container(*ngIf="repliesById[comment._id]")
+                .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
+                  edji-comment.replyCommentBlock(
+                    *ngIf="replyComment.author",
+                    [readOnly]="replyComment.user_id !== user._id",
+                    [comment]="replyComment",
+                    [commentContext]="'reply'",
+                    [isActive]="replyComment.active",
+                    [reply]="true",
+                    [userPermission]="getCommentPermissions(replyComment)",
+                    (commentActivation)="commentActivationEmitter($event, replyComment)",
+                    [attr.replyId]="replyComment._id"
+                  )
+              //--Reply input--
+              .reply-row
+                user-avatar.comment__avatar.show([userDetails]="user")
+                .reply-input__line
+                .replyInput Add Reply
+                //--Add reply buttons--
+                .replyButtonGroup
+                  button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")
+                    i.icon.icon-comment-emoji
+                  button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType(comment, 'text')")
+                    i.icon.icon-comment-text
+                  button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
+                    i.icon.icon-mic
+.exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
+//- END .comment - mobile
