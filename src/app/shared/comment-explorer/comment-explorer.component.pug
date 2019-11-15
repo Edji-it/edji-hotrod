@@ -6,32 +6,34 @@
           .header-wrap
             button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
               span(aria-hidden="true") ×
-            i.icon.icon-comments 
-            .header-text 
+            i.icon.icon-comments
+            .header-text
               | {{ commentCount }} Comments
               .small All Students
         .col-12
           label#sortByCreated.form-check-label.form-check-btn.form-check-sm(
-              [class.active]="sortValue == 'true'",
+              [class.active]="sortValue == 'created'",
               title="Sort comments in the order they were created"
             )
             input.form-check-input(
                 type="radio",
                 name="sortCreated",
-                value="true",
+                value="created",
                 [(ngModel)]="sortValue",
+                (click)="filterComments('created')",
                 checked
               )
             span By Created
           label#sortByLocation.form-check-label.form-check-btn.form-check-sm(
-              [class.active]="sortValue == 'false'",
+              [class.active]="sortValue == 'location'",
               title="Sort comments by where they appear in the text"
             )
             input.form-check-input(
                 type="radio",
                 name="sortLocation",
-                value="false",
+                value="location",
                 [(ngModel)]="sortValue",
+                (click)="filterComments('location')",
               )
             span By Location
     .comment-container.container-fluid.pb-4(

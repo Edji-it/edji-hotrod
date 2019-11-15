@@ -45,9 +45,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   // // Subscriptions and related
   public subscriptions: Subscription[] = []
+  private allComments: EdjiComment[] = []
   public comments: EdjiComment[] = []
   public commentCount: number = 0
   // public commentByPos: any[] = []
+
+  public sortValue: string = 'created' // default to created
 
   // // Comment Pane Component Inputs
   @Input() comment: EdjiComment
@@ -103,8 +106,9 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         project => {
           if (project) {
             this.project = project
-            this.comments = project.comments || []
+            this.allComments = project.comments || []
             this.commentCount = this.comments.length
+            this.filterComments()
           }
         },
         error => {
@@ -137,6 +141,34 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         this.project.heat_vision = heatToggle.heatVision.all
       }),
     )
+  }
+
+  /**
+   * Filters and sorts comments based on set parameters
+   * @todo support using URL params
+   * @param sort optional - ordering parameter
+   */
+  public filterComments(sort?: string) {
+    if (!sort) {
+      sort = this.sortValue
+    }
+    let sorted = this.allComments.slice().filter(comment => {
+      return comment.start >= 0
+    })
+    if (sort === 'location') {
+      this.comments = sorted.sort(function(a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return a.start - b.start
+      })
+    } else {
+      // 'created' / default
+      this.comments = sorted.sort(function(a, b) {
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
+      })
+    }
   }
 
   dismissCommentPane() {
