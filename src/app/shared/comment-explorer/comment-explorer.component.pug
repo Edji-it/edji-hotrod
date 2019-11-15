@@ -6,7 +6,34 @@
           .header-wrap
             button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
               span(aria-hidden="true") ×
-            p.pt-1 Comments
+            i.icon.icon-comments 
+            .header-text 
+              | {{ commentCount }} Comments
+              .small All Students
+        .col-12
+          label#sortByCreated.form-check-label.form-check-btn.form-check-sm(
+              [class.active]="sortValue == 'true'",
+              title="Sort comments in the order they were created"
+            )
+            input.form-check-input(
+                type="radio",
+                name="sortCreated",
+                value="true",
+                [(ngModel)]="sortValue",
+                checked
+              )
+            span By Created
+          label#sortByLocation.form-check-label.form-check-btn.form-check-sm(
+              [class.active]="sortValue == 'false'",
+              title="Sort comments by where they appear in the text"
+            )
+            input.form-check-input(
+                type="radio",
+                name="sortLocation",
+                value="false",
+                [(ngModel)]="sortValue",
+              )
+            span By Location
     .comment-container.container-fluid.pb-4(
       [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
     )

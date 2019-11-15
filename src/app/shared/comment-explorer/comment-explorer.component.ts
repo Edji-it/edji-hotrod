@@ -46,6 +46,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   // // Subscriptions and related
   public subscriptions: Subscription[] = []
   public comments: EdjiComment[] = []
+  public commentCount: number = 0
   // public commentByPos: any[] = []
 
   // // Comment Pane Component Inputs
@@ -102,7 +103,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         project => {
           if (project) {
             this.project = project
-            this.comments = project.comments
+            this.comments = project.comments || []
+            this.commentCount = this.comments.length
           }
         },
         error => {

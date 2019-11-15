@@ -172,6 +172,10 @@ $iconGrayOpacity: 0.6;
   height: 1em;
 }
 
+.icon-comments {
+  @include icon('icon-comments.svg');
+}
+
 .icon-create {
   @include icon('icon-create.svg');
   display: inline-block;

@@ -5,14 +5,41 @@
   top: 0px;
   left: 0px;
   z-index: 5000;
-  background: #fff;
+  background: rgba(255,255,255,0.95);
   width: 100%;
+
+  width: calc(100% + 60px);
+
+  padding: 5px 45px 0px;
+
+  margin: 0px -30px;
+  // border-bottom: 1px solid #cdcdcd;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.2);
 }
 
 .header-wrap {
   padding-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #cdcdcd;
+
+  & .icon {
+    width: 2em;
+    height: 2em;
+    display: inline-block;
+    margin-right: 12px;
+    margin-top: 2px;
+  }
+
+  & .small {
+      font-size: 12px;
+      color:#bbb;
+  }
+}
+
+.header-text {
+  font-size: 18px;
+  display: inline-block;
+  vertical-align: top;
+  line-height: 1em;
 }
 
 .comment-container {
