@@ -193,7 +193,7 @@ export class ReadingService {
       queryString += '&scope=owner'
     }
     // district readings
-    if (searchParams.district.length > 0) {
+    if (searchParams.district && searchParams.district.length > 0) {
       queryString += `&district_id=${searchParams.district}`
     }
     // Default to sort by most recent, unless using a search term

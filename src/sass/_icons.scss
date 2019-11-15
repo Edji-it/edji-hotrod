@@ -102,6 +102,10 @@ $iconGrayOpacity: 0.6;
 
 .icon-district-lg {
   @include icon('icon-district-lg.svg');
+  height: 3em;
+  width: 3em;
+  display: inline-block;
+  background-color: transparent;
 }
 
 .icon-caret,

@@ -40,7 +40,7 @@ nav-bar([showDashboardOptions]="true")
                         i.icon.icon-close.mx-1
                 br
     .row
-        .col-md-4
+        .col-md-3
                 .form-group(*ngIf="!isSearching")
                     .input-group.input-group
                         .input-group-prepend-icon((click)="searchInput.focus()")
@@ -60,7 +60,7 @@ nav-bar([showDashboardOptions]="true")
                     div
                         button#discoverFilterPublic.btn.btn-filter( 
                             title="See public readings from all users",
-                            [class.active]="!searchParams.activeLibrary || searchParams.activeLibrary === 'public'",
+                            [class.active]="!searchParams.activeLibrary || searchParams.activeLibrary === 'public' && searchParams.district.length===0",
                             (click)="searchParams.activeLibrary = 'public'; searchParams.first=0; updateSearchParams('filter_public')"
                         )
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
@@ -77,7 +77,7 @@ nav-bar([showDashboardOptions]="true")
                     div
                         button#discoverFilterFollowing.btn.btn-filter( 
                             title="Filter by users you follow",
-                            [class.active]="searchParams.activeLibrary === 'following'",
+                            [class.active]="searchParams.activeLibrary === 'following' && searchParams.district.length===0",
                             (click)="searchParams.activeLibrary = 'following'; searchParams.first=0; updateSearchParams('filter_following')"
                         )
                             span([innerHTML]="':green_heart: Following' | emojione")
@@ -115,7 +115,7 @@ nav-bar([showDashboardOptions]="true")
                 //- .form-group
                 //-     label Subjects
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="searchParams.subjectFilter", [settings]="subjectDropSettings")
-        .col-md-8
+        .col-md-6
             #discoverStrategies.strategies-banner.mb-5.p-3(*ngIf="searchParams.activeLibrary === 'strategies'")
                 .row
                     .col-2.px-4.py-0
@@ -126,16 +126,20 @@ nav-bar([showDashboardOptions]="true")
                     .col-4.px-4.py-0
                         //- , style="max-width: 400px;"
                         img(src="/assets/images/graphic-strategies.svg") 
-            #discoverMyDistrict.district-header.mb-5.p-3(*ngIf="searchParams.district.length > 0")
+            #discoverMyDistrict.district-header.p-3(*ngIf="searchParams.district.length > 0")
                 .row
-                    .col-2.px-4.py-0
-                        i.icon-strategies-lg.d-inline-block.w-100.h-100
-                    .col-6.p-0
-                        h2.mb-1 Strategy Templates!
-                        p.banner-text.mb-0 Reading strategy templates for trying new approaches in your classroom
-                    .col-4.px-4.py-0
-                        //- , style="max-width: 400px;"
-                        img(src="/assets/images/graphic-strategies.svg") 
+                    .col-12
+                        i.icon-district-lg
+                        h2.ml-3.mb-4.d-inline-block.align-middle {{ user && user.school && user.school.district_name }} District
+                .row
+                    .col-12
+                        p Reading from teachers in 
+                            a.link(
+                                tabindex="0",
+                                (click)="goToAccount()",
+                                title="Click to see your district"
+                            ) 
+                                |your district
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
@@ -206,6 +210,13 @@ nav-bar([showDashboardOptions]="true")
                                 span.w &hellip;
                 </ng-template>
             </p-dataList>
+        .col-md-3
+            #academyBanner(*ngIf="academyState && academyState.academies && academyState.academies.length > 0")
+                img(src="/assets/images/logo-academy-library.svg")
+                h2.d-inline-block Academies teach together
+                p Others in your district are on Edji!
+                p Edji Academy makes it easy for your school or district to get you Hero, while also establishing an Academy Library.
+                button.btn.btn-primary((click)="goToAccount()") Becoming an Academy
 //- Reading Preview Modal
 hot-reading-preview-modal(
     *ngIf="showReadingPreviewModal",

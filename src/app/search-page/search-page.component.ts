@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService, AcademyService, LockerService, ReadingQuery } from '../_services'
+import { AuthService, ReadingService, AcademyService, LockerService, ReadingQuery, AcademyState } from '../_services'
 import { User, Reading, Project } from '../shared/datatypes'
 
 @Component({
@@ -62,6 +62,7 @@ export class SearchPage implements OnInit {
   // State vars
   public loading: boolean = true
   public previewIndex: number = -1
+  public academyState: AcademyState = {}
 
   // Archiving state
   public readingToArchive: Reading
@@ -188,6 +189,9 @@ export class SearchPage implements OnInit {
           console.error(err)
         },
       ),
+      this._auth.currentAcademyState.subscribe(currentState => {
+        this.academyState = currentState
+      }),
     )
   }
 
@@ -205,6 +209,8 @@ export class SearchPage implements OnInit {
     }
     let filters = {}
     let filterParams = {}
+    // reset our vars so we don't have mixed filtering that is unintended
+    if (action !== 'filter_district') this.searchParams.district = ''
     // Pagination values
     this.searchParams.first = filters['from'] =
       paging && paging.first != undefined ? parseInt(paging.first) : this.searchParams.first
@@ -419,6 +425,10 @@ export class SearchPage implements OnInit {
    */
   public setDistrictParam(): void {
     this.searchParams.district = this.user.school && this.user.school.district_id ? this.user.school.district_id : ''
+  }
+
+  public goToAccount(): void {
+    this.router.navigate(['/account'])
   }
 }
 

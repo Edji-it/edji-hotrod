@@ -100,3 +100,15 @@
 .icon-strategies-lg {
   background-color: transparent; // our highlight class h- causes this element bkgnd to turn in to a crimson red
 }
+
+#academyBanner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #FFFCF0;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 3px;
+}
