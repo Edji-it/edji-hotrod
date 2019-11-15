@@ -2,7 +2,7 @@
 
 .sliding-pane-comment__header {
   position: sticky;
-  top: $navOffset + 10px;
+  top: 0px;
   left: 0px;
   z-index: 5000;
   background: #fff;
@@ -21,7 +21,7 @@
   position: relative;
   width: 100%;
   display: block;
-  padding-top: $navOffset + $base-pad;
+  padding-top: $base-pad;
   z-index: 1000;
 }
 
