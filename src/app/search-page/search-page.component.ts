@@ -425,8 +425,27 @@ export class SearchPage implements OnInit {
     this.searchParams.district = this.user.school && this.user.school.district_id ? this.user.school.district_id : ''
   }
 
+  /**
+   * Sends user to their account page to view their district selection and make changes
+   */
   public goToAccount(): void {
     this.router.navigate(['/account'])
+  }
+
+  /**
+   * Opens the referral modal by using the query param
+   */
+  public showReferral(): void {
+    // append showRefer param before we go
+    this.loginParams['showRefer'] = true
+    this.router.navigate(['/discover' + (this.isSearching ? '/search' : '')], { queryParams: this.loginParams })
+  }
+
+  /**
+   * Sends user to the Academy pricing page
+   */
+  public goToAcademyPricing(): void {
+    this.router.navigate(['/plans'], { fragment: 'academy' })
   }
 }
 
