@@ -1,5 +1,5 @@
 nav-bar([showDashboardOptions]="true")
-.container-fluid.mt-4
+.mt-4([ngClass]="searchParams.district.length > 0 && academyState && academyState.academies && academyState.academies.length===0 ? 'container-fluid' : 'container'")
     .row
         .col-12.my-4
             ng-container(*ngIf="!isSearching")
@@ -40,6 +40,25 @@ nav-bar([showDashboardOptions]="true")
                         i.icon.icon-close.mx-1
                 br
     .row
+        .col-lg-3.order-md-1.mb-4(*ngIf="searchParams.district.length > 0 && academyState && academyState.academies && academyState.academies.length===0")
+            #academyBanner
+                .container
+                    .row.mb-3
+                        //- .col-12
+                        //-     div.d-inline-block.pr-3
+                        //-         img.academy-logo(src="/assets/images/logo-academy-library.svg")
+                        //-     div.d-inline-block
+                        //-         h3.m-0 Academies teach together
+                        .col-3.p-0.pr-2
+                            img.academy-logo(src="/assets/images/logo-academy-library.svg")
+                        .col-9.p-0
+                            h3.d-inline-block.m-0 Academies teach together
+                    .row
+                        .col-12.p-0
+                            p.academy-text.mb-2 Others in your district are on Edji!
+                            p.academy-text.mb-4 Edji Academy makes it easy for your school or district to get you Hero, while also establishing an Academy Library.
+                        .col-12.p-0.center
+                            button.btn.btn-academy((click)="goToAccount()") Becoming an Academy
         .col-md-3
                 .form-group(*ngIf="!isSearching")
                     .input-group.input-group
@@ -66,7 +85,8 @@ nav-bar([showDashboardOptions]="true")
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
                     //- My District 
                     div
-                        button#discoverFilterDistrict.btn.btn-filter( 
+                        button#discoverFilterDistrict.btn.btn-filter(
+                            *ngIf="user && user.school && user.school.district_id",
                             title="Filter by shared readings in your district",
                             [class.active]="searchParams.district.length > 0",
                             (click)="setDistrictParam(); searchParams.first=0; updateSearchParams('filter_district')"
@@ -115,7 +135,7 @@ nav-bar([showDashboardOptions]="true")
                 //- .form-group
                 //-     label Subjects
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="searchParams.subjectFilter", [settings]="subjectDropSettings")
-        .col-md-6
+        div([ngClass]="searchParams.district.length > 0 && academyState && academyState.academies && academyState.academies.length===0 ? 'col-md-6' : 'col-md-9'")
             #discoverStrategies.strategies-banner.mb-5.p-3(*ngIf="searchParams.activeLibrary === 'strategies'")
                 .row
                     .col-2.px-4.py-0
@@ -133,7 +153,7 @@ nav-bar([showDashboardOptions]="true")
                         h2.ml-3.mb-4.d-inline-block.align-middle {{ user && user.school && user.school.district_name }} District
                 .row
                     .col-12
-                        p Reading from teachers in 
+                        p.font-gray Reading from teachers in 
                             a.link(
                                 tabindex="0",
                                 (click)="goToAccount()",
@@ -154,9 +174,13 @@ nav-bar([showDashboardOptions]="true")
                 b Error Loading
                 | There was an error on our server or your connection, please try again or contact us if you continue to have an issue.
             //- No results message when user is genuinely searching
-            .alert.alert-info(*ngIf="searchAlerts.noResults")
+            .alert.alert-info(*ngIf="searchAlerts.noResults && !searchParams.district")
                 b No Readings Found
                 | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters. 
+            //- No results message when user is genuinely searching
+            .alert.alert-info(*ngIf="searchAlerts.noResults && searchParams.district")
+                b No Shared Readings From Your District
+                p No district readings
             .row.loading(*ngIf="loading")
             ng-container(*ngIf="isSearching || filterCount > 0")
                 .found__readings
@@ -210,13 +234,6 @@ nav-bar([showDashboardOptions]="true")
                                 span.w &hellip;
                 </ng-template>
             </p-dataList>
-        .col-md-3
-            #academyBanner(*ngIf="academyState && academyState.academies && academyState.academies.length > 0")
-                img(src="/assets/images/logo-academy-library.svg")
-                h2.d-inline-block Academies teach together
-                p Others in your district are on Edji!
-                p Edji Academy makes it easy for your school or district to get you Hero, while also establishing an Academy Library.
-                button.btn.btn-academy((click)="goToAccount()") Becoming an Academy
 //- Reading Preview Modal
 hot-reading-preview-modal(
     *ngIf="showReadingPreviewModal",

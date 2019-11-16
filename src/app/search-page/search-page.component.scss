@@ -1,4 +1,5 @@
 @import '../../sass/base/variables';
+$grayFont: #727272;
 
 .hero-background {
   position: absolute;
@@ -102,7 +103,7 @@
 }
 
 #academyBanner {
-  padding: 16px;
+  padding: 18px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -112,5 +113,25 @@
   background-clip: border-box;
   border: 1px solid rgba(0,0,0,.125);
   border-radius: 3px;
-  color: #727272;
+  color: $grayFont;
+
+  & h2 {
+    line-height: initial;
+  }
+}
+
+.font-gray {
+  color: $grayFont;
+}
+
+img.academy-logo {
+  width: 42px;
+}
+
+.academy-text {
+  font-size: 12px;
+}
+
+.btn-academy {
+  white-space: normal;
 }
