@@ -1,5 +1,5 @@
 nav-bar([showDashboardOptions]="true")
-.container.mt-4
+.container-fluid.mt-4
     .row
         .col-12.my-4
             ng-container(*ngIf="!isSearching")
@@ -216,7 +216,7 @@ nav-bar([showDashboardOptions]="true")
                 h2.d-inline-block Academies teach together
                 p Others in your district are on Edji!
                 p Edji Academy makes it easy for your school or district to get you Hero, while also establishing an Academy Library.
-                button.btn.btn-primary((click)="goToAccount()") Becoming an Academy
+                button.btn.btn-academy((click)="goToAccount()") Becoming an Academy
 //- Reading Preview Modal
 hot-reading-preview-modal(
     *ngIf="showReadingPreviewModal",

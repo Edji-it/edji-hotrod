@@ -119,9 +119,7 @@ export class SearchPage implements OnInit {
           ...params,
         }
         this.clearFilterVars()
-        if (params.q) {
-          this.searchParams.searchTerm = params.q
-        }
+        if (params.q) this.searchParams.searchTerm = params.q
         if (params.library) {
           this.searchParams.activeLibrary = params.library
           if (this.searchParams.activeLibrary !== 'public') {
@@ -141,9 +139,8 @@ export class SearchPage implements OnInit {
           }
           this.filterCount++
         }
-        if (params.from) {
-          this.searchParams.first = parseInt(params.from)
-        }
+        if (params.from) this.searchParams.first = parseInt(params.from)
+        if (params.district) this.searchParams.district = params.district
         /**
          * Load results
          * - Not when opening/closing preview if results are already loaded
@@ -262,6 +259,7 @@ export class SearchPage implements OnInit {
     this.gradesSelected = []
     this.searchParams.subjectFilter = []
     this.searchParams.activeLibrary = 'public'
+    this.searchParams.district = ''
   }
 
   /**
