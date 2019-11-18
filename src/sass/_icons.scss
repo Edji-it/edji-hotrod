@@ -506,6 +506,10 @@ $iconGrayOpacity: 0.6;
   height: 2em;
 }
 
+.icon-view-line {
+  @include icon('icon-view-line.svg');
+}
+
 .icon-vision-flame {
   @include icon('icon-vision-flame.svg');
 

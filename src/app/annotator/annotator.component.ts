@@ -1691,7 +1691,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
-      this.projectStore.commentPaneStateSubj.next(true)
     } else {
       // Clear Comment ID/deep link params
       this.clearQueryParams()
@@ -1702,7 +1701,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.commentPane = false
       // reset our icon arrow position
       this.commentHeightPos = 0
-      this.projectStore.commentPaneStateSubj.next(false)
       // Run the standard comment inactivation to reset variables and do things like close the Keyboard
       this.inactivateComment()
     }

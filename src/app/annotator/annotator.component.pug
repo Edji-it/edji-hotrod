@@ -244,15 +244,21 @@ emoji-keyboard(
 )
 
 //- comment-pane
-comment-pane(
-    [isActive]="(selectedComment.active || selectedReply.active) ? true : false",
-    [isSelected]="(selectedComment.selected || selectedReply.selected) ? true : false",
+//- comment-pane(
+//-     [isActive]="(selectedComment.active || selectedReply.active) ? true : false",
+//-     [isSelected]="(selectedComment.selected || selectedReply.selected) ? true : false",
+//-     [comment]="selectedComment",
+//-     [reply]="selectedReply",
+//-     (hideComment)="toggleCommentPane(false)",
+//-     (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",
+//-     (commentUpdated)="setLinePositions()",
+//-     (commentReply)="discReplyFire($event)"
+//- )
+
+comment-explorer(
     [comment]="selectedComment",
-    [reply]="selectedReply",
-    (hideComment)="toggleCommentPane(false)",
-    (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",
-    (commentUpdated)="setLinePositions()",
-    (commentReply)="discReplyFire($event)"
+    [visible]="commentPane",
+    (close)="toggleCommentPane(false)"
 )
 
 //- Icon Arrow for the active comment

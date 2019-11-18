@@ -48,21 +48,32 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   private allComments: EdjiComment[] = []
   public comments: EdjiComment[] = []
   public commentCount: number = 0
-  // public commentByPos: any[] = []
+  public commentByPos: any[] = []
 
+  // Sort and Filtering
   public sortValue: string = 'created' // default to created
+
+  public filterMode: 'line' | 'all' = 'all'
 
   // // Comment Pane Component Inputs
   @Input() comment: EdjiComment
-  @Input() visible: boolean
-  // @Input() reply: EdjiComment
-  // @Input()
-  // set isActive(isActive: boolean) {
-  //   if (typeof isActive !== 'undefined' && this.active !== isActive) {
-  //     this.active = isActive
-  //     this.evaluateShouldScroll()
-  //   }
-  // }
+  private _visible: boolean
+  @Input() 
+  set visible(visible: boolean) {
+    // if (typeof visible !== 'undefined' && this.active !== visible) {
+      this._visible = visible
+    // }
+    if (visible) {
+      this.filterComments()
+      this.evaluateShouldScroll()
+      document.body.classList.add('body__lock-scroll')
+    } else {
+      document.body.classList.remove('body__lock-scroll')
+    }
+  }
+  get visible(): boolean {
+    return this._visible
+  }
   // // Checking for selected in the instances where a user clicks on the avatar and we want to scroll to that comment while adding the associated classes
   // @Input()
   // set isSelected(isSelected: boolean) {
@@ -73,7 +84,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   // }
 
   // // Comment Pane Component Outputs
-  // @Output() hideComment = new EventEmitter()
+  @Output() close = new EventEmitter()
   // @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   // @Output() commentReply = new EventEmitter()
 
@@ -89,14 +100,14 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Subscribe to updates to the comment by line number position array
     this.subscriptions.push(
-      // this.projectStore.commentByPos.subscribe(
-      //   commentByPos => {
-      //     this.commentByPos = commentByPos
-      //   },
-      //   error => {
-      //     console.error(error)
-      //   },
-      // ),
+      this.projectStore.commentByPos.subscribe(
+        commentByPos => {
+          this.commentByPos = commentByPos
+        },
+        error => {
+          console.error(error)
+        },
+      ),
       // /** Set the current user every time it changes */
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
@@ -115,15 +126,15 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
-      this.projectStore.commentPaneState.subscribe(paneState => {
-        this.visible = paneState
-        if (paneState) {
-          this.evaluateShouldScroll()
-          document.body.classList.add('body__lock-scroll')
-        } else {
-          document.body.classList.remove('body__lock-scroll')
-        }
-      }),
+      // this.projectStore.commentPaneState.subscribe(paneState => {
+      //   this.visible = paneState
+      //   if (paneState) {
+      //     this.evaluateShouldScroll()
+      //     document.body.classList.add('body__lock-scroll')
+      //   } else {
+      //     document.body.classList.remove('body__lock-scroll')
+      //   }
+      // }),
       // Subscribe to updates to the reply reference object
       // this.projectStore.repliesById.subscribe(
       //   repliesById => {
@@ -152,9 +163,20 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     if (!sort) {
       sort = this.sortValue
     }
-    let sorted = this.allComments.slice().filter(comment => {
-      return comment.start >= 0
-    })
+    let sorted
+    if (this.comment && this.comment.lineY) {
+      this.filterMode = 'line'
+      this.sortValue = sort = 'location'
+      sorted = this.commentByPos[this.comment.lineY].slice().filter(comment => {
+        return comment.start >= 0
+      })
+    } else {
+      this.filterMode = 'all'
+      sorted = this.allComments.slice().filter(comment => {
+        return comment.start >= 0
+      })
+    }
+
     if (sort === 'location') {
       this.comments = sorted.sort(function(a, b) {
         // Turn your strings into dates, and then subtract them
@@ -169,16 +191,38 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         return Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
       })
     }
+
+    this.commentCount = this.comments.length
+  }
+
+  /**
+   * Clear filters applied to the explorer
+   * @note does not fire "filterComments", so it can be used internally
+   */
+  private clearFilters(): void {
+    this.sortValue = 'created'
+    this.filterMode = 'all'
+    this.comment = null
+  }
+
+  /**
+   * Reset comment explorer to "all comments"
+   */
+  viewAll(): void {
+    this.clearFilters()
+    this.filterComments()
   }
 
   dismissCommentPane() {
-    this.selected = false
+    console.log("Dismiss!")
+    this.visible = false
+    this.comment = null
     // this.comment.selected = false
     // if (this.reply) {
     //   this.reply.selected = false
     // }
-    // this.hideComment.emit()
-    this.projectStore.commentPaneStateSubj.next(false)
+    this.close.emit(false)
+    // this.projectStore.commentPaneStateSubj.next(false)
     document.body.classList.remove('body__lock-scroll')
   }
 
