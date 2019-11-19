@@ -294,3 +294,22 @@
     left: 2px;
   }
 }
+
+.end-block {
+  position: relative;
+}
+
+.timeline-line {
+  position: absolute;
+  height: 10000px;
+  bottom: 100%;
+  left: 18px;
+  width: 0px;
+  border-left: 1px dashed #b0f7a7;
+}
+
+.mobileBlock {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 50px);
+}

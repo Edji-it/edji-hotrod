@@ -106,15 +106,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
-      this.projectStore.commentPaneState.subscribe(paneState => {
-        this.visible = paneState
-        if (paneState) {
-          this.evaluateShouldScroll()
-          document.body.classList.add('body__lock-scroll')
-        } else {
-          document.body.classList.remove('body__lock-scroll')
-        }
-      }),
       // Subscribe to updates to the reply reference object
       this.projectStore.repliesById.subscribe(
         repliesById => {
@@ -141,7 +132,6 @@ export class CommentPaneComponent implements OnInit, OnDestroy {
       this.reply.selected = false
     }
     this.hideComment.emit()
-    this.projectStore.commentPaneStateSubj.next(false)
     document.body.classList.remove('body__lock-scroll')
   }
 

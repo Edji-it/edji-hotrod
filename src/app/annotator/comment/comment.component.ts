@@ -141,16 +141,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       ),
     )
 
-    // Change mobile icon state if pane closes
-    this.subscriptions.push(
-      this.projectStore.commentPaneState.subscribe(paneState => {
-        // We can ONLY use this subscription to CLEAR the indicatesPane var to *false*
-        if (paneState === false) {
-          this.indicatesPane = false
-        }
-      }),
-    )
-
     this.subscriptions.push(
       this.projectStore.commentByPos.subscribe(commentsByPos => {
         this.commentsByPos = commentsByPos
@@ -458,4 +448,27 @@ export class CommentComponent implements OnInit, OnDestroy {
   isCommentNewDraft(comment: EdjiComment): boolean {
     return (!comment.data || comment.data == '') && (!comment.url || comment.url == '')
   }
+
+  public getOffset(el) {
+    el = el.getBoundingClientRect()
+    return {
+      left: el.left + window.scrollX,
+      top: el.top + window.scrollY,
+    }
+  }
+
+  public scrollToImage(imageIndex) {
+    let yOffset = 100
+    let imageElement = document.getElementById('readingImage' + imageIndex)
+    if (!imageElement) {
+      this.projectStore.lastWordUpdateSubj.next(imageIndex)
+      setTimeout(() => {
+        this.scrollToImage(imageIndex)
+      }, 1)
+    } else {
+      let yPos = this.getOffset(imageElement).top
+      window.scrollTo(0, yPos - yOffset)
+    }
+  }
+
 }

@@ -126,15 +126,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
-      // this.projectStore.commentPaneState.subscribe(paneState => {
-      //   this.visible = paneState
-      //   if (paneState) {
-      //     this.evaluateShouldScroll()
-      //     document.body.classList.add('body__lock-scroll')
-      //   } else {
-      //     document.body.classList.remove('body__lock-scroll')
-      //   }
-      // }),
       // Subscribe to updates to the reply reference object
       // this.projectStore.repliesById.subscribe(
       //   repliesById => {
@@ -222,7 +213,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     //   this.reply.selected = false
     // }
     this.close.emit(false)
-    // this.projectStore.commentPaneStateSubj.next(false)
     document.body.classList.remove('body__lock-scroll')
   }
 

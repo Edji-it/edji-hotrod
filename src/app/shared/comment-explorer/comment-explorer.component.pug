@@ -101,11 +101,12 @@
                       i.icon.icon-comment-text
                     button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
                       i.icon.icon-mic
-          .comment
+          .end-block(*ngIf="filterMode === 'all' && sortValue === 'created'")
+            .timeline-line
             .user-icon.user-icon--medium
                 span.user-icon__initials
                   span.is-emoji([innerHtml]="':seedling:' | emojione")
-            .list-item.list-item--block
+            .mobileBlock
               | {{ project.createdAt | edjidate:'timeAgo':null }}
               p.small
                 b {{project.label}}
