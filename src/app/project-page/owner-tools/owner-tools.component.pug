@@ -37,7 +37,7 @@
     type="button",
     (tap)="showElseFalse('showAllComments')",
   )
-    i#toggleAllComments.icon-fire-feed
+    i#toggleAllComments.icon-comment-feed
     span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
     label All
   //- Question Feed toggle
