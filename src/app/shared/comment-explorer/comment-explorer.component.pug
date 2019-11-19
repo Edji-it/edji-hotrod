@@ -1,6 +1,6 @@
-.sliding-pane-comment.from-left(*ngIf="visible", #commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
+.sliding-pane-comment.from-left(#commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
   ng-scrollbar
-    .sliding-pane-comment__header.container-fluid
+    .sliding-pane-comment__header.container-fluid(*ngIf="visible")
       .row
         .col-12
           .header-wrap
@@ -59,12 +59,11 @@
               [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
               [class.spec-owner]="comment.user_id === project.teacher_id",
               [readOnly]="comment.user_id !== user._id",
-              [userPermission]="getCommentPermissions(comment)",
               [commentPaneActive]="true",
               [comment]="comment",
               [commentMobile]="true",
               [commentMobileFirst]="i<1",
-              (commentActivation)="commentActivationEmitter($event, comment)",
+              (commentActivation)="commentActivationEmitter($event)",
               (commentUpdated)="commentUpdatedEmitter()",
               (commentReply)="commentReplyEmitter($event)",
               style="display: initial;"

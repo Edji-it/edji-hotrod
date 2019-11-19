@@ -19,6 +19,7 @@ import { AuthService, CommentService, SocketService } from '../../_services'
 import { Angulartics2 } from 'angulartics2'
 import { CommentComponent } from 'src/app/annotator/comment/comment.component'
 import { ProjectStore } from 'src/app/_store'
+import { NgScrollbar } from 'ngx-scrollbar'
 @Component({
   selector: 'comment-explorer',
   templateUrl: './comment-explorer.component.pug',
@@ -58,11 +59,11 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   // // Comment Pane Component Inputs
   @Input() comment: EdjiComment
   private _visible: boolean
-  @Input() 
+  @Input()
   set visible(visible: boolean) {
     console.log('set visible', visible)
     // if (typeof visible !== 'undefined' && this.active !== visible) {
-      this._visible = visible
+    this._visible = visible
     // }
     if (visible) {
       this.filterComments()
@@ -88,6 +89,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter()
   // @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   // @Output() commentReply = new EventEmitter()
+
+  @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar
 
   constructor(
     private projectStore: ProjectStore,
@@ -203,10 +206,15 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   viewAll(): void {
     this.clearFilters()
     this.filterComments()
+    /**
+     * Return scroll to the top
+     * @todo only scroll on filter click
+     */
+    this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
   }
 
   dismissCommentPane() {
-    console.log("Dismiss!")
+    console.log('Dismiss!')
     this.visible = false
     this.comment = null
     // this.comment.selected = false
@@ -301,67 +309,55 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     // this.repliesToggleById[comment._id] = forceShow || !this.repliesToggleById[comment._id]
   }
 
-  /**
-   * Create a Comment of any Type
-   * - Fired from comment options tooltip
-   * Requires three parameters, and finds the other information it needs
-   * @param type What kind of reply comment: emoji, text...
-   */
-  addReplyOfType(comment: EdjiComment, type: string): void {
-    let commentId = comment._id
+  // /**
+  //  * Create a Comment of any Type
+  //  * - Fired from comment options tooltip
+  //  * Requires three parameters, and finds the other information it needs
+  //  * @param type What kind of reply comment: emoji, text...
+  //  */
+  // addReplyOfType(comment: EdjiComment, type: string): void {
+  //   let commentId = comment._id
 
-    this.angulartics.eventTrack.next({
-      action: type + 'ReplyCreate',
-      properties: { category: 'heroFeature', label: 'attempt' },
-    })
+  //   this.angulartics.eventTrack.next({
+  //     action: type + 'ReplyCreate',
+  //     properties: { category: 'heroFeature', label: 'attempt' },
+  //   })
 
-    var replyCommentNew = <EdjiComment>{
-      user_id: this.user._id,
-      author: this.user.fullname,
-      reply_to: commentId,
-      data: '',
-      type: type,
-    }
+  //   var replyCommentNew = <EdjiComment>{
+  //     user_id: this.user._id,
+  //     author: this.user.fullname,
+  //     reply_to: commentId,
+  //     data: '',
+  //     type: type,
+  //   }
 
-    replyCommentNew.new = true
-    // replyCommentNew.active = true
-    // this.replyCommentNew = replyCommentNew
+  //   replyCommentNew.new = true
+  //   // replyCommentNew.active = true
+  //   // this.replyCommentNew = replyCommentNew
 
-    if (type == 'emoji') {
-      // this.activeEmojiKeyboardReply(this.replyCommentNew)
-    }
+  //   if (type == 'emoji') {
+  //     // this.activeEmojiKeyboardReply(this.replyCommentNew)
+  //   }
 
-    // Tell the server we've added a comment.
-    // this.projectStore
-    //   .saveComment(this.replyCommentNew)
-    //   .then(comment => {
-    //     this.angulartics.eventTrack.next({
-    //       action: type + 'ReplyCreate',
-    //       properties: { category: 'heroFeature', label: 'success' },
-    //     })
-    //     comment.active = true
-    //     this._comments.activeComment = comment
-    //     this.projectStore.addCommentToReplies(comment)
-    //   })
-    //   .catch(error => {
-    //     // TRACK EXCEPTION
-    //     this.angulartics.eventTrack.next({
-    //       action: type + 'ReplyCreate',
-    //       properties: { category: 'heroFeature', label: 'failure' },
-    //     })
-    //     console.log(error)
-    //   })
-  } // createReplyComment(type: string): void
-
-  /** Used to determine which level of permission the user has for a specific comment
-   * @param comment A comment object
-   */
-  private getCommentPermissions(comment: any): number {
-    return this._comments.getCommentPermissions(comment, this.user, this.project)
-  }
-
-  private activeEmojiKeyboardReply(activeReply: any): void {
-    this._comments.activeComment = activeReply
-    this._comments.setEmojiKeyboardActive(this.user)
-  }
+  //   // Tell the server we've added a comment.
+  //   // this.projectStore
+  //   //   .saveComment(this.replyCommentNew)
+  //   //   .then(comment => {
+  //   //     this.angulartics.eventTrack.next({
+  //   //       action: type + 'ReplyCreate',
+  //   //       properties: { category: 'heroFeature', label: 'success' },
+  //   //     })
+  //   //     comment.active = true
+  //   //     this._comments.activeComment = comment
+  //   //     this.projectStore.addCommentToReplies(comment)
+  //   //   })
+  //   //   .catch(error => {
+  //   //     // TRACK EXCEPTION
+  //   //     this.angulartics.eventTrack.next({
+  //   //       action: type + 'ReplyCreate',
+  //   //       properties: { category: 'heroFeature', label: 'failure' },
+  //   //     })
+  //   //     console.log(error)
+  //   //   })
+  // } // createReplyComment(type: string): void
 }

@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, CommentService, SocketService } from '../../_services'
+import { AuthService, CommentService, SocketService, AnalyticsService } from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
 import { ProjectStore } from 'src/app/_store'
@@ -28,12 +28,14 @@ export class CommentComponent implements OnInit, OnDestroy {
   private user: any = {}
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
-  private commentsByPos: any = []
+  // private commentsByPos: any = []
   private project: any
   private commentPane: boolean
   private indicatesPane: boolean
-  private setLineYAttempts: number = 0
+  // private setLineYAttempts: number = 0
   private fragment: string
+
+  public toggleReplies: boolean
 
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
@@ -81,6 +83,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     public el: ElementRef,
     private _socket: SocketService,
+    public _analytics: AnalyticsService,
   ) {}
 
   ngOnInit() {
@@ -140,13 +143,6 @@ export class CommentComponent implements OnInit, OnDestroy {
         },
       ),
     )
-
-    this.subscriptions.push(
-      this.projectStore.commentByPos.subscribe(commentsByPos => {
-        this.commentsByPos = commentsByPos
-        this.updateLineCount()
-      }),
-    )
   }
 
   /**
@@ -165,74 +161,13 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Get nearest baseline as integer
-   * @param vYalue: number The y position in pixels
-   * @returns number Nearest baseline Y value
-   */
-  private nearestLine(yValue: number): number {
-    return yValue + ALLSPARK.BASELINEHEIGHT / 2 - (yValue % ALLSPARK.BASELINEHEIGHT)
-  }
-
-  /**
-   * Calculates lineY and imageY values for rendering
-   * - lineY is required by commentByPos in ProjectService
-   * - imageY provides consistent and lighter comment positioning on images
-   */
-  setLineY() {
-    let firstWord = document.querySelector('.w[index="1"]')
-    // @todo Workaround: Identify back up firstWord (index 1 is more reliably a word)
-    if (!firstWord) {
-      firstWord = document.querySelector('.w[index="0"]')
-    }
-    let commentWord = document.querySelector('.w[index="' + this.comment.start + '"]')
-    let commentImage = document.getElementById('readingImage' + this.comment.start)
-
-    if (firstWord && (commentWord || commentImage)) {
-      let firstWordTop: number = firstWord.getBoundingClientRect().bottom
-      // This will need to re-decorate on resize
-      // For a period we were erroneously saving comments on text with image coords
-      // *Fixed March 2019, but allow for legacy comments by checking for commentImage
-      if (commentImage && ((this.comment.loc && this.comment.loc.y) || this.comment.box)) {
-        // Set comment on image position
-        this.setLineYAttempts = 0
-        let imageTop: number = commentImage.getBoundingClientRect().top
-        let imageHeight = commentImage.clientHeight
-        let y = this.comment.box ? this.comment.box.start_y : this.comment.loc.y
-        // Get nearest baseline (Y) of comment within image
-        let imageY = (y / 100) * imageHeight
-        this.comment.imageY = imageY = this.nearestLine(imageY)
-
-        // Get image offset for Line Y value
-        let imageOffset = imageTop - firstWordTop
-        imageOffset = this.nearestLine(imageOffset)
-        this.comment.lineY = imageY + imageOffset
-      } else {
-        // Set comment on text position
-        let wordY = commentWord.getBoundingClientRect().bottom
-        wordY = wordY - firstWordTop
-        this.comment.lineY = this.nearestLine(wordY)
-      }
-    } else {
-      this.setLineYAttempts++
-      if (this.setLineYAttempts < 10) {
-        setTimeout(() => {
-          this.setLineY()
-        }, 1000)
-      } else {
-        // Reset attempt count once we've tried 10 times
-        this.setLineYAttempts = 0
-      }
-    }
-  }
-
   activate(event?: any): void {
     // Deactivate any active comments
     this._comments.deactivateAllComments()
     // Activate this comment
     this.comment.active = this.active = true
     this._comments.activeComment = this.comment
-    this.commentActivation.emit(true)
+    // this.commentActivation.emit(true)
   }
 
   /**
@@ -243,7 +178,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Deactivate this comment
     this.comment.active = this.active = false
     this.comment.new = false
-    this.commentActivation.emit(false)
+    // this.commentActivation.emit(false)
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
     if (comment && !noUpdate) {
@@ -373,14 +308,14 @@ export class CommentComponent implements OnInit, OnDestroy {
     return this.repliesById[comment._id] && this.repliesById[comment._id].length > 0
   }
 
-  /**
-   * Toggle display of replies
-   * @description Uses output to trigger display in parent component
-   */
-  public toggleReplies(): void {
-    this.repliesShowing = !this.repliesShowing
-    this.commentReply.emit(this.comment)
-  }
+  // /**
+  //  * Toggle display of replies
+  //  * @description Uses output to trigger display in parent component
+  //  */
+  // public toggleReplies(): void {
+  //   this.repliesShowing = !this.repliesShowing
+  //   this.commentReply.emit(this.comment)
+  // }
 
   /**
    * Collapse all stacked comments on the same line
@@ -403,42 +338,25 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   toggleCPane(comment?, forceOpen?: boolean): void {
-    // When displaying in comment pane, comment MUST have line y
-    if (!this.comment.lineY) {
-      this.setLineY()
-      this.projectStore.buildCommentsByPos()
-    }
-    if (!this.commentPaneActive) {
-      if (comment.selected) {
-        this.comment.selected = true
-      }
-      // Need to give the app 1 millisecond to update all arrays when adding a new comment
-      if (!this.indicatesPane || forceOpen) {
-        setTimeout(() => {
-          this.indicatesPane = true
-          this.toggleCommentPane.emit(true)
-        }, 1)
-      } else {
-        setTimeout(() => {
-          this.indicatesPane = false
-          this.toggleCommentPane.emit(false)
-        }, 1)
-      }
-    }
-  }
+    console.log('Comment toggle', forceOpen)
 
-  updateLineCount(): void {
-    if (this.comment.lineY) {
-      let commentsOnLine = this.commentsByPos[this.comment.lineY]
-      this.lineCount = commentsOnLine && commentsOnLine.length
-      for (let i = 0; i < this.lineCount; i++) {
-        if (commentsOnLine[i]._id == this.comment._id) {
-          this.indexOnLine = this.lineCount - i
-        }
-      }
-    } else {
-      this.lineCount = 1
+    // if (!this.commentPaneActive) {
+    if (comment.selected) {
+      this.comment.selected = true
     }
+    // Need to give the app 1 millisecond to update all arrays when adding a new comment
+    if (!this.indicatesPane || forceOpen) {
+      setTimeout(() => {
+        this.indicatesPane = true
+        this.toggleCommentPane.emit(true)
+      }, 1)
+    } else {
+      setTimeout(() => {
+        this.indicatesPane = false
+        this.toggleCommentPane.emit(false)
+      }, 1)
+    }
+    // }
   }
 
   /**
@@ -471,4 +389,58 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Create a Comment of any Type
+   * - Fired from comment options tooltip
+   * Requires three parameters, and finds the other information it needs
+   * @param type What kind of reply comment: emoji, text...
+   */
+  addReplyOfType(comment: EdjiComment, type: string): void {
+    let commentId = comment._id
+
+    this._analytics.event(type + 'ReplyCreate')
+
+    var replyCommentNew = <EdjiComment>{
+      user_id: this.user._id,
+      author: this.user.fullname,
+      reply_to: commentId,
+      data: '',
+      type: type,
+    }
+
+    replyCommentNew.new = true
+    // replyCommentNew.active = true
+    // this.replyCommentNew = replyCommentNew
+
+    if (type == 'emoji') {
+      // this.activeEmojiKeyboardReply(this.replyCommentNew)
+    }
+
+    // Tell the server we've added a comment.
+    this.projectStore
+      .saveComment(replyCommentNew)
+      .then(comment => {
+        this._analytics.event(type + 'ReplyCreate')
+        comment.active = true
+        this._comments.activeComment = comment
+        this.projectStore.addCommentToReplies(comment)
+      })
+      .catch(error => {
+        // TRACK EXCEPTION
+        this._analytics.event(type + 'ReplyCreate')
+        console.log(error)
+      })
+  } // createReplyComment(type: string): void
+
+  /** Used to determine which level of permission the user has for a specific comment
+   * @param comment A comment object
+   */
+  private getCommentPermissions(comment: any): number {
+    return this._comments.getCommentPermissions(comment, this.user, this.project)
+  }
+
+  private activeEmojiKeyboardReply(activeReply: any): void {
+    this._comments.activeComment = activeReply
+    this._comments.setEmojiKeyboardActive(this.user)
+  }
 }

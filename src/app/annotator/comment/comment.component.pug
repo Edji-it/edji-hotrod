@@ -149,7 +149,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                     i.icon.icon-draft.icon-draft__comment
                 ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1 && !((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
                     button#addReply.btn.btn-xs-action.btn--reply(
-                        (tap)="toggleReplies()",
+                        (tap)="toggleReplies = !toggleReplies",
                         [class.has-reply]="hasReplies(comment)",
                         [class.text-only]="repliesShowing"
                     )
@@ -194,15 +194,47 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                     button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
                       i.icon.icon-mic
 //- END comment pane display
+ng-container(*ngIf="!reply && toggleReplies")
+  .replies([ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? '' : 'replyOverflow-normal' ]")
+    .replies__header
+      .arrow-wrap
+        img.arrow-point(src="assets/images/reply-triangle.png")
+        .arrow-line
+    ng-container(*ngIf="repliesById[comment._id]")
+      .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
+        edji-comment.replyCommentBlock(
+          *ngIf="replyComment.author",
+          [readOnly]="replyComment.user_id !== user._id",
+          [comment]="replyComment",
+          [commentContext]="'reply'",
+          [isActive]="replyComment.active",
+          [reply]="true",
+          [userPermission]="getCommentPermissions(replyComment)",
+          (commentActivation)="commentActivation($event, replyComment)",
+          [attr.replyId]="replyComment._id"
+        )
+    //--Reply input--
+    .reply-row
+      user-avatar.comment__avatar.show([userDetails]="user")
+      .reply-input__line
+      .replyInput Add Reply
+      //--Add reply buttons--
+      .replyButtonGroup
+        button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")
+          i.icon.icon-comment-emoji
+        button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType(comment, 'text')")
+          i.icon.icon-comment-text
+        button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
+          i.icon.icon-mic
 
 //- Handle Desktop and Mobile Icons for activating comments
-avatar-portal(
-    *ngIf="!reply && !readingReport",
-    [comment]="comment",
-    [lineCount]="lineCount",
-    [indexOnLine]="indexOnLine",
-    [isActive]="indicatesPane",
-    [lineY]="comment.lineY",
-    (toggleCommentPane)="toggleCPane(comment)",
-    [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]"
-)
+//- avatar-portal(
+//-     *ngIf="!reply && !readingReport",
+//-     [comment]="comment",
+//-     [lineCount]="lineCount",
+//-     [indexOnLine]="indexOnLine",
+//-     [isActive]="indicatesPane",
+//-     [lineY]="comment.lineY",
+//-     (toggleCommentPane)="toggleCPane(comment)",
+//-     [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]"
+//- )

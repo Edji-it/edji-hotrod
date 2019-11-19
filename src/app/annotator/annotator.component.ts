@@ -37,6 +37,7 @@ import { ProjectStore } from '../_store'
 import { Store } from '@ngrx/store'
 import { AppState } from '../_reducers'
 import { getMetricsComments } from '../_reducers/metrics.reducers'
+import { AvatarPortalComponent } from './avatar-portal'
 
 @Component({
   selector: 'annotator',
@@ -60,6 +61,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() private activeReply: any
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
+  @ViewChildren(AvatarPortalComponent) portalComponents: QueryList<AvatarPortalComponent>
   @ViewChildren('words') wordEls
   @ViewChild('activeContent', { static: false }) contentEl: ElementRef
   @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
@@ -103,7 +105,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   // public activeComment: EdjiComment = <EdjiComment>{}
   public replyComment: EdjiComment = <EdjiComment>{}
   public selectedComment: EdjiComment = <EdjiComment>{}
-  public selectedReply: EdjiComment = <EdjiComment>{}
+  // public selectedReply: EdjiComment = <EdjiComment>{}
   // Comment options that can be made directly on a word
   public directCommentOptions: string[] = []
 
@@ -540,7 +542,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           // Reset selected comment values
           // > ensures comment pane scroll action when transitioning between comments and replies
           if (this.selectedComment) this.selectedComment.selected = false
-          if (this.selectedReply) this.selectedReply.selected = false
+          // if (this.selectedReply) this.selectedReply.selected = false
           // Parent indicates a reply comment
           let isReply = !!params['parent']
           let commendId = isReply ? params['parent'] : params['comment']
@@ -1204,11 +1206,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   inactivateComment(): void {
     if (this._comments.activeComment.start !== undefined) {
-      this.unfocusHighlight(
-        this._comments.activeComment.start,
-        this._comments.activeComment.end,
-        this._comments.activeComment.box,
-      )
+      // this.unfocusHighlight(
+      //   this._comments.activeComment.start,
+      //   this._comments.activeComment.end,
+      //   this._comments.activeComment.box,
+      // )
       this._comments.activeComment.active = false
       this._comments.activeComment = <EdjiComment>{}
     }
@@ -1629,7 +1631,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * We check this every time the comment pane is open in case the user adjusts screen width
    */
   setLinePositions(): void {
-    if (typeof this.commentComponents == 'undefined') {
+    if (typeof this.portalComponents == 'undefined') {
       setTimeout(() => {
         this.setLinePositions()
       }, 500)
@@ -1640,7 +1642,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.preScrollHeightUpdate()
     }
     // Let's do this!
-    let allComments = this.commentComponents.toArray()
+    let allComments = this.portalComponents.toArray()
     // Only run this if the words are rendered and if it isn't already running
     if (!this.lineNumRunning && allComments.length > 0) {
       this.lineNumRunning = true
@@ -1648,9 +1650,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Loop through each word element and tell comments to update line number
       let len: number = allComments.length
       for (let i = 0; i < len; i++) {
-        let commentComp = allComments[i]
+        let portalComp = allComments[i]
         // Tell comments to update lineY value
-        commentComp.setLineY()
+        portalComp.setLineY()
       }
       // Set up comments by line for Comment Pane
       this.projectStore.buildCommentsByPos()
@@ -1660,6 +1662,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
+    console.log('Annotator: toggleCommentPane')
     /**
      * In tablet view, the width of content changes as the pane slides
      * @todo determine a better layout option that doesn't cause relevant comments to change
@@ -1674,24 +1677,30 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Set the input comment to the comment pane if it is not currently open
     if (visible) {
+      console.log('Annotator set explorer visible')
       if (selectedComment) {
-        selectedComment.selected = !selectedReply
-        this.selectedComment = selectedComment
+        // selectedComment.selected = !selectedReply
+        // this.selectedComment = selectedComment
         // Set the icon arrow position based on lineY and offsets
         this.commentHeightPos = this.getCommentDisplayY(selectedComment)
 
         if (selectedReply) {
           selectedReply.selected = true
-          this.selectedReply = selectedReply
+          this.selectedComment = selectedReply
         } else {
-          // Reset selected reply
-          this.selectedReply = <EdjiComment>{}
+          selectedComment.selected = true
+          this.selectedComment = selectedComment
         }
+        // else {
+        //   // Reset selected reply
+        //   this.selectedReply = <EdjiComment>{}
+        // }
       }
       // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
     } else {
+      console.log('Annotator set explorer hidden')
       // Clear Comment ID/deep link params
       this.clearQueryParams()
       // iOS selection

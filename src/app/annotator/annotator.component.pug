@@ -109,27 +109,36 @@ scroll-progress([scrollProgress]="currentScroll")
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
-                edji-comment(
-                    *ngFor="let comment of commentsByIndex[i]; let ci = index",
-                    [class.hidden]="!projectStore.isCommentVisible(comment)",
-                    [class.spec-owner]="comment.user_id === project.teacher_id",
-                    [comment]="comment",
-                    (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
-                    (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
-                    [readOnly]="comment.user_id !== user._id",
-                    [userPermission]="getCommentPermissions(comment)",
-                    [isActive]="comment.active ? true : false",
-                    (commentActivation)="setActiveCommentByIndex($event, i, ci)",
-                    (commentDeleted)="removeComment(comment, i, ci)",
-                    (commentDeactivate)="unfocusHighlight($event.start, $event.end)",
-                    (commentUpdated)="setLinePositions()",
-                    (expandLine)="expandLine($event, true)",
-                    (collapseLine)="expandLine($event, false)",
-                    (toggleCommentPane)="toggleCommentPane($event, comment)",
-                    (commentReply)="discReplyFire(comment)",
-                    [class.imageComment]="comment.imageY",
-                    [style.top]="comment.imageY ? comment.imageY + 'px' : '0px'"
-                ) <!-- edji-comment -->
+                .comment(*ngFor="let comment of commentsByIndex[i]; let ci = index")
+                  avatar-portal(
+                      [comment]="comment",
+                      [isActive]="indicatesPane",
+                      (toggleCommentPane)="toggleCommentPane($event, comment)",
+                      [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]",
+                      (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
+                      (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
+                  )
+                //- edji-comment(
+                //-     *ngFor="let comment of commentsByIndex[i]; let ci = index",
+                //-     [class.hidden]="!projectStore.isCommentVisible(comment)",
+                //-     [class.spec-owner]="comment.user_id === project.teacher_id",
+                //-     [comment]="comment",
+                //-     (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
+                //-     (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
+                //-     [readOnly]="comment.user_id !== user._id",
+                //-     [userPermission]="getCommentPermissions(comment)",
+                //-     [isActive]="comment.active ? true : false",
+                //-     (commentActivation)="setActiveCommentByIndex($event, i, ci)",
+                //-     (commentDeleted)="removeComment(comment, i, ci)",
+                //-     (commentDeactivate)="unfocusHighlight($event.start, $event.end)",
+                //-     (commentUpdated)="setLinePositions()",
+                //-     (expandLine)="expandLine($event, true)",
+                //-     (collapseLine)="expandLine($event, false)",
+                //-     (toggleCommentPane)="toggleCommentPane($event, comment)",
+                //-     (commentReply)="discReplyFire(comment)",
+                //-     [class.imageComment]="comment.imageY",
+                //-     [style.top]="comment.imageY ? comment.imageY + 'px' : '0px'"
+                //- ) <!-- edji-comment -->
                 //- Link Words: If a word is actually a link, handle it differently
                 a.w(
                     *ngIf="w.a",
