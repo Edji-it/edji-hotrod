@@ -23,23 +23,15 @@
     span.badge.badge-pill.badge-primary(*ngIf="currentProject.heat_vision") On
     span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
     label Vision
-  //- Fire Feed toggle
-  button.btn.owner-tools__btn.btn-hv(
-    type="button", 
-    (tap)="showElseFalse('showFireFeed')", 
-    [class.disabled]="currentProject.archived"
-  )
-    i#toggleFirefeed.icon-fire-feed(*ngIf="currentProject")
-    span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
-    label Feed
   //- All Comments
   button.btn.owner-tools__btn(
     type="button",
     (tap)="showElseFalse('showAllComments')",
+    [class.disabled]="currentProject.archived"
   )
     i#toggleAllComments.icon-comment-feed
     span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
-    label All
+    label Comments
   //- Question Feed toggle
   div(*ngIf="currentReading.questions && currentReading.questions.length>0")
     button.btn.owner-tools__btn.btn-hv(
@@ -82,14 +74,14 @@
       span.badge.badge-pill.badge-primary(*ngIf="currentProject.heat_vision") On
       span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
       //- label Vision
-    //- Fire Feed toggle
+    //- All Comments toggle
     button.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
-      (tap)="showElseFalse('showFireFeed')", 
+      (tap)="showElseFalse('showAllComments')",
       [class.btn-show--animation]="ownerToolShow", 
       [class.disabled]="currentProject.archived"
     )
-      i#toggleFirefeedMobile.icon-fire-feed.owner-tool-icon-mobile(*ngIf="currentProject")
+      i#toggleFirefeedMobile.icon-comment-feed.owner-tool-icon-mobile(*ngIf="currentProject")
       span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.count && commentStats.stats.count > 0") {{ commentStats.stats.count }}
       //- label Feed
     //- Question Feed toggle

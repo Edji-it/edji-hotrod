@@ -139,7 +139,10 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             //- Image comment handling
             .list-item.mobileHighlight-card.h-1(*ngIf="isImageSpot && !readingReport")
                 .mobileHighlight-card_image Image
-            //- button.mobileHighlight-card_button((tap)="getImagePos(comment.start)") View&nbsp;&#8594;
+                button.mobileHighlight-card_button((tap)="scrollToImage(comment.start)") View&nbsp;&#8594;
+            //- .list-item.list-item.fireHighlight-card_liImage.h-1(*ngIf="isImageSpot")
+            //-     .fireHighlight-card_image Image
+            //-     button.fireHighlight-card_button((tap)="getImagePos(fireComment.start)") View&nbsp;&#8594;
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
                 ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")

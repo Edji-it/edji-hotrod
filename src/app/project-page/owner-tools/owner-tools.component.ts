@@ -23,15 +23,14 @@ export class OwnerToolsComponent implements OnInit {
   public currentProject: Project
   public currentReading: Reading
   public user: any = {}
-  public showFireFeed: boolean = false
-  public showCommentCounts: boolean = false
-  public showQuestionFeed: boolean = false
-  public showReadingRecap: boolean = false
-  public showCoOwnerGuide: boolean = false
   /**
    * @todo clean up boolean trap
    */
   public showAllComments: boolean = false
+  public showCommentCounts: boolean = false
+  public showQuestionFeed: boolean = false
+  public showReadingRecap: boolean = false
+  public showCoOwnerGuide: boolean = false
 
   public ownerToolBlockHeight: string
 
@@ -129,12 +128,9 @@ export class OwnerToolsComponent implements OnInit {
 
   private showElseFalse(displayPane: string) {
     switch (displayPane) {
-      case 'showAllComments':
-        this.showAllComments = !this.showAllComments
-        break
       case 'showQuestionFeed':
         this.showQuestionFeed = !this.showQuestionFeed
-        this.showFireFeed = false
+        this.showAllComments = false
         this.showCommentCounts = false
         this.showReadingRecap = false
         // fire an analytic event here for tracking purposes
@@ -143,9 +139,9 @@ export class OwnerToolsComponent implements OnInit {
           properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
         })
         break
-      case 'showFireFeed':
+      case 'showAllComments':
         this.showQuestionFeed = false
-        this.showFireFeed = !this.showFireFeed
+        this.showAllComments = !this.showAllComments
         this.showCommentCounts = false
         this.showReadingRecap = false
         // fire an analytic event here for tracking purposes
@@ -156,7 +152,7 @@ export class OwnerToolsComponent implements OnInit {
         break
       case 'showCommentCounts':
         this.showQuestionFeed = false
-        this.showFireFeed = false
+        this.showAllComments = false
         this.showCommentCounts = !this.showCommentCounts
         this.showReadingRecap = false
         // fire an analytic event here for tracking purposes
@@ -167,13 +163,13 @@ export class OwnerToolsComponent implements OnInit {
         break
       case 'showReadingRecap':
         this.showQuestionFeed = false
-        this.showFireFeed = false
+        this.showAllComments = false
         this.showCommentCounts = false
         this.showReadingRecap = !this.showReadingRecap
         break
       default:
         this.showCommentCounts = false
-        this.showFireFeed = false
+        this.showAllComments = false
         this.showQuestionFeed = false
         this.showReadingRecap = false
     }

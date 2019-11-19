@@ -101,5 +101,14 @@
                       i.icon.icon-comment-text
                     button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
                       i.icon.icon-mic
+          .comment
+            .user-icon.user-icon--medium
+                span.user-icon__initials
+                  span.is-emoji([innerHtml]="':seedling:' | emojione")
+            .list-item.list-item--block
+              | {{ project.createdAt | edjidate:'timeAgo':null }}
+              p.small
+                b {{project.label}}
+                |  group was created.
 .exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
 //- END .comment - mobile

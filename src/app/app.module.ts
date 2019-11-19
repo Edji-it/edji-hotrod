@@ -104,8 +104,6 @@ import {
   AvatarPortalComponent,
 } from './annotator'
 import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
-import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
-import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component'
 import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component'
 import { QuestioncardComponent } from './project-page/owner-tools/questionfeed/questioncard/questioncard.component'
 import {
@@ -257,8 +255,6 @@ const routerOptions: ExtraOptions = {
     DiscoverFeedComponent,
     DiscoverAddMetaModal,
     LeaderboardComponent,
-    FirefeedComponent,
-    FirecardComponent,
     QuestionfeedComponent,
     QuestioncardComponent,
     UploadModalComponent,
