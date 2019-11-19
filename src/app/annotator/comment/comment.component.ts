@@ -25,7 +25,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   // Is fully visible, focused, and editable
   private active: boolean = false
   private showDeleteModal: boolean = false
-  private user: any
+  private user: any = {}
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
   private commentsByPos: any = []

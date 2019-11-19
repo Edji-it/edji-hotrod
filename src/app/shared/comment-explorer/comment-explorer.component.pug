@@ -69,38 +69,6 @@
               (commentReply)="commentReplyEmitter($event)",
               style="display: initial;"
             )
-            ng-container(*ngIf="repliesToggleById[comment._id]")
-              .replies([ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? '' : 'replyOverflow-normal' ]")
-                .replies__header
-                  .arrow-wrap
-                    img.arrow-point(src="assets/images/reply-triangle.png")
-                    .arrow-line
-                ng-container(*ngIf="repliesById[comment._id]")
-                  .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
-                    edji-comment.replyCommentBlock(
-                      *ngIf="replyComment.author",
-                      [readOnly]="replyComment.user_id !== user._id",
-                      [comment]="replyComment",
-                      [commentContext]="'reply'",
-                      [isActive]="replyComment.active",
-                      [reply]="true",
-                      [userPermission]="getCommentPermissions(replyComment)",
-                      (commentActivation)="commentActivationEmitter($event, replyComment)",
-                      [attr.replyId]="replyComment._id"
-                    )
-                //--Reply input--
-                .reply-row
-                  user-avatar.comment__avatar.show([userDetails]="user")
-                  .reply-input__line
-                  .replyInput Add Reply
-                  //--Add reply buttons--
-                  .replyButtonGroup
-                    button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")
-                      i.icon.icon-comment-emoji
-                    button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType(comment, 'text')")
-                      i.icon.icon-comment-text
-                    button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
-                      i.icon.icon-mic
           .end-block(*ngIf="filterMode === 'all' && sortValue === 'created'")
             .timeline-line
             .user-icon.user-icon--medium

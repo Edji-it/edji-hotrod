@@ -127,6 +127,7 @@ export class OwnerToolsComponent implements OnInit {
   }
 
   private showElseFalse(displayPane: string) {
+    console.log('show else!', displayPane)
     switch (displayPane) {
       case 'showQuestionFeed':
         this.showQuestionFeed = !this.showQuestionFeed

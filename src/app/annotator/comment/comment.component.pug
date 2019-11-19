@@ -161,6 +161,38 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                 ng-container(*ngIf="comment.type != 'audio' && !readOnly && !comment.active")
                     .action-separator
                     button.btn.btn-xs-primary((tap)="activate(comment)") Edit
+            ng-container(*ngIf="repliesShowing")
+              .replies([ngClass]="[ comment.active && comment.type=='emoji' ? '' : 'replyOverflow-normal' ]")
+                .replies__header
+                  .arrow-wrap
+                    img.arrow-point(src="assets/images/reply-triangle.png")
+                    .arrow-line
+                ng-container(*ngIf="repliesById[comment._id]")
+                  .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
+                    edji-comment.replyCommentBlock(
+                      *ngIf="replyComment.author",
+                      [readOnly]="replyComment.user_id !== user._id",
+                      [comment]="replyComment",
+                      [commentContext]="'reply'",
+                      [isActive]="replyComment.active",
+                      [reply]="true",
+                      [userPermission]="_comments.getCommentPermissions(replyComment, user, project)",
+                      (commentActivation)="commentActivationEmitter($event, replyComment)",
+                      [attr.replyId]="replyComment._id"
+                    )
+                //--Reply input--
+                .reply-row
+                  user-avatar.comment__avatar.show([userDetails]="user")
+                  .reply-input__line
+                  .replyInput Add Reply
+                  //--Add reply buttons--
+                  .replyButtonGroup
+                    button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")
+                      i.icon.icon-comment-emoji
+                    button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType(comment, 'text')")
+                      i.icon.icon-comment-text
+                    button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
+                      i.icon.icon-mic
 //- END comment pane display
 
 //- Handle Desktop and Mobile Icons for activating comments
