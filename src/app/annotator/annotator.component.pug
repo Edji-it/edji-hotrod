@@ -109,10 +109,10 @@ scroll-progress([scrollProgress]="currentScroll")
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
-                .comment(*ngFor="let comment of commentsByIndex[i]; let ci = index")
+                .margin-portal(*ngFor="let comment of commentsByIndex[i]; let ci = index")
                   avatar-portal(
                       [comment]="comment",
-                      [isActive]="indicatesPane",
+                      [isActive]="comment.active",
                       (toggleCommentPane)="toggleCommentPane($event, comment)",
                       [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]",
                       (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',

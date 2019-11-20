@@ -16,7 +16,6 @@
             [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
             [class.spec-owner]="comment.user_id === project.teacher_id",
             [readOnly]="comment.user_id !== user._id",
-            [userPermission]="getCommentPermissions(comment)",
             [commentPaneActive]="true",
             [comment]="comment",
             [commentMobile]="true",
@@ -41,7 +40,6 @@
                     [commentContext]="'reply'",
                     [isActive]="replyComment.active",
                     [reply]="true",
-                    [userPermission]="getCommentPermissions(replyComment)",
                     (commentActivation)="commentActivationEmitter($event, replyComment)",
                     [attr.replyId]="replyComment._id"
                   )

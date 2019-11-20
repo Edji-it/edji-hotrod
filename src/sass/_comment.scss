@@ -46,6 +46,20 @@ edji-comment {
   position: absolute;
 }
 
+.margin-portal {
+  left: 0px;
+  margin-top: 3px;
+  z-index: 4500;
+  display: block;
+  position: absolute;
+  pointer-events: all;
+  cursor: pointer;
+  opacity: 1;
+  font-size: $base-font-size;
+  font-weight: normal;
+  font-style: normal;
+}
+
 // Primary comment block
 .comment {
   z-index: 4500;
@@ -833,7 +847,7 @@ $progressStart: 51px;
   &.show {
     opacity: 1;
   }
-  
+
   &.selected {
     border-width: 2px;
     border-style: solid;

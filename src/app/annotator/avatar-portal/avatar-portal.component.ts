@@ -27,6 +27,8 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   public currentState: playState = playState.inactive
   public audio
   public active: boolean = false
+  // Used to show loading
+  public loading: boolean = false
 
   public lineY: number
   public setLineYAttempts: number
@@ -39,12 +41,31 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     if (typeof isActive !== 'undefined' && this.active !== isActive) {
       this.active = isActive
     }
+    // Open comment on creation
+    if (isActive) {
+      if (this.comment) {
+        this.triggerCommentPane(true)
+      } else {
+        this.loading = true
+      }
+    }
   }
   get isActive(): boolean {
     return this.active
   }
   // @Input() public lineY: Number = 0
-  @Input() public comment: EdjiComment
+  private _comment: EdjiComment
+  @Input()
+  set comment(comment: EdjiComment) {
+    this._comment = comment
+    if (this.loading) {
+      this.loading = false
+      this.triggerCommentPane(true)
+    }
+  }
+  get comment(): EdjiComment {
+    return this._comment
+  }
   public indexOnLine: Number = 1
 
   @Output() toggleCommentPane = new EventEmitter()
@@ -79,7 +100,6 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   }
 
   public triggerCommentPane(selected?: boolean) {
-    console.log('Portal: toggle comment ' + selected)
     // When displaying in comment pane, comment MUST have line y
     if (!this.comment.lineY) {
       this.setLineY()

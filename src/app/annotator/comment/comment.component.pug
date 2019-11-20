@@ -176,7 +176,6 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                       [commentContext]="'reply'",
                       [isActive]="replyComment.active",
                       [reply]="true",
-                      [userPermission]="_comments.getCommentPermissions(replyComment, user, project)",
                       (commentActivation)="commentActivationEmitter($event, replyComment)",
                       [attr.replyId]="replyComment._id"
                     )
@@ -209,7 +208,6 @@ ng-container(*ngIf="!reply && toggleReplies")
           [commentContext]="'reply'",
           [isActive]="replyComment.active",
           [reply]="true",
-          [userPermission]="getCommentPermissions(replyComment)",
           (commentActivation)="commentActivation($event, replyComment)",
           [attr.replyId]="replyComment._id"
         )
