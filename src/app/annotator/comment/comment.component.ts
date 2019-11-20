@@ -43,11 +43,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public reply: boolean = false // Is it a reply to another comment?
   @Input() private commentLite: boolean = false
   @Input() private commentContext: string = 'comment' // See NOTES in summary.
+  // Deprecated "mobile" values
   @Input() public commentMobile: boolean = false
   @Input() public commentMobileFirst: boolean = false
   @Input() public commentPaneActive: boolean = false
   @Input() private assignedQuestion: EdjiQuestion // If this is an answer, it'll need this.
-  @Input() private userPermission: number = CommentPermissions.READ
+  private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
   @Input() public readingReport: boolean = false
   @Input()
@@ -102,11 +103,9 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
+        this.checkPermissions()
       }),
-    )
-
-    // Subscribe to updates to the reply reference object
-    this.subscriptions.push(
+      // Subscribe to updates to the reply reference object
       this.projectStore.repliesById.subscribe(
         repliesById => {
           this.repliesById = repliesById
@@ -115,25 +114,20 @@ export class CommentComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
-    )
-
-    // Subscribe to updates from that project once we're subscribed to the reading
-    this.subscriptions.push(
+      // Subscribe to updates from that project once we're subscribed to the reading
       this.projectStore.currentProject.subscribe(
         project => {
           if (project) {
             this.project = project
             this.setAuthorOwner(project)
+            this.checkPermissions()
           }
         },
         error => {
           console.error(error)
         },
       ),
-    )
-
-    // Certain events require a top-down decision to deactivate comments
-    this.subscriptions.push(
+      // Certain events require a top-down decision to deactivate comments
       this._comments.clearActiveComments.subscribe(
         deactivate => {
           this.deactivate()
@@ -158,6 +152,17 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.comment.authorIsTeacher = true
     } else {
       this.comment.authorIsTeacher = false
+    }
+  }
+
+  /**
+   * Update local var permissions
+   */
+  private checkPermissions(): void {
+    if (this.comment && this.user && this.project) {
+      this.userPermission = this._comments.getCommentPermissions(this.comment, this.user, this.project)
+    } else {
+      this.userPermission = CommentPermissions.READ
     }
   }
 
