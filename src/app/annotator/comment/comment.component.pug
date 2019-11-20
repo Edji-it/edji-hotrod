@@ -25,7 +25,7 @@
     user-avatar.comment__avatar.comment__reply-avatar(
         *ngIf="comment.author",
         [class.show]="reply",
-        [class.selected]="comment.selected",
+        [selected]="comment.selected",
         [userId]="comment.user_id"
     )
     .comment-input-wrapper([ngClass]="[ replyRef ? 'replyCommentHandler' : '', comment.type + '' ]")
@@ -97,7 +97,12 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             (tap)="deactivate(comment)",
             [innerHtml]="':white_check_mark:' | emojione"
         )
-        user-avatar([userId]="comment.user_id", [size]="'medium'", [tempName]="comment.author")
+        user-avatar(
+            [userId]="comment.user_id", 
+            [size]="'medium'", 
+            [tempName]="comment.author",
+            [selected]="comment.selected"
+        )
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'mobileBlock--reading-recap' : '' ]")
             .list-item.list-item--block.mobileTime-card(*ngIf="!readingReport")
                 | {{comment.author}}

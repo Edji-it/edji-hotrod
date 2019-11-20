@@ -1,5 +1,6 @@
 .user-icon(
-    [ngClass]="['user-icon--' + size]"
+    [ngClass]="['user-icon--' + size]",
+    [class.selected]="selected"
 )
     span.user-icon__initials {{ initials }}
     //- @todo enabling avatars

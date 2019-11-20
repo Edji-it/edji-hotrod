@@ -57,7 +57,20 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public filterMode: 'line' | 'all' = 'all'
 
   // // Comment Pane Component Inputs
-  @Input() comment: EdjiComment
+  // @Input() comment: EdjiComment
+  private _comment: EdjiComment
+  @Input()
+  set comment(comment: EdjiComment) {
+    if (!this._comment || (comment && comment._id !== this._comment._id)) {
+      this.evaluateShouldScroll()
+    }
+    this._comment = comment
+  }
+  get comment(): EdjiComment {
+    return this._comment
+  }
+
+
   private _visible: boolean
   @Input()
   set visible(visible: boolean) {
@@ -249,9 +262,10 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     // // if the comment was selected then we'll need to scroll to it, but not activate it
     // if (this.reply.selected) {
     //   this.scrollToComment(this.reply, true)
-    // } else if (this.comment.selected) {
-    //   this.scrollToComment(this.comment)
-    // }
+    // } else 
+    if (this.comment && this.comment.selected) {
+      this.scrollToComment(this.comment)
+    }
   }
 
   /**
@@ -266,8 +280,9 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       let commentEl = document.getElementById('comment-' + targetComment._id)
       // Found comment, scroll!
-      if (commentEl && commentEl.scrollIntoView) {
-        commentEl.scrollIntoView()
+      if (commentEl) {
+        this.scrollable && this.visible && this.scrollable.scrollToElement(commentEl, {top: 100, left: -100, duration: 400})
+        // commentEl.scrollIntoView()
         // Offset for comment pane sticky header (60px) and nav bar (70px), and a lil padding
         if (!isReply) {
           // this.commentPane.nativeElement.scrollTop -= 150
