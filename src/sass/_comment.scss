@@ -1028,3 +1028,39 @@ div.avatar-count-8 {
     border: 1px solid #cfcfcf;
   }
 }
+
+
+.mobileBlock-hr {
+  margin: 0.75em 0 0.75em 40px;
+}
+
+
+.mobileTime-card, .list-item.mobileTime-card {
+  margin: 0;
+  max-width: 100%;
+  padding: 0;
+  color: #adadad;
+  font-size: 11px;
+  border: none;
+}
+
+.mobileTime-card__time {
+  font-style: italic;
+  padding-left: 0.25em;
+
+  & .time-text--draft {
+    display: none;
+  }
+
+  &.is-draft {
+    color: #b0d8ed;
+
+    & .time-text--date {
+      display: none;
+    }
+
+    & .time-text--draft {
+      display: inline;
+    }
+  }
+}

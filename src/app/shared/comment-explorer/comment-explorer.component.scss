@@ -302,7 +302,7 @@
 .timeline-line {
   position: absolute;
   height: 10000px;
-  bottom: 100%;
+  bottom: calc(100% - #{ $base-pad + 14px });
   left: 18px;
   width: 0px;
   border-left: 1px dashed #b0f7a7;

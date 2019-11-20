@@ -69,14 +69,17 @@
               style="display: initial;"
             )
           .end-block(*ngIf="filterMode === 'all' && sortValue === 'created'")
+            hr.mobileBlock-hr
             .timeline-line
-            .user-icon.user-icon--medium
-                span.user-icon__initials
-                  span.is-emoji([innerHtml]="':seedling:' | emojione")
-            .mobileBlock
-              | {{ project.createdAt | edjidate:'timeAgo':null }}
-              p.small
-                b {{project.label}}
-                |  group was created.
+            .pt-2
+              .user-icon.user-icon--medium
+                  span.user-icon__initials
+                    span.is-emoji([innerHtml]="':seedling:' | emojione")
+              .mobileBlock
+                .mobileTime-card
+                  .mobileTime-card__time {{ project.createdAt | edjidate:'timeAgo':null }}
+                p.small
+                  b {{project.label}}
+                  |  group was created.
 .exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
 //- END .comment - mobile
