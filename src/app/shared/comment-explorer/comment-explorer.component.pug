@@ -77,7 +77,7 @@
                     span.is-emoji([innerHtml]="':seedling:' | emojione")
               .mobileBlock
                 .mobileTime-card
-                  .mobileTime-card__time {{ project.createdAt | edjidate:'timeAgo':null }}
+                  .mobileTime-card__time.p-0 {{ project.createdAt | edjidate:'timeAgo':null }}
                 p.small
                   b {{project.label}}
                   |  group was created.

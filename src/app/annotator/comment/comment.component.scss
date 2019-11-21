@@ -143,6 +143,7 @@ user-avatar {
   max-width: 100%;
   border-top: none;
   padding: 5px;
+  position: relative;
 }
 
 $mobileBoundVPad: 40px;
@@ -186,6 +187,7 @@ $mobileBoundVPad: 40px;
   width: 50%;
   padding: 5px;
   font-style: italic;
+  display: inline-block;
 }
 
 .mobileHighlight-card_button {
@@ -193,7 +195,10 @@ $mobileBoundVPad: 40px;
   width: 50%;
   padding: 5px;
   font-size: 12px;
-  line-height: 18px;
+  line-height: 14px;
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 3px;
 }
 
 .mobileHighlight-card_liImage {
