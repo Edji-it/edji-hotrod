@@ -61,7 +61,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   private _visible: boolean
   @Input()
   set visible(visible: boolean) {
-    console.log('set visible', visible)
     let madeVisible: boolean = visible !== this._visible && visible
     // if (typeof visible !== 'undefined' && this.active !== visible) {
     this._visible = visible

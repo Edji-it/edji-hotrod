@@ -129,7 +129,6 @@ import { HeroPricingComponent } from './hero-pricing/hero-pricing.component'
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component'
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { GoogleButton, CleverButton } from './buttons'
-import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
 import { CommentExplorerComponent } from './shared'
 import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
@@ -211,7 +210,6 @@ const routerOptions: ExtraOptions = {
     RedeemToken,
     RegisterPageComponent,
     CreateProfilePageComponent,
-    CommentPaneComponent,
     CommentExplorerComponent,
     CommentComponent,
     TeacherFeedbackComponent,
