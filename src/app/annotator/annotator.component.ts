@@ -599,7 +599,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // settimeout here to prevent errors where expression changes after checked
     setTimeout(() => {
       // Scroll to line in reading where comment was made
-      commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
+      commentEl && commentEl.scrollEl.nativeElement.scrollIntoView({ behavior: 'smooth' })
       // Toggle the comment pane
       if (isReply) {
         let reply = this.project.comments.find(comment => {
@@ -1676,7 +1676,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
-    console.log('Annotator: toggleCommentPane')
     /**
      * In tablet view, the width of content changes as the pane slides
      * @todo determine a better layout option that doesn't cause relevant comments to change
@@ -1691,13 +1690,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Set the input comment to the comment pane if it is not currently open
     if (visible) {
-      console.log('Annotator set explorer visible')
       if (selectedComment) {
         // selectedComment.selected = !selectedReply
         // this.selectedComment = selectedComment
         // Set the icon arrow position based on lineY and offsets
         this.commentHeightPos = this.getCommentDisplayY(selectedComment)
-
         if (selectedReply) {
           selectedReply.selected = true
           this.selectedComment = selectedReply
@@ -1705,16 +1702,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           selectedComment.selected = true
           this.selectedComment = selectedComment
         }
-        // else {
-        //   // Reset selected reply
-        //   this.selectedReply = <EdjiComment>{}
-        // }
       }
       // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
     } else {
-      console.log('Annotator set explorer hidden')
       // Clear Comment ID/deep link params
       this.clearQueryParams()
       // iOS selection

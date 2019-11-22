@@ -66,3 +66,14 @@
     animation: pulse 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
   }
 }
+
+.portal-scroll-adjust {
+  position: absolute;
+  content: '';
+  display: block;
+  top:-100px;
+  width: 1px;
+  height: 100%;
+  pointer-events: none;
+  background: transparent;
+}
