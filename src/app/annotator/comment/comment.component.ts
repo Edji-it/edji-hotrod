@@ -59,7 +59,7 @@ export class CommentComponent implements OnInit, OnDestroy {
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
       } else {
-        this.toggleCPane(this.comment, true)
+        // this.toggleCPane(this.comment, true)
       }
     }
   }
@@ -362,14 +362,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       }, 1)
     }
     // }
-  }
-
-  /**
-   * Returns true if comment is a fresh, empty comment
-   * @param comment EdjiComment in question
-   */
-  isCommentNewDraft(comment: EdjiComment): boolean {
-    return (!comment.data || comment.data == '') && (!comment.url || comment.url == '')
   }
 
   public getOffset(el) {

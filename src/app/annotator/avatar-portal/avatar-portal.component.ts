@@ -4,7 +4,7 @@ import { EdjiComment } from '../../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService } from '../../_services'
+import { AuthService, CommentService } from '../../_services'
 import { ProjectStore } from 'src/app/_store'
 import { ALLSPARK } from 'src/app/app.constants'
 
@@ -40,13 +40,13 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   set isActive(isActive: boolean) {
     if (typeof isActive !== 'undefined' && this.active !== isActive) {
       this.active = isActive
-    }
-    // Open comment on creation
-    if (isActive) {
-      if (this.comment) {
-        this.triggerCommentPane(true)
-      } else {
-        this.loading = true
+      // Open comment on creation
+      if (isActive) {
+        if (this.comment && this.comment.new) {
+          this.triggerCommentPane(true)
+        } else if (!this.comment) {
+          this.loading = true
+        }
       }
     }
   }
@@ -70,7 +70,12 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
 
   @Output() toggleCommentPane = new EventEmitter()
 
-  constructor(private projectStore: ProjectStore, private angulartics: Angulartics2, private _auth: AuthService) {}
+  constructor(
+    private projectStore: ProjectStore,
+    private angulartics: Angulartics2,
+    private _auth: AuthService,
+    public _comments: CommentService,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

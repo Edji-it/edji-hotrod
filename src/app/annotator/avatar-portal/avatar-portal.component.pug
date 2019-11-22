@@ -6,7 +6,8 @@
   [class.active]="active",
   [class.mobileBlock-mobile-comment]="commentMobile",
   [class.has-teacher-tag]="comment.authorIsTeacher",
-  [class.pending]="loading"
+  [class.pending]="loading",
+  [class.draft]="_comments.isCommentNewDraft(comment)"
 )
   user-avatar(*ngIf="indexOnLine<8", [userId]="comment.user_id", [tempName]="comment.author")
   span.tooltipbody(*ngIf="indexOnLine<8")

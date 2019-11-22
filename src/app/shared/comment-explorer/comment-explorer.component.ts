@@ -70,19 +70,20 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     return this._comment
   }
 
-
   private _visible: boolean
   @Input()
   set visible(visible: boolean) {
     console.log('set visible', visible)
+    let madeVisible: boolean = visible !== this._visible && visible
     // if (typeof visible !== 'undefined' && this.active !== visible) {
     this._visible = visible
     // }
-    if (visible) {
+    if (madeVisible) {
       this.filterComments()
       this.evaluateShouldScroll()
       document.body.classList.add('body__lock-scroll')
-    } else {
+    }
+    if (!visible) {
       document.body.classList.remove('body__lock-scroll')
     }
   }
@@ -262,7 +263,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     // // if the comment was selected then we'll need to scroll to it, but not activate it
     // if (this.reply.selected) {
     //   this.scrollToComment(this.reply, true)
-    // } else 
+    // } else
     if (this.comment && this.comment.selected) {
       this.scrollToComment(this.comment)
     }
@@ -281,7 +282,9 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       let commentEl = document.getElementById('comment-' + targetComment._id)
       // Found comment, scroll!
       if (commentEl) {
-        this.scrollable && this.visible && this.scrollable.scrollToElement(commentEl, {top: 100, left: -100, duration: 400})
+        this.scrollable &&
+          this.visible &&
+          this.scrollable.scrollToElement(commentEl, { top: 100, left: -100, duration: 400 })
         // commentEl.scrollIntoView()
         // Offset for comment pane sticky header (60px) and nav bar (70px), and a lil padding
         if (!isReply) {
