@@ -20,29 +20,18 @@ import { Angulartics2 } from 'angulartics2'
 import { CommentComponent } from 'src/app/annotator/comment/comment.component'
 import { ProjectStore } from 'src/app/_store'
 import { NgScrollbar } from 'ngx-scrollbar'
+import { Router, ActivationEnd, ActivatedRoute } from '@angular/router'
 @Component({
   selector: 'comment-explorer',
   templateUrl: './comment-explorer.component.pug',
   styleUrls: ['./comment-explorer.component.scss'],
 })
 export class CommentExplorerComponent implements OnInit, OnDestroy {
-  // @ViewChild('commentPane', { static: false }) private commentPane: ElementRef
-  // @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
-
-  // // General variables for the comment pane component
-  // public lineNum: number = 0
-  // public commentCount: number = 0
-  // public rowComments: EdjiComment[][] = []
-  // // Reply variables
-  // public repliesById: any = {} // Updated via project service
-  public repliesToggleById: any = {} // Boolean properties for template
-  // public replyCommentNew: EdjiComment
   // // Is fully visible, focused, and editable
   public active = false
   public selected = false
   public user: User
   public project: Project = <Project>{}
-  // public visible: boolean
 
   // // Subscriptions and related
   public subscriptions: Subscription[] = []
@@ -56,8 +45,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   public filterMode: 'line' | 'all' = 'all'
 
-  // // Comment Pane Component Inputs
-  // @Input() comment: EdjiComment
+  // Comment Pane Component Inputs
   private _comment: EdjiComment
   @Input()
   set comment(comment: EdjiComment) {
@@ -90,19 +78,9 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   get visible(): boolean {
     return this._visible
   }
-  // // Checking for selected in the instances where a user clicks on the avatar and we want to scroll to that comment while adding the associated classes
-  // @Input()
-  // set isSelected(isSelected: boolean) {
-  //   if (typeof isSelected !== 'undefined' && this.selected !== isSelected) {
-  //     this.selected = isSelected
-  //     this.evaluateShouldScroll()
-  //   }
-  // }
 
-  // // Comment Pane Component Outputs
+  // Comment Pane Component Outputs
   @Output() close = new EventEmitter()
-  // @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
-  // @Output() commentReply = new EventEmitter()
 
   @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar
 
@@ -113,6 +91,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private _comments: CommentService,
     private angulartics: Angulartics2,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -121,12 +101,16 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.projectStore.commentByPos.subscribe(
         commentByPos => {
           this.commentByPos = commentByPos
+          // Ensure we update explorer when line is re-evaluated for a new comment
+          if (this.comment && this.comment.new) {
+            this.filterComments()
+          }
         },
         error => {
           console.error(error)
         },
       ),
-      // /** Set the current user every time it changes */
+      /** Set the current user every time it changes */
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
@@ -144,15 +128,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
-      // Subscribe to updates to the reply reference object
-      // this.projectStore.repliesById.subscribe(
-      //   repliesById => {
-      //     this.repliesById = repliesById
-      //   },
-      //   error => {
-      //     console.error(error)
-      //   },
-      // ),
     )
 
     // Subscribe to Heat Vision toggle updates
@@ -173,15 +148,22 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       sort = this.sortValue
     }
     let sorted
-    if (this.comment && this.comment.lineY) {
+    let comment = this.comment
+    // Handle if reply selected
+    if (comment && comment.reply_to) {
+      comment = this.allComments.find(c => {
+        return c._id === comment.reply_to
+      })
+    }
+    if (comment && comment.lineY) {
       this.filterMode = 'line'
       this.sortValue = sort = 'location'
-      sorted = this.commentByPos[this.comment.lineY].slice().filter(comment => {
+      sorted = this.commentByPos[comment.lineY].filter(comment => {
         return comment.start >= 0
       })
     } else {
       this.filterMode = 'all'
-      sorted = this.allComments.slice().filter(comment => {
+      sorted = this.allComments.filter(comment => {
         return comment.start >= 0
       })
     }
@@ -212,6 +194,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     this.sortValue = 'created'
     this.filterMode = 'all'
     this.comment = null
+    // Clear URL params
+    this.router.navigate(['.'], {
+      relativeTo: this.route,
+      queryParams: { comment: null, parent: null },
+      queryParamsHandling: 'merge',
+    })
   }
 
   /**
@@ -274,10 +262,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * @param targetComment Comment to scroll to
    */
   scrollToComment(targetComment: EdjiComment, isReply?: boolean) {
-    if (isReply) {
-      // Tell parent comment to display replies
-      this.commentReplyEmitter(this.comment, true)
-    }
+    // Replies are opened by comment component based on URL param
     setTimeout(() => {
       let commentEl = document.getElementById('comment-' + targetComment._id)
       // Found comment, scroll!
@@ -314,68 +299,4 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       }
     }
   }
-
-  commentUpdatedEmitter() {
-    // this.commentUpdated.emit()
-  }
-
-  /**
-   * Toggle replies on parent comment
-   * @param comment Parent Comment
-   */
-  commentReplyEmitter(comment: EdjiComment, forceShow?: boolean): void {
-    // this.repliesToggleById[comment._id] = forceShow || !this.repliesToggleById[comment._id]
-  }
-
-  // /**
-  //  * Create a Comment of any Type
-  //  * - Fired from comment options tooltip
-  //  * Requires three parameters, and finds the other information it needs
-  //  * @param type What kind of reply comment: emoji, text...
-  //  */
-  // addReplyOfType(comment: EdjiComment, type: string): void {
-  //   let commentId = comment._id
-
-  //   this.angulartics.eventTrack.next({
-  //     action: type + 'ReplyCreate',
-  //     properties: { category: 'heroFeature', label: 'attempt' },
-  //   })
-
-  //   var replyCommentNew = <EdjiComment>{
-  //     user_id: this.user._id,
-  //     author: this.user.fullname,
-  //     reply_to: commentId,
-  //     data: '',
-  //     type: type,
-  //   }
-
-  //   replyCommentNew.new = true
-  //   // replyCommentNew.active = true
-  //   // this.replyCommentNew = replyCommentNew
-
-  //   if (type == 'emoji') {
-  //     // this.activeEmojiKeyboardReply(this.replyCommentNew)
-  //   }
-
-  //   // Tell the server we've added a comment.
-  //   // this.projectStore
-  //   //   .saveComment(this.replyCommentNew)
-  //   //   .then(comment => {
-  //   //     this.angulartics.eventTrack.next({
-  //   //       action: type + 'ReplyCreate',
-  //   //       properties: { category: 'heroFeature', label: 'success' },
-  //   //     })
-  //   //     comment.active = true
-  //   //     this._comments.activeComment = comment
-  //   //     this.projectStore.addCommentToReplies(comment)
-  //   //   })
-  //   //   .catch(error => {
-  //   //     // TRACK EXCEPTION
-  //   //     this.angulartics.eventTrack.next({
-  //   //       action: type + 'ReplyCreate',
-  //   //       properties: { category: 'heroFeature', label: 'failure' },
-  //   //     })
-  //   //     console.log(error)
-  //   //   })
-  // } // createReplyComment(type: string): void
 }

@@ -6,6 +6,7 @@ import { AuthService, CommentService, SocketService, AnalyticsService } from '..
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
 import { ProjectStore } from 'src/app/_store'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'edji-comment',
@@ -85,6 +86,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     public el: ElementRef,
     private _socket: SocketService,
     public _analytics: AnalyticsService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -104,6 +106,12 @@ export class CommentComponent implements OnInit, OnDestroy {
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
         this.checkPermissions()
+      }),
+      // Check URL params
+      this.route.queryParams.subscribe(params => {
+        if (this.comment && params['parent'] && params['parent'] === this.comment._id && params['comment']) {
+          this.toggleReplies = true
+        }
       }),
       // Subscribe to updates to the reply reference object
       this.projectStore.repliesById.subscribe(

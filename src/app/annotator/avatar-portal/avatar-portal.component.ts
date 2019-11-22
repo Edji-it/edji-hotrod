@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, ElementRef } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { EdjiComment } from '../../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
@@ -75,6 +75,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     private _auth: AuthService,
     public _comments: CommentService,
+    public el: ElementRef, // used by annotator
   ) {}
 
   ngOnInit() {

@@ -539,49 +539,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           // Scroll to feedback
           feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
         } else if (params['comment']) {
-          // Reset selected comment values
-          // > ensures comment pane scroll action when transitioning between comments and replies
-          if (this.selectedComment) this.selectedComment.selected = false
-          // if (this.selectedReply) this.selectedReply.selected = false
-          // Parent indicates a reply comment
-          let isReply = !!params['parent']
-          let commendId = isReply ? params['parent'] : params['comment']
-          let commentEl = this.commentComponents.toArray().find(commentEl => {
-            return commentEl.comment._id === commendId
-          })
-          // Cancel if comment not found
-          if (!commentEl) {
-            // Clear param if comment not found
-            this.clearQueryParams()
-            return
-          }
-          // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
-          if (commentEl.comment.start > this.lastWord) {
-            this.lastWord = commentEl.comment.start + 800
-            // Make sure we broadcast lastWord position out to listening components
-            this.projectStore.lastWordUpdateSubj.next(this.lastWord)
-          }
-          // Hack that follows same settimeout as the below for updating image heights
-          // We have to wait for images and questions to load in order for the scroll on load to be accurate
-          // after the intitial load, we only want a 1ms timeout to prevent errors is all
-          let scrollTimeout = this.renderTimeout
-          if (this.commentFragScrollReady) {
-            scrollTimeout = 1
-          }
-          // settimeout here to prevent errors where expression changes after checked
-          setTimeout(() => {
-            // Scroll to line in reading where comment was made
-            commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
-            // Toggle the comment pane
-            if (isReply) {
-              let reply = this.project.comments.find(comment => {
-                return (comment._id = params['comment'])
-              })
-              this.toggleCommentPane(true, commentEl.comment, reply)
-            } else {
-              this.toggleCommentPane(true, commentEl.comment)
-            }
-          }, scrollTimeout)
+          // Check if opening/scrolling to comment
+          this.checkCommentLink(params['comment'], params['parent'])
         }
       }),
     )
@@ -596,6 +555,61 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this._messages.dismissToast('heat')
     // Clear feedback message
     this._messages.dismissToast('feedback')
+  }
+
+  private checkCommentLink(commentId: string, parentId?: string): void {
+    if (!this.portalComponents) {
+      console.log('waiting for portals')
+      setTimeout(() => {
+        this.checkCommentLink(commentId, parentId)
+      }, 1000)
+    }
+    // Ensure not already selected
+    if (this.selectedComment && parentId === this.selectedComment._id) {
+      return
+    }
+    // Reset selected comment values
+    // > ensures comment pane scroll action when transitioning between comments and replies
+    if (this.selectedComment) this.selectedComment.selected = false
+    // Parent indicates a reply comment
+    let isReply = !!parentId
+    let commendId = isReply ? parentId : commentId
+    let commentEl = this.portalComponents.toArray().find(commentEl => {
+      return commentEl.comment._id === commendId
+    })
+    // Cancel if comment not found
+    if (!commentEl) {
+      // Clear param if comment not found
+      this.clearQueryParams()
+      return
+    }
+    // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
+    if (commentEl.comment.start > this.lastWord) {
+      this.lastWord = commentEl.comment.start + 800
+      // Make sure we broadcast lastWord position out to listening components
+      this.projectStore.lastWordUpdateSubj.next(this.lastWord)
+    }
+    // Hack that follows same settimeout as the below for updating image heights
+    // We have to wait for images and questions to load in order for the scroll on load to be accurate
+    // after the intitial load, we only want a 1ms timeout to prevent errors is all
+    let scrollTimeout = this.renderTimeout
+    if (this.commentFragScrollReady) {
+      scrollTimeout = 1
+    }
+    // settimeout here to prevent errors where expression changes after checked
+    setTimeout(() => {
+      // Scroll to line in reading where comment was made
+      commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
+      // Toggle the comment pane
+      if (isReply) {
+        let reply = this.project.comments.find(comment => {
+          return comment._id == commentId
+        })
+        this.toggleCommentPane(true, commentEl.comment, reply)
+      } else {
+        this.toggleCommentPane(true, commentEl.comment)
+      }
+    }, scrollTimeout)
   }
 
   /**
