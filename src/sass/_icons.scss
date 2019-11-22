@@ -636,6 +636,13 @@ $iconGrayOpacity: 0.6;
   z-index: $zMid + 999;
   left: 264px;
 
+  transition: margin $slidingPaneTime linear;
+  margin-left: -264px;
+
+  &.slide-in {
+    margin-left: 0;
+  }
+
   // Hide on mobile for now
   @media (max-width: $medium-screen) {
     display: none;
@@ -645,11 +652,13 @@ $iconGrayOpacity: 0.6;
   @media (min-width: $medium-screen) and (max-width: 1129px) {
     // 768px - 992px
     left: 299px;
+    margin-left: -299px;
   }
   // Flexible width pane
   @media (min-width: 1129px) {
     // >992px
     left: calc(((100% - 530px) / 2) - 1px) !important;
+    margin-left: calc(1px - ((100% - 530px) / 2)) ;
   }
 }
 
