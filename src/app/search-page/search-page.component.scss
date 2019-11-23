@@ -104,7 +104,9 @@ $grayFont: #727272;
 
 #academyBanner {
   padding: 18px;
-  position: relative;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 100px;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -134,4 +136,8 @@ img.academy-logo {
 
 .btn-academy {
   white-space: normal;
+}
+
+.overflow-override {
+  overflow: initial;
 }

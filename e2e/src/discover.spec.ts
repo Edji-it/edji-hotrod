@@ -387,4 +387,25 @@ describe('Discover Feed', () => {
       browser.wait(EC.elementToBeClickable(discover.strategiesBanner), 5000, 'never saw strategies collection')
     })
   })
+
+  describe('My District Filter', () => {
+    beforeAll(() => {
+      sidebar.logout()
+      login.getPage()
+      login.loginAndVerify(login.adminUser, login.adminPassword)
+      sidebar.navDiscover.click()
+    })
+
+    it('should open my district readings and see district header', () => {
+      browser.wait(
+        EC.elementToBeClickable(discover.firstFeedReading),
+        5000,
+        'never saw first reading in discover feed public view',
+      )
+      // View my district readings
+      browser.wait(EC.elementToBeClickable(discover.filterDistrict), 5000, 'my district button was not clickable')
+      discover.filterDistrict.click()
+      browser.wait(EC.elementToBeClickable(discover.discoverMyDistrict), 5000, 'never saw my district header')
+    })
+  })
 })

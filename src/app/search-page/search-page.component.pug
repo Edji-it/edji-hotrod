@@ -1,5 +1,5 @@
 nav-bar([showDashboardOptions]="true")
-.mt-4([ngClass]="searchParams.district.length > 0 && academyState && academyState.academies && academyState.academies.length===0 ? 'container-fluid' : 'container'")
+.mt-4.overflow-override([ngClass]="searchParams.district.length > 0 && academyState && academyState.academies && academyState.academies.length===0 ? 'container-fluid' : 'container'")
     .row
         .col-12.my-4
             ng-container(*ngIf="!isSearching")
