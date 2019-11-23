@@ -605,10 +605,7 @@ div#driver-highlighted-element-stage {
 }
 
 // Custom scroll overrides
-.ng-scrollbar-wrapper[deactivated="false"][dir="ltr"] > scrollbar-y.scrollbar-control {
-  right: 5px !important;
-}
-.ng-scrollbar-wrapper[deactivated="false"] > scrollbar-y.scrollbar-control {
+.sliding-pane-comment .ng-scrollbar-wrapper[deactivated="false"] > scrollbar-y.scrollbar-control {
   top: 10px !important;
-  bottom: 10px !important;
+  bottom: 110px !important;
 }

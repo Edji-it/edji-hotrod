@@ -101,7 +101,7 @@ $slidingPaneWidth: 265px;
 .sliding-pane-comment {
   padding: 0px;
   z-index: $zMid + 1000;
-  overflow: auto;
+  overflow: hidden; // handled by ng-scrollbar
   box-shadow: $slidingPaneShadow;
   border-radius: 20px;
   border: $slidingPaneBorder;

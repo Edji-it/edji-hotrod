@@ -3,7 +3,7 @@
 .sliding-pane-comment__header {
   position: sticky;
   top: 0px;
-  left: 0px;
+  left: -30px;
   z-index: 5000;
   background: rgba(255,255,255,0.95);
   width: 100%;
@@ -49,6 +49,7 @@
   width: 100%;
   display: block;
   padding-top: $base-pad;
+  padding-bottom: 120px + $base-pad;
   z-index: 1000;
 }
 

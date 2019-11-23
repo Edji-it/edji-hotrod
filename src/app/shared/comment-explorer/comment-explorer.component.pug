@@ -1,5 +1,4 @@
 .sliding-pane-comment.from-left(#commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
-  ng-scrollbar
     ng-container(*ngIf="visible")
       .sliding-pane-comment__header.container-fluid
         .row
@@ -50,37 +49,38 @@
               button.btn.btn-xs-primary(*ngIf="filterMode != 'all'", (click)="viewAll()")
                 .icon.icon-comments
                 | All Comments
-      .comment-container.container-fluid.pb-4(
-        [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
-      )
-        .row
-          .col-12
-            div(*ngFor="let comment of comments; let i = index")
-              edji-comment(
-                [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
-                [class.spec-owner]="comment.user_id === project.teacher_id",
-                [readOnly]="comment.user_id !== user._id",
-                [commentPaneActive]="true",
-                [comment]="comment",
-                [commentMobile]="true",
-                [commentMobileFirst]="i<1",
-                (commentActivation)="commentActivationEmitter($event)",
-                (commentUpdated)="commentUpdatedEmitter()",
-                (commentReply)="commentReplyEmitter($event)",
-                style="display: initial;"
-              )
-            .end-block(*ngIf="filterMode === 'all' && sortValue === 'created'")
-              hr.mobileBlock-hr
-              .timeline-line
-              .pt-2
-                .user-icon.user-icon--medium
-                    span.user-icon__initials
-                      span.is-emoji([innerHtml]="':seedling:' | emojione")
-                .mobileBlock
-                  .mobileTime-card
-                    .mobileTime-card__time.p-0 {{ project.createdAt | edjidate:'timeAgo':null }}
-                  p.small
-                    b {{project.label}}
-                    |  group was created.
+      ng-scrollbar
+        .comment-container.container-fluid(
+          [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
+        )
+          .row
+            .col-12
+              div(*ngFor="let comment of comments; let i = index")
+                edji-comment(
+                  [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
+                  [class.spec-owner]="comment.user_id === project.teacher_id",
+                  [readOnly]="comment.user_id !== user._id",
+                  [commentPaneActive]="true",
+                  [comment]="comment",
+                  [commentMobile]="true",
+                  [commentMobileFirst]="i<1",
+                  (commentActivation)="commentActivationEmitter($event)",
+                  (commentUpdated)="commentUpdatedEmitter()",
+                  (commentReply)="commentReplyEmitter($event)",
+                  style="display: initial;"
+                )
+              .end-block(*ngIf="filterMode === 'all' && sortValue === 'created'")
+                hr.mobileBlock-hr
+                .timeline-line
+                .pt-2
+                  .user-icon.user-icon--medium
+                      span.user-icon__initials
+                        span.is-emoji([innerHtml]="':seedling:' | emojione")
+                  .mobileBlock
+                    .mobileTime-card
+                      .mobileTime-card__time.p-0 {{ project.createdAt | edjidate:'timeAgo':null }}
+                    p.small
+                      b {{project.label}}
+                      |  group was created.
 .exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
 //- END .comment - mobile
