@@ -112,7 +112,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
       this.projectStore.buildCommentsByPos()
     }
     // If the avatar is the 8th where it shows '+' and number of comments
-    if (this.indexOnLine == 8) {
+    if (this.indexOnLine >= 8) {
       selected = false
     }
     // If selected is true then we will have the comment pane scroll to the comment the user clicked on

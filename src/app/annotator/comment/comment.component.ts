@@ -345,6 +345,8 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // Clear selected comments
+    this.comment.selected = false
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })

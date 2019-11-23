@@ -1676,11 +1676,13 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
+    console.log('TOGGLE PANE', visible, selectedComment && selectedComment._id)
     /**
      * In tablet view, the width of content changes as the pane slides
      * @todo determine a better layout option that doesn't cause relevant comments to change
      */
     let annotatorWidth = this.annotatorContent.clientWidth
+    let isVisible = visible || selectedComment
     setTimeout(() => {
       // Limit when set line position fires, heavy w/ lots of comments
       if (annotatorWidth != this.annotatorContent.clientWidth) {
@@ -1689,17 +1691,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }, 500)
 
     // Set the input comment to the comment pane if it is not currently open
-    if (visible) {
+    if (isVisible) {
       if (selectedComment) {
         // selectedComment.selected = !selectedReply
         // this.selectedComment = selectedComment
         // Set the icon arrow position based on lineY and offsets
         this.commentHeightPos = this.getCommentDisplayY(selectedComment)
         if (selectedReply) {
-          selectedReply.selected = true
+          selectedReply.selected = visible
           this.selectedComment = selectedReply
         } else {
-          selectedComment.selected = true
+          selectedComment.selected = visible
           this.selectedComment = selectedComment
         }
       }

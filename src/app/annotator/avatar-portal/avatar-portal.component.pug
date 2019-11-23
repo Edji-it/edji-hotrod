@@ -39,5 +39,5 @@
     | {{repliesById[comment._id].length}}
 
 //- Mobile Icon
-.comment__button--mobile.hidden-md-up((tap)='triggerCommentPane(true)', [ngClass]="[ active ? 'active' : '' ]")
+.comment__button--mobile.hidden-md-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")
 .comment__count--mobile.hidden-md-up {{ lineCount }}
