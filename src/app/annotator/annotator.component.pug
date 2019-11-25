@@ -112,6 +112,7 @@ scroll-progress([scrollProgress]="currentScroll")
                 .margin-portal(*ngFor="let comment of commentsByIndex[i]; let ci = index")
                   avatar-portal(
                       [comment]="comment",
+                      [commentExplorerActive]="commentPane",
                       [isActive]="comment.active",
                       (toggleCommentPane)="toggleCommentPane($event, comment)",
                       [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]",

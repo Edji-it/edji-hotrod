@@ -37,7 +37,7 @@ $slidingPaneWidth: 265px;
   // Flexible width pane
   @media (min-width: $large-screen) {
     // >992px
-    min-width: 300px;
+    min-width: 300px !important;
     width: calc((100% - 530px) / 2) !important;
   }
   &.reading-recap {

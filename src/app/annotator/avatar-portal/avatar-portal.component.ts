@@ -32,10 +32,13 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
 
   public lineY: number
   public setLineYAttempts: number
-  // private commentsByPos
 
   public lineCount: number = 1
-  // @Input() public active: boolean = false
+  /**
+   * isActive
+   * - Activation property reflecting the comment activation
+   * - Display only for portal, and can be manipulated as needed within component
+   */
   @Input()
   set isActive(isActive: boolean) {
     if (typeof isActive !== 'undefined' && this.active !== isActive) {
@@ -53,7 +56,20 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   get isActive(): boolean {
     return this.active
   }
-  // @Input() public lineY: Number = 0
+  // Handle comment explorer de-activation
+  private _expolorerActive: boolean
+  @Input()
+  set commentExplorerActive(active: boolean) {
+    if (!active && this._expolorerActive !== active) {
+      // Clear portal activation when explorer closed
+      this.active = false
+    }
+    this._expolorerActive = active
+  }
+  get commentExplorerActive(): boolean {
+    return this._expolorerActive
+  }
+  // Comment represented by portal
   private _comment: EdjiComment
   @Input()
   set comment(comment: EdjiComment) {
@@ -79,11 +95,6 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subscriptions.push(
-      this.projectStore.commentByPos.subscribe(commentsByPos => {
-        this.commentsByPos = commentsByPos
-      }),
-    )
     // If comment already has uploaded audio, load it
     if (this.comment.type == 'audio' && this.comment.url && this.comment.url.length > 0) {
       this.loadAudioPlayer(this.comment.url)
@@ -120,6 +131,8 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
       this.comment.selected = true
     } else {
       this.comment.selected = false
+      // Set as active
+      this.active = true
     }
     this.toggleCommentPane.emit(selected)
   }

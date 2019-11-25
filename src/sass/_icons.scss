@@ -645,7 +645,10 @@ $iconGrayOpacity: 0.6;
 
   // Hide on mobile for now
   @media (max-width: $medium-screen) {
-    display: none;
+    // <768px
+    left: calc(100% - 60px);
+    margin-left: calc(100% - 60px);
+    margin-top: 64px; //mobile adjustment
   }
   // NOTE: "large screen" value is different here to account min-width flexibility
   // Min width pane
