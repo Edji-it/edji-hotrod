@@ -72,7 +72,7 @@
     )
     i.comment__saved([innerHtml]='":ok_hand:" | emojione')
     //- Comment action row
-    .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
+    .comment__action-row.btn-row.left.mt-0(*ngIf="!readingReport", [class.reply-gap]="repliesShowing")
         button.btn.btn-xs-danger.e2e-delete-button(*ngIf="userPermission >= 3", (tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
         ng-container(*ngIf="comment.type != 'audio' && !readOnly && !comment.active")
             .action-separator
@@ -146,7 +146,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                 .mobileHighlight-card_image Image
                 button.mobileHighlight-card_button((tap)="scrollToImage(comment.start)") View&nbsp;&#8594;
             //- Comment action buttons
-            .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
+            .comment__action-row.btn-row.left.mt-0(*ngIf="!readingReport", [class.reply-gap]="repliesShowing")
                 ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")
                     i.icon.icon-draft.icon-draft__comment
                 ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1 && !((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
