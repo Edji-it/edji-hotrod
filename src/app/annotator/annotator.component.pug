@@ -119,6 +119,8 @@ scroll-progress([scrollProgress]="currentScroll")
                       (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
                       (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
                       [class.imageComment]="comment.imageY",
+                      [class.hide]="!projectStore.isCommentVisible(comment)",
+                      [class.spec-owner]="comment.user_id === project.teacher_id",
                       [style.top]="comment.imageY ? comment.imageY + 'px' : '0px'"
                   )
                 //- Link Words: If a word is actually a link, handle it differently
