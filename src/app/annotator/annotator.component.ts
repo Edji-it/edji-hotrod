@@ -88,13 +88,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   // Indices for highlights of a selected filter
   public filterHighlightArray: number[][]
   public focusArray: (boolean | boolean[])[] = []
-  // Word/Hit boxes on images
-  /**
-   * @todo add layered highlighting to boxes
-   */
-  // public boxHighlightArray: number[][]
-  // public boxAlwaysHighlightArray: number[][]
-  // public boxFilterHighlightArray: number[][]
 
   // Line Count
   public lineCountRunning: boolean = false
@@ -102,10 +95,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public commentPane: boolean
   public lineExpanded: number
 
-  // public activeComment: EdjiComment = <EdjiComment>{}
   public replyComment: EdjiComment = <EdjiComment>{}
   public selectedComment: EdjiComment = <EdjiComment>{}
-  // public selectedReply: EdjiComment = <EdjiComment>{}
   // Comment options that can be made directly on a word
   public directCommentOptions: string[] = []
 
@@ -1220,11 +1211,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   inactivateComment(): void {
     if (this._comments.activeComment.start !== undefined) {
-      // this.unfocusHighlight(
-      //   this._comments.activeComment.start,
-      //   this._comments.activeComment.end,
-      //   this._comments.activeComment.box,
-      // )
       this._comments.activeComment.active = false
       this._comments.activeComment = <EdjiComment>{}
     }
@@ -1676,25 +1662,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
-    console.log('TOGGLE PANE', visible, selectedComment && selectedComment._id)
-    /**
-     * In tablet view, the width of content changes as the pane slides
-     * @todo determine a better layout option that doesn't cause relevant comments to change
-     */
-    let annotatorWidth = this.annotatorContent.clientWidth
     let isVisible = visible || selectedComment
-    setTimeout(() => {
-      // Limit when set line position fires, heavy w/ lots of comments
-      if (annotatorWidth != this.annotatorContent.clientWidth) {
-        this.setLinePositions()
-      }
-    }, 500)
-
     // Set the input comment to the comment pane if it is not currently open
     if (isVisible) {
       if (selectedComment) {
-        // selectedComment.selected = !selectedReply
-        // this.selectedComment = selectedComment
         // Set the icon arrow position based on lineY and offsets
         this.commentHeightPos = this.getCommentDisplayY(selectedComment)
         if (selectedReply) {

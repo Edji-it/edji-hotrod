@@ -218,10 +218,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     console.log('Dismiss!')
     this.visible = false
     this.comment = null
-    // this.comment.selected = false
-    // if (this.reply) {
-    //   this.reply.selected = false
-    // }
     this.close.emit(false)
     document.body.classList.remove('body__lock-scroll')
   }
@@ -241,16 +237,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       return
     }
     // if the comment is new, let's adjust the scroll position if there are a ton of comments
-    // + Verify reply changes first, in order to support transitioning from comment => reply
-    // if (this.reply.new) {
-    //   this.scrollToComment(this.reply, true)
-    // } else if (this.comment.new) {
-    //   this.scrollToComment(this.comment)
-    // }
-    // // if the comment was selected then we'll need to scroll to it, but not activate it
-    // if (this.reply.selected) {
-    //   this.scrollToComment(this.reply, true)
-    // } else
     if (this.comment && this.comment.selected) {
       this.scrollToComment(this.comment)
     }
@@ -269,11 +255,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         this.scrollable &&
           this.visible &&
           this.scrollable.scrollToElement(commentEl, { top: 100, left: -100, duration: 400 })
-        // commentEl.scrollIntoView()
-        // Offset for comment pane sticky header (60px) and nav bar (70px), and a lil padding
-        if (!isReply) {
-          // this.commentPane.nativeElement.scrollTop -= 150
-        }
       }
     }, 1)
   }

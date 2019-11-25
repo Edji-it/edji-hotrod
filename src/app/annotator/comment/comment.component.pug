@@ -145,9 +145,6 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             .list-item.mobileHighlight-card.h-1(*ngIf="isImageSpot && !readingReport")
                 .mobileHighlight-card_image Image
                 button.mobileHighlight-card_button((tap)="scrollToImage(comment.start)") View&nbsp;&#8594;
-            //- .list-item.list-item.fireHighlight-card_liImage.h-1(*ngIf="isImageSpot")
-            //-     .fireHighlight-card_image Image
-            //-     button.fireHighlight-card_button((tap)="getImagePos(fireComment.start)") View&nbsp;&#8594;
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0([class.reply-gap]="repliesShowing")
                 ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")
@@ -229,15 +226,3 @@ ng-container(*ngIf="!reply && toggleReplies")
           i.icon.icon-comment-text
         button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
           i.icon.icon-mic
-
-//- Handle Desktop and Mobile Icons for activating comments
-//- avatar-portal(
-//-     *ngIf="!reply && !readingReport",
-//-     [comment]="comment",
-//-     [lineCount]="lineCount",
-//-     [indexOnLine]="indexOnLine",
-//-     [isActive]="indicatesPane",
-//-     [lineY]="comment.lineY",
-//-     (toggleCommentPane)="toggleCPane(comment)",
-//-     [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]"
-//- )

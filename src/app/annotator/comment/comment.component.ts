@@ -29,11 +29,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   private user: any = {}
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
-  // private commentsByPos: any = []
   private project: any
-  private commentPane: boolean
-  private indicatesPane: boolean
-  // private setLineYAttempts: number = 0
   private fragment: string
 
   public toggleReplies: boolean
@@ -321,15 +317,6 @@ export class CommentComponent implements OnInit, OnDestroy {
     return this.repliesById[comment._id] && this.repliesById[comment._id].length > 0
   }
 
-  // /**
-  //  * Toggle display of replies
-  //  * @description Uses output to trigger display in parent component
-  //  */
-  // public toggleReplies(): void {
-  //   this.repliesShowing = !this.repliesShowing
-  //   this.commentReply.emit(this.comment)
-  // }
-
   /**
    * Collapse all stacked comments on the same line
    */
@@ -360,18 +347,11 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.comment.selected = true
     }
     // Need to give the app 1 millisecond to update all arrays when adding a new comment
-    if (!this.indicatesPane || forceOpen) {
+    if (forceOpen) {
       setTimeout(() => {
-        this.indicatesPane = true
-        this.toggleCommentPane.emit(true)
-      }, 1)
-    } else {
-      setTimeout(() => {
-        this.indicatesPane = false
         this.toggleCommentPane.emit(false)
       }, 1)
     }
-    // }
   }
 
   public getOffset(el) {
@@ -416,12 +396,6 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
 
     replyCommentNew.new = true
-    // replyCommentNew.active = true
-    // this.replyCommentNew = replyCommentNew
-
-    if (type == 'emoji') {
-      // this.activeEmojiKeyboardReply(this.replyCommentNew)
-    }
 
     // Tell the server we've added a comment.
     this.projectStore
