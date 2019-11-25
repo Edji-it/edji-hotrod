@@ -38,17 +38,17 @@ export class Project implements PageObjectInterface {
   public imageDown = 25
   public tutorialSkip = element(by.css('.tooltip__skip'))
   public commentOptionsShow = element(by.css('.text-options.active'))
-  public commentNotHidden = element(by.css('edji-comment:not(.hidden)'))
+  public commentNotHidden = element(by.css('avatar-portal:not(.hide)'))
   public getEmojiFromKeyboard = (locator: string) => element(by.css('emoji-keyboard')).element(by.css(locator))
   public textCommentInput = element(by.css('textarea.text-comment-input'))
   public word = (index: string | number) => element(by.css(`.w[index='${index}']`))
   public commentAnnotatedText = element(by.css('[data-test="commentAnnotatedText"]'))
 
   // Audio Comment test variables
-  public audioPlay = element(by.css('edji-comment:not(.hidden) audio-comment #audioPlay'))
-  public audioPause = element(by.css('edji-comment:not(.hidden) audio-comment #audioPause'))
-  public audioRestart = element(by.css('edji-comment:not(.hidden) audio-comment #audioRestart'))
-  public audioRecord = element(by.css('edji-comment:not(.hidden) audio-comment #audioRecord'))
+  public audioPlay = element(by.css('audio-comment #audioPlay'))
+  public audioPause = element(by.css('audio-comment #audioPause'))
+  public audioRestart = element(by.css('audio-comment #audioRestart'))
+  public audioRecord = element(by.css('audio-comment #audioRecord'))
   public emojiCommentSave = element(by.css('edji-comment .comment-action--save'))
   public audioComment = element.all(by.css('.audio-comment-input-wrapper')).first()
 
