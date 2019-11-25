@@ -154,7 +154,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         return c._id === comment.reply_to
       })
     }
-    if (comment && comment.lineY) {
+    if (comment && comment.lineY && this.commentByPos && this.commentByPos[comment.lineY]) {
       this.filterMode = 'line'
       this.sortValue = sort = 'location'
       sorted = this.commentByPos[comment.lineY].filter(comment => {
