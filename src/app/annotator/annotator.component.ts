@@ -550,14 +550,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private checkCommentLink(commentId: string, parentId?: string): void {
     if (!this.portalComponents) {
-      console.log('waiting for portals')
       setTimeout(() => {
         this.checkCommentLink(commentId, parentId)
       }, 1000)
-    }
-    // Ensure not already selected
-    if (this.selectedComment && parentId === this.selectedComment._id) {
-      return
     }
     // Reset selected comment values
     // > ensures comment pane scroll action when transitioning between comments and replies
@@ -568,6 +563,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     let commentEl = this.portalComponents.toArray().find(commentEl => {
       return commentEl.comment._id === commendId
     })
+    // Ensure not already selected
+    if (this.selectedComment && commentId === this.selectedComment._id) {
+      return
+    }
     // Cancel if comment not found
     if (!commentEl) {
       // Clear param if comment not found
