@@ -32,8 +32,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   private project: any
   private fragment: string
 
-  public toggleReplies: boolean
-
   @Input() public comment: EdjiComment
   @Input() private readOnly: boolean = false
   @Input() private replyRef: boolean = false
@@ -106,7 +104,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       // Check URL params
       this.route.queryParams.subscribe(params => {
         if (this.comment && params['parent'] && params['parent'] === this.comment._id && params['comment']) {
-          this.toggleReplies = true
+          this.repliesShowing = true
         }
       }),
       // Subscribe to updates to the reply reference object
