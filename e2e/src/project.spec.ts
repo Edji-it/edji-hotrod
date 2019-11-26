@@ -186,7 +186,10 @@ describe('Project Page', () => {
         5000,
         'never found the add text reply comment button',
       )
+      // Showing/hiding replies is causing a hiccup
+      browser.sleep(400)
       project.addTextReplyBtn.click()
+      browser.sleep(400)
       browser.wait(
         EC.presenceOf(element(by.css('textarea.text-comment-input'))),
         5000,
