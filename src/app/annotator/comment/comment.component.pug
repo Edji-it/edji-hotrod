@@ -97,6 +97,10 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             (tap)="deactivate(comment)",
             [innerHtml]="':white_check_mark:' | emojione"
         )
+        .comment__saved.comment-action--save__mobile(
+          *ngIf="justSaved",
+          [innerHtml]='":ok_hand:" | emojione'
+        )
         user-avatar(
             [userId]="comment.user_id",
             [size]="'medium'",
