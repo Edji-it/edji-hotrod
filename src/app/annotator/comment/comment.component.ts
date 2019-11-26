@@ -287,6 +287,8 @@ export class CommentComponent implements OnInit, OnDestroy {
           console.error(error)
         })
     }
+    // Emit deletion event
+    this.commentDeleted.emit()
   } // deleteComment(comment: any) : void
 
   /**

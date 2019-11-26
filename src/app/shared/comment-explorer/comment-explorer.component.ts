@@ -215,7 +215,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   }
 
   dismissCommentPane() {
-    console.log('Dismiss!')
     this.visible = false
     this.comment = null
     this.close.emit(false)
@@ -277,6 +276,16 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       if (comment && comment.type === 'emoji') {
         this.scrollToComment(comment)
       }
+    }
+  }
+
+  /**
+   * Delete comment handler
+   * - If only comment, close pane
+   */
+  public onDelete(): void {
+    if (this.comments.length <= 1) {
+      this.dismissCommentPane()
     }
   }
 }

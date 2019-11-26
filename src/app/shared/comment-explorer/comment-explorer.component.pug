@@ -65,8 +65,8 @@
                 [commentMobile]="true",
                 [commentMobileFirst]="i<1",
                 (commentActivation)="commentActivationEmitter($event)",
-                (commentUpdated)="commentUpdatedEmitter()",
                 (commentReply)="commentReplyEmitter($event)",
+                (commentDeleted)="onDelete()",
                 style="display: initial;"
               )
             .end-block(*ngIf="filterMode === 'all' && sortValue === 'created'")
