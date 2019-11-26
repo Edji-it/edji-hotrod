@@ -88,9 +88,7 @@ describe('Project Page', () => {
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
       project.commentDelete.click()
 
-      // close the comment pane
-      browser.wait(EC.elementToBeClickable(project.closePane), 5000, 'could not find close pane button')
-      project.closePane.click()
+      // Comment Explorer should close when only comment is deleted
     })
 
     it('should make a comment on an image by clicking on image', async () => {
@@ -120,9 +118,7 @@ describe('Project Page', () => {
       project.commentDelete.click()
       // make sure it's deleted
       browser.wait(EC.invisibilityOf(project.textCommentInput), 5000, 'text comment never went away after deleting it')
-      // close the comment pane
-      browser.wait(EC.elementToBeClickable(project.closePane), 5000, 'could not find close pane button')
-      project.closePane.click()
+      // Comment Explorer should close when only comment is deleted
     })
 
     it('should make audio comment by selecting text', () => {
@@ -343,9 +339,7 @@ describe('Project Page', () => {
       project.commentDelete.click()
       // make sure it's deleted
       browser.wait(EC.invisibilityOf(project.textCommentInput), 5000, 'text comment did not go away after deleting it')
-      // close the comment pane
-      browser.wait(EC.elementToBeClickable(project.closePane), 5000, 'could not find close pane button')
-      project.closePane.click()
+      // Comment Explorer should close when only comment is deleted
     })
   })
 })
