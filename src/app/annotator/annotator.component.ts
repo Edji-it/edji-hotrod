@@ -490,7 +490,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Subscribe to updates on where to move the lastWord for the infinity scroll
     this.subscriptions.push(
       this.projectStore.lastWordUpdateState.subscribe(lastWord => {
-        this.lastWord = lastWord + this.lastWordImageOffset
+        if (lastWord > this.lastWord) {
+          this.lastWord = lastWord + this.lastWordImageOffset
+        }
       }),
     )
 

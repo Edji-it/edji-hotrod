@@ -363,6 +363,9 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   public scrollToImage(imageIndex) {
+    if (!imageIndex) {
+      return
+    }
     let yOffset = 100
     let imageElement = document.getElementById('readingImage' + imageIndex)
     if (!imageElement) {
