@@ -127,10 +127,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
-    )
-
-    // Subscribe to Heat Vision toggle updates
-    this.subscriptions.push(
+      // Subscribe to Heat Vision toggle updates
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
       }),

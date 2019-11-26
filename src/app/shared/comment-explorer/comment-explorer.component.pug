@@ -45,9 +45,17 @@
             span By Location
         .col-12
           .btn-row.right.header__btn-row
-            button.btn.btn-xs-primary(*ngIf="filterMode != 'all'", (click)="viewAll()")
-              .icon.icon-comments
-              | All Comments
+            .hover--tooltip
+              button.btn.btn-xs-primary(
+                *ngIf="filterMode != 'all'",
+                (click)="viewAll()",
+                [disabled]="!project.heat_vision && user._id !== project.teacher_id"
+              )
+                .icon.icon-comments
+                | All Comments
+                .tooltip-wrap.tooltip--on-disabled
+                  .tooltip
+                    .tooltip-title Heat Vision is disabled
     ng-scrollbar
       .comment-container.container-fluid(
         *ngIf="visible",

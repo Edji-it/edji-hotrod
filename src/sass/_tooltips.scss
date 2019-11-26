@@ -43,6 +43,16 @@
   }
 }
 
+// Util for showing explanation tooltip on disabled buttons
+.tooltip--on-disabled {
+  display: none;
+}
+
+.btn:disabled > .tooltip--on-disabled,
+button:disabled > .tooltip--on-disabled {
+  display: block;
+}
+
 .tooltip::after {
   content: '';
   position: absolute;
