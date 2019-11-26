@@ -48,7 +48,7 @@ export class Project implements PageObjectInterface {
   public audioPlay = element(by.css('audio-comment #audioPlay'))
   public audioPause = element(by.css('audio-comment #audioPause'))
   public audioRestart = element(by.css('audio-comment #audioRestart'))
-  public audioRecord = element(by.css('audio-comment #audioRecord'))
+  public audioRecord = element(by.css('audio-comment #audioRecord:not(.disabled)'))
   public emojiCommentSave = element(by.css('edji-comment .comment-action--save'))
   public audioComment = element.all(by.css('.audio-comment-input-wrapper')).first()
 

@@ -5,13 +5,13 @@
     //- [class.disabled]="isRecording() || isLoading()"
     //- Play
   button#audioPlay.btn-audio(
-      *ngIf="!isPlaying() && !isLoading()", 
+      *ngIf="!isPlaying() && !isLoading()",
       (click)="play()"
     )
     i.icon-play
     //- Pause
   button#audioPause.btn-audio(
-    *ngIf="isPlaying()", 
+    *ngIf="isPlaying()",
     (click)="pause()"
   )
     i.icon-pause
@@ -22,15 +22,15 @@
     i.icon-loading
   //- Restart Playback
   button#audioRestart.btn-audio(
-    [class.disabled]="!isPlayable()", 
+    [class.disabled]="!isPlayable()",
     (click)="restartPlayback()"
   )
     i.icon-restart
   //- Record
   button#audioRecord.btn-audio.btn-record(
-    *ngIf="!(userPermission <= 3)", 
-    (click)="isRecording() ? stopRecord() : record()", 
-    [class.disabled]="!isInactive() && !isRecording()",
+    *ngIf="!(userPermission <= 3)",
+    (click)="isRecording() ? stopRecord() : record()",
+    [class.disabled]="isLoading() && isPlaying()",
     [class.active]="isRecording()"
   )
     i.icon([ngClass]="[ isRecording() ? 'icon-stop' : 'icon-mic']")
