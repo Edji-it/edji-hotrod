@@ -164,6 +164,8 @@ export class Project implements PageObjectInterface {
         })
       }
     })
+    // sleep() reason: Give comment explorer time to slide in
+    browser.sleep(400)
   }
 
   public addTextComment(): void {
@@ -187,6 +189,8 @@ export class Project implements PageObjectInterface {
         })
       }
     })
+    // sleep() reason: Give comment explorer time to slide in
+    browser.sleep(400)
   }
 
   public addAudioComment(): void {
@@ -214,6 +218,8 @@ export class Project implements PageObjectInterface {
         })
       }
     })
+    // sleep() reason: Give comment explorer time to slide in
+    browser.sleep(400)
   }
 
   public openReplyPane(): void {
