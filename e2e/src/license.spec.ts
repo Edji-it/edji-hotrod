@@ -1,6 +1,6 @@
 import { browser, by, element, protractor } from 'protractor'
 import { Sidebar, Login, Dashboard } from './page-objects'
-import { AcademyMgmt } from './page-objects/academy-mgmt-page';
+import { AcademyMgmt } from './page-objects/academy-mgmt-page'
 
 describe('Academy user that has ability to manage licenses for their academy: ', () => {
   let dashboard = new Dashboard()
@@ -78,7 +78,7 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       let activeLicenseVal = element(by.id('activeLicenseCount'))
       browser.wait(EC.visibilityOf(activeLicenseVal), 3000, 'not able to find the active license value')
       activeLicenseVal.getText().then(count => {
-        expect(parseInt(count.substring(0, 1))).toBeGreaterThanOrEqual(
+        expect(parseInt(count.trim())).toBeGreaterThanOrEqual(
           1,
           'active licenses value should be greater than or equal to 1',
         )
@@ -95,6 +95,8 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       // verify more than 1 license is available
       let availLicenseVal = element(by.id('availableLicenseCount'))
       browser.wait(EC.visibilityOf(availLicenseVal), 3000, 'not able to find the available license value')
+      // Allow value to calculate (displays as 0 on initial load)
+      browser.sleep(1000)
       availLicenseVal.getText().then(count => {
         expect(count.substring(0, 1)).toBeGreaterThan(1, 'available licenses value is not greater than 1')
       })
@@ -145,7 +147,11 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       expect(inviteLink).toContain('/license/accept')
       // Verify clicking "Copy" at least shows a success message
       mgmt.copyInviteLink.click()
-      browser.wait(EC.visibilityOf(mgmt.copySuccessMsg), 3000, 'clicking to copy invite link did not show success message')
+      browser.wait(
+        EC.visibilityOf(mgmt.copySuccessMsg),
+        3000,
+        'clicking to copy invite link did not show success message',
+      )
       // Browse to link
       browser.get(inviteLink)
       browser.wait(EC.elementToBeClickable(mgmt.joinAcademyBtn), 5000, 'invite link did show license accept page')
