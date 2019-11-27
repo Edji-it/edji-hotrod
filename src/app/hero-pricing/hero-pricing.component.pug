@@ -54,7 +54,7 @@ nav-bar
           p.card-text Teachers who make reading a staple of their class and want a detailed history of their classroom engagement
           a.btn.btn-hero.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", tabindex='1', (click)='goHero("pricingHeroCard")') Go Hero
           a.btn.btn-hero.btn-lg.btn-block(*ngIf="user && user.isLoggedIn && user.hero_status", [routerLink]="['/account']", [innerHtml]="'Current Plan &nbsp;:tada:' | emojione")
-    .col-sm-4
+    #academy.col-sm-4
       .card.card-outline-secondary
         .card-body
           h2.card-title Hero Academy

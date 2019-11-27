@@ -28,9 +28,11 @@ export class Discover implements PageObjectInterface {
   public outsideLoginModal = element(by.id('loginModalOutsideContent'))
   public previewTitle = element(by.id('previewTitle'))
   public strategiesBanner = element(by.id('discoverStrategies'))
+  public discoverMyDistrict = element(by.id('discoverMyDistrict'))
 
   // Discover Filters
   public filterPublic = element(by.id('discoverFilterPublic'))
+  public filterDistrict = element(by.id('discoverFilterDistrict'))
   public filterFollowing = element(by.id('discoverFilterFollowing'))
   public filterStrategies = element(by.id('discoverFilterStrategies'))
   public searchCount = element(by.css('[data-test="searchCount"]'))

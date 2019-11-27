@@ -331,6 +331,29 @@ button {
   }
 }
 
+%btnAcademy,
+.btn.btn-academy {
+  background-color: $btnAcademyBg;
+  // background-image: linear-gradient(180deg, #FFFFFF 7%, $btnAcademyBg 100%);
+  border: $btnBorderWidth solid $btnAcademyColor;
+  border-radius: $btnBorderRadius;
+  color: $btnAcademyColor;
+  box-shadow: 0 4px 2px -2px rgba($btnAcademyColor, 0.5);
+
+  &.loading {
+    background: darken($btnAcademyBg, 20%);
+  }
+
+  &:hover,
+  &:active,
+  &:focus,
+  &.force-hover {
+    box-shadow: 0 0px 15px 0px rgba($btnAcademyFocusColor, 0.5);
+    background: $btnAcademyFocusColor;
+    color: #fff;
+  }
+}
+
 %btnSecondary,
 .btn-secondary {
   color: $btnSecondaryColor;

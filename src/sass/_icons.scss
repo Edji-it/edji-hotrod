@@ -96,6 +96,18 @@ $iconGrayOpacity: 0.6;
   @include icon('icon-strategies-lg.svg');
 }
 
+.icon-district-sm {
+  @include icon('icon-district-sm.svg');
+}
+
+.icon-district-lg {
+  @include icon('icon-district-lg.svg');
+  height: 3em;
+  width: 3em;
+  display: inline-block;
+  background-color: transparent;
+}
+
 .icon-caret,
 .ui-paginator-icon.pi {
   @include icon('icon-caret-right.svg');
