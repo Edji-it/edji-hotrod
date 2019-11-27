@@ -57,7 +57,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     return this.active
   }
   // Handle comment explorer de-activation
-  private _expolorerActive: boolean
+  private _explorerActive: boolean
   @Input()
   set commentExplorerActive(active: boolean) {
     if (!active && this._expolorerActive !== active) {
