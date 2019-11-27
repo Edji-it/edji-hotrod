@@ -185,7 +185,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Deactivate this comment
     this.comment.active = this.active = false
     this.comment.new = false
-    // this.commentActivation.emit(false)
+    
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
     if (comment && !noUpdate) {
