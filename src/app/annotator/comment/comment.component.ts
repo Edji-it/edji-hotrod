@@ -54,7 +54,7 @@ export class CommentComponent implements OnInit, OnDestroy {
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
       
-        // this.toggleCPane(this.comment, true)
+        
       }
     }
   }
