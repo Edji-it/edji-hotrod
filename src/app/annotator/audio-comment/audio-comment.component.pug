@@ -31,7 +31,7 @@
   button#audioRecord.btn-audio.btn-record(
     *ngIf="!(userPermission <= 3)",
     (click)="isRecording() ? stopRecord() : record()",
-    [class.disabled]="isLoading() && isPlaying()",
+    [class.disabled]="isLoading() || isPlaying()",
     [class.active]="isRecording()"
   )
     i.icon([ngClass]="[ isRecording() ? 'icon-stop' : 'icon-mic']")
