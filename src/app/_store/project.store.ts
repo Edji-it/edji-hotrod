@@ -600,7 +600,7 @@ export class ProjectStore {
         }),
       )
       .toPromise()
-  } //  public removeComment(comment): Promise<any>
+  }
 
   /**
    * Decorates the comment before adding it to the array
@@ -634,7 +634,7 @@ export class ProjectStore {
     }
     arr[comment.start].push(comment)
     return arr
-  } // private addCommentToArray(comment: EdjiComment, project: Project, user: User, arr: EdjiComment[][]): EdjiComment[][]
+  }
 
   public addCommentToReplies(comment: EdjiComment): void {
     let repliesById = this.repliesByIdSubject.getValue()
@@ -656,7 +656,7 @@ export class ProjectStore {
       }
       this.repliesByIdSubject.next(repliesById)
     }
-  } // public addCommentToReplies(comment: EdjiComment): void
+  }
 
   public removeCommentFromReplies(comment: EdjiComment): void {
     let repliesById = this.repliesByIdSubject.getValue()
@@ -668,7 +668,7 @@ export class ProjectStore {
         }
       }
     }
-  } // public removeCommentFromReplies(comment: EdjiComment) : void
+  }
 
   /**
    * Adds the answer to the array by question ID
@@ -701,7 +701,7 @@ export class ProjectStore {
       // Update observable
       this.answersByIdSubject.next(answersById)
     }
-  } // public addAnswerToAnswers(answer: EdjiComment): void
+  }
 
   public removeAnswerFromAnswers(answer: EdjiComment): void {
     let answersById = this.answersByIdSubject.getValue()
@@ -711,9 +711,9 @@ export class ProjectStore {
           answersById[answer.questionId].splice(i, 1)
           this.answersByIdSubject.next(answersById)
         }
-      } // for
+      }
     }
-  } //  public removeAnswerFromAnswers(answer: EdjiComment) : void
+  }
 
   /**
    * Save an answer on a project.
@@ -728,9 +728,6 @@ export class ProjectStore {
 
     answer.project_id = project._id // Tell the answer what project it's a part of
 
-    // Clean frontend only properties
-    delete answer['active']
-    delete answer['new']
     // Get the url of this project that we're saving to.
     if (!answer.user_id) {
       answer.user_id = this._auth.getUser()._id
@@ -790,6 +787,32 @@ export class ProjectStore {
           // Tell other Project views that the comment is gone
           this._socket.updateComment(answer, 'DELETE', project._id)
           this.removeAnswerFromAnswers(answer)
+          return data
+        }),
+      )
+      .toPromise()
+  }
+
+  public saveFeedback(feedback: Partial<EdjiComment>): Promise<EdjiComment> {
+    const project = this.currentProjectSource.getValue()
+
+    this.angulartics.eventTrack.next({
+      action: 'feedback_create',
+      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+    })
+
+    return this._project
+      .putFeedback(project._id, feedback)
+      .pipe(
+        take(1),
+        map(data => {
+          this._socket.groupUpdateEvent({
+            type: 'feedbackUpdate',
+            feedback: data,
+          })
+          const feedbackArray = project.report_evals || []
+          feedbackArray.push(data)
+          this.currentProjectSource.next(project)
           return data
         }),
       )

@@ -113,6 +113,7 @@ export class ReadingRecapComponent implements OnInit {
       this.subscriptions.push(
         this.projectStore.currentProject.subscribe(
           project => {
+            console.log('got a new project!')
             if (project) {
               this.project = project
               this.teacherId = project.teacher_id
@@ -367,26 +368,9 @@ export class ReadingRecapComponent implements OnInit {
       evaluation: evalData,
       user_id: this.currentStudent.value,
     }
-    let projectToUpdate = {
-      // Ensure "report_evals" exists and is an array
-      report_evals: this.project.report_evals ? this.project.report_evals : [],
-    }
-    // Add the new evaluation to the project
-    projectToUpdate.report_evals.push(evalObj)
 
     // update the project with the new evaluation, create the pdf, and then email it out
-    this.projectStore.update(projectToUpdate, this.project._id).subscribe(project => {
-      const newEval = project.report_evals[project.report_evals.length - 1]
-      // update our project so evaluation shows in the page
-      this.evaluations.push(newEval)
-      this._socket.groupUpdateEvent({
-        type: 'feedbackUpdate',
-        feedback: newEval,
-      })
-    }),
-      error => {
-        console.error(error)
-      }
+    this.projectStore.saveFeedback(evalObj)
     // empty out the form
     this.evaluationForm.reset()
   }
