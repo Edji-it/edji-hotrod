@@ -192,7 +192,7 @@ describe('Project Page', () => {
       // Showing/hiding replies is causing a hiccup
       browser.sleep(400)
       project.addTextReplyBtn.click()
-      browser.sleep(400)
+      browser.sleep(1000)
       browser.wait(
         EC.presenceOf(element(by.css('textarea.text-comment-input'))),
         5000,

@@ -804,6 +804,10 @@ $progressStart: 51px;
   margin-top: 28px;
   left: 32px;
   // pointer-events: none;
+
+  & .comment__saved, & .comment__save {
+    right: -19px;
+  }
 }
 
 .replyCommentHandler:hover {
