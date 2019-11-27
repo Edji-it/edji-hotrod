@@ -6,7 +6,8 @@
     //- Play
   button#audioPlay.btn-audio(
       *ngIf="!isPlaying() && !isLoading()",
-      (click)="play()"
+      (click)="play()",
+      [class.disabled]="!isPlayable()"
     )
     i.icon-play
     //- Pause
