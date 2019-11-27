@@ -342,7 +342,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   toggleCPane(comment?, forceOpen?: boolean): void {
     console.log('Comment toggle', forceOpen)
 
-    // if (!this.commentPaneActive) {
     if (comment.selected) {
       this.comment.selected = true
     }
