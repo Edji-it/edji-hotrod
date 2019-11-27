@@ -793,11 +793,11 @@ export class ProjectStore {
       .toPromise()
   }
 
-  public saveFeedback(feedback: Partial<EdjiComment>): Promise<EdjiComment> {
+  public saveEvaluation(feedback: Partial<EdjiComment>): Promise<EdjiComment> {
     const project = this.currentProjectSource.getValue()
 
     this.angulartics.eventTrack.next({
-      action: 'feedback_create',
+      action: 'readingRecap_feedbackGiven',
       properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
 
@@ -817,6 +817,12 @@ export class ProjectStore {
         }),
       )
       .toPromise()
+  }
+
+  public getEvaluationsByStudent(id: string): Array<Partial<EdjiComment>> {
+    const project = this.currentProjectSource.getValue()
+    if (!project.report_evals) return []
+    return project.report_evals.filter(evaluation => evaluation.user_id === id)
   }
 
   /**

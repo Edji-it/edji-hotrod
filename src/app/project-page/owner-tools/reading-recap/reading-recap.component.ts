@@ -113,7 +113,6 @@ export class ReadingRecapComponent implements OnInit {
       this.subscriptions.push(
         this.projectStore.currentProject.subscribe(
           project => {
-            console.log('got a new project!')
             if (project) {
               this.project = project
               this.teacherId = project.teacher_id
@@ -218,14 +217,7 @@ export class ReadingRecapComponent implements OnInit {
     }
 
     // If there are evaluations from the teacher on the selected student, let's display it here
-    this.evaluations = []
-    if (this.project.report_evals && this.project.report_evals.length > 0) {
-      this.project.report_evals.forEach(evaluation => {
-        if (this.currentStudent.value === evaluation.user_id) {
-          this.evaluations.push(evaluation)
-        }
-      })
-    }
+    this.evaluations = this.projectStore.getEvaluationsByStudent(this.currentStudent.value)
   }
 
   // Process the time on reading data for the selected user
@@ -303,8 +295,8 @@ export class ReadingRecapComponent implements OnInit {
    */
   public sendEval(formValue: any): void {
     // set the pdf name here and data
-    let date = new Date()
-    let dateVal = new EdjiDatePipe().transform(date.toDateString())
+    const date = new Date()
+    const dateVal = new EdjiDatePipe().transform(date.toDateString())
     formValue.pdfName = this.currentStudent.label + "'s Reading Report - " + dateVal
     formValue.personSharing = this.currentUser.fullname
     formValue.personSharingEmail = this.currentUser.email
@@ -313,12 +305,12 @@ export class ReadingRecapComponent implements OnInit {
     this.evalLoading = true
 
     // create a new evaluation to save to the project
-    let evalObj = {
+    const evalObj = {
       createdAt: date,
       evaluation: formValue.inputText,
       user_id: this.currentStudent.value,
     }
-    var projectToUpdate = this.project
+    const projectToUpdate = this.project
     // add the new evaluation to the project
     projectToUpdate.report_evals.push(evalObj)
 
@@ -357,11 +349,6 @@ export class ReadingRecapComponent implements OnInit {
   }
 
   public addEvaluationOnly(evalData: any): void {
-    // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({
-      action: 'readingRecap_feedbackGiven',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
     // create a new evaluation to save to the project
     let evalObj = {
       createdAt: new Date(),
@@ -370,7 +357,7 @@ export class ReadingRecapComponent implements OnInit {
     }
 
     // update the project with the new evaluation, create the pdf, and then email it out
-    this.projectStore.saveFeedback(evalObj)
+    this.projectStore.saveEvaluation(evalObj)
     // empty out the form
     this.evaluationForm.reset()
   }
