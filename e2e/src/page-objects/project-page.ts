@@ -272,5 +272,7 @@ export class Project implements PageObjectInterface {
     grinningEmoji.click()
     // Save emoji comment
     this.emojiCommentSave.click()
+    // sleep() reason - saved icon displays
+    browser.sleep(1100)
   }
 }
