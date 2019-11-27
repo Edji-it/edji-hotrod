@@ -67,7 +67,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
     this._expolorerActive = active
   }
   get commentExplorerActive(): boolean {
-    return this._expolorerActive
+    return this._explorerActive
   }
   // Comment represented by portal
   private _comment: EdjiComment
