@@ -174,7 +174,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Activate this comment
     this.comment.active = this.active = true
     this._comments.activeComment = this.comment
-    // this.commentActivation.emit(true)
+    
   }
 
   /**
