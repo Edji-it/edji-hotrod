@@ -5,7 +5,7 @@ export class Questions implements PageObjectInterface {
   /*
     8 Aug 2017
     Last Mod: 8 Aug 2017
-    
+
     Easily reference parts of the project page test page.
     */
 
@@ -18,7 +18,7 @@ export class Questions implements PageObjectInterface {
 
   // Comment variables
   public emojiCommentBtn = element.all(by.css('button.emoji.button__answer-type')).first()
-  public emojiCommentSave = element(by.id('keyboardDoneBtn'))
+  public commentActionSave = element(by.id('keyboardDoneBtn'))
   public textCommentBtn = this.answerOptions.element(by.css('.text.button__answer-type'))
   public firstQuestion = element(by.id('question-1'))
   public firstAnswer = this.firstQuestion.element(by.css('edji-comment'))

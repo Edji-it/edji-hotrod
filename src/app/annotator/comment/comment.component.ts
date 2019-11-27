@@ -2,10 +2,11 @@ import { Subscription } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, CommentService, SocketService } from '../../_services'
+import { AuthService, CommentService, SocketService, AnalyticsService } from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ALLSPARK } from './../../app.constants'
 import { ProjectStore } from 'src/app/_store'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'edji-comment',
@@ -25,14 +26,10 @@ export class CommentComponent implements OnInit, OnDestroy {
   // Is fully visible, focused, and editable
   private active: boolean = false
   private showDeleteModal: boolean = false
-  private user: any
+  private user: any = {}
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
-  private commentsByPos: any = []
   private project: any
-  private commentPane: boolean
-  private indicatesPane: boolean
-  private setLineYAttempts: number = 0
   private fragment: string
 
   @Input() public comment: EdjiComment
@@ -41,11 +38,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public reply: boolean = false // Is it a reply to another comment?
   @Input() private commentLite: boolean = false
   @Input() private commentContext: string = 'comment' // See NOTES in summary.
+  // Deprecated "mobile" values
   @Input() public commentMobile: boolean = false
   @Input() public commentMobileFirst: boolean = false
   @Input() public commentPaneActive: boolean = false
   @Input() private assignedQuestion: EdjiQuestion // If this is an answer, it'll need this.
-  @Input() private userPermission: number = CommentPermissions.READ
+  private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
   @Input() public readingReport: boolean = false
   @Input()
@@ -55,8 +53,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       if (!isActive) {
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
-      } else {
-        this.toggleCPane(this.comment, true)
       }
     }
   }
@@ -81,6 +77,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     public el: ElementRef,
     private _socket: SocketService,
+    public _analytics: AnalyticsService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -99,11 +97,15 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
+        this.checkPermissions()
       }),
-    )
-
-    // Subscribe to updates to the reply reference object
-    this.subscriptions.push(
+      // Check URL params
+      this.route.queryParams.subscribe(params => {
+        if (this.comment && params['parent'] && params['parent'] === this.comment._id && params['comment']) {
+          this.repliesShowing = true
+        }
+      }),
+      // Subscribe to updates to the reply reference object
       this.projectStore.repliesById.subscribe(
         repliesById => {
           this.repliesById = repliesById
@@ -112,25 +114,20 @@ export class CommentComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
-    )
-
-    // Subscribe to updates from that project once we're subscribed to the reading
-    this.subscriptions.push(
+      // Subscribe to updates from that project once we're subscribed to the reading
       this.projectStore.currentProject.subscribe(
         project => {
           if (project) {
             this.project = project
             this.setAuthorOwner(project)
+            this.checkPermissions()
           }
         },
         error => {
           console.error(error)
         },
       ),
-    )
-
-    // Certain events require a top-down decision to deactivate comments
-    this.subscriptions.push(
+      // Certain events require a top-down decision to deactivate comments
       this._comments.clearActiveComments.subscribe(
         deactivate => {
           this.deactivate()
@@ -139,23 +136,6 @@ export class CommentComponent implements OnInit, OnDestroy {
           console.error(error)
         },
       ),
-    )
-
-    // Change mobile icon state if pane closes
-    this.subscriptions.push(
-      this.projectStore.commentPaneState.subscribe(paneState => {
-        // We can ONLY use this subscription to CLEAR the indicatesPane var to *false*
-        if (paneState === false) {
-          this.indicatesPane = false
-        }
-      }),
-    )
-
-    this.subscriptions.push(
-      this.projectStore.commentByPos.subscribe(commentsByPos => {
-        this.commentsByPos = commentsByPos
-        this.updateLineCount()
-      }),
     )
   }
 
@@ -176,63 +156,13 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get nearest baseline as integer
-   * @param vYalue: number The y position in pixels
-   * @returns number Nearest baseline Y value
+   * Update local var permissions
    */
-  private nearestLine(yValue: number): number {
-    return yValue + ALLSPARK.BASELINEHEIGHT / 2 - (yValue % ALLSPARK.BASELINEHEIGHT)
-  }
-
-  /**
-   * Calculates lineY and imageY values for rendering
-   * - lineY is required by commentByPos in ProjectService
-   * - imageY provides consistent and lighter comment positioning on images
-   */
-  setLineY() {
-    let firstWord = document.querySelector('.w[index="1"]')
-    // @todo Workaround: Identify back up firstWord (index 1 is more reliably a word)
-    if (!firstWord) {
-      firstWord = document.querySelector('.w[index="0"]')
-    }
-    let commentWord = document.querySelector('.w[index="' + this.comment.start + '"]')
-    let commentImage = document.getElementById('readingImage' + this.comment.start)
-
-    if (firstWord && (commentWord || commentImage)) {
-      let firstWordTop: number = firstWord.getBoundingClientRect().bottom
-      // This will need to re-decorate on resize
-      // For a period we were erroneously saving comments on text with image coords
-      // *Fixed March 2019, but allow for legacy comments by checking for commentImage
-      if (commentImage && ((this.comment.loc && this.comment.loc.y) || this.comment.box)) {
-        // Set comment on image position
-        this.setLineYAttempts = 0
-        let imageTop: number = commentImage.getBoundingClientRect().top
-        let imageHeight = commentImage.clientHeight
-        let y = this.comment.box ? this.comment.box.start_y : this.comment.loc.y
-        // Get nearest baseline (Y) of comment within image
-        let imageY = (y / 100) * imageHeight
-        this.comment.imageY = imageY = this.nearestLine(imageY)
-
-        // Get image offset for Line Y value
-        let imageOffset = imageTop - firstWordTop
-        imageOffset = this.nearestLine(imageOffset)
-        this.comment.lineY = imageY + imageOffset
-      } else {
-        // Set comment on text position
-        let wordY = commentWord.getBoundingClientRect().bottom
-        wordY = wordY - firstWordTop
-        this.comment.lineY = this.nearestLine(wordY)
-      }
+  private checkPermissions(): void {
+    if (this.comment && this.user && this.project) {
+      this.userPermission = this._comments.getCommentPermissions(this.comment, this.user, this.project)
     } else {
-      this.setLineYAttempts++
-      if (this.setLineYAttempts < 10) {
-        setTimeout(() => {
-          this.setLineY()
-        }, 1000)
-      } else {
-        // Reset attempt count once we've tried 10 times
-        this.setLineYAttempts = 0
-      }
+      this.userPermission = CommentPermissions.READ
     }
   }
 
@@ -242,7 +172,6 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Activate this comment
     this.comment.active = this.active = true
     this._comments.activeComment = this.comment
-    this.commentActivation.emit(true)
   }
 
   /**
@@ -253,7 +182,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Deactivate this comment
     this.comment.active = this.active = false
     this.comment.new = false
-    this.commentActivation.emit(false)
+
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
     if (comment && !noUpdate) {
@@ -355,6 +284,8 @@ export class CommentComponent implements OnInit, OnDestroy {
           console.error(error)
         })
     }
+    // Emit deletion event
+    this.commentDeleted.emit()
   } // deleteComment(comment: any) : void
 
   /**
@@ -384,15 +315,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Toggle display of replies
-   * @description Uses output to trigger display in parent component
-   */
-  public toggleReplies(): void {
-    this.repliesShowing = !this.repliesShowing
-    this.commentReply.emit(this.comment)
-  }
-
-  /**
    * Collapse all stacked comments on the same line
    */
   collapse(): void {
@@ -407,55 +329,96 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // Clear selected comments
+    this.comment.selected = false
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
   }
 
   toggleCPane(comment?, forceOpen?: boolean): void {
-    // When displaying in comment pane, comment MUST have line y
-    if (!this.comment.lineY) {
-      this.setLineY()
-      this.projectStore.buildCommentsByPos()
+    if (comment.selected) {
+      this.comment.selected = true
     }
-    if (!this.commentPaneActive) {
-      if (comment.selected) {
-        this.comment.selected = true
-      }
-      // Need to give the app 1 millisecond to update all arrays when adding a new comment
-      if (!this.indicatesPane || forceOpen) {
-        setTimeout(() => {
-          this.indicatesPane = true
-          this.toggleCommentPane.emit(true)
-        }, 1)
-      } else {
-        setTimeout(() => {
-          this.indicatesPane = false
-          this.toggleCommentPane.emit(false)
-        }, 1)
-      }
+    // Need to give the app 1 millisecond to update all arrays when adding a new comment
+    if (forceOpen) {
+      setTimeout(() => {
+        this.toggleCommentPane.emit(false)
+      }, 1)
     }
   }
 
-  updateLineCount(): void {
-    if (this.comment.lineY) {
-      let commentsOnLine = this.commentsByPos[this.comment.lineY]
-      this.lineCount = commentsOnLine && commentsOnLine.length
-      for (let i = 0; i < this.lineCount; i++) {
-        if (commentsOnLine[i]._id == this.comment._id) {
-          this.indexOnLine = this.lineCount - i
-        }
-      }
+  public getOffset(el) {
+    el = el.getBoundingClientRect()
+    return {
+      left: el.left + window.scrollX,
+      top: el.top + window.scrollY,
+    }
+  }
+
+  public scrollToImage(imageIndex) {
+    if (!imageIndex) {
+      return
+    }
+    let yOffset = 100
+    let imageElement = document.getElementById('readingImage' + imageIndex)
+    if (!imageElement) {
+      this.projectStore.lastWordUpdateSubj.next(imageIndex)
+      setTimeout(() => {
+        this.scrollToImage(imageIndex)
+      }, 1)
     } else {
-      this.lineCount = 1
+      let yPos = this.getOffset(imageElement).top
+      window.scrollTo(0, yPos - yOffset)
     }
   }
 
   /**
-   * Returns true if comment is a fresh, empty comment
-   * @param comment EdjiComment in question
+   * Create a Reply Comment of any Type
+   * - Fired from comment options tooltip
+   * Requires three parameters, and finds the other information it needs
+   * @param type What kind of reply comment: emoji, text...
    */
-  isCommentNewDraft(comment: EdjiComment): boolean {
-    return (!comment.data || comment.data == '') && (!comment.url || comment.url == '')
+  addReplyOfType(comment: EdjiComment, type: string): void {
+    let commentId = comment._id
+
+    this._analytics.event(type + 'ReplyCreate')
+
+    var replyCommentNew = <EdjiComment>{
+      user_id: this.user._id,
+      author: this.user.fullname,
+      reply_to: commentId,
+      data: '',
+      type: type,
+    }
+
+    replyCommentNew.new = true
+
+    // Tell the server we've added a comment.
+    this.projectStore
+      .saveComment(replyCommentNew)
+      .then(comment => {
+        this._analytics.event(type + 'ReplyCreate')
+        comment.active = true
+        this._comments.activeComment = comment
+        this.projectStore.addCommentToReplies(comment)
+      })
+      .catch(error => {
+        // TRACK EXCEPTION
+        this._analytics.event(type + 'ReplyCreate')
+        console.log(error)
+      })
+  } // createReplyComment(type: string): void
+
+  /** Used to determine which level of permission the user has for a specific comment
+   * @param comment A comment object
+   */
+  private getCommentPermissions(comment: any): number {
+    return this._comments.getCommentPermissions(comment, this.user, this.project)
+  }
+
+  private activeEmojiKeyboardReply(activeReply: any): void {
+    this._comments.activeComment = activeReply
+    this._comments.setEmojiKeyboardActive(this.user)
   }
 }

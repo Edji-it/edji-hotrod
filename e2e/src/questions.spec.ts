@@ -98,7 +98,7 @@ describe('Questions', () => {
         5000,
         'answer types button never became clickable for the second question',
       )
-      newReading.questionByIndexAnswer(1,'text')
+      newReading.questionByIndexAnswer(1, 'text')
       // Send the input field more text
       newReading.contentInput2.sendKeys(newReading.qContentString2)
       /**
@@ -107,11 +107,7 @@ describe('Questions', () => {
        */
       newReading.insertQuestionButtonTap()
       // Remove the question #3
-      browser.wait(
-        EC.visibilityOf(newReading.questionDelete),
-        5000,
-        'delete question button never became clickable',
-      )
+      browser.wait(EC.visibilityOf(newReading.questionDelete), 5000, 'delete question button never became clickable')
       browser.executeScript('document.getElementById("question-2").scrollIntoView()').then(() => {
         // Delete Question
         newReading.questionDelete.click()
@@ -166,8 +162,8 @@ describe('Questions', () => {
       browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, 'failed to find the emoji answer button')
       question.emojiCommentBtn.click()
 
-      browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, 'failed to find the answer confirm button')
-      question.emojiCommentSave.click()
+      browser.wait(EC.visibilityOf(question.commentActionSave), 5000, 'failed to find the answer confirm button')
+      question.commentActionSave.click()
 
       browser.wait(
         EC.invisibilityOf(question.answerOptions),

@@ -104,8 +104,6 @@ import {
   AvatarPortalComponent,
 } from './annotator'
 import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
-import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
-import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component'
 import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component'
 import { QuestioncardComponent } from './project-page/owner-tools/questionfeed/questioncard/questioncard.component'
 import {
@@ -131,7 +129,7 @@ import { HeroPricingComponent } from './hero-pricing/hero-pricing.component'
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component'
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { GoogleButton, CleverButton } from './buttons'
-import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
+import { CommentExplorerComponent } from './shared'
 import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
 import { TooltipModule } from 'primeng/tooltip'
@@ -212,7 +210,7 @@ const routerOptions: ExtraOptions = {
     RedeemToken,
     RegisterPageComponent,
     CreateProfilePageComponent,
-    CommentPaneComponent,
+    CommentExplorerComponent,
     CommentComponent,
     TeacherFeedbackComponent,
     AvatarPortalComponent,
@@ -255,8 +253,6 @@ const routerOptions: ExtraOptions = {
     DiscoverFeedComponent,
     DiscoverAddMetaModal,
     LeaderboardComponent,
-    FirefeedComponent,
-    FirecardComponent,
     QuestionfeedComponent,
     QuestioncardComponent,
     UploadModalComponent,

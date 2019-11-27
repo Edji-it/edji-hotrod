@@ -50,7 +50,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     // Get comment count
     let totalCount: number
     element
-      .all(by.css('edji-comment:not(.hidden)'))
+      .all(by.css('avatar-portal:not(.hide)'))
       .count()
       .then(count => {
         totalCount = count
@@ -104,7 +104,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     )
     // Ensure all comments are showing again
     element
-      .all(by.css('edji-comment:not(.hidden)'))
+      .all(by.css('avatar-portal:not(.hide)'))
       .count()
       .then(count => {
         expect(count == totalCount).toBeTruthy('all comments did not show after clearing student filter')

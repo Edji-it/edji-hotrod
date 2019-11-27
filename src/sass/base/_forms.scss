@@ -482,6 +482,18 @@ tr.selectable {
   }
 }
 
+.form-check-btn.form-check-sm {
+  // Small variation
+  line-height: 24px;
+  font-size: 12px;
+  padding: 0px 10px;
+  margin-right: 7px;
+
+  &.active {
+    padding-right: 10px;
+  }
+}
+
 .form-check-link {
   float: left;
   margin-right: 5px;
