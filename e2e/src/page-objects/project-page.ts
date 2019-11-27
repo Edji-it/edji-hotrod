@@ -49,7 +49,7 @@ export class Project implements PageObjectInterface {
   public audioPause = element(by.css('audio-comment #audioPause'))
   public audioRestart = element(by.css('audio-comment #audioRestart'))
   public audioRecord = element(by.css('audio-comment #audioRecord:not(.disabled)'))
-  public emojiCommentSave = element(by.css('edji-comment .comment-action--save'))
+  public commentActionSave = element(by.css('edji-comment .comment-action--save'))
   public audioComment = element.all(by.css('.audio-comment-input-wrapper')).first()
 
   // Avatar comment pane activators
@@ -271,7 +271,7 @@ export class Project implements PageObjectInterface {
     browser.wait(this.EC.elementToBeClickable(grinningEmoji), 5000, 'never found the emoji keyboard')
     grinningEmoji.click()
     // Save emoji comment
-    this.emojiCommentSave.click()
+    this.commentActionSave.click()
     // sleep() reason - saved icon displays
     browser.sleep(1100)
   }

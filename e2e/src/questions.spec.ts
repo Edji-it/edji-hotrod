@@ -166,8 +166,8 @@ describe('Questions', () => {
       browser.wait(EC.elementToBeClickable(question.emojiCommentBtn), 5000, 'failed to find the emoji answer button')
       question.emojiCommentBtn.click()
 
-      browser.wait(EC.visibilityOf(question.emojiCommentSave), 5000, 'failed to find the answer confirm button')
-      question.emojiCommentSave.click()
+      browser.wait(EC.visibilityOf(question.commentActionSave), 5000, 'failed to find the answer confirm button')
+      question.commentActionSave.click()
 
       browser.wait(
         EC.invisibilityOf(question.answerOptions),
