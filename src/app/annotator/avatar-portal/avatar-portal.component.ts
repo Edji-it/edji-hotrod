@@ -64,7 +64,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
       // Clear portal activation when explorer closed
       this.active = false
     }
-    this._expolorerActive = active
+    this._explorerActive = active
   }
   get commentExplorerActive(): boolean {
     return this._explorerActive
