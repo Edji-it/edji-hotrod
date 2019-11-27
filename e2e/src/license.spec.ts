@@ -95,8 +95,8 @@ describe('Academy user that has ability to manage licenses for their academy: ',
       // verify more than 1 license is available
       let availLicenseVal = element(by.id('availableLicenseCount'))
       browser.wait(EC.visibilityOf(availLicenseVal), 3000, 'not able to find the available license value')
-      // Allow value to calculate (displays as 0 on initial load)
-      browser.sleep(1000)
+      // sleep() reason - Allow value to calculate (displays as "-" on initial load)
+      browser.sleep(3000)
       availLicenseVal.getText().then(count => {
         expect(count.substring(0, 1)).toBeGreaterThan(1, 'available licenses value is not greater than 1')
       })
