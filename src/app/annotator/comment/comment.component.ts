@@ -53,8 +53,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       if (!isActive) {
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
-      
-        
       }
     }
   }
@@ -174,7 +172,6 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Activate this comment
     this.comment.active = this.active = true
     this._comments.activeComment = this.comment
-    
   }
 
   /**
@@ -185,7 +182,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Deactivate this comment
     this.comment.active = this.active = false
     this.comment.new = false
-    
+
     this._comments.activeComment.active = false
     // Save when comment is toggled away from
     if (comment && !noUpdate) {
@@ -340,7 +337,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   toggleCPane(comment?, forceOpen?: boolean): void {
-
     if (comment.selected) {
       this.comment.selected = true
     }

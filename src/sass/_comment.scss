@@ -1063,3 +1063,76 @@ div.avatar-count-8 {
     }
   }
 }
+
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.saved .comment__saved {
+  //@include transition(opacity linear 0.3s);
+  animation: fadeInOut 2s ease;
+}
+
+.comment__saved {
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0px;
+  right: -30px;
+  content: ' ';
+  width: 1.3em;
+  height: 1.3em;
+  font-size: 1.2em;
+  padding: 0 2px;
+}
+
+.comment__save {
+  position: absolute;
+  top: 0;
+  right: -28px;
+  cursor: pointer;
+  opacity: 0.8;
+  filter: grayscale(100%);
+
+  &:hover,
+  &:active {
+    opacity: 1;
+    filter: none;
+  }
+
+  @media (max-width: $tablet) {
+    font-size: 20px;
+    right: -30px;
+  }
+}
+
+.comment-action--save {
+  cursor: pointer;
+}
+
+.comment-action--save__mobile {
+  height: 25px;
+  width: 25px;
+  top: 27px;
+  right: -21px;
+  position: absolute;
+  text-align: right;
+  z-index: 5501;
+  padding-left: 5px;
+
+  & .emojioneemoji {
+    pointer-events: none; // hide emoji short code tooltip
+  }
+}
