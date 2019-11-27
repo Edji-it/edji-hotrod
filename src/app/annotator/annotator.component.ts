@@ -561,9 +561,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.selectedComment) this.selectedComment.selected = false
     // Parent indicates a reply comment
     let isReply = !!parentId
-    let commendId = isReply ? parentId : commentId
+    let findCommentId = isReply ? parentId : commentId
     let commentEl = this.portalComponents.toArray().find(commentEl => {
-      return commentEl.comment._id === commendId
+      return commentEl.comment._id === findCommentId
     })
     // Ensure not already selected
     if (this.selectedComment && commentId === this.selectedComment._id) {
