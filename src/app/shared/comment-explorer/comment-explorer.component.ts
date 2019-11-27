@@ -63,7 +63,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   set visible(visible: boolean) {
     let madeVisible: boolean = visible !== this._visible && visible
     this._visible = visible
-    // }
     if (madeVisible) {
       this.filterComments()
       this.evaluateShouldScroll()
