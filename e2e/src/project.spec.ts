@@ -75,7 +75,7 @@ describe('Project Page', () => {
       dollaDolla.click()
 
       // Save emoji comment
-      project.emojiCommentSave.click()
+      project.commentActionSave.click()
       // Wait for keyboard animation and highlight paint cycle
       browser.sleep(200)
       // Verify commented words have highlight (1) class
@@ -88,9 +88,7 @@ describe('Project Page', () => {
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
       project.commentDelete.click()
 
-      // close the comment pane
-      browser.wait(EC.elementToBeClickable(project.closePane), 5000, 'could not find close pane button')
-      project.closePane.click()
+      // Comment Explorer should close when only comment is deleted
     })
 
     it('should make a comment on an image by clicking on image', async () => {
@@ -120,9 +118,7 @@ describe('Project Page', () => {
       project.commentDelete.click()
       // make sure it's deleted
       browser.wait(EC.invisibilityOf(project.textCommentInput), 5000, 'text comment never went away after deleting it')
-      // close the comment pane
-      browser.wait(EC.elementToBeClickable(project.closePane), 5000, 'could not find close pane button')
-      project.closePane.click()
+      // Comment Explorer should close when only comment is deleted
     })
 
     it('should make audio comment by selecting text', () => {
@@ -135,6 +131,10 @@ describe('Project Page', () => {
 
       // Add audio comment
       project.addAudioComment()
+
+      // Make sure audio comment works even when not marked as active
+      browser.sleep(1000) // - audio comment rendering
+      project.commentActionSave.click()
 
       // Wait 5 seconds for record button to become clickable and click the record audio button to start recording
       browser.wait(EC.elementToBeClickable(project.audioRecord), 7000, 'never found the record audio button')
@@ -190,7 +190,10 @@ describe('Project Page', () => {
         5000,
         'never found the add text reply comment button',
       )
+      // Showing/hiding replies is causing a hiccup
+      browser.sleep(400)
       project.addTextReplyBtn.click()
+      browser.sleep(1000)
       browser.wait(
         EC.presenceOf(element(by.css('textarea.text-comment-input'))),
         5000,
@@ -343,9 +346,7 @@ describe('Project Page', () => {
       project.commentDelete.click()
       // make sure it's deleted
       browser.wait(EC.invisibilityOf(project.textCommentInput), 5000, 'text comment did not go away after deleting it')
-      // close the comment pane
-      browser.wait(EC.elementToBeClickable(project.closePane), 5000, 'could not find close pane button')
-      project.closePane.click()
+      // Comment Explorer should close when only comment is deleted
     })
   })
 })

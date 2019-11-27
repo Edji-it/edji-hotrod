@@ -603,3 +603,9 @@ div#driver-popover-item {
 div#driver-highlighted-element-stage {
   border-radius: 10px;
 }
+
+// Custom scroll overrides
+.sliding-pane-comment .ng-scrollbar-wrapper[deactivated="false"] > scrollbar-y.scrollbar-control {
+  top: 10px !important;
+  bottom: 110px !important;
+}

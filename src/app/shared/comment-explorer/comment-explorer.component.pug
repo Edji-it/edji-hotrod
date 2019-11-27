@@ -1,0 +1,94 @@
+.sliding-pane-comment.from-left(#commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
+    .sliding-pane-comment__header.container-fluid(*ngIf="visible")
+      .row
+        .col-12
+          .header-wrap
+            button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
+              span(aria-hidden="true") ×
+            //- All Comments header
+            ng-container(*ngIf="filterMode === 'all'")
+              i.icon.icon-comment-feed
+              .header-text
+                | {{ commentCount }} Comments
+                .small All Students
+            //- Comments on Line
+            ng-container(*ngIf="filterMode === 'line'")
+              i.icon.icon-view-line
+              .header-text
+                | Viewing Line
+                .small {{ commentCount }} Comments
+        .col-12(*ngIf="filterMode !== 'line'")
+          label#sortByCreated.form-check-label.form-check-btn.form-check-sm(
+              [class.active]="sortValue == 'created'",
+              title="Sort comments in the order they were created"
+            )
+            input.form-check-input(
+                type="radio",
+                name="sortCreated",
+                value="created",
+                [(ngModel)]="sortValue",
+                (click)="filterComments('created')",
+                checked
+              )
+            span By Time
+          label#sortByLocation.form-check-label.form-check-btn.form-check-sm(
+              [class.active]="sortValue == 'location'",
+              title="Sort comments by where they appear in the text"
+            )
+            input.form-check-input(
+                type="radio",
+                name="sortLocation",
+                value="location",
+                [(ngModel)]="sortValue",
+                (click)="filterComments('location')",
+              )
+            span By Location
+        .col-12
+          .btn-row.right.header__btn-row
+            .hover--tooltip
+              button.btn.btn-xs-primary(
+                *ngIf="filterMode != 'all'",
+                (click)="viewAll()",
+                [disabled]="!project.heat_vision && user._id !== project.teacher_id"
+              )
+                .icon.icon-comments
+                | All Comments
+                .tooltip-wrap.tooltip--on-disabled
+                  .tooltip
+                    .tooltip-title Heat Vision is disabled
+    ng-scrollbar
+      .comment-container.container-fluid(
+        *ngIf="visible",
+        [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
+      )
+        .row
+          .col-12
+            div(*ngFor="let comment of comments; let i = index")
+              edji-comment(
+                [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
+                [class.spec-owner]="comment.user_id === project.teacher_id",
+                [readOnly]="comment.user_id !== user._id",
+                [commentPaneActive]="true",
+                [comment]="comment",
+                [commentMobile]="true",
+                [commentMobileFirst]="i<1",
+                (commentActivation)="commentActivationEmitter($event)",
+                (commentReply)="commentReplyEmitter($event)",
+                (commentDeleted)="onDelete()",
+                style="display: initial;"
+              )
+            .end-block(*ngIf="filterMode === 'all' && sortValue === 'created'")
+              hr.mobileBlock-hr
+              .timeline-line
+              .pt-2
+                .user-icon.user-icon--medium
+                    span.user-icon__initials
+                      span.is-emoji([innerHtml]="':seedling:' | emojione")
+                .mobileBlock
+                  .mobileTime-card
+                    .mobileTime-card__time.p-0 {{ project.createdAt | edjidate:'timeAgo':null }}
+                  p.small
+                    b {{project.label}}
+                    |  group was created.
+.exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
+//- END .comment - mobile

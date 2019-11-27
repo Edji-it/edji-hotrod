@@ -44,12 +44,12 @@ export class HeroPricingComponent implements OnInit {
       },
     },
     {
-      name: 'Reader Management: Leaderboard, Firefeed',
+      name: 'Reader Management: Leaderboard, Comment Feed',
       free: true,
       info: {
         heading: 'Reader Management',
         description:
-          'Getting an entire class to read together is no easy feat, so we make sure that you can stay on top of your classes engagement with the Fire Feed to see new comments, and the Reader List to keep track of what each reader is doing.',
+          'Getting an entire class to read together is no easy feat, so we make sure that you can stay on top of your classes engagement with the Comment Feed to see new comments, and the Reader List to keep track of what each reader is doing.',
         image: '/assets/images/pricing/fire-feed.png',
       },
     },

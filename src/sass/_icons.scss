@@ -173,6 +173,21 @@ $iconGrayOpacity: 0.6;
   height: 1em;
 }
 
+.icon-comment-feed {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: url('/assets/images/icon-comment-feed.svg');
+  background-size: 100% 100%;
+  background-position: center center;
+  cursor: pointer;
+
+  &.inactive {
+    background-size: 100% 100%;
+    filter: grayscale(100%);
+  }
+}
+
 .icon-comment-filter {
   @include icon('icon-comment-filter.svg');
 }
@@ -182,6 +197,10 @@ $iconGrayOpacity: 0.6;
   display: inline-block;
   width: 1em;
   height: 1em;
+}
+
+.icon-comments {
+  @include icon('icon-comments.svg');
 }
 
 .icon-create {
@@ -514,6 +533,10 @@ $iconGrayOpacity: 0.6;
   height: 2em;
 }
 
+.icon-view-line {
+  @include icon('icon-view-line.svg');
+}
+
 .icon-vision-flame {
   @include icon('icon-vision-flame.svg');
 
@@ -618,27 +641,41 @@ $iconGrayOpacity: 0.6;
 .icon-comment-arrow {
   width: 27px;
   height: 45px;
-  background: url('/assets/images/comment-arrow.svg');
+  background: url('/assets/images/icon-comment-arrow.svg');
   background-size: 100% 100%;
   position: absolute;
   top: 350px;
   z-index: $zMid + 999;
   left: 264px;
 
+  transition: margin $slidingPaneTime linear, opacity $slidingPaneTime linear;
+  margin-left: -264px;
+  opacity: 0;
+
+  &.slide-in {
+    margin-left: 0;
+    opacity: 1;
+  }
+
   // Hide on mobile for now
   @media (max-width: $medium-screen) {
-    display: none;
+    // <768px
+    left: calc(100% - 60px);
+    margin-left: calc(1px - (100% - 60px));
+    margin-top: 64px; //mobile adjustment
   }
   // NOTE: "large screen" value is different here to account min-width flexibility
   // Min width pane
   @media (min-width: $medium-screen) and (max-width: 1129px) {
     // 768px - 992px
     left: 299px;
+    margin-left: -299px;
   }
   // Flexible width pane
   @media (min-width: 1129px) {
     // >992px
     left: calc(((100% - 530px) / 2) - 1px) !important;
+    margin-left: calc(1px - ((100% - 530px) / 2)) ;
   }
 }
 

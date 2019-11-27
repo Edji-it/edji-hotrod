@@ -8,12 +8,12 @@ nav-bar([showDashboardOptions]="true")
           .academy-header Academy
           .academy-name {{currentAcademy ? currentAcademy.name : 'Academy'}}
         .col-6
-          .float-right
+          .float-right(style="white-space: nowrap;")
             .academy-header.ml-2 License Seats
-            button.btn.academy-pill.bckgnd-invisible.mr-4#availableLicenseCount {{license ? license.max_users - license.users.length : 0}} 
-              .text-smaller available
-            button.btn.academy-pill#activeLicenseCount {{license ? license.users.length : 0}} 
-              .text-smaller in Use
+            button.btn.academy-pill.bckgnd-invisible.mr-4#availableLicenseCount {{license ? license.max_users - license.users.length : 0}}
+              .text-smaller &nbsp;available
+            button.btn.academy-pill#activeLicenseCount {{license ? license.users.length : 0}}
+              .text-smaller &nbsp;in Use
       .row#licenseMgmtLoader.loading(*ngIf="licenseUsers.length < 0 || !currentAcademy")
       .row
         .container(*ngIf="licenseUsers.length > 0")
@@ -26,8 +26,8 @@ nav-bar([showDashboardOptions]="true")
                 th.academy-header(scope="col") Joined Academy
             tbody
               tr.no-border(
-                  *ngFor="let licenseUser of licenseUsers", 
-                  [class.table-danger]="licenseUser.type == 'expired'", 
+                  *ngFor="let licenseUser of licenseUsers",
+                  [class.table-danger]="licenseUser.type == 'expired'",
                   [class.educator-pending]="licenseUser.type != 'active'"
                 )
                 td
@@ -35,9 +35,9 @@ nav-bar([showDashboardOptions]="true")
                   p.small.mb-0 {{licenseUser.email}}
                 td {{ licenseUser.role }}
                 td(*ngIf="licenseUser.type=='active'") {{ licenseUser.joined ? (licenseUser.joined | edjidate:'timeStamp':'mediumDate') : '-' }}
-                td.educator-pending.expires(*ngIf="licenseUser.type=='pending'") 
+                td.educator-pending.expires(*ngIf="licenseUser.type=='pending'")
                   i Pending - Expires {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
-                td.educator-pending.expires(*ngIf="licenseUser.type=='expired'") 
+                td.educator-pending.expires(*ngIf="licenseUser.type=='expired'")
                   | Expired {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
                   .btn.btn-secondary.btn-sm.ml-3((click)="resendInvite(licenseUser)") Resend
       .row
@@ -56,7 +56,7 @@ nav-bar([showDashboardOptions]="true")
                   | Academy invite updated and resent!
                 #licenseInviteServerError.alert.alert-warning(*ngIf="inviteError.server")
                   b Server Error&nbsp;
-                  | There was an error processing the invite. 
+                  | There was an error processing the invite.
                   a.link(href="mailto:support@edji.it") Please contact support.
                 .form-group
                   //- Name of Teacher
@@ -66,19 +66,19 @@ nav-bar([showDashboardOptions]="true")
                     [formControl]="licenseInvite.controls['name']",
                     tabindex="0"
                   )
-                  #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty)") 
+                  #errorTitle.alert.alert-info(*ngIf="licenseInvite.controls['name'].hasError('required') && (licenseInvite.controls['name'].dirty)")
                     | Please enter the name of the teacher for the license invite
                 .form-group
                   //- Email Address
                   label Email
                   input#licenseInviteEmailInput.mb-0(
-                    type="text", 
-                    [formControl]="licenseInvite.controls['email']", 
+                    type="text",
+                    [formControl]="licenseInvite.controls['email']",
                     tabindex="0"
                   )
-                  #licenseInviteErrorNoEmail.alert.alert-warning(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty)") 
+                  #licenseInviteErrorNoEmail.alert.alert-warning(*ngIf="licenseInvite.controls['email'].hasError('required') && (licenseInvite.controls['email'].dirty)")
                     | Please enter the email address of the teacher for the license invite
-                  #licenseInviteErrorBadEmail.alert.alert-warning(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')") 
+                  #licenseInviteErrorBadEmail.alert.alert-warning(*ngIf="licenseInvite.controls['email'].hasError('emailIncorrect') && licenseInvite.controls['email'].dirty && !licenseInvite.controls['email'].hasError('required')")
                     | We don't think that's an email...
                 .form-group
                   //- Role
@@ -87,7 +87,7 @@ nav-bar([showDashboardOptions]="true")
                     option(*ngFor="let role of licenseRoles", [ngValue]="role.value", tabindex="0") {{role.label}}
                 .form-group.mt-4
                   button.btn.btn-primary.float-right#licenseInviteSubmitBtn(
-                    type="submit", 
+                    type="submit",
                     [disabled]="!licenseInvite.valid",
                     tabindex="0"
                   ) Submit
@@ -119,7 +119,7 @@ nav-bar([showDashboardOptions]="true")
                 [formControl]="licenseRequest.controls['message']",
                 placeholder="Additional information, such as number of licenses..."
               )
-              #errorTitle.alert.alert-info(*ngIf="licenseRequest.controls['message'].hasError('required') && (licenseRequest.controls['message'].dirty)") 
+              #errorTitle.alert.alert-info(*ngIf="licenseRequest.controls['message'].hasError('required') && (licenseRequest.controls['message'].dirty)")
                 | Please enter a message
             .row
               .col-12
