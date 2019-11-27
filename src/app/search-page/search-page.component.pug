@@ -141,14 +141,12 @@ nav-bar([showDashboardOptions]="true")
                     .col-4.px-4.py-0
                         //- , style="max-width: 400px;"
                         img(src="/assets/images/graphic-strategies.svg")
-            #discoverMyDistrict.district-header.p-3(*ngIf="searchParams.district.length > 0")
-                .row
-                    .col-12
-                        i.icon-district-lg
-                        h2.ml-3.mb-4.d-inline-block.align-middle {{ user && user.school && user.school.district_name }} District
-                .row
-                    .col-12
-                        p.font-gray Reading from teachers in your district
+            #discoverMyDistrict.district-header(*ngIf="searchParams.district.length > 0")
+                div
+                  i.icon-district-lg
+                  h2.district-header__text {{ user && user.school && user.school.district_name }} District
+                .district-subheading
+                  p.font-gray Reading from teachers in your district
                             //- @todo: Enable link when district is displayed on account
                             //- a.link(
                             //-     tabindex="0",
