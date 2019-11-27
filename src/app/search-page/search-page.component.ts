@@ -24,6 +24,7 @@ export class SearchPage implements OnInit {
 
   // User
   private user: User
+  public userDistrict: string
   // Main display toggle
   public isSearching: boolean
   // Filters
@@ -111,6 +112,11 @@ export class SearchPage implements OnInit {
       // User subscription needs to be first, prereq for filters
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
+        if (user && user.school && user.school.district_name) {
+          this.userDistrict = user.school.district_name.replace('District', '').trim()
+        } else {
+          this.userDistrict = ''
+        }
       }),
       // Get search params from URL
       this.route.queryParams.subscribe(async params => {

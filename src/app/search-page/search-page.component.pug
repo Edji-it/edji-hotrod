@@ -144,7 +144,7 @@ nav-bar([showDashboardOptions]="true")
             #discoverMyDistrict.district-header(*ngIf="searchParams.district.length > 0")
                 div
                   i.icon-district-lg
-                  h2.district-header__text {{ user && user.school && user.school.district_name }} District
+                  h2.district-header__text {{ userDistrict }} District
                 .district-subheading
                   p.font-gray Reading from teachers in your district
                             //- @todo: Enable link when district is displayed on account
