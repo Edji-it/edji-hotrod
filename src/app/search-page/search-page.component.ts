@@ -23,7 +23,7 @@ export class SearchPage implements OnInit {
   }
 
   // User
-  private user: User
+  public user: User
   public userDistrict: string
   // Main display toggle
   public isSearching: boolean

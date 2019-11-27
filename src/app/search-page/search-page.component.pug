@@ -81,7 +81,7 @@ nav-bar([showDashboardOptions]="true")
                     //- My District
                     div
                         button#discoverFilterDistrict.btn.btn-filter(
-                            *ngIf="user && user.school && user.school.district_id",
+                            *ngIf="userDistrict",
                             title="Filter by shared readings in your district",
                             [class.active]="searchParams.district.length > 0",
                             (click)="setDistrictParam(); searchParams.first=0; updateSearchParams('filter_district')"
