@@ -378,7 +378,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Create a Comment of any Type
+   * Create a Reply Comment of any Type
    * - Fired from comment options tooltip
    * Requires three parameters, and finds the other information it needs
    * @param type What kind of reply comment: emoji, text...
