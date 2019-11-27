@@ -133,6 +133,7 @@ describe('Project Page', () => {
       project.addAudioComment()
 
       // Make sure audio comment works even when not marked as active
+      browser.sleep(1000) // - audio comment rendering
       project.commentActionSave.click()
 
       // Wait 5 seconds for record button to become clickable and click the record audio button to start recording
