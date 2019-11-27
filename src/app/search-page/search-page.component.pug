@@ -14,10 +14,10 @@ nav-bar([showDashboardOptions]="true")
                                 i.icon.icon-search
                             input#readingSearch.form-control.form-control-autosize(
                                 #searchInput,
-                                name="SearchTermInput", 
-                                [(ngModel)]="searchParams.searchTerm", 
-                                type="text", 
-                                style="text-align: left;", 
+                                name="SearchTermInput",
+                                [(ngModel)]="searchParams.searchTerm",
+                                type="text",
+                                style="text-align: left;",
                                 placeholder="Search...",
                                 (keyup.enter)="updateSearchParams('search_term')",
                                 [style.minWidth]="searchFieldWidth",
@@ -31,11 +31,11 @@ nav-bar([showDashboardOptions]="true")
                 div.mt-2
                     span(*ngIf="!loading") Found <b data-test="searchCount" id="searchCount">{{ total || 0 }}</b> readings&nbsp;
                     a.link(
-                        *ngIf="filterCount > 0", 
-                        tabindex="0", 
+                        *ngIf="filterCount > 0",
+                        tabindex="0",
                         (click)="clearFilterVars(true); updateSearchParams('')",
                         title="Click to clear"
-                    ) 
+                    )
                         |with {{ filterCount }} filters
                         i.icon.icon-close.mx-1
                 br
@@ -61,10 +61,10 @@ nav-bar([showDashboardOptions]="true")
                             i.icon.icon-search
                         input#readingSearch.form-control(
                             #searchInput,
-                            name="SearchTermInput", 
-                            [(ngModel)]="searchParams.searchTerm", 
-                            type="text", 
-                            style="text-align: left;", 
+                            name="SearchTermInput",
+                            [(ngModel)]="searchParams.searchTerm",
+                            type="text",
+                            style="text-align: left;",
                             placeholder="Search...",
                             (keyup.enter)="updateSearchParams('search_term')"
                         )
@@ -72,13 +72,13 @@ nav-bar([showDashboardOptions]="true")
                     label Community
                     //- Public Library
                     div
-                        button#discoverFilterPublic.btn.btn-filter( 
+                        button#discoverFilterPublic.btn.btn-filter(
                             title="See public readings from all users",
                             [class.active]="!searchParams.activeLibrary || searchParams.activeLibrary === 'public' && searchParams.district.length===0",
                             (click)="searchParams.activeLibrary = 'public'; searchParams.first=0; updateSearchParams('filter_public')"
                         )
                             span([innerHTML]="':earth_americas: Public Library' | emojione")
-                    //- My District 
+                    //- My District
                     div
                         button#discoverFilterDistrict.btn.btn-filter(
                             *ngIf="user && user.school && user.school.district_id",
@@ -88,9 +88,9 @@ nav-bar([showDashboardOptions]="true")
                         )
                             i.icon.icon-district-sm(style="vertical-align:middle;")
                             | My District
-                    //- Following 
+                    //- Following
                     div
-                        button#discoverFilterFollowing.btn.btn-filter( 
+                        button#discoverFilterFollowing.btn.btn-filter(
                             title="Filter by users you follow",
                             [class.active]="searchParams.activeLibrary === 'following' && searchParams.district.length===0",
                             (click)="searchParams.activeLibrary = 'following'; searchParams.first=0; updateSearchParams('filter_following')"
@@ -115,7 +115,7 @@ nav-bar([showDashboardOptions]="true")
                     ss-multiselect-dropdown(
                         id="subjectDropdown",
                         [(ngModel)]="searchParams.subjectFilter",
-                        [options]="subjects", 
+                        [options]="subjects",
                         [settings]="subjectDropSettings",
                         (dropdownClosed)="updateSearchParams('search_filter')"
                     )
@@ -140,7 +140,7 @@ nav-bar([showDashboardOptions]="true")
                         p.banner-text.mb-0 Reading strategy templates for trying new approaches in your classroom
                     .col-4.px-4.py-0
                         //- , style="max-width: 400px;"
-                        img(src="/assets/images/graphic-strategies.svg") 
+                        img(src="/assets/images/graphic-strategies.svg")
             #discoverMyDistrict.district-header.p-3(*ngIf="searchParams.district.length > 0")
                 .row
                     .col-12
@@ -148,13 +148,14 @@ nav-bar([showDashboardOptions]="true")
                         h2.ml-3.mb-4.d-inline-block.align-middle {{ user && user.school && user.school.district_name }} District
                 .row
                     .col-12
-                        p.font-gray Reading from teachers in 
-                            a.link(
-                                tabindex="0",
-                                (click)="goToAccount()",
-                                title="Click to see your district"
-                            ) 
-                                |your district
+                        p.font-gray Reading from teachers in your district
+                            //- @todo: Enable link when district is displayed on account
+                            //- a.link(
+                            //-     tabindex="0",
+                            //-     (click)="goToAccount()",
+                            //-     title="Click to see your district"
+                            //- )
+                            //-     |your district
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
@@ -171,7 +172,7 @@ nav-bar([showDashboardOptions]="true")
             //- No results message when user is genuinely searching
             .alert.alert-info(*ngIf="searchAlerts.noResults && !searchParams.district")
                 b No Readings Found
-                | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters. 
+                | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters.
             //- No results message when user is genuinely searching
             .alert.alert-info(*ngIf="searchAlerts.noResults && searchParams.district")
                 b No Shared Readings From Your District
@@ -182,11 +183,11 @@ nav-bar([showDashboardOptions]="true")
                 .found__readings
                     span(*ngIf="!loading") Found <b data-test="searchCount">{{ total || 0 }}</b> readings&nbsp;
                     a.link(
-                        *ngIf="filterCount > 0", 
-                        tabindex="0", 
+                        *ngIf="filterCount > 0",
+                        tabindex="0",
                         (click)="clearFilterVars(true); updateSearchParams(''); isSearching=false",
                         title="Click to clear"
-                    ) 
+                    )
                         |with {{ filterCount }} filters
                         i.icon.icon-close.mx-1
                 br
@@ -201,22 +202,22 @@ nav-bar([showDashboardOptions]="true")
                             )
                             i.hidden-md-down.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null) }}
                             .btn.btn-sm.btn-primary.float-right(
-                                (click)="openReadingPreview(reading)", 
+                                (click)="openReadingPreview(reading)",
                                 [class.force-hover]="previewIndex===i"
                             ) Preview
                             i.hidden-lg-up.ws-nowrap {{ ' shared ' + (reading.updatedAt | edjidate:'timeAgo':null) }}
                         .clickable(
                             (click)="openReadingPreview(reading)",
-                            (mouseenter)="readingCardHoverSet(i)", 
+                            (mouseenter)="readingCardHoverSet(i)",
                             (mouseleave)="readingCardHoverSet(-1)"
                         )
                             hot-reading-card(
-                                [reading]="reading", 
+                                [reading]="reading",
                                 [readOnly]="true"
                             )
                             .feed__reading-preview.words--read-only(*ngIf="reading.words_preview")
                                 span.w(
-                                        *ngFor="let w of reading.words_preview", 
+                                        *ngFor="let w of reading.words_preview",
                                         [ngClass]="[ w && w.styles ? w.styles.join(' ') : '' ]"
                                     )
                                     | {{ (!(w && w.styles) || (w && w.styles.indexOf('space')) > -1) ? '&nbsp;' : w && w.str }}
@@ -242,7 +243,7 @@ hot-reading-preview-modal(
 //- Confirm if user wants to archive a past reading
 hot-confirm-archive-modal.modal-will-fade(
   *ngIf="showConfirmArchiveModal",
-  [class.show]="showConfirmArchiveModal", 
+  [class.show]="showConfirmArchiveModal",
   (confirmArchive)="showConfirmArchiveModal=false; showFirstGroupModal = true",
   (declineArchive)="showConfirmArchiveModal=false",
   (goHero)="showHeroParam=true",
@@ -252,10 +253,10 @@ hot-confirm-archive-modal.modal-will-fade(
 //- Create First Group
 hot-add-project-modal.modal-will-fade(
     *ngIf="showFirstGroupModal",
-    [class.show]="showFirstGroupModal", 
+    [class.show]="showFirstGroupModal",
     [heading]="'Create and Share First Group'",
     [subheading]="'Your Reading has been saved! Now create your first group to publish this Reading and share with students.'",
-    [reading]="createdReading", 
+    [reading]="createdReading",
     [groupLabel]="'Group 1'",
     (groupSaved)="finalizeShare($event)",
     (closeModal)="showFirstGroupModal = false"
@@ -263,7 +264,7 @@ hot-add-project-modal.modal-will-fade(
 //- Login modal with option to switch to registration page
 hot-login-modal.modal-will-fade(
     *ngIf="showLoginModal",
-    [class.show]="showLoginModal", 
+    [class.show]="showLoginModal",
     [loginOnly]="true",
     (closeModal)="closeLoginModal($event)"
 )
