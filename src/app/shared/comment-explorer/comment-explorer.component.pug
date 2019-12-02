@@ -17,6 +17,16 @@
               .header-text
                 | Viewing Line
                 .small {{ commentCount }} Comments
+            //- User's Comments
+            ng-container(*ngIf="filterMode === 'user'")
+              user-avatar(
+                [userId]="filterUserId",
+                [size]="'medium'",
+                [showName]="true"
+              )
+              .header-text
+                | User!
+                .small {{ commentCount }} Comments
         .col-12(*ngIf="filterMode !== 'line'")
           label#sortByCreated.form-check-label.form-check-btn.form-check-sm(
               [class.active]="sortValue == 'created'",

@@ -43,7 +43,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   // Sort and Filtering
   public sortValue: string = 'created' // default to created
 
-  public filterMode: 'line' | 'all' = 'all'
+  public filterMode: 'line' | 'all' | 'user' = 'all'
+  public filterUserId: string
 
   // Comment Pane Component Inputs
   private _comment: EdjiComment
@@ -129,6 +130,16 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
       }),
+      // Check for filters on URL
+      this.route.queryParams.subscribe(params => {
+        console.log('Param update!', params)
+        if (params['student'] && this.filterUserId !== params['student']) {
+          this.clearFilters({ student: params['student'] })
+          this.filterUserId = params['student']
+          this.filterComments()
+          this._visible = true
+        }
+      }),
     )
   }
 
@@ -154,6 +165,11 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.sortValue = sort = 'location'
       sorted = this.commentByPos[comment.lineY].filter(comment => {
         return comment.start >= 0
+      })
+    } else if (this.filterUserId) {
+      this.filterMode = 'user'
+      sorted = this.allComments.filter(comment => {
+        return comment.user_id === this.filterUserId
       })
     } else {
       this.filterMode = 'all'
@@ -184,14 +200,19 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * Clear filters applied to the explorer
    * @note does not fire "filterComments", so it can be used internally
    */
-  private clearFilters(): void {
+  private clearFilters(paramsToKeep?: { comment?: string; parent?: string; student?: string }): void {
     this.sortValue = 'created'
-    this.filterMode = 'all'
-    this.comment = null
+    this.filterMode = 'all' //- default
+    if (!paramsToKeep) paramsToKeep = {}
+    if (!paramsToKeep['comment']) this.comment = null
+    if (!paramsToKeep['student']) this.filterUserId = null
+    // Merge params to keep with reset/null
+    let params = Object.assign({ comment: null, parent: null, student: null }, paramsToKeep)
+    console.log('params to reset', params)
     // Clear URL params
     this.router.navigate(['.'], {
       relativeTo: this.route,
-      queryParams: { comment: null, parent: null },
+      queryParams: params,
       queryParamsHandling: 'merge',
     })
   }

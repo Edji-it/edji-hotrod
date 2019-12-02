@@ -729,12 +729,18 @@ pre.btn {
   &:hover {
     background: $btnPrimaryFocusColor;
   }
+  &:focus {
+    box-shadow: none;
+  }
 }
 
 .btn-xs-danger {
   @extend .btn-xs;
   &:hover {
     background: #e26f6e;
+  }
+  &:focus {
+    box-shadow: none;
   }
 }
 
