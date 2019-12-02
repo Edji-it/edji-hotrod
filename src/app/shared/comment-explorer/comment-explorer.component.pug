@@ -64,6 +64,21 @@
                 .tooltip-wrap.tooltip--on-disabled
                   .tooltip
                     .tooltip-title Heat Vision is disabled
+            //- Student view actions/options
+            ng-container(*ngIf="filterUserId")
+              a.btn.btn-xs-primary(
+                [routerLink]="'./'",
+                [queryParams]="{ recap: filterUserId }"
+              )
+                .icon.icon-recap-sm
+                | Recap
+              a.btn.btn-xs-primary(
+                [routerLink]="'./'",
+                [queryParams]="{ highlights: filterUserId }",
+                queryParamsHandling="merge"
+              )
+                .icon.icon-comment-filter
+                | Highlights
     ng-scrollbar
       .comment-container.container-fluid(
         *ngIf="visible",

@@ -477,6 +477,10 @@ $iconGrayOpacity: 0.6;
   }
 }
 
+.icon-recap-sm {
+  @include icon('icon-recap-sm.svg');
+}
+
 .icon-reply-arrow {
   @include icon('icon-reply-arrow.png');
   display: inline-block;

@@ -13,6 +13,7 @@ import { AuthService, AcademyService, SocketService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
 import { ProjectStore } from 'src/app/_store'
+import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
   selector: 'hot-reading-recap',
@@ -23,7 +24,21 @@ export class ReadingRecapComponent implements OnInit {
   // @Input() visible: boolean = false
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
-  @Output() hide: EventEmitter<any> = new EventEmitter()
+  private _visible: boolean
+  @Input()
+  set visible(visible: boolean) {
+    let madeVisible: boolean = visible !== this._visible && visible
+    this._visible = visible
+    if (madeVisible) {
+      // Slide in once component is constructed
+      setTimeout(() => {
+        this.slidePaneIn = true
+      }, 50)
+    }
+  }
+  get visible(): boolean {
+    return this._visible
+  }
 
   private subscriptions: Subscription[] = []
   public currentUser: User
@@ -71,6 +86,8 @@ export class ReadingRecapComponent implements OnInit {
     private _academy: AcademyService,
     private angulartics: Angulartics2,
     private _socket: SocketService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.evaluationForm = _fb.group({
       email: [null, [Validators.required, this.emailValidator]],
@@ -85,10 +102,6 @@ export class ReadingRecapComponent implements OnInit {
       action: 'readingRecap_opened',
       properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
-    // Slide in once component is constructed
-    setTimeout(() => {
-      this.slidePaneIn = true
-    }, 100)
 
     // Subscribe to current user
     this.subscriptions.push(
@@ -139,6 +152,23 @@ export class ReadingRecapComponent implements OnInit {
             console.error(error)
           },
         ),
+        // Check for recap opened via url
+        this.route.queryParams.subscribe(params => {
+          if (params['recap']) {
+            if (params['recap'] !== 'true' && this.students && this.selectedStudent !== params['recap']) {
+              // SET USER BY ID
+              this.selectedStudent = params['recap']
+              this.changeStudentSelection()
+            }
+            this.visible = true
+          } else {
+            // Close recap
+            this.slidePaneIn = false
+            setTimeout(() => {
+              this.visible = this.slidePaneIn
+            }, 400)
+          }
+        }),
       )
   }
 
@@ -235,6 +265,10 @@ export class ReadingRecapComponent implements OnInit {
         this.commentStats.stats.userStats.splice(removePos, 1)
       }
     }
+    // Load selected student if not loaded
+    if (this.selectedStudent && !this.currentStudent) {
+      this.changeStudentSelection()
+    }
   }
 
   /**
@@ -247,8 +281,10 @@ export class ReadingRecapComponent implements OnInit {
       properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
     this.currentStudent = this.students.find(user => user.value === this.selectedStudent)
-    this.buildReport()
-    this.processTimeChart()
+    if (this.currentStudent) {
+      this.buildReport()
+      this.processTimeChart()
+    }
   }
 
   /** Validates email against the same regex used on the server
@@ -438,11 +474,12 @@ export class ReadingRecapComponent implements OnInit {
    * - Allows for animation to close before destroying the component
    */
   public close() {
-    this.slidePaneIn = false
-    // Wait for slide closed to complete
-    setTimeout(() => {
-      this.hide.emit()
-    }, 400)
+    // Clear URL params
+    this.router.navigate(['.'], {
+      relativeTo: this.route,
+      queryParams: { recap: null },
+      queryParamsHandling: 'merge',
+    })
   }
 
   ngOnDestroy() {
