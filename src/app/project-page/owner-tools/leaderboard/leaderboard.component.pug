@@ -1,7 +1,10 @@
 //- Comments Pane
-.sliding-pane__wrap.from-left([ngClass]="{ 'slide-in' : visibility }")
+.sliding-pane__wrap.from-left(
+  *ngIf="visible",
+  [ngClass]="{ 'slide-in' : slidePaneIn }"
+)
   #coTeacherTooltip.tooltip.tooltip--clickable.tooltip--right(
-      [class.show]="coOwnerTooltipIndex > -1", 
+      [class.show]="coOwnerTooltipIndex > -1",
       style="top: 190px;",
       (click)="coOwnerTooltipNext()"
     )
@@ -27,7 +30,7 @@
       .user-list-item.hover-parent(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
         span.answer-circle__group.mr-2.live-status([attr.title]="commentUser.fullname + ' is ' + commentUser.status")
           .circle.filled([ngClass]="commentUser.status")
-        span.user-list__name([attr.id]="'studentName'+i") 
+        span.user-list__name([attr.id]="'studentName'+i")
           user-avatar([userId]="commentUser._id", [showName]="true")
           .ml-1.badge.badge-pill.badge-teacher--label.hover--tooltip(
             *ngIf="isStudentCoTeacher(commentUser)",
@@ -38,7 +41,7 @@
               .tooltip-title Co-teacher
         //- User settings
         .user-list__action
-          .dropdown.student-options( 
+          .dropdown.student-options(
             [class.show]="studentSettingsIndex == i"
           )
             button.btn.btn-icon.btn-outline-primary.e2e-student-settings(
@@ -50,13 +53,22 @@
               //- View student filter
               button.dropdown-item(
                 (click)="viewStudentFilter(commentUser)"
-              ) 
+              )
                 .icon.icon-comment-filter
-                | &nbsp; View student filter
-              //- 
+                | &nbsp; View highlight filter
+              //- View student filter
+              a.dropdown-item(
+                (tap)="studentSettingsIndex = -1",
+                [routerLink]="'./'",
+                [queryParams]="{ recap: commentUser._id }",
+                queryParamsHandling="merge"
+              )
+                .icon.icon-recap-sm
+                | &nbsp; View recap
+              //- Co-Teacher
               button#promoteCoTeacherOption.dropdown-item.e2e-new-group(
                 (click)="confirmCoOwner(commentUser)"
-              ) 
+              )
                 .icon.icon-promote
                 | &nbsp; Promote to co-teacher
         //- Comment count
@@ -64,9 +76,9 @@
           .btn.btn-icon.btn-outline-primary.e2e-student-filter(
               [attr.id]="'studentFilterBtn'+i",
               [class.active]="commentUser.filtered",
-              (click)="viewStudentFilter(commentUser)", 
+              (click)="viewStudentFilter(commentUser)",
               title="View only {{commentUser.fullname}}'s comments"
-            ) 
+            )
             .icon.icon-comment-filter.mr-1
             | {{ commentUser.comment_count }}
 
@@ -88,7 +100,7 @@
           aria-label="Close"
           )
         span(aria-hidden="true") &times;
-      .filter-bubble__descriptor 
+      .filter-bubble__descriptor
         .icon.icon-comment-filter.mr-1
         | Viewing {{ appliedFilter.displayType }}
       #studentFilterPrev.btn.btn-icon.btn-outline-primary.btn--prev((click)="pageStudentFilter(-1)")

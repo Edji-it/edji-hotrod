@@ -15,28 +15,6 @@ import { ProjectStore } from 'src/app/_store'
 })
 export class LeaderboardComponent implements OnInit {
   @Input() archived: boolean = false
-  @Input()
-  set coOwnerGuide(val) {
-    if (val === true) {
-      if (this.coOwnerTooltipIndex < 0) {
-        this.coOwnerTooltipIndex = 0
-      }
-    }
-  }
-  // Manage visibility with 2 way binding
-  private visible: boolean = false
-  @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter()
-  @Input()
-  get visibility() {
-    return this.visible
-  }
-  set visibility(val) {
-    if (this.visible !== val) {
-      this.visible = val
-      this.visibilityChange.emit(this.visible)
-    }
-  }
-
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
 
@@ -47,6 +25,8 @@ export class LeaderboardComponent implements OnInit {
   private answersById: any = {}
   private userAnswers: any[] = []
 
+  public visible: boolean = false
+  public slidePaneIn: boolean
   public appliedFilter: CommentFilter
   public showFilterHeroModal: boolean
   public coOwnerToBe: User
@@ -59,7 +39,7 @@ export class LeaderboardComponent implements OnInit {
     private _readings: ReadingService,
     private projectStore: ProjectStore,
     private _auth: AuthService,
-    private _route: ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router,
   ) {}
 
@@ -101,6 +81,24 @@ export class LeaderboardComponent implements OnInit {
                 this.commentStats.stats.userStats[i],
               )
             }
+          }
+        }),
+        // Check for question feed opened via url
+        this.route.queryParams.subscribe(params => {
+          if (params['pane'] && params['pane'] === 'students') {
+            this.visible = true
+            this.slidePaneIn = true
+            if (params.studentList === 'coteach') {
+              if (this.coOwnerTooltipIndex < 0) {
+                this.coOwnerTooltipIndex = 0
+              }
+            }
+          } else {
+            // Close questions
+            this.slidePaneIn = false
+            setTimeout(() => {
+              this.visible = this.slidePaneIn
+            }, 400)
           }
         }),
       )
@@ -225,11 +223,10 @@ export class LeaderboardComponent implements OnInit {
    */
   public close(): void {
     this.router.navigate(['./'], {
-      relativeTo: this._route,
-      queryParams: { studentList: null },
+      relativeTo: this.route,
+      queryParams: { pane: null, studentList: null },
       queryParamsHandling: 'merge',
     })
-    this.visibility = false
     // Clear tooltips
     this.coOwnerTooltipIndex = -1
     // Close dropdowns

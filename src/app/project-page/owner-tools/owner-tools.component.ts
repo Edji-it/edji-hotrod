@@ -83,15 +83,6 @@ export class OwnerToolsComponent implements OnInit {
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
-      // Watch URL params for quick links
-      this._route.queryParams.subscribe(params => {
-        if (params.studentList) {
-          this.showCommentCounts = true
-          if (params.studentList === 'coteach') {
-            this.showCoOwnerGuide = true
-          }
-        }
-      }),
     )
   }
 

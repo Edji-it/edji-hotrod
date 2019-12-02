@@ -109,11 +109,9 @@
 
 //- Leaderboard goes here
 hot-leaderboard(
-  [(visibility)]="showCommentCounts",
   [commentStats]="commentStats",
-  [archived]="currentProject.archived",
-  [coOwnerGuide]="showCoOwnerGuide"
-  )
+  [archived]="currentProject.archived"
+)
 
 //- Question Feed goes here
 hot-questionfeed()
