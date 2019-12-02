@@ -10,23 +10,21 @@
               i.icon.icon-comment-feed
               .header-text
                 | {{ commentCount }} Comments
-                .small All Students
+                .sub-label All Students
             //- Comments on Line
             ng-container(*ngIf="filterMode === 'line'")
               i.icon.icon-view-line
               .header-text
                 | Viewing Line
-                .small {{ commentCount }} Comments
+                .sub-label {{ commentCount }} Comments
             //- User's Comments
             ng-container(*ngIf="filterMode === 'user'")
               user-avatar(
                 [userId]="filterUserId",
                 [size]="'medium'",
-                [showName]="true"
+                [showName]="true",
+                [subLabel]="commentCount + ' Comments'"
               )
-              .header-text
-                | User!
-                .small {{ commentCount }} Comments
         .col-12(*ngIf="filterMode !== 'line'")
           label#sortByCreated.form-check-label.form-check-btn.form-check-sm(
               [class.active]="sortValue == 'created'",
@@ -62,7 +60,7 @@
                 [disabled]="!project.heat_vision && user._id !== project.teacher_id"
               )
                 .icon.icon-comments
-                | All Comments
+                | {{ filterMode === 'user' ? 'All Students' : 'All Comments' }}
                 .tooltip-wrap.tooltip--on-disabled
                   .tooltip
                     .tooltip-title Heat Vision is disabled
