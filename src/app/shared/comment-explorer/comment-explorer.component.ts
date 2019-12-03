@@ -50,10 +50,15 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   private _comment: EdjiComment
   @Input()
   set comment(comment: EdjiComment) {
+    let commentApplied: boolean
     if (!this._comment || (comment && comment._id !== this._comment._id)) {
-      this.evaluateShouldScroll()
+      commentApplied = true
     }
     this._comment = comment
+    if (commentApplied) {
+      this.filterComments()
+      this.evaluateShouldScroll()
+    }
   }
   get comment(): EdjiComment {
     return this._comment
