@@ -1686,6 +1686,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       selec.removeAllRanges()
       // Tell comments to close
       this.commentPane = false
+      this.selectedComment = null
       // reset our icon arrow position
       this.commentHeightPos = 0
       // Run the standard comment inactivation to reset variables and do things like close the Keyboard

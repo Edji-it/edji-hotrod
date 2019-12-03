@@ -25,7 +25,7 @@
     user-avatar.comment__avatar.comment__reply-avatar(
         *ngIf="comment.author",
         [class.show]="reply",
-        [selected]="comment.selected",
+        [selected]="selected",
         [userId]="comment.user_id"
     )
     .comment-input-wrapper([ngClass]="[ replyRef ? 'replyCommentHandler' : '', comment.type + '' ]")
@@ -96,7 +96,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             [userId]="comment.user_id",
             [size]="'medium'",
             [tempName]="comment.author",
-            [selected]="comment.selected"
+            [selected]="selected"
         )
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'mobileBlock--reading-recap' : '' ]")
             .list-item.list-item--block.mobileTime-card(*ngIf="!readingReport")

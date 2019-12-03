@@ -276,7 +276,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       return
     }
     // if the comment is new, let's adjust the scroll position if there are a ton of comments
-    if (this.comment && this.comment.selected) {
+    if (this.comment) {
       this.scrollToComment(this.comment)
     }
   }
