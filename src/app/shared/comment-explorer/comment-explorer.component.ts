@@ -105,8 +105,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.projectStore.commentByPos.subscribe(
         commentByPos => {
           this.commentByPos = commentByPos
-          // Ensure we update explorer when line is re-evaluated for a new comment
-          if (this.comment && this.comment.new) {
+          /**
+           * Ensure we update explorer when:
+           *  - line is re-evaluated for a new comment
+           *  - New comment added via sockets
+           */
+          if ((this.comment && this.comment.new) || this.filterMode === 'all') {
             this.filterComments()
           }
         },
