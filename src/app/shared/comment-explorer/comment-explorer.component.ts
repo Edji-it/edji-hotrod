@@ -317,4 +317,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.close()
     }
   }
+
+  /**
+   * Apply Student Filter
+   * @param student User needs "_id" and "fullname"/"username"
+   */
+  public viewStudentFilter(studentId: any): void {
+    this.projectStore.filterByUser(studentId)
+  }
 }

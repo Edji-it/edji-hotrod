@@ -112,14 +112,14 @@ export class LeaderboardComponent implements OnInit {
 
   /**
    * Apply Student Filter
-   * @param student User needs "_id" and "fullname"/"username"
+   * @param studentId User needs "_id" and "fullname"/"username"
    */
-  public viewStudentFilter(student: any): void {
+  public viewStudentFilter(studentId: any): void {
     // Hide dropdown
     this.studentSettingsIndex = -1
     // Toggle filter
-    if (!this.isStudentFiltered(student)) {
-      this.projectStore.filterByUser(student)
+    if (!this.isStudentFiltered(studentId)) {
+      this.projectStore.filterByUser(studentId)
     } else {
       this.projectStore.clearFilters()
     }
@@ -151,7 +151,7 @@ export class LeaderboardComponent implements OnInit {
       newIndex = 0
     }
     // Apply filter for student navigated to
-    this.viewStudentFilter(this.commentStats.stats.userStats[newIndex])
+    this.viewStudentFilter(this.commentStats.stats.userStats[newIndex]._id)
   }
 
   /**

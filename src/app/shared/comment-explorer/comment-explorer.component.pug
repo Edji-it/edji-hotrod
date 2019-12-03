@@ -73,9 +73,7 @@
                 .icon.icon-recap-sm
                 | Recap
               a.btn.btn-xs-primary(
-                [routerLink]="'./'",
-                [queryParams]="{ highlights: filterUserId }",
-                queryParamsHandling="merge"
+                (click)="viewStudentFilter(filterUserId)"
               )
                 .icon.icon-comment-filter
                 | Highlights

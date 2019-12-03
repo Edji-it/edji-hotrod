@@ -52,7 +52,7 @@
             .dropdown-menu.dropdown-menu-right.reading-card-menu([class.show]="studentSettingsIndex == i")
               //- View student filter
               button.dropdown-item(
-                (click)="viewStudentFilter(commentUser)"
+                (click)="viewStudentFilter(commentUser._id)"
               )
                 .icon.icon-comment-filter
                 | &nbsp; View highlight filter
@@ -76,7 +76,7 @@
           .btn.btn-icon.btn-outline-primary.e2e-student-filter(
               [attr.id]="'studentFilterBtn'+i",
               [class.active]="commentUser.filtered",
-              (click)="viewStudentFilter(commentUser)",
+              (click)="viewStudentFilter(commentUser._id)",
               title="View {{commentUser.fullname}}'s highlights"
             )
             .icon.icon-comment-filter
@@ -95,26 +95,26 @@
           ng-container(*ngFor='let question of commentUser.questions')
             .answer-circle__group
               .circle([class.filled]="question.answered")
-  .filter-bubble(
-      [class.slide-in]="appliedFilter && !archived",
-      (swipeleft)="pageStudentFilter(-1)",
-      (swiperight)="pageStudentFilter(1)"
-    )
-    ng-container(*ngIf="appliedFilter")
-      button.close.btn-icon--round(
-          (click)="clearFilter()",
-          type="button",
-          data-dismiss="modal",
-          aria-label="Close"
-          )
-        span(aria-hidden="true") &times;
-      .filter-bubble__descriptor
-        .icon.icon-comment-filter.mr-1
-        | Viewing {{ appliedFilter.displayType }}
-      #studentFilterPrev.btn.btn-icon.btn-outline-primary.btn--prev((click)="pageStudentFilter(-1)")
-          .fa.fa-backward
-      .filter-bubble__name
-        | {{ appliedFilter.displayName }}
-      #studentFilterNext.btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
-        .fa.fa-forward
+.filter-bubble(
+    [class.slide-in]="appliedFilter && !archived",
+    (swipeleft)="pageStudentFilter(-1)",
+    (swiperight)="pageStudentFilter(1)"
+  )
+  ng-container(*ngIf="appliedFilter")
+    button.close.btn-icon--round(
+        (click)="clearFilter()",
+        type="button",
+        data-dismiss="modal",
+        aria-label="Close"
+        )
+      span(aria-hidden="true") &times;
+    .filter-bubble__descriptor
+      .icon.icon-comment-filter.mr-1
+      | Viewing {{ appliedFilter.displayType }}
+    #studentFilterPrev.btn.btn-icon.btn-outline-primary.btn--prev((click)="pageStudentFilter(-1)")
+        .fa.fa-backward
+    .filter-bubble__name
+      | {{ appliedFilter.displayName }}
+    #studentFilterNext.btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
+      .fa.fa-forward
 edji-confirm-co-owner(*ngIf="coOwnerToBe", [student]="coOwnerToBe", (closeModal)="coOwnerToBe = false")
