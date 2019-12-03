@@ -903,7 +903,7 @@ export class ProjectStore {
       return user._id === userId
     })
     // Construct full filter and notify components
-    this.generateCommentFilter(props, 'Student', user.fullname ? user.fullname : user.username)
+    this.generateCommentFilter(props, 'Highlights', user.fullname ? user.fullname : user.username)
   }
 
   /**

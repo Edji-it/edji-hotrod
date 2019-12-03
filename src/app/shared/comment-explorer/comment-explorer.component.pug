@@ -64,7 +64,7 @@
               button.btn.btn-xs-primary(
                 *ngIf="filterMode != 'all'",
                 (click)="viewAll()",
-                [disabled]="!project.heat_vision && user._id !== project.teacher_id"
+                [disabled]="!project.heat_vision && !project.isTeaching"
               )
                 .icon.icon-comments
                 |  All Comments
@@ -74,6 +74,7 @@
             //- Student view actions/options
             ng-container(*ngIf="filterUserId")
               a.btn.btn-xs-primary(
+                *ngIf="project.isTeaching",
                 [routerLink]="'./'",
                 [queryParams]="{ recap: filterUserId }"
               )
@@ -88,7 +89,7 @@
               button.btn.btn-xs-primary.pl-0(
                   *ngIf="filterMode != 'all'",
                   (click)="viewAll()",
-                  [disabled]="!project.heat_vision && user._id !== project.teacher_id",
+                  [disabled]="!project.heat_vision && !project.isTeaching",
                   title="All Comments"
                 )
                   .icon.icon-comments.mr-0

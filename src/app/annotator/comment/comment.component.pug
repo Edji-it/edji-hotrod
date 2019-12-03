@@ -83,7 +83,7 @@
 hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst && !readingReport")
 div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
     //- We are removing this dot indicator for now
-    //- .comment-selected-highlight(*ngIf="comment && (comment.selected || comment.new)")
+    //- .comment-selected-highlight(*ngIf="comment && (selected || comment.new)")
     //-     .comment-selected-dot__mobile
     #comment.comment.mobileBound(
         [class.new]="comment.new",
