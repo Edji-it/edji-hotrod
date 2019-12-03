@@ -77,9 +77,17 @@
               [attr.id]="'studentFilterBtn'+i",
               [class.active]="commentUser.filtered",
               (click)="viewStudentFilter(commentUser)",
-              title="View only {{commentUser.fullname}}'s comments"
+              title="View {{commentUser.fullname}}'s highlights"
             )
-            .icon.icon-comment-filter.mr-1
+            .icon.icon-comment-filter
+        .user-list__action
+          a.btn.btn-icon.btn-outline-primary.e2e-student-filter(
+              [attr.id]="'studentFilterBtn'+i",
+              [routerLink]="'./'",
+              [queryParams]="{ student: commentUser._id }",
+              title="View {{commentUser.fullname}}'s comments"
+            )
+            .icon.icon-comments.mr-1
             | {{ commentUser.comment_count }}
 
         .question-answer-status__block(*ngIf='commentUser && currentReading.questions && currentReading.questions.length > 0')

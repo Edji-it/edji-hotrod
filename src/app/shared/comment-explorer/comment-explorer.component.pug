@@ -51,16 +51,16 @@
                 (click)="filterComments('location')",
               )
             span By Location
-        .col-12
+        .col-12(*ngIf="filterMode !== 'all'")
           .btn-row.right.header__btn-row
-            .hover--tooltip
+            .hover--tooltip(*ngIf="!filterUserId")
               button.btn.btn-xs-primary(
                 *ngIf="filterMode != 'all'",
                 (click)="viewAll()",
                 [disabled]="!project.heat_vision && user._id !== project.teacher_id"
               )
                 .icon.icon-comments
-                | {{ filterMode === 'user' ? 'All Students' : 'All Comments' }}
+                |  All Comments
                 .tooltip-wrap.tooltip--on-disabled
                   .tooltip
                     .tooltip-title Heat Vision is disabled
@@ -79,6 +79,14 @@
               )
                 .icon.icon-comment-filter
                 | Highlights
+              //- User filter, small "all comments" option
+              button.btn.btn-xs-primary.pl-0(
+                  *ngIf="filterMode != 'all'",
+                  (click)="viewAll()",
+                  [disabled]="!project.heat_vision && user._id !== project.teacher_id",
+                  title="All Comments"
+                )
+                  .icon.icon-comments.mr-0
     ng-scrollbar
       .comment-container.container-fluid(
         *ngIf="visible",

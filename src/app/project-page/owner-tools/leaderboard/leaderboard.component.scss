@@ -216,10 +216,16 @@ $userListBorderWidth: 2px;
 .user-list__action {
   position: relative;
   float: right;
-  margin-left: 5px;
+  margin-left: 2px;
 
   & .btn {
     z-index: 1;
+    line-height: 15px;
+  }
+
+  & .icon {
+    vertical-align: middle;
+    margin-bottom: 1px;
   }
 }
 

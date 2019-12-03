@@ -194,6 +194,14 @@ button {
     margin-top: 80px;
   }
 
+  & .hover--tooltip {
+    display: inline-block;
+
+    & .btn {
+      vertical-align: top;
+    }
+  }
+
   & .button,
   & .btn {
     margin: 0px 5px;
@@ -518,6 +526,12 @@ button {
   &:active,
   &:focus {
     text-shadow: none;
+  }
+
+  &.btn-outline-primary {
+    &:hover {
+      color: $btnPrimaryColor;
+    }
   }
 }
 

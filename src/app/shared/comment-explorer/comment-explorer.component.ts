@@ -245,7 +245,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     // Clear URL params
     this.router.navigate(['.'], {
       relativeTo: this.route,
-      queryParams: { pane: null },
+      queryParams: { pane: null, student: null, comment: null, parent: null },
       queryParamsHandling: 'merge',
     })
   }
