@@ -3,7 +3,7 @@
       .row
         .col-12
           .header-wrap
-            button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
+            button.close.stats-close-btn.btn-icon--round((click)="close()", type="button")
               span(aria-hidden="true") ×
             //- All Comments header
             ng-container(*ngIf="filterMode === 'all'")
@@ -113,5 +113,5 @@
                   p.small
                     b {{project.label}}
                     |  group was created.
-.exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
+.exit-row(*ngIf="visible", (tap)="close()")
 //- END .comment - mobile

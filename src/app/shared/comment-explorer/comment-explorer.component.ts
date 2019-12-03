@@ -78,7 +78,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   }
 
   // Comment Pane Component Outputs
-  @Output() close = new EventEmitter()
+  @Output() closed = new EventEmitter()
 
   @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar
 
@@ -138,6 +138,11 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           this.filterUserId = params['student']
           this.filterComments()
           this._visible = true
+        } else if (params['pane'] && params['pane'] === 'comments') {
+          this.filterComments()
+          this._visible = true
+        } else {
+          this.close()
         }
       }),
     )
@@ -204,11 +209,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     this.sortValue = 'created'
     this.filterMode = 'all' //- default
     if (!paramsToKeep) paramsToKeep = {}
+    paramsToKeep['pane'] = 'comments'
     if (!paramsToKeep['comment']) this.comment = null
     if (!paramsToKeep['student']) this.filterUserId = null
     // Merge params to keep with reset/null
     let params = Object.assign({ comment: null, parent: null, student: null }, paramsToKeep)
-    console.log('params to reset', params)
+    console.log('CLEAR', params)
     // Clear URL params
     this.router.navigate(['.'], {
       relativeTo: this.route,
@@ -230,11 +236,18 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
   }
 
-  dismissCommentPane() {
+  close() {
     this.visible = false
     this.comment = null
-    this.close.emit(false)
+    this.closed.emit(false)
     document.body.classList.remove('body__lock-scroll')
+    console.log('Close commetns')
+    // Clear URL params
+    this.router.navigate(['.'], {
+      relativeTo: this.route,
+      queryParams: { pane: null },
+      queryParamsHandling: 'merge',
+    })
   }
 
   ngOnDestroy() {
@@ -301,7 +314,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    */
   public onDelete(): void {
     if (this.comments.length <= 1) {
-      this.dismissCommentPane()
+      this.close()
     }
   }
 }
