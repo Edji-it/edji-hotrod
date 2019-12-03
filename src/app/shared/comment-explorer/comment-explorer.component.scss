@@ -1,5 +1,7 @@
 @import '../../../sass/base/variables';
 
+$headerIconMargin: 12px;
+
 .sliding-pane-comment__header {
   position: sticky;
   top: 0px;
@@ -25,7 +27,7 @@
     width: 2em;
     height: 2em;
     display: inline-block;
-    margin-right: 12px;
+    margin-right: $headerIconMargin;
     margin-top: 2px;
     pointer-events: none;
   }
@@ -36,6 +38,10 @@
   display: inline-block;
   vertical-align: top;
   line-height: 1em;
+
+  &.no-label {
+    line-height: 1.75em;
+  }
 }
 
 .comment-container {
@@ -316,4 +322,26 @@
 
 .btn-row {
   margin-top: 0px;
+}
+
+.comment-count__wrap {
+  position: relative;
+  text-align: center;
+  display: inline-block;
+  margin-right: $headerIconMargin;
+  margin-top: 2px;
+
+  .icon {
+    margin: 0px;
+  }
+
+  .count {
+    position: absolute;
+    top: 3px;
+    width: 100%;
+    text-align: center;
+    color: #6EBEEF;
+    font-weight: 500;
+    font-size: 13px;
+  }
 }

@@ -166,6 +166,10 @@ $iconGrayOpacity: 0.6;
   height: 1em;
 }
 
+.icon-comment-count {
+  @include icon('icon-comment-count.svg');
+}
+
 .icon-comment-emoji {
   @include icon('icon-comment-emoji.png');
   display: inline-block;

@@ -45,6 +45,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   public filterMode: 'line' | 'all' | 'user' = 'all'
   public filterUserId: string
+  public filterCurrentUser: boolean
 
   // Comment Pane Component Inputs
   private _comment: EdjiComment
@@ -179,6 +180,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       })
     } else if (this.filterUserId) {
       this.filterMode = 'user'
+      this.filterCurrentUser = this.user._id === this.filterUserId
       sorted = this.allComments.filter(comment => {
         return comment.user_id === this.filterUserId
       })
