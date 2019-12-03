@@ -132,7 +132,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       }),
       // Check for filters on URL
       this.route.queryParams.subscribe(params => {
-        console.log('Param update!', params)
         if (params['student'] && this.filterUserId !== params['student']) {
           this.clearFilters({ student: params['student'] })
           this.filterUserId = params['student']
@@ -141,8 +140,10 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         } else if (params['pane'] && params['pane'] === 'comments') {
           this.filterComments()
           this._visible = true
-        } else {
+        } else if (this.visible) {
           this.close()
+        } else {
+          this.closed.emit(false)
         }
       }),
     )
@@ -214,7 +215,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     if (!paramsToKeep['student']) this.filterUserId = null
     // Merge params to keep with reset/null
     let params = Object.assign({ comment: null, parent: null, student: null }, paramsToKeep)
-    console.log('CLEAR', params)
     // Clear URL params
     this.router.navigate(['.'], {
       relativeTo: this.route,
@@ -239,9 +239,9 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   close() {
     this.visible = false
     this.comment = null
+    this.filterUserId = ''
     this.closed.emit(false)
     document.body.classList.remove('body__lock-scroll')
-    console.log('Close commetns')
     // Clear URL params
     this.router.navigate(['.'], {
       relativeTo: this.route,
