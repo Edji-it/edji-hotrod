@@ -19,7 +19,7 @@ button,
   line-height: 1;
   padding: $small-spacing $base-spacing;
   text-decoration: none;
-  transition: background-color $base-duration $base-timing;
+  transition: background-color $base-duration $base-timing, color $base-duration $base-timing;
   user-select: none;
   vertical-align: middle;
   white-space: nowrap;
@@ -730,14 +730,14 @@ pre.btn {
   border-radius: 4px;
   text-decoration: none;
   // Padding provides space for icon
-  padding: 1px 5px 1px 22px;
+  padding: 1px 5px 1px 5px;
 
   &:hover {
     color: #fff;
   }
 
-  &.no-icon {
-    padding-left: 5px;
+  &.has-icon {
+    padding-left: 22px;
   }
 
   & .icon {

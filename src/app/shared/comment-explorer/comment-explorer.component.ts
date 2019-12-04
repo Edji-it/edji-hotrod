@@ -309,7 +309,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       if (commentEl) {
         this.scrollable &&
           this.visible &&
-          this.scrollable.scrollToElement(commentEl, { top: 100, left: -100, duration: 400 })
+          this.scrollable.scrollToElement(commentEl, { top: 0, left: -100, duration: 400 })
       }
     }, 1)
   }

@@ -118,13 +118,13 @@
     #studentFilterNext.btn.btn-icon.btn-outline-primary.btn--next((click)="pageStudentFilter(1)")
       .fa.fa-forward
     .btn-row.pt-2(*ngIf="appliedFilter.propertyFilters.user_id")
-      a.btn.btn-xs-primary(
+      a.btn.btn-xs-primary.has-icon(
         [routerLink]="'./'",
         [queryParams]="{ pane: 'comments', student: appliedFilter.propertyFilters.user_id  }"
       )
         .icon.icon-comments
         | Comments
-      a.btn.btn-xs-primary(
+      a.btn.btn-xs-primary.has-icon(
         [routerLink]="'./'",
         [queryParams]="{ recap: appliedFilter.propertyFilters.user_id }"
       )

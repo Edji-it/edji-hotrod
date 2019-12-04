@@ -63,7 +63,7 @@
         .col-12(*ngIf="filterMode !== 'all'")
           .btn-row.right.header__btn-row
             .hover--tooltip(*ngIf="!filterUserId")
-              button.btn.btn-xs-primary(
+              button.btn.btn-xs-primary.has-icon(
                 *ngIf="filterMode != 'all'",
                 (click)="viewAll()",
                 [disabled]="!project.heat_vision && !project.isTeaching"
@@ -75,20 +75,20 @@
                     .tooltip-title Heat Vision is disabled
             //- Student view actions/options
             ng-container(*ngIf="filterUserId")
-              a.btn.btn-xs-primary(
+              a.btn.btn-xs-primary.has-icon(
                 *ngIf="project.isTeaching",
                 [routerLink]="'./'",
                 [queryParams]="{ recap: filterUserId }"
               )
                 .icon.icon-recap-sm
                 | Recap
-              button.btn.btn-xs-primary(
+              button.btn.btn-xs-primary.has-icon(
                 (click)="viewStudentFilter(filterUserId)"
               )
                 .icon.icon-comment-filter
                 | Highlights
               //- User filter, small "all comments" option
-              button.btn.btn-xs-primary.pl-0(
+              button.btn.btn-xs-primary.has-icon.pl-0(
                   *ngIf="filterMode != 'all'",
                   (click)="viewAll()",
                   [disabled]="!project.heat_vision && !project.isTeaching",

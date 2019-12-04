@@ -264,18 +264,6 @@ $headerIconMargin: 12px;
 
 // Buttons
 .btn-xs-primary { //$btnActionFocusColor;
-  // color: #fff;
-
-  & .icon {
-    filter: grayscale(100%);
-  }
-
-  &.active {
-    & .icon {
-      filter: grayscale(0%);
-    }
-  }
-
   &.text-only {
     padding-left: 5px;
     background-color: #fff;
