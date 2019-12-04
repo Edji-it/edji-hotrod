@@ -862,7 +862,7 @@ export class ProjectStore {
       let fitsFilter = true
       let filterKeys = Object.keys(filter.propertyFilters)
       for (let key of filterKeys) {
-        if (filter.propertyFilters[key].test(comment[key]) === false) {
+        if (filter.propertyFilters[key] !== comment[key]) {
           fitsFilter = false
           break
         }
@@ -897,7 +897,7 @@ export class ProjectStore {
     // Clear current filter, without notifying components
     this.activeFilter = null
     // For User id filters, we want an exact match
-    props.user_id = new RegExp('^' + userId + '$')
+    props.user_id = userId
     // Get user object
     let user = (this.joinedUsersSource.getValue() || []).find(user => {
       return user._id === userId

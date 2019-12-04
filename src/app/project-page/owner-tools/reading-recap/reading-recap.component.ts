@@ -463,7 +463,7 @@ export class ReadingRecapComponent implements OnInit {
    */
   public isStudentFiltered(student: any): boolean {
     if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
-      return this.appliedFilter.propertyFilters.user_id.test(student._id)
+      return this.appliedFilter.propertyFilters.user_id === student._id
     } else {
       return false
     }

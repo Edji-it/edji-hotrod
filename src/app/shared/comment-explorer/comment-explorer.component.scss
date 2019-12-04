@@ -265,7 +265,6 @@ $headerIconMargin: 12px;
 // Buttons
 .btn-xs-primary { //$btnActionFocusColor;
   // color: #fff;
-  padding-left: 22px;
 
   & .icon {
     filter: grayscale(100%);
@@ -285,19 +284,6 @@ $headerIconMargin: 12px;
       display: none;
       padding-left: 5px;
     }
-  }
-
-  & .icon {
-    background-color: #fff;
-    border-radius: 3px;
-    height: 15px;
-    width: 15px;
-    margin: 0px 3px 0px 0px;
-    border: 2px solid #fff;
-    vertical-align: middle;
-    position: absolute;
-    top: 2px;
-    left: 2px;
   }
 }
 

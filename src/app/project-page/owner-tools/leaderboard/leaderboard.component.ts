@@ -75,6 +75,8 @@ export class LeaderboardComponent implements OnInit {
         this.projectStore.filterUpdates.subscribe(filter => {
           this.appliedFilter = filter
 
+          console.log('Applied:', filter)
+
           if (this.commentStats.stats.userStats) {
             for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
               this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(
@@ -167,7 +169,7 @@ export class LeaderboardComponent implements OnInit {
    */
   public isStudentFiltered(student: PublicUser): boolean {
     if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
-      return this.appliedFilter.propertyFilters.user_id.test(student._id)
+      return this.appliedFilter.propertyFilters.user_id === student._id
     } else {
       return false
     }
