@@ -150,7 +150,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           this.filterComments()
           this._visible = true
         } else if (params['pane'] && params['pane'] === 'comments') {
-          console.log('pane url pdate')
           this.filterComments()
           this._visible = true
         } else if (this.visible) {
