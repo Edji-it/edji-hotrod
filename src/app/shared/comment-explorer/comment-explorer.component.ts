@@ -144,7 +144,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       }),
       // Check for filters on URL
       this.route.queryParams.subscribe(params => {
-        if (params['student'] && this.filterUserId !== params['student']) {
+        if (params['student']) {
           this.clearFilters({ student: params['student'] })
           this.filterUserId = params['student']
           this.filterComments()
