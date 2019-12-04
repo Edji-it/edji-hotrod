@@ -372,6 +372,14 @@ $iconGrayOpacity: 0.6;
   background-size: 100% 100% !important;
 }
 
+.icon-loading--action {
+  @include icon('loading-action-spinner.svg');
+  width: 100px;
+  height: 100px;
+  background-size: 100% 100% !important;
+  background-color: transparent;
+}
+
 .icon-megaphone {
   @include icon('icon-megaphone.svg');
 

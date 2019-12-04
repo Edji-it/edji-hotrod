@@ -42,10 +42,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   // Sort and Filtering
   public sortValue: string = 'created' // default to created
-
   public filterMode: 'line' | 'all' | 'user' = 'all'
   public filterUserId: string
   public filterCurrentUser: boolean
+
+  // Display
+  public loading: boolean
 
   // Comment Pane Component Inputs
   private _comment: EdjiComment
@@ -111,7 +113,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
            *  - New comment added via sockets
            */
           if ((this.comment && this.comment.new) || this.filterMode === 'all') {
-            this.filterComments()
+            this.filterComments({ update: true })
           }
         },
         error => {
@@ -129,7 +131,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
             this.project = project
             this.allComments = project.comments || []
             this.commentCount = this.comments.length
-            this.filterComments()
+            this.filterComments({ update: true })
           }
         },
         error => {
@@ -148,6 +150,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           this.filterComments()
           this._visible = true
         } else if (params['pane'] && params['pane'] === 'comments') {
+          console.log('pane url pdate')
           this.filterComments()
           this._visible = true
         } else if (this.visible) {
@@ -164,12 +167,18 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * @todo support using URL params
    * @param sort optional - ordering parameter
    */
-  public filterComments(sort?: string) {
-    if (!sort) {
-      sort = this.sortValue
+  public filterComments(opts?: { sort?: string; update?: boolean }) {
+    if (!opts) {
+      opts = {}
     }
+    let sort = opts.sort || this.sortValue
     let sorted
     let comment = this.comment
+    // Set loading state
+    if (!opts.update) {
+      this.loading = true
+      this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
+    }
     // Handle if reply selected
     if (comment && comment.reply_to) {
       comment = this.allComments.find(c => {
@@ -196,21 +205,27 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     }
 
     if (sort === 'location') {
-      this.comments = sorted.sort(function(a, b) {
+      sorted = sorted.sort(function(a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
         return a.start - b.start
       })
     } else {
       // 'created' / default
-      this.comments = sorted.sort(function(a, b) {
+      sorted = sorted.sort(function(a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
         return Number(new Date(b.createdAt)) - Number(new Date(a.createdAt))
       })
     }
 
-    this.commentCount = this.comments.length
+    this.commentCount = sorted.length
+    setTimeout(() => {
+      this.comments = sorted
+    })
+    setTimeout(() => {
+      this.loading = false
+    }, 400)
   }
 
   /**
@@ -284,6 +299,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   /**
    * Scroll to Comment
    * @param targetComment Comment to scroll to
+   * @note We check "visible" before scrolling since content is required
+   * - it is also possible to check this.scrollable.viewport (the reason it fails)
    */
   scrollToComment(targetComment: EdjiComment, isReply?: boolean) {
     // Replies are opened by comment component based on URL param

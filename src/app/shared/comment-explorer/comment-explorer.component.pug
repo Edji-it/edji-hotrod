@@ -1,4 +1,6 @@
 .sliding-pane-comment.from-left(#commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
+    .loading-screen([class.fade-in]="loading")
+      .loader.icon-loading--action
     .sliding-pane-comment__header.container-fluid(*ngIf="visible")
       .row
         .col-12
@@ -42,7 +44,7 @@
                 name="sortCreated",
                 value="created",
                 [(ngModel)]="sortValue",
-                (click)="filterComments('created')",
+                (click)="filterComments({sort: 'created' })",
                 checked
               )
             span By Time
@@ -55,7 +57,7 @@
                 name="sortLocation",
                 value="location",
                 [(ngModel)]="sortValue",
-                (click)="filterComments('location')",
+                (click)="filterComments({sort: 'location' })",
               )
             span By Location
         .col-12(*ngIf="filterMode !== 'all'")
@@ -96,7 +98,7 @@
     ng-scrollbar
       .comment-container.container-fluid(
         *ngIf="visible",
-        [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
+        [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]",
       )
         .row
           .col-12
