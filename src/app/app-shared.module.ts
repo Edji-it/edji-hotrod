@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgScrollbarModule } from 'ngx-scrollbar'
 
 // Project Dependencies
 import {
@@ -72,7 +73,7 @@ let SHARED_DECLARATIONS = [
   QuickStartFlagComponent,
 ]
 
-let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule]
+let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, NgScrollbarModule]
 
 @NgModule({
   imports: [

@@ -192,6 +192,10 @@ export class ReadingService {
     if (searchParams.scope === 'owner') {
       queryString += '&scope=owner'
     }
+    // district readings
+    if (searchParams.district && searchParams.district.length > 0) {
+      queryString += `&district_id=${searchParams.district}`
+    }
     // Default to sort by most recent, unless using a search term
     if (!searchParams.searchTerm) {
       queryString += '&sort=createdAt&sort_order=desc'
@@ -503,6 +507,7 @@ export interface ReadingQuery {
   createdCollection?: CreatedCollection
   scope?: Scope
   pop?: POP
+  district?: string
 }
 
 type POP = 'projects'

@@ -143,7 +143,7 @@ $mediumAvatarSize: 36px;
    & .tooltipbody {
     font-family: 'Open Sans', Arial;
     visibility: hidden;
-    width: 160px;
+    min-width: 160px;
     background-color: #fff;
     color: #000;
     text-align: left;
@@ -182,6 +182,7 @@ $mediumAvatarSize: 36px;
     line-height: 13px;
     &.tooltipcount {
       text-align: center;
+      margin-top: 0px;
       margin-bottom: 0;
       font-size: 11px;
     }

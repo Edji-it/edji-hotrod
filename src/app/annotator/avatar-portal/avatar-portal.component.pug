@@ -5,14 +5,19 @@
   [ngClass]="['avatar-count-' + indexOnLine, 'avatar-' + comment.type]",
   [class.active]="active",
   [class.mobileBlock-mobile-comment]="commentMobile",
-  [class.has-teacher-tag]="comment.authorIsTeacher"
+  [class.has-teacher-tag]="comment.authorIsTeacher",
+  [class.pending]="loading",
+  [class.draft]="_comments.isCommentNewDraft(comment)"
 )
+  .portal-scroll-adjust(#scrollEl)
   user-avatar(*ngIf="indexOnLine<8", [userId]="comment.user_id", [tempName]="comment.author")
   span.tooltipbody(*ngIf="indexOnLine<8")
     .tooltip-title([class.inline-center]="comment.type == 'audio'")
       | {{comment.author}}
-    .tooltipblank(*ngIf="!comment.data")
+    .tooltipblank(*ngIf="!comment.data && !loading")
       | Empty draft
+    .tooltipblank(*ngIf="loading")
+      | Creating comment...
     .tooltipemoji(*ngIf="comment.type == 'emoji' || !comment.type", [innerHtml]="comment.data | emojione")
     .tooltiptext.block-with-text(*ngIf="comment.type == 'text'", [innerHtml]="comment.data | linkify | emojione")
     span.tooltipaudio(*ngIf="comment.type == 'audio'")
@@ -34,5 +39,8 @@
     | {{repliesById[comment._id].length}}
 
 //- Mobile Icon
-.comment__button--mobile.hidden-md-up((tap)='triggerCommentPane(false)', [ngClass]="[ active ? 'active' : '' ]")
+.comment__button--mobile.hidden-md-up(
+  (tap)='triggerCommentPane(false)',
+  [ngClass]="[ active ? 'active' : '' ]"
+)
 .comment__count--mobile.hidden-md-up {{ lineCount }}

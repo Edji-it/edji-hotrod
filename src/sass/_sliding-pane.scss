@@ -16,6 +16,10 @@ $slidingPaneWidth: 265px;
   overflow-x: hidden;
   overflow-y: auto;
 
+  // Scrollbar
+  // scrollbar-color: #111 #333;
+  // scrollbar-width: thin;
+
   .keyboard-adjust & {
     height: 70%; // calc(70% - #{ $navBarHeight - 13px });
   }
@@ -33,7 +37,7 @@ $slidingPaneWidth: 265px;
   // Flexible width pane
   @media (min-width: $large-screen) {
     // >992px
-    min-width: 300px;
+    min-width: 300px !important;
     width: calc((100% - 530px) / 2) !important;
   }
   &.reading-recap {
@@ -93,22 +97,32 @@ $slidingPaneWidth: 265px;
   }
 }
 
+// Comment pane has "bubble style"
 .sliding-pane-comment {
   padding: 0px;
   z-index: $zMid + 1000;
-  overflow: auto;
+  overflow: hidden; // handled by ng-scrollbar
   box-shadow: $slidingPaneShadow;
-  border-right: $slidingPaneBorder;
+  border-radius: 20px;
+  border: $slidingPaneBorder;
   transition: transform $slidingPaneTime linear;
+  $progressBarWidth: 5px;
+  height: calc(100% - #{ $navBarHeight + 2px + $progressBarWidth });
+  min-width: $slidingPaneWidth;
+  top: $navBarHeight + 1px + $progressBarWidth;
+
+  & .pane__header {
+    top: 0px;
+  }
 
   &.from-right {
     // transform: translate3d(100%, 0, 0);
-    right: 0;
+    right: 1px;
   }
 
   &.from-left {
     // transform: translate3d(-105%, 0, 0);
-    left: 0;
+    left: 1px;
     transform: translate3d(-100%, 0, 0);
   }
 
