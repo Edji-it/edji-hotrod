@@ -376,7 +376,7 @@ export class ReadingService {
         source: reading.source,
         draft: reading.draft,
         questions: reading.questions,
-        public: reading.public,
+        reading_type: reading.reading_type,
         subjects: reading.subjects,
         grade_levels: reading.grade_levels,
         default_instructions: reading.default_instructions,

@@ -29,7 +29,7 @@ export interface BaseReading {
   title: string
   instructions?: string
   owner_id?: string
-  public?: boolean
+  reading_type: readingType
   promoter_ids?: string[]
   source?: string
   cover_img?: string
@@ -46,3 +46,5 @@ export interface BaseReading {
   owner_bookmarked?: boolean
   default_instructions?: string
 }
+
+export type readingType = 'public' | 'private' | 'academy'

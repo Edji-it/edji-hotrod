@@ -7,8 +7,8 @@
         .tag-row
           ng-container(*ngIf="reading.subjects && reading.subjects.length > 0")
             span.badge-pill.badge-secondary.badge-subject(*ngFor="let subject of reading.subjects") {{ subject | subjectName }}
-        i.icon.lg(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
-        i.icon.lg(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
+        i.icon.lg(*ngIf="reading.reading_type=='public'", [innerHTML]="':earth_americas:' | emojione")
+        i.icon.lg(*ngIf="reading.reading_type=='private", [innerHTML]="':lock:' | emojione")
       //- .container
       .row
         .col-md-9

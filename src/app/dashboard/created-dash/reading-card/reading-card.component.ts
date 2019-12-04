@@ -1,11 +1,10 @@
 import { Subscription } from 'rxjs'
-import { Angulartics2 } from 'angulartics2'
 import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
-import { ReadingService, ProjectService, AuthService } from '../../../_services'
-import { Reading, Project, User } from '../../../shared/datatypes'
+import { ReadingService, AnalyticsService, AuthService } from '../../../_services'
+import { Reading, Project, User, readingType } from '../../../shared/datatypes'
 import { take } from 'rxjs/operators'
 import { ALLSPARK } from 'src/app/app.constants'
 
@@ -36,8 +35,8 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   public showDeleteReadingModal: boolean = false
   public showReadingLinkModal: boolean = false
   public showDeleteProjectModal: boolean = false
-  public togglePublicFlag: boolean
-  public currentPublicFlag: boolean
+  public toggleTypeFlag: boolean
+  public currentTypeFlag: boolean
   public showReadingDiscoverModal: boolean
   public showBookmarkTooltip: boolean
   public gradeInitials: string[] = ALLSPARK.GRADEINITIALS
@@ -50,8 +49,8 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   constructor(
     private _route: ActivatedRoute,
     private _readings: ReadingService,
-    private angulartics: Angulartics2,
     private _auth: AuthService,
+    private _analytics: AnalyticsService,
   ) {}
 
   ngOnInit() {
@@ -77,7 +76,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
-  } //ngOnDestroy
+  }
 
   /**
    * Updates user's current readings with all versions of a specific reading
@@ -85,13 +84,10 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
    */
   getVersions(versionId: string) {
     this.isLoading = true
-    this.angulartics.eventTrack.next({
-      action: 'createdReading_getAllVersions',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
+    this._analytics.event(`createdReading_getAllVersions`)
     // Update current user readings on Dashboard
     this._readings.getAllVersions(versionId)
-  } // getVersions(versionId : string)
+  }
 
   hasProjects(): boolean {
     if (!this.reading.projects || !this.reading.projects[0]) {
@@ -113,52 +109,48 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     return this.versionHeight
   } // versionsHeight() : number
 
-  togglePublic(publicFlag: boolean): void {
+  toggleType(readingType: readingType): void {
     // Get the current public flag value from the reading; if none, assume false
-    this.currentPublicFlag = false
-    if (this.reading.public) {
-      this.currentPublicFlag = true
+    this.currentTypeFlag = false
+    if (this.reading.reading_type === 'public') {
+      this.currentTypeFlag = true
     }
     // If the user picks the value of public flag that it already is, close the tooltip
-    if (this.currentPublicFlag == publicFlag) {
-      this.togglePublicFlag = false
+    if (readingType === this.reading.reading_type) {
+      this.toggleTypeFlag = false
       return
     }
     // If user wishes to make a private reading public, make sure grade_levels and subjects exist on the reading
     if (
-      publicFlag &&
+      readingType === 'public' &&
       (!this.reading.grade_levels ||
         !(this.reading.grade_levels.length > 0) ||
         !this.reading.subjects ||
         !(this.reading.subjects.length > 0))
     ) {
       // Close the tooltip and toggle the grade_levels and subjects add modal
-      this.togglePublicFlag = false
+      this.toggleTypeFlag = false
       this.showReadingDiscoverModal = true
       return
     }
 
-    if ((publicFlag && (this.reading.grade_levels && this.reading.subjects)) || !publicFlag) {
+    if (
+      (readingType === 'public' && (this.reading.grade_levels && this.reading.subjects)) ||
+      readingType === 'private'
+    ) {
       // fire an analytic event here for tracking purposes
-      let publicVal = 'public'
-      if (!publicFlag) {
-        publicVal = 'private'
-      }
-      this.angulartics.eventTrack.next({
-        action: 'createdReading_togglePublic_' + publicVal,
-        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-      })
+      this._analytics.event(`createdReading_togglePublic_${readingType}`)
       // Close the tooltip
-      this.togglePublicFlag = false
+      this.toggleTypeFlag = false
 
       // cache the reading since the server will return a reading stripped of projects, and we only want to update the public flag on return
       let updateReading = this.reading
-      updateReading.public = publicFlag
+      updateReading.reading_type = readingType
       //  Make the call to PUT the reading public value
       this._readings.save(updateReading).subscribe(
         data => {
           if (data._id) {
-            this.reading.public = data.public
+            this.reading.reading_type = data.reading_type
           }
         },
         error => {
@@ -168,9 +160,9 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private togglePublicTooltip() {
+  private toggleTypeTooltip() {
     if (this._route.snapshot.routeConfig.path != 'discover') {
-      this.togglePublicFlag = !this.togglePublicFlag
+      this.toggleTypeFlag = !this.toggleTypeFlag
     }
   }
 
@@ -211,4 +203,4 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
         },
       )
   }
-} // @Component
+}
