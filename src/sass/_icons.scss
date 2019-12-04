@@ -663,21 +663,20 @@ $iconGrayOpacity: 0.6;
   top: 350px;
   z-index: $zMid + 999;
   left: 264px;
+  margin-left: -15px;
 
-  transition: margin $slidingPaneTime linear, opacity $slidingPaneTime linear;
-  margin-left: -264px;
+  transition: opacity $slidingPaneTime linear;
   opacity: 0;
 
   &.slide-in {
-    margin-left: 0;
     opacity: 1;
+    margin-left: 0px;
   }
 
   // Hide on mobile for now
   @media (max-width: $medium-screen) {
     // <768px
     left: calc(100% - 60px);
-    margin-left: calc(1px - (100% - 60px));
     margin-top: 64px; //mobile adjustment
   }
   // NOTE: "large screen" value is different here to account min-width flexibility
@@ -685,13 +684,11 @@ $iconGrayOpacity: 0.6;
   @media (min-width: $medium-screen) and (max-width: 1129px) {
     // 768px - 992px
     left: 299px;
-    margin-left: -299px;
   }
   // Flexible width pane
   @media (min-width: 1129px) {
     // >992px
     left: calc(((100% - 530px) / 2) - 1px) !important;
-    margin-left: calc(1px - ((100% - 530px) / 2)) ;
   }
 }
 

@@ -239,7 +239,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     if (!paramsToKeep['comment']) this.comment = null
     if (!paramsToKeep['student']) this.filterUserId = null
     // Merge params to keep with reset/null
-    let params = Object.assign({ comment: null, parent: null, student: null }, paramsToKeep)
+    let params = Object.assign({ comment: null, parent: null, student: null, line: null }, paramsToKeep)
     // Clear URL params
     this.router.navigate(['.'], {
       relativeTo: this.route,
@@ -270,7 +270,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     // Clear URL params
     this.router.navigate(['.'], {
       relativeTo: this.route,
-      queryParams: { pane: null, student: null, comment: null, parent: null },
+      queryParams: { pane: null, student: null, comment: null, parent: null, line: null },
       queryParamsHandling: 'merge',
     })
   }

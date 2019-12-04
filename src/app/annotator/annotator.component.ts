@@ -535,6 +535,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           // Check if opening/scrolling to comment
           this.checkCommentLink(params['comment'], params['parent'])
         }
+        // Handle clearing selected comment
+        if (params['line']) {
+          if (this.selectedComment._id !== params['line']) {
+            this.selectedComment = null
+          }
+        } else {
+          this.selectedComment = null
+        }
       }),
     )
   }
@@ -1677,6 +1685,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           this.selectedComment = selectedComment
         }
       }
+      // Set line selection param
+      this._router.navigate(['.'], {
+        relativeTo: this.route,
+        queryParams: { line: this.selectedComment._id },
+        queryParamsHandling: 'merge',
+      })
       // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
