@@ -100,7 +100,7 @@
         i#readingPublic.icon(*ngIf="reading.reading_type === 'public'", [innerHTML]="':earth_americas:' | emojione")
         i#readingPrivate.icon(*ngIf="reading.reading_type === 'private'", [innerHTML]="':lock:' | emojione")
         .tooltip-wrap
-          .tooltip.tooltip--interactive([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
+          .tooltip.tooltip--interactive([class.show]="toggleTypeFlag", [class.no-link]="!reading.source")
             .tooltip-title
               | Make public for others to Discover?
             .tooltiptext.block-with-text
@@ -108,14 +108,14 @@
               label#readingMakePublic.form-check-label.form-check-btn(
                   [class.active]="reading.reading_type === 'public'",
                   title="Allow anyone to find this Reading in Discover",
-                  (click)="$event.stopPropagation(); toggleType(true)"
+                  (click)="$event.stopPropagation(); toggleType('public')"
                 )
                 span([innerHTML]="':earth_americas: Public' | emojione")
               //- Private option
               label#readingMakePrivate.form-check-label.form-check-btn(
                   [class.active]="reading.reading_type === 'private'",
                   title="Hide this Reading from Discover",
-                  (click)="$event.stopPropagation(); toggleType(false)"
+                  (click)="$event.stopPropagation(); toggleType('private')"
                 )
                 span([innerHTML]="':lock: Private' | emojione")
       //- Bookmark action
