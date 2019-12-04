@@ -113,7 +113,7 @@
                 span([innerHTML]="':earth_americas: Public' | emojione")
               //- Private option
               label#readingMakePrivate.form-check-label.form-check-btn(
-                  [class.active]="!reading.reading_type === 'private'",
+                  [class.active]="reading.reading_type === 'private'",
                   title="Hide this Reading from Discover",
                   (click)="$event.stopPropagation(); toggleType(false)"
                 )

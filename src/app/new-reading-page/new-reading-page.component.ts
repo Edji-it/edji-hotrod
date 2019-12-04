@@ -193,7 +193,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     this.readingForm = fb.group({
       title: [null, Validators.required],
       source: [null, null],
-      type: ['public'],
+      reading_type: ['public'],
       subjects: [[], Validators.required],
       grade_levels: [[], Validators.required],
       default_instructions: [null, null],
@@ -406,7 +406,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
               subjects: this.reading.subjects,
               grade_levels: this.reading.grade_levels,
               source: this.reading.source,
-              type: this.reading.reading_type,
+              reading_type: this.reading.reading_type,
               default_instructions: this.reading.default_instructions,
             })
             this.versionId = this.reading.version_id
@@ -737,7 +737,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
       form.title.length < 1 ||
       this.readingIsBlank ||
       !questionsValid ||
-      (form.type == 'public' && (form.grade_levels.length < 1 || form.subjects.length < 1))
+      (form.reading_type == 'public' && (form.grade_levels.length < 1 || form.subjects.length < 1))
     ) {
       return false
     } else {
