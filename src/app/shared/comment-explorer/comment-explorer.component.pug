@@ -5,18 +5,22 @@
       .row
         .col-12
           .header-wrap
-            button.close.stats-close-btn.btn-icon--round((click)="close()", type="button")
+            button.close.btn-icon--round(
+              (click)="close()",
+              type="button",
+              data-text="closeCommentExplorer"
+            )
               span(aria-hidden="true") ×
             //- All Comments header
             ng-container(*ngIf="filterMode === 'all'")
               i.icon.icon-comment-feed
-              .header-text
+              .header-text(data-test="allFilterHeader")
                 | {{ commentCount }} Comments
                 .sub-label All Students
             //- Comments on Line
             ng-container(*ngIf="filterMode === 'line'")
               i.icon.icon-view-line
-              .header-text
+              .header-text(data-test="lineFilterHeader")
                 | Viewing Line
                 .sub-label {{ commentCount }} Comments
             //- User's Comments
@@ -25,14 +29,15 @@
                 [userId]="filterUserId",
                 [size]="'medium'",
                 [showName]="true",
-                [subLabel]="commentCount + ' Comments'"
+                [subLabel]="commentCount + ' Comments'",
+                data-test="userFilterHeader"
               )
             //- Current User's Comments
             ng-container(*ngIf="filterMode === 'user' && filterCurrentUser")
               .comment-count__wrap
                 i.icon.icon-comment-count
                 .count {{ commentCount }}
-              .header-text.no-label
+              .header-text.no-label(data-test="userFilterHeader")
                 | My Comments
         .col-12(*ngIf="filterMode !== 'line'")
           label#sortByCreated.form-check-label.form-check-btn.form-check-sm(
