@@ -70,7 +70,7 @@ describe('Project Page using the comment explorer: ', () => {
     // Wait for header
     browser.wait(EC.visibilityOf(explorer.userHeader), 5000, 'did see user filter after clicking user name on comment')
     browser.wait(
-      EC.invisibilityOf(explorer.userHeader),
+      EC.invisibilityOf(explorer.allHeader),
       3000,
       'still saw "All Comments" header after clicking user name on comment',
     )
@@ -89,7 +89,7 @@ describe('Project Page using the comment explorer: ', () => {
 
   // Useful to test after opening the Explorer for other purposes
   it('should open a comment and see comment line', () => {
-    let commentPortals = element.all(by.css('avatar-portal:not(.hide)'))
+    let commentPortals = element.all(by.css('avatar-portal:not(.hide) .user-icon__wrap'))
     browser.wait(
       EC.elementToBeClickable(commentPortals.first()),
       3000,
