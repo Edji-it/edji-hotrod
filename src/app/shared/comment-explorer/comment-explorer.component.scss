@@ -346,7 +346,7 @@ $headerIconMargin: 12px;
   &.fade-in {
     opacity: 1;
     pointer-events: all;
-    transition-duration: 200ms;
+    transition-duration: 0ms;
   }
 
   & .loader {
