@@ -110,24 +110,24 @@
               label#readingMakePublic.form-check-label.form-check-btn(
                   [class.active]="reading.reading_type === 'public'",
                   title="Allow anyone to find this Reading in Discover",
-                  (click)="$event.stopPropagation(); toggleType('public')"
+                  (click)="$event.stopPropagation(); toggleReadingType('public')"
                 )
                 span([innerHTML]="':earth_americas: Public' | emojione")
               //- Private option
               label#readingMakePrivate.form-check-label.form-check-btn(
                   [class.active]="reading.reading_type === 'private'",
                   title="Hide this Reading from Discover",
-                  (click)="$event.stopPropagation(); toggleType('private')"
+                  (click)="$event.stopPropagation(); toggleReadingType('private')"
                 )
                 span([innerHTML]="':lock: Private' | emojione")
               //- Academy option
               label#readingMakeAcademy.form-check-label.form-check-btn(
                   [class.active]="reading.reading_type === 'academy'",
                   title="Allow anyone in your Academy to find this reading in Discover",
-                  (click)="$event.stopPropagation(); toggleType('academy')"
+                  (click)="$event.stopPropagation(); toggleReadingType('academy')"
                 )
                 span
-                  i.icon.icon-academy-plate.icon-academy-plate-reading([class.icon-invisible]="reading.reading_type === 'academy'")
+                  i.icon.icon-academy-plate.icon-academy-plate-reading([class.icon-invisible]="reading.reading_type !== 'academy'")
                   | &nbsp;Academy
       //- Bookmark action
       .btn.btn-icon--round.reading-action.hover--tooltip(
@@ -198,6 +198,7 @@ hot-del-project(
 hot-discover-add-meta(
   [showModal]="showReadingDiscoverModal", 
   [reading]="reading",
+  [newReadingType]="newReadingType",
   (closeModal)="showReadingDiscoverModal = false"
 )
 //- Reading link share modal

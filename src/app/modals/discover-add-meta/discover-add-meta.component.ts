@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { Reading } from './../../shared/datatypes'
+import { Reading, readingType } from './../../shared/datatypes'
 import { ReadingService } from './../../_services'
 import { IMultiSelectOption, IMultiSelectSettings } from '../../_directives'
 
@@ -14,6 +14,7 @@ import { IMultiSelectOption, IMultiSelectSettings } from '../../_directives'
 export class DiscoverAddMetaModal implements OnInit {
   @Input() showModal: boolean
   @Input() reading: Reading
+  @Input() newReadingType: readingType
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   private readingMetaForm: FormGroup
@@ -62,7 +63,7 @@ export class DiscoverAddMetaModal implements OnInit {
     // Add subjects, grade levels, and make the reading public
     updateReading.subjects = form.value.subjects
     updateReading.grade_levels = form.value.grade_levels
-    updateReading.reading_type = 'public'
+    updateReading.reading_type = this.newReadingType
     //  Make the call to PUT the reading public value
     this._readings.save(updateReading).subscribe(
       data => {

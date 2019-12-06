@@ -41,6 +41,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   public showBookmarkTooltip: boolean
   public gradeInitials: string[] = ALLSPARK.GRADEINITIALS
   public gradeDisplay: string
+  public newReadingType: readingType
 
   public versionHeight = 50
 
@@ -107,60 +108,61 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
       this.versionHeight = document.getElementById(this.reading._id).clientHeight
     }
     return this.versionHeight
-  } // versionsHeight() : number
+  }
 
-  toggleType(readingType: readingType): void {
-    // Get the current public flag value from the reading; if none, assume false
-    this.currentTypeFlag = false
-    if (this.reading.reading_type === 'public') {
-      this.currentTypeFlag = true
-    }
-    // If the user picks the value of public flag that it already is, close the tooltip
-    if (readingType === this.reading.reading_type) {
-      this.toggleTypeFlag = false
-      return
-    }
-    // If user wishes to make a private reading public, make sure grade_levels and subjects exist on the reading
-    if (
-      readingType === 'public' &&
-      (!this.reading.grade_levels ||
-        !(this.reading.grade_levels.length > 0) ||
-        !this.reading.subjects ||
-        !(this.reading.subjects.length > 0))
-    ) {
-      // Close the tooltip and toggle the grade_levels and subjects add modal
-      this.toggleTypeFlag = false
-      this.showReadingDiscoverModal = true
+  public toggleReadingType(readingType: readingType): void {
+    const currentType = this.reading.reading_type
+    const publicDetailsPresent = this.publicReadingReq()
+
+    // if user selects option that reading currently is then close toggle
+    if (currentType === readingType) {
+      this.toggleTypeTooltip(true)
       return
     }
 
-    if (
-      (readingType === 'public' && (this.reading.grade_levels && this.reading.subjects)) ||
-      readingType === 'private'
-    ) {
-      // fire an analytic event here for tracking purposes
+    // if we don't need further detail and are ready to make the change, then make it
+    if ((readingType !== 'private' && this.publicReadingReq()) || readingType == 'private') {
       this._analytics.event(`createdReading_togglePublic_${readingType}`)
-      // Close the tooltip
-      this.toggleTypeFlag = false
+      this.toggleTypeTooltip(true)
 
       // cache the reading since the server will return a reading stripped of projects, and we only want to update the public flag on return
       let updateReading = this.reading
       updateReading.reading_type = readingType
-      //  Make the call to PUT the reading public value
       this._readings.save(updateReading).subscribe(
         data => {
           if (data._id) {
             this.reading.reading_type = data.reading_type
+            this.toggleTypeTooltip(true)
           }
         },
         error => {
           console.error(error)
         },
       )
+    } else {
+      // Close the tooltip and toggle the grade_levels and subjects add modal
+      this.newReadingType = readingType
+      this.toggleTypeTooltip(true)
+      this.showReadingDiscoverModal = true
+      return
     }
   }
 
-  private toggleTypeTooltip() {
+  // determine if non-private readings are ready to share
+  private publicReadingReq(): boolean {
+    return (
+      this.reading.grade_levels &&
+      this.reading.grade_levels.length > 0 &&
+      (this.reading.subjects && this.reading.subjects.length > 0)
+    )
+  }
+
+  // toggles the change reading_type tooltip
+  private toggleTypeTooltip(forceClose: boolean) {
+    if (forceClose) {
+      this.toggleTypeFlag = false
+      return
+    }
     if (this._route.snapshot.routeConfig.path != 'discover') {
       this.toggleTypeFlag = !this.toggleTypeFlag
     }
