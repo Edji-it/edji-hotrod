@@ -150,6 +150,12 @@ edji-comment {
     letter-spacing: 0.5px;
 
     pointer-events: none;
+
+    cursor: pointer;
+  }
+
+  .comment__user-link {
+    margin-left: -5px;
   }
 
   &:hover {
@@ -1039,16 +1045,18 @@ div.avatar-count-8 {
 
 
 .mobileTime-card, .list-item.mobileTime-card {
-  margin: 0;
+  margin: 0 0 1px 0;
   max-width: 100%;
   padding: 0;
   color: #adadad;
   font-size: 11px;
   border: none;
+  overflow: visible;
 }
 
 .mobileTime-card__time {
   font-style: italic;
+  font-size: 10px;
   padding-left: 0.25em;
 
   & .time-text--draft {

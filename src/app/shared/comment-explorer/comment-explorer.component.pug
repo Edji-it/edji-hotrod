@@ -1,22 +1,44 @@
 .sliding-pane-comment.from-left(#commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
+    .loading-screen([class.fade-in]="loading")
+      .loader.icon-loading--action
     .sliding-pane-comment__header.container-fluid(*ngIf="visible")
       .row
         .col-12
           .header-wrap
-            button.close.stats-close-btn.btn-icon--round((click)="dismissCommentPane()", type="button")
+            button.close.btn-icon--round(
+              (click)="close()",
+              type="button",
+              data-text="closeCommentExplorer"
+            )
               span(aria-hidden="true") ×
             //- All Comments header
             ng-container(*ngIf="filterMode === 'all'")
               i.icon.icon-comment-feed
-              .header-text
+              .header-text(data-test="allFilterHeader")
                 | {{ commentCount }} Comments
-                .small All Students
+                .sub-label All Students
             //- Comments on Line
             ng-container(*ngIf="filterMode === 'line'")
               i.icon.icon-view-line
-              .header-text
+              .header-text(data-test="lineFilterHeader")
                 | Viewing Line
-                .small {{ commentCount }} Comments
+                .sub-label {{ commentCount }} Comments
+            //- User's Comments
+            ng-container(*ngIf="filterMode === 'user' && !filterCurrentUser")
+              user-avatar(
+                [userId]="filterUserId",
+                [size]="'medium'",
+                [showName]="true",
+                [subLabel]="commentCount + ' Comments'",
+                data-test="userFilterHeader"
+              )
+            //- Current User's Comments
+            ng-container(*ngIf="filterMode === 'user' && filterCurrentUser")
+              .comment-count__wrap
+                i.icon.icon-comment-count
+                .count {{ commentCount }}
+              .header-text.no-label(data-test="userFilterHeader")
+                | My Comments
         .col-12(*ngIf="filterMode !== 'line'")
           label#sortByCreated.form-check-label.form-check-btn.form-check-sm(
               [class.active]="sortValue == 'created'",
@@ -27,7 +49,7 @@
                 name="sortCreated",
                 value="created",
                 [(ngModel)]="sortValue",
-                (click)="filterComments('created')",
+                (click)="filterComments({sort: 'created' })",
                 checked
               )
             span By Time
@@ -40,38 +62,61 @@
                 name="sortLocation",
                 value="location",
                 [(ngModel)]="sortValue",
-                (click)="filterComments('location')",
+                (click)="filterComments({sort: 'location' })",
               )
             span By Location
-        .col-12
+        .col-12(*ngIf="filterMode !== 'all'")
           .btn-row.right.header__btn-row
-            .hover--tooltip
-              button.btn.btn-xs-primary(
+            .hover--tooltip(*ngIf="!filterUserId")
+              button.btn.btn-xs-primary.has-icon(
                 *ngIf="filterMode != 'all'",
                 (click)="viewAll()",
-                [disabled]="!project.heat_vision && user._id !== project.teacher_id"
+                [disabled]="!project.heat_vision && !project.isTeaching"
               )
                 .icon.icon-comments
-                | All Comments
+                |  All Comments
                 .tooltip-wrap.tooltip--on-disabled
                   .tooltip
                     .tooltip-title Heat Vision is disabled
+            //- Student view actions/options
+            ng-container(*ngIf="filterUserId")
+              a.btn.btn-xs-primary.has-icon(
+                *ngIf="project.isTeaching",
+                [routerLink]="'./'",
+                [queryParams]="{ recap: filterUserId }"
+              )
+                .icon.icon-recap-sm
+                | Recap
+              button.btn.btn-xs-primary.has-icon(
+                (click)="viewStudentFilter(filterUserId)"
+              )
+                .icon.icon-comment-filter
+                | Highlights
+              //- User filter, small "all comments" option
+              button.btn.btn-xs-primary.has-icon.pl-0(
+                  *ngIf="filterMode != 'all'",
+                  (click)="viewAll()",
+                  [disabled]="!project.heat_vision && !project.isTeaching",
+                  title="All Comments"
+                )
+                  .icon.icon-comments.mr-0
     ng-scrollbar
       .comment-container.container-fluid(
         *ngIf="visible",
-        [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]"
+        [ngClass]="[ _comments.activeComment.active && _comments.activeComment.type=='emoji' ? 'commentOverflow-eKey' : '' ]",
       )
         .row
           .col-12
-            div(*ngFor="let comment of comments; let i = index")
+            div(*ngFor="let c of comments; let i = index")
               edji-comment(
-                [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && comment.user_id !== user._id && comment.user_id !== project.teacher_id",
-                [class.spec-owner]="comment.user_id === project.teacher_id",
-                [readOnly]="comment.user_id !== user._id",
+                [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && c.user_id !== user._id && c.user_id !== project.teacher_id",
+                [class.spec-owner]="c.user_id === project.teacher_id",
+                [readOnly]="c.user_id !== user._id",
                 [commentPaneActive]="true",
-                [comment]="comment",
+                [comment]="c",
                 [commentMobile]="true",
                 [commentMobileFirst]="i<1",
+                [selected]="comment && c._id === comment._id",
                 (commentActivation)="commentActivationEmitter($event)",
                 (commentReply)="commentReplyEmitter($event)",
                 (commentDeleted)="onDelete()",
@@ -90,5 +135,5 @@
                   p.small
                     b {{project.label}}
                     |  group was created.
-.exit-row(*ngIf="visible", (tap)="dismissCommentPane()")
+.exit-row(*ngIf="visible", (tap)="close()")
 //- END .comment - mobile

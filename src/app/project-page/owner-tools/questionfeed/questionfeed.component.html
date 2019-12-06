@@ -1,13 +1,13 @@
 <!--Question Feed Pane-->
 <div
-  *ngIf="currentReading && currentReading.questions"
+  *ngIf="currentReading && currentReading.questions && visible"
   class="sliding-pane from-left"
-  [ngClass]="{ 'slide-in': visible }"
+  [ngClass]="{ 'slide-in': slidePaneIn }"
 >
   <div class="container-fluid container--less-pad">
     <h4>
       Questions
-      <button (click)="hide.emit()" class="close stats-close-btn btn-icon--round" type="button">
+      <button (click)="close()" class="close stats-close-btn btn-icon--round" type="button">
         <span aria-hidden="true">×</span>
       </button>
     </h4>

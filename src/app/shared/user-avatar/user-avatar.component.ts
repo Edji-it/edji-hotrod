@@ -29,6 +29,7 @@ export class UserAvatarComponent implements OnInit {
   @Input() showName: boolean
   @Input() size: string // 'medium', 'large'
   @Input() selected: boolean
+  @Input() subLabel: string
 
   private userSubscription: Subscription
   private _userDetails: PublicUser

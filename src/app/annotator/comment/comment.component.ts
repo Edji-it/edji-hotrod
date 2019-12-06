@@ -38,6 +38,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public reply: boolean = false // Is it a reply to another comment?
   @Input() private commentLite: boolean = false
   @Input() private commentContext: string = 'comment' // See NOTES in summary.
+  @Input() public selected: boolean = false
   // Deprecated "mobile" values
   @Input() public commentMobile: boolean = false
   @Input() public commentMobileFirst: boolean = false
@@ -329,17 +330,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Clear selected comments
-    this.comment.selected = false
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
   }
 
   toggleCPane(comment?, forceOpen?: boolean): void {
-    if (comment.selected) {
-      this.comment.selected = true
-    }
     // Need to give the app 1 millisecond to update all arrays when adding a new comment
     if (forceOpen) {
       setTimeout(() => {

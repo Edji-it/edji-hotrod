@@ -45,7 +45,7 @@ export class Project implements PageObjectInterface {
   public commentAnnotatedText = element(by.css('[data-test="commentAnnotatedText"]'))
 
   // Audio Comment test variables
-  public audioPlay = element(by.css('audio-comment #audioPlay'))
+  public audioPlay = element(by.css('audio-comment #audioPlay:not(.disabled)'))
   public audioPause = element(by.css('audio-comment #audioPause'))
   public audioRestart = element(by.css('audio-comment #audioRestart'))
   public audioRecord = element(by.css('audio-comment #audioRecord:not(.disabled)'))
@@ -165,7 +165,7 @@ export class Project implements PageObjectInterface {
       }
     })
     // sleep() reason: Give comment explorer time to slide in
-    browser.sleep(400)
+    browser.sleep(1000)
   }
 
   public addTextComment(): void {
@@ -190,7 +190,7 @@ export class Project implements PageObjectInterface {
       }
     })
     // sleep() reason: Give comment explorer time to slide in
-    browser.sleep(400)
+    browser.sleep(1000)
   }
 
   public addAudioComment(): void {
@@ -219,7 +219,7 @@ export class Project implements PageObjectInterface {
       }
     })
     // sleep() reason: Give comment explorer time to slide in
-    browser.sleep(400)
+    browser.sleep(1000)
   }
 
   public openReplyPane(): void {

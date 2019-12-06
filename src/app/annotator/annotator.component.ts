@@ -1681,13 +1681,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Tell pane to open
       this.commentPane = true
     } else {
-      // Clear Comment ID/deep link params
-      this.clearQueryParams()
       // iOS selection
       let selec = Rangy.getSelection()
       selec.removeAllRanges()
       // Tell comments to close
       this.commentPane = false
+      this.selectedComment = null
       // reset our icon arrow position
       this.commentHeightPos = 0
       // Run the standard comment inactivation to reset variables and do things like close the Keyboard

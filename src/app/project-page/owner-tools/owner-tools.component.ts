@@ -83,15 +83,6 @@ export class OwnerToolsComponent implements OnInit {
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
-      // Watch URL params for quick links
-      this._route.queryParams.subscribe(params => {
-        if (params.studentList) {
-          this.showCommentCounts = true
-          if (params.studentList === 'coteach') {
-            this.showCoOwnerGuide = true
-          }
-        }
-      }),
     )
   }
 
@@ -125,57 +116,4 @@ export class OwnerToolsComponent implements OnInit {
         this._socket.toggleHeatVision({ all: turnOn })
       })
   }
-
-  private showElseFalse(displayPane: string) {
-    switch (displayPane) {
-      case 'showQuestionFeed':
-        this.showQuestionFeed = !this.showQuestionFeed
-        this.showAllComments = false
-        this.showCommentCounts = false
-        this.showReadingRecap = false
-        // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({
-          action: 'teacherTools_questionPanel_open',
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-        })
-        break
-      case 'showAllComments':
-        this.showQuestionFeed = false
-        this.showAllComments = !this.showAllComments
-        this.showCommentCounts = false
-        this.showReadingRecap = false
-        // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({
-          action: 'teacherTools_firefeed_open',
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-        })
-        break
-      case 'showCommentCounts':
-        this.showQuestionFeed = false
-        this.showAllComments = false
-        this.showCommentCounts = !this.showCommentCounts
-        this.showReadingRecap = false
-        // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({
-          action: 'teacherTools_leaderboard_open',
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-        })
-        break
-      case 'showReadingRecap':
-        this.showQuestionFeed = false
-        this.showAllComments = false
-        this.showCommentCounts = false
-        this.showReadingRecap = !this.showReadingRecap
-        break
-      default:
-        this.showCommentCounts = false
-        this.showAllComments = false
-        this.showQuestionFeed = false
-        this.showReadingRecap = false
-    }
-  }
-
-  // private hackyGetCommentStats(): string[] {
-  //   return Object.keys(this.commentStats.stats.userRef)
-  // }
 }

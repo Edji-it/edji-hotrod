@@ -862,7 +862,7 @@ export class ProjectStore {
       let fitsFilter = true
       let filterKeys = Object.keys(filter.propertyFilters)
       for (let key of filterKeys) {
-        if (filter.propertyFilters[key].test(comment[key]) === false) {
+        if (filter.propertyFilters[key] !== comment[key]) {
           fitsFilter = false
           break
         }
@@ -892,14 +892,18 @@ export class ProjectStore {
    * - Pass an empty string to clear the filter
    * @param userId The id for the Student you want to view the comments of
    */
-  public filterByUser(user: User): void {
+  public filterByUser(userId: string): void {
     let props: CommentPropertyFilters = {}
     // Clear current filter, without notifying components
     this.activeFilter = null
     // For User id filters, we want an exact match
-    props.user_id = new RegExp('^' + user._id + '$')
+    props.user_id = userId
+    // Get user object
+    let user = (this.joinedUsersSource.getValue() || []).find(user => {
+      return user._id === userId
+    })
     // Construct full filter and notify components
-    this.generateCommentFilter(props, 'Student', user.fullname ? user.fullname : user.username)
+    this.generateCommentFilter(props, 'Highlights', user.fullname ? user.fullname : user.username)
   }
 
   /**
