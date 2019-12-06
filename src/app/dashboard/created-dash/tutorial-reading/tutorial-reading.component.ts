@@ -14,6 +14,7 @@ export class TutorialReadingComponent implements OnInit {
     title: 'How to Make a Reading',
     draft: true,
     projects: [],
+    reading_type: 'private',
   }
 
   constructor() {}
