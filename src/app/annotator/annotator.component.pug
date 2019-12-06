@@ -239,12 +239,13 @@ emoji-keyboard(
 comment-explorer(
     [comment]="selectedComment",
     [visible]="commentPane",
-    (close)="toggleCommentPane(false)"
+    (closed)="toggleCommentPane(false)",
+    (clearSelected)="selectedComment = null"
 )
 
 //- Icon Arrow for the active comment
 .icon-comment-arrow(
-    [class.slide-in]="commentPane",
+    [class.slide-in]="commentPane && selectedComment",
     [style.top]="commentHeightPos + 'px'"
 )
 

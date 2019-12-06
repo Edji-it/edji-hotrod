@@ -38,7 +38,7 @@ $mediumAvatarSize: 36px;
   cursor: default;
   // Needed for images
   overflow: hidden;
-  object-fit: cover; 
+  object-fit: cover;
 
   & span {
     font-family: 'Open Sans';
@@ -200,6 +200,7 @@ $mediumAvatarSize: 36px;
 
 .user-icon__fullname {
   vertical-align: middle;
+  display: inline-block;
 }
 
 .outer-circle {

@@ -141,6 +141,7 @@
   font-family: $base-font-family;
   font-weight: 300;
   font-size: 11px;
+  padding-bottom: 0.5rem;
 }
 
 .filter-bubble__name {
@@ -216,10 +217,16 @@ $userListBorderWidth: 2px;
 .user-list__action {
   position: relative;
   float: right;
-  margin-left: 5px;
+  margin-left: 2px;
 
   & .btn {
     z-index: 1;
+    line-height: 15px;
+  }
+
+  & .icon {
+    vertical-align: middle;
+    margin-bottom: 1px;
   }
 }
 

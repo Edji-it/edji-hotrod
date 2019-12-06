@@ -47,6 +47,7 @@ exports.config = {
     dashboard: helpers.root('e2e/src/dashboard.spec.ts'),
     discover: helpers.root('e2e/src/discover.spec.ts'),
     discoverPublic: helpers.root('e2e/src/discover-share-public.spec.ts'),
+    explorer: helpers.root('e2e/src/project__comment-explorer.spec.ts'),
     heroSubscribe: helpers.root('e2e/src/hero-subscribe.spec.ts'),
     home: helpers.root('e2e/src/home.spec.ts'),
     leaderboard: helpers.root('e2e/src/owner-tools__leaderboard.spec.ts'),

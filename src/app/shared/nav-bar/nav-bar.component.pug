@@ -57,22 +57,22 @@
             #addCoTeacherBtn.badge.badge-pill.badge-button.badge-teacher(
               *ngIf="currentProject.isTeaching",
               [routerLink]="['./']",
-              [queryParams]="{ studentList: 'coteach'}"
+              [queryParams]="{ pane: 'students', studentList: 'coteach'}"
             ) Add a teacher
               //- OR add Co-teacher
             //- Live Reader Count
             //- - Student display
             .badge.badge-pill(
-              *ngIf="!currentProject.isTeaching",
+              *ngIf="!currentProject.isTeaching && !currentProject.heat_vision",
               [ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']"
             )
               | {{ liveCount }} Reading
             //- - Teacher display
             .badge.badge-pill.badge-button(
-              *ngIf="currentProject.isTeaching",
+              *ngIf="currentProject.isTeaching || currentProject.heat_vision",
               [ngClass]="[ liveCount > 1 ? 'badge-primary' : 'badge-secondary']",
               [routerLink]="['./']",
-              [queryParams]="{ studentList: 'open'}"
+              [queryParams]="{ pane: 'students'}"
             )
               | {{ liveCount }} Reading
     //- Login/Register Actions
@@ -85,7 +85,7 @@
         user-avatar#avatarActionIcon.pointer.float-right(
           [userDetails]="user",
           [size]="'large'",
-          (click)="showAvatarDropdown=!showAvatarDropdown", 
+          (click)="showAvatarDropdown=!showAvatarDropdown",
           (clickOutside)="showAvatarDropdown=false"
         )
         .avatar__drop-down.list-group(*ngIf="showAvatarDropdown", [class.visible]="showAvatarDropdown")

@@ -1,5 +1,8 @@
 //- Reading Report Pane
-.sliding-pane.from-left.reading-recap([ngClass]="{ 'slide-in' : slidePaneIn }")
+.sliding-pane.from-left.reading-recap(
+  *ngIf="visible && currentUser",
+  [ngClass]="{ 'slide-in' : slidePaneIn }"
+)
   .container.px-3
     .row
       .col-8
@@ -9,7 +12,7 @@
             [(ngModel)]="selectedStudent",
             [autoWidth]="false",
             [scrollHeight]="'90vh'",
-            [dropdownIcon]="'filter-arrow-down'", 
+            [dropdownIcon]="'filter-arrow-down'",
             (onChange)="changeStudentSelection()",
             placeholder="select student"
           )
@@ -18,7 +21,7 @@
           span(aria-hidden='true') &times;
         //- button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
         //- button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
-  .container.px-3(*ngIf="currentUser.hero_status")
+  .container.px-3(*ngIf="currentUser.hero_status && currentStudent")
     #readingReport.p-4
       //- Header Block
       .row
@@ -132,8 +135,8 @@
         form#evaluationForm([formGroup]="evaluationForm", (ngSubmit)="sendEval(evaluationForm.value)")
           label(for="inputText") Feedback
           textarea#evalFormText(
-            [formControl]="evaluationForm.controls['inputText']", 
-            placeholder="This student did a great job identifying the main themes...", 
+            [formControl]="evaluationForm.controls['inputText']",
+            placeholder="This student did a great job identifying the main themes...",
             tabindex="0"
           )
           #msgEvalRequired.alert.alert-info(
@@ -142,8 +145,8 @@
           //- .col-7.no-gutters.p-0.d-inline-block
           //-   label(for="email") Email
           //-   input#evalFormEmail(
-          //-     type="text", 
-          //-     [formControl]="evaluationForm.controls['email']", 
+          //-     type="text",
+          //-     [formControl]="evaluationForm.controls['email']",
           //-     tabindex="1"
           //-   )
           //-   #msgEmailIncorrect.alert.alert-info(
@@ -155,8 +158,8 @@
           //- .col-4.no-gutters.ml-1.p-0.d-inline-block.float-right
           //-   label(for="name") Name
           //-   input#evalFormName(
-          //-     type="text", 
-          //-     [formControl]="evaluationForm.controls['name']", 
+          //-     type="text",
+          //-     [formControl]="evaluationForm.controls['name']",
           //-     tabindex="2"
           //-   )
           //-   #msgNameRequired.alert.alert-info(
@@ -164,18 +167,18 @@
           //-   ) Make sure you add a name to the email greeting!
           //- .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right.float-right
           //-   button.btn.btn-success(
-          //-     title="Make sure you've completed all the fields!", 
-          //-     type="submit", 
-          //-     [class.loading]="evalLoading", 
-          //-     [disabled]="!evaluationForm.valid", 
+          //-     title="Make sure you've completed all the fields!",
+          //-     type="submit",
+          //-     [class.loading]="evalLoading",
+          //-     [disabled]="!evaluationForm.valid",
           //-     tabindex="3",
           //-   ) Send Email
           .col-4.no-gutters.p-0.mt-4.d-inline-block.text-right.float-right
             button#sendEvalBtn.btn.btn-success(
-              title="Make sure you've filled out your feedback", 
-              type="button", 
-              [class.loading]="evalLoading", 
-              [disabled]="!evaluationForm.controls['inputText'].valid", 
+              title="Make sure you've filled out your feedback",
+              type="button",
+              [class.loading]="evalLoading",
+              [disabled]="!evaluationForm.controls['inputText'].valid",
               tabindex="3",
               (click)="addEvaluationOnly(evaluationForm.controls['inputText'].value)"
             ) Add Feedback
@@ -184,7 +187,7 @@
     #readingReport
       .modal-dialog.reading-recap-blurred
         .modal-content.reading-recap-blurred-outer
-          .modal-body.text-center.reading-recap-blurred-inner 
+          .modal-body.text-center.reading-recap-blurred-inner
             h2.h1 Unlock Reading Recap with Hero
             .text-left
               p([innerHtml]='":timer: Gauge a student\'s time and activity" | emojione')
@@ -193,7 +196,7 @@
               //- p([innerHtml]='":floppy_disk: Save a copy of the Recap to share with parents" | emojione')
             //- With Edji Hero, get and provide insights feedback save to parents
             //- time on reading
-            //- activity 
+            //- activity
             //- feedback
             .btn-row.mt-4
               .btn.btn-hero([routerLink]="['/plans']", fragment="top", target="_blank") Learn About Hero

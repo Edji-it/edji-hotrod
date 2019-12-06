@@ -127,10 +127,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
       selected = false
     }
     // If selected is true then we will have the comment pane scroll to the comment the user clicked on
-    if (selected) {
-      this.comment.selected = true
-    } else {
-      this.comment.selected = false
+    if (!selected) {
       // Set as active
       this.active = true
     }

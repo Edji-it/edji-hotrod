@@ -19,7 +19,7 @@ button,
   line-height: 1;
   padding: $small-spacing $base-spacing;
   text-decoration: none;
-  transition: background-color $base-duration $base-timing;
+  transition: background-color $base-duration $base-timing, color $base-duration $base-timing;
   user-select: none;
   vertical-align: middle;
   white-space: nowrap;
@@ -192,6 +192,14 @@ button {
 
   @media screen and (max-width: $tablet) {
     margin-top: 80px;
+  }
+
+  & .hover--tooltip {
+    display: inline-block;
+
+    & .btn {
+      vertical-align: top;
+    }
   }
 
   & .button,
@@ -519,6 +527,12 @@ button {
   &:focus {
     text-shadow: none;
   }
+
+  &.btn-outline-primary {
+    &:hover {
+      color: $btnPrimaryColor;
+    }
+  }
 }
 
 .btn-icon--plain {
@@ -701,7 +715,13 @@ pre.btn {
   margin-left: -3px;
 }
 
-// Coment action buttons
+/**
+ * Coment action buttons
+ * - Usage:
+ *   .btn.btn-xs-primary
+ *      .icon.icon-comments
+*       | Comments
+ */
 .btn-xs {
   background: #fff;
   color: #5f5f5f;
@@ -709,10 +729,28 @@ pre.btn {
   line-height: 17px;
   border-radius: 4px;
   text-decoration: none;
-  padding: 1px 5px;
+  // Padding provides space for icon
+  padding: 1px 5px 1px 5px;
 
   &:hover {
     color: #fff;
+  }
+
+  &.has-icon {
+    padding-left: 22px;
+  }
+
+  & .icon {
+    background-color: #fff;
+    border-radius: 3px;
+    height: 15px;
+    width: 15px;
+    margin: 0px 3px 0px 0px;
+    border: 2px solid #fff;
+    vertical-align: middle;
+    position: absolute;
+    top: 2px;
+    left: 2px;
   }
 }
 
@@ -729,12 +767,18 @@ pre.btn {
   &:hover {
     background: $btnPrimaryFocusColor;
   }
+  &:focus {
+    box-shadow: none;
+  }
 }
 
 .btn-xs-danger {
   @extend .btn-xs;
   &:hover {
     background: #e26f6e;
+  }
+  &:focus {
+    box-shadow: none;
   }
 }
 

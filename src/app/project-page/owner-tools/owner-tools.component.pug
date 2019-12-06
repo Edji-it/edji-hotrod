@@ -4,9 +4,10 @@
     - Desktop Buttons
   //- Comment Stats pane
   button#toggleLeaderboard.btn.owner-tools__btn.btn-cmt(
-    type="button", 
-    aria-label="Comment Counts", 
-    (click)="showElseFalse('showCommentCounts')", 
+    type="button",
+    aria-label="Comment Counts",
+    [routerLink]="'./'",
+    [queryParams]="{ pane: 'students' }",
     [class.disabled]="currentProject.archived"
   )
     //- img(*ngIf="isMobile" style="width: 50px;" src="assets/images/icon-comment.svg")
@@ -14,8 +15,8 @@
     label Students
   //- Heat Vision toggle
   button.btn.owner-tools__btn.btn-hv(
-    type="button", 
-    (tap)="togglePower('heat_vision', !this.currentProject.heat_vision)", 
+    type="button",
+    (tap)="togglePower('heat_vision', !this.currentProject.heat_vision)",
     [class.disabled]="currentProject.archived"
   )
     //- placement={{tooltipPlacement}} ngbTooltip="Turn on Heat Vision to let readers see comments from other readers, turn it off to make comments private!"
@@ -26,7 +27,8 @@
   //- All Comments
   button.btn.owner-tools__btn(
     type="button",
-    (tap)="showElseFalse('showAllComments')",
+    [routerLink]="'./'",
+    [queryParams]="{ pane: 'comments' }",
     [class.disabled]="currentProject.archived"
   )
     i#toggleAllComments.icon-comment-feed
@@ -35,17 +37,19 @@
   //- Question Feed toggle
   div(*ngIf="currentReading.questions && currentReading.questions.length>0")
     button.btn.owner-tools__btn.btn-hv(
-      type="button", 
-      (tap)="showElseFalse('showQuestionFeed')", 
+      type="button",
+      [routerLink]="'./'",
+      [queryParams]="{ pane: 'questions' }",
       [class.disabled]="currentProject.archived"
     )
       i#toggleQuestionfeed.icon-question(*ngIf="currentProject")
       label Questions
   //- Reading Report toggle
-  button.btn.owner-tools__btn.btn-hv.btn-reading-recap(
+  a.btn.owner-tools__btn.btn-hv.btn-reading-recap(
     type="button",
-    (tap)="showElseFalse('showReadingRecap')",
-    [class.hero--micro-offer__wrap]="user && !user.hero_status", 
+    [routerLink]="'./'",
+    [queryParams]="{ recap: true }",
+    [class.hero--micro-offer__wrap]="user && !user.hero_status",
     [class.disabled]="currentProject.archived"
   )
     i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")
@@ -55,10 +59,12 @@
   //- Mobile Buttons
   .owner-options-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
     //- Comment Stats pane
-    button#toggleLeaderboard--narrow-viewport.btn.btn-icon--circle-shadow.owner-options--mobile(
+    a#toggleLeaderboard--narrow-viewport.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
-      (tap)="showElseFalse('showCommentCounts'); ownerToolShow=!ownerToolShow", 
-      [class.btn-show--animation]="ownerToolShow", 
+      (tap)="ownerToolShow=!ownerToolShow",
+      [routerLink]="'./'",
+      [queryParams]="{ pane: 'students' }",
+      [class.btn-show--animation]="ownerToolShow",
       [class.disabled]="currentProject.archived"
     )
       img(src="assets/images/icon-leaderboard.svg", [class.hide]="!ownerToolShow", style="width: 32px;")
@@ -66,8 +72,8 @@
     //- Heat Vision toggle
     button.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
-      (tap)="togglePower('heat_vision', !this.currentProject.heat_vision); ownerToolShow=!ownerToolShow", 
-      [class.btn-show--animation]="ownerToolShow", 
+      (tap)="togglePower('heat_vision', !this.currentProject.heat_vision); ownerToolShow=!ownerToolShow",
+      [class.btn-show--animation]="ownerToolShow",
       [class.disabled]="currentProject.archived"
     )
       i#toggleHeatVisionMobile.icon-heatvision.owner-tool-icon-mobile(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
@@ -75,10 +81,12 @@
       span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
       //- label Vision
     //- All Comments toggle
-    button.btn.btn-icon--circle-shadow.owner-options--mobile(
+    a.btn.btn-icon--circle-shadow.owner-options--mobile(
       type="button",
-      (tap)="showElseFalse('showAllComments')",
-      [class.btn-show--animation]="ownerToolShow", 
+      (tap)="ownerToolShow=!ownerToolShow",
+      [routerLink]="'./'",
+      [queryParams]="{ pane: 'comments' }",
+      [class.btn-show--animation]="ownerToolShow",
       [class.disabled]="currentProject.archived"
     )
       i#toggleFirefeedMobile.icon-comment-feed.owner-tool-icon-mobile(*ngIf="currentProject")
@@ -86,10 +94,12 @@
       //- label Feed
     //- Question Feed toggle
     div(*ngIf="currentReading.questions && currentReading.questions.length>0")
-      button.btn.btn-icon--circle-shadow.owner-options--mobile(
+      a.btn.btn-icon--circle-shadow.owner-options--mobile(
         type="button",
-        (tap)="showElseFalse('showQuestionFeed'); ownerToolShow=!ownerToolShow", 
-        [class.btn-show--animation]="ownerToolShow", 
+        (tap)="ownerToolShow=!ownerToolShow",
+        [routerLink]="'./'",
+        [queryParams]="{ pane: 'questions' }",
+        [class.btn-show--animation]="ownerToolShow",
         [class.disabled]="currentProject.archived"
       )
         i#toggleQuestionfeedMobile.icon-question.owner-tool-icon-mobile(*ngIf="currentProject")
@@ -97,21 +107,16 @@
   a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="ownerToolShow=!ownerToolShow")
     span(style="font-size: 11px;") Tools
 
-//- All/My Comments display
-comment-explorer(
-  [visible]="showAllComments"
-)
-
 //- Leaderboard goes here
 hot-leaderboard(
-  [(visibility)]="showCommentCounts", 
-  [commentStats]="commentStats", 
-  [archived]="currentProject.archived",
-  [coOwnerGuide]="showCoOwnerGuide"
-  )
+  [commentStats]="commentStats",
+  [archived]="currentProject.archived"
+)
 
 //- Question Feed goes here
-hot-questionfeed((hide)="showQuestionFeed=false", [visible]="showQuestionFeed")
+hot-questionfeed()
 
 //- Reading Report goes here
-hot-reading-recap(*ngIf="showReadingRecap", (hide)="showReadingRecap=false", [commentStats]="commentStats")
+hot-reading-recap(
+  [commentStats]="commentStats"
+)
