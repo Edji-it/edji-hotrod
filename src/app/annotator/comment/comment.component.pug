@@ -25,7 +25,7 @@
     user-avatar.comment__avatar.comment__reply-avatar(
         *ngIf="comment.author",
         [class.show]="reply",
-        [selected]="comment.selected",
+        [selected]="selected",
         [userId]="comment.user_id"
     )
     .comment-input-wrapper([ngClass]="[ replyRef ? 'replyCommentHandler' : '', comment.type + '' ]")
@@ -83,7 +83,7 @@
 hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst && !readingReport")
 div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
     //- We are removing this dot indicator for now
-    //- .comment-selected-highlight(*ngIf="comment && (comment.selected || comment.new)")
+    //- .comment-selected-highlight(*ngIf="comment && (selected || comment.new)")
     //-     .comment-selected-dot__mobile
     #comment.comment.mobileBound(
         [class.new]="comment.new",
@@ -96,11 +96,15 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             [userId]="comment.user_id",
             [size]="'medium'",
             [tempName]="comment.author",
-            [selected]="comment.selected"
+            [selected]="selected"
         )
         .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'mobileBlock--reading-recap' : '' ]")
             .list-item.list-item--block.mobileTime-card(*ngIf="!readingReport")
-                | {{comment.author}}
+                a.btn.btn-xs-primary.comment__user-link(
+                  [routerLink]="['./']",
+                  [queryParams]="{ student: comment.user_id }"
+                )
+                  | {{comment.author}}
                 span.mobileTime-card__time([class.is-draft]="_comments.isCommentNewDraft(comment)") &nbsp;
                     span.time-text--draft New
                     span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
@@ -145,7 +149,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                 ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")
                     i.icon.icon-draft.icon-draft__comment
                 ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1 && !((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
-                    button#addReply.btn.btn-xs-action.btn--reply(
+                    button#addReply.btn.btn-xs-action.btn--reply.has-icon(
                         (tap)="repliesShowing = !repliesShowing",
                         [class.has-reply]="hasReplies(comment)",
                         [class.text-only]="repliesShowing"

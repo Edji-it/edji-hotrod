@@ -137,8 +137,11 @@ export class ProjectService {
     delete comment['active']
     delete comment['new']
 
-    return this._http
-      .put(this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments', comment, this._auth.getOptions())
+    return this._http.put(
+      this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments',
+      comment,
+      this._auth.getOptions(),
+    )
   }
 
   /**
@@ -216,7 +219,7 @@ export interface CommentFilter {
 
 export interface CommentPropertyFilters {
   type?: RegExp
-  user_id?: RegExp
+  user_id?: string
 }
 
 interface validateProjectCodeResponse {
