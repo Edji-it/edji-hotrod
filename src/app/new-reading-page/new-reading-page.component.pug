@@ -49,6 +49,20 @@ nav-bar(
                       checked
                     )
                   span([innerHTML]="':earth_americas: Public' | emojione")
+                //- Academy option
+                label#readingMakeAcademy.form-check-label.form-check-btn(
+                    [class.active]="readingForm.controls['reading_type'].value == 'academy'",
+                    title="Allow anyone in your Academy to find this reading in Discover"
+                  )
+                  input.form-check-input(
+                      type="radio",
+                      name="publicFlag",
+                      value="academy",
+                      [formControl]="readingForm.controls['reading_type']"
+                    )
+                  span
+                    i.icon.icon-academy-plate([class.icon-invisible]="readingForm.controls['reading_type'].value !== 'academy'")
+                    | &nbsp;Academy
                 //- Private option
                 label#readingMakePrivate.form-check-label.form-check-btn(
                     [class.active]="readingForm.controls['reading_type'].value == 'private'",

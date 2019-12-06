@@ -435,12 +435,12 @@ tr.selectable {
     // box-shadow: 5px 0px 0px rgba($green, 0.5);
   }
 
-  & .emoji, & .emojioneemoji {
+  & .emoji, & .emojioneemoji, & .icon {
     margin-right: 0.5em;
     margin-top: -0.2em;
     filter: grayscale(50%);
     opacity: 0.5;
-    background: #fff;
+    // background: #fff;
     border-radius: 50%;
     border: 1px solid $dark-gray;
     padding: 7px;
@@ -471,12 +471,12 @@ tr.selectable {
     &.form-check-label {
       color: #000;
     }
-    & .emoji,  & .emojioneemoji {
+    & .emoji,  & .emojioneemoji, & .icon {
       filter: none;
       opacity: 1;
       border-radius: 0px;
       border: 0px solid transparent;
-      background: transparent;
+      // background: transparent;
       padding: 0px;
     }
   }
