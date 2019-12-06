@@ -3,7 +3,7 @@
   //- Buttons for toggling panes and tools
     - Desktop Buttons
   //- All Comments
-  div([class.hover--tooltip]="!currentProject.heat_vision",)
+  div([class.hover--tooltip]="!currentProject.heat_vision", style="position:relative;")
     a.btn.toolbar__btn(
       type="button",
       [routerLink]="'./'",
@@ -15,9 +15,9 @@
         *ngIf="currentProject.heat_vision && commentStats.stats.comment_count && commentStats.stats.comment_count > 0"
       ) {{ commentStats.stats.comment_count }}
       label Discuss
-      .tooltip-wrap(style="pointer-events: none;")
-        .tooltip.tooltip--right
-          .tooltip-title Heat Vision is turned off, others comments disabled
+    .tooltip-wrap(style="pointer-events: none;")
+      .tooltip.tooltip--right
+        .tooltip-title Heat Vision is turned off, others comments disabled
   a.btn.toolbar__btn(
     type="button",
     [routerLink]="'./'",
