@@ -239,7 +239,8 @@ emoji-keyboard(
 comment-explorer(
     [comment]="selectedComment",
     [visible]="commentPane",
-    (closed)="toggleCommentPane(false)"
+    (closed)="toggleCommentPane(false)",
+    (clearSelected)="selectedComment = null"
 )
 
 //- Icon Arrow for the active comment

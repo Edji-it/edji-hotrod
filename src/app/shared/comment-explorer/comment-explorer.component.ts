@@ -87,6 +87,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   // Comment Pane Component Outputs
   @Output() closed = new EventEmitter()
+  @Output() clearSelected = new EventEmitter()
 
   @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar
 
@@ -238,6 +239,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     paramsToKeep['pane'] = 'comments'
     if (!paramsToKeep['comment']) this.comment = null
     if (!paramsToKeep['student']) this.filterUserId = null
+    // Tell parent component comment is cleared
+    this.clearSelected.emit()
     // Merge params to keep with reset/null
     let params = Object.assign({ comment: null, parent: null, student: null, line: null }, paramsToKeep)
     // Clear URL params
