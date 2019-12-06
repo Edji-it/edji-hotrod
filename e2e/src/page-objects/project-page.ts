@@ -45,7 +45,7 @@ export class Project implements PageObjectInterface {
   public commentAnnotatedText = element(by.css('[data-test="commentAnnotatedText"]'))
 
   // Audio Comment test variables
-  public audioPlay = element(by.css('audio-comment #audioPlay'))
+  public audioPlay = element(by.css('audio-comment #audioPlay:not(.disabled)'))
   public audioPause = element(by.css('audio-comment #audioPause'))
   public audioRestart = element(by.css('audio-comment #audioRestart'))
   public audioRecord = element(by.css('audio-comment #audioRecord:not(.disabled)'))

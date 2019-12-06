@@ -536,10 +536,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           this.checkCommentLink(params['comment'], params['parent'])
         }
         // Handle clearing selected comment
-        if (params['line']) {
-          if (this.selectedComment._id !== params['line']) {
-            this.selectedComment = null
-          }
+        if (params['line'] && this.selectedComment && this.selectedComment._id !== params['line']) {
+          this.selectedComment = null
         } else {
           this.selectedComment = null
         }
@@ -1674,6 +1672,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     let isVisible = visible || selectedComment
     // Set the input comment to the comment pane if it is not currently open
     if (isVisible) {
+      let params = { pane: 'comments' }
       if (selectedComment) {
         // Set the icon arrow position based on lineY and offsets
         this.commentHeightPos = this.getCommentDisplayY(selectedComment)
@@ -1684,11 +1683,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           selectedComment.selected = visible
           this.selectedComment = selectedComment
         }
+        params['line'] = this.selectedComment._id
       }
       // Set line selection param
       this._router.navigate(['.'], {
         relativeTo: this.route,
-        queryParams: { line: this.selectedComment._id },
+        queryParams: params,
         queryParamsHandling: 'merge',
       })
       // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
