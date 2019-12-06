@@ -99,6 +99,8 @@
       )
         i#readingPublic.icon(*ngIf="reading.reading_type === 'public'", [innerHTML]="':earth_americas:' | emojione")
         i#readingPrivate.icon(*ngIf="reading.reading_type === 'private'", [innerHTML]="':lock:' | emojione")
+        i#readingAcademy.icon(*ngIf="reading.reading_type === 'academy'")
+          i.icon.icon-academy-plate.icon-academy-plate-reading
         .tooltip-wrap
           .tooltip.tooltip--interactive([class.show]="toggleTypeFlag", [class.no-link]="!reading.source")
             .tooltip-title
@@ -118,6 +120,15 @@
                   (click)="$event.stopPropagation(); toggleType('private')"
                 )
                 span([innerHTML]="':lock: Private' | emojione")
+              //- Academy option
+              label#readingMakeAcademy.form-check-label.form-check-btn(
+                  [class.active]="reading.reading_type === 'academy'",
+                  title="Allow anyone in your Academy to find this reading in Discover",
+                  (click)="$event.stopPropagation(); toggleType('academy')"
+                )
+                span
+                  i.icon.icon-academy-plate.icon-academy-plate-reading([class.icon-invisible]="reading.reading_type === 'academy'")
+                  | &nbsp;Academy
       //- Bookmark action
       .btn.btn-icon--round.reading-action.hover--tooltip(
         title="Bookmark",

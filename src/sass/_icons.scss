@@ -70,6 +70,16 @@ $iconGrayOpacity: 0.6;
 
 .icon-academy-plate {
   @include icon('icon-academy-plate.svg');
+
+  &-reading {
+    width: 1.125em;
+    height: 1.125em;
+    vertical-align: middle;
+  }
+}
+
+.icon-invisible {
+  background: #fff;
 }
 
 .icon-add-question {

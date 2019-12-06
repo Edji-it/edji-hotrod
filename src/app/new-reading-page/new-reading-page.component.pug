@@ -61,7 +61,7 @@ nav-bar(
                       [formControl]="readingForm.controls['reading_type']"
                     )
                   span
-                    i.icon.icon-academy-plate([class.icon-invisible]="readingForm.controls['reading_type'].value !== 'academy'")
+                    i.icon.icon-academy-plate.icon-academy-plate-reading([class.icon-invisible]="readingForm.controls['reading_type'].value !== 'academy'")
                     | &nbsp;Academy
                 //- Private option
                 label#readingMakePrivate.form-check-label.form-check-btn(
