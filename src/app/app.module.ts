@@ -103,7 +103,7 @@ import {
   AudioCommentComponent,
   AvatarPortalComponent,
 } from './annotator'
-import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
+import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent, ReaderToolsComponent } from './project-page'
 import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component'
 import { QuestioncardComponent } from './project-page/owner-tools/questionfeed/questioncard/questioncard.component'
 import {
@@ -261,6 +261,7 @@ const routerOptions: ExtraOptions = {
     DeletePdfMiniModal,
     ProjectPageComponent,
     OwnerToolsComponent,
+    ReaderToolsComponent,
     LoginRequiredModal,
     HeroChangeComponent,
     TutorialBoxComponent,

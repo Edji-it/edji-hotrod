@@ -1,0 +1,32 @@
+#readerToolsBar.toolbar.hidden-md-down(*ngIf="currentProject && !currentProject.isTeaching")
+  label.bar-title Reader
+  //- Buttons for toggling panes and tools
+    - Desktop Buttons
+  //- All Comments
+  button.btn.toolbar__btn(
+    type="button",
+    [routerLink]="'./'",
+    [queryParams]="{ pane: 'comments' }",
+    [class.disabled]="currentProject.archived"
+  )
+    i#toggleAllComments.icon-comment-feed
+    span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
+    label Comments
+
+.toolbar__btn--mobile.hidden-lg-up(*ngIf="currentProject && currentProject.isTeaching")
+  //- Mobile Buttons
+  .toolbar-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
+    //- All Comments toggle
+    a.btn.btn-icon--circle-shadow.toolbar--mobile(
+      type="button",
+      (tap)="ownerToolShow=!ownerToolShow",
+      [routerLink]="'./'",
+      [queryParams]="{ pane: 'comments' }",
+      [class.btn-show--animation]="ownerToolShow",
+      [class.disabled]="currentProject.archived"
+    )
+      i#toggleFirefeedMobile.icon-comment-feed.toolbar-icon-mobile(*ngIf="currentProject")
+      span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.count && commentStats.stats.count > 0") {{ commentStats.stats.count }}
+      //- label Feed
+  a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="ownerToolShow=!ownerToolShow")
+    span(style="font-size: 11px;") Tools

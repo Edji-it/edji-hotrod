@@ -1,0 +1,213 @@
+// Toolbar - Fixed on left side of screen
+
+$toolbarBorder: 1px solid rgba(0, 0, 0, 0.2);
+$toolbarShadow: 0px 1px 18px 2px rgba(0, 0, 0, 0.18);
+$toolbarWidth: 60px;
+
+.toolbar {
+  position: fixed;
+  // Owner bar should sit below sliding panes
+  z-index: $zMid + 999;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: $toolbarWidth;
+  // border: $toolbarBorder;
+  background: #fff;
+  color: $medium-gray;
+  box-shadow: $toolbarShadow;
+  border-radius: 10px;
+  padding-bottom: 5px;
+
+  & label {
+    width: 100%;
+    text-align: center;
+    margin: 5px 0px;
+    font-size: 11px;
+  }
+
+  @media (max-width: $tablet) {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: calc(100% - #{$toolbarWidth});
+    width: 100%;
+    height: $toolbarWidth;
+    overflow: hidden;
+    text-align: center;
+    transform: translateY(0%);
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    z-index: 6000;
+  }
+}
+
+.toolbar__btn {
+  background: transparent;
+  padding: 5px;
+  width: $toolbarWidth;
+  margin: 0px;
+  position: relative;
+  border-top: $toolbarBorder;
+  outline: none !important;
+  margin-bottom: 14px;
+
+  & label {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+  }
+
+  @media (max-width: $tablet) {
+    height: $toolbarWidth - 15px;
+    border-top: none;
+    display: inline-block;
+    margin: 0 10px;
+    & i {
+      height: 35px;
+      width: 35px;
+    }
+  }
+}
+
+// Comment button specific styles
+.btn-cmt {
+  & img {
+    width: 90%;
+    // opacity: 0.2;
+    height: auto;
+  }
+
+  & .comment-count {
+    position: absolute;
+    top: calc(50% - 4px);
+    text-align: center;
+    width: $toolbarWidth - 10px;
+    transform: translateY(-50%);
+    font-weight: bold;
+  }
+}
+
+.toolbar__btn--mobile {
+  position: absolute;
+  right: calc(100% + 4px);
+  margin-top: 4px;
+  width: 50px;
+  top: 35px;
+  display: block;
+  text-align: center;
+  padding: 0px;
+  border: 1px solid $midGray;
+
+  & .btn {
+    border-radius: 0px;
+    width: 100%;
+    padding: 10px 5px;
+    border-top: 1px solid $midGray;
+
+    & img {
+      height: auto;
+      width: 25px;
+    }
+  }
+
+  &:after,
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 4px;
+    left: calc(100% + 1px);
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-left-color: $midGray;
+  }
+  &:after {
+    left: calc(100% + 0px);
+    border-left-color: white;
+  }
+  &.hidden-lg-up {
+    opacity: 1;
+    border: none;
+    right: initial;
+    top: initial;
+    position: fixed;
+    left: 6px;
+    width: 60px;
+    bottom: 6px;
+    z-index: 10;
+    &:after,
+    &:before {
+      display: none;
+    }
+    & .btn {
+      border-radius: 50%;
+      // padding: 10px;
+      height: 50px;
+      width: 50px;
+      border: none;
+      margin-bottom: 4px;
+      // box-shadow: 0px 2px 2px $gray;
+      box-shadow: 0px 1px 10px 3px rgba(0, 0, 0, 0.075);
+      position: relative;
+
+      & img {
+        width: 22px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+      }
+    }
+  }
+}
+
+.toolbar-group--mobile {
+  &:not(.btn-group-show--animation) {
+    max-height: 0;
+    height: 0;
+    transition-property: all;
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    // display: none;
+  }
+  &.btn-group-show--animation {
+    overflow-y: hidden;
+    max-height: 162px;
+    // Padding for full display of box-shadows
+    padding-top: 15px;
+    transition-property: all;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+}
+
+.toolbar--mobile {
+  &:not(.btn-show--animation) {
+    opacity: 0;
+    padding: 0 !important;
+    box-shadow: none !important;
+    transition-property: all;
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    // display: none;
+  }
+  &.btn-show--animation {
+    overflow-y: hidden;
+    opacity: 1;
+
+    transition-property: all;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+}
+
+.toolbar-icon-mobile {
+  height: 100%;
+  width: 100%;
+}
