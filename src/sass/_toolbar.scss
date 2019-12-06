@@ -72,6 +72,12 @@ $toolbarWidth: 60px;
       width: 35px;
     }
   }
+
+  & .icon {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+  }
 }
 
 // Comment button specific styles
