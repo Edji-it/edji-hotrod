@@ -35,11 +35,6 @@ export class ReaderToolsComponent implements OnInit {
       this._readings.currentReading.subscribe(
         reading => {
           this.currentReading = reading
-          if (this.currentReading.questions && this.currentReading.questions.length > 0) {
-            this.ownerToolBlockHeight = '285px'
-          } else {
-            this.ownerToolBlockHeight = '221px'
-          }
         },
         error => {
           console.error(error)
