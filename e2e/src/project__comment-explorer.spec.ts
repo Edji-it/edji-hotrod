@@ -4,7 +4,7 @@ import { Project, Sidebar, Login } from './page-objects'
 import { LoginModal, CommentExplorer } from './components'
 import { Home } from './page-objects/home-page'
 
-describe('Project Page as an owner wishing to filter by student: ', () => {
+describe('Project Page using the comment explorer: ', () => {
   /* ---- Variable Initialization --------------- */
   let project = new Project()
   let loginModal = new LoginModal()
@@ -53,6 +53,8 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     // Close Explorer
     explorer.close.click()
     browser.wait(EC.invisibilityOf(explorer.close), 3000, 'close button did not close comment explorer')
+    // Let explorer slide out
+    browser.sleep(400)
   })
 
   it('should open the Comment Explorer and filter by student', async () => {
@@ -81,11 +83,18 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     // Close Explorer
     explorer.close.click()
     browser.wait(EC.invisibilityOf(explorer.close), 3000, 'close button did not close comment explorer')
+    // Let explorer slide out
+    browser.sleep(400)
   })
 
   // Useful to test after opening the Explorer for other purposes
   it('should open a comment and see comment line', () => {
     let commentPortals = element.all(by.css('avatar-portal:not(.hide)'))
+    browser.wait(
+      EC.elementToBeClickable(commentPortals.first()),
+      3000,
+      'comment portal did not become clickable after explorer',
+    )
     commentPortals.first().click()
     // Wait for explorer to open, verify
     browser.wait(
