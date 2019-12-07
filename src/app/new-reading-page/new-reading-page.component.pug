@@ -62,7 +62,7 @@ nav-bar(
                     )
                   span([innerHTML]="':lock: Private' | emojione")
           //- Grade level range selector
-          .form-group(*ngIf="readingForm.controls['reading_type'].value == 'public'")
+          .form-group(*ngIf="readingForm.controls['reading_type'].value === 'public'")
             label Grade Level
               p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
             grade-selector(formControlName="grade_levels", (click)="changeMonitor()")
