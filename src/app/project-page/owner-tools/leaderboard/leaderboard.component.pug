@@ -125,6 +125,7 @@
         .icon.icon-comments
         | Comments
       a.btn.btn-xs-primary.has-icon(
+        *ngIf="currentProject.isTeaching",
         [routerLink]="'./'",
         [queryParams]="{ recap: appliedFilter.propertyFilters.user_id }"
       )
