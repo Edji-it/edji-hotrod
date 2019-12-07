@@ -310,6 +310,7 @@ export class NewReading implements PageObjectInterface {
    * @param title optional to set specific title
    */
   public createReadingByType(readingType: readingType, title?: string): void {
+    this.getPage()
     const uniqueTitle = title ? title : this.titleString
     // Enter sample Reading into form
     this.titleInput.clear()
