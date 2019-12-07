@@ -74,9 +74,6 @@ export class LeaderboardComponent implements OnInit {
         // Get Updates about applied comment filters so we can show the user
         this.projectStore.filterUpdates.subscribe(filter => {
           this.appliedFilter = filter
-
-          console.log('Applied:', filter)
-
           if (this.commentStats.stats.userStats) {
             for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
               this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(

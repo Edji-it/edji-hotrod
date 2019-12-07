@@ -107,7 +107,7 @@
       )
         .row
           .col-12
-            div(*ngFor="let c of comments; let i = index")
+            div(*ngFor="let c of comments; let i = index; trackBy: trackComment")
               edji-comment(
                 [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && c.user_id !== user._id && c.user_id !== project.teacher_id",
                 [class.spec-owner]="c.user_id === project.teacher_id",
