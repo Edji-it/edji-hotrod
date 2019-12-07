@@ -70,7 +70,7 @@ nav-bar(
               b No Grades Selected
               | Please select the range of grade levels this Reading is best suited for.
           //- Subject Selector
-          .form-group(*ngIf="readingForm.controls['reading_type'].value == 'public'")
+          .form-group(*ngIf="readingForm.controls['reading_type'].value === 'public'")
             label Subject
             .input-group
             ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
