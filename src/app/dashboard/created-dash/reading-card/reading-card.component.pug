@@ -90,32 +90,32 @@
       )
         i.icon.icon-link
       //- Private/Public Toggle
-      #togglePublic.btn.btn-icon--round.reading-access-icon.reading-action(
-        [attr.title]="reading.public ? 'Public Reading' : 'Private Reading'", 
-        (click)="togglePublicTooltip()",
+      #toggleType.btn.btn-icon--round.reading-access-icon.reading-action(
+        [attr.title]="reading.reading_type === 'public' ? 'Public Reading' : 'Private Reading'", 
+        (click)="toggleTypeTooltip()",
         [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'",
         [class.disabled]="reading.archived",
-        [attr.testFindTogglePublic]="reading.title"
+        [attr.testFindToggleType]="reading.title"
       )
-        i#readingPublic.icon(*ngIf="reading.public", [innerHTML]="':earth_americas:' | emojione")
-        i#readingPrivate.icon(*ngIf="!reading.public", [innerHTML]="':lock:' | emojione")
+        i#readingPublic.icon(*ngIf="reading.reading_type === 'public'", [innerHTML]="':earth_americas:' | emojione")
+        i#readingPrivate.icon(*ngIf="reading.reading_type === 'private'", [innerHTML]="':lock:' | emojione")
         .tooltip-wrap
-          .tooltip.tooltip--interactive([class.show]="togglePublicFlag", [class.no-link]="!reading.source")
+          .tooltip.tooltip--interactive([class.show]="toggleTypeFlag", [class.no-link]="!reading.source")
             .tooltip-title
               | Make public for others to Discover?
             .tooltiptext.block-with-text
               //- Public option
               label#readingMakePublic.form-check-label.form-check-btn(
-                  [class.active]="reading.public",
+                  [class.active]="reading.reading_type === 'public'",
                   title="Allow anyone to find this Reading in Discover",
-                  (click)="$event.stopPropagation(); togglePublic(true)"
+                  (click)="$event.stopPropagation(); toggleType('public')"
                 )
                 span([innerHTML]="':earth_americas: Public' | emojione")
               //- Private option
               label#readingMakePrivate.form-check-label.form-check-btn(
-                  [class.active]="!reading.public",
+                  [class.active]="reading.reading_type === 'private'",
                   title="Hide this Reading from Discover",
-                  (click)="$event.stopPropagation(); togglePublic(false)"
+                  (click)="$event.stopPropagation(); toggleType('private')"
                 )
                 span([innerHTML]="':lock: Private' | emojione")
       //- Bookmark action

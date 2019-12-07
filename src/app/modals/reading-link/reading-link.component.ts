@@ -12,9 +12,9 @@ import { Project, User, Reading } from '../../shared/datatypes'
 })
 export class ReadingLinkModal implements OnInit {
   public readingLink: string
-  private _reading: Reading = { title: '', draft: false, _id: ''}
+  private _reading: Reading = { title: '', draft: false, _id: '', reading_type: 'private' }
 
-  @Input('reading') 
+  @Input('reading')
   set shareReading(reading: Reading) {
     if (reading) {
       this._reading = reading
@@ -22,7 +22,7 @@ export class ReadingLinkModal implements OnInit {
     }
   }
   get shareReading(): Reading {
-    return this._reading  
+    return this._reading
   }
   @Input() public isCreator: boolean
 
@@ -31,9 +31,7 @@ export class ReadingLinkModal implements OnInit {
   constructor() // imports
   {}
 
-  ngOnInit() {
-   
-  }
+  ngOnInit() {}
 
   public close() {
     this.closeModal.emit(false)
