@@ -38,7 +38,7 @@ nav-bar(
               .form-check.pl-0((click)="changeMonitor()")
                 //- Public option
                 label#readingMakePublic.form-check-label.form-check-btn(
-                    [class.active]="readingForm.controls['reading_type'].value == 'public'",
+                    [class.active]="readingForm.controls['reading_type'].value === 'public'",
                     title="Allow anyone to find this Reading in Discover"
                   )
                   input.form-check-input(
