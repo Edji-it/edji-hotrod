@@ -220,9 +220,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     }
 
     this.commentCount = sorted.length
-    setTimeout(() => {
-      this.comments = sorted
-    })
+    this.comments = sorted
     setTimeout(() => {
       this.loading = false
     }, 400)
@@ -354,5 +352,14 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    */
   public viewStudentFilter(studentId: any): void {
     this.projectStore.filterByUser(studentId)
+  }
+
+  /**
+   * Track by function
+   * @param index item index
+   * @param comment iterated comment
+   */
+  trackComment(index, comment): string {
+    return comment._id
   }
 }

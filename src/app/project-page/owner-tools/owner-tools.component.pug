@@ -1,9 +1,9 @@
-#ownerToolsBar.owner-bar.hidden-md-down(*ngIf="currentProject && currentProject.isTeaching")
+#ownerToolsBar.toolbar.hidden-md-down(*ngIf="currentProject && currentProject.isTeaching")
   label.bar-title Owner
   //- Buttons for toggling panes and tools
     - Desktop Buttons
   //- Comment Stats pane
-  button#toggleLeaderboard.btn.owner-tools__btn.btn-cmt(
+  button#toggleLeaderboard.btn.toolbar__btn.btn-cmt(
     type="button",
     aria-label="Comment Counts",
     [routerLink]="'./'",
@@ -14,7 +14,7 @@
     img(src="assets/images/icon-leaderboard.svg")
     label Students
   //- Heat Vision toggle
-  button.btn.owner-tools__btn.btn-hv(
+  button.btn.toolbar__btn.btn-hv(
     type="button",
     (tap)="togglePower('heat_vision', !this.currentProject.heat_vision)",
     [class.disabled]="currentProject.archived"
@@ -25,7 +25,7 @@
     span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
     label Vision
   //- All Comments
-  button.btn.owner-tools__btn(
+  button.btn.toolbar__btn(
     type="button",
     [routerLink]="'./'",
     [queryParams]="{ pane: 'comments' }",
@@ -36,7 +36,7 @@
     label Comments
   //- Question Feed toggle
   div(*ngIf="currentReading.questions && currentReading.questions.length>0")
-    button.btn.owner-tools__btn.btn-hv(
+    button.btn.toolbar__btn.btn-hv(
       type="button",
       [routerLink]="'./'",
       [queryParams]="{ pane: 'questions' }",
@@ -45,7 +45,7 @@
       i#toggleQuestionfeed.icon-question(*ngIf="currentProject")
       label Questions
   //- Reading Report toggle
-  a.btn.owner-tools__btn.btn-hv.btn-reading-recap(
+  a.btn.toolbar__btn.btn-hv.btn-reading-recap(
     type="button",
     [routerLink]="'./'",
     [queryParams]="{ recap: true }",
@@ -55,11 +55,11 @@
     i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")
     label Recap
 
-.owner-tools-button__mobile.hidden-lg-up(*ngIf="currentProject && currentProject.isTeaching")
+.toolbar__btn--mobile.hidden-lg-up(*ngIf="currentProject && currentProject.isTeaching")
   //- Mobile Buttons
-  .owner-options-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
+  .toolbar-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="ownerToolBlockHeight")
     //- Comment Stats pane
-    a#toggleLeaderboard--narrow-viewport.btn.btn-icon--circle-shadow.owner-options--mobile(
+    a#toggleLeaderboard--narrow-viewport.btn.btn-icon--circle-shadow.toolbar--mobile(
       type="button",
       (tap)="ownerToolShow=!ownerToolShow",
       [routerLink]="'./'",
@@ -70,18 +70,18 @@
       img(src="assets/images/icon-leaderboard.svg", [class.hide]="!ownerToolShow", style="width: 32px;")
       //- label Tally
     //- Heat Vision toggle
-    button.btn.btn-icon--circle-shadow.owner-options--mobile(
+    button.btn.btn-icon--circle-shadow.toolbar--mobile(
       type="button",
       (tap)="togglePower('heat_vision', !this.currentProject.heat_vision); ownerToolShow=!ownerToolShow",
       [class.btn-show--animation]="ownerToolShow",
       [class.disabled]="currentProject.archived"
     )
-      i#toggleHeatVisionMobile.icon-heatvision.owner-tool-icon-mobile(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
+      i#toggleHeatVisionMobile.icon-heatvision.toolbar-icon-mobile(*ngIf="currentProject", [ngClass]="[!currentProject.heat_vision ? 'inactive' : 'active']")
       span.badge.badge-pill.badge-primary(*ngIf="currentProject.heat_vision") On
       span.badge.badge-pill.badge-secondary(*ngIf="!currentProject.heat_vision") Off
       //- label Vision
     //- All Comments toggle
-    a.btn.btn-icon--circle-shadow.owner-options--mobile(
+    a.btn.btn-icon--circle-shadow.toolbar--mobile(
       type="button",
       (tap)="ownerToolShow=!ownerToolShow",
       [routerLink]="'./'",
@@ -89,12 +89,12 @@
       [class.btn-show--animation]="ownerToolShow",
       [class.disabled]="currentProject.archived"
     )
-      i#toggleFirefeedMobile.icon-comment-feed.owner-tool-icon-mobile(*ngIf="currentProject")
+      i#toggleFirefeedMobile.icon-comment-feed.toolbar-icon-mobile(*ngIf="currentProject")
       span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.count && commentStats.stats.count > 0") {{ commentStats.stats.count }}
       //- label Feed
     //- Question Feed toggle
     div(*ngIf="currentReading.questions && currentReading.questions.length>0")
-      a.btn.btn-icon--circle-shadow.owner-options--mobile(
+      a.btn.btn-icon--circle-shadow.toolbar--mobile(
         type="button",
         (tap)="ownerToolShow=!ownerToolShow",
         [routerLink]="'./'",
@@ -102,7 +102,7 @@
         [class.btn-show--animation]="ownerToolShow",
         [class.disabled]="currentProject.archived"
       )
-        i#toggleQuestionfeedMobile.icon-question.owner-tool-icon-mobile(*ngIf="currentProject")
+        i#toggleQuestionfeedMobile.icon-question.toolbar-icon-mobile(*ngIf="currentProject")
         //- label Questions
   a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="ownerToolShow=!ownerToolShow")
     span(style="font-size: 11px;") Tools

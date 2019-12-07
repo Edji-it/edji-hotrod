@@ -23,14 +23,6 @@ export class OwnerToolsComponent implements OnInit {
   public currentProject: Project
   public currentReading: Reading
   public user: any = {}
-  /**
-   * @todo clean up boolean trap
-   */
-  public showAllComments: boolean = false
-  public showCommentCounts: boolean = false
-  public showQuestionFeed: boolean = false
-  public showReadingRecap: boolean = false
-  public showCoOwnerGuide: boolean = false
 
   public ownerToolBlockHeight: string
 
