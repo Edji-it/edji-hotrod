@@ -42,8 +42,10 @@ export class Dashboard implements PageObjectInterface {
   public publicToggleBtn = (title: string) => element(by.css('div[testFindToggleType="' + title + '"]'))
   public publicReadingStatus = element(by.id('readingPublic'))
   public privateReadingStatus = element(by.id('readingPrivate'))
+  public academyReadingStatus = element(by.id('readingAcademy'))
   public readingMakePublic = element(by.id('readingMakePublic'))
   public readingMakePrivate = element(by.id('readingMakePrivate'))
+  public readingMakeAcademy = element(by.id('readingMakeAcademy'))
 
   // Dropdown buttons
   public dropDownMenu = element(by.css('.btn-icon--plain'))

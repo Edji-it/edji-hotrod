@@ -117,35 +117,63 @@ describe('Dashboard Page as a Hero', () => {
     expect(dashboard.projectCards.count()).toBeGreaterThan(0)
   })
 
-   // this test relies on the user having at least one project - could do more verification of the project card itself
-   it('should see the join code box at multiple sizes', async () => {
+  // this test relies on the user having at least one project - could do more verification of the project card itself
+  it('should see the join code box at multiple sizes', async () => {
     // Switch to the created readings tab on mobile (will simply skip if on desktop)
     dashboard.goToJoinedTab()
     // Verify code box
     browser.wait(EC.visibilityOf(dashboard.projectCodeInputNav), 3000, 'no join code box on full-size dashboard')
     // Stash current size
-    let defaultSize = await browser.manage().window().getSize()
+    let defaultSize = await browser
+      .manage()
+      .window()
+      .getSize()
     // Test window size variations
     // Small Chromebook
-    await browser.manage().window().setSize(1280, 720)
+    await browser
+      .manage()
+      .window()
+      .setSize(1280, 720)
     browser.wait(EC.visibilityOf(dashboard.projectCodeInputNav), 3000, 'no join code box on small desktop dashboard')
     // iPad Landscape
-    await browser.manage().window().setSize(1024, 768)
+    await browser
+      .manage()
+      .window()
+      .setSize(1024, 768)
     browser.wait(EC.visibilityOf(dashboard.projectCodeInputNav), 3000, 'no join code box on iPad landscape dashboard')
     // iPad Portrait
-    await browser.manage().window().setSize(798, 1024)
+    await browser
+      .manage()
+      .window()
+      .setSize(798, 1024)
     browser.wait(EC.visibilityOf(dashboard.projectCodeInputNav), 3000, 'no join code box on iPad portrait dashboard')
     // Smaller tablet Portrait - Just below breakpoint
-    await browser.manage().window().setSize(760, 1024)
-    browser.wait(EC.visibilityOf(dashboard.projectCodeInput), 3000, 'no join code box on smaller tablet portrait dashboard')
+    await browser
+      .manage()
+      .window()
+      .setSize(760, 1024)
+    browser.wait(
+      EC.visibilityOf(dashboard.projectCodeInput),
+      3000,
+      'no join code box on smaller tablet portrait dashboard',
+    )
     // Large Phone, Portrait (Pixel XL)
-    await browser.manage().window().setSize(411, 823)
+    await browser
+      .manage()
+      .window()
+      .setSize(411, 823)
     browser.wait(EC.visibilityOf(dashboard.projectCodeInput), 3000, 'no join code box on large phone dashboard')
     // Small Phone, Portrait (iPhone 6)
-    await browser.manage().window().setSize(375, 667)
+    await browser
+      .manage()
+      .window()
+      .setSize(375, 667)
     browser.wait(EC.visibilityOf(dashboard.projectCodeInput), 3000, 'no join code box on small phone dashboard')
     // Reset window size
-    await browser.manage().window().setSize(defaultSize.width, defaultSize.height)
+    await browser
+      .manage()
+      .window()
+      .setSize(defaultSize.width, defaultSize.height)
   })
 
   /* ---- Dashboard Tests ------------------------ */
@@ -301,6 +329,37 @@ describe('Dashboard Page as a Hero', () => {
       // verify it changed to public status
       browser.wait(EC.visibilityOf(dashboard.privateReadingStatus), 5000, 'status never changed back to private')
     })
+  })
+
+  it('should make a private reading go academy', () => {
+    dashboard.goToCreatedTab()
+    // Wait for Readings to load into Dashboard
+    browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 8000, 'never found Created Readings on Dashboard')
+    // create a private reading
+    let specificTitle = `academyReading${new Date().valueOf()}`
+    newReading.createReadingByType('private', specificTitle)
+    // verify the reading showed up
+    browser.wait(
+      EC.elementToBeClickable(dashboard.readingTitleText(specificTitle)),
+      5000,
+      'never found the new private status reading',
+    )
+    // click toggle
+    browser.wait(
+      EC.elementToBeClickable(dashboard.publicToggleBtn(specificTitle)),
+      5000,
+      'never found the toggle reading type button',
+    )
+    dashboard.publicToggleBtn(specificTitle).click()
+    // click academy
+    browser.wait(
+      EC.elementToBeClickable(dashboard.readingMakeAcademy),
+      5000,
+      'never found the make academy button on the tooltip to toggle academy status',
+    )
+    dashboard.readingMakeAcademy.click()
+    // verify it changed to public status
+    browser.wait(EC.visibilityOf(dashboard.academyReadingStatus), 5000, 'status never changed back to academy')
   })
 })
 

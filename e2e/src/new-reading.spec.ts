@@ -115,6 +115,18 @@ describe('New Reading Page', () => {
     newReading.newGroupModalClose.click()
   })
 
+  it('should create a reading with reading type academy', () => {
+    // Utilize the convenience function and then verify reading showed up with academy type
+    let specificTitle = `academyReading${new Date().valueOf()}`
+    newReading.createReadingByType('academy', specificTitle)
+    // verify the reading showed up
+    browser.wait(
+      EC.elementToBeClickable(dashboard.readingTitleText(specificTitle)),
+      5000,
+      'never found the new academy status reading',
+    )
+  })
+
   describe('Reading draft', () => {
     it('should add a reading as a draft and return to the same screen with a reading id', function() {
       // Should begin at New Reading page
