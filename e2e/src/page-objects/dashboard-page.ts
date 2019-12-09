@@ -1,7 +1,7 @@
 import { browser, by, element, protractor, ElementFinder } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
 import { reset } from '../utils/browser-methods'
-import { Sidebar } from './sidebar-page';
+import { Sidebar } from './sidebar-page'
 
 export class Dashboard implements PageObjectInterface {
   private EC = protractor.ExpectedConditions
@@ -38,8 +38,8 @@ export class Dashboard implements PageObjectInterface {
 
   // public toggle and status
   public publicStatusTitle = 'Public Status <Do Not Delete or Use>'
-  public publicToggleBtnOld = element(by.id('togglePublic'))
-  public publicToggleBtn = (title: string) => element(by.css('div[testFindTogglePublic="' + title + '"]'))
+  public publicToggleBtnOld = element(by.id('toggleType'))
+  public publicToggleBtn = (title: string) => element(by.css('div[testFindToggleType="' + title + '"]'))
   public publicReadingStatus = element(by.id('readingPublic'))
   public privateReadingStatus = element(by.id('readingPrivate'))
   public readingMakePublic = element(by.id('readingMakePublic'))
@@ -198,11 +198,7 @@ export class Dashboard implements PageObjectInterface {
     // Wait for clickable
     browser.wait(this.EC.elementToBeClickable(this.sidebar.navRead), 3000, 'joined readings tab not found')
     this.sidebar.navRead.click()
-    browser.wait(
-      this.EC.urlContains('dashboard/read'),
-      3000,
-      'did not browse to joined readings dashboard'
-    )
+    browser.wait(this.EC.urlContains('dashboard/read'), 3000, 'did not browse to joined readings dashboard')
     // sleep() excuse - Let readings update and render
     browser.sleep(500)
   }
@@ -214,6 +210,12 @@ export class Dashboard implements PageObjectInterface {
   deleteReadingByTitle(title: string): void {
     reset()
     this.getPage()
+    // Wait for page to load
+    browser.wait(
+      this.EC.elementToBeClickable(this.firstReadingCard),
+      5000,
+      'reading cards did not appear on dashboard while trying to delete',
+    )
     browser.wait(
       this.EC.elementToBeClickable(this.getReadingOptionsByTitle(title)),
       8000,

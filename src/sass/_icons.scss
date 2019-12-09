@@ -96,6 +96,18 @@ $iconGrayOpacity: 0.6;
   @include icon('icon-strategies-lg.svg');
 }
 
+.icon-district-sm {
+  @include icon('icon-district-sm.svg');
+}
+
+.icon-district-lg {
+  @include icon('icon-district-lg.svg');
+  height: 3em;
+  width: 3em;
+  display: inline-block;
+  background-color: transparent;
+}
+
 .icon-caret,
 .ui-paginator-icon.pi {
   @include icon('icon-caret-right.svg');
@@ -154,11 +166,30 @@ $iconGrayOpacity: 0.6;
   height: 1em;
 }
 
+.icon-comment-count {
+  @include icon('icon-comment-count.svg');
+}
+
 .icon-comment-emoji {
   @include icon('icon-comment-emoji.png');
   display: inline-block;
   width: 1em;
   height: 1em;
+}
+
+.icon-comment-feed {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: url('/assets/images/icon-comment-feed.svg');
+  background-size: 100% 100%;
+  background-position: center center;
+  cursor: pointer;
+
+  &.inactive {
+    background-size: 100% 100%;
+    filter: grayscale(100%);
+  }
 }
 
 .icon-comment-filter {
@@ -170,6 +201,10 @@ $iconGrayOpacity: 0.6;
   display: inline-block;
   width: 1em;
   height: 1em;
+}
+
+.icon-comments {
+  @include icon('icon-comments.svg');
 }
 
 .icon-create {
@@ -205,6 +240,10 @@ $iconGrayOpacity: 0.6;
   display: inline-block;
   width: 2em;
   height: 2em;
+}
+
+.icon-embed {
+  @include icon('icon-embed.svg');
 }
 
 .icon-external {
@@ -245,6 +284,10 @@ $iconGrayOpacity: 0.6;
     background-size: 100% 100%;
     filter: grayscale(100%);
   }
+}
+
+.icon-flag {
+  @include icon('icon-flag.svg');
 }
 
 .icon-folder {
@@ -327,6 +370,14 @@ $iconGrayOpacity: 0.6;
   background-color: transparent;
   background-image: url('/assets/images/loading-smaller.svg') !important;
   background-size: 100% 100% !important;
+}
+
+.icon-loading--action {
+  @include icon('loading-action-spinner.svg');
+  width: 100px;
+  height: 100px;
+  background-size: 100% 100% !important;
+  background-color: transparent;
 }
 
 .icon-megaphone {
@@ -438,6 +489,10 @@ $iconGrayOpacity: 0.6;
   }
 }
 
+.icon-recap-sm {
+  @include icon('icon-recap-sm.svg');
+}
+
 .icon-reply-arrow {
   @include icon('icon-reply-arrow.png');
   display: inline-block;
@@ -494,6 +549,10 @@ $iconGrayOpacity: 0.6;
   height: 2em;
 }
 
+.icon-view-line {
+  @include icon('icon-view-line.svg');
+}
+
 .icon-vision-flame {
   @include icon('icon-vision-flame.svg');
 
@@ -547,6 +606,17 @@ $iconGrayOpacity: 0.6;
   height: 2em;
 }
 
+// Badge Icon Styles
+// *****************************************************
+
+.badge-reading-1 {
+  @include icon('badges/first-reading.png');
+}
+
+.badge-comment-1 {
+  @include icon('badges/first-comment.png');
+}
+
 // Acquired font awesome styles
 .fa {
   -moz-osx-font-smoothing: grayscale;
@@ -587,16 +657,27 @@ $iconGrayOpacity: 0.6;
 .icon-comment-arrow {
   width: 27px;
   height: 45px;
-  background: url('/assets/images/comment-arrow.svg');
+  background: url('/assets/images/icon-comment-arrow.svg');
   background-size: 100% 100%;
   position: absolute;
   top: 350px;
   z-index: $zMid + 999;
   left: 264px;
+  margin-left: -15px;
+
+  transition: opacity $slidingPaneTime linear;
+  opacity: 0;
+
+  &.slide-in {
+    opacity: 1;
+    margin-left: 0px;
+  }
 
   // Hide on mobile for now
   @media (max-width: $medium-screen) {
-    display: none;
+    // <768px
+    left: calc(100% - 60px);
+    margin-top: 64px; //mobile adjustment
   }
   // NOTE: "large screen" value is different here to account min-width flexibility
   // Min width pane

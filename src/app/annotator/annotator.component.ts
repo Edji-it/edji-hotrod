@@ -13,7 +13,6 @@ import {
 } from '@angular/core'
 import { Subject, Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
-import { Angulartics2 } from 'angulartics2'
 import { Location } from '@angular/common'
 import { Feedback } from 'edji-types'
 
@@ -29,12 +28,17 @@ import {
   UtilToolService,
   MessageService,
   AcademyService,
+  AnalyticsService,
 } from '../_services'
 import { CommentPermissions, EdjiComment, Reading } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
 import { ProjectStore } from '../_store'
+import { Store } from '@ngrx/store'
+import { AppState } from '../_reducers'
+import { getMetricsComments } from '../_reducers/metrics.reducers'
+import { AvatarPortalComponent } from './avatar-portal'
 
 @Component({
   selector: 'annotator',
@@ -58,6 +62,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() private activeReply: any
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
+  @ViewChildren(AvatarPortalComponent) portalComponents: QueryList<AvatarPortalComponent>
   @ViewChildren('words') wordEls
   @ViewChild('activeContent', { static: false }) contentEl: ElementRef
   @ViewChildren(TeacherFeedbackComponent) feedbackEl: QueryList<TeacherFeedbackComponent>
@@ -84,13 +89,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   // Indices for highlights of a selected filter
   public filterHighlightArray: number[][]
   public focusArray: (boolean | boolean[])[] = []
-  // Word/Hit boxes on images
-  /**
-   * @todo add layered highlighting to boxes
-   */
-  // public boxHighlightArray: number[][]
-  // public boxAlwaysHighlightArray: number[][]
-  // public boxFilterHighlightArray: number[][]
 
   // Line Count
   public lineCountRunning: boolean = false
@@ -98,16 +96,15 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public commentPane: boolean
   public lineExpanded: number
 
-  // public activeComment: EdjiComment = <EdjiComment>{}
   public replyComment: EdjiComment = <EdjiComment>{}
   public selectedComment: EdjiComment = <EdjiComment>{}
-  public selectedReply: EdjiComment = <EdjiComment>{}
   // Comment options that can be made directly on a word
   public directCommentOptions: string[] = []
 
   // Trigger Booleans
   public showDiscussions: boolean = false
   public optionsShow = false
+  public optionsForceShow = false
   public hideKeyboard = false
 
   // Status Booleans
@@ -138,6 +135,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // For verifying comment ownership
   public user: any
+  public userCommentsCreated: number
 
   // For mobile display of comments
   public foundArray: any[] = []
@@ -160,6 +158,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     },
   ]
   public guideStepNo = 1
+  public onboardGuide: boolean = false
+  public tutorialGifUrl: string = ''
 
   public annotatorPaper: Element
   public annotatorContent: Element
@@ -187,13 +187,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     private _socket: SocketService,
     private _util: UtilToolService,
     public _comments: CommentService,
-    private angulartics: Angulartics2,
     private _audio: AudioService,
     private _messages: MessageService,
     private route: ActivatedRoute,
     private _router: Router,
     private _academy: AcademyService,
     private location: Location,
+    private store: Store<AppState>,
+    private _analytics: AnalyticsService,
   ) {
     this.window = window
   }
@@ -315,13 +316,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (this.project.types.indexOf('audio') > -1 && !this._audio.isSupported()) {
                   this.audioSupportError = true
                   // if audio is not supported, let analytics know
-                  this.angulartics.eventTrack.next({
-                    action: 'noAudioSupport',
-                    properties: {
-                      category: this._auth.setAnalyticEventCategory(),
-                      label: this._auth.setAnalyticEventLabel(),
-                    },
-                  })
+                  this._analytics.event('noAudioSupport')
                 }
               }
             }
@@ -350,12 +345,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Subscribe to comment comment updates
     this.subscriptions.push(
+      /**
+       * @todo consolidate with subscription in Project Store,
+       */
       this._socket.commentUpdates.subscribe(
         commentUpdate => {
           let comment = commentUpdate.comment
           let wIndex = comment.start
           let cIndex = -1
+          let selfUpdate = comment.user_id === this.user._id
 
+          if (selfUpdate && commentUpdate.action !== 'DELETE') {
+            // A user's comment edits should not update via sockets
+            // HOWEVER, a teacher can DELETE a user's comments
+            return
+          }
           // Get local array index
           if (this.commentsByIndex[wIndex]) {
             // faster to cache length
@@ -398,8 +402,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
             if (cIndex > -1 && this.commentsByIndex[wIndex] && this.commentsByIndex[wIndex][cIndex]) {
               this.commentsByIndexUpdate(comment, wIndex, cIndex)
             } else {
-              // Socket updates don't come through with a timestamp
-              comment.createdAt = Date.now()
               // Sometimes an UPDATE comes through for comment not yet created
               // Add highlights to local array
               this.incrementHighlights(
@@ -418,8 +420,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
               this.projectStore.recalculateAnswers(comment, true)
             }
           } else if (commentUpdate.action === 'CREATE') {
-            // Socket updates don't come through with a timestamp
-            comment.createdAt = Date.now()
             // Add highlights to local array
             this.incrementHighlights(
               this.user._id === comment.user_id || this.project.teacher_id == comment.user_id,
@@ -439,14 +439,18 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       ),
     )
 
-    // Subscribe to Heat Vision toggle updates
     this.subscriptions.push(
+      // Subscribe to Heat Vision toggle updates
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
         // Re-evaluate comment line counts
         this.projectStore.buildCommentsByPos()
         // We send the message here because we only care to show it when the user has the reading loaded
         this.showHeatVisionToast(this.project.heat_vision)
+      }),
+      // Subscribe to needed user metrics
+      this.store.select(getMetricsComments).subscribe(comments_count => {
+        this.userCommentsCreated = comments_count
       }),
     )
 
@@ -487,7 +491,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Subscribe to updates on where to move the lastWord for the infinity scroll
     this.subscriptions.push(
       this.projectStore.lastWordUpdateState.subscribe(lastWord => {
-        this.lastWord = lastWord + this.lastWordImageOffset
+        if (lastWord > this.lastWord) {
+          this.lastWord = lastWord + this.lastWordImageOffset
+        }
       }),
     )
 
@@ -516,6 +522,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
        * - In AfterViewInit due to "commentComponents" use
        */
       this.route.queryParams.subscribe(params => {
+        if (params['guide'] === 'welcome' && !params['readingCodeModal']) {
+          this.onboardGuide = true
+        }
         // handler for feedback
         if (params['feedback']) {
           let feedbackEl = this.feedbackEl.toArray().find(feedbackEl => {
@@ -524,49 +533,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           // Scroll to feedback
           feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
         } else if (params['comment']) {
-          // Reset selected comment values
-          // > ensures comment pane scroll action when transitioning between comments and replies
-          if (this.selectedComment) this.selectedComment.selected = false
-          if (this.selectedReply) this.selectedReply.selected = false
-          // Parent indicates a reply comment
-          let isReply = !!params['parent']
-          let commendId = isReply ? params['parent'] : params['comment']
-          let commentEl = this.commentComponents.toArray().find(commentEl => {
-            return commentEl.comment._id === commendId
-          })
-          // Cancel if comment not found
-          if (!commentEl) {
-            // Clear param if comment not found
-            this.clearQueryParams()
-            return
-          }
-          // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
-          if (commentEl.comment.start > this.lastWord) {
-            this.lastWord = commentEl.comment.start + 800
-            // Make sure we broadcast lastWord position out to listening components
-            this.projectStore.lastWordUpdateSubj.next(this.lastWord)
-          }
-          // Hack that follows same settimeout as the below for updating image heights
-          // We have to wait for images and questions to load in order for the scroll on load to be accurate
-          // after the intitial load, we only want a 1ms timeout to prevent errors is all
-          let scrollTimeout = this.renderTimeout
-          if (this.commentFragScrollReady) {
-            scrollTimeout = 1
-          }
-          // settimeout here to prevent errors where expression changes after checked
-          setTimeout(() => {
-            // Scroll to line in reading where comment was made
-            commentEl && commentEl.el.nativeElement.scrollIntoView({ behavior: 'smooth' })
-            // Toggle the comment pane
-            if (isReply) {
-              let reply = this.project.comments.find(comment => {
-                return (comment._id = params['comment'])
-              })
-              this.toggleCommentPane(true, commentEl.comment, reply)
-            } else {
-              this.toggleCommentPane(true, commentEl.comment)
-            }
-          }, scrollTimeout)
+          // Check if opening/scrolling to comment
+          this.checkCommentLink(params['comment'], params['parent'])
         }
       }),
     )
@@ -577,11 +545,64 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
-
     // Clear heat vision message
     this._messages.dismissToast('heat')
     // Clear feedback message
     this._messages.dismissToast('feedback')
+  }
+
+  private checkCommentLink(commentId: string, parentId?: string): void {
+    if (!this.portalComponents) {
+      setTimeout(() => {
+        this.checkCommentLink(commentId, parentId)
+      }, 1000)
+    }
+    // Reset selected comment values
+    // > ensures comment pane scroll action when transitioning between comments and replies
+    if (this.selectedComment) this.selectedComment.selected = false
+    // Parent indicates a reply comment
+    let isReply = !!parentId
+    let findCommentId = isReply ? parentId : commentId
+    let commentEl = this.portalComponents.toArray().find(commentEl => {
+      return commentEl.comment._id === findCommentId
+    })
+    // Ensure not already selected
+    if (this.selectedComment && commentId === this.selectedComment._id) {
+      return
+    }
+    // Cancel if comment not found
+    if (!commentEl) {
+      // Clear param if comment not found
+      this.clearQueryParams()
+      return
+    }
+    // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
+    if (commentEl.comment.start > this.lastWord) {
+      this.lastWord = commentEl.comment.start + 800
+      // Make sure we broadcast lastWord position out to listening components
+      this.projectStore.lastWordUpdateSubj.next(this.lastWord)
+    }
+    // Hack that follows same settimeout as the below for updating image heights
+    // We have to wait for images and questions to load in order for the scroll on load to be accurate
+    // after the intitial load, we only want a 1ms timeout to prevent errors is all
+    let scrollTimeout = this.renderTimeout
+    if (this.commentFragScrollReady) {
+      scrollTimeout = 1
+    }
+    // settimeout here to prevent errors where expression changes after checked
+    setTimeout(() => {
+      // Scroll to line in reading where comment was made
+      commentEl && commentEl.scrollEl.nativeElement.scrollIntoView({ behavior: 'smooth' })
+      // Toggle the comment pane
+      if (isReply) {
+        let reply = this.project.comments.find(comment => {
+          return comment._id == commentId
+        })
+        this.toggleCommentPane(true, commentEl.comment, reply)
+      } else {
+        this.toggleCommentPane(true, commentEl.comment)
+      }
+    }, scrollTimeout)
   }
 
   /**
@@ -1192,11 +1213,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   inactivateComment(): void {
     if (this._comments.activeComment.start !== undefined) {
-      this.unfocusHighlight(
-        this._comments.activeComment.start,
-        this._comments.activeComment.end,
-        this._comments.activeComment.box,
-      )
       this._comments.activeComment.active = false
       this._comments.activeComment = <EdjiComment>{}
     }
@@ -1617,7 +1633,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * We check this every time the comment pane is open in case the user adjusts screen width
    */
   setLinePositions(): void {
-    if (typeof this.commentComponents == 'undefined') {
+    if (typeof this.portalComponents == 'undefined') {
       setTimeout(() => {
         this.setLinePositions()
       }, 500)
@@ -1628,7 +1644,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.preScrollHeightUpdate()
     }
     // Let's do this!
-    let allComments = this.commentComponents.toArray()
+    let allComments = this.portalComponents.toArray()
     // Only run this if the words are rendered and if it isn't already running
     if (!this.lineNumRunning && allComments.length > 0) {
       this.lineNumRunning = true
@@ -1636,9 +1652,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Loop through each word element and tell comments to update line number
       let len: number = allComments.length
       for (let i = 0; i < len; i++) {
-        let commentComp = allComments[i]
+        let portalComp = allComments[i]
         // Tell comments to update lineY value
-        commentComp.setLineY()
+        portalComp.setLineY()
       }
       // Set up comments by line for Comment Pane
       this.projectStore.buildCommentsByPos()
@@ -1648,49 +1664,32 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
-    /**
-     * In tablet view, the width of content changes as the pane slides
-     * @todo determine a better layout option that doesn't cause relevant comments to change
-     */
-    let annotatorWidth = this.annotatorContent.clientWidth
-    setTimeout(() => {
-      // Limit when set line position fires, heavy w/ lots of comments
-      if (annotatorWidth != this.annotatorContent.clientWidth) {
-        this.setLinePositions()
-      }
-    }, 500)
-
+    let isVisible = visible || selectedComment
     // Set the input comment to the comment pane if it is not currently open
-    if (visible) {
+    if (isVisible) {
       if (selectedComment) {
-        selectedComment.selected = !selectedReply
-        this.selectedComment = selectedComment
         // Set the icon arrow position based on lineY and offsets
         this.commentHeightPos = this.getCommentDisplayY(selectedComment)
-
         if (selectedReply) {
-          selectedReply.selected = true
-          this.selectedReply = selectedReply
+          selectedReply.selected = visible
+          this.selectedComment = selectedReply
         } else {
-          // Reset selected reply
-          this.selectedReply = <EdjiComment>{}
+          selectedComment.selected = visible
+          this.selectedComment = selectedComment
         }
       }
       // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
-      this.projectStore.commentPaneStateSubj.next(true)
     } else {
-      // Clear Comment ID/deep link params
-      this.clearQueryParams()
       // iOS selection
       let selec = Rangy.getSelection()
       selec.removeAllRanges()
       // Tell comments to close
       this.commentPane = false
+      this.selectedComment = null
       // reset our icon arrow position
       this.commentHeightPos = 0
-      this.projectStore.commentPaneStateSubj.next(false)
       // Run the standard comment inactivation to reset variables and do things like close the Keyboard
       this.inactivateComment()
     }

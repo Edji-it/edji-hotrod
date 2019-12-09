@@ -132,6 +132,8 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
+    // Clear filters
+    this.projectStore.clearFilters()
     // End socket connections
     this._socket.leaveRoom()
     this._academy.stopReadingTimer()

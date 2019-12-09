@@ -62,7 +62,7 @@ export class DiscoverAddMetaModal implements OnInit {
     // Add subjects, grade levels, and make the reading public
     updateReading.subjects = form.value.subjects
     updateReading.grade_levels = form.value.grade_levels
-    updateReading.public = true
+    updateReading.reading_type = 'public'
     //  Make the call to PUT the reading public value
     this._readings.save(updateReading).subscribe(
       data => {

@@ -1,4 +1,5 @@
 @import '../../sass/base/variables';
+$grayFont: #727272;
 
 .hero-background {
   position: absolute;
@@ -99,4 +100,80 @@
 
 .icon-strategies-lg {
   background-color: transparent; // our highlight class h- causes this element bkgnd to turn in to a crimson red
+}
+
+#academyBanner {
+  padding: 18px;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #FFFCF0;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 3px;
+  color: $grayFont;
+
+  & h2 {
+    line-height: initial;
+  }
+}
+
+.font-gray {
+  color: $grayFont;
+}
+
+img.academy-logo {
+  width: 42px;
+}
+
+.academy-text {
+  font-size: 12px;
+}
+
+.btn-academy {
+  white-space: normal;
+}
+
+.overflow-override {
+  overflow: initial;
+}
+
+// District library banner
+.district-header {
+  padding-bottom: $base-pad;
+}
+
+.district-header__text {
+  display: inline-block;
+  margin: 0 0 0 0.5em;
+  vertical-align: top;
+  font-weight: 400;
+  color: $dark-gray;
+}
+
+.district-subheading {
+  position: relative;
+
+  & p {
+    background:#fff;
+    display: inline-block;
+    padding-right: 0.5em;
+    margin: 0.75em 0;
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: $gray;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    z-index: -1;
+  }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router'
-import { Observable, BehaviorSubject, Subject } from 'rxjs'
-import { map, take, catchError } from 'rxjs/operators'
+import { Observable, BehaviorSubject, Subject, from, forkJoin, of } from 'rxjs'
+import { map, take, catchError, combineAll } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 // Project Dependencies
@@ -11,11 +11,11 @@ import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { LockerService } from '../_services/locker.service'
 
 import { environment } from '../../environments/environment'
-import { AcademyService } from './academy.service'
 import { generateInitialsFromName } from '../_store/user.decorators'
 const { version: appVersion } = require('../../../package.json')
 
 declare var gtag: any
+declare var Stripe: any
 
 @Injectable()
 export class AuthService implements CanActivate {
@@ -34,6 +34,7 @@ export class AuthService implements CanActivate {
   private user: User
   private currentUserSource: BehaviorSubject<any>
   public currentUser: Observable<any>
+  private stripe: any
 
   private academyState: AcademyState = {}
   private academyStateSource: BehaviorSubject<AcademyState>
@@ -85,6 +86,17 @@ export class AuthService implements CanActivate {
   /** Provides environment variable to the rest of the app */
   public getEnv() {
     return this.ENV
+  }
+
+  /** Provides stripe to the rest of the app */
+  public getStripe() {
+    // Create a Stripe client
+    if (this.getEnv() === 'dev') {
+      this.stripe = Stripe('pk_test_e2lOurNpSI745MOUdu2LgzOu')
+    } else {
+      this.stripe = Stripe('pk_live_IOwqaYAERP6biScBTFk3Csrm')
+    }
+    return this.stripe
   }
 
   /** Give out options to any other http-using components or services */
@@ -143,10 +155,17 @@ export class AuthService implements CanActivate {
     // Set convenience "isStudent" flag
     // + Default guest/temp to student flag
     let studentId = user.identities && user.identities.includes('student')
-    let notSchoolStaff = studentId && !['teacher', 'administrator', 'coach'].some(id => user.identities.includes(id))
-    user.isStudent = user.type === 'temp' || (studentId && notSchoolStaff)
+    let schoolStaff = !studentId || ['teacher', 'administrator', 'coach'].some(id => user.identities && user.identities.includes(id))
+    let missingIdentity: boolean = !user.identities || user.identities.length < 1
+    // missingSchool is also used to identify incomplete Clever sign-ups
+    let missingSchool: boolean
+    user.isStudent = user.type === 'temp' || (studentId && !schoolStaff)
+    // Check if School Staff set school value
+    if (schoolStaff) {
+      missingSchool = !user.school || !(user.school.school_name || user.school.district_name)
+    }
     // Determine if user has completed required profile fields
-    user.profileIncomplete = user.type !== 'temp' && (!user.fullname || !user.identities || user.identities.length < 1)
+    user.profileIncomplete = user.type !== 'temp' && (!user.fullname || missingSchool || missingIdentity)
     // Determine if user is an Academy Admin
     if (user && user.license_ids && user.license_ids[0]) {
       this.fetchAcademies(user)
@@ -425,7 +444,7 @@ export class AuthService implements CanActivate {
             let mergedUser = Object.assign({}, currentUser)
             // Loop through and merge arrays
             let propsToCheck = ['prefs', 'media']
-            let childPropsToOverwrite = ['recentEmoji']
+            let childPropsToOverwrite = ['recentEmoji', 'teachingGrades']
             for (let n = 0; n < propsToCheck.length; n++) {
               let propA = propsToCheck[n]
               for (let prop in mergedUser[propA]) {
@@ -806,6 +825,21 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Update payment source on customer
+   */
+  public updatePaymentSource(stripeToken: string, customerId: string): Observable<any> {
+    let data = {
+      token: stripeToken,
+    }
+    return this._http.put<any>(this.baseUrl + `/api/v1/stripe/customers/${customerId}`, data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: this.getToken(),
+      }),
+    })
+  }
+
+  /**
    * Submit payment and subscription type to add plan to user
    */
   public subscribeToHero(stripeToken, couponCode?: string): Observable<HeroCreateResponse> {
@@ -958,32 +992,51 @@ export class AuthService implements CanActivate {
    * @param temp_ids array of temp user ids
    */
   public getPublicUsers(students_ids?: any[], temp_ids?: any[]): Observable<any> {
-    let search_params: string = ''
-    // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
-    if (students_ids.length > 0 && students_ids[0].hasOwnProperty('_id')) {
-      let length = students_ids.length
-      for (var i = 0; i < length; i++) {
-        students_ids[i] = students_ids[i]._id
+    let search_params: string[] = []
+    const CHUNK_COUNT = 25
+    // Builds param string(s) based on chunk size
+    let generateChunkedParams = (idArray: any[], key: string) => {
+      // if the ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
+      if (idArray.length > 0 && idArray[0].hasOwnProperty('_id')) {
+        idArray = idArray.map(el => el._id)
+      }
+      // Chunk
+      for (let i = 0, j = idArray.length; i < j; i += CHUNK_COUNT) {
+        let chunkArray = idArray.slice(i, i + CHUNK_COUNT)
+        // do whatever
+        search_params.push(this.arrayParamsToString(key + '[]', chunkArray))
       }
     }
-    // if the students_ids is already converted to the leaderboard-friendly format, strip it out and use _ids only
-    if (temp_ids.length > 0 && temp_ids[0].hasOwnProperty('_id')) {
-      let length = temp_ids.length
-      for (var i = 0; i < length; i++) {
-        temp_ids[i] = temp_ids[i]._id
-      }
-    }
-    // Attach student ids to query string
-    search_params = this.arrayParamsToString('students_ids[]', students_ids, search_params)
-    // Attach temp ids to query string
-    search_params = this.arrayParamsToString('temp_ids[]', temp_ids, search_params)
-
-    return this._http.get(this.getUrl() + '/api/v1/users/public-details?' + search_params, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: this.getToken(),
+    if (students_ids) generateChunkedParams(students_ids, 'students_ids')
+    if (temp_ids) generateChunkedParams(temp_ids, 'temp_ids')
+    // Make requests for each "chunked" query string
+    return from(search_params).pipe(
+      map(
+        params => <Observable<any>>this._http
+            .get(this.getUrl() + '/api/v1/users/public-details?' + params, {
+              headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: this.getToken(),
+              }),
+            })
+            .pipe(
+              map(data => {
+                return data['users'] || []
+              }),
+              catchError(err => {
+                // Ensure one failed request does not prevent completion
+                console.error(err)
+                return of([])
+              }),
+            ),
+      ),
+      // Merge requests together, and wait for all to complete
+      combineAll(),
+      map(resultArrays => {
+        // Combine result arrays
+        return resultArrays.reduce((result, member) => result.concat(member), [])
       }),
-    })
+    )
   }
 
   /**
@@ -1081,9 +1134,9 @@ export class AuthService implements CanActivate {
    * Returns customer information including subscriptions, but not payment source
    * @param customer_id the customer ID from Stripe that we store on the user object
    */
-  public getStripeCustomer(): Observable<any> {
+  public getStripeCustomer(customerId: string): Observable<any> {
     return this._http
-      .get<any>(this.baseUrl + '/api/v1/stripe/customers/', {
+      .get<any>(this.baseUrl + `/api/v1/stripe/customers/${customerId}`, {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
           Authorization: this.getToken(),
@@ -1092,6 +1145,25 @@ export class AuthService implements CanActivate {
       .pipe(
         map(customer => {
           return customer.customer
+        }),
+      )
+  }
+
+  /**
+   * Returns customer information including subscriptions, but not payment source
+   * @param customer_id the customer ID from Stripe that we store on the user object
+   */
+  public getStripeCustomerCard(customerId: string): Observable<any> {
+    return this._http
+      .get<any>(this.baseUrl + `/api/v1/stripe/customers/${customerId}/card`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: this.getToken(),
+        }),
+      })
+      .pipe(
+        map(card => {
+          return card.card
         }),
       )
   }

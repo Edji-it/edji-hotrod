@@ -319,7 +319,8 @@ input.form-item--seamless {
   }
 }
 
-input.form-item--editor {
+input.form-item--editor,
+textarea.form-item--editor {
   background: $editorBg;
   border: $editorBorder;
   color: #333;
@@ -478,6 +479,18 @@ tr.selectable {
       background: transparent;
       padding: 0px;
     }
+  }
+}
+
+.form-check-btn.form-check-sm {
+  // Small variation
+  line-height: 24px;
+  font-size: 12px;
+  padding: 0px 10px;
+  margin-right: 7px;
+
+  &.active {
+    padding-right: 10px;
   }
 }
 

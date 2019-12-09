@@ -106,15 +106,59 @@
     <p-paginator [class.disabled]="paginationDisabled" [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
     .mb-4
     //- Show readings with date values
-    .alert.alert-info.alert-dismissible(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && searchParams.createdCollection === 'recent'")
+    .alert.alert-info(role="alert", *ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && searchParams.createdCollection === 'recent'")
+      quick-start-flag
+      //- @todo enable with more templates
+      //- .row(*ngIf="!templateChoices")
+      //-   .col-8
+      //-     h2.alert-heading Get Started with a Simple Lesson
+      //-     p To kick things off, let's create a simple lesson that you can use with your students as a short activity or keep as an example.
+      //-   .col-4.text-right
+      //-     img(src="/assets/images/guide/new-reading.png")
+      //-   .col-12
+      //-     p.font-weight-bolder I primarily teach...
+      //-     label.form-check-label.form-check-btn(
+      //-       *ngFor="let cohort of cohortOptions; let i = index",
+      //-       [class.active]="cohortChoice === cohort",
+      //-       [attr.data-test]="'gradesOption' + i",
+      //-       (click)="_analytics.event('onboarding_chooseReading_gradesSelected', cohort.label)"
+      //-     )
+      //-       input.form-check-input(
+      //-           type="radio",
+      //-           name="cohort.label",
+      //-           (change)="showTemplates(cohort, i)"                
+      //-         )
+      //-       span {{ cohort.label }}
       .row
-        .col-lg-7
-          h4.alert-heading Create your first reading!
-          p Watch Will show you the basics of creating a Reading to get you started.
-        .col-lg-5.nopadding.text-center
-          .guide-video-thumb((click)="showNewReadingVideoModal = true")
-            .icon.icon-play
-            img(src="/assets/images/thumbnail-first-reading.jpg")
+        .col-12(data-test="templateChoices")
+          h2.alert-heading Get Started with a Simple Lesson
+          //- @todo enable with more templates
+          //- p Great, we're excited to help you teach <i>{{cohortChoice.label}}</i>. 
+          p To kick things off, let's create a simple lesson that you can use with your students as a short activity or keep as an example.
+          p.font-weight-bolder Which of these would you like to try?
+          .row.no-gutters.justify-content-center
+            //- @todo loop through templateChoices when more templates are available
+            .col-12.col-xl-6.template-link__wrap(*ngFor="let template of templates")
+              a.template-link(
+                [routerLink]="['/new-reading']",
+                [queryParams]="{ 'copyId': template._id, 'guide':'welcome' }",
+                data-test="templateChoice",
+                (click)="_analytics.event('onboarding_chooseReading_templateSelected', template.title)"
+              )
+                span([innerHtml]="template.title | emojione")
+                p.text-muted.small([innerHtml]="template.note")
+        .col-12
+          //- @todo enable with more templates
+          //- .btn.btn-link.no-margin((click)="templateChoices = null", tabindex="0")
+          //-   i.icon.icon-caret.left
+          //-   | Back
+        //- .col-lg-7
+        //-   h4.alert-heading Create your first reading!
+        //-   p Watch Will show you the basics of creating a Reading to get you started.
+        //- .col-lg-5.nopadding.text-center
+        //-   .guide-video-thumb((click)="showNewReadingVideoModal = true")
+        //-     .icon.icon-play
+        //-     img(src="/assets/images/thumbnail-first-reading.jpg")
       //- https://youtu.be/GPB8i8H8IBc
     .alert.alert-danger.alert-readings(*ngIf="errorObject.serverError || searchAlerts.serverError", role="alert")
       b Error Loading Readings
@@ -128,7 +172,6 @@
       b No Bookmarked Readings
       p You do not currently have any Created Readings bookmarked!
     .row.loading.e2e-reading-loader(*ngIf="loading")
-    hot-tutorial-reading(*ngIf="!isSearching && !loading && readings.length < 1 && !searchAlerts.serverError && user.type !=='temp' && searchParams.createdCollection === 'recent'")
     //- Sub headings for specific cases
     .row(*ngIf="activeFilter === 'versions'")
       .col-12        

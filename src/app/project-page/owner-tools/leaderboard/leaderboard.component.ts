@@ -15,28 +15,6 @@ import { ProjectStore } from 'src/app/_store'
 })
 export class LeaderboardComponent implements OnInit {
   @Input() archived: boolean = false
-  @Input()
-  set coOwnerGuide(val) {
-    if (val === true) {
-      if (this.coOwnerTooltipIndex < 0) {
-        this.coOwnerTooltipIndex = 0
-      }
-    }
-  }
-  // Manage visibility with 2 way binding
-  private visible: boolean = false
-  @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter()
-  @Input()
-  get visibility() {
-    return this.visible
-  }
-  set visibility(val) {
-    if (this.visible !== val) {
-      this.visible = val
-      this.visibilityChange.emit(this.visible)
-    }
-  }
-
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
   @Input() commentStats: CommentStats
 
@@ -47,6 +25,8 @@ export class LeaderboardComponent implements OnInit {
   private answersById: any = {}
   private userAnswers: any[] = []
 
+  public visible: boolean = false
+  public slidePaneIn: boolean
   public appliedFilter: CommentFilter
   public showFilterHeroModal: boolean
   public coOwnerToBe: User
@@ -59,7 +39,7 @@ export class LeaderboardComponent implements OnInit {
     private _readings: ReadingService,
     private projectStore: ProjectStore,
     private _auth: AuthService,
-    private _route: ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router,
   ) {}
 
@@ -94,13 +74,30 @@ export class LeaderboardComponent implements OnInit {
         // Get Updates about applied comment filters so we can show the user
         this.projectStore.filterUpdates.subscribe(filter => {
           this.appliedFilter = filter
-
           if (this.commentStats.stats.userStats) {
             for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
               this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(
                 this.commentStats.stats.userStats[i],
               )
             }
+          }
+        }),
+        // Check for question feed opened via url
+        this.route.queryParams.subscribe(params => {
+          if (params['pane'] && params['pane'] === 'students') {
+            this.visible = true
+            this.slidePaneIn = true
+            if (params.studentList === 'coteach') {
+              if (this.coOwnerTooltipIndex < 0) {
+                this.coOwnerTooltipIndex = 0
+              }
+            }
+          } else {
+            // Close questions
+            this.slidePaneIn = false
+            setTimeout(() => {
+              this.visible = this.slidePaneIn
+            }, 400)
           }
         }),
       )
@@ -114,14 +111,14 @@ export class LeaderboardComponent implements OnInit {
 
   /**
    * Apply Student Filter
-   * @param student User needs "_id" and "fullname"/"username"
+   * @param studentId User needs "_id" and "fullname"/"username"
    */
-  public viewStudentFilter(student: any): void {
+  public viewStudentFilter(studentId: any): void {
     // Hide dropdown
     this.studentSettingsIndex = -1
     // Toggle filter
-    if (!this.isStudentFiltered(student)) {
-      this.projectStore.filterByUser(student)
+    if (!this.isStudentFiltered(studentId)) {
+      this.projectStore.filterByUser(studentId)
     } else {
       this.projectStore.clearFilters()
     }
@@ -153,7 +150,7 @@ export class LeaderboardComponent implements OnInit {
       newIndex = 0
     }
     // Apply filter for student navigated to
-    this.viewStudentFilter(this.commentStats.stats.userStats[newIndex])
+    this.viewStudentFilter(this.commentStats.stats.userStats[newIndex]._id)
   }
 
   /**
@@ -169,7 +166,7 @@ export class LeaderboardComponent implements OnInit {
    */
   public isStudentFiltered(student: PublicUser): boolean {
     if (this.appliedFilter && this.appliedFilter.propertyFilters.user_id) {
-      return this.appliedFilter.propertyFilters.user_id.test(student._id)
+      return this.appliedFilter.propertyFilters.user_id === student._id
     } else {
       return false
     }
@@ -225,11 +222,10 @@ export class LeaderboardComponent implements OnInit {
    */
   public close(): void {
     this.router.navigate(['./'], {
-      relativeTo: this._route,
-      queryParams: { studentList: null },
+      relativeTo: this.route,
+      queryParams: { pane: null, studentList: null },
       queryParamsHandling: 'merge',
     })
-    this.visibility = false
     // Clear tooltips
     this.coOwnerTooltipIndex = -1
     // Close dropdowns

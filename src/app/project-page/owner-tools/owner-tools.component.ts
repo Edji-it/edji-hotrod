@@ -23,11 +23,7 @@ export class OwnerToolsComponent implements OnInit {
   public currentProject: Project
   public currentReading: Reading
   public user: any = {}
-  public showFireFeed: boolean = false
-  public showCommentCounts: boolean = false
-  public showQuestionFeed: boolean = false
-  public showReadingRecap: boolean = false
-  public showCoOwnerGuide: boolean = false
+
   public ownerToolBlockHeight: string
 
   // State vars
@@ -79,15 +75,6 @@ export class OwnerToolsComponent implements OnInit {
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
-      // Watch URL params for quick links
-      this._route.queryParams.subscribe(params => {
-        if (params.studentList) {
-          this.showCommentCounts = true
-          if (params.studentList === 'coteach') {
-            this.showCoOwnerGuide = true
-          }
-        }
-      }),
     )
   }
 
@@ -121,57 +108,4 @@ export class OwnerToolsComponent implements OnInit {
         this._socket.toggleHeatVision({ all: turnOn })
       })
   }
-
-  private showElseFalse(displayPane: string) {
-    switch (displayPane) {
-      case 'showQuestionFeed':
-        this.showQuestionFeed = !this.showQuestionFeed
-        this.showFireFeed = false
-        this.showCommentCounts = false
-        this.showReadingRecap = false
-        // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({
-          action: 'teacherTools_questionPanel_open',
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-        })
-        break
-      case 'showFireFeed':
-        this.showQuestionFeed = false
-        this.showFireFeed = !this.showFireFeed
-        this.showCommentCounts = false
-        this.showReadingRecap = false
-        // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({
-          action: 'teacherTools_firefeed_open',
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-        })
-        break
-      case 'showCommentCounts':
-        this.showQuestionFeed = false
-        this.showFireFeed = false
-        this.showCommentCounts = !this.showCommentCounts
-        this.showReadingRecap = false
-        // fire an analytic event here for tracking purposes
-        this.angulartics.eventTrack.next({
-          action: 'teacherTools_leaderboard_open',
-          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-        })
-        break
-      case 'showReadingRecap':
-        this.showQuestionFeed = false
-        this.showFireFeed = false
-        this.showCommentCounts = false
-        this.showReadingRecap = !this.showReadingRecap
-        break
-      default:
-        this.showCommentCounts = false
-        this.showFireFeed = false
-        this.showQuestionFeed = false
-        this.showReadingRecap = false
-    }
-  }
-
-  // private hackyGetCommentStats(): string[] {
-  //   return Object.keys(this.commentStats.stats.userRef)
-  // }
 }

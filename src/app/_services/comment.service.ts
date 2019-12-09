@@ -207,4 +207,12 @@ export class CommentService {
         })
     }
   }
+
+  /**
+   * Returns true if comment is a fresh, empty comment
+   * @param comment EdjiComment in question
+   */
+  public isCommentNewDraft(comment: EdjiComment): boolean {
+    return (!comment.data || comment.data == '') && (!comment.url || comment.url == '')
+  }
 }

@@ -12,7 +12,7 @@ scroll-progress([scrollProgress]="currentScroll")
     .text-options(
         *ngIf="directCommentOptions.length > 0",
         [style.top]="highlightY + 'px'",
-        [ngClass]="{ 'active' : optionsShow }"
+        [ngClass]="{ 'active' : optionsShow || optionsForceShow }"
     )
         //- optionsShow
         //- Desktop buttons
@@ -91,6 +91,15 @@ scroll-progress([scrollProgress]="currentScroll")
             [ngClass]="[ (quickSelect.anchor != null || quickSelect.boxes)? 'quick-select--begin' : '', (quickSelect.focus != null || (quickSelect.boxes && quickSelect.boxes.end)) ? 'quick-select--end':'']"
             #activeContent
         )
+            //- Onboarding action
+            .alert.alert-info.alert--margin.alert--clickable(
+                *ngIf="onboardGuide",
+                [class.fade-out]="quickSelect.anchor != null || userCommentsCreated > 0",
+                (click)="tutorialGifUrl = '/assets/guide/add-highlight-v2.gif'; _analytics.event('onboarding_createComment_openHow')",
+                data-test="commentHintOnboarding"
+            )
+                quick-start-flag
+                | How do I comment?
             //- Reading Group Instructions
             .row.lesson-block(*ngIf="project.group_instructions && project.group_instructions.length > 1")
                     .lesson-block__indicator([innerHtml]="':mega:' | emojione")
@@ -100,27 +109,20 @@ scroll-progress([scrollProgress]="currentScroll")
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
-                edji-comment(
-                    *ngFor="let comment of commentsByIndex[i]; let ci = index",
-                    [class.hidden]="!projectStore.isCommentVisible(comment)",
-                    [class.spec-owner]="comment.user_id === project.teacher_id",
-                    [comment]="comment",
-                    (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
-                    (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
-                    [readOnly]="comment.user_id !== user._id",
-                    [userPermission]="getCommentPermissions(comment)",
-                    [isActive]="comment.active ? true : false",
-                    (commentActivation)="setActiveCommentByIndex($event, i, ci)",
-                    (commentDeleted)="removeComment(comment, i, ci)",
-                    (commentDeactivate)="unfocusHighlight($event.start, $event.end)",
-                    (commentUpdated)="setLinePositions()",
-                    (expandLine)="expandLine($event, true)",
-                    (collapseLine)="expandLine($event, false)",
-                    (toggleCommentPane)="toggleCommentPane($event, comment)",
-                    (commentReply)="discReplyFire(comment)",
-                    [class.imageComment]="comment.imageY",
-                    [style.top]="comment.imageY ? comment.imageY + 'px' : '0px'"
-                ) <!-- edji-comment -->
+                .margin-portal(*ngFor="let comment of commentsByIndex[i]; let ci = index")
+                  avatar-portal(
+                      [comment]="comment",
+                      [commentExplorerActive]="commentPane",
+                      [isActive]="comment.active",
+                      (toggleCommentPane)="toggleCommentPane($event, comment)",
+                      [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]",
+                      (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
+                      (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
+                      [class.imageComment]="comment.imageY",
+                      [class.hide]="!projectStore.isCommentVisible(comment)",
+                      [class.spec-owner]="comment.user_id === project.teacher_id",
+                      [style.top]="comment.imageY ? comment.imageY + 'px' : '0px'"
+                  )
                 //- Link Words: If a word is actually a link, handle it differently
                 a.w(
                     *ngIf="w.a",
@@ -222,7 +224,8 @@ scroll-progress([scrollProgress]="currentScroll")
         [pager]="guideStepNo",
         (pageChange)="guideStepNo = $event",
         [class.keyboard-offset]="isEmojiKeyboardActive()",
-        [class.mobile-toolbar-offset]="optionsShow"
+        [class.mobile-toolbar-offset]="optionsShow",
+        [forceCollapse]="true"
     )
 
 //- Emoji Keyboard: Custom Emoji entry component
@@ -233,20 +236,16 @@ emoji-keyboard(
     (dismissKeyboard)="inactivateComment()"
 )
 
-//- comment-pane
-comment-pane(
-    [isActive]="(selectedComment.active || selectedReply.active) ? true : false",
-    [isSelected]="(selectedComment.selected || selectedReply.selected) ? true : false",
+comment-explorer(
     [comment]="selectedComment",
-    [reply]="selectedReply",
-    (hideComment)="toggleCommentPane(false)",
-    (commentActivationMobile)="setActiveCommentByIndex($event.activate, $event.wi, $event.ci, $event.activatedComment)",
-    (commentUpdated)="setLinePositions()",
-    (commentReply)="discReplyFire($event)"
+    [visible]="commentPane",
+    (closed)="toggleCommentPane(false)",
+    (clearSelected)="selectedComment = null"
 )
 
 //- Icon Arrow for the active comment
 .icon-comment-arrow(
+    [class.slide-in]="commentPane && selectedComment",
     [style.top]="commentHeightPos + 'px'"
 )
 
@@ -256,4 +255,12 @@ hot-del-comment(
     [comment]="_comments.deleteCommentRef",
     (delete)="deleteComment(_comments.deleteCommentRef)",
     (closeModal)="_comments.commentDeleted()"
+)
+// Tutorial gifs
+edji-tutorial-gif(
+    *ngIf="tutorialGifUrl",
+    [header]="'How to Comment'",
+    [gif]="tutorialGifUrl",
+    [description]="'<b>1.</b> Click an image or word<br/><b>2.</b> Select a comment type<br/><b>3.</b> Make your comment to save the highlight'",
+    (closeModal)="tutorialGifUrl = ''"
 )

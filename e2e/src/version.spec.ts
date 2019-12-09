@@ -64,13 +64,7 @@ describe('Versioning - ', () => {
     newReading.subjectFirstOption.click()
     newReading.contentInput.sendKeys(newReading.contentShortString)
     // Submit New Reading
-    newReading.clickShareAndArchive()
-    browser.wait(
-      EC.elementToBeClickable(newReading.finalizeButton),
-      5000,
-      'finalize reading button never became clickable',
-    )
-    newReading.finalizeButton.click()
+    newReading.finalizeAndSkipToReading()
     // Should redirect to Project page for new reading
     browser.wait(EC.urlContains('project'), 10000, 'never arrived at the reading page after published')
     // Go to the dashboard
@@ -90,11 +84,11 @@ describe('Versioning - ', () => {
     dashboard.getReadingOptionsByTitle(uniqueTitle).click()
 
     browser.wait(
-      EC.elementToBeClickable(element(by.css('button[testFindCopyAndEdit="' + uniqueTitle + '"]'))),
+      EC.elementToBeClickable(element(by.css('button[data-test="copyEdit' + uniqueTitle + '"]'))),
       5000,
       'copy and edit button never became clickable after options dropdown click',
     )
-    element(by.css('button[testFindCopyAndEdit="' + uniqueTitle + '"]')).click()
+    element(by.css('button[data-test="copyEdit' + uniqueTitle + '"]')).click()
 
     // Make sure it arrives at the new reading page with the copyId query param
     browser.wait(EC.urlContains('new-reading'), 5000, 'never arrived at the new reading page')
@@ -141,16 +135,8 @@ describe('Versioning - ', () => {
 
     // Make sure the site arrives at the new reading page with the copyId query param
     browser.wait(EC.urlContains('new-reading'), 5000, 'never arrived at the new reading page')
-
     // Submit New Reading
-    newReading.clickShareAndArchive()
-    browser.wait(
-      EC.elementToBeClickable(newReading.finalizeButton),
-      5000,
-      'finalize reading button never became clickable',
-    )
-    newReading.finalizeButton.click()
-
+    newReading.finalizeAndSkipToReading()
     // Reading should be published
     browser.wait(EC.urlContains('project'), 15000, 'never arrived at the finished reading')
   })

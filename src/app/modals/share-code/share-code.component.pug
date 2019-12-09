@@ -1,30 +1,34 @@
-#shareCodeModal.modal.fade-in.show(*ngIf="currentProject && currentProject.code")
+#shareCodeModal.modal.modal-will-fade(*ngIf="currentProject && currentProject.code", [class.show]="show")
   .modal-dialog.modal-lg(role="document")
     .modal-content
       .modal-header
-        h4.modal-title 
+        h4.modal-title
           i.icon.icon-group
           |  Group Code
         button.close.btn-icon--round(
-            (click)="closeModal.emit()",
+            (click)="close()",
             type="button",
             data-dismiss="modal",
             aria-label="Close"
             )
           span(aria-hidden="true") &times;
       .modal-body.modal-body-share
-        p.text-secondary 
+        .alert.alert-info.mx-1(*ngIf="showIntroAlert", data-test="groupCodeOnboarding")
+          quick-start-flag
+          b Your lesson is ready to use!
+          p Students join Edji readings by entering the short group code in the url or code box
+        p.text-secondary
           | Join this Reading by going to&ensp;
           a.link([routerLink]="'/' + currentProject.code", target="_blank") edji.it/{{ currentProject.code }}
           | &ensp;or entering this code on your dashboard:
         .share-code--block
           .share-code--code.text-code(*ngFor="let codeLetter of currentProject.code.split('')")
             span.sc--c([ngClass]="[ isNumber(codeLetter) ? 'sc--c__green' : '' ]") {{ codeLetter }}
-          .share-code--label 
+          .share-code--label
             i.icon.icon-key
             | &nbsp;for&nbsp;
             b {{ currentProject.label }}
-        div(*ngIf="showOnNewReading")
+        div(*ngIf="showOnNewReading && !showIntroAlert")
           hr
           .text-center
             .small
@@ -34,15 +38,16 @@
               i.icon.icon-key
               .btn-slider__value {{ currentProject.code }}
       .modal-footer
-        .col-6
+        .col-8
           label.pb-2 Share
           div
             edji-google-classroom-share(
-              [url]="shareUrl", 
-              [title]="currentProject.reading_id ? currentProject.reading_id.title : ''", 
+              [url]="shareUrl",
+              [title]="currentProject.reading_id ? currentProject.reading_id.title : ''",
               [instructions]="currentProject.group_instructions ? currentProject.group_instructions : ''"
             )
+            edji-copy-embed([projectId]="currentProject._id")
             edji-copy-link-share([url]="shareUrl")
-        .col-6
+        .col-4
           .btn-row.right
-            button#shareCodeModalClose.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close
+            button#shareCodeModalClose.btn.btn-secondary(type="button", (click)="close()") Close

@@ -38,31 +38,31 @@ nav-bar(
               .form-check.pl-0((click)="changeMonitor()")
                 //- Public option
                 label#readingMakePublic.form-check-label.form-check-btn(
-                    [class.active]="readingForm.controls['public'].value == 'true'",
+                    [class.active]="readingForm.controls['reading_type'].value === 'public'",
                     title="Allow anyone to find this Reading in Discover"
                   )
                   input.form-check-input(
                       type="radio",
                       name="publicFlag",
-                      value="true",
-                      [formControl]="readingForm.controls['public']",
+                      value="public",
+                      [formControl]="readingForm.controls['reading_type']",
                       checked
                     )
                   span([innerHTML]="':earth_americas: Public' | emojione")
                 //- Private option
                 label#readingMakePrivate.form-check-label.form-check-btn(
-                    [class.active]="readingForm.controls['public'].value == 'false'",
+                    [class.active]="readingForm.controls['reading_type'].value == 'private'",
                     title="Hide this Reading from Discover"
                   )
                   input.form-check-input(
                       type="radio",
                       name="publicFlag",
-                      value="false",
-                      [formControl]="readingForm.controls['public']"
+                      value="private",
+                      [formControl]="readingForm.controls['reading_type']"
                     )
                   span([innerHTML]="':lock: Private' | emojione")
           //- Grade level range selector
-          .form-group(*ngIf="readingForm.controls['public'].value == 'true'")
+          .form-group(*ngIf="readingForm.controls['reading_type'].value === 'public'")
             label Grade Level
               p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
             grade-selector(formControlName="grade_levels", (click)="changeMonitor()")
@@ -70,7 +70,7 @@ nav-bar(
               b No Grades Selected
               | Please select the range of grade levels this Reading is best suited for.
           //- Subject Selector
-          .form-group(*ngIf="readingForm.controls['public'].value == 'true'")
+          .form-group(*ngIf="readingForm.controls['reading_type'].value === 'public'")
             label Subject
             .input-group
             ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
@@ -78,11 +78,17 @@ nav-bar(
               b No Subjects Selected
               | Please select at least one Subject area that this Reading applies to.
           //- Reading Group Instructions section
-          //- .form-group(*ngIf="user.hero")
-          //-   label Group Instructions
-          //-     p.sub-label Provide your students with instructions for this reading. Instructions can be changed whenever you make a new group
-          //-     .input-group
-          //-       input#readingInstructions.form-control.form-item--editor.h3(type="text", placeholder="Reading Group Instructions", [formControl]="readingForm.controls['instructions']")
+          .form-group
+            label Instructions
+              p.sub-label Provide your students with instructions for this reading. Used as the default for new groups.
+              .input-group
+                textarea#groupInstructions.form-control.form-item--editor(
+                  [formControl]="readingForm.controls['default_instructions']", 
+                  type='text', 
+                  placeholder="For this lesson...",
+                  resize="none",
+                  (keyup)="changeMonitor()"
+                )
           //- Body Section
               - Includes "reading content" and "source"
           .form-group.medium-wrap(style="position:relative;")
@@ -120,7 +126,10 @@ nav-bar(
                 - Insert a Picture or Pdf
                 - (Hero) Insert a Question
             //- Desktop Insert Buttons
-            .editor-button-bar.hidden-md-down([class.hide]="editorToolbarHidden", [style.top]="editorToolbarY + 'px'")
+            #insertBar.editor-button-bar.hidden-md-down(
+              [class.hide]="editorToolbarHidden", 
+              [style.top]="editorToolbarY + 'px'"
+            )
               //- Insert Label
               span.editor-button-bar__title Insert
               //- Upload Image Button
@@ -170,15 +179,13 @@ nav-bar(
           .form-group
             //- Source section
             label Source
-              p.sub-label (Optional) Provide a link or title for the source of the text.
+              p.sub-label Provide a link or title for the source of the text (Optional).
               .input-group
                 input#readingSource.form-control.form-item--editor.h3.mSource(type="text", placeholder="New Reading Source...", [formControl]="readingForm.controls['source']")
-
-.fixed-btn-row--SE
-  tutorial-box([tutorialName]="'newReading'",
-    [pageObjs]="guideContent",
-    [pager]="guideStepNo",
-    (pageChange)="guideStepNo = $event")
+quick-start-flag(
+  [isCornerTrigger]="true",
+  (click)="beginTour(true)"
+)
 
 //- Modals
 upload-picture-modal.modal-will-fade([class.show]="showUploadModal", (returnImage)="addImages($event)", (closeModal)="showUploadModal = false")
@@ -202,6 +209,8 @@ hot-add-project-modal.modal-will-fade(
   [reading]="reading",
   [groupLabel]="'Group 1'",
   [largeReadingWarning]="isLargeReading(wordCount, wordBoxCount)",
+  [showGuideMessage]="onboardTemplate",
+  [hideInstructions]="true",
   (groupSaved)="finalizeShare(readingForm.value, $event)",
   (closeModal)="showFirstGroupModal = false"
 )

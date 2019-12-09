@@ -2,6 +2,81 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.12.32"></a>
+## [4.12.32](https://github.com/codiak/edji-hotrod/compare/v4.12.31...v4.12.32) (2019-12-07)
+
+
+
+<a name="4.12.31"></a>
+## [4.12.31](https://github.com/codiak/edji-hotrod/compare/v4.12.30...v4.12.31) (2019-12-06)
+
+
+
+<a name="4.12.30"></a>
+## [4.12.30](https://github.com/codiak/edji-hotrod/compare/v4.12.29...v4.12.30) (2019-12-06)
+
+
+
+<a name="4.12.29"></a>
+## [4.12.29](https://github.com/codiak/edji-hotrod/compare/v4.12.28...v4.12.29) (2019-12-06)
+
+
+
+<a name="4.12.28"></a>
+## [4.12.28](https://github.com/codiak/edji-hotrod/compare/v4.12.27...v4.12.28) (2019-11-27)
+
+
+
+<a name="4.12.27"></a>
+## [4.12.27](https://github.com/codiak/edji-hotrod/compare/v4.12.25...v4.12.27) (2019-11-13)
+
+
+
+<a name="4.12.26"></a>
+## [4.12.26](https://github.com/codiak/edji-hotrod/compare/v4.12.9...v4.12.26) (2019-11-12)
+
+
+
+<a name="4.12.25"></a>
+## [4.12.25](https://github.com/codiak/edji-hotrod/compare/v4.12.24...v4.12.25) (2019-11-08)
+
+
+
+<a name="4.12.24"></a>
+## [4.12.24](https://github.com/codiak/edji-hotrod/compare/v4.12.23...v4.12.24) (2019-11-08)
+
+
+
+<a name="4.12.23"></a>
+## [4.12.23](https://github.com/codiak/edji-hotrod/compare/v4.12.22...v4.12.23) (2019-11-08)
+
+
+
+<a name="4.12.22"></a>
+## [4.12.22](https://github.com/codiak/edji-hotrod/compare/v4.12.21...v4.12.22) (2019-10-31)
+
+
+
+<a name="4.12.21"></a>
+## [4.12.21](https://github.com/codiak/edji-hotrod/compare/v4.12.20...v4.12.21) (2019-10-29)
+
+
+
+<a name="4.12.20"></a>
+## [4.12.20](https://github.com/codiak/edji-hotrod/compare/v4.11.5...v4.12.20) (2019-10-26)
+
+
+
+<a name="4.12.19"></a>
+## [4.12.19](https://github.com/codiak/edji-hotrod/compare/v4.12.18...v4.12.19) (2019-10-23)
+
+
+
+<a name="4.12.18"></a>
+## [4.12.18](https://github.com/codiak/edji-hotrod/compare/v4.12.17...v4.12.18) (2019-10-22)
+
+
+
 <a name="4.12.17"></a>
 ## [4.12.17](https://github.com/codiak/edji-hotrod/compare/v4.12.16...v4.12.17) (2019-10-13)
 

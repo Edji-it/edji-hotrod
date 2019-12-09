@@ -13,7 +13,6 @@ import { AppComponent } from './app.component'
 // Shared Module imports components between modules
 import { SharedModule } from './app-shared.module'
 
-import { Ng4TwitterTimelineModule } from './home/twitter-timeline'
 import { NgxPageScrollModule } from 'ngx-page-scroll'
 
 // Sentry Setup
@@ -72,7 +71,7 @@ import {
   PromoBannerComponent,
   SchoolSelectorComponent,
 } from './shared'
-import { HomeComponent, BadgeRowComponent } from './home'
+import { HomeComponent, BadgeRowComponent, TweetCarouselComponent } from './home'
 import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
 import { LoginForm, GuestForm, RegisterFormComponent, ProfileFormComponent } from './forms'
 
@@ -93,6 +92,7 @@ import {
   ConfirmCoOwnerModal,
   ReadingPreviewModal,
   ReadingLinkModal,
+  TutorialGifModalComponent,
 } from './modals'
 import {
   AnnotatorComponent,
@@ -103,9 +103,7 @@ import {
   AudioCommentComponent,
   AvatarPortalComponent,
 } from './annotator'
-import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent } from './project-page'
-import { FirefeedComponent } from './project-page/owner-tools/firefeed/firefeed.component'
-import { FirecardComponent } from './project-page/owner-tools/firefeed/firecard/firecard.component'
+import { ProjectPageComponent, OwnerToolsComponent, LeaderboardComponent, ReaderToolsComponent } from './project-page'
 import { QuestionfeedComponent } from './project-page/owner-tools/questionfeed/questionfeed.component'
 import { QuestioncardComponent } from './project-page/owner-tools/questionfeed/questioncard/questioncard.component'
 import {
@@ -131,7 +129,7 @@ import { HeroPricingComponent } from './hero-pricing/hero-pricing.component'
 import { DiscoverFeedComponent } from './discover-feed/discover-feed.component'
 import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { GoogleButton, CleverButton } from './buttons'
-import { CommentPaneComponent } from './shared/comment-pane/comment-pane.component'
+import { CommentExplorerComponent } from './shared'
 import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
 import { TooltipModule } from 'primeng/tooltip'
@@ -212,7 +210,7 @@ const routerOptions: ExtraOptions = {
     RedeemToken,
     RegisterPageComponent,
     CreateProfilePageComponent,
-    CommentPaneComponent,
+    CommentExplorerComponent,
     CommentComponent,
     TeacherFeedbackComponent,
     AvatarPortalComponent,
@@ -244,6 +242,7 @@ const routerOptions: ExtraOptions = {
     DeleteCommentModal,
     DeleteReadingModal,
     DeleteProjectModal,
+    TutorialGifModalComponent,
     UploadAvatarModal,
     AnnotatorComponent,
     NewReadingPage,
@@ -254,8 +253,6 @@ const routerOptions: ExtraOptions = {
     DiscoverFeedComponent,
     DiscoverAddMetaModal,
     LeaderboardComponent,
-    FirefeedComponent,
-    FirecardComponent,
     QuestionfeedComponent,
     QuestioncardComponent,
     UploadModalComponent,
@@ -264,6 +261,7 @@ const routerOptions: ExtraOptions = {
     DeletePdfMiniModal,
     ProjectPageComponent,
     OwnerToolsComponent,
+    ReaderToolsComponent,
     LoginRequiredModal,
     HeroChangeComponent,
     TutorialBoxComponent,
@@ -272,6 +270,7 @@ const routerOptions: ExtraOptions = {
     CreatedDashComponent,
     LoginComponent,
     BadgeRowComponent,
+    TweetCarouselComponent,
     HomeComponent,
     NoContentComponent,
     UserDetailsUpdateModal,
@@ -310,7 +309,6 @@ const routerOptions: ExtraOptions = {
     DataListModule,
     PaginatorModule,
     TooltipModule,
-    Ng4TwitterTimelineModule,
     NgxPageScrollModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([MetricsEffects]),

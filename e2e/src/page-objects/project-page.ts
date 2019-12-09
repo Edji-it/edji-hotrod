@@ -38,18 +38,18 @@ export class Project implements PageObjectInterface {
   public imageDown = 25
   public tutorialSkip = element(by.css('.tooltip__skip'))
   public commentOptionsShow = element(by.css('.text-options.active'))
-  public commentNotHidden = element(by.css('edji-comment:not(.hidden)'))
+  public commentNotHidden = element(by.css('avatar-portal:not(.hide)'))
   public getEmojiFromKeyboard = (locator: string) => element(by.css('emoji-keyboard')).element(by.css(locator))
   public textCommentInput = element(by.css('textarea.text-comment-input'))
   public word = (index: string | number) => element(by.css(`.w[index='${index}']`))
   public commentAnnotatedText = element(by.css('[data-test="commentAnnotatedText"]'))
 
   // Audio Comment test variables
-  public audioPlay = element(by.css('edji-comment:not(.hidden) audio-comment #audioPlay'))
-  public audioPause = element(by.css('edji-comment:not(.hidden) audio-comment #audioPause'))
-  public audioRestart = element(by.css('edji-comment:not(.hidden) audio-comment #audioRestart'))
-  public audioRecord = element(by.css('edji-comment:not(.hidden) audio-comment #audioRecord'))
-  public emojiCommentSave = element(by.css('edji-comment .comment-action--save'))
+  public audioPlay = element(by.css('audio-comment #audioPlay:not(.disabled)'))
+  public audioPause = element(by.css('audio-comment #audioPause'))
+  public audioRestart = element(by.css('audio-comment #audioRestart'))
+  public audioRecord = element(by.css('audio-comment #audioRecord:not(.disabled)'))
+  public commentActionSave = element(by.css('edji-comment .comment-action--save'))
   public audioComment = element.all(by.css('.audio-comment-input-wrapper')).first()
 
   // Avatar comment pane activators
@@ -164,6 +164,8 @@ export class Project implements PageObjectInterface {
         })
       }
     })
+    // sleep() reason: Give comment explorer time to slide in
+    browser.sleep(1000)
   }
 
   public addTextComment(): void {
@@ -187,6 +189,8 @@ export class Project implements PageObjectInterface {
         })
       }
     })
+    // sleep() reason: Give comment explorer time to slide in
+    browser.sleep(1000)
   }
 
   public addAudioComment(): void {
@@ -214,6 +218,8 @@ export class Project implements PageObjectInterface {
         })
       }
     })
+    // sleep() reason: Give comment explorer time to slide in
+    browser.sleep(1000)
   }
 
   public openReplyPane(): void {
@@ -265,6 +271,8 @@ export class Project implements PageObjectInterface {
     browser.wait(this.EC.elementToBeClickable(grinningEmoji), 5000, 'never found the emoji keyboard')
     grinningEmoji.click()
     // Save emoji comment
-    this.emojiCommentSave.click()
+    this.commentActionSave.click()
+    // sleep() reason - saved icon displays
+    browser.sleep(1100)
   }
 }

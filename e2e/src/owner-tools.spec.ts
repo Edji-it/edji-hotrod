@@ -114,7 +114,7 @@ describe('Project Page as a Project Owner: ', () => {
     loginModal.guestLoginButton.click()
 
     // Make sure the comment was created
-    let comments = element.all(by.css('edji-comment:not(.hidden):not(.spec-owner)'))
+    let comments = element.all(by.css('avatar-portal:not(.hide):not(.spec-owner)'))
     browser.wait(EC.elementToBeClickable(comments.first()), 5000, 'never found the added comment')
     expect(comments.count()).toBeGreaterThan(0)
   })
@@ -197,7 +197,7 @@ describe('Project Page as a Project Owner: ', () => {
 
     // Make sure the comment was created
     let comments = element
-      .all(by.css('edji-comment:not(.hidden):not(.spec-owner)'))
+      .all(by.css('avatar-portal:not(.hide):not(.spec-owner)'))
       .count()
       .then(count => {
         expect(count).toBe(0)

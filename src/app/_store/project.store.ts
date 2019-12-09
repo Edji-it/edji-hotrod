@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, Subscription, Subject, of } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
+import { Store } from '@ngrx/store'
 
 // Internal
 import { CommentStats, EdjiComment, PublicUser, Project, User } from '../shared/datatypes'
@@ -16,6 +17,8 @@ import {
 } from '../_services'
 import { decorateArchivedProject } from './project.decorators'
 import { generateInitialsFromName } from './user.decorators'
+import { AppState } from '../_reducers'
+import { IncrementMetric } from '../_reducers/metrics.reducers'
 
 @Injectable()
 export class ProjectStore {
@@ -72,10 +75,6 @@ export class ProjectStore {
   private commentByPosSubject: BehaviorSubject<any> = new BehaviorSubject<any>(this.commentByPosSource)
   public commentByPos: Observable<any> = this.commentByPosSubject.asObservable()
 
-  // Broadcast closing the comment pane
-  public commentPaneStateSubj: Subject<boolean> = new Subject<boolean>()
-  public commentPaneState: Observable<boolean> = this.commentPaneStateSubj.asObservable()
-
   // Broadcast rendering the lastword element if firefeed view image reference doesn't have the image rendered yet
   public lastWordUpdateSubj: Subject<number> = new Subject<number>()
   public lastWordUpdateState: Observable<number> = this.lastWordUpdateSubj.asObservable()
@@ -94,6 +93,7 @@ export class ProjectStore {
     private angulartics: Angulartics2,
     private _academy: AcademyService,
     private _messages: MessageService,
+    private store: Store<AppState>,
   ) {
     // needs to be constructed here or else it returns undefined
     this._commentStats = new CommentStats()
@@ -108,6 +108,12 @@ export class ProjectStore {
       this._socket.commentUpdates.subscribe(
         commentUpdate => {
           let comment = commentUpdate.comment
+          let selfUpdate = comment.user_id === this.user._id
+          if (selfUpdate && commentUpdate.action !== 'DELETE') {
+            // A user's comment edits should not update via sockets
+            // HOWEVER, a teacher can DELETE a user's comments
+            return
+          }
           // Process different live comment updates
           if (commentUpdate.action === 'DELETE') {
             if (comment.reply_to) {
@@ -116,16 +122,12 @@ export class ProjectStore {
               this.removeAnswerFromAnswers(comment)
             }
           } else if (commentUpdate.action === 'UPDATE') {
-            // Socket updates don't come through with a timestamp
-            comment.createdAt = Date.now()
             if (comment.reply_to) {
               this.addCommentToReplies(comment)
             } else if (comment.questionId) {
               this.addAnswerToAnswers(comment)
             }
           } else if (commentUpdate.action === 'CREATE') {
-            // Socket updates don't come through with a timestamp
-            comment.createdAt = Date.now()
             if (comment.reply_to) {
               this.addCommentToReplies(comment)
             } else if (comment.questionId) {
@@ -489,6 +491,7 @@ export class ProjectStore {
   public saveComment(commentObj: EdjiComment): Promise<any> {
     let project: Project = this.currentProjectSource.getValue()
     let comment = Object.assign({}, commentObj)
+    let isUpdate: boolean
 
     if (!comment.user_id) {
       comment.user_id = this._auth.getUser()._id
@@ -496,21 +499,24 @@ export class ProjectStore {
     if (!comment.author) {
       comment.author = this._auth.getUser().fullname ? this._auth.getUser().fullname : this._auth.getUser().username
     }
-
-    let options = this._auth.getOptions()
-    // Add comment ID if passed
-    // Tell other Project viewers comment changed, using Socket
+    // Identify whether NEW comment or UPDATE to comment
     if (comment._id) {
-      this._socket.updateComment(comment, 'UPDATE', project._id)
+      isUpdate = true
+      // Identify newly created commetns with content
+      // Rounds dates to the nearest 1/10 of a second, since created/updated differ by milliseconds
+      if (
+        comment.createdAt &&
+        comment.updatedAt &&
+        comment.createdAt.toString().substr(0, 21) === comment.updatedAt.toString().substr(0, 21)
+      ) {
+        this.store.dispatch(new IncrementMetric('comments_created'))
+      }
     } else {
-      this._socket.updateComment(comment, 'CREATE', project._id)
-
       // need to set a comment context to discern between comments and replies for pipo event
       let commentContext = 'comment'
       if (comment.reply_to && comment.reply_to !== '') {
         commentContext = 'reply'
       }
-
       // add the comment creation event to pipo
       this._academy.pipoEvent({
         // standard event info:
@@ -542,7 +548,18 @@ export class ProjectStore {
         properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
       })
     }
-    return this._project.putComment(project._id, comment)
+    return this._project
+      .putComment(project._id, comment)
+      .pipe(
+        map((savedComment: EdjiComment) => {
+          this._socket.updateComment(savedComment, isUpdate ? 'UPDATE' : 'CREATE', project._id)
+          if (!isUpdate) {
+            this.buildCommentsByPos()
+          }
+          return savedComment
+        }),
+      )
+      .toPromise()
   }
 
   /**
@@ -627,15 +644,17 @@ export class ProjectStore {
         repliesById[comment.reply_to] = []
       }
       // Double check comment doesn't exist
-      for (let reply of repliesById[comment.reply_to]) {
-        if (reply._id == comment._id) {
+      repliesById[comment.reply_to].forEach((reply, index) => {
+        if (reply && reply._id === comment._id) {
+          // Update with new copy
+          repliesById[comment.reply_to][index] = comment
           skipAdd = true
         }
-      }
+      })
       if (!skipAdd) {
         repliesById[comment.reply_to].push(comment)
-        this.repliesByIdSubject.next(repliesById)
       }
+      this.repliesByIdSubject.next(repliesById)
     }
   } // public addCommentToReplies(comment: EdjiComment): void
 
@@ -843,7 +862,7 @@ export class ProjectStore {
       let fitsFilter = true
       let filterKeys = Object.keys(filter.propertyFilters)
       for (let key of filterKeys) {
-        if (filter.propertyFilters[key].test(comment[key]) === false) {
+        if (filter.propertyFilters[key] !== comment[key]) {
           fitsFilter = false
           break
         }
@@ -873,14 +892,18 @@ export class ProjectStore {
    * - Pass an empty string to clear the filter
    * @param userId The id for the Student you want to view the comments of
    */
-  public filterByUser(user: User): void {
+  public filterByUser(userId: string): void {
     let props: CommentPropertyFilters = {}
     // Clear current filter, without notifying components
     this.activeFilter = null
     // For User id filters, we want an exact match
-    props.user_id = new RegExp('^' + user._id + '$')
+    props.user_id = userId
+    // Get user object
+    let user = (this.joinedUsersSource.getValue() || []).find(user => {
+      return user._id === userId
+    })
     // Construct full filter and notify components
-    this.generateCommentFilter(props, 'Student', user.fullname ? user.fullname : user.username)
+    this.generateCommentFilter(props, 'Highlights', user.fullname ? user.fullname : user.username)
   }
 
   /**
@@ -920,7 +943,6 @@ export class ProjectStore {
       this._auth.getPublicUsers(studentIds, tempIds).subscribe(
         userInfo => {
           let currentProject = this.currentProjectSource.getValue()
-          userInfo = userInfo.users
           // Ensure PublicUsers have initials
           userInfo[0] &&
             userInfo.forEach(user => {

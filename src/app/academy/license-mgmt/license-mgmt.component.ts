@@ -85,6 +85,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         this.academyState = currentState
         if (this.licenses && this.academyState && this.academyState.selected) {
           this.loadLicenseRows(this.licenses[this.academyState.selected])
+          this.inviteLink = this.buildLicenseLink(this.licenses, this.currentAcademy)
         }
       }),
       // get the licenses the user can manage
@@ -92,9 +93,8 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         let licenseIndex = this.academyState.selected || 0
         this.licenses = licenses
         this.loadLicenseRows(this.licenses[licenseIndex])
-        // Set invite link to first hero license
-        let heroLicenses = licenses.filter(license => { return license.license_type === 'hero' })
-        this.inviteLink = this.buildLicenseLink(heroLicenses[0])
+        // Set invite link to the institution's Hero license
+        this.inviteLink = this.buildLicenseLink(licenses, this.currentAcademy)
       }),
     )
   }
@@ -159,13 +159,17 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
    * Generate academy invite link
    * @param license hero license to use for link
    */
-  private buildLicenseLink(license): string {
-    if (license.link_tokens && license.owning_institution) {
+  private buildLicenseLink(licenses, academy): string {
+    if (!academy) return ''
+    let license = licenses.find(license => {
+      return license.license_type === 'hero' && academy._id === license.owning_institution._id
+    })
+    if (license && license.link_tokens) {
       let name = encodeURIComponent(license.owning_institution.name)
-      let token = license.link_tokens
+      let token = license.link_tokens[0]
       return `${location.origin}/#/license/accept/${token}?academy=${name}&tokenType=academy_token`
     } else {
-      console.error("License Link: Unable to find link token on license")
+      console.error('License Link: Unable to find link token on license')
       return ''
     }
   }

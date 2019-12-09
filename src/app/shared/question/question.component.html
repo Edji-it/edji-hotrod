@@ -79,8 +79,7 @@
           <div *ngFor="let answer of answersById[question._id]; let i = index">
             <div *ngIf="isAnswerVisible(answer)" class="comment-wrap-row">
               <edji-comment class="answerCommentBlock" [comment]="answer" [commentContext]="'answer'"
-                [isActive]="answer.active" [readOnly]="answer.user_id !== user._id" [reply]="true"
-                [userPermission]="getCommentPermissions(answer)"></edji-comment>
+                [isActive]="answer.active" [readOnly]="answer.user_id !== user._id" [reply]="true"></edji-comment>
             </div>
           </div>
         </div>

@@ -1,2 +1,7 @@
 @import '../../../sass/base/variables';
 
+.user-icon--medium + .user-icon__fullname {
+  font-size: 18px;
+  line-height: 1em;
+  vertical-align: top;
+}

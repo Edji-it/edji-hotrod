@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgScrollbarModule } from 'ngx-scrollbar'
 
 // Project Dependencies
 import {
@@ -36,11 +37,12 @@ import {
   LicenseInviteComponent,
   ShareCodeComponent,
 } from './modals'
-import { GoogleClassroomShareButton, CopyLinkShareButton } from './buttons'
+import { GoogleClassroomShareButton, CopyLinkShareButton, CopyEmbedButton } from './buttons'
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
 import { PromoPageComponent } from './promo/promo.component'
 import { ShareSocialIconsComponent } from './shared/share-social-icons/share-social-icons.component'
+import { QuickStartFlagComponent } from './shared/quick-start-flag.component'
 
 let SHARED_DECLARATIONS = [
   AddClassPipe,
@@ -51,6 +53,7 @@ let SHARED_DECLARATIONS = [
   FooterComponent,
   GoogleClassroomShareButton,
   CopyLinkShareButton,
+  CopyEmbedButton,
   HeroSubscribeComponent,
   LicenseInviteComponent,
   LinkifyPipe,
@@ -67,9 +70,10 @@ let SHARED_DECLARATIONS = [
   UserInitialsPipe,
   HotChartHzbarComponent,
   HotChartGaugeComponent,
+  QuickStartFlagComponent,
 ]
 
-let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule]
+let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, NgScrollbarModule]
 
 @NgModule({
   imports: [

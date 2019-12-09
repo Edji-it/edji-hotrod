@@ -2,137 +2,133 @@ nav-bar
 //- Image block with header text
 .container-fluid
   promo-banner
-  .row.navy.has-sparks
-      .sparks
-      .col-md-4.promo-panel
-        .promo-image__wrap
-          img(src="/assets/images/promo-home.svg")
-      .col-md-8.join-panel
-        .col__center-fix
-          .col__center-content.col-pad
-            h1.center.on-dark.promo-header.join-header__top Make Reading Engagement Visible
-            .promo-header__divider
-            //- h1.center.on-dark.promo-header See student thoughts 
-            //-   b live!
-            .button__row.pt-2.promo-button__row
-              a.btn.btn-primary(href="/project/demo") Try an Edji Reading
+  .row
+    .col-12.col-md-7.col-lg-8.promo-panel.navy.has-sparks
+      //- .sparks
+      .promo-image__wrap
+        img.image-one(src="/assets/images/promo/homepage-graphic--text.svg")
+        img.image-two(src="/assets/images/promo/homepage-graphic--halfway.svg")
+        img.image-midway(src="/assets/images/promo/homepage-graphic--midway.svg")
+        img.image-two-out(src="/assets/images/promo/homepage-graphic--halfway-out.svg")
+        img.image-three(src="/assets/images/promo/homepage-graphic--highlighted.svg")
+        .heat-demo-toggle
+          i.icon.icon-vision-flame.inactive
+          span.toggle-preview See Heat Vision
+          span.toggle-hover Heat Vision On
+      h1.jumbo-header Your space-age annotation tool
+    .col-12.col-md-5.col-lg-4.join-panel
+      .promo-stack(
+          (mouseenter)="focusSection = 1",
+          (mouseleave)="focusSection = 0",
+          (click)="scrollToSection(1, 'Student Engagement')"
+        )
+        .col__center-content
+          h2 Increase student engagement
+          button.btn.btn-link(
+            [class.force-hover]="focusSection === 1",
+            [innerHtml]="':chart_with_upwards_trend: Learn how' | emojione"
+          )
+      .promo-stack(
+          (mouseenter)="focusSection = 2",
+          (mouseleave)="focusSection = 0",
+          (click)="scrollToSection(2, 'Annotate Anything')"
+        )
+        .col__center-content
+          h2 Annotate anything together
+          button.btn.btn-link(
+            [class.force-hover]="focusSection === 2",
+            [innerHtml]="':handshake: Learn how' | emojione"
+          )
+      .promo-stack(
+          (mouseenter)="focusSection = 3",
+          (mouseleave)="focusSection = 0",
+          (click)="scrollToSection(3, 'Personalize Education')"
+        )
+        .col__center-content
+          h2 Personalize education <br/>on-the-go
+          button.btn.btn-link(
+            [class.force-hover]="focusSection === 3",
+            [innerHtml]="':triangular_ruler: Learn how' | emojione"
+          )
   //- Container with Commenting and Heat Map info & images
   .container
-    //- Triple Value Prop
-    .row.justify-content-center
-      .col--value-prop.col-md-6.col-lg-4
-        h2 
-          | The Fastest Way to 
-          br
-          b Get Students Reading
-        img(src="/assets/images/promo/value-prop__fastest.png")
-        p Turn any content into a lesson, accessed with a simple code
-      .col--value-prop.col-md-6.col-lg-4
-        h2 
-          | The Easiest Way to 
-          br
-          b Annotate Content
-        img(src="/assets/images/promo/value-prop__annotate.png")
-        p Students highlight and discuss using Emoji, Text or Audio comments
-      .col--value-prop.col-md-6.col-lg-4
-        h2 
-          | The Best Way to 
-          br
-          b See Student Thoughts
-        img(src="/assets/images/promo/value-prop__thoughts.png")
-        p Live updating comments show you every student thought as its shared
+    .row
+      .col-12
+        #twitterShowcase.my-4
+          edji-tweet-carousel
     //- Partner badges
     edji-badge-row
-    //- Intro video
-    .row.promo-row.jumbotron--guide-video
-      .col-md-8.mt-4.nopadding.text-center
-        .promo-video-thumb((click)="showPromoVideoModal = true")
-          .icon.icon-play
-          img(src="/assets/images/thumbnail-literacy-is-essential--lg.png")
-      .col-md-4.my-4(style="min-height:120px; padding-left: 0px; padding-right: 0px;")
-        .col__center-content.guide-video-heading
-          p.h1.mb-0 Learn how Edji gives teachers powerful, real-time insights
-    .row.promo-row.promo-row__no-btm-padding
-      .col-md-6
-        .col__center-fix
-          .promo-text
-            h1 Highlight and React
-            p Edji readings revolve around your students interacting with text through comments. As they read, students highlight 
-              | interesting or important parts of the text and leave a comment to express their thoughts about it. 
-            p Comments can be written with text or strings of Emoji that convey complex thoughts. You can see all comments being 
-              |made in real time to keep an eye on what your students are thinking.
-      .col-md-6.center.nopadding__min-screen
-        .row.has-sparks.full-width__min-screen
-          .flexi-img.img-fluid.promo-img__background.promo-img-1
-    .row.promo-row
-      .col-md-6.push-md-6
-        .col__center-fix
-          .promo-text
-            h1 Pinpoint with Heat Map
-            p Edji lets you stay on top of how your students are reacting in Edji by watching the Heat Map: A real time, 
-              | interactive view, that shows you where each highlight is made. When Highlights overlap, the highlights 
-              | begin to glow. 
-            p A word with one comment is yellow, but a word with 15 comments glows dark red; making it easy to see 
-              | what your students care most about in a reading.
-      .col-md-6.pull-md-6.center.nopadding__min-screen
-        .row.has-sparks.full-width__min-screen
-          .flexi-img.img-fluid.promo-img__background.promo-img-2
-  //- .container 
-  //- Sign-up button large and stand-alone
-  .row.navy.has-sparks
-    .sparks
-    .col-sm-12
-      .call-to-action
-        h1 Share instantly. Read together. Learn loud
-        .row
-          .col-md-3
-          .col-md-3
-            .text-center.mb-2
-              button.btn.btn-secondary([routerLink]="['/about']", fragment="top") Meet the Team
-          .col-md-3
-            .text-center
-              button.btn.btn-primary([routerLink]="['/register']", fragment="top") Get Started
-  //- Tweet Row
-  div.mt-4([class.hide]="!tweetsLoaded")
-    .container
-      .row.promo-row
-        .col-12
-          h1 What teachers are saying about Edji!
-          div(style="border:1px solid #eee; padding: 5px; border-radius:5px;")
-            ng4-twitter-timeline([dataSrc]="{sourceType: 'collection', id: '947890483635851267'}", [opts]="{tweetLimit: 10, chrome: { noheader: true }}")
-  //- Row below promo
-  .container
-    //- we don't want this content to be fluid, so we give it another container
-    .row.promo-row.promo-row__no-btm-padding
-      .col-md-6
-        .col__center-fix
-          .promo-text
-            h1 Go Hero!
-            p Edji Hero is the way to take Edji to the next level. As a Hero, you can make unlimited Edji Readings, and can revisit them at any time. You also get full access to the Edji Reading Recap, a tool that breaks down each of your students' engagement, and lets you give live feedback to your students while they read.
-            button.btn.btn-hero([routerLink]="['/plans']", fragment="top") Learn More
-      .col-md-6.center.nopadding__min-screen
-        .row.has-sparks.full-width__min-screen
-          .flexi-img.img-fluid.promo-img__background.promo-img-3
-    .row.promo-row
-      .col-md-6.push-md-6
-        .col__center-fix
-          .promo-text
-            h1 Hassle Free lessons
-            p Edji lets you craft engaging lessons based on the individual need of your class. If you find text from articles and 
-              | journals that reflect your next lesson, you can place it right into an Edji Reading.
-            p You can also insert images, gifs, and PDFs to bring your lessons to life. Lessons you create can be shared 
-              | with others. You can also use the lessons other teachers create from the Discover Feed.
-      .col-md-6.pull-md-6.center.nopadding__min-screen
-        .row.has-sparks.full-width__min-screen
-          .flexi-img.img-fluid.promo-img__background.promo-img-4
+    //- 1st Details Row
+.container-fluid
+  #detailSection1.row.promo-row
+    .scroll-positioner#detailSectionAnchor1
+    .col-md-5
+      h2 Increase student engagement
+      img.section-1__img(src="/assets/images/promo/value-prop__thoughts-2.png")
+    .col-md-7
+      div(style="margin-top:60px; max-width: 550px")
+        p.sub Engagement is the #1 reason teachers love Edji. It’s simple: students have more fun <span class="h-1">and learn more</span> when they can have input.
+        div(style="margin-top:20px; max-width: 500px")
+          //- .offset-md-2
+          p Everyone wants happy, engaged students. Edji is the best way to increase student engagement with lessons you already have, by making any lesson into a collaborative, social experience!
+          p Edji brings easy engagement to <span class="h-1">lessons you already have</span>. Your students will love learning on Edji, because <span class="h-1">their thoughts are seen</span> by you and their peers in a collaborative, social environment.
+  //- 2nd Details Row
+  #detailSection2.row.promo-row.promo-row--accent
+    .scroll-positioner#detailSectionAnchor2
+    .col-12.col-lg-8.offset-lg-4
+      h2.section-2__header Annotate anything together
+    .col-md-12.col-lg-8
+      .row
+        .col-md-6
+          p.sub Whether its a <b>PDF</b>, <b>image</b>, <b>web article</b>, or <b>GIF</b>&mdash;annotation is better live and together.
+        .col-md-6
+          p Edji works great in Science, Social Studies, and any content area, to shift the focus from "how to annotate" back to the material you are teaching.
+          p(style="margin-top:10px;") Use the content you already have, and use Edji to make it a collaborative, engaging experience while you get live data.
+          p.section-2__cta
+            b What lesson are you planning next?
+            button.btn.btn-primary([routerLink]="['/register']") Upgrade your lesson with Edji
+    .col-md-12.col-lg-4(style="margin-bottom: 30px; min-height: 160px;")
+      .promo-video-thumb((click)="showPromoVideoModal = true")
+        .icon.icon-play
+        img(src="/assets/images/thumbnail-literacy-is-essential--lg.png")
+        p.small.text-right.mt-1(style="position: absolute; right: 0px;") Get creative with PDFs in Edji
+  //- 3rd Details Row
+  #detailSection3.row.promo-row(style="z-index: 100; position: relative;")
+    .scroll-positioner#detailSectionAnchor3
+    .col-md-8
+      h2 Personalize education <br/>on-the-go
+    .col-md-4
+      //- Spacer
+    .col-md-5.col-lg-4.col-xl-3.section-3--col-l
+      p Without real time data on student thoughts, you’ll always be one step behind on what students are thinking.
+      p With real-time feedback from your students, Edji is your hands-off window into student thoughts, helping you identify where a student is performing well, and where a student needs an assist.
+    .col-md-2.col-lg-4.col-xl-6.p-0
+      .align-center.mt-2
+        //-spacer image
+        img.section-3__img-dummy(
+          src="/assets/images/promo/homepage-frogs-screenshot-HD.png",
+          style=""
+        )
+        img.section-3__img(
+          src="/assets/images/promo/homepage-frogs-screenshot-HD.png",
+          style=""
+        )
+    .col-md-5.col-lg-4.col-xl-3.section-3--col-r
+      p.mt-2.sub Instantly see:
+      p.sub
+        span.h-8 &nbsp;What engages your class&nbsp;
+      p.sub
+        span.h-4 &nbsp;Where students struggle&nbsp;
+      p.sub
+        span.h-1 &nbsp;Who has read and how far&nbsp;
   //-  Another Sign-up button large and stand-alone
   .row.navy.has-sparks
     .sparks
     .col-sm-12
       .call-to-action
-        h1 Want to see a reading on Edji?
+        .h1 Explore a reading on Edji
         .btn-row
-          button.btn.btn-primary.btn-lg([routerLink]="['/project','demo']") View Demo
+          button.btn.btn-primary.btn-lg([routerLink]="['/project','demo']") Join Demo
     //- A catchy d3m0 reading button
 
 edji-reset-pass(*ngIf="showPassModal", (closeModal)="showPassModal = !showPassModal")
@@ -145,9 +141,8 @@ edji-reset-pass(*ngIf="showPassModal", (closeModal)="showPassModal = !showPassMo
       .modal-body
         .embed-responsive.embed-responsive-16by9
           iframe.embed-responsive-item(
-              src="//www.youtube.com/embed/F9LgNtwnsZw?autoplay=1",
+              src="//www.youtube.com/embed/a8EiJoloyGw?autoplay=1",
               frameborder="0",
               allow="autoplay; encrypted-media",
               allowfullscreen
           )
-      

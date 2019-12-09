@@ -140,7 +140,7 @@ medium-editor.content {
     }
   }
 
-  & * {
+  & *:not(.driver-highlighted-element)  {
     position: static !important;
   }
 

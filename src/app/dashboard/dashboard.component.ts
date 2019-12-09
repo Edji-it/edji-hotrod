@@ -22,41 +22,13 @@ import { User } from './../shared/datatypes'
 })
 export class DashboardComponent implements OnInit {
   // Set our default values
-  private currentUser: User
   private subscriptions: Subscription[] = []
+  public currentUser: User
   public mobileShowJoined: boolean = true
   public showUserDetailsModal: boolean = false
 
   // Tool Tip variables
-  public toolTipsContent: any[] = [
-    {
-      title: 'The Dashboard',
-      image: '/assets/dashboard-tooltips/logo.png',
-      body: 'This is The Dashboard, your hub to Edji. You can find all the Readings you have Created or Joined here!',
-    },
-    {
-      title: 'Joined Readings',
-      image: '/assets/dashboard-tooltips/lightning-code.png',
-      body: 'These are Readings that you join to read and comment on. Join a new one by using a Lightning Code!',
-    },
-    {
-      title: 'Created Readings',
-      image: '/assets/dashboard-tooltips/reading.png',
-      body:
-        'These are Readings that you created yourself. Each reading will have Groups, and each Group has a Lightning Code!',
-    },
-    {
-      title: 'Create A New Group',
-      image: '/assets/dashboard-tooltips/groups.png',
-      body: 'This creates an exact copy of a Reading that you can immediately share with a new Group of users.',
-    },
-    {
-      title: 'Copy & Edit',
-      image: '/assets/dashboard-tooltips/versioning.png',
-      body:
-        'This will create a new Version of your reading. This lets you simply add to, or edit a Reading you have already made.',
-    },
-  ]
+  public toolTipsContent: any[]
   public toolTipStepNo: number = 1
 
   // TypeScript public modifiers
@@ -89,6 +61,36 @@ export class DashboardComponent implements OnInit {
         this.showUserDetailsModal = true
       }
     }
+    // Set tutorial content
+    this.toolTipsContent = [
+      {
+        title: 'The Dashboard',
+        image: '/assets/dashboard-tooltips/logo.png',
+        body: 'Welcome to your Dashboard, your Edji hub. Here, you\'ll find all the readings you have created or are reading!',
+      },
+      {
+        title: 'The Read Tab',
+        image: '/assets/dashboard-tooltips/lightning-code.png',
+        body: 'Readings that you\'ve <b>joined</b> to read. Join a new one by using a group code!',
+      },
+      {
+        title: `The ${ this.currentUser.isStudent ? 'Write' : 'Create' } Tab`,
+        image: '/assets/dashboard-tooltips/reading.png',
+        body:
+          'Readings that you <b>created</b> yourself. Each reading has groups, and each group has a code!',
+      },
+      {
+        title: 'Create A New Group',
+        image: '/assets/dashboard-tooltips/groups.png',
+        body: 'This creates an exact copy of a reading that you can immediately share with a new group of users.',
+      },
+      {
+        title: 'Copy & Edit',
+        image: '/assets/dashboard-tooltips/versioning.png',
+        body:
+          'This will create a new version of your reading, allowing you to edit it for a new lesson.',
+      },
+    ]
 
     this.subscriptions.push(
       this._auth.currentUser.subscribe(user => {

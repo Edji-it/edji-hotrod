@@ -22,6 +22,8 @@ export class Sidebar {
   // Owner Tools
   public ownerTools = element(by.id('ownerToolsBar'))
   public leaderboardButton = element(by.id('toggleLeaderboard'))
+  public commentsButton = element(by.id('toggleAllComments'))
+  public myCommentsButton = element(by.id('toggleMyComments'))
   public firstCommenterComments = element.all(by.css('.e2e-comment--First-Commenter .user-icon')) // User icon is a more reliable indicator of visibility
   public firstCommenterFirstComment = this.firstCommenterComments.first()
   public prevStudentButton = element(by.id('studentFilterPrev'))

@@ -47,11 +47,12 @@ nav-bar([showDashboardOptions]="true")
               | Your Hero powers will go away on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}.
           span(*ngIf="currentUser.hero_status && !canceled && !academyHero") Renews on {{ customerSubEnd | edjidate:'timeStamp':'mediumDate' }}
       .col-md-4.pt-3
-        button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status && !canceled && !academyHero", (click)="showHeroChangeModal = true") Modify
+        button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status && !canceled && !academyHero", (click)="showHeroChangeModal = true") View/Modify
         button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
-        button.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Renew Subscription
+        button#heroResubscribeBtn.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Renew Subscription
     //- Linked Accounts
-    .info-group
+    //- Only showing this section if the user has an account linked, because we are temporarily disabling linking from this page.
+    .info-group(*ngIf="linkedAccounts.clever")
       label.info-label Linked Accounts
       //- Clever linked
       div.mt-2
@@ -66,7 +67,7 @@ nav-bar([showDashboardOptions]="true")
             .tooltip
               .tooltip-title Clever account is linked
         //- Clever NOT linked
-        edji-clever-button(*ngIf="!linkedAccounts.clever", [dark]="true")
+        //- edji-clever-button(*ngIf="!linkedAccounts.clever", [dark]="true")
     //- Reading on Edji since
     .info-group.mt-5
       p.faded Reading on Edji since {{currentUser.createdAt | edjidate:'timeStamp':'mediumDate'}}
@@ -90,6 +91,7 @@ hero-subscribe-modal.modal-will-fade(
   (heroWasBorn)="_router.navigate(['/dashboard'])"
 )
 hero-change-modal.modal-will-fade(
+  *ngIf="showHeroChangeModal",
   [class.show]="showHeroChangeModal", 
   (closeModal)="showHeroChangeModal = !showHeroChangeModal; updateHeroStatus()"
 )
