@@ -2735,9 +2735,9 @@ ecstatic@^3.0.0:
     minimist "^1.1.0"
     url-join "^2.0.5"
 
-"edji-types@git+ssh://git@github.com/codiak/edji-types.git#1.0.0":
-  version "0.0.0"
-  resolved "git+ssh://git@github.com/codiak/edji-types.git#b661fcec0e0364e020acd9e708841daba3396f79"
+"edji-types@git+http://git@github.com/codiak/edji-types.git#1.0.2":
+  version "1.0.0"
+  resolved "git+http://git@github.com/codiak/edji-types.git#4c8bb8a7a5c612c98b7c4d00acdade132098040d"
 
 ee-first@1.1.1:
   version "1.1.1"
