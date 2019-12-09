@@ -56,8 +56,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         - Deletes highlights and comment components
         - Asks ProjectService to save comments for us.
     */
-
-  @Input() private mobileCommentActive: boolean
   @Input() private activeReply: any
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
@@ -107,7 +105,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public hideKeyboard = false
 
   // Status Booleans
-  public isMobile = false
   private commentFragScrollReady = false
 
   public highlightY = 200
@@ -965,15 +962,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Keep track of which line is expanded
       if (forceSet === true) {
         this.lineExpanded = lineY
-      }
-      // Loop through comments on line and mark comments as expand
-      for (let i = 0; i < commentsByPos[lineY].length; i++) {
-        let comment = commentsByPos[lineY][i]
-        if (typeof forceSet !== 'undefined') {
-          comment.expanded = forceSet
-        } else {
-          comment.expanded = !comment.expanded
-        }
       }
     }
   }

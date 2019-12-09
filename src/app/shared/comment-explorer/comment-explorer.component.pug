@@ -107,15 +107,13 @@
       )
         .row
           .col-12
-            div(*ngFor="let c of comments; let i = index; trackBy: trackComment")
+            ng-container(*ngFor="let c of comments; let i = index; trackBy: trackComment")
+              hr.comment-block-hr(*ngIf="i > 0")
               edji-comment(
                 [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && c.user_id !== user._id && c.user_id !== project.teacher_id",
                 [class.spec-owner]="c.user_id === project.teacher_id",
                 [readOnly]="c.user_id !== user._id",
-                [commentPaneActive]="true",
                 [comment]="c",
-                [commentMobile]="true",
-                [commentMobileFirst]="i<1",
                 [selected]="comment && c._id === comment._id",
                 (commentActivation)="commentActivationEmitter($event)",
                 (commentReply)="commentReplyEmitter($event)",

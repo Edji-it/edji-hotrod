@@ -291,7 +291,7 @@ describe('Project Page', () => {
       browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
       // verify we scroll to the reply and can see it
       browser.wait(
-        EC.visibilityOf(element(by.css(`.replyCommentBlock[replyId="${replyId}"]`))),
+        EC.visibilityOf(element(by.css(`.comment--replyBlock[replyId="${replyId}"]`))),
         5000,
         'never found the reply',
       )

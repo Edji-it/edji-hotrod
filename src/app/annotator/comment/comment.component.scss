@@ -30,15 +30,6 @@ user-avatar {
   margin-top: 2px;
 }
 
-.comment-block-mobile-comment {
-  &.comment-block {
-    width: calc(100% - 50px);
-  }
-  &.mobileBound {
-    padding: 10px 0px;
-  }
-}
-
 
 .comment-action--block {
   width: calc(100% - 6px);
@@ -66,56 +57,10 @@ user-avatar {
 }
 
 .comment-block {
-  width: calc(100% - 35px);
+  // width: calc(100% - 35px);
+  width: calc(100% - 50px);
   display: inline-block;
   vertical-align: top;
-}
-
-// .mobileComment-card {
-//   margin: 0;
-//   max-width: 100%;
-//   border-bottom: none;
-//   -moz-border-radius: 0px;
-//   -webkit-border-radius: 4px 4px 0px 0px;
-//   border-radius: 4px 4px 0px 0px;
-//   padding: 5px;
-// }
-
-
-$mobileBoundVPad: 40px;
-
-.mobileBound {
-  padding: 0px 0px $mobileBoundVPad;
-  // overflow: hidden;
-  overflow: visible;
-  position: relative;
-
-  &.comment {
-    left: 0;
-    margin: 0;
-    &.active {
-      // padding-right: 25px;
-      &.new {
-        // padding-left: 12px;
-      }
-    }
-  }
-}
-
-.comment-block:before {
-  content: ' ';
-  display: block;
-  position: absolute;
-  left: 12px;
-  width: 0px;
-  height: 99%;
-  top: 0px;
-  border-left: 1px dashed #cfcfcf;
-  // z-index: -1;
-}
-
-.comment-block-mobile-comment:before {
-  content: none;
 }
 
 .comment__highlight_image {
@@ -228,6 +173,10 @@ $mobileBoundVPad: 40px;
   background: #c4c4c4;
   border-radius: 50%;
   margin: 3px 2px;
+
+  &:first-child {
+    display: none;
+  }
 }
 
 .reply-gap {
@@ -330,7 +279,7 @@ $mobileBoundVPad: 40px;
   color: $gray;
 }
 
-.replyCommentInputBlock {
+.comment--replyInputBlock {
   width: calc(100% - 66px);
 }
 

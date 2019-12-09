@@ -34,8 +34,6 @@ $multiLineBlockOffset: -15px;
 // Component wrapping element
 edji-comment {
   display: inline-block;
-  height: 15px;
-  width: 0px;
   @extend %noSelect;
 
   &.hidden {
@@ -74,57 +72,24 @@ edji-comment {
   font-size: $base-font-size;
   font-weight: normal;
   font-style: normal;
+  padding: 10px 0px;
+  // overflow: hidden;
+  overflow: visible;
+  position: relative;
+
+  left: 0;
+  margin: 0;
 
   @extend %noSelect;
 
-  &:not(.expanded) {
-    & .expand-comments {
-      @media (max-width: $desktop) {
-        &:before {
-          content: ' ';
-          position: absolute;
-          display: block;
-          z-index: 5000;
-          width: $multiLineBlockWidth;
-          right: $multiLineBlockOffset;
-          border-radius: 0px;
-          top: 0px;
-          background: $expandBg;
-          height: $commentHeight + 10px;
-          top: -5px;
-          border-top-left-radius: 5px;
-          border-top-right-radius: 5px;
-        }
-      }
-    }
-    & .cmtEmoji {
-      @media (max-width: $desktop) {
-        &:before {
-          height: $commentHeight + 10px;
-        }
-      }
-    }
-    & .cmtText {
-      @media (max-width: $desktop) {
-        &:before {
-          height: $commentHeight + 30px;
-        }
-      }
-    }
+  & .audio-comment-input-wrapper,
+  .emojionearea,
+  .text-comment-input {
+    width: 100%;
   }
 
   & .input-wrap {
     border-radius: 4px;
-  }
-
-  &.expanded {
-    z-index: 5000;
-    display: block;
-    position: absolute !important;
-    top: none !important;
-    @media (max-width: $desktop) {
-      left: 30px;
-    }
   }
 
   &.fade-out {
@@ -194,7 +159,7 @@ edji-comment {
       z-index: 5500;
       display: block !important;
     }
-    &:not(.replyComment):not(.mobileBound) {
+    &:not(.comment--reply) {
       position: absolute !important;
       top: none !important;
     }
@@ -492,65 +457,6 @@ img.emojioneemoji {
     & input {
       height: $commentHeight + $n;
     }
-
-    &.expanded {
-      transform: translateY(#{($commentHeight * $n) - $commentHeight}) translateZ(0px);
-
-      & input {
-        height: $commentHeight;
-      }
-
-      & .expand-comments {
-        width: 22px;
-        pointer-events: none;
-
-        &:before {
-          // width: 261px;
-          // right: -25px;
-          width: $multiLineBlockWidth;
-          right: $multiLineBlockOffset;
-
-          border-radius: 0px;
-          top: 0px;
-          height: $commentHeight;
-          background: $expandBg;
-        }
-
-        @if ($n == 1) {
-          pointer-events: all;
-
-          &:before {
-            height: $commentHeight + 6px;
-            top: -5px;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-          }
-        }
-
-        @if ($n != 1) {
-          // If not line-count-1, it should be part of the "line" showing the selection
-          // display: none;
-          &:after {
-            display: block;
-            content: ' ';
-            position: absolute;
-            width: $multiLineBlockWidth;
-            right: $multiLineBlockOffset;
-            border-radius: 0px;
-            top: 100%;
-            height: 5px;
-            background: $expandBg;
-            transform: none;
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-          }
-        }
-      }
-
-      &:after {
-        display: none;
-      }
-    }
   }
 }
 
@@ -580,27 +486,6 @@ div.line-count-1 {
     display: none;
   }
 
-  & .expand-comments {
-    display: none;
-    @media (max-width: $tablet) {
-      display: block;
-    }
-  }
-
-  &.expanded {
-    & .expand-comments {
-      // First line shows 'contract' minus
-      display: block !important;
-
-      &:after {
-        display: block;
-
-        @media (max-width: $tablet) {
-          display: none;
-        }
-      }
-    }
-  }
 }
 
 // &:hover .emojiComment {
@@ -648,18 +533,6 @@ $expandShadowSize: 3px;
 
   &:hover:before {
     background-color: darken($gray, 5%);
-  }
-
-  // Emoji Plus
-  // background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAJdnBBZwAAAEAAAABAAOrz+GAAAAFgSURBVHja7ZsxUoNQEIY/HStGi4yVhVwgwxksOIeFpdbpvIK12ll4DgrPwOQCWFg5FGaoHLAIpSQvQdan+38tC+z72PdgFgAhhBDCLQcWJ8nzHGAGnABdQE4fQF0UxeS5HVkI6LoOYAFcAZ8BOT0Btxa5mQjomQFnO8SaYCKgbVur8cQpoJ8CUSIBEiABEiABEjAxeg7wXgES4F2A1gDvFSABEQsYbIllWQbrxsQCOAXGTOQOuADmgfFL4IVxLbtD4B24A+qyLL8NGqyA/qodA5fA+YhE9mG+g6xNvAKPQD0UsE3Av0cChjbEfO82EeC+AtwL0BTwXgHuBWgKrCtgBTzztx+FV5uCTF6Pp2kKcA9cB+7yANxUVTV5bmqIWJwk5gVVAiRAAqZHi6D3CpAA7wK0BnivAAmQAAn47XFKQAwCauCNsM/l623H/ClMOkJJksAeP0w0TWPlQQghhPDIFzius9vRuvq3AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE1LTEwLTAxVDEyOjAwOjE2LTA3OjAw41i45QAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNS0xMC0wMVQxMjowMDoxNi0wNzowMJIFAFkAAAAASUVORK5CYII=');
-
-  .expanded & {
-    &:after {
-      top: 10px;
-      transform: rotate(180deg);
-    }
-    // Emoji Minus
-    // background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAJdnBBZwAAAEAAAABAAOrz+GAAAAChSURBVHja7daxDQIxDEbhB6KkQdQskz3YgjEYgJ49sszV6JqrEgXRUJICCgzK+9o4kvMrlgySJEmSJEmSJEkaw6p3kFIC2AEnYA/co5t90xq4AWdgzjm/LNr0brfWALbAEThEv+ZDE3AB5l5BN4Baa3TzX2EABtBRSonuzQBCAxh+BIYPwBEY/Qc8N8EFuPLfq/AS3YgkSZIkSZIkSZJ+wQNLlC8HbLV/1QAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0xMC0wMVQxMjowMDoxNi0wNzowMONYuOUAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTUtMTAtMDFUMTI6MDA6MTYtMDc6MDCSBQBZAAAAAElFTkSuQmCC');
   }
 }
 
@@ -836,17 +709,11 @@ $progressStart: 51px;
   height: 1em;
 }
 
-.replyComment {
-  margin-top: 28px;
-  left: 32px;
-  // pointer-events: none;
-
-  & .comment__saved, & .comment__save {
-    right: -19px;
-  }
+.comment.comment--reply {
+  // margin-top: 28px;
 }
 
-.replyCommentHandler:hover {
+.comment--replyHandler:hover {
   transform: scale(1) !important;
   transition: none;
 }
@@ -903,19 +770,6 @@ $progressStart: 51px;
   }
 }
 
-.comment__force-display {
-  &.hidden-md-down {
-    display: block !important;
-  }
-}
-
-.mobileBound {
-  & .audio-comment-input-wrapper,
-  .emojionearea,
-  .text-comment-input {
-    width: 100% !important;
-  }
-}
 
 textarea.text-comment-input,
 .text-comment-input {
@@ -944,7 +798,7 @@ textarea.text-comment-input,
     overflow: hidden;
   }
 
-  .mobileBound .text-comment & {
+  .text-comment & {
     user-select: text !important;
     cursor: text;
     max-height: none !important;
@@ -1068,7 +922,7 @@ div.avatar-count-8 {
   }
 }
 
-
+// Comment list separator
 .comment-block-hr {
   margin: 0.75em 0 0.75em 40px;
 }
@@ -1184,9 +1038,9 @@ div.avatar-count-8 {
 
 
 
-.replyCommentBlock {
-  height: 75px;
-  width: calc(100% - 32px);
+.comment--replyBlock {
+  min-height: 75px;
+  width: 100%;
 
   & .comment-input-wrapper {
     border-color: rgb(220, 227, 234);

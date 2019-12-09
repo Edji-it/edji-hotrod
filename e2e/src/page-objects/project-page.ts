@@ -28,7 +28,7 @@ export class Project implements PageObjectInterface {
   public imageWordBoxes = element.all(by.css('#annotatorContent .img-wrap .w-box'))
   public textComment = element(by.css('.new textarea.text-comment-input'))
   public existingTextComment = element(by.css('div.text-comment-input'))
-  public textReplyComment = element(by.css('.replyComment.new .text-comment-input'))
+  public textReplyComment = element(by.css('.comment--reply.new .text-comment-input'))
   public dismissReplyPanelBtn = element(by.id('discussionClosePanel'))
   public discussionPanel = element(by.css('div.sliding-pane.from-left.replies.slide-in'))
   public commentSave = element(by.css('.comment__save'))

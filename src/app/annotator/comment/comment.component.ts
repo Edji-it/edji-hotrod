@@ -25,7 +25,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   private currentScroll: number
   // Is fully visible, focused, and editable
   private active: boolean = false
-  private showDeleteModal: boolean = false
   private user: any = {}
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
@@ -33,16 +32,10 @@ export class CommentComponent implements OnInit, OnDestroy {
   private fragment: string
 
   @Input() public comment: EdjiComment
-  @Input() private readOnly: boolean = false
-  @Input() private replyRef: boolean = false
+  @Input() public readOnly: boolean = false
   @Input() public reply: boolean = false // Is it a reply to another comment?
-  @Input() private commentLite: boolean = false
   @Input() private commentContext: string = 'comment' // See NOTES in summary.
   @Input() public selected: boolean = false
-  // Deprecated "mobile" values
-  @Input() public commentMobile: boolean = false
-  @Input() public commentMobileFirst: boolean = false
-  @Input() public commentPaneActive: boolean = false
   @Input() private assignedQuestion: EdjiQuestion // If this is an answer, it'll need this.
   private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
@@ -265,10 +258,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     if (this.commentContext !== 'answer') {
       this.projectStore
         .removeComment(comment)
-        .then(data => {
-          // Tell Annotator to destroy this comment element!
-          this.showDeleteModal = false
-        })
+        .then(data => {})
         .catch(error => {
           this.deactivate(this.comment)
           console.error(error)
@@ -278,7 +268,6 @@ export class CommentComponent implements OnInit, OnDestroy {
         .removeAnswer(comment)
         .then(data => {
           this.projectStore.removeAnswerFromAnswers(this.comment)
-          this.showDeleteModal = false
         })
         .catch(error => {
           this.deactivate(this.comment)
