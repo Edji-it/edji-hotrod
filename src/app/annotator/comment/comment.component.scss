@@ -30,8 +30,8 @@ user-avatar {
   margin-top: 2px;
 }
 
-.mobileBlock-mobile-comment {
-  &.mobileBlock {
+.comment-block-mobile-comment {
+  &.comment-block {
     width: calc(100% - 50px);
   }
   &.mobileBound {
@@ -65,33 +65,22 @@ user-avatar {
   text-transform: uppercase;
 }
 
-.mobileBlock {
+.comment-block {
   width: calc(100% - 35px);
   display: inline-block;
   vertical-align: top;
-
-  & .comment-input-wrapper {
-    border-radius: 4px 4px 0 0;
-  }
 }
 
-.mobileComment-card {
-  margin: 0;
-  max-width: 100%;
-  border-bottom: none;
-  -moz-border-radius: 0px;
-  -webkit-border-radius: 4px 4px 0px 0px;
-  border-radius: 4px 4px 0px 0px;
-  padding: 5px;
-}
+// .mobileComment-card {
+//   margin: 0;
+//   max-width: 100%;
+//   border-bottom: none;
+//   -moz-border-radius: 0px;
+//   -webkit-border-radius: 4px 4px 0px 0px;
+//   border-radius: 4px 4px 0px 0px;
+//   padding: 5px;
+// }
 
-.mobileHighlight-card {
-  margin: 0;
-  max-width: 100%;
-  border-top: none;
-  padding: 5px;
-  position: relative;
-}
 
 $mobileBoundVPad: 40px;
 
@@ -113,7 +102,7 @@ $mobileBoundVPad: 40px;
   }
 }
 
-.mobileBlock:before {
+.comment-block:before {
   content: ' ';
   display: block;
   position: absolute;
@@ -125,11 +114,11 @@ $mobileBoundVPad: 40px;
   // z-index: -1;
 }
 
-.mobileBlock-mobile-comment:before {
+.comment-block-mobile-comment:before {
   content: none;
 }
 
-.mobileHighlight-card_image {
+.comment__highlight_image {
   line-height: 12px;
   width: 50%;
   padding: 5px;
@@ -137,7 +126,7 @@ $mobileBoundVPad: 40px;
   display: inline-block;
 }
 
-.mobileHighlight-card_button {
+.comment__highlight_button {
   // float: right;
   width: 50%;
   padding: 5px;
@@ -148,7 +137,7 @@ $mobileBoundVPad: 40px;
   border-radius: 3px;
 }
 
-.mobileHighlight-card_liImage {
+.comment__highlight_liImage {
   margin: 0;
   max-width: 100%;
   border-top: none;
@@ -216,13 +205,13 @@ $mobileBoundVPad: 40px;
   vertical-align: middle;
 }
 
-.mobileBlock--reading-recap {
+.comment-block--reading-recap {
   margin: 0;
   width: calc(100% - 46px) !important;
 }
 
 /**
-  * @todo transition from "mobileBlock" to "comment-block", and clean up with media selectors
+  * @todo transition from "comment-block" to "comment-block", and clean up with media selectors
  **/
 .comment-block--align-top {
   padding-top: 0px !important;
@@ -329,11 +318,6 @@ $mobileBoundVPad: 40px;
   max-width: 100%;
   border-top: none;
   padding: 0px;
-}
-
-.replyCommentBlock {
-  height: 75px;
-  width: calc(100% - 32px);
 }
 
 .replyHeaderRow {

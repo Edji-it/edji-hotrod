@@ -80,7 +80,7 @@
 //- END the other component comment display
 
 //- Comments that are displayed in the comment pane
-hr.mobileBlock-hr(*ngIf="commentMobile && !commentMobileFirst && !readingReport")
+hr.comment-block-hr(*ngIf="commentMobile && !commentMobileFirst && !readingReport")
 div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
     //- We are removing this dot indicator for now
     //- .comment-selected-highlight(*ngIf="comment && (selected || comment.new)")
@@ -90,7 +90,7 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
         [class.saved]="justSaved",
         [class.active]="comment.active",
         [class.readonly]="readOnly",
-        [ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'comment-block--align-top':'' ]"
+        [ngClass]="[ commentMobile ? 'comment-block-mobile-comment' : '', readingReport ? 'comment-block--align-top':'' ]"
     )
         user-avatar(
             [userId]="comment.user_id",
@@ -98,52 +98,52 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
             [tempName]="comment.author",
             [selected]="selected"
         )
-        .mobileBlock([ngClass]="[ commentMobile ? 'mobileBlock-mobile-comment' : '', readingReport ? 'mobileBlock--reading-recap' : '' ]")
-            .list-item.list-item--block.mobileTime-card(*ngIf="!readingReport")
+        .comment-block([ngClass]="[ commentMobile ? 'comment-block-mobile-comment' : '', readingReport ? 'comment-block--reading-recap' : '' ]")
+            .comment-meta(*ngIf="!readingReport")
                 a.btn.btn-xs-primary.comment__user-link(
                   [routerLink]="['./']",
                   [queryParams]="{ student: comment.user_id }"
                 )
                   | {{comment.author}}
-                span.mobileTime-card__time([class.is-draft]="_comments.isCommentNewDraft(comment)") &nbsp;
+                span.comment-meta__time([class.is-draft]="_comments.isCommentNewDraft(comment)") &nbsp;
                     span.time-text--draft New
                     span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
-            .comment-input-wrapper
-                emoji-comment(
-                    *ngIf="comment.type == 'emoji' || !comment.type",
-                    [comment]="comment",
-                    [readOnly]="readOnly",
-                    [reply]="reply",
-                    (activate)="activate()",
-                    (deactivate)="deactivate(comment)"
-                )
-                text-comment(
-                    *ngIf="comment.type == 'text'",
-                    [readOnly]="readOnly",
-                    [comment]="comment",
-                    [active]="comment.active",
-                    [reply]="reply",
-                    (activate)="activate()",
-                    (deactivate)="deactivate(comment, $event)"
-                )
-                audio-comment(
-                    *ngIf="comment.type == 'audio'",
-                    [comment]="comment",
-                    (save)="deactivate(comment)",
-                    [active]="comment.active",
-                    (showDeleteAudioModal)="showDeleteAudioModal = true",
-                    [userPermission]="userPermission",
-                    [reply]="reply",
-                    [commentContext]="commentContext"
-                )
-            //- Text that was commented on
-            .list-item.mobileHighlight-card.h-1(*ngIf="!isImageSpot && !readingReport", data-test="commentAnnotatedText")
-                blockquote
+            .comment__content
+                //- Text that was commented on
+                .comment__highlight(*ngIf="!isImageSpot && !readingReport", data-test="commentAnnotatedText")
                     | {{ comment.text ? comment.text : '...'}}
-            //- Image comment handling
-            .list-item.mobileHighlight-card.h-1(*ngIf="isImageSpot && !readingReport")
-                .mobileHighlight-card_image Image
-                button.mobileHighlight-card_button((tap)="scrollToImage(comment.start)") View&nbsp;&#8594;
+                //- Image comment handling
+                .comment__highlight(*ngIf="isImageSpot && !readingReport")
+                    .comment__highlight_image Image
+                    button.comment__highlight_button((tap)="scrollToImage(comment.start)") View&nbsp;&#8594;
+                .comment-input-wrapper
+                    emoji-comment(
+                        *ngIf="comment.type == 'emoji' || !comment.type",
+                        [comment]="comment",
+                        [readOnly]="readOnly",
+                        [reply]="reply",
+                        (activate)="activate()",
+                        (deactivate)="deactivate(comment)"
+                    )
+                    text-comment(
+                        *ngIf="comment.type == 'text'",
+                        [readOnly]="readOnly",
+                        [comment]="comment",
+                        [active]="comment.active",
+                        [reply]="reply",
+                        (activate)="activate()",
+                        (deactivate)="deactivate(comment, $event)"
+                    )
+                    audio-comment(
+                        *ngIf="comment.type == 'audio'",
+                        [comment]="comment",
+                        (save)="deactivate(comment)",
+                        [active]="comment.active",
+                        (showDeleteAudioModal)="showDeleteAudioModal = true",
+                        [userPermission]="userPermission",
+                        [reply]="reply",
+                        [commentContext]="commentContext"
+                    )
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0(*ngIf="!readingReport", [class.reply-gap]="repliesShowing")
                 ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")
@@ -162,19 +162,16 @@ div(*ngIf="commentPaneActive", [id]="'comment-' + comment._id")
                 ng-container(*ngIf="comment.type != 'audio' && !readOnly && !comment.active")
                     .action-separator
                     button.btn.btn-xs-primary((tap)="activate(comment)") Edit
-        //- Save/Saved Icons
-        .comment-action--save.comment-action--save__mobile.comment-action--save__mobile-btn(
-            *ngIf="comment.active && !readOnly && !readingReport",
-            (tap)="deactivate(comment)",
-            [innerHtml]="':white_check_mark:' | emojione",
-            title="Save Comment"
-        )
-        .comment__saved.comment-action--save__mobile(
-          *ngIf="justSaved",
-          [innerHtml]='":ok_hand:" | emojione',
-          title="Comment Saved"
-        )
-//- END primary comment display
+                ng-container(*ngIf="comment.active && !readOnly && !readingReport")
+                    .action-separator
+                    button#saveComment.btn.btn-xs-action.has-icon((tap)="deactivate(comment)")
+                        i.icon.icon-check
+                        | Save
+                ng-container(*ngIf="justSaved")
+                    .btn.btn-xs-action.has-icon.ml-1.display-only
+                        i.icon.icon-check
+                        | Saved
+//- Display Replies
 ng-container(*ngIf="!reply && repliesShowing")
   .replies([ngClass]="[ comment.active && comment.type=='emoji' ? '' : 'replyOverflow-normal' ]")
     .replies__header

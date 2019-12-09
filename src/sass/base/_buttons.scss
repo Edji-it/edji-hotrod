@@ -752,6 +752,10 @@ pre.btn {
     top: 2px;
     left: 2px;
   }
+
+  &.display-only {
+    pointer-events: none;
+  }
 }
 
 // eg. Reply action
@@ -759,6 +763,10 @@ pre.btn {
   @extend .btn-xs;
   &:hover {
     background: $btnActionFocusColor !important;
+  }
+
+  &.display-only {
+    color: $actionGreen;
   }
 }
 

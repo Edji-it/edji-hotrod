@@ -3,7 +3,9 @@
 $commentHeight: 32px;
 $commentWidth: 175px;
 $commentPad: 4px;
-$commentBorder: 1px solid rgb(220, 227, 234);
+$commentFontSize: 13px;
+$oneHighlightColor: #fef3bb;
+$commentBorder: 1px solid $oneHighlightColor;
 $expandBg: #e0e4e8;
 $multiLineBlockWidth: 250px;
 $multiLineBlockOffset: -15px;
@@ -111,6 +113,10 @@ edji-comment {
     }
   }
 
+  & .input-wrap {
+    border-radius: 4px;
+  }
+
   &.expanded {
     z-index: 5000;
     display: block;
@@ -170,7 +176,7 @@ edji-comment {
     display: none;
     height: 18px;
     background-color: lighten($gray, 4%);
-    font-size: 12px;
+    font-size: $commentFontSize;
     color: white;
   }
 
@@ -221,11 +227,29 @@ edji-comment {
     }
   }
 
-  blockquote {
-    @extend %textSelect;
-    cursor: text;
-  }
+  // blockquote {
+  //   @extend %textSelect;
+  //   cursor: text;
+  // }
 } // .comment
+
+
+.comment__highlight {
+  margin: 0;
+  max-width: 100%;
+  border-bottom: none;
+  padding: 5px 10px;
+  position: relative;
+  font-size: $commentFontSize;
+  background:$oneHighlightColor;
+  border-color: $oneHighlightColor;
+  border-radius: 4px 4px 0px 0px;
+}
+
+.comment__content {
+  background: $oneHighlightColor;
+  border-radius: 4px;
+}
 
 .comment-input-wrapper {
   border: $commentBorder;
@@ -233,6 +257,12 @@ edji-comment {
   overflow: visible; // hidden;
   position: relative;
   transition: transform linear 0.2s;
+  position: relative;
+
+  // Gap fill
+  &:before {
+    position: absolute;
+  }
 }
 
 .comment--placeholder {
@@ -240,7 +270,7 @@ edji-comment {
   cursor: default;
   padding: 8px 10px 8px 10px !important;
   line-height: 16px !important;
-  font-size: 12px !important;
+  font-size: $commentFontSize !important;
   font-family: 'Open Sans', Arial !important;
   color: #222;
   color: #cdcdcd;
@@ -897,7 +927,7 @@ textarea.text-comment-input,
   height: auto;
   line-height: 16px;
   resize: none;
-  font-size: 12px;
+  font-size: $commentFontSize;
   font-family: 'Open Sans', Arial;
   font-weight: normal !important;
   font-style: normal !important;
@@ -1039,12 +1069,12 @@ div.avatar-count-8 {
 }
 
 
-.mobileBlock-hr {
+.comment-block-hr {
   margin: 0.75em 0 0.75em 40px;
 }
 
 
-.mobileTime-card, .list-item.mobileTime-card {
+.comment-meta, .list-item.comment-meta {
   margin: 0 0 1px 0;
   max-width: 100%;
   padding: 0;
@@ -1054,10 +1084,11 @@ div.avatar-count-8 {
   overflow: visible;
 }
 
-.mobileTime-card__time {
+.comment-meta__time {
   font-style: italic;
   font-size: 10px;
   padding-left: 0.25em;
+  vertical-align: middle;
 
   & .time-text--draft {
     display: none;
@@ -1146,5 +1177,18 @@ div.avatar-count-8 {
 
   & .emojioneemoji {
     pointer-events: none; // hide emoji short code tooltip
+  }
+}
+
+// Comment Replies
+
+
+
+.replyCommentBlock {
+  height: 75px;
+  width: calc(100% - 32px);
+
+  & .comment-input-wrapper {
+    border-color: rgb(220, 227, 234);
   }
 }
