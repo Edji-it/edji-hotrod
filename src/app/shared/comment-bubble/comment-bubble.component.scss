@@ -1,6 +1,60 @@
+@import '../../../sass/base/variables';
+
+@keyframes bubbleFade {
+  0% {
+    opacity: 0;
+    margin-top: -135px;
+  }
+  100% {
+    opacity: 1;
+    margin-top: -140px;
+  }
+}
+@keyframes bubbleFadeOut {
+  0% {
+    opacity: 1;
+    margin-top: -140px;
+  }
+  100% {
+    opacity: 0;
+    margin-top: -135px;
+  }
+}
+
 .comment-bubble {
   position: absolute;
   background: #fff;
   box-shadow: 1px 1px 15px rgba(0,0,0,0.2);
   width: 256px;
+  left: 264px;
+  opacity: 0;
+  // transition: opacity linear 2000ms, margin linear 2000ms;
+  // transition-delay: 200ms;
+  z-index: 8000;
+  padding: $base-pad/2;
+  border-radius: 20px;
+  margin-top: -140px;
+  // margin-left: -305px;
+  z-index: 5999;
+  margin-left: -285px;
+  animation: bubbleFade 300ms 1;
+  animation-fill-mode: forwards;
+
+  &.fade-out {
+    animation: bubbleFadeOut 300ms 1;
+  }
+}
+
+.icon-comment-arrow {
+  position: absolute;
+  top: 20px;
+  left: calc(100% + 14px) !important;
+  opacity: 1 !important;
+}
+
+.close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 6000;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core'
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
 
 // Internal
 import { EdjiComment } from '../datatypes'
@@ -14,23 +14,42 @@ export class CommentBubbleComponent implements OnInit, OnDestroy {
   @Input()
   set comment(comment: EdjiComment) {
     this._comment = comment
-    // let commentApplied: boolean
-    // if (!this._comment || (comment && comment._id !== this._comment._id)) {
-    //   commentApplied = true
-    // }
-    // this._comment = comment
-    // if (commentApplied) {
-    //   this.filterComments()
-    //   this.evaluateShouldScroll()
-    // }
   }
   get comment(): EdjiComment {
     return this._comment
   }
+  private _top: string
+  @Input()
+  set top(pos: string) {
+    if (pos !== this._top) {
+      // position changed
+      this.visible = false
+      this._top = pos
+      setTimeout(() => {
+        this.visible = true
+      })
+    }
+  }
+  get top(): string {
+    return this._top
+  }
+  @Input() public visible: boolean
+  @Output() closed = new EventEmitter()
+
+  public fadeOut: boolean
 
   constructor() {}
 
   ngOnInit() {}
 
   ngOnDestroy() {}
+
+  public close() {
+    this.fadeOut = true
+    // allow animation
+    setTimeout(() => {
+      this.closed.emit(true)
+      this.fadeOut = false
+    }, 1000)
+  }
 }

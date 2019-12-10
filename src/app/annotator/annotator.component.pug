@@ -114,7 +114,7 @@ scroll-progress([scrollProgress]="currentScroll")
                       [comment]="comment",
                       [commentExplorerActive]="commentPane",
                       [isActive]="comment.active",
-                      (toggleCommentPane)="toggleCommentPane($event, comment)",
+                      (toggleCommentPane)="openComment($event, comment)",
                       [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]",
                       (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
                       (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
@@ -194,6 +194,13 @@ scroll-progress([scrollProgress]="currentScroll")
                         )
         .row.mb-4(*ngIf="lastWord < reading.words.length")
             .loading(style="margin: 0 auto;")
+    //- Nested within Annotator
+    comment-bubble(
+      [visible]="commentBubble",
+      [comment]="selectedComment",
+      [top]="commentHeightPos + 'px'",
+      (closed)="commentBubble = false; selectedComment = null"
+    )
 //- End of Reading options
 .button__row
     button.btn.btn-secondary(
@@ -241,10 +248,6 @@ comment-explorer(
     [visible]="commentPane",
     (closed)="toggleCommentPane(false)",
     (clearSelected)="selectedComment = null"
-)
-
-comment-bubble(
-  [comment]="selectedComment"
 )
 
 //- Icon Arrow for the active comment

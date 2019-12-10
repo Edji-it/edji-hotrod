@@ -91,6 +91,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public lineCountRunning: boolean = false
   public lineNumRunning: boolean
   public commentPane: boolean
+  public commentBubble: boolean
   public lineExpanded: number
 
   public replyComment: EdjiComment = <EdjiComment>{}
@@ -1650,18 +1651,33 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
+  public openComment(visible?: boolean, selectedComment?: EdjiComment): void {
     let isVisible = visible || selectedComment
+
+    console.log('Open comment', isVisible)
+
+    if (!isVisible) {
+      this.toggleCommentPane(true, selectedComment)
+    } else {
+      // Set the icon arrow position based on lineY and offsets
+      this.commentHeightPos = this.getCommentDisplayY(selectedComment)
+      // Open Comment Bubble
+      this.selectedComment = selectedComment
+      this.commentBubble = true
+    }
+  }
+
+  public toggleCommentPane(isVisible?: boolean, selectedComment?, selectedReply?): void {
     // Set the input comment to the comment pane if it is not currently open
     if (isVisible) {
       if (selectedComment) {
         // Set the icon arrow position based on lineY and offsets
         this.commentHeightPos = this.getCommentDisplayY(selectedComment)
         if (selectedReply) {
-          selectedReply.selected = visible
+          selectedReply.selected = true
           this.selectedComment = selectedReply
         } else {
-          selectedComment.selected = visible
+          selectedComment.selected = true
           this.selectedComment = selectedComment
         }
       }
