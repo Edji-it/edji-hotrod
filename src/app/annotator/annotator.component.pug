@@ -192,15 +192,15 @@ scroll-progress([scrollProgress]="currentScroll")
                             [feedback]="feedback",
                             [teacherName]="project && project.teacher.fullname"
                         )
-        .row.mb-4(*ngIf="lastWord < reading.words.length")
-            .loading(style="margin: 0 auto;")
-    //- Nested within Annotator
-    comment-bubble(
-      [visible]="commentBubble",
-      [comment]="selectedComment",
-      [top]="commentHeightPos + 'px'",
-      (closed)="commentBubble = false; selectedComment = null"
-    )
+            .row.mb-4(*ngIf="lastWord < reading.words.length")
+                .loading(style="margin: 0 auto;")
+            //- Nested within annotator content
+            comment-bubble(
+              [visible]="commentBubble",
+              [comment]="selectedComment",
+              [top]="commentHeightPos + 'px'",
+              (closed)="commentBubble = false; selectedComment = null"
+            )
 //- End of Reading options
 .button__row
     button.btn.btn-secondary(

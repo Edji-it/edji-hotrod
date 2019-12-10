@@ -21,13 +21,15 @@ export class CommentBubbleComponent implements OnInit, OnDestroy {
   private _top: string
   @Input()
   set top(pos: string) {
-    if (pos !== this._top) {
+    if (pos !== this._top && this.visible) {
       // position changed
       this.visible = false
       this._top = pos
       setTimeout(() => {
         this.visible = true
       })
+    } else {
+      this._top = pos
     }
   }
   get top(): string {

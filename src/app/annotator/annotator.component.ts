@@ -1652,11 +1652,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public openComment(visible?: boolean, selectedComment?: EdjiComment): void {
-    let isVisible = visible || selectedComment
+    // let isVisible = visible || selectedComment
 
-    console.log('Open comment', isVisible)
+    console.log('Open comment', visible)
 
-    if (!isVisible) {
+    if (!visible) {
       this.toggleCommentPane(true, selectedComment)
     } else {
       // Set the icon arrow position based on lineY and offsets

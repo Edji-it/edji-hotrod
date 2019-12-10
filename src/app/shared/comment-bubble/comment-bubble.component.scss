@@ -1,23 +1,25 @@
 @import '../../../sass/base/variables';
 
+$bubbleTopOffset: -126px;
+
 @keyframes bubbleFade {
   0% {
     opacity: 0;
-    margin-top: -135px;
+    margin-top: #{ $bubbleTopOffset + 5px };
   }
   100% {
     opacity: 1;
-    margin-top: -140px;
+    margin-top: $bubbleTopOffset;
   }
 }
 @keyframes bubbleFadeOut {
   0% {
     opacity: 1;
-    margin-top: -140px;
+    margin-top: $bubbleTopOffset;
   }
   100% {
     opacity: 0;
-    margin-top: -135px;
+    margin-top: #{ $bubbleTopOffset + 5px };
   }
 }
 
@@ -26,22 +28,51 @@
   background: #fff;
   box-shadow: 1px 1px 15px rgba(0,0,0,0.2);
   width: 256px;
-  left: 264px;
+  left: 0px;
+  transform: translateX(-100%);
   opacity: 0;
   // transition: opacity linear 2000ms, margin linear 2000ms;
   // transition-delay: 200ms;
   z-index: 8000;
   padding: $base-pad/2;
   border-radius: 20px;
-  margin-top: -140px;
+  margin-top: $bubbleTopOffset;
   // margin-left: -305px;
   z-index: 5999;
-  margin-left: -285px;
+  margin-left: 0px;
   animation: bubbleFade 300ms 1;
   animation-fill-mode: forwards;
 
   &.fade-out {
     animation: bubbleFadeOut 300ms 1;
+  }
+
+  // $xsmall-screen: 320px;
+// $small-screen: 576px;
+// $medium-screen: 768px;
+// $large-screen: 992px;
+// $xl-screen: 1200px;
+  // Comment Bubble should not display on mobile
+  // $small-screen and $medium-screen
+  @media (max-width: $large-screen) {
+    & .icon-comment-arrow {
+      display: none;
+    }
+    transform: translateX(0%) translateY(60px);
+    width: 320px;
+    left: -200px;
+  }
+  @media (min-width: $large-screen + 1px) {
+    & .icon-comment-arrow {
+      display: block;
+    }
+    width: 265px;
+    left: -25px;
+  }
+  @media(min-width: 1060px) {
+    // viewport size fallback provided by above selector ^^
+    width: 25vw;
+    max-width: 350px;
   }
 }
 

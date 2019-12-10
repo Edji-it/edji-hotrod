@@ -24,9 +24,9 @@ $adjustedLineHeight: $readingLineHeight - $focusUnderlineWidth - 1px;
     }
   }
 
-  // iPad
+  // iPad Portrait
   @media (min-width: $medium-screen) and (max-width: $large-screen) {
-    padding-left: 60px;
+    padding-left: 125px;
     transition: transform $slidingPaneTime linear;
     transform: translate3d(0, 0, -1px);
     &.sliding-out {
