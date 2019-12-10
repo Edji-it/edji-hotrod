@@ -7,6 +7,7 @@ import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/da
 import { ALLSPARK } from './../../app.constants'
 import { ProjectStore } from 'src/app/_store'
 import { ActivatedRoute } from '@angular/router'
+import { copyToClipboard } from 'src/app/shared/clipboard'
 
 @Component({
   selector: 'edji-comment',
@@ -18,6 +19,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   public indexOnLine: number = 1
   public repliesShowing: boolean = false
   public isImageSpot: boolean = false
+  public linkCopied: boolean = false
 
   private justSaved: boolean = false
   private isLoading: boolean = false
@@ -39,6 +41,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() private assignedQuestion: EdjiQuestion // If this is an answer, it'll need this.
   private userPermission: number = CommentPermissions.READ
   @Input() private showDeleteAudioModal: boolean = false
+  @Input() public largeDisplay: boolean = false
   @Input() public readingReport: boolean = false
   @Input()
   set isActive(isActive: boolean) {
@@ -405,5 +408,14 @@ export class CommentComponent implements OnInit, OnDestroy {
   private activeEmojiKeyboardReply(activeReply: any): void {
     this._comments.activeComment = activeReply
     this._comments.setEmojiKeyboardActive(this.user)
+  }
+
+  public copyLink() {
+    let url = `${location.origin}/${this.project._id}?comment=${this.comment._id}`
+    copyToClipboard(url)
+    this.linkCopied = true
+    setTimeout(() => {
+      this.linkCopied = false
+    }, 3000)
   }
 }

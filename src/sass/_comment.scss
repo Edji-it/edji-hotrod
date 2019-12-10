@@ -33,7 +33,7 @@ $multiLineBlockOffset: -15px;
 
 // Component wrapping element
 edji-comment {
-  display: inline-block;
+  display: block;
   @extend %noSelect;
 
   &.hidden {
@@ -699,6 +699,14 @@ $progressStart: 51px;
   }
 }
 
+.comment.comment--large {
+  padding: 0;
+
+  & user-avatar {
+    margin-top: 0px !important;
+  }
+}
+
 .comment--replyHandler:hover {
   transform: scale(1) !important;
   transition: none;
@@ -933,17 +941,21 @@ div.avatar-count-8 {
   & .time-text--draft {
     display: none;
   }
+}
 
-  &.is-draft {
-    color: #b0d8ed;
+.sub-label .time-text--draft {
+  display: none;
+}
 
-    & .time-text--date {
-      display: none;
-    }
+.is-draft {
+  color: #b0d8ed;
 
-    & .time-text--draft {
-      display: inline;
-    }
+  & .time-text--date {
+    display: none;
+  }
+
+  & .time-text--draft {
+    display: inline;
   }
 }
 

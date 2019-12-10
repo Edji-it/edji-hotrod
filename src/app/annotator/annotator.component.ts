@@ -529,9 +529,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           })
           // Scroll to feedback
           feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
-        } else if (params['comment']) {
-          // Check if opening/scrolling to comment
-          this.checkCommentLink(params['comment'], params['parent'])
+        } else if (params['comment'] || params['line']) {
+          // Check if opening/scrolling to comment or line
+          this.checkCommentLink(params['comment'] || params['line'], !!params['line'], params['parent'])
         }
       }),
     )
@@ -548,10 +548,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this._messages.dismissToast('feedback')
   }
 
-  private checkCommentLink(commentId: string, parentId?: string): void {
+  private checkCommentLink(commentId: string, viewLine?: boolean, parentId?: string): void {
     if (!this.portalComponents) {
       setTimeout(() => {
-        this.checkCommentLink(commentId, parentId)
+        this.checkCommentLink(commentId, viewLine, parentId)
       }, 1000)
     }
     // Reset selected comment values
@@ -595,9 +595,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         let reply = this.project.comments.find(comment => {
           return comment._id == commentId
         })
-        this.toggleCommentPane(true, commentEl.comment, reply)
+        this.openComment(!viewLine, commentEl.comment, reply)
       } else {
-        this.toggleCommentPane(true, commentEl.comment)
+        this.openComment(!viewLine, commentEl.comment)
       }
     }, scrollTimeout)
   }
@@ -1651,18 +1651,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public openComment(visible?: boolean, selectedComment?: EdjiComment): void {
-    // let isVisible = visible || selectedComment
-
-    console.log('Open comment', visible)
-
+  public openComment(visible?: boolean, selectedComment?: EdjiComment, selectedReply?): void {
     if (!visible) {
-      this.toggleCommentPane(true, selectedComment)
+      this.commentBubble = false
+      this.toggleCommentPane(true, selectedComment, selectedReply)
     } else {
       // Set the icon arrow position based on lineY and offsets
       this.commentHeightPos = this.getCommentDisplayY(selectedComment)
       // Open Comment Bubble
       this.selectedComment = selectedComment
+      this.commentPane = false
       this.commentBubble = true
     }
   }

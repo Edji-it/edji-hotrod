@@ -6,6 +6,7 @@ div([id]="'comment-' + comment._id")
         [class.active]="comment.active",
         [class.readonly]="readOnly",
         [class.comment--reply]="reply",
+        [class.comment--large]="largeDisplay",
         [ngClass]="[ readingReport ? 'comment-block--align-top':'' ]",
     )
         user-avatar(
@@ -15,14 +16,33 @@ div([id]="'comment-' + comment._id")
             [selected]="selected",
             [class.comment__reply-avatar]="reply"
         )
-        .comment-block([ngClass]="[ readingReport ? 'comment-block--reading-recap' : '' ]")
-            .comment-meta(*ngIf="!readingReport")
+        .user-icon__fullname(*ngIf="largeDisplay")
+            a.comment--large__user-link(
+                [routerLink]="['./']",
+                [queryParams]="{ student: comment.user_id }"
+            ) {{ comment.author }}
+            a.sub-label(
+              (click)="copyLink()",
+              [class.is-draft]="_comments.isCommentNewDraft(comment)"
+            )
+              span.time-text--draft New
+              span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
+              span.text-success(*ngIf="linkCopied") &nbsp;-&nbsp;Comment link copied!
+        .comment-block(
+          [class.comment-block--large]="largeDisplay",
+          [class.comment-block--reading-recap]="readingReport"
+        )
+            .comment-meta(*ngIf="!readingReport && !largeDisplay")
                 a.btn.btn-xs-primary.comment__user-link(
                   [routerLink]="['./']",
                   [queryParams]="{ student: comment.user_id }"
                 )
                   | {{comment.author}}
-                span.comment-meta__time([class.is-draft]="_comments.isCommentNewDraft(comment)") &nbsp;
+                a.comment-meta__time(
+                  [routerLink]="['./']",
+                  [queryParams]="{ comment: comment._id }",
+                  [class.is-draft]="_comments.isCommentNewDraft(comment)"
+                ) &nbsp;
                     span.time-text--draft New
                     span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
             .comment__content
@@ -91,35 +111,35 @@ div([id]="'comment-' + comment._id")
                     .btn.btn-xs-action.has-icon.ml-1.display-only
                         i.icon.icon-check
                         | Saved
-//- Display Replies
-ng-container(*ngIf="!reply && repliesShowing")
-  .replies
-    .replies__header
-      .arrow-wrap
-        img.arrow-point(src="assets/images/reply-triangle.png")
-        .arrow-line
-    ng-container(*ngIf="repliesById[comment._id]")
-      .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
-        edji-comment.comment--replyBlock(
-          *ngIf="replyComment.author",
-          [readOnly]="replyComment.user_id !== user._id",
-          [comment]="replyComment",
-          [commentContext]="'reply'",
-          [isActive]="replyComment.active",
-          [reply]="true",
-          (commentActivation)="commentActivation($event, replyComment)",
-          [attr.replyId]="replyComment._id"
-        )
-    //--Reply input--
-    .reply-row
-      user-avatar.comment__avatar.show([userDetails]="user")
-      .reply-input__line
-      .replyInput Add Reply
-      //--Add reply buttons--
-      .replyButtonGroup
-        button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")
-          i.icon.icon-comment-emoji
-        button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType(comment, 'text')")
-          i.icon.icon-comment-text
-        button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
-          i.icon.icon-mic
+    //- Display Replies
+    ng-container(*ngIf="!reply && repliesShowing")
+      .replies
+        .replies__header
+          .arrow-wrap
+            img.arrow-point(src="assets/images/reply-triangle.png")
+            .arrow-line
+        ng-container(*ngIf="repliesById[comment._id]")
+          .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
+            edji-comment.comment--replyBlock(
+              *ngIf="replyComment.author",
+              [readOnly]="replyComment.user_id !== user._id",
+              [comment]="replyComment",
+              [commentContext]="'reply'",
+              [isActive]="replyComment.active",
+              [reply]="true",
+              (commentActivation)="commentActivation($event, replyComment)",
+              [attr.replyId]="replyComment._id"
+            )
+        //--Reply input--
+        .reply-row
+          user-avatar.comment__avatar.show([userDetails]="user")
+          .reply-input__line
+          .replyInput Add Reply
+          //--Add reply buttons--
+          .replyButtonGroup
+            button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")
+              i.icon.icon-comment-emoji
+            button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType(comment, 'text')")
+              i.icon.icon-comment-text
+            button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
+              i.icon.icon-mic

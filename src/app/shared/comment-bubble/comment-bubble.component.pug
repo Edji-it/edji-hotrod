@@ -12,5 +12,12 @@
   .icon-comment-arrow
   edji-comment(
     [comment]="comment",
+    [largeDisplay]="true",
     (commentDeleted)="close()"
   )
+  a.btn.btn-xs-primary.has-icon(
+    [routerLink]="['./']",
+    [queryParams]="{ line: comment._id }"
+  )
+    i.icon.icon-line
+    | View Line
