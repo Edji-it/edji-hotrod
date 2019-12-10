@@ -243,6 +243,10 @@ comment-explorer(
     (clearSelected)="selectedComment = null"
 )
 
+comment-bubble(
+  [comment]="selectedComment"
+)
+
 //- Icon Arrow for the active comment
 .icon-comment-arrow(
     [class.slide-in]="commentPane && selectedComment",
@@ -256,7 +260,7 @@ hot-del-comment(
     (delete)="deleteComment(_comments.deleteCommentRef)",
     (closeModal)="_comments.commentDeleted()"
 )
-// Tutorial gifs
+//- Tutorial gifs
 edji-tutorial-gif(
     *ngIf="tutorialGifUrl",
     [header]="'How to Comment'",
