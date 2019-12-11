@@ -531,7 +531,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
         } else if (params['comment'] || params['line']) {
           // Check if opening/scrolling to comment or line
-          this.checkCommentLink(params['comment'] || params['line'], !!params['line'], params['parent'])
+          this.checkCommentLink(params['comment'] || params['line'], !!params['line'], params['reply'])
         }
       }),
     )
@@ -548,21 +548,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this._messages.dismissToast('feedback')
   }
 
-  private checkCommentLink(commentId: string, viewLine?: boolean, parentId?: string): void {
+  private checkCommentLink(commentId: string, viewLine?: boolean, replyId?: string): void {
     if (!this.portalComponents) {
       setTimeout(() => {
-        this.checkCommentLink(commentId, viewLine, parentId)
+        this.checkCommentLink(commentId, viewLine, replyId)
       }, 1000)
     }
-    console.log('Check comment link?', commentId, viewLine)
     // Reset selected comment values
     // > ensures comment pane scroll action when transitioning between comments and replies
     if (this.selectedComment) this.selectedComment.selected = false
     // Parent indicates a reply comment
-    let isReply = !!parentId
-    let findCommentId = isReply ? parentId : commentId
+    let isReply = !!replyId
     let commentEl = this.portalComponents.toArray().find(commentEl => {
-      return commentEl.comment._id === findCommentId
+      return commentEl.comment._id === commentId
     })
     // Ensure not already selected
     if (this.selectedComment && commentId === this.selectedComment._id) {
@@ -594,7 +592,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Toggle the comment pane
       if (isReply) {
         let reply = this.project.comments.find(comment => {
-          return comment._id == commentId
+          return comment._id == replyId
         })
         this.openComment(!viewLine, commentEl.comment, reply)
       } else {
@@ -692,7 +690,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         type: 'new-reply',
         id: 'newReply',
         link: './',
-        linkParams: { comment: content._id, parent: content.parent },
+        linkParams: { reply: content._id, comment: content.reply_to },
         limitToPage: 'project',
         requireDismiss: true,
       })

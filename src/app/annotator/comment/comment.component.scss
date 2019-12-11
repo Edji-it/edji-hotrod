@@ -161,10 +161,11 @@ user-avatar {
 
 .comment--large__user-link {
   text-decoration: none !important;
+  color: $dark-gray;
 
-  &:hover {
-    text-decoration: underline;
-  }
+  // &:hover {
+  //   text-decoration: underline !important;
+  // }
 }
 
 .user-icon__fullname {
@@ -175,10 +176,16 @@ user-avatar {
     display: block;
     font-style: italic;
     text-decoration: none !important;
+    color: $medium-gray;
 
     .text-success {
       font-style: normal;
     }
+  }
+
+  a:hover {
+    text-decoration: underline !important;
+    color: $blue;
   }
 }
 

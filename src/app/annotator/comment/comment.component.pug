@@ -17,11 +17,11 @@ div([id]="'comment-' + comment._id")
             [class.comment__reply-avatar]="reply"
         )
         .user-icon__fullname(*ngIf="largeDisplay")
-            a.comment--large__user-link(
+            a.link.comment--large__user-link(
                 [routerLink]="['./']",
                 [queryParams]="{ student: comment.user_id }"
             ) {{ comment.author }}
-            a.sub-label(
+            a.link.sub-label(
               (click)="copyLink()",
               [class.is-draft]="_comments.isCommentNewDraft(comment)"
             )
@@ -33,14 +33,14 @@ div([id]="'comment-' + comment._id")
           [class.comment-block--reading-recap]="readingReport"
         )
             .comment-meta(*ngIf="!readingReport && !largeDisplay")
-                a.btn.btn-xs-primary.comment__user-link(
+                a.link.comment__user-link(
                   [routerLink]="['./']",
                   [queryParams]="{ student: comment.user_id }"
                 )
                   | {{comment.author}}
-                a.comment-meta__time(
+                a.link.comment-meta__time(
                   [routerLink]="['./']",
-                  [queryParams]="{ comment: comment._id }",
+                  [queryParams]="reply ? { reply: comment._id, comment: comment.reply_to } : { comment: comment._id }",
                   [class.is-draft]="_comments.isCommentNewDraft(comment)"
                 ) &nbsp;
                     span.time-text--draft New

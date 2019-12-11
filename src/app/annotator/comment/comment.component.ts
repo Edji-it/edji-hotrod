@@ -98,7 +98,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       }),
       // Check URL params
       this.route.queryParams.subscribe(params => {
-        if (this.comment && params['parent'] && params['parent'] === this.comment._id && params['comment']) {
+        if (this.comment && params['comment'] && params['comment'] === this.comment._id && params['reply']) {
           this.repliesShowing = true
         }
       }),
@@ -411,7 +411,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   public copyLink() {
-    let url = `${location.origin}/${this.project._id}?comment=${this.comment._id}`
+    let url = `${location.origin}/#/project/${this.project._id}?comment=${this.comment._id}`
     copyToClipboard(url)
     this.linkCopied = true
     setTimeout(() => {

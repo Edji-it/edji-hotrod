@@ -123,11 +123,12 @@ edji-comment {
   }
 
   .comment__user-link {
-    margin-left: -5px;
     text-decoration: none !important;
+    color: $dark-gray;
 
     &:hover {
-      color: #fff !important;
+      // color: #fff !important;
+      text-decoration: underline !important;
     }
   }
 
@@ -937,9 +938,14 @@ div.avatar-count-8 {
   font-size: 10px;
   padding-left: 0.25em;
   vertical-align: middle;
+  text-decoration: none !important;
 
   & .time-text--draft {
     display: none;
+  }
+
+  a.link:hover {
+    text-decoration: underline !important;
   }
 }
 
