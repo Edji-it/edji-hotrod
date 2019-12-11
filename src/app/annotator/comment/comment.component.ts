@@ -1,12 +1,11 @@
 import { Subscription } from 'rxjs'
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
 import { AuthService, CommentService, SocketService, AnalyticsService } from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
-import { ALLSPARK } from './../../app.constants'
 import { ProjectStore } from 'src/app/_store'
-import { ActivatedRoute } from '@angular/router'
 import { copyToClipboard } from 'src/app/shared/clipboard'
 
 @Component({
