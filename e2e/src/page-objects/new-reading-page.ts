@@ -347,6 +347,7 @@ export class NewReading implements PageObjectInterface {
     this.finalizeButton.click()
     // Should redirect to Project page for new reading
     browser.wait(this.EC.urlContains('project'), 10000, 'never arrived at new reading')
+    this.shareCodeModalCloseClick()
     // Give Optimus/Elastic a BRIEF moment to index the new reading
     browser.sleep(100)
     this.sidebar.backToDash()
