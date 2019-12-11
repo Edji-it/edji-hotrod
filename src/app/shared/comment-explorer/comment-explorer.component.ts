@@ -201,6 +201,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     } else {
       this.filterMode = 'all'
       sorted = this.allComments.filter(comment => {
+        // This hides replies from All Comments feed
         return comment.start >= 0
       })
     }

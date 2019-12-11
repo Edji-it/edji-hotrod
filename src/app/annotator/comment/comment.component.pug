@@ -5,7 +5,7 @@ div([id]="'comment-' + comment._id")
         [class.saved]="justSaved",
         [class.active]="comment.active",
         [class.read-only]="userPermission < 5",
-        [class.comment--reply]="reply",
+        [class.comment--reply]="reply || comment.reply_to",
         [class.comment--large]="largeDisplay",
         [ngClass]="[ readingReport ? 'comment-block--align-top':'' ]",
     )
@@ -46,7 +46,7 @@ div([id]="'comment-' + comment._id")
                     span.time-text--draft New
                     span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
             .comment__content
-                ng-container(*ngIf="!reply")
+                ng-container(*ngIf="!reply && !comment.reply_to")
                   //- Text that was commented on
                   .comment__highlight(*ngIf="!isImageSpot && !readingReport", data-test="commentAnnotatedText")
                       | {{ comment.text ? comment.text : '...'}}
@@ -54,8 +54,17 @@ div([id]="'comment-' + comment._id")
                   .comment__highlight(*ngIf="isImageSpot && !readingReport")
                       .comment__highlight_image Image
                       button.comment__highlight_button((tap)="scrollToImage(comment.start)") View&nbsp;&#8594;
+                .reply-action-badge(*ngIf="!reply && comment.reply_to")
+                  //- If not dispaying reply in context, provide a link
+                  a.link.btn.btn-xs-action.btn--reply.has-icon(
+                    [routerLink]="['./']",
+                    [queryParams]="{ reply: comment._id, comment: comment.reply_to }"
+                  )
+                    | Reply to
+                    i.icon.icon-reply-arrow
                 .comment-input-wrapper(
-                  [ngClass]="[ comment.type + '' ]"
+                  [ngClass]="[ comment.type + '' ]",
+                  [class.input-wrapper--reply]="reply || comment.reply_to"
                 )
                     emoji-comment(
                         *ngIf="comment.type == 'emoji' || !comment.type",
@@ -87,7 +96,7 @@ div([id]="'comment-' + comment._id")
             .comment__action-row.btn-row.left.mt-0(*ngIf="!readingReport", [class.reply-gap]="repliesShowing")
                 ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")
                     i.icon.icon-draft.icon-draft__comment
-                ng-container(*ngIf="!readingReport && !reply && project.types.indexOf('reply') > -1 && !((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
+                ng-container(*ngIf="!readingReport && !reply && !comment.reply_to && project.types.indexOf('reply') > -1 && !((!comment.data || comment.data=='') && (!comment.url || comment.url == ''))")
                     button#addReply.btn.btn-xs-action.btn--reply.has-icon(
                         (tap)="repliesShowing = !repliesShowing",
                         [class.has-reply]="hasReplies(comment)",
@@ -111,7 +120,7 @@ div([id]="'comment-' + comment._id")
                         i.icon.icon-check
                         | Saved
     //- Display Replies
-    ng-container(*ngIf="!reply && repliesShowing")
+    ng-container(*ngIf="!reply && !comment.reply_to && repliesShowing")
       .replies
         .replies__header
           .arrow-wrap

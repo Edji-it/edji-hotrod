@@ -203,6 +203,17 @@ edji-comment {
 .comment__content {
   background: $oneHighlightColor;
   border-radius: 4px;
+
+  .comment--reply & {
+    background: #fff;
+  }
+}
+
+.reply-action-badge {
+  position: absolute;
+  top: 14px;
+  right: -5px;
+  z-index: 1000;
 }
 
 .comment-input-wrapper {
@@ -704,10 +715,11 @@ $progressStart: 51px;
   height: 1em;
 }
 
-.comment.comment--reply {
-  & .comment-input-wrapper,
-  &.read-only .comment-input-wrapper,
-  &.read-only .comment-input-wrapper:hover {
+.comment-input-wrapper.input-wrapper--reply {
+  border-color: rgb(220, 227, 234);
+
+  .read-only &,
+  .read-only &:hover {
     border-color: rgb(220, 227, 234);
   }
 }
