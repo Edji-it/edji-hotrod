@@ -46,9 +46,9 @@ export class Dashboard implements PageObjectInterface {
   public publicReadingStatus = element(by.id('readingPublic'))
   public privateReadingStatus = element(by.id('readingPrivate'))
   public academyReadingStatus = element(by.id('readingAcademy'))
-  public readingMakePublic = element(by.css('.tooltip.show readingMakePublic'))
-  public readingMakePrivate = element(by.css('.tooltip.show readingMakePrivate'))
-  public readingMakeAcademy = element(by.css('.tooltip.show readingMakeAcademy'))
+  public readingMakePublic = element(by.css('.tooltip.show #readingMakePublic'))
+  public readingMakePrivate = element(by.css('.tooltip.show #readingMakePrivate'))
+  public readingMakeAcademy = element(by.css('.tooltip.show #readingMakeAcademy'))
 
   // Dropdown buttons
   public dropDownMenu = element(by.css('.btn-icon--plain'))
