@@ -21,7 +21,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   public isImageSpot: boolean = false
   public linkCopied: boolean = false
 
-  private justSaved: boolean = false
+  public justSaved: boolean = false
   private isLoading: boolean = false
   // Hold the current scroll position for the iOS fix
   private currentScroll: number
