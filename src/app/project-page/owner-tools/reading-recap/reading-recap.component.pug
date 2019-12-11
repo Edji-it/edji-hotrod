@@ -92,7 +92,6 @@
       .row(*ngFor="let recapComment of comments; let i = index")
         .col-3.pr-0
           edji-comment(
-            [readOnly]="true",
             [comment]="recapComment",
             [readingReport]="true",
             style="display: initial;"

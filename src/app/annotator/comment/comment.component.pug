@@ -4,7 +4,7 @@ div([id]="'comment-' + comment._id")
         [class.new]="comment.new",
         [class.saved]="justSaved",
         [class.active]="comment.active",
-        [class.readonly]="readOnly",
+        [class.read-only]="userPermission < 5",
         [class.comment--reply]="reply",
         [class.comment--large]="largeDisplay",
         [ngClass]="[ readingReport ? 'comment-block--align-top':'' ]",
@@ -60,14 +60,14 @@ div([id]="'comment-' + comment._id")
                     emoji-comment(
                         *ngIf="comment.type == 'emoji' || !comment.type",
                         [comment]="comment",
-                        [readOnly]="readOnly",
+                        [readOnly]="userPermission < 5",
                         [reply]="reply",
                         (activate)="activate()",
                         (deactivate)="deactivate(comment)"
                     )
                     text-comment(
                         *ngIf="comment.type == 'text'",
-                        [readOnly]="readOnly",
+                        [readOnly]="userPermission < 5",
                         [comment]="comment",
                         [active]="comment.active",
                         [reply]="reply",
@@ -79,7 +79,6 @@ div([id]="'comment-' + comment._id")
                         [comment]="comment",
                         (save)="deactivate(comment)",
                         [active]="comment.active",
-                        (showDeleteAudioModal)="showDeleteAudioModal = true",
                         [userPermission]="userPermission",
                         [reply]="reply",
                         [commentContext]="commentContext"
@@ -99,10 +98,10 @@ div([id]="'comment-' + comment._id")
                 ng-container(*ngIf="userPermission >= 3")
                     .action-separator
                     button.btn.btn-xs-danger.e2e-delete-button((tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
-                ng-container(*ngIf="comment.type != 'audio' && !readOnly && !comment.active")
+                ng-container(*ngIf="comment.type != 'audio' && userPermission >= 5 && !comment.active")
                     .action-separator
                     button.btn.btn-xs-primary((tap)="activate(comment)") Edit
-                ng-container(*ngIf="comment.active && !readOnly && !readingReport")
+                ng-container(*ngIf="comment.active && userPermission >= 5 && !readingReport")
                     .action-separator
                     button.btn.btn-xs-action.has-icon((tap)="deactivate(comment)", data-test="commentSaveButton")
                         i.icon.icon-check
@@ -122,7 +121,6 @@ div([id]="'comment-' + comment._id")
           .comment-wrap-row(*ngFor="let replyComment of repliesById[comment._id] | sortByDate:'createdAt'")
             edji-comment.comment--replyBlock(
               *ngIf="replyComment.author",
-              [readOnly]="replyComment.user_id !== user._id",
               [comment]="replyComment",
               [commentContext]="'reply'",
               [isActive]="replyComment.active",

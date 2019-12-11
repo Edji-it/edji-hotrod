@@ -17,9 +17,7 @@ export class CommentService {
   public deleteCommentRef: EdjiComment = <EdjiComment>{}
   // public deleteAudioRef: EdjiComment = <EdjiComment>{}
   public showDeleteCommentModal: boolean
-  // public showDeleteAudioModal: boolean
   public commentContext: string
-  // public showAudioDeleteModal: boolean
 
   public clearActiveCommentsSource: Subject<boolean> = new Subject()
   public clearActiveComments: Observable<boolean> = this.clearActiveCommentsSource.asObservable()
@@ -137,9 +135,12 @@ export class CommentService {
    * @param project A project object
    */
   public getCommentPermissions(comment: any, user: any, project: Project): number {
-    if (user._id == comment.user_id) {
+    if (!comment || !user) {
+      // Fallback to read-only
+      return CommentPermissions.READ
+    } else if (user._id == comment.user_id) {
       return CommentPermissions.EDIT
-    } else if (project.isTeaching) {
+    } else if (project && project.isTeaching) {
       return CommentPermissions.DELETE
     } else {
       return CommentPermissions.READ

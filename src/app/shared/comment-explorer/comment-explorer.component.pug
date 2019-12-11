@@ -111,14 +111,10 @@
               hr.comment-block-hr(*ngIf="i > 0")
               edji-comment(
                 [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && c.user_id !== user._id && c.user_id !== project.teacher_id",
-                [class.spec-owner]="c.user_id === project.teacher_id",
-                [readOnly]="c.user_id !== user._id",
                 [comment]="c",
                 [selected]="comment && c._id === comment._id",
                 (commentActivation)="commentActivationEmitter($event)",
-                (commentReply)="commentReplyEmitter($event)",
                 (commentDeleted)="onDelete()",
-                style="display: initial;"
               )
             .end-block(*ngIf="filterMode === 'all' && sortValue === 'created'")
               hr.comment-block-hr

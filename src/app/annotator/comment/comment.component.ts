@@ -19,6 +19,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   public repliesShowing: boolean = false
   public isImageSpot: boolean = false
   public linkCopied: boolean = false
+  public readOnly: boolean = true
 
   public justSaved: boolean = false
   private isLoading: boolean = false
@@ -31,16 +32,14 @@ export class CommentComponent implements OnInit, OnDestroy {
   private repliesById: any = {}
   private project: any
   private fragment: string
+  private userPermission: number = CommentPermissions.READ
 
   @Input() public comment: EdjiComment
-  @Input() public readOnly: boolean = false
   @Input() public reply: boolean = false // Is it a reply to another comment?
   @Input() private commentContext: string = 'comment' // See NOTES in summary.
   @Input() public selected: boolean = false
-  @Input() private assignedQuestion: EdjiQuestion // If this is an answer, it'll need this.
-  private userPermission: number = CommentPermissions.READ
-  @Input() private showDeleteAudioModal: boolean = false
   @Input() public largeDisplay: boolean = false
+  // Reading recap has a specialized display
   @Input() public readingReport: boolean = false
   @Input()
   set isActive(isActive: boolean) {
@@ -157,9 +156,9 @@ export class CommentComponent implements OnInit, OnDestroy {
   private checkPermissions(): void {
     if (this.comment && this.user && this.project) {
       this.userPermission = this._comments.getCommentPermissions(this.comment, this.user, this.project)
-    } else {
-      this.userPermission = CommentPermissions.READ
     }
+    // Set readonly flag
+    this.readOnly = this.userPermission === CommentPermissions.READ
   }
 
   activate(event?: any): void {

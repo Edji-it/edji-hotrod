@@ -148,7 +148,7 @@ edji-comment {
     color: white;
   }
 
-  &:not(.active) .comment-input-wrapper:hover {
+  & .comment-input-wrapper:hover {
     box-shadow: $inputFocusHalfShadow;
     border-color: #b8d4e2;
 
@@ -157,8 +157,18 @@ edji-comment {
     }
   }
 
+  &.read-only {
+    & .comment-input-wrapper,
+    & .comment-input-wrapper:hover {
+      border: $commentBorder;
+      box-shadow: none;
+      transform: scale(1) translateZ(0px);
+    }
+  }
+
   &.active {
-    & .comment-input-wrapper {
+    & .comment-input-wrapper,
+    & .comment-input-wrapper:hover {
       box-shadow: $inputFocusShadow;
       border-color: #00a2f5;
       transform: scale(1) translateZ(0px);
@@ -695,7 +705,9 @@ $progressStart: 51px;
 }
 
 .comment.comment--reply {
-  & .comment-input-wrapper {
+  & .comment-input-wrapper,
+  &.read-only .comment-input-wrapper,
+  &.read-only .comment-input-wrapper:hover {
     border-color: rgb(220, 227, 234);
   }
 }
