@@ -1,5 +1,5 @@
 .sliding-pane-comment.from-left(#commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
-    .loading-screen([class.fade-in]="loading")
+    .loading-screen([class.fade-in]="loading", data-test="explorerLoading")
       .loader.icon-loading--action
     .sliding-pane-comment__header.container-fluid(*ngIf="visible")
       .row

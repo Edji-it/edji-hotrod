@@ -72,6 +72,8 @@ describe('Project Page using the comment explorer: ', () => {
         5000,
         'did see user filter after clicking user name on comment',
       )
+      // Let content load
+      explorer.waitForLoad()
       browser.wait(
         EC.invisibilityOf(explorer.allHeader),
         3000,
@@ -169,6 +171,8 @@ describe('Project Page using the comment explorer: ', () => {
         5000,
         'did see user filter after clicking user name on comment',
       )
+      // Let content load
+      explorer.waitForLoad()
       browser.wait(
         EC.invisibilityOf(explorer.allHeader),
         3000,
