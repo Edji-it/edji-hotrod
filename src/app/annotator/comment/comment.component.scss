@@ -414,6 +414,24 @@ user-avatar {
   float: left;
 }
 
+.reply-action-badge {
+  position: absolute;
+  top: 14px;
+  right: -5px;
+  z-index: 1000;
+
+  & a.btn--reply {
+    border-radius: 9px;
+    background-color:#d9f3e2;
+    color: #87c17f;
+
+    & .icon {
+      filter: grayscale(0%);
+      border-radius: 7px;
+    }
+  }
+}
+
 .arrow-wrap {
   // -25px ???
   width: 32px;

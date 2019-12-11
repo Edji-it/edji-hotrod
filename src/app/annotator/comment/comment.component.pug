@@ -60,7 +60,7 @@ div([id]="'comment-' + comment._id")
                     [routerLink]="['./']",
                     [queryParams]="{ reply: comment._id, comment: comment.reply_to }"
                   )
-                    | Reply to
+                    | Reply
                     i.icon.icon-reply-arrow
                 .comment-input-wrapper(
                   [ngClass]="[ comment.type + '' ]",
