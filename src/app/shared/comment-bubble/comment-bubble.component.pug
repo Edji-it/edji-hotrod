@@ -15,9 +15,10 @@
     [largeDisplay]="true",
     (commentDeleted)="close()"
   )
-  a.btn.btn-xs-primary.has-icon(
-    [routerLink]="['./']",
-    [queryParams]="{ line: comment._id }"
-  )
-    i.icon.icon-line
-    | View Line
+  .btn-row.right
+    a.btn.btn-xs-primary.has-icon(
+      [routerLink]="['./']",
+      [queryParams]="{ line: comment._id }"
+    )
+      i.icon.icon-view-line-sm
+      | View Line

@@ -553,6 +553,11 @@ $iconGrayOpacity: 0.6;
   @include icon('icon-view-line.svg');
 }
 
+.icon-view-line-sm {
+  @include icon('icon-view-line-sm.svg');
+}
+
+
 .icon-vision-flame {
   @include icon('icon-vision-flame.svg');
 

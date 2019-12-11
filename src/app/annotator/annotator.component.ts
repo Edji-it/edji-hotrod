@@ -554,6 +554,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.checkCommentLink(commentId, viewLine, parentId)
       }, 1000)
     }
+    console.log('Check comment link?', commentId, viewLine)
     // Reset selected comment values
     // > ensures comment pane scroll action when transitioning between comments and replies
     if (this.selectedComment) this.selectedComment.selected = false
@@ -1661,6 +1662,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Open Comment Bubble
       this.selectedComment = selectedComment
       this.commentPane = false
+      console.log('open comment bubble!')
       this.commentBubble = true
     }
   }

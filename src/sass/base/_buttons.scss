@@ -728,12 +728,12 @@ pre.btn {
   font-size: 10px;
   line-height: 17px;
   border-radius: 4px;
-  text-decoration: none;
+  text-decoration: none !important;
   // Padding provides space for icon
   padding: 1px 5px 1px 5px;
 
   &:hover {
-    color: #fff;
+    color: #fff !important;
   }
 
   &.has-icon {

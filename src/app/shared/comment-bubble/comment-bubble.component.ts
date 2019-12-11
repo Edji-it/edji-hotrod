@@ -23,11 +23,11 @@ export class CommentBubbleComponent implements OnInit, OnDestroy {
   set top(pos: string) {
     if (pos !== this._top && this.visible) {
       // position changed
-      this.visible = false
+      // this.visible = false
       this._top = pos
-      setTimeout(() => {
-        this.visible = true
-      })
+      // setTimeout(() => {
+      //   this.visible = true
+      // })
     } else {
       this._top = pos
     }
