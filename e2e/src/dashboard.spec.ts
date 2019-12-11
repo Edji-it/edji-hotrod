@@ -12,7 +12,6 @@ describe('Dashboard Page as a Hero', () => {
   let newReading = new NewReading()
 
   beforeAll(() => {
-    // Login as test account that we can fill with junk data
     login.getPage()
     login.loginAndVerify(login.heroUser, login.heroPassword)
   })
@@ -358,6 +357,7 @@ describe('Dashboard Page as a Hero', () => {
       'never found the make academy button on the tooltip to toggle academy status',
     )
     dashboard.readingMakeAcademy.click()
+    dashboard.readingTypeAddDetails()
     // verify it changed to public status
     browser.wait(EC.visibilityOf(dashboard.academyReadingStatus), 5000, 'status never changed back to academy')
   })

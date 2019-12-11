@@ -356,7 +356,7 @@ export class NewReading implements PageObjectInterface {
   /**
    * Convenience function for selecting grade and subject on new reading
    */
-  private selectGradeSubject(): void {
+  public selectGradeSubject(): void {
     browser.wait(this.EC.elementToBeClickable(this.gradeTileK), 1000, 'grade K button was not clickable')
     this.gradeTileK.click()
     browser.wait(this.EC.elementToBeClickable(this.gradeTileU), 1000, 'grade U button was not clickable')

@@ -2,10 +2,12 @@ import { browser, by, element, protractor, ElementFinder } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
 import { reset } from '../utils/browser-methods'
 import { Sidebar } from './sidebar-page'
+import { NewReading } from './new-reading-page'
 
 export class Dashboard implements PageObjectInterface {
   private EC = protractor.ExpectedConditions
   private sidebar = new Sidebar()
+  private newReading = new NewReading()
 
   // Public Instance Variables
   public readingCards = element.all(by.css('.reading-card'))
@@ -35,6 +37,7 @@ export class Dashboard implements PageObjectInterface {
   public searchInput = element(by.id('readingSearch'))
   public bookmarksBtn = element(by.id('bookmarksBtn'))
   public strategiesBtn = element(by.id('dashboardFilterStrategies'))
+  public readingAddDetailsSubmit = element(by.id('readingAddDetails'))
 
   // public toggle and status
   public publicStatusTitle = 'Public Status <Do Not Delete or Use>'
@@ -43,9 +46,9 @@ export class Dashboard implements PageObjectInterface {
   public publicReadingStatus = element(by.id('readingPublic'))
   public privateReadingStatus = element(by.id('readingPrivate'))
   public academyReadingStatus = element(by.id('readingAcademy'))
-  public readingMakePublic = element(by.id('readingMakePublic'))
-  public readingMakePrivate = element(by.id('readingMakePrivate'))
-  public readingMakeAcademy = element(by.id('readingMakeAcademy'))
+  public readingMakePublic = element(by.css('.tooltip.show readingMakePublic'))
+  public readingMakePrivate = element(by.css('.tooltip.show readingMakePrivate'))
+  public readingMakeAcademy = element(by.css('.tooltip.show readingMakeAcademy'))
 
   // Dropdown buttons
   public dropDownMenu = element(by.css('.btn-icon--plain'))
@@ -297,6 +300,26 @@ export class Dashboard implements PageObjectInterface {
               .perform()
           }
         })
+      }
+    })
+  }
+
+  public readingTypeAddDetails(): void {
+    // Wait for a modal to appear (either archive or create group)
+    let modal = element(by.css('.modal.show'))
+    browser.wait(this.EC.visibilityOf(modal), 5000, 'add more reading details modal never showed')
+    // sleep() reason - Allow for modal fade-in
+    browser.sleep(400)
+    // Click the confirm archive reading button for new reading
+    this.newReading.gradeTileK.isPresent().then(result => {
+      if (result) {
+        this.newReading.selectGradeSubject()
+        browser.wait(
+          this.EC.visibilityOf(this.readingAddDetailsSubmit),
+          2000,
+          'add more details submit button was not clickable',
+        )
+        this.readingAddDetailsSubmit.click()
       }
     })
   }

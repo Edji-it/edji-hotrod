@@ -33,5 +33,5 @@
             a.add-underline([routerLink]="['/project', projectLink]") Click here
           span &nbsp;to open the reading again
       .modal-footer
-        button.btn.btn-primary(type="submit", [disabled]="!readingMetaForm.valid", *ngIf="!messages.success") Submit
+        button#readingAddDetails.btn.btn-primary(type="submit", [disabled]="!readingMetaForm.valid", *ngIf="!messages.success") Submit
         button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Close
