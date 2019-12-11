@@ -104,7 +104,7 @@ div([id]="'comment-' + comment._id")
                     button.btn.btn-xs-primary((tap)="activate(comment)") Edit
                 ng-container(*ngIf="comment.active && !readOnly && !readingReport")
                     .action-separator
-                    button#saveComment.btn.btn-xs-action.has-icon((tap)="deactivate(comment)")
+                    button.btn.btn-xs-action.has-icon((tap)="deactivate(comment)", data-test="commentSaveButton")
                         i.icon.icon-check
                         | Save
                 ng-container(*ngIf="justSaved")

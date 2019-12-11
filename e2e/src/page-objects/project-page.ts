@@ -62,6 +62,7 @@ export class Project implements PageObjectInterface {
   public commentDeleteLast = element.all(by.css('edji-comment .e2e-delete-button')).last()
   public addReplyBtn = element(by.id('addReply'))
   public closePane = element(by.css('.sliding-pane-comment__header button.close'))
+  public closeComment = element(by.css('.comment-bubble .close'))
 
   public getPage(id: string): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)
