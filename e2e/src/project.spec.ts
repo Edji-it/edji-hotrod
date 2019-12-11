@@ -140,8 +140,8 @@ describe('Project Page', () => {
       browser.wait(EC.elementToBeClickable(project.audioRecord), 7000, 'never found the record audio button')
       project.audioRecord.click()
 
-      // wait 3 seconds for the audio to record
-      browser.sleep(3000)
+      // wait 4 seconds for the audio to record
+      browser.sleep(4000)
 
       // click the record audio button to end recording
       browser.wait(EC.elementToBeClickable(project.audioRecord), 5000, 'never found the record audio button')

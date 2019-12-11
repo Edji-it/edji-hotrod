@@ -18,7 +18,8 @@
   .btn-row.right
     a.btn.btn-xs-primary.has-icon(
       [routerLink]="['./']",
-      [queryParams]="{ line: comment._id }"
+      [queryParams]="{ line: comment._id }",
+      data-test="commentViewLine"
     )
       i.icon.icon-view-line-sm
       | View Line

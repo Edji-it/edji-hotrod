@@ -61,6 +61,7 @@ export class Project implements PageObjectInterface {
   public commentDelete = element(by.css('edji-comment .e2e-delete-button'))
   public commentDeleteLast = element.all(by.css('edji-comment .e2e-delete-button')).last()
   public addReplyBtn = element(by.id('addReply'))
+  public viewLine = element(by.css('[data-test="commentViewLine"]'))
   public closePane = element(by.css('.sliding-pane-comment__header button.close'))
   public closeComment = element(by.css('.comment-bubble .close'))
 
