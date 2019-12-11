@@ -84,7 +84,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
   }
   public indexOnLine: Number = 1
 
-  @Output() toggleCommentPane = new EventEmitter()
+  @Output() toggleCommentExplorer = new EventEmitter()
   @ViewChild('scrollEl', { static: false }) public scrollEl: ElementRef
 
   constructor(
@@ -131,7 +131,7 @@ export class AvatarPortalComponent implements OnInit, OnDestroy {
       // Set as active
       this.active = true
     }
-    this.toggleCommentPane.emit(selected)
+    this.toggleCommentExplorer.emit(selected)
   }
 
   ngOnDestroy() {

@@ -114,7 +114,7 @@ scroll-progress([scrollProgress]="currentScroll")
                       [comment]="comment",
                       [commentExplorerActive]="commentPane",
                       [isActive]="comment.active",
-                      (toggleCommentPane)="openComment($event, comment)",
+                      (toggleCommentExplorer)="openComment($event, comment)",
                       [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]",
                       (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
                       (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
@@ -246,7 +246,7 @@ emoji-keyboard(
 comment-explorer(
     [comment]="selectedComment",
     [visible]="commentPane",
-    (closed)="toggleCommentPane(false)",
+    (closed)="toggleCommentExplorer(false)",
     (clearSelected)="selectedComment = null"
 )
 

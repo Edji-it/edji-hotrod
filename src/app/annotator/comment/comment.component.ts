@@ -66,7 +66,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Output() dismissKeyboard = new EventEmitter()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
-  @Output() toggleCommentPane = new EventEmitter<boolean>()
+  @Output() toggleCommentExplorer = new EventEmitter<boolean>()
 
   constructor(
     private projectStore: ProjectStore,
@@ -331,7 +331,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Need to give the app 1 millisecond to update all arrays when adding a new comment
     if (forceOpen) {
       setTimeout(() => {
-        this.toggleCommentPane.emit(false)
+        this.toggleCommentExplorer.emit(false)
       }, 1)
     }
   }

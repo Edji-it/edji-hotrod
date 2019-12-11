@@ -1649,10 +1649,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public openComment(visible?: boolean, selectedComment?: EdjiComment, selectedReply?): void {
-    if (!visible) {
+  /**
+   * Displays comment via Bubble or Explorer
+   * @param focusComment focus individual comment - if not, line
+   * @param selectedComment comment to display
+   * @param selectedReply reply if applicable (results in expanding replies)
+   */
+  public openComment(focusComment?: boolean, selectedComment?: EdjiComment, selectedReply?): void {
+    if (!focusComment) {
       this.commentBubble = false
-      this.toggleCommentPane(true, selectedComment, selectedReply)
+      this.toggleCommentExplorer(true, selectedComment, selectedReply)
     } else {
       // Set the icon arrow position based on lineY and offsets
       this.commentHeightPos = this.getCommentDisplayY(selectedComment)
@@ -1663,7 +1669,12 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public toggleCommentPane(isVisible?: boolean, selectedComment?, selectedReply?): void {
+  /**
+   * Toggles Comment Explorer/Pane
+   * - Primarily used by openComment()
+   * - Remains "public" for toggling closed interactions
+   */
+  public toggleCommentExplorer(isVisible?: boolean, selectedComment?, selectedReply?): void {
     // Set the input comment to the comment pane if it is not currently open
     if (isVisible) {
       if (selectedComment) {
