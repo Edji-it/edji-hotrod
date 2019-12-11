@@ -49,7 +49,7 @@ export class Project implements PageObjectInterface {
   public audioPause = element(by.css('audio-comment #audioPause'))
   public audioRestart = element(by.css('audio-comment #audioRestart'))
   public audioRecord = element(by.css('audio-comment #audioRecord:not(.disabled)'))
-  public commentActionSave = element(by.css('edji-comment .comment-action--save'))
+  public commentActionSave = element(by.css('edji-comment [data-test="commentSaveButton"]'))
   public audioComment = element.all(by.css('.audio-comment-input-wrapper')).first()
 
   // Avatar comment pane activators

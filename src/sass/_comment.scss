@@ -1019,24 +1019,6 @@ div.avatar-count-8 {
   }
 }
 
-.comment-action--save {
-  cursor: pointer;
-}
-
-.comment-action--save__mobile {
-  height: 25px;
-  width: 25px;
-  top: 27px;
-  right: -21px;
-  position: absolute;
-  text-align: right;
-  z-index: 5501;
-  padding-left: 5px;
-
-  & .emojioneemoji {
-    pointer-events: none; // hide emoji short code tooltip
-  }
-}
 
 // Comment Replies
 
