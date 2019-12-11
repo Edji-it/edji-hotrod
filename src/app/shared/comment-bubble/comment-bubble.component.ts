@@ -1,51 +1,23 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
 
 // Internal
 import { EdjiComment } from '../datatypes'
-import { Router, ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'comment-bubble',
   templateUrl: './comment-bubble.component.pug',
   styleUrls: ['./comment-bubble.component.scss'],
 })
-export class CommentBubbleComponent implements OnInit, OnDestroy {
-  // Comment Pane Component Inputs
-  private _comment: EdjiComment
-  @Input()
-  set comment(comment: EdjiComment) {
-    this._comment = comment
-  }
-  get comment(): EdjiComment {
-    return this._comment
-  }
-  private _top: string
-  @Input()
-  set top(pos: string) {
-    if (pos !== this._top && this.visible) {
-      // position changed
-      // this.visible = false
-      this._top = pos
-      // setTimeout(() => {
-      //   this.visible = true
-      // })
-    } else {
-      this._top = pos
-    }
-  }
-  get top(): string {
-    return this._top
-  }
+export class CommentBubbleComponent {
+  @Input() public comment: EdjiComment
+  @Input() public top: string
   @Input() public visible: boolean
   @Output() closed = new EventEmitter()
 
   public fadeOut: boolean
 
   constructor(private router: Router, private route: ActivatedRoute) {}
-
-  ngOnInit() {}
-
-  ngOnDestroy() {}
 
   public close(clearParams?: boolean) {
     this.fadeOut = true
