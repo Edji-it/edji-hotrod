@@ -19,6 +19,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   public repliesShowing: boolean = false
   public isImageSpot: boolean = false
   public linkCopied: boolean = false
+  public userPermission: number = CommentPermissions.READ
   public readOnly: boolean = true
 
   public justSaved: boolean = false
@@ -32,7 +33,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   private repliesById: any = {}
   private project: any
   private fragment: string
-  private userPermission: number = CommentPermissions.READ
 
   @Input() public comment: EdjiComment
   @Input() public reply: boolean = false // Is it a reply to another comment?
