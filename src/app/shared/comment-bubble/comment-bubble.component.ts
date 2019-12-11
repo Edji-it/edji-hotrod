@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 
 // Internal
 import { EdjiComment } from '../datatypes'
+import { Router, ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'comment-bubble',
@@ -40,14 +41,22 @@ export class CommentBubbleComponent implements OnInit, OnDestroy {
 
   public fadeOut: boolean
 
-  constructor() {}
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {}
 
   ngOnDestroy() {}
 
-  public close() {
+  public close(clearParams?: boolean) {
     this.fadeOut = true
+    if (clearParams) {
+      // Clear URL params
+      this.router.navigate(['./'], {
+        relativeTo: this.route,
+        queryParams: { comment: null, reply: null },
+        queryParamsHandling: 'merge',
+      })
+    }
     // allow animation
     setTimeout(() => {
       this.closed.emit(true)

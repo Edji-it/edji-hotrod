@@ -230,19 +230,18 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * Clear filters applied to the explorer
    * @note does not fire "filterComments", so it can be used internally
    */
-  private clearFilters(paramsToKeep?: { comment?: string; parent?: string; student?: string }): void {
+  private clearFilters(paramsToKeep?: { line?: string; student?: string }): void {
     this.sortValue = 'created'
     this.filterMode = 'all' //- default
     if (!paramsToKeep) paramsToKeep = {}
     paramsToKeep['pane'] = 'comments'
-    if (!paramsToKeep['comment']) this.comment = null
     if (!paramsToKeep['student']) this.filterUserId = null
     // Tell parent component comment is cleared
     this.clearSelected.emit()
     // Merge params to keep with reset/null
-    let params = Object.assign({ comment: null, parent: null, student: null, line: null }, paramsToKeep)
+    let params = Object.assign({ student: null, line: null }, paramsToKeep)
     // Clear URL params
-    this.router.navigate(['.'], {
+    this.router.navigate(['./'], {
       relativeTo: this.route,
       queryParams: params,
       queryParamsHandling: 'merge',
@@ -269,9 +268,9 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     this.closed.emit(false)
     document.body.classList.remove('body__lock-scroll')
     // Clear URL params
-    this.router.navigate(['.'], {
+    this.router.navigate(['./'], {
       relativeTo: this.route,
-      queryParams: { pane: null, student: null, comment: null, parent: null, line: null },
+      queryParams: { pane: null, student: null, line: null },
       queryParamsHandling: 'merge',
     })
   }

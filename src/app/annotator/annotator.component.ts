@@ -702,7 +702,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * - Used to clear deep link params for comments/replies
    */
   private clearQueryParams(): void {
-    // this._router.navigate(['./'], { relativeTo: this.route, queryParams: {}, replaceUrl: true })
     this.location.replaceState(this._router.url.split('?')[0])
   }
 
@@ -1660,7 +1659,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Open Comment Bubble
       this.selectedComment = selectedComment
       this.commentPane = false
-      console.log('open comment bubble!')
       this.commentBubble = true
     }
   }
