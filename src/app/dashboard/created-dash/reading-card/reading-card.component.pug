@@ -122,6 +122,7 @@
                 span([innerHTML]="':lock: Private' | emojione")
               //- Academy option
               label#readingMakeAcademy.form-check-label.form-check-btn(
+                  *ngIf="academyState && academyState.academies && academyState.academies.length > 0 && academyReadingType",
                   [class.active]="reading.reading_type === 'academy'",
                   title="Allow anyone in your Academy to find this reading in Discover",
                   (click)="$event.stopPropagation(); toggleReadingType('academy')"

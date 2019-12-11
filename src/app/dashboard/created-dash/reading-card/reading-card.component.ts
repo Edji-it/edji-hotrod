@@ -3,7 +3,14 @@ import { Component, Input, Output, OnDestroy, OnInit, EventEmitter } from '@angu
 import { ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
-import { ReadingService, AnalyticsService, AuthService } from '../../../_services'
+import {
+  ReadingService,
+  AnalyticsService,
+  AuthService,
+  AcademyState,
+  Academy,
+  SecretSwitchesService,
+} from '../../../_services'
 import { Reading, Project, User, readingType } from '../../../shared/datatypes'
 import { take } from 'rxjs/operators'
 import { ALLSPARK } from 'src/app/app.constants'
@@ -20,6 +27,9 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   }
   private subscriptions: Subscription[] = []
   public isLoading: boolean = false
+
+  // Secret switch for academy reading type
+  public academyReadingType: boolean
 
   @Input()
   public reading: Reading
@@ -42,6 +52,8 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   public gradeInitials: string[] = ALLSPARK.GRADEINITIALS
   public gradeDisplay: string
   public newReadingType: readingType
+  public academyState: AcademyState = {}
+  public currentAcademy: Academy = {}
 
   public versionHeight = 50
 
@@ -51,6 +63,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _readings: ReadingService,
     private _auth: AuthService,
+    private _switches: SecretSwitchesService,
     private _analytics: AnalyticsService,
   ) {}
 
@@ -58,6 +71,20 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._auth.currentUser.subscribe(user => {
         this.user = user
+      }),
+      this._auth.currentAcademyState.subscribe(currentState => {
+        this.academyState = currentState
+        // Set abbreviation
+        if (this.academyState && this.academyState.academies) {
+          this.currentAcademy = this.academyState.academies[this.academyState.selected]
+        } else {
+          this.currentAcademy = {}
+        }
+      }),
+      this._switches.secretSwitchesUpdates.subscribe(switches => {
+        if (switches['academyReading']) {
+          this.academyReadingType = switches['academyReading']
+        }
       }),
     )
     if (this.reading.grade_levels) {

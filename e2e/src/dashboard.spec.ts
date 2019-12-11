@@ -9,7 +9,6 @@ describe('Dashboard Page as a Hero', () => {
   let login = new Login()
   let dashboard = new Dashboard()
   let sidebar = new Sidebar()
-  let newReading = new NewReading()
 
   beforeAll(() => {
     login.getPage()
@@ -329,38 +328,6 @@ describe('Dashboard Page as a Hero', () => {
       browser.wait(EC.visibilityOf(dashboard.privateReadingStatus), 5000, 'status never changed back to private')
     })
   })
-
-  it('should make a private reading go academy', () => {
-    dashboard.goToCreatedTab()
-    // Wait for Readings to load into Dashboard
-    browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 8000, 'never found Created Readings on Dashboard')
-    // create a private reading
-    let specificTitle = `academyReading${new Date().valueOf()}`
-    newReading.createReadingByType('private', specificTitle)
-    // verify the reading showed up
-    browser.wait(
-      EC.elementToBeClickable(dashboard.readingTitleText(specificTitle)),
-      5000,
-      'never found the new private status reading',
-    )
-    // click toggle
-    browser.wait(
-      EC.elementToBeClickable(dashboard.publicToggleBtn(specificTitle)),
-      5000,
-      'never found the toggle reading type button',
-    )
-    dashboard.publicToggleBtn(specificTitle).click()
-    // click academy
-    browser.wait(
-      EC.elementToBeClickable(dashboard.readingMakeAcademy),
-      5000,
-      'never found the make academy button on the tooltip to toggle academy status',
-    )
-    dashboard.readingMakeAcademy.click()
-    dashboard.readingTypeAddDetails()
-    // verify it changed to public status
-    browser.wait(EC.visibilityOf(dashboard.academyReadingStatus), 5000, 'status never changed back to academy')
-  })
 })
 
 describe('Dashboard page as a sidekick', () => {
@@ -430,5 +397,67 @@ describe('Dashboard page as a sidekick', () => {
     dashboard.searchCount.getText().then(count => {
       expect(parseInt(count)).toBe(0, 'expected to see no search results when entering a bad search')
     })
+  })
+})
+
+describe('Dashboard page as a sidekick', () => {
+  let login = new Login()
+  let dashboard = new Dashboard()
+  let sidebar = new Sidebar()
+  let newReading = new NewReading()
+
+  beforeAll(() => {
+    login.getPage()
+    login.loginAndVerify(login.adminUser, login.adminPassword)
+  })
+
+  afterAll(() => {
+    sidebar.logout()
+  })
+
+  afterEach(() => {
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
+  })
+
+  it('should make a private reading go academy', () => {
+    dashboard.goToCreatedTab()
+    // Wait for Readings to load into Dashboard
+    browser.wait(EC.elementToBeClickable(dashboard.firstReadingCard), 8000, 'never found Created Readings on Dashboard')
+    // create a private reading
+    let specificTitle = `academyReading${new Date().valueOf()}`
+    newReading.createReadingByType('private', specificTitle)
+    // verify the reading showed up
+    browser.wait(
+      EC.elementToBeClickable(dashboard.readingTitleText(specificTitle)),
+      5000,
+      'never found the new private status reading',
+    )
+    // click toggle
+    browser.wait(
+      EC.elementToBeClickable(dashboard.publicToggleBtn(specificTitle)),
+      5000,
+      'never found the toggle reading type button',
+    )
+    dashboard.publicToggleBtn(specificTitle).click()
+    // click academy
+    browser.wait(
+      EC.elementToBeClickable(dashboard.readingMakeAcademy),
+      5000,
+      'never found the make academy button on the tooltip to toggle academy status',
+    )
+    dashboard.readingMakeAcademy.click()
+    dashboard.readingTypeAddDetails()
+    // verify it changed to public status
+    browser.wait(EC.visibilityOf(dashboard.academyReadingStatus), 5000, 'status never changed back to academy')
   })
 })
