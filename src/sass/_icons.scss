@@ -78,10 +78,6 @@ $iconGrayOpacity: 0.6;
   }
 }
 
-.icon-invisible {
-  background: #fff;
-}
-
 .icon-add-question {
   @include icon('icon-add-question.svg');
   display: inline-block;

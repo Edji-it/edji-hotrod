@@ -426,7 +426,7 @@ tr.selectable {
   background: #fff;
   // allow use of tooltip
   position: relative;
-  overflow: visible; 
+  overflow: visible;
 
   &:hover, &:focus {
     border-color: rgba($green, 0.5);
@@ -440,7 +440,8 @@ tr.selectable {
     margin-top: -0.2em;
     filter: grayscale(50%);
     opacity: 0.5;
-    // background: #fff;
+    background-repeat: no-repeat;
+    background-size: 0 0;
     border-radius: 50%;
     border: 1px solid $dark-gray;
     padding: 7px;
@@ -478,6 +479,8 @@ tr.selectable {
       border: 0px solid transparent;
       // background: transparent;
       padding: 0px;
+      // Icon support
+      background-size: 100% 100%;
     }
   }
 }
@@ -522,7 +525,7 @@ tr.selectable {
   border-radius: 4px; // 1/2 of modal border radius
   margin-top: $base-pad;
   margin-bottom: $base-pad;
-  
+
   & .form-group {
     margin-bottom: 0rem;
   }

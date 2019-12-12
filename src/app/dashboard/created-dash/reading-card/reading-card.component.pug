@@ -10,30 +10,30 @@
       *ngIf="reading['draft']",
       [routerLink]="['/new-reading/' + reading._id]"
     )
-      h1.small.reading-title__text {{reading.title}} 
+      h1.small.reading-title__text {{reading.title}}
         span(*ngIf="!reading.title")
           i Untitled
     .reading-title--center-row(
-      *ngIf="!reading['draft']", 
+      *ngIf="!reading['draft']",
       [attr.testVersionNumber]="reading.title"
     )
-      h1.small.reading-title__text {{reading.title}} 
+      h1.small.reading-title__text {{reading.title}}
         span(*ngIf="!reading.title")
           i Untitled
       p.reading-details(
         *ngIf="reading.parent_id"
-      ) 
+      )
         span.reading-date {{ reading.createdAt | edjidate:'timeAgo':null }} &nbsp;
-        span.reading-version((click)="getVersions(reading.version_id)", [class.disabled]="reading.archived") 
+        span.reading-version((click)="getVersions(reading.version_id)", [class.disabled]="reading.archived")
           | Previous Versions
   i.icon.icon-draft.reading-draft(*ngIf="reading['draft']")
   //- The Dropdown Options Menu
   #optionsWrap.dropdown.reading-options(
-    *ngIf="!readOnly && (!reading['draft'] || reading.draft !== true || reading.projects[0])", 
+    *ngIf="!readOnly && (!reading['draft'] || reading.draft !== true || reading.projects[0])",
     [class.show]="showOptions"
   )
     button.btn.btn-icon--plain(
-      (click)="showOptions = !showOptions", 
+      (click)="showOptions = !showOptions",
       [attr.data-test]="'options-'+reading.title"
     )
       i.icon.icon-more
@@ -44,17 +44,17 @@
         (click)="relevantReading = reading; showAddModal = true; showOptions = false;",
         [attr.testFindCreateNewGroup]="reading.title",
         [disabled]="reading.archived"
-      ) 
+      )
         .icon.icon-plus
         | &nbsp; Create New Group
       //- Copy & Edit dropdown button
       button.dropdown-item(
-        (click)="showOptions=false;", 
-        [routerLink]="['/new-reading/']", 
+        (click)="showOptions=false;",
+        [routerLink]="['/new-reading/']",
         [queryParams]="{ copyId: reading._id }",
         [attr.data-test]="'copyEdit'+reading.title",
         [disabled]="reading.archived"
-      ) 
+      )
         .icon.icon-create
         | &nbsp; Copy and Edit
       //- Reading Link dropdown button
@@ -62,14 +62,14 @@
         (click)="showOptions=false; showReadingLinkModal=true",
         [attr.testReadingLink]="reading.title",
         [disabled]="reading.archived"
-      ) 
+      )
         .icon.icon-reading-link
         | &nbsp; Reading Link
       //- Delete dropdown button
       button.dropdown-item(
-        (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;", 
+        (click)="relevantReading = reading; showDeleteReadingModal = true; showOptions = false;",
         [attr.data-test]="'delete-'+reading.title"
-      ) 
+      )
         .icon.icon-delete
         | &nbsp; Delete
   .reading-data(*ngIf="!reading['draft']")
@@ -83,15 +83,15 @@
     .w-25.reading-action-row(*ngIf="!readOnly")
       //- Source Link
       a.btn.btn-icon--round.reading-action(
-        *ngIf="reading.source", 
-        [attr.href]="reading.source", 
-        title="Source", 
+        *ngIf="reading.source",
+        [attr.href]="reading.source",
+        title="Source",
         target="_blank"
       )
         i.icon.icon-link
       //- Private/Public Toggle
       #toggleType.btn.btn-icon--round.reading-access-icon.reading-action(
-        [attr.title]="reading.reading_type === 'public' ? 'Public Reading' : 'Private Reading'", 
+        [attr.title]="reading.reading_type === 'public' ? 'Public Reading' : 'Private Reading'",
         (click)="toggleTypeTooltip()",
         [class.access-icon__hover]="_route.snapshot.routeConfig.path!='discover'",
         [class.disabled]="reading.archived",
@@ -128,7 +128,7 @@
                   (click)="$event.stopPropagation(); toggleReadingType('academy')"
                 )
                 span
-                  i.icon.icon-academy-plate.icon-academy-plate-reading([class.icon-invisible]="reading.reading_type !== 'academy'")
+                  i.icon.icon-academy-plate.icon-academy-plate-reading
                   | &nbsp;Academy
       //- Bookmark action
       .btn.btn-icon--round.reading-action.hover--tooltip(
@@ -149,7 +149,7 @@
     span([innerHtml]="':x:' | emojione")
 //- The Project Card
 .list-item.list-item--button.project-card(
-      *ngFor="let project of reading.projects", 
+      *ngFor="let project of reading.projects",
       [class.new-project]="project.new",
       [class.archived]="reading.archived",
       [class.read-only]="readOnly"
@@ -177,16 +177,16 @@
 //- Modals
 //- hot-add-project-modal is opens when "Create New Group" under the dropdown is clicked
 hot-add-project-modal(
-  *ngIf="showAddModal", 
+  *ngIf="showAddModal",
   [reading]="relevantReading",
   (groupSaved)="addGroup(relevantReading, $event)",
   (closeModal)="showAddModal = false"
 )
 //- hot-del-reading pops up when "Delete" is clicked underneath a Reading's dropdown menu
 hot-del-reading(
-  *ngIf="showDeleteReadingModal", 
-  [reading]="relevantReading", 
-  (deleteReading)="removeReading(relevantReading)", 
+  *ngIf="showDeleteReadingModal",
+  [reading]="relevantReading",
+  (deleteReading)="removeReading(relevantReading)",
   (closeModal)="showDeleteReadingModal = false"
 )
 //- hot-del-project pops up when you cliock the delete button for a group
@@ -197,14 +197,14 @@ hot-del-project(
 )
 //- Add data for making reading public
 hot-discover-add-meta(
-  [showModal]="showReadingDiscoverModal", 
+  [showModal]="showReadingDiscoverModal",
   [reading]="reading",
   [newReadingType]="newReadingType",
   (closeModal)="showReadingDiscoverModal = false"
 )
 //- Reading link share modal
 edji-reading-link(
-  *ngIf="showReadingLinkModal", 
+  *ngIf="showReadingLinkModal",
   [reading]="reading",
   [isCreator]="true",
   (closeModal)="showReadingLinkModal = false"

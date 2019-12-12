@@ -62,7 +62,7 @@ nav-bar(
                       [formControl]="readingForm.controls['reading_type']"
                     )
                   span
-                    i.icon.icon-academy-plate.icon-academy-plate-reading([class.icon-invisible]="readingForm.controls['reading_type'].value !== 'academy'")
+                    i.icon.icon-academy-plate.icon-academy-plate-reading
                     | &nbsp;Academy
                 //- Private option
                 label#readingMakePrivate.form-check-label.form-check-btn(
@@ -98,8 +98,8 @@ nav-bar(
               p.sub-label Provide your students with instructions for this reading. Used as the default for new groups.
               .input-group
                 textarea#groupInstructions.form-control.form-item--editor(
-                  [formControl]="readingForm.controls['default_instructions']", 
-                  type='text', 
+                  [formControl]="readingForm.controls['default_instructions']",
+                  type='text',
                   placeholder="For this lesson...",
                   resize="none",
                   (keyup)="changeMonitor()"
@@ -142,7 +142,7 @@ nav-bar(
                 - (Hero) Insert a Question
             //- Desktop Insert Buttons
             #insertBar.editor-button-bar.hidden-md-down(
-              [class.hide]="editorToolbarHidden", 
+              [class.hide]="editorToolbarHidden",
               [style.top]="editorToolbarY + 'px'"
             )
               //- Insert Label
