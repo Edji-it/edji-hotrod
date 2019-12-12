@@ -43,7 +43,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
   public guideLinks: { displayName: string; url: string }[] = [
     { displayName: 'Lesson Ideas', url: 'http://guide.edji.it/index.php/2017/05/20/getting-started-with-edji/' },
     { displayName: 'Readings for Math', url: 'http://guide.edji.it/index.php/2017/07/16/using-edji-with-math/' },
-    { displayName: 'AVID and WICOR', url: 'http://guide.edji.it/index.php/2018/09/20/using-edji-with-avid-wicor/' },
+    { displayName: 'Video Tutorials', url: 'https://www.youtube.com/channel/UCxkb7DqTXF4EQWHLB7Bex5g/videos' },
   ]
   public filterCount: number = 0
   private subscriptions: Subscription[] = []
