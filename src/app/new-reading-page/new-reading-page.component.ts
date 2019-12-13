@@ -15,6 +15,8 @@ import {
   MediaService,
   SecretSwitchesService,
   AnalyticsService,
+  AcademyState,
+  Academy,
 } from '../_services'
 import { EdjiComment, EdjiQuestion, User, Project, Reading } from '../shared/datatypes'
 import { ReadingShareObject } from './../shared/nav-bar'
@@ -52,6 +54,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
   private autosaveTimer
   private autosaveDisabled: boolean
   public previewReading: Reading
+  public academyState: AcademyState = {}
+  public currentAcademy: Academy = {}
 
   // Trigger booleans
   public showAlert: boolean = false
@@ -173,6 +177,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
    * TEMP: New feature flag (word highlights)
    */
   public newWordHighlights: boolean
+  public academyReadingType: boolean
 
   constructor(
     private _route: ActivatedRoute,
@@ -250,6 +255,15 @@ export class NewReadingPage implements OnInit, OnDestroy {
           this._readings.updateCreated(user)
         }
       }),
+      this._auth.currentAcademyState.subscribe(currentState => {
+        this.academyState = currentState
+        // Set abbreviation
+        if (this.academyState && this.academyState.academies) {
+          this.currentAcademy = this.academyState.academies[this.academyState.selected]
+        } else {
+          this.currentAcademy = {}
+        }
+      }),
       this._readings.currentUserReadings.subscribe(
         data => {
           if (!data.readings) {
@@ -276,6 +290,9 @@ export class NewReadingPage implements OnInit, OnDestroy {
       this._switches.secretSwitchesUpdates.subscribe(switches => {
         if (switches['pdfWordHighlighting']) {
           this.newWordHighlights = switches['pdfWordHighlighting']
+        }
+        if (switches['academyReading']) {
+          this.academyReadingType = switches['academyReading']
         }
       }),
     )

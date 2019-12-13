@@ -1,12 +1,12 @@
 import * as path from 'path'
 import { browser, by, element, protractor } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
+import { readingType } from 'src/app/shared/datatypes'
+import { Sidebar } from './sidebar-page'
 
 export class NewReading implements PageObjectInterface {
-  /*
-        Page Object for the New Reading page.
-    */
   private EC = protractor.ExpectedConditions
+  private sidebar = new Sidebar()
 
   // Public Instance Variables
   public titleInput = element(by.id('readingTitle'))
@@ -15,6 +15,7 @@ export class NewReading implements PageObjectInterface {
   public contentInput2 = element.all(by.css('.medium-editor-element')).last()
   public sourceInput = element(by.id('readingSource'))
   public publicButton = element(by.id('readingMakePublic'))
+  public academyButton = element(by.id('readingMakeAcademy'))
   public privateButton = element(by.id('readingMakePrivate'))
   public groupInput = element(by.id('newProjectLabel'))
   public newGroupModalClose = element(by.css('#addProjectModal .close'))
@@ -277,7 +278,7 @@ export class NewReading implements PageObjectInterface {
     )
     this.shareCodeModalClose.click()
   }
-  
+
   /**
    * Ultra Convenience: Get from editor to highlightable text
    */
@@ -302,4 +303,71 @@ export class NewReading implements PageObjectInterface {
     let answerClass = `.icon-comment-${answerType}.icon__answer-type`
     return question.element(by.css(answerClass))
   }
-} // class Login
+
+  /**
+   * Convenience function that creates a reading based on type and will land back at the dashboard
+   * @param readingType reading type of readingType
+   * @param title optional to set specific title
+   */
+  public createReadingByType(readingType: readingType, title?: string): void {
+    this.getPage()
+    const uniqueTitle = title ? title : this.titleString
+    // Enter sample Reading into form
+    this.titleInput.clear()
+    this.titleInput.sendKeys(uniqueTitle)
+    // select reading type based on input. public & academy have a few more steps
+    switch (readingType) {
+      case 'private':
+        this.privateButton.click()
+        break
+      case 'public':
+        this.publicButton.click()
+        this.selectGradeSubject()
+        break
+      case 'academy':
+        this.academyButton.click()
+        this.selectGradeSubject()
+        break
+      default:
+        this.privateButton.click()
+    }
+    this.contentInput.sendKeys(this.contentShortString)
+    // Submit New Reading
+    this.clickShareAndArchive()
+    browser.wait(this.EC.invisibilityOf(this.confirmArchiveModal), 5000, 'confirm archive modal should not be showing')
+    browser.wait(
+      this.EC.elementToBeClickable(this.finalizeButton),
+      8000,
+      'finalize reading button never became clickable',
+    )
+    // Group Label has content prefilled, so we clear it
+    this.groupInput.clear()
+    this.groupInput.sendKeys(this.groupString)
+    // Save first group
+    this.finalizeButton.click()
+    // Should redirect to Project page for new reading
+    browser.wait(this.EC.urlContains('project'), 10000, 'never arrived at new reading')
+    this.shareCodeModalCloseClick()
+    // Give Optimus/Elastic a BRIEF moment to index the new reading
+    browser.sleep(100)
+    this.sidebar.backToDash()
+  }
+
+  /**
+   * Convenience function for selecting grade and subject on new reading
+   */
+  public selectGradeSubject(): void {
+    browser.wait(this.EC.elementToBeClickable(this.gradeTileK), 1000, 'grade K button was not clickable')
+    this.gradeTileK.click()
+    browser.wait(this.EC.elementToBeClickable(this.gradeTileU), 1000, 'grade U button was not clickable')
+    this.gradeTileU.click()
+    browser.wait(this.EC.elementToBeClickable(this.subjectDropdown), 1000, 'subject dropdown was not clickable')
+    this.subjectDropdown.click()
+    browser.wait(
+      this.EC.elementToBeClickable(this.subjectFirstOption),
+      1000,
+      'first subject in dropdown was not clickable',
+    )
+    this.subjectFirstOption.click()
+  }
+}
