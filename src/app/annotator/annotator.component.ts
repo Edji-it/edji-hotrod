@@ -572,6 +572,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.clearQueryParams()
       return
     }
+    // Check if comment is visible to user
+    if (!this.project.heat_vision && !this.project.isTeaching && this.user._id !== commentEl.comment.user_id) {
+      return
+    }
     // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
     if (commentEl.comment.start > this.lastWord) {
       this.lastWord = commentEl.comment.start + 800
