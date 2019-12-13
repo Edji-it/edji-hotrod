@@ -28,7 +28,7 @@ export class Project implements PageObjectInterface {
   public imageWordBoxes = element.all(by.css('#annotatorContent .img-wrap .w-box'))
   public textComment = element(by.css('.new textarea.text-comment-input'))
   public existingTextComment = element(by.css('div.text-comment-input'))
-  public textReplyComment = element(by.css('.replyComment.new .text-comment-input'))
+  public textReplyComment = element(by.css('.comment--reply.new .text-comment-input'))
   public dismissReplyPanelBtn = element(by.id('discussionClosePanel'))
   public discussionPanel = element(by.css('div.sliding-pane.from-left.replies.slide-in'))
   public commentSave = element(by.css('.comment__save'))
@@ -49,7 +49,7 @@ export class Project implements PageObjectInterface {
   public audioPause = element(by.css('audio-comment #audioPause'))
   public audioRestart = element(by.css('audio-comment #audioRestart'))
   public audioRecord = element(by.css('audio-comment #audioRecord:not(.disabled)'))
-  public commentActionSave = element(by.css('edji-comment .comment-action--save'))
+  public commentActionSave = element(by.css('edji-comment [data-test="commentSaveButton"]'))
   public audioComment = element.all(by.css('.audio-comment-input-wrapper')).first()
 
   // Avatar comment pane activators
@@ -61,7 +61,9 @@ export class Project implements PageObjectInterface {
   public commentDelete = element(by.css('edji-comment .e2e-delete-button'))
   public commentDeleteLast = element.all(by.css('edji-comment .e2e-delete-button')).last()
   public addReplyBtn = element(by.id('addReply'))
+  public viewLine = element(by.css('[data-test="commentViewLine"]'))
   public closePane = element(by.css('.sliding-pane-comment__header button.close'))
+  public closeComment = element(by.css('.comment-bubble .close'))
 
   public getPage(id: string): void {
     // First we clear out the url (sometimes page is preserved if the url stays the same)

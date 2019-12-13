@@ -140,8 +140,8 @@ describe('Project Page', () => {
       browser.wait(EC.elementToBeClickable(project.audioRecord), 7000, 'never found the record audio button')
       project.audioRecord.click()
 
-      // wait 3 seconds for the audio to record
-      browser.sleep(3000)
+      // wait 4 seconds for the audio to record
+      browser.sleep(4000)
 
       // click the record audio button to end recording
       browser.wait(EC.elementToBeClickable(project.audioRecord), 5000, 'never found the record audio button')
@@ -273,25 +273,25 @@ describe('Project Page', () => {
         'live comment query param never showed in project url',
       )
       // verify the comment pane opens
-      browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
+      browser.wait(EC.visibilityOf(project.closeComment), 5000, 'comment never opened in-line')
       // verify we scroll to the reply and can see it
       browser.wait(EC.visibilityOf(element(by.css(`#comment-${commentId}`))), 5000, 'never found the comment')
     })
 
     it('should open a project with the query param for a live reply and see that reply', () => {
-      project.getPage(`test-live?comment=${replyId}&parent=${commentId}`)
+      project.getPage(`test-live?comment=${commentId}&reply=${replyId}`)
       browser.wait(EC.elementToBeClickable(sidebar.avatarActionIcon))
       // verify the query param shows up in the url
       browser.wait(
-        EC.urlContains(`?comment=${replyId}&parent=${commentId}`),
+        EC.urlContains(`?comment=${commentId}&reply=${replyId}`),
         15000,
         'live reply query param never showed in project url',
       )
       // verify the comment pane opens
-      browser.wait(EC.visibilityOf(project.closePane), 5000, 'comment pane never opened up')
+      browser.wait(EC.visibilityOf(project.closeComment), 5000, 'comment never opened in-line')
       // verify we scroll to the reply and can see it
       browser.wait(
-        EC.visibilityOf(element(by.css(`.replyCommentBlock[replyId="${replyId}"]`))),
+        EC.visibilityOf(element(by.css(`.comment--replyBlock[replyId="${replyId}"]`))),
         5000,
         'never found the reply',
       )

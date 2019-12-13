@@ -30,15 +30,6 @@ user-avatar {
   margin-top: 2px;
 }
 
-.mobileBlock-mobile-comment {
-  &.mobileBlock {
-    width: calc(100% - 50px);
-  }
-  &.mobileBound {
-    padding: 10px 0px;
-  }
-}
-
 
 .comment-action--block {
   width: calc(100% - 6px);
@@ -65,71 +56,14 @@ user-avatar {
   text-transform: uppercase;
 }
 
-.mobileBlock {
-  width: calc(100% - 35px);
+.comment-block {
+  // width: calc(100% - 35px);
+  width: calc(100% - 50px);
   display: inline-block;
   vertical-align: top;
-
-  & .comment-input-wrapper {
-    border-radius: 4px 4px 0 0;
-  }
 }
 
-.mobileComment-card {
-  margin: 0;
-  max-width: 100%;
-  border-bottom: none;
-  -moz-border-radius: 0px;
-  -webkit-border-radius: 4px 4px 0px 0px;
-  border-radius: 4px 4px 0px 0px;
-  padding: 5px;
-}
-
-.mobileHighlight-card {
-  margin: 0;
-  max-width: 100%;
-  border-top: none;
-  padding: 5px;
-  position: relative;
-}
-
-$mobileBoundVPad: 40px;
-
-.mobileBound {
-  padding: 0px 0px $mobileBoundVPad;
-  // overflow: hidden;
-  overflow: visible;
-  position: relative;
-
-  &.comment {
-    left: 0;
-    margin: 0;
-    &.active {
-      // padding-right: 25px;
-      &.new {
-        // padding-left: 12px;
-      }
-    }
-  }
-}
-
-.mobileBlock:before {
-  content: ' ';
-  display: block;
-  position: absolute;
-  left: 12px;
-  width: 0px;
-  height: 99%;
-  top: 0px;
-  border-left: 1px dashed #cfcfcf;
-  // z-index: -1;
-}
-
-.mobileBlock-mobile-comment:before {
-  content: none;
-}
-
-.mobileHighlight-card_image {
+.comment__highlight_image {
   line-height: 12px;
   width: 50%;
   padding: 5px;
@@ -137,7 +71,7 @@ $mobileBoundVPad: 40px;
   display: inline-block;
 }
 
-.mobileHighlight-card_button {
+.comment__highlight_button {
   // float: right;
   width: 50%;
   padding: 5px;
@@ -148,7 +82,7 @@ $mobileBoundVPad: 40px;
   border-radius: 3px;
 }
 
-.mobileHighlight-card_liImage {
+.comment__highlight_liImage {
   margin: 0;
   max-width: 100%;
   border-top: none;
@@ -216,14 +150,45 @@ $mobileBoundVPad: 40px;
   vertical-align: middle;
 }
 
-.mobileBlock--reading-recap {
+.comment-block--reading-recap {
   margin: 0;
   width: calc(100% - 46px) !important;
 }
 
-/**
-  * @todo transition from "mobileBlock" to "comment-block", and clean up with media selectors
- **/
+.comment-block--large {
+  width: 100% !important;
+}
+
+.comment--large__user-link {
+  text-decoration: none !important;
+  color: $dark-gray;
+
+  // &:hover {
+  //   text-decoration: underline !important;
+  // }
+}
+
+.user-icon__fullname {
+  vertical-align: top;
+  line-height: 18px;
+
+  .sub-label {
+    display: block;
+    font-style: italic;
+    text-decoration: none !important;
+    color: $medium-gray;
+
+    .text-success {
+      font-style: normal;
+    }
+  }
+
+  a:hover {
+    text-decoration: underline !important;
+    color: $blue;
+  }
+}
+
 .comment-block--align-top {
   padding-top: 0px !important;
 
@@ -239,6 +204,10 @@ $mobileBoundVPad: 40px;
   background: #c4c4c4;
   border-radius: 50%;
   margin: 3px 2px;
+
+  &:first-child {
+    display: none;
+  }
 }
 
 .reply-gap {
@@ -331,11 +300,6 @@ $mobileBoundVPad: 40px;
   padding: 0px;
 }
 
-.replyCommentBlock {
-  height: 75px;
-  width: calc(100% - 32px);
-}
-
 .replyHeaderRow {
   margin: 0;
 }
@@ -346,7 +310,7 @@ $mobileBoundVPad: 40px;
   color: $gray;
 }
 
-.replyCommentInputBlock {
+.comment--replyInputBlock {
   width: calc(100% - 66px);
 }
 
@@ -435,6 +399,10 @@ $mobileBoundVPad: 40px;
     display: inline-block;
     color: #5f5f5f;
   }
+
+  .comment--large + & {
+    margin-left: 0px;
+  }
 }
 
 .replies__header {
@@ -444,6 +412,24 @@ $mobileBoundVPad: 40px;
   margin-top: -25px;
   width: 50%;
   float: left;
+}
+
+.reply-action-badge {
+  position: absolute;
+  top: 14px;
+  right: -5px;
+  z-index: 1000;
+
+  & a.btn--reply {
+    border-radius: 9px;
+    background-color:#d9f3e2;
+    color: #87c17f;
+
+    & .icon {
+      filter: grayscale(0%);
+      border-radius: 7px;
+    }
+  }
 }
 
 .arrow-wrap {
@@ -477,3 +463,4 @@ $mobileBoundVPad: 40px;
   left: 13px;
   z-index: -1;
 }
+

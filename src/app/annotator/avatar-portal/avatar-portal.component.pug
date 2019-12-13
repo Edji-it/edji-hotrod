@@ -4,7 +4,6 @@
   (tap)='triggerCommentPane(true)',
   [ngClass]="['avatar-count-' + indexOnLine, 'avatar-' + comment.type]",
   [class.active]="active",
-  [class.mobileBlock-mobile-comment]="commentMobile",
   [class.has-teacher-tag]="comment.authorIsTeacher",
   [class.pending]="loading",
   [class.draft]="_comments.isCommentNewDraft(comment)"

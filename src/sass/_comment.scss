@@ -3,7 +3,9 @@
 $commentHeight: 32px;
 $commentWidth: 175px;
 $commentPad: 4px;
-$commentBorder: 1px solid rgb(220, 227, 234);
+$commentFontSize: 13px;
+$oneHighlightColor: #fef3bb;
+$commentBorder: 1px solid $oneHighlightColor;
 $expandBg: #e0e4e8;
 $multiLineBlockWidth: 250px;
 $multiLineBlockOffset: -15px;
@@ -31,9 +33,7 @@ $multiLineBlockOffset: -15px;
 
 // Component wrapping element
 edji-comment {
-  display: inline-block;
-  height: 15px;
-  width: 0px;
+  display: block;
   @extend %noSelect;
 
   &.hidden {
@@ -64,61 +64,29 @@ edji-comment {
 .comment {
   z-index: 4500;
   display: block;
-  position: absolute;
-  left: -215px;
-  margin-top: -5px;
   pointer-events: all;
   opacity: 1;
   font-size: $base-font-size;
   font-weight: normal;
   font-style: normal;
+  padding: 10px 0px;
+  // overflow: hidden;
+  overflow: visible;
+  position: relative;
+  left: 0;
+  margin: 0;
 
   @extend %noSelect;
 
-  &:not(.expanded) {
-    & .expand-comments {
-      @media (max-width: $desktop) {
-        &:before {
-          content: ' ';
-          position: absolute;
-          display: block;
-          z-index: 5000;
-          width: $multiLineBlockWidth;
-          right: $multiLineBlockOffset;
-          border-radius: 0px;
-          top: 0px;
-          background: $expandBg;
-          height: $commentHeight + 10px;
-          top: -5px;
-          border-top-left-radius: 5px;
-          border-top-right-radius: 5px;
-        }
-      }
-    }
-    & .cmtEmoji {
-      @media (max-width: $desktop) {
-        &:before {
-          height: $commentHeight + 10px;
-        }
-      }
-    }
-    & .cmtText {
-      @media (max-width: $desktop) {
-        &:before {
-          height: $commentHeight + 30px;
-        }
-      }
-    }
+  & .audio-comment-input-wrapper,
+  .emojionearea,
+  .text-comment-input,
+  .audio-comment-input-wrapper {
+    width: 100%;
   }
 
-  &.expanded {
-    z-index: 5000;
-    display: block;
-    position: absolute !important;
-    top: none !important;
-    @media (max-width: $desktop) {
-      left: 30px;
-    }
+  & .input-wrap {
+    border-radius: 4px;
   }
 
   &.fade-out {
@@ -155,7 +123,13 @@ edji-comment {
   }
 
   .comment__user-link {
-    margin-left: -5px;
+    text-decoration: none !important;
+    color: $dark-gray;
+
+    &:hover {
+      // color: #fff !important;
+      text-decoration: underline !important;
+    }
   }
 
   &:hover {
@@ -170,11 +144,11 @@ edji-comment {
     display: none;
     height: 18px;
     background-color: lighten($gray, 4%);
-    font-size: 12px;
+    font-size: $commentFontSize;
     color: white;
   }
 
-  &:not(.active) .comment-input-wrapper:hover {
+  & .comment-input-wrapper:hover {
     box-shadow: $inputFocusHalfShadow;
     border-color: #b8d4e2;
 
@@ -183,31 +157,21 @@ edji-comment {
     }
   }
 
-  &.active {
-    &:not(.hidden-md-down) {
-      z-index: 5500;
-      display: block !important;
+  &.read-only {
+    & .comment-input-wrapper,
+    & .comment-input-wrapper:hover {
+      border: $commentBorder;
+      box-shadow: none;
+      transform: scale(1) translateZ(0px);
     }
-    &:not(.replyComment):not(.mobileBound) {
-      position: absolute !important;
-      top: none !important;
-    }
-    @media (max-width: $desktop) {
-      left: 30px;
-    }
+  }
 
-    & .comment-input-wrapper {
+  &.active {
+    & .comment-input-wrapper,
+    & .comment-input-wrapper:hover {
       box-shadow: $inputFocusShadow;
       border-color: #00a2f5;
       transform: scale(1) translateZ(0px);
-    }
-
-    // & .input-wrap {
-
-    // }
-
-    .reply {
-      display: block !important;
     }
   }
 
@@ -220,12 +184,30 @@ edji-comment {
       display: block !important;
     }
   }
-
-  blockquote {
-    @extend %textSelect;
-    cursor: text;
-  }
 } // .comment
+
+
+.comment__highlight {
+  margin: 0;
+  max-width: 100%;
+  border-bottom: none;
+  padding: 5px 10px;
+  position: relative;
+  font-size: $commentFontSize;
+  background:$oneHighlightColor;
+  border-color: $oneHighlightColor;
+  border-radius: 4px 4px 0px 0px;
+  color: #121212;
+}
+
+.comment__content {
+  background: $oneHighlightColor;
+  border-radius: 4px;
+
+  .comment--reply & {
+    background: #fff;
+  }
+}
 
 .comment-input-wrapper {
   border: $commentBorder;
@@ -233,6 +215,22 @@ edji-comment {
   overflow: visible; // hidden;
   position: relative;
   transition: transform linear 0.2s;
+  position: relative;
+
+  // Gap fill
+  &:before {
+    position: absolute;
+  }
+
+  & .input-wrap {
+    border: 1px solid #fde7b3;
+  }
+
+  .active &, .comment--reply & {
+    & .input-wrap {
+      border: none;
+    }
+  }
 }
 
 .comment--placeholder {
@@ -240,7 +238,7 @@ edji-comment {
   cursor: default;
   padding: 8px 10px 8px 10px !important;
   line-height: 16px !important;
-  font-size: 12px !important;
+  font-size: $commentFontSize !important;
   font-family: 'Open Sans', Arial !important;
   color: #222;
   color: #cdcdcd;
@@ -419,6 +417,12 @@ img.emojioneemoji {
   pointer-events: none;
 }
 
+// Audio comment sizing
+.audio-comment-input-wrapper {
+  width: 180px;
+  min-width: 130px;
+}
+
 [class*='line-count'] {
   // Optimization translateZ value
   transform: translateY(0px) translateZ(0px);
@@ -462,65 +466,6 @@ img.emojioneemoji {
     & input {
       height: $commentHeight + $n;
     }
-
-    &.expanded {
-      transform: translateY(#{($commentHeight * $n) - $commentHeight}) translateZ(0px);
-
-      & input {
-        height: $commentHeight;
-      }
-
-      & .expand-comments {
-        width: 22px;
-        pointer-events: none;
-
-        &:before {
-          // width: 261px;
-          // right: -25px;
-          width: $multiLineBlockWidth;
-          right: $multiLineBlockOffset;
-
-          border-radius: 0px;
-          top: 0px;
-          height: $commentHeight;
-          background: $expandBg;
-        }
-
-        @if ($n == 1) {
-          pointer-events: all;
-
-          &:before {
-            height: $commentHeight + 6px;
-            top: -5px;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-          }
-        }
-
-        @if ($n != 1) {
-          // If not line-count-1, it should be part of the "line" showing the selection
-          // display: none;
-          &:after {
-            display: block;
-            content: ' ';
-            position: absolute;
-            width: $multiLineBlockWidth;
-            right: $multiLineBlockOffset;
-            border-radius: 0px;
-            top: 100%;
-            height: 5px;
-            background: $expandBg;
-            transform: none;
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-          }
-        }
-      }
-
-      &:after {
-        display: none;
-      }
-    }
   }
 }
 
@@ -550,27 +495,6 @@ div.line-count-1 {
     display: none;
   }
 
-  & .expand-comments {
-    display: none;
-    @media (max-width: $tablet) {
-      display: block;
-    }
-  }
-
-  &.expanded {
-    & .expand-comments {
-      // First line shows 'contract' minus
-      display: block !important;
-
-      &:after {
-        display: block;
-
-        @media (max-width: $tablet) {
-          display: none;
-        }
-      }
-    }
-  }
 }
 
 // &:hover .emojiComment {
@@ -618,18 +542,6 @@ $expandShadowSize: 3px;
 
   &:hover:before {
     background-color: darken($gray, 5%);
-  }
-
-  // Emoji Plus
-  // background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAJdnBBZwAAAEAAAABAAOrz+GAAAAFgSURBVHja7ZsxUoNQEIY/HStGi4yVhVwgwxksOIeFpdbpvIK12ll4DgrPwOQCWFg5FGaoHLAIpSQvQdan+38tC+z72PdgFgAhhBDCLQcWJ8nzHGAGnABdQE4fQF0UxeS5HVkI6LoOYAFcAZ8BOT0Btxa5mQjomQFnO8SaYCKgbVur8cQpoJ8CUSIBEiABEiABEjAxeg7wXgES4F2A1gDvFSABEQsYbIllWQbrxsQCOAXGTOQOuADmgfFL4IVxLbtD4B24A+qyLL8NGqyA/qodA5fA+YhE9mG+g6xNvAKPQD0UsE3Av0cChjbEfO82EeC+AtwL0BTwXgHuBWgKrCtgBTzztx+FV5uCTF6Pp2kKcA9cB+7yANxUVTV5bmqIWJwk5gVVAiRAAqZHi6D3CpAA7wK0BnivAAmQAAn47XFKQAwCauCNsM/l623H/ClMOkJJksAeP0w0TWPlQQghhPDIFzius9vRuvq3AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE1LTEwLTAxVDEyOjAwOjE2LTA3OjAw41i45QAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNS0xMC0wMVQxMjowMDoxNi0wNzowMJIFAFkAAAAASUVORK5CYII=');
-
-  .expanded & {
-    &:after {
-      top: 10px;
-      transform: rotate(180deg);
-    }
-    // Emoji Minus
-    // background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAJdnBBZwAAAEAAAABAAOrz+GAAAAChSURBVHja7daxDQIxDEbhB6KkQdQskz3YgjEYgJ49sszV6JqrEgXRUJICCgzK+9o4kvMrlgySJEmSJEmSJEkaw6p3kFIC2AEnYA/co5t90xq4AWdgzjm/LNr0brfWALbAEThEv+ZDE3AB5l5BN4Baa3TzX2EABtBRSonuzQBCAxh+BIYPwBEY/Qc8N8EFuPLfq/AS3YgkSZIkSZIkSZJ+wQNLlC8HbLV/1QAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0xMC0wMVQxMjowMDoxNi0wNzowMONYuOUAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTUtMTAtMDFUMTI6MDA6MTYtMDc6MDCSBQBZAAAAAElFTkSuQmCC');
   }
 }
 
@@ -806,17 +718,24 @@ $progressStart: 51px;
   height: 1em;
 }
 
-.replyComment {
-  margin-top: 28px;
-  left: 32px;
-  // pointer-events: none;
+.comment-input-wrapper.input-wrapper--reply {
+  border-color: rgb(220, 227, 234);
 
-  & .comment__saved, & .comment__save {
-    right: -19px;
+  .read-only &,
+  .read-only &:hover {
+    border-color: rgb(220, 227, 234);
   }
 }
 
-.replyCommentHandler:hover {
+.comment.comment--large {
+  padding: 0;
+
+  & user-avatar {
+    margin-top: 0px !important;
+  }
+}
+
+.comment--replyHandler:hover {
   transform: scale(1) !important;
   transition: none;
 }
@@ -873,19 +792,6 @@ $progressStart: 51px;
   }
 }
 
-.comment__force-display {
-  &.hidden-md-down {
-    display: block !important;
-  }
-}
-
-.mobileBound {
-  & .audio-comment-input-wrapper,
-  .emojionearea,
-  .text-comment-input {
-    width: 100% !important;
-  }
-}
 
 textarea.text-comment-input,
 .text-comment-input {
@@ -897,7 +803,7 @@ textarea.text-comment-input,
   height: auto;
   line-height: 16px;
   resize: none;
-  font-size: 12px;
+  font-size: $commentFontSize;
   font-family: 'Open Sans', Arial;
   font-weight: normal !important;
   font-style: normal !important;
@@ -914,7 +820,7 @@ textarea.text-comment-input,
     overflow: hidden;
   }
 
-  .mobileBound .text-comment & {
+  .text-comment & {
     user-select: text !important;
     cursor: text;
     max-height: none !important;
@@ -1038,13 +944,16 @@ div.avatar-count-8 {
   }
 }
 
-
-.mobileBlock-hr {
+// Comment list separator
+.comment-block-hr {
   margin: 0.75em 0 0.75em 40px;
 }
 
+.comment-meta {
+  padding-bottom: 2px;
+}
 
-.mobileTime-card, .list-item.mobileTime-card {
+.comment-meta, .list-item.comment-meta {
   margin: 0 0 1px 0;
   max-width: 100%;
   padding: 0;
@@ -1054,25 +963,35 @@ div.avatar-count-8 {
   overflow: visible;
 }
 
-.mobileTime-card__time {
+.comment-meta__time {
   font-style: italic;
   font-size: 10px;
   padding-left: 0.25em;
+  vertical-align: middle;
+  text-decoration: none !important;
 
   & .time-text--draft {
     display: none;
   }
 
-  &.is-draft {
-    color: #b0d8ed;
+  &.link:hover {
+    text-decoration: underline !important;
+  }
+}
 
-    & .time-text--date {
-      display: none;
-    }
+.sub-label .time-text--draft {
+  display: none;
+}
 
-    & .time-text--draft {
-      display: inline;
-    }
+.is-draft {
+  color: #b0d8ed;
+
+  & .time-text--date {
+    display: none;
+  }
+
+  & .time-text--draft {
+    display: inline;
   }
 }
 
@@ -1130,21 +1049,12 @@ div.avatar-count-8 {
   }
 }
 
-.comment-action--save {
-  cursor: pointer;
-}
 
-.comment-action--save__mobile {
-  height: 25px;
-  width: 25px;
-  top: 27px;
-  right: -21px;
-  position: absolute;
-  text-align: right;
-  z-index: 5501;
-  padding-left: 5px;
+// Comment Replies
 
-  & .emojioneemoji {
-    pointer-events: none; // hide emoji short code tooltip
-  }
+
+
+.comment--replyBlock {
+  min-height: 75px;
+  width: 100%;
 }

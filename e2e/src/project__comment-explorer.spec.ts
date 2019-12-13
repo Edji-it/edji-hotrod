@@ -72,6 +72,8 @@ describe('Project Page using the comment explorer: ', () => {
         5000,
         'did see user filter after clicking user name on comment',
       )
+      // Let content load
+      explorer.waitForLoad()
       browser.wait(
         EC.invisibilityOf(explorer.allHeader),
         3000,
@@ -91,7 +93,7 @@ describe('Project Page using the comment explorer: ', () => {
     })
 
     // Useful to test after opening the Explorer for other purposes
-    it('should open a comment and see comment line', () => {
+    it('should open a comment, view line, and see comment line', () => {
       let commentPortals = element.all(by.css('avatar-portal:not(.hide) .user-icon__wrap'))
       browser.wait(
         EC.elementToBeClickable(commentPortals.first()),
@@ -99,6 +101,13 @@ describe('Project Page using the comment explorer: ', () => {
         'comment portal did not become clickable after explorer',
       )
       commentPortals.first().click()
+      // Wait for comment bubble to open, then view line
+      browser.wait(
+        EC.elementToBeClickable(project.viewLine),
+        5000,
+        'comment bubble did not opening when clicking portal',
+      )
+      project.viewLine.click()
       // Wait for explorer to open, verify
       browser.wait(
         EC.visibilityOf(explorer.lineHeader),
@@ -162,6 +171,8 @@ describe('Project Page using the comment explorer: ', () => {
         5000,
         'did see user filter after clicking user name on comment',
       )
+      // Let content load
+      explorer.waitForLoad()
       browser.wait(
         EC.invisibilityOf(explorer.allHeader),
         3000,

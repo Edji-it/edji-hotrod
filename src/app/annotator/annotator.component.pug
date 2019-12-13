@@ -114,7 +114,7 @@ scroll-progress([scrollProgress]="currentScroll")
                       [comment]="comment",
                       [commentExplorerActive]="commentPane",
                       [isActive]="comment.active",
-                      (toggleCommentPane)="toggleCommentPane($event, comment)",
+                      (toggleCommentExplorer)="openComment($event, comment)",
                       [ngClass]="['e2e-comment--'+comment.author.replace(' ', '-')]",
                       (mouseenter)='!optionsShow && focusHighlight(comment.start, comment.end, comment.loc, comment.box)',
                       (mouseleave)='!optionsShow && unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)',
@@ -192,8 +192,15 @@ scroll-progress([scrollProgress]="currentScroll")
                             [feedback]="feedback",
                             [teacherName]="project && project.teacher.fullname"
                         )
-        .row.mb-4(*ngIf="lastWord < reading.words.length")
-            .loading(style="margin: 0 auto;")
+            .row.mb-4(*ngIf="lastWord < reading.words.length")
+                .loading(style="margin: 0 auto;")
+            //- Nested within annotator content
+            comment-bubble(
+              [visible]="commentBubble",
+              [comment]="selectedComment",
+              [top]="commentHeightPos + 'px'",
+              (closed)="commentBubble = false; selectedComment = null"
+            )
 //- End of Reading options
 .button__row
     button.btn.btn-secondary(
@@ -239,7 +246,7 @@ emoji-keyboard(
 comment-explorer(
     [comment]="selectedComment",
     [visible]="commentPane",
-    (closed)="toggleCommentPane(false)",
+    (closed)="toggleCommentExplorer(false)",
     (clearSelected)="selectedComment = null"
 )
 
@@ -256,7 +263,7 @@ hot-del-comment(
     (delete)="deleteComment(_comments.deleteCommentRef)",
     (closeModal)="_comments.commentDeleted()"
 )
-// Tutorial gifs
+//- Tutorial gifs
 edji-tutorial-gif(
     *ngIf="tutorialGifUrl",
     [header]="'How to Comment'",

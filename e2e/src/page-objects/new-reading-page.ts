@@ -325,6 +325,7 @@ export class NewReading implements PageObjectInterface {
         this.selectGradeSubject()
         break
       case 'academy':
+        browser.wait(this.EC.elementToBeClickable(this.academyButton), 3000, '"Academy" share option was not clickable')
         this.academyButton.click()
         this.selectGradeSubject()
         break

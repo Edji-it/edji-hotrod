@@ -106,11 +106,6 @@ $headerIconMargin: 12px;
   padding: 0px;
 }
 
-.replyCommentBlock {
-  height: 75px;
-  width: calc(100% - 32px);
-}
-
 .replyHeaderRow {
   margin: 0;
 }
@@ -121,7 +116,7 @@ $headerIconMargin: 12px;
   color: $gray;
 }
 
-.replyCommentInputBlock {
+.comment--replyInputBlock {
   width: calc(100% - 66px);
 }
 
@@ -288,7 +283,7 @@ $headerIconMargin: 12px;
   border-left: 1px dashed #b0f7a7;
 }
 
-.mobileBlock {
+.comment-block {
   display: inline-block;
   vertical-align: top;
   width: calc(100% - 50px);

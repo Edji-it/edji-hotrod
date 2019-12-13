@@ -56,8 +56,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         - Deletes highlights and comment components
         - Asks ProjectService to save comments for us.
     */
-
-  @Input() private mobileCommentActive: boolean
   @Input() private activeReply: any
 
   @ViewChildren(CommentComponent) commentComponents: QueryList<CommentComponent>
@@ -93,6 +91,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public lineCountRunning: boolean = false
   public lineNumRunning: boolean
   public commentPane: boolean
+  public commentBubble: boolean
   public lineExpanded: number
 
   public replyComment: EdjiComment = <EdjiComment>{}
@@ -107,7 +106,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public hideKeyboard = false
 
   // Status Booleans
-  public isMobile = false
   private commentFragScrollReady = false
 
   public highlightY = 200
@@ -531,9 +529,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           })
           // Scroll to feedback
           feedbackEl.element.nativeElement.scrollIntoView({ behavior: 'smooth' })
-        } else if (params['comment']) {
-          // Check if opening/scrolling to comment
-          this.checkCommentLink(params['comment'], params['parent'])
+        } else if (params['comment'] || params['line']) {
+          // Check if opening/scrolling to comment or line
+          this.checkCommentLink(params['comment'] || params['line'], !!params['line'], params['reply'])
         }
       }),
     )
@@ -550,20 +548,19 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this._messages.dismissToast('feedback')
   }
 
-  private checkCommentLink(commentId: string, parentId?: string): void {
+  private checkCommentLink(commentId: string, viewLine?: boolean, replyId?: string): void {
     if (!this.portalComponents) {
       setTimeout(() => {
-        this.checkCommentLink(commentId, parentId)
+        this.checkCommentLink(commentId, viewLine, replyId)
       }, 1000)
     }
     // Reset selected comment values
     // > ensures comment pane scroll action when transitioning between comments and replies
     if (this.selectedComment) this.selectedComment.selected = false
     // Parent indicates a reply comment
-    let isReply = !!parentId
-    let findCommentId = isReply ? parentId : commentId
+    let isReply = !!replyId
     let commentEl = this.portalComponents.toArray().find(commentEl => {
-      return commentEl.comment._id === findCommentId
+      return commentEl.comment._id === commentId
     })
     // Ensure not already selected
     if (this.selectedComment && commentId === this.selectedComment._id) {
@@ -573,6 +570,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!commentEl) {
       // Clear param if comment not found
       this.clearQueryParams()
+      return
+    }
+    // Check if comment is visible to user
+    if (!this.project.heat_vision && !this.project.isTeaching && this.user._id !== commentEl.comment.user_id) {
       return
     }
     // when the page loads with a fragment that links to a comment that is on a word that has not yet rendered
@@ -595,11 +596,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Toggle the comment pane
       if (isReply) {
         let reply = this.project.comments.find(comment => {
-          return comment._id == commentId
+          return comment._id == replyId
         })
-        this.toggleCommentPane(true, commentEl.comment, reply)
+        this.openComment(!viewLine, commentEl.comment, reply)
       } else {
-        this.toggleCommentPane(true, commentEl.comment)
+        this.openComment(!viewLine, commentEl.comment)
       }
     }, scrollTimeout)
   }
@@ -693,7 +694,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         type: 'new-reply',
         id: 'newReply',
         link: './',
-        linkParams: { comment: content._id, parent: content.parent },
+        linkParams: { reply: content._id, comment: content.reply_to },
         limitToPage: 'project',
         requireDismiss: true,
       })
@@ -705,7 +706,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * - Used to clear deep link params for comments/replies
    */
   private clearQueryParams(): void {
-    // this._router.navigate(['./'], { relativeTo: this.route, queryParams: {}, replaceUrl: true })
     this.location.replaceState(this._router.url.split('?')[0])
   }
 
@@ -913,7 +913,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       if (wordText.length < 1 && wordI != 1) {
         wordI--
       }
-
       // Set the anchor (start) or focus (end) for the highlight section on the clickable highlighting
       if (prevAnchor == null && prevFocus == null) {
         this.quickSelect.anchor = wordI
@@ -965,15 +964,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Keep track of which line is expanded
       if (forceSet === true) {
         this.lineExpanded = lineY
-      }
-      // Loop through comments on line and mark comments as expand
-      for (let i = 0; i < commentsByPos[lineY].length; i++) {
-        let comment = commentsByPos[lineY][i]
-        if (typeof forceSet !== 'undefined') {
-          comment.expanded = forceSet
-        } else {
-          comment.expanded = !comment.expanded
-        }
       }
     }
   }
@@ -1248,8 +1238,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Quick Select Selection (Underline)
       start = this.quickSelect.anchor
       end = this.quickSelect.focus != null ? this.quickSelect.focus : start
-      this.quickSelect.focus = null
-      this.quickSelect.anchor = null
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
@@ -1269,7 +1257,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         end = getNodeIndex(selection['focusNode'])
         // Hide tool tips
         this.hideCommentOptions()
-        // Clear selections
+        // Clear text selections
         selection.removeAllRanges()
       }
     }
@@ -1295,6 +1283,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (span.boxStart > span.boxEnd) {
       span.boxEnd = [span.boxStart, (span.boxStart = span.boxEnd)][0] // Swap start and end values
     }
+    // Clear quick select values
+    this.clearQuickSelect()
     return span
   }
 
@@ -1313,6 +1303,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.incrementHighlights(true, span.start, span.end, { start: span.boxStart, end: span.boxEnd })
     // Tell the server we've got a comment!
     this.createComment(span, type)
+    console.log(this.quickSelect)
+    this.clearQuickSelect()
+    console.log(this.quickSelect)
   }
 
   /**
@@ -1612,19 +1605,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     return this._comments.setEmojiKeyboardActive(this.user)
   }
 
-  public discReplyFire(comment) {
-    this.replyComment = comment
-    this.focusOverride = true
-    this.focusHighlight(comment.start, comment.end, comment.loc, comment.box)
-    this.showDiscussions = true
-  }
-
-  public hideDiscussions(comment: any) {
-    this.showDiscussions = false
-    this.focusOverride = false
-    this.unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)
-  }
-
   /**
    * setLinePositions gives us the number of lines in the project
    *
@@ -1662,18 +1642,42 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public toggleCommentPane(visible?: boolean, selectedComment?, selectedReply?): void {
-    let isVisible = visible || selectedComment
+  /**
+   * Displays comment via Bubble or Explorer
+   * @param focusComment focus individual comment - if not, line
+   * @param selectedComment comment to display
+   * @param selectedReply reply if applicable (results in expanding replies)
+   */
+  public openComment(focusComment?: boolean, selectedComment?: EdjiComment, selectedReply?): void {
+    if (!focusComment) {
+      this.commentBubble = false
+      this.toggleCommentExplorer(true, selectedComment, selectedReply)
+    } else {
+      // Set the icon arrow position based on lineY and offsets
+      this.commentHeightPos = this.getCommentDisplayY(selectedComment)
+      // Open Comment Bubble
+      this.selectedComment = selectedComment
+      this.commentPane = false
+      this.commentBubble = true
+    }
+  }
+
+  /**
+   * Toggles Comment Explorer/Pane
+   * - Primarily used by openComment()
+   * - Remains "public" for toggling closed interactions
+   */
+  public toggleCommentExplorer(isVisible?: boolean, selectedComment?, selectedReply?): void {
     // Set the input comment to the comment pane if it is not currently open
     if (isVisible) {
       if (selectedComment) {
         // Set the icon arrow position based on lineY and offsets
         this.commentHeightPos = this.getCommentDisplayY(selectedComment)
         if (selectedReply) {
-          selectedReply.selected = visible
+          selectedReply.selected = true
           this.selectedComment = selectedReply
         } else {
-          selectedComment.selected = visible
+          selectedComment.selected = true
           this.selectedComment = selectedComment
         }
       }

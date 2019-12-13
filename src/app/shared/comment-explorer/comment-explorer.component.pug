@@ -1,5 +1,5 @@
 .sliding-pane-comment.from-left(#commentPane="", [ngClass]="[ visible ? 'slide-in' : '' ]", style="z-index: 5999;")
-    .loading-screen([class.fade-in]="loading")
+    .loading-screen([class.fade-in]="loading", data-test="explorerLoading")
       .loader.icon-loading--action
     .sliding-pane-comment__header.container-fluid(*ngIf="visible")
       .row
@@ -29,7 +29,7 @@
                 [userId]="filterUserId",
                 [size]="'medium'",
                 [showName]="true",
-                [subLabel]="commentCount + ' Comments'",
+                [subLabel]="commentCount + ' Comments & Replies'",
                 data-test="userFilterHeader"
               )
             //- Current User's Comments
@@ -107,31 +107,25 @@
       )
         .row
           .col-12
-            div(*ngFor="let c of comments; let i = index; trackBy: trackComment")
+            ng-container(*ngFor="let c of comments; let i = index; trackBy: trackComment")
+              hr.comment-block-hr(*ngIf="i > 0")
               edji-comment(
                 [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && c.user_id !== user._id && c.user_id !== project.teacher_id",
-                [class.spec-owner]="c.user_id === project.teacher_id",
-                [readOnly]="c.user_id !== user._id",
-                [commentPaneActive]="true",
                 [comment]="c",
-                [commentMobile]="true",
-                [commentMobileFirst]="i<1",
                 [selected]="comment && c._id === comment._id",
                 (commentActivation)="commentActivationEmitter($event)",
-                (commentReply)="commentReplyEmitter($event)",
                 (commentDeleted)="onDelete()",
-                style="display: initial;"
               )
             .end-block(*ngIf="filterMode === 'all' && sortValue === 'created'")
-              hr.mobileBlock-hr
+              hr.comment-block-hr
               .timeline-line
               .pt-2
                 .user-icon.user-icon--medium
                     span.user-icon__initials
                       span.is-emoji([innerHtml]="':seedling:' | emojione")
-                .mobileBlock
-                  .mobileTime-card
-                    .mobileTime-card__time.p-0 {{ project.createdAt | edjidate:'timeAgo':null }}
+                .comment-block
+                  .comment-meta
+                    .comment-meta__time.p-0 {{ project.createdAt | edjidate:'timeAgo':null }}
                   p.small
                     b {{project.label}}
                     |  group was created.

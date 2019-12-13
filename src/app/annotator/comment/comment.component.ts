@@ -1,12 +1,12 @@
 import { Subscription } from 'rxjs'
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChange } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
 
 // Project Dependencies
 import { AuthService, CommentService, SocketService, AnalyticsService } from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
-import { ALLSPARK } from './../../app.constants'
 import { ProjectStore } from 'src/app/_store'
-import { ActivatedRoute } from '@angular/router'
+import { copyToClipboard } from 'src/app/shared/clipboard'
 
 @Component({
   selector: 'edji-comment',
@@ -18,14 +18,16 @@ export class CommentComponent implements OnInit, OnDestroy {
   public indexOnLine: number = 1
   public repliesShowing: boolean = false
   public isImageSpot: boolean = false
+  public linkCopied: boolean = false
+  public userPermission: number = CommentPermissions.READ
+  public readOnly: boolean = true
 
-  private justSaved: boolean = false
+  public justSaved: boolean = false
   private isLoading: boolean = false
   // Hold the current scroll position for the iOS fix
   private currentScroll: number
   // Is fully visible, focused, and editable
   private active: boolean = false
-  private showDeleteModal: boolean = false
   private user: any = {}
   private subscriptions: Subscription[] = []
   private repliesById: any = {}
@@ -33,19 +35,11 @@ export class CommentComponent implements OnInit, OnDestroy {
   private fragment: string
 
   @Input() public comment: EdjiComment
-  @Input() private readOnly: boolean = false
-  @Input() private replyRef: boolean = false
   @Input() public reply: boolean = false // Is it a reply to another comment?
-  @Input() private commentLite: boolean = false
   @Input() private commentContext: string = 'comment' // See NOTES in summary.
   @Input() public selected: boolean = false
-  // Deprecated "mobile" values
-  @Input() public commentMobile: boolean = false
-  @Input() public commentMobileFirst: boolean = false
-  @Input() public commentPaneActive: boolean = false
-  @Input() private assignedQuestion: EdjiQuestion // If this is an answer, it'll need this.
-  private userPermission: number = CommentPermissions.READ
-  @Input() private showDeleteAudioModal: boolean = false
+  @Input() public largeDisplay: boolean = false
+  // Reading recap has a specialized display
   @Input() public readingReport: boolean = false
   @Input()
   set isActive(isActive: boolean) {
@@ -70,7 +64,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Output() dismissKeyboard = new EventEmitter()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
-  @Output() toggleCommentPane = new EventEmitter<boolean>()
+  @Output() toggleCommentExplorer = new EventEmitter<boolean>()
 
   constructor(
     private projectStore: ProjectStore,
@@ -102,7 +96,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       }),
       // Check URL params
       this.route.queryParams.subscribe(params => {
-        if (this.comment && params['parent'] && params['parent'] === this.comment._id && params['comment']) {
+        if (this.comment && params['comment'] && params['comment'] === this.comment._id && params['reply']) {
           this.repliesShowing = true
         }
       }),
@@ -162,9 +156,9 @@ export class CommentComponent implements OnInit, OnDestroy {
   private checkPermissions(): void {
     if (this.comment && this.user && this.project) {
       this.userPermission = this._comments.getCommentPermissions(this.comment, this.user, this.project)
-    } else {
-      this.userPermission = CommentPermissions.READ
     }
+    // Set readonly flag
+    this.readOnly = this.userPermission === CommentPermissions.READ
   }
 
   activate(event?: any): void {
@@ -265,10 +259,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     if (this.commentContext !== 'answer') {
       this.projectStore
         .removeComment(comment)
-        .then(data => {
-          // Tell Annotator to destroy this comment element!
-          this.showDeleteModal = false
-        })
+        .then(data => {})
         .catch(error => {
           this.deactivate(this.comment)
           console.error(error)
@@ -278,7 +269,6 @@ export class CommentComponent implements OnInit, OnDestroy {
         .removeAnswer(comment)
         .then(data => {
           this.projectStore.removeAnswerFromAnswers(this.comment)
-          this.showDeleteModal = false
         })
         .catch(error => {
           this.deactivate(this.comment)
@@ -330,6 +320,10 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // Deactivate comment (for instance, ensures emoji keyboard closes)
+    if (this.comment.active) {
+      this.deactivate()
+    }
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
@@ -339,7 +333,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Need to give the app 1 millisecond to update all arrays when adding a new comment
     if (forceOpen) {
       setTimeout(() => {
-        this.toggleCommentPane.emit(false)
+        this.toggleCommentExplorer.emit(false)
       }, 1)
     }
   }
@@ -416,5 +410,14 @@ export class CommentComponent implements OnInit, OnDestroy {
   private activeEmojiKeyboardReply(activeReply: any): void {
     this._comments.activeComment = activeReply
     this._comments.setEmojiKeyboardActive(this.user)
+  }
+
+  public copyLink() {
+    let url = `${location.origin}/#/project/${this.project._id}?comment=${this.comment._id}`
+    copyToClipboard(url)
+    this.linkCopied = true
+    setTimeout(() => {
+      this.linkCopied = false
+    }, 3000)
   }
 }

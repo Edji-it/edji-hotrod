@@ -1,0 +1,25 @@
+.comment-bubble(
+  *ngIf="comment && visible",
+  [class.fade-out]="fadeOut",
+  [style.top]="top"
+)
+  button.close.btn-icon--round(
+    (click)="close(true)",
+    type="button",
+    data-text="closeCommentExplorer"
+  )
+    span(aria-hidden="true") ×
+  .icon-comment-arrow
+  edji-comment(
+    [comment]="comment",
+    [largeDisplay]="true",
+    (commentDeleted)="close()"
+  )
+  .btn-row.right
+    a.btn.btn-xs-primary.has-icon(
+      [routerLink]="['./']",
+      [queryParams]="{ line: comment._id }",
+      data-test="commentViewLine"
+    )
+      i.icon.icon-view-line-sm
+      | View Line
