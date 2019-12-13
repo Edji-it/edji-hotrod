@@ -913,7 +913,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       if (wordText.length < 1 && wordI != 1) {
         wordI--
       }
-
       // Set the anchor (start) or focus (end) for the highlight section on the clickable highlighting
       if (prevAnchor == null && prevFocus == null) {
         this.quickSelect.anchor = wordI
@@ -1239,8 +1238,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Quick Select Selection (Underline)
       start = this.quickSelect.anchor
       end = this.quickSelect.focus != null ? this.quickSelect.focus : start
-      this.quickSelect.focus = null
-      this.quickSelect.anchor = null
     } else {
       // Browser API selection
       let selection = Rangy.getSelection()
@@ -1260,7 +1257,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         end = getNodeIndex(selection['focusNode'])
         // Hide tool tips
         this.hideCommentOptions()
-        // Clear selections
+        // Clear text selections
         selection.removeAllRanges()
       }
     }
@@ -1286,6 +1283,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     if (span.boxStart > span.boxEnd) {
       span.boxEnd = [span.boxStart, (span.boxStart = span.boxEnd)][0] // Swap start and end values
     }
+    // Clear quick select values
+    this.clearQuickSelect()
     return span
   }
 
@@ -1304,6 +1303,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.incrementHighlights(true, span.start, span.end, { start: span.boxStart, end: span.boxEnd })
     // Tell the server we've got a comment!
     this.createComment(span, type)
+    console.log(this.quickSelect)
+    this.clearQuickSelect()
+    console.log(this.quickSelect)
   }
 
   /**
@@ -1601,19 +1603,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public isEmojiKeyboardActive(): boolean {
     // return this._comments.isEmojiKeyboardActive(this.user)
     return this._comments.setEmojiKeyboardActive(this.user)
-  }
-
-  public discReplyFire(comment) {
-    this.replyComment = comment
-    this.focusOverride = true
-    this.focusHighlight(comment.start, comment.end, comment.loc, comment.box)
-    this.showDiscussions = true
-  }
-
-  public hideDiscussions(comment: any) {
-    this.showDiscussions = false
-    this.focusOverride = false
-    this.unfocusHighlight(comment.start, comment.end, comment.loc, comment.box)
   }
 
   /**
