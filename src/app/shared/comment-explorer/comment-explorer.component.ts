@@ -73,7 +73,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     let madeVisible: boolean = visible !== this._visible && visible
     this._visible = visible
     if (madeVisible) {
-      console.log('Made visible!', this.comment)
       this.filterComments()
       this.evaluateShouldScroll()
       document.body.classList.add('body__lock-scroll')
