@@ -320,6 +320,10 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // Deactivate comment (for instance, ensures emoji keyboard closes)
+    if (this.comment.active) {
+      this.deactivate()
+    }
     this.subscriptions.forEach(sub => {
       sub.unsubscribe()
     })
