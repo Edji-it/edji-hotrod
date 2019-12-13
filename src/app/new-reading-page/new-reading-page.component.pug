@@ -49,6 +49,21 @@ nav-bar(
                       checked
                     )
                   span([innerHTML]="':earth_americas: Public' | emojione")
+                //- Academy option
+                label#readingMakeAcademy.form-check-label.form-check-btn(
+                    *ngIf="academyState && academyState.academies && academyState.academies.length > 0 && academyReadingType",
+                    [class.active]="readingForm.controls['reading_type'].value == 'academy'",
+                    title="Allow anyone in your Academy to find this reading in Discover"
+                  )
+                  input.form-check-input(
+                      type="radio",
+                      name="publicFlag",
+                      value="academy",
+                      [formControl]="readingForm.controls['reading_type']"
+                    )
+                  span
+                    i.icon.icon-academy-plate.icon-academy-plate-reading
+                    | &nbsp;Academy
                 //- Private option
                 label#readingMakePrivate.form-check-label.form-check-btn(
                     [class.active]="readingForm.controls['reading_type'].value == 'private'",
@@ -62,7 +77,7 @@ nav-bar(
                     )
                   span([innerHTML]="':lock: Private' | emojione")
           //- Grade level range selector
-          .form-group(*ngIf="readingForm.controls['reading_type'].value === 'public'")
+          .form-group(*ngIf="readingForm.controls['reading_type'].value !== 'private'")
             label Grade Level
               p.sub-label Select which grade levels this reading targets. (Click to select start of range, and click again to select end of range!)
             grade-selector(formControlName="grade_levels", (click)="changeMonitor()")
@@ -70,7 +85,7 @@ nav-bar(
               b No Grades Selected
               | Please select the range of grade levels this Reading is best suited for.
           //- Subject Selector
-          .form-group(*ngIf="readingForm.controls['reading_type'].value === 'public'")
+          .form-group(*ngIf="readingForm.controls['reading_type'].value !== 'private'")
             label Subject
             .input-group
             ss-multiselect-dropdown(id="subjectDropdown",[options]="subjects", formControlName="subjects", [settings]="subjectDropSettings")
@@ -83,8 +98,8 @@ nav-bar(
               p.sub-label Provide your students with instructions for this reading. Used as the default for new groups.
               .input-group
                 textarea#groupInstructions.form-control.form-item--editor(
-                  [formControl]="readingForm.controls['default_instructions']", 
-                  type='text', 
+                  [formControl]="readingForm.controls['default_instructions']",
+                  type='text',
                   placeholder="For this lesson...",
                   resize="none",
                   (keyup)="changeMonitor()"
@@ -127,7 +142,7 @@ nav-bar(
                 - (Hero) Insert a Question
             //- Desktop Insert Buttons
             #insertBar.editor-button-bar.hidden-md-down(
-              [class.hide]="editorToolbarHidden", 
+              [class.hide]="editorToolbarHidden",
               [style.top]="editorToolbarY + 'px'"
             )
               //- Insert Label

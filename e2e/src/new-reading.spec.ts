@@ -115,6 +115,14 @@ describe('New Reading Page', () => {
     newReading.newGroupModalClose.click()
   })
 
+  it('should not see the option to create a reading as type academy', () => {
+    browser.wait(
+      EC.invisibilityOf(newReading.academyButton),
+      5000,
+      'make reading type academy button should not be showing',
+    )
+  })
+
   describe('Reading draft', () => {
     it('should add a reading as a draft and return to the same screen with a reading id', function() {
       // Should begin at New Reading page
@@ -265,5 +273,53 @@ describe('New Reading Page', () => {
       // Close preview modal
       newReading.previewClose.click()
     })
+  })
+})
+
+describe('Create Academy Readings', () => {
+  let newReading = new NewReading()
+  let login = new Login()
+  let sidebar = new Sidebar()
+  let dashboard = new Dashboard()
+  let EC = protractor.ExpectedConditions
+
+  beforeAll(() => {
+    login.getPage()
+    login.loginAndVerify(login.adminUser, login.adminPassword)
+  })
+
+  beforeEach(() => {
+    reset()
+    newReading.getPage()
+  })
+
+  afterAll(() => {
+    sidebar.logout()
+  })
+
+  afterEach(() => {
+    browser
+      .manage()
+      .logs()
+      .get('browser')
+      .then(browserLog => {
+        if (browserLog.length > 0) {
+          browserLog.forEach(log => {
+            console.error(log.message)
+          })
+        }
+      })
+  })
+
+  it('should create a reading with reading type academy', () => {
+    // Utilize the convenience function and then verify reading showed up with academy type
+    let specificTitle = `academyReading${new Date().valueOf()}`
+    newReading.createReadingByType('academy', specificTitle)
+    // verify the reading showed up
+    browser.wait(
+      EC.elementToBeClickable(dashboard.readingTitleText(specificTitle)),
+      5000,
+      'never found the new academy status reading',
+    )
   })
 })
