@@ -1784,9 +1784,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   // Sets the feedback display for students
   private setFeedback(feedback?: any): void {
     if (!feedback) {
-      // this.feedbackForUser = this.project.report_evals.filter(feedback => {
-      //   return this.user._id === feedback.recipient_id
-      // })
       this.feedbackForUser = this.projectStore.getFeedbackByStudent(this.user._id)
     } else {
       // the socket update needs to have the latest feedback pushed in
