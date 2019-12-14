@@ -2,14 +2,14 @@ import { Component, ElementRef, Input } from '@angular/core'
 import { Subscription } from 'rxjs'
 
 // Project Dependencies
-import { Feedback } from 'src/app/shared/datatypes'
+import { EdjiComment } from 'src/app/shared/datatypes'
 
 @Component({
   selector: 'edji-teacher-feedback',
   templateUrl: './teacher-feedback.component.pug',
 })
 export class TeacherFeedbackComponent {
-  @Input() feedback: Feedback
+  @Input() feedback: EdjiComment
   @Input() teacherName: string
 
   public subscriptions: Subscription[] = []

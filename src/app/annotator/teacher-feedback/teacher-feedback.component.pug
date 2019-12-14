@@ -1,5 +1,5 @@
 .sub-label.mb-0 
   | {{ teacherName }}
   i &nbsp;{{ feedback.createdAt | edjidate:'timeAgo':null }}
-p.feedback-bubble {{ feedback.evaluation ? feedback.evaluation : '' }}
+p.feedback-bubble {{ feedback.data || '' }}
 div([attr.id]="feedbackAttribute(feedback)")

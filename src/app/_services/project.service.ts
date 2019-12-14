@@ -158,9 +158,9 @@ export class ProjectService {
    * Puts a teacher's feedback to its project
    * @param feedback
    */
-  public putFeedback(projectId: string, feedback: Partial<EdjiComment>): Observable<any> {
+  public putEval(projectId: string, feedback: Partial<EdjiComment>): Observable<any> {
     return this._http.put(
-      this._auth.getUrl() + '/api/v1/projects/' + projectId + '/feedback',
+      this._auth.getUrl() + '/api/v1/projects/' + projectId + '/report_evals',
       feedback,
       this._auth.getOptions(),
     )

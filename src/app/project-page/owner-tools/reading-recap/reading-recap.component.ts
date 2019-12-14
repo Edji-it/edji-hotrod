@@ -217,7 +217,7 @@ export class ReadingRecapComponent implements OnInit {
     }
 
     // If there are evaluations from the teacher on the selected student, let's display it here
-    this.evaluations = this.projectStore.getEvaluationsByStudent(this.currentStudent.value)
+    this.evaluations = this.projectStore.getFeedbackByStudent(this.currentStudent.value)
   }
 
   // Process the time on reading data for the selected user
@@ -350,14 +350,14 @@ export class ReadingRecapComponent implements OnInit {
 
   public addEvaluationOnly(evalData: any): void {
     // create a new evaluation to save to the project
-    let evalObj = {
-      createdAt: new Date(),
-      evaluation: evalData,
-      user_id: this.currentStudent.value,
+    const evalObj: Partial<EdjiComment> = {
+      data: evalData,
+      user_id: this.currentUser._id,
+      recipient_id: this.currentStudent.value,
     }
 
     // update the project with the new evaluation, create the pdf, and then email it out
-    this.projectStore.saveEvaluation(evalObj)
+    this.projectStore.saveFeedback(evalObj)
     // empty out the form
     this.evaluationForm.reset()
   }

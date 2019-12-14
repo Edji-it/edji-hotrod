@@ -793,7 +793,11 @@ export class ProjectStore {
       .toPromise()
   }
 
-  public saveEvaluation(feedback: Partial<EdjiComment>): Promise<EdjiComment> {
+  /**
+   * Feedback is put into the report_evals array, so we put to an /evals endpoint
+   * @param feedback feedback from teacher to student
+   */
+  public saveFeedback(feedback: Partial<EdjiComment>): Promise<EdjiComment> {
     const project = this.currentProjectSource.getValue()
 
     this.angulartics.eventTrack.next({
@@ -802,7 +806,7 @@ export class ProjectStore {
     })
 
     return this._project
-      .putFeedback(project._id, feedback)
+      .putEval(project._id, feedback)
       .pipe(
         take(1),
         map(data => {
@@ -819,10 +823,10 @@ export class ProjectStore {
       .toPromise()
   }
 
-  public getEvaluationsByStudent(id: string): Array<Partial<EdjiComment>> {
+  public getFeedbackByStudent(id: string): Array<EdjiComment> {
     const project = this.currentProjectSource.getValue()
     if (!project.report_evals) return []
-    return project.report_evals.filter(evaluation => evaluation.user_id === id)
+    return project.report_evals.filter(evaluation => evaluation.recipient_id === id)
   }
 
   /**
