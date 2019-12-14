@@ -40,9 +40,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public commentCount: number = 0
   public commentByPos: any[] = []
 
+  // Search
+  public searchTerm: string = ''
+
   // Sort and Filtering
   public sortValue: string = 'created' // default to created
-  public filterMode: 'line' | 'all' | 'user' = 'all'
+  public filterMode: 'line' | 'all' | 'user' | 'search' = 'all'
   public filterUserId: string
   public filterCurrentUser: boolean
 
@@ -163,6 +166,44 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Search logic
+   * - Provides client-side fuzziness and relevancy
+   * @param comment
+   * @param term
+   */
+  searchComment(comment: EdjiComment, term: string): boolean {
+    // reset search score
+    comment.search_score = 0
+
+    function fuzzy(string, term, ratio) {
+      var string = string.toLowerCase()
+      var compare = term.toLowerCase()
+      var matches = 0
+      if (string.indexOf(compare) > -1) return true // covers basic partial matches
+      for (var i = 0; i < compare.length; i++) {
+        string.indexOf(compare[i]) > -1 ? (matches += 1) : (matches -= 1)
+      }
+      let score = matches / string.length
+      // Save for sorting
+      if (score >= 0) comment.search_score += score
+      return score >= ratio || term == ''
+    }
+
+    let quoteWrapped = /^("|').*("|')$/
+    let contentMatch
+    let commentMatch
+    if (quoteWrapped.test(term)) {
+      let unwrappedTerm = term.substring(1, term.length - 1)
+      contentMatch = comment.data && comment.data.includes(unwrappedTerm)
+      commentMatch = comment.text && comment.text.includes(unwrappedTerm)
+    } else {
+      contentMatch = comment.data && fuzzy(comment.data, term, 0.5)
+      commentMatch = comment.text && fuzzy(comment.text, term, 0.5)
+    }
+    return contentMatch || commentMatch
+  }
+
+  /**
    * Filters and sorts comments based on set parameters
    * @todo support using URL params
    * @param sort optional - ordering parameter
@@ -185,7 +226,11 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         return c._id === comment.reply_to
       })
     }
-    if (comment && comment.lineY && this.commentByPos && this.commentByPos[comment.lineY]) {
+    if (this.searchTerm) {
+      sorted = this.allComments.filter(comment => {
+        return this.searchComment(comment, this.searchTerm)
+      })
+    } else if (comment && comment.lineY && this.commentByPos && this.commentByPos[comment.lineY]) {
       this.filterMode = 'line'
       this.sortValue = sort = 'location'
       sorted = this.commentByPos[comment.lineY].filter(comment => {

@@ -1,4 +1,4 @@
-/*  
+/*
   Last Mod: 8.5.17
 */
 
@@ -15,6 +15,7 @@ export interface EdjiComment extends BaseComment {
   authorIsTeacher: boolean
   imagePos: number
   selected: boolean
+  search_score?: number
 }
 
 /**
