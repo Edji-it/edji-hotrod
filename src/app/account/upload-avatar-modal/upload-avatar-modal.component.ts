@@ -48,8 +48,6 @@ export class UploadAvatarModal implements OnInit {
     // console.log("We are uploading.");
 
     let file = files[0]
-    console.log(file)
-    // console.log(file.size + " is being compared to " + (5 * Math.pow(10, 6)));
 
     // Limit file size to 5mb
     if (file && file.size < 5 * Math.pow(10, 6)) {
@@ -65,7 +63,7 @@ export class UploadAvatarModal implements OnInit {
         },
       )
     } else {
-      console.log('Upload failure. Either the image was null or too big.')
+      console.error('Upload failure. Either the image was null or too big.')
     }
   } // public updateUploadFile() voi
 
@@ -79,14 +77,11 @@ export class UploadAvatarModal implements OnInit {
       .pipe(take(1))
       .subscribe(
         () => {
-          console.log('Saved!')
-          console.log(this._auth.getUser().avatar)
           this.newAvatarConfirmed.emit()
           this.closeModal.emit()
         },
         error => {
-          console.log('ERROR')
-          console.log(error)
+          console.error(error)
         },
       )
   } //  public confirmNewAvatar () : void

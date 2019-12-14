@@ -1301,9 +1301,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.incrementHighlights(true, span.start, span.end, { start: span.boxStart, end: span.boxEnd })
     // Tell the server we've got a comment!
     this.createComment(span, type)
-    console.log(this.quickSelect)
     this.clearQuickSelect()
-    console.log(this.quickSelect)
   }
 
   /**

@@ -203,7 +203,7 @@ export class AudioCommentComponent implements OnInit {
         this.startRecording()
       })
       .catch(error => {
-        console.log(error)
+        console.error(error)
       })
   }
 
