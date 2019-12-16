@@ -183,20 +183,31 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     function fuzzy(string, term, ratio) {
       var string = string.toLowerCase() || ''
       var compare = term.toLowerCase()
-      var matches = 0
-      let score = -1
-      let exactMatches = (string.match(new RegExp(term, 'g')) || []).length
-      if (exactMatches > 0) {
-        // exact/partial matches
-        score = exactMatches
-      } else {
-        for (var i = 0; i < compare.length; i++) {
-          string.indexOf(compare[i]) > -1 ? (matches += 1) : (matches -= 1)
+      // var matches = 0
+      let score = 0
+      let words = compare.split(' ')
+
+      for (let i = 0; i < words.length; i++) {
+        let w = words[i]
+        let exactMatches = (string.match(new RegExp(w, 'g')) || []).length
+        if (exactMatches > 0) {
+          // Exact matches, even as part of longer words
+          score += exactMatches
+        } else if (w.length > 5) {
+          // Fuzzy search for long words
+          var matches = 0
+          for (var j = 0; j < w.length; j++) {
+            // check for pairs of letters
+            let pair = compare[j] + (compare[j + 1] || '')
+            string.indexOf(pair) > -1 ? (matches += 1) : (matches -= 1)
+          }
+          // Reduce fuzzy value if string is long (value of match scales)
+          let fscore = matches / string.length
+          if (fscore > 0) score += fscore
         }
-        score = matches / string.length
       }
       // Save for sorting
-      if (score >= 0) comment.search_score += score
+      if (score >= comment.search_score) comment.search_score = score
       return score >= ratio || term == ''
     }
 
@@ -208,7 +219,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       commentMatch = comment.data && comment.data.includes(unwrappedTerm)
       contentMatch = comment.text && comment.text.includes(unwrappedTerm)
     } else {
-      commentMatch = comment.data && fuzzy(comment.data, term, 0.4)
+      commentMatch = comment.data && fuzzy(comment.data, term, 0.2)
+      // Since we don't expect typos in the content, reduce fuzzy matches
       contentMatch = comment.text && fuzzy(comment.text, term, 0.75)
     }
     return contentMatch || commentMatch
