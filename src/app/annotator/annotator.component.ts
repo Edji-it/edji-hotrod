@@ -1703,7 +1703,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param comment comment for which you need the real display y position of
    */
   public getCommentDisplayY(comment: EdjiComment): number {
-    let commentIcon = document.querySelector('.w[index="' + comment.start + '"]')
+    // ".w[index..]" elements also exist on images, the child selector is crucial here
+    let commentIcon = document.querySelector('.content > .w[index="' + comment.start + '"]')
     if (commentIcon) {
       let commentTop = commentIcon.getBoundingClientRect().top
       let bodyTop = document.body.getBoundingClientRect().top
