@@ -18,12 +18,14 @@
                 | {{ commentCount }} Comments
                 .sub-label All Students
             //- All Comments header
-            ng-container
-              //-(*ngIf="filterMode === 'search'")
+            ng-container(*ngIf="filterMode === 'search'")
               i.icon.icon-comment-feed
               .header-text(data-test="searchFilterHeader")
                 .sub-label Search Comments
-                input.form-control([(ngModel)]="searchTerm", (keyup.enter)="filterComments()")
+                input.form-control(
+                  [(ngModel)]="searchTerm",
+                  (keyup.enter)="filterComments()"
+                )
             //- Comments on Line
             ng-container(*ngIf="filterMode === 'line'")
               i.icon.icon-view-line
@@ -47,6 +49,20 @@
               .header-text.no-label(data-test="userFilterHeader")
                 | My Comments
         .col-12(*ngIf="filterMode !== 'line'")
+          label#sortByMatch.form-check-label.form-check-btn.form-check-sm(
+              *ngIf="filterMode === 'search'",
+              [class.active]="sortValue == 'match'",
+              title="Sort comments based on search relevancy"
+            )
+            input.form-check-input(
+                type="radio",
+                name="sortMatch",
+                value="match",
+                [(ngModel)]="sortValue",
+                (click)="filterComments({sort: 'match' })",
+                checked
+              )
+            span By Match
           label#sortByCreated.form-check-label.form-check-btn.form-check-sm(
               [class.active]="sortValue == 'created'",
               title="Sort comments in the order they were created"
@@ -72,6 +88,11 @@
                 (click)="filterComments({sort: 'location' })",
               )
             span By Location
+          .btn.btn-icon(
+            *ngIf="filterMode !== 'search'",
+            (click)="viewSearch()"
+          )
+            i.icon.icon-search
         .col-12(*ngIf="filterMode !== 'all'")
           .btn-row.right.header__btn-row
             .hover--tooltip(*ngIf="!filterUserId")

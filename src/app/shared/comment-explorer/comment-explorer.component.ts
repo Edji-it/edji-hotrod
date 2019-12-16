@@ -148,7 +148,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       }),
       // Check for filters on URL
       this.route.queryParams.subscribe(params => {
-        if (params['student']) {
+        console.log('query applied')
+        if (params['search']) {
+          this.searchTerm = params['search']
+          this.filterComments()
+          this._visible = true
+        } else if (params['student']) {
           this.clearFilters({ student: params['student'] })
           this.filterUserId = params['student']
           this.filterComments()
@@ -176,14 +181,20 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     comment.search_score = 0
 
     function fuzzy(string, term, ratio) {
-      var string = string.toLowerCase()
+      var string = string.toLowerCase() || ''
       var compare = term.toLowerCase()
       var matches = 0
-      if (string.indexOf(compare) > -1) return true // covers basic partial matches
-      for (var i = 0; i < compare.length; i++) {
-        string.indexOf(compare[i]) > -1 ? (matches += 1) : (matches -= 1)
+      let score = -1
+      let exactMatches = (string.match(new RegExp(term, 'g')) || []).length
+      if (exactMatches > 0) {
+        // exact/partial matches
+        score = exactMatches
+      } else {
+        for (var i = 0; i < compare.length; i++) {
+          string.indexOf(compare[i]) > -1 ? (matches += 1) : (matches -= 1)
+        }
+        score = matches / string.length
       }
-      let score = matches / string.length
       // Save for sorting
       if (score >= 0) comment.search_score += score
       return score >= ratio || term == ''
@@ -194,11 +205,11 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     let commentMatch
     if (quoteWrapped.test(term)) {
       let unwrappedTerm = term.substring(1, term.length - 1)
-      contentMatch = comment.data && comment.data.includes(unwrappedTerm)
-      commentMatch = comment.text && comment.text.includes(unwrappedTerm)
+      commentMatch = comment.data && comment.data.includes(unwrappedTerm)
+      contentMatch = comment.text && comment.text.includes(unwrappedTerm)
     } else {
-      contentMatch = comment.data && fuzzy(comment.data, term, 0.5)
-      commentMatch = comment.text && fuzzy(comment.text, term, 0.5)
+      commentMatch = comment.data && fuzzy(comment.data, term, 0.4)
+      contentMatch = comment.text && fuzzy(comment.text, term, 0.75)
     }
     return contentMatch || commentMatch
   }
@@ -227,8 +238,16 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       })
     }
     if (this.searchTerm) {
+      console.log('Search term found')
       sorted = this.allComments.filter(comment => {
         return this.searchComment(comment, this.searchTerm)
+      })
+      // Update
+      // Clear URL w/ term
+      this.router.navigate(['./'], {
+        relativeTo: this.route,
+        queryParams: { search: this.searchTerm },
+        queryParamsHandling: 'merge',
       })
     } else if (comment && comment.lineY && this.commentByPos && this.commentByPos[comment.lineY]) {
       this.filterMode = 'line'
@@ -250,7 +269,11 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       })
     }
 
-    if (sort === 'location') {
+    if (sort === 'match' && this.searchTerm) {
+      sorted = sorted.sort(function(a, b) {
+        return b.search_score - a.search_score
+      })
+    } else if (sort === 'location') {
       sorted = sorted.sort(function(a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
@@ -305,6 +328,16 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
      * Return scroll to the top
      * @todo only scroll on filter click
      */
+    this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
+  }
+
+  /**
+   * Search comments
+   */
+  viewSearch(): void {
+    // translate filters to search??
+    this.filterMode = 'search'
+    this.sortValue = 'match'
     this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
   }
 
