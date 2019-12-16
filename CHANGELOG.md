@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.12.36"></a>
+## [4.12.36](https://github.com/codiak/edji-hotrod/compare/v4.12.35...v4.12.36) (2019-12-16)
+
+
+
 <a name="4.12.35"></a>
 ## [4.12.35](https://github.com/codiak/edji-hotrod/compare/v4.12.34...v4.12.35) (2019-12-13)
 
