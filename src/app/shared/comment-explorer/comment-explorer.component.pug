@@ -17,11 +17,9 @@
               .header-text(data-test="allFilterHeader")
                 | {{ commentCount }} Comments
                 .sub-label  All Students
-            //- All Comments header
+            //- Search header
             ng-container(*ngIf="filterMode === 'search'")
-              //- i.icon.icon-comment-feed
               .header-text.header-text--search(data-test="searchFilterHeader")
-                //- .sub-label Search Comments
                 .input-group
                   .input-group-prepend-icon
                     i.icon.icon-search(
@@ -94,6 +92,7 @@
                 (click)="filterComments({sort: 'location' })",
               )
             span By Location
+          //- Access to search from other views
           button#searchBtnXS.btn.btn-xs-primary.has-icon(
             *ngIf="filterMode !== 'search'",
             (click)="viewSearch()"

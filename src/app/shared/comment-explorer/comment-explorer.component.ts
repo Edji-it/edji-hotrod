@@ -148,7 +148,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       }),
       // Check for filters on URL
       this.route.queryParams.subscribe(params => {
-        console.log('query applied')
         if (params['search']) {
           this.searchTerm = params['search']
           this.sortValue = params['sort'] || 'match'
