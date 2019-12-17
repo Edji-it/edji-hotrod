@@ -172,31 +172,36 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   /**
    * Search logic
-   * - Provides client-side fuzziness and relevancy
+   * - Provides client-side fuzziness, relevancy, and exact matches
    * @param comment
    * @param term
    */
   searchComment(comment: EdjiComment, term: string): boolean {
-    // reset search score
+    // Reset search score
     comment.search_score = 0
-
-    function fuzzy(string, term, ratio) {
-      var string = string.toLowerCase() || ''
-      var compare = term.toLowerCase()
-      // var matches = 0
+    /**
+     * Search Algorithm
+     * - Weights exact matches as 1.0, fuzzy matches as <1
+     * - Attaches search score to comments for sorting (relies on comment pointer)
+     * - Finds only exact matches for quote wrapped terms
+     * @param string Content to search
+     * @param words Search term broken apart
+     * @param ratio how fuzzy to allow (0.1 - 1.0)
+     */
+    function fuzzy(string, words: { str: string; exact?: boolean }[], ratio) {
+      let compare = term.toLowerCase()
       let score = 0
-      let words = compare.split(' ')
-
+      string = string.toLowerCase() || ''
       for (let i = 0; i < words.length; i++) {
         let w = words[i]
-        // let exactMatches = (string.match(new RegExp(w, 'g')) || []).length
-        if (string.indexOf(w) > -1) {
+        let len = w.str.length
+        if (string.indexOf(w.str) > -1) {
           // Exact matches, even as part of longer words
           score += 1
-        } else if (w.length > 5) {
-          // Fuzzy search for long words
+        } else if (len >= 5 && !w.exact) {
+          // Fuzzy search for longer words
           var matches = 0
-          for (var j = 0; j < w.length; j++) {
+          for (var j = 0; j < len; j++) {
             // check for pairs of letters
             let pair = compare[j] + (compare[j + 1] || '')
             string.indexOf(pair) > -1 ? (matches += 1) : (matches -= 1)
@@ -210,19 +215,23 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       if (score >= comment.search_score) comment.search_score = score
       return score >= ratio || term == ''
     }
-
+    // Process the search term once
     let quoteWrapped = /^("|').*("|')$/
-    let contentMatch
-    let commentMatch
-    if (quoteWrapped.test(term)) {
-      let unwrappedTerm = term.substring(1, term.length - 1)
-      commentMatch = comment.data && comment.data.includes(unwrappedTerm)
-      contentMatch = comment.text && comment.text.includes(unwrappedTerm)
-    } else {
-      commentMatch = comment.data && fuzzy(comment.data, term, 0.2)
-      // Since we don't expect typos in the content, reduce fuzzy matches
-      contentMatch = comment.text && fuzzy(comment.text, term, 0.75)
-    }
+    let terms = term.split(/(".*")|\s/)
+    let words = []
+    terms.forEach(word => {
+      if (!word) {
+        return
+      } else if (quoteWrapped.test(word)) {
+        let unwrappedTerm = word.substring(1, word.length - 1)
+        words.push({ str: unwrappedTerm, exact: true })
+      } else {
+        words.push({ str: word })
+      }
+    })
+    let commentMatch = comment.data && fuzzy(comment.data, words, 0.2)
+    // Since we don't expect typos in the content, reduce fuzzy matches (see ratio)
+    let contentMatch = comment.text && fuzzy(comment.text, words, 0.75)
     return contentMatch || commentMatch
   }
 
