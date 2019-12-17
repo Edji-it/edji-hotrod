@@ -16,7 +16,7 @@
               i.icon.icon-comment-feed
               .header-text(data-test="allFilterHeader")
                 | {{ commentCount }} Comments
-                .sub-label All Students
+                .sub-label  All Students
             //- All Comments header
             ng-container(*ngIf="filterMode === 'search'")
               //- i.icon.icon-comment-feed
@@ -94,15 +94,16 @@
                 (click)="filterComments({sort: 'location' })",
               )
             span By Location
-          .btn.btn-icon(
+          button#searchBtnXS.btn.btn-xs-primary.has-icon(
             *ngIf="filterMode !== 'search'",
             (click)="viewSearch()"
           )
             i.icon.icon-search
+            | Search
         .col-12(*ngIf="filterMode !== 'all'")
           .btn-row.right.header__btn-row
             //- Search count appears below
-            .sub-label.search-count
+            .sub-label.search-count(*ngIf="filterMode === 'search'")
               | {{ commentCount }} found
             .hover--tooltip(*ngIf="!filterUserId")
               button.btn.btn-xs-primary.has-icon(
