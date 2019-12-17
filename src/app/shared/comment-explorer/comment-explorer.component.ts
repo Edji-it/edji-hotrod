@@ -189,7 +189,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
      * @param ratio how fuzzy to allow (0.1 - 1.0)
      */
     function fuzzy(string, words: { str: string; exact?: boolean }[], ratio) {
-      let compare = term.toLowerCase()
       let score = 0
       string = string.toLowerCase() || ''
       for (let i = 0; i < words.length; i++) {
@@ -203,26 +202,26 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           var matches = 0
           for (var j = 0; j < len; j++) {
             // check for pairs of letters
-            let pair = compare[j] + (compare[j + 1] || '')
+            let pair = w.str[j] + (w.str[j + 1] || '')
             string.indexOf(pair) > -1 ? (matches += 1) : (matches -= 1)
           }
           // Reduce fuzzy value if string is long (value of match scales)
-          let fscore = matches / string.length
+          let fscore = matches / (string.length * 0.5)
           if (fscore > 0) score += fscore
         }
       }
       // Save for sorting
-      if (score >= comment.search_score) comment.search_score = score
+      if (score >= 0) comment.search_score = score
       return score >= ratio || term == ''
     }
     // Process the search term once
-    let quoteWrapped = /^("|').*("|')$/
+    let quoteWrapped = /^(").*(")$/
     let terms = term.split(/(".*")|\s/)
     let words = []
     terms.forEach(word => {
-      if (!word) {
-        return
-      } else if (quoteWrapped.test(word)) {
+      if (!word) return
+      word = word.toLowerCase()
+      if (quoteWrapped.test(word)) {
         let unwrappedTerm = word.substring(1, word.length - 1)
         words.push({ str: unwrappedTerm, exact: true })
       } else {
