@@ -29,15 +29,8 @@ interface BaseProject {
   code: string
   types: string // can currently be 'emoji' and 'text'
   heat_vision: boolean
-  report_evals?: Feedback[]
+  report_evals?: EdjiComment[]
   group_instructions?: string
   createdAt?: string
   updatedAt?: string
-}
-
-export interface Feedback {
-  createdAt: Date
-  evaluation: string
-  user_id: string
-  _id: string
 }

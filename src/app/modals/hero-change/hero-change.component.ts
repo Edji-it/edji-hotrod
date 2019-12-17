@@ -121,7 +121,6 @@ export class HeroChangeComponent implements OnInit {
   cancelSub() {
     this.canceling = true
     this.cancelMsg = ''
-    // console.log(this.user.hero.subscription_id)
     this._auth
       .cancelHeroSubscription()
       .pipe(take(1))
@@ -143,7 +142,7 @@ export class HeroChangeComponent implements OnInit {
           this.canceling = false
           this.cancelMsg =
             "Sorry, canceling your subscription failed. <a class='link' href='mailto:support@edji.it'>Please contact support</a>."
-          console.log(err)
+          console.error(err)
         },
       )
   }

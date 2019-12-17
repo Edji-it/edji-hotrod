@@ -194,7 +194,7 @@ export class CommentService {
         .saveComment(comment)
         .then(comment => {})
         .catch(error => {
-          console.log(error)
+          console.error(error)
         })
     } else {
       this.projectStore.addAnswerToAnswers(comment)
@@ -204,7 +204,7 @@ export class CommentService {
           this.projectStore.addAnswerToAnswers(answer)
         })
         .catch(error => {
-          console.log(error)
+          console.error(error)
         })
     }
   }
