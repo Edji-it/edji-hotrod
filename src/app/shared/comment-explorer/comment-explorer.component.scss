@@ -23,7 +23,7 @@ $headerIconMargin: 12px;
   padding-top: 10px;
   padding-bottom: 10px;
 
-  & .icon {
+  & > .icon {
     width: 2em;
     height: 2em;
     display: inline-block;
@@ -38,6 +38,10 @@ $headerIconMargin: 12px;
   display: inline-block;
   vertical-align: top;
   line-height: 1em;
+
+  &--search {
+    width: calc(100% - 3em);
+  }
 
   &.no-label {
     line-height: 1.75em;
@@ -351,4 +355,11 @@ $headerIconMargin: 12px;
     width: 50px;
     height: 50px;
   }
+}
+
+.sub-label.search-count {
+  float: left;
+  margin: 3px 0 0 0;
+  font-weight: 300;
+  font-style: italic;
 }

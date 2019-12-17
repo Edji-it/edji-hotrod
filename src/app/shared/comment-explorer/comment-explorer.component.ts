@@ -151,6 +151,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         console.log('query applied')
         if (params['search']) {
           this.searchTerm = params['search']
+          this.sortValue = params['sort'] || 'match'
           this.filterComments()
           this._visible = true
         } else if (params['student']) {
@@ -189,10 +190,10 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
       for (let i = 0; i < words.length; i++) {
         let w = words[i]
-        let exactMatches = (string.match(new RegExp(w, 'g')) || []).length
-        if (exactMatches > 0) {
+        // let exactMatches = (string.match(new RegExp(w, 'g')) || []).length
+        if (string.indexOf(w) > -1) {
           // Exact matches, even as part of longer words
-          score += exactMatches
+          score += 1
         } else if (w.length > 5) {
           // Fuzzy search for long words
           var matches = 0
@@ -250,17 +251,10 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       })
     }
     if (this.searchTerm) {
-      console.log('Search term found')
       sorted = this.allComments.filter(comment => {
         return this.searchComment(comment, this.searchTerm)
       })
-      // Update
-      // Clear URL w/ term
-      this.router.navigate(['./'], {
-        relativeTo: this.route,
-        queryParams: { search: this.searchTerm },
-        queryParamsHandling: 'merge',
-      })
+      this.filterMode = 'search'
     } else if (comment && comment.lineY && this.commentByPos && this.commentByPos[comment.lineY]) {
       this.filterMode = 'line'
       this.sortValue = sort = 'location'
@@ -318,10 +312,11 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     paramsToKeep['pane'] = 'comments'
     if (!paramsToKeep['student']) this.filterUserId = null
     if (!paramsToKeep['line']) this.comment = null
+    if (!paramsToKeep['search']) this.searchTerm = null
     // Tell parent component comment is cleared
     this.clearSelected.emit()
     // Merge params to keep with reset/null
-    let params = Object.assign({ student: null, line: null }, paramsToKeep)
+    let params = Object.assign({ student: null, line: null, search: null }, paramsToKeep)
     // Clear URL params
     this.router.navigate(['./'], {
       relativeTo: this.route,
@@ -351,6 +346,20 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     this.filterMode = 'search'
     this.sortValue = 'match'
     this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
+  }
+
+  /**
+   * Apply search term
+   */
+  applySearch(): void {
+    // Update URL w/ term
+    this.router.navigate(['./'], {
+      relativeTo: this.route,
+      queryParams: { search: this.searchTerm },
+      queryParamsHandling: 'merge',
+    })
+    // Process search
+    this.filterComments()
   }
 
   close() {
