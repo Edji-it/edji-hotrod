@@ -63,7 +63,7 @@
                 name="sortMatch",
                 value="match",
                 [(ngModel)]="sortValue",
-                (click)="filterComments({sort: 'match' })",
+                (click)="applySort('match')",
                 checked
               )
             span By Match
@@ -76,7 +76,7 @@
                 name="sortCreated",
                 value="created",
                 [(ngModel)]="sortValue",
-                (click)="filterComments({sort: 'created' })",
+                (click)="applySort('created')",
                 checked
               )
             span By Time
@@ -89,7 +89,7 @@
                 name="sortLocation",
                 value="location",
                 [(ngModel)]="sortValue",
-                (click)="filterComments({sort: 'location' })",
+                (click)="applySort('location')",
               )
             span By Location
           //- Access to search from other views

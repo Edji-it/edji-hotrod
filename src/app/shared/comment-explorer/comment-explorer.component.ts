@@ -44,8 +44,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public searchTerm: string = ''
 
   // Sort and Filtering
-  public sortValue: string = 'created' // default to created
-  public filterMode: 'line' | 'all' | 'user' | 'search' = 'all'
+  public sortValue: SearchSort = 'created' // default to created
+  public filterMode: SearchFilter = 'all'
   public filterUserId: string
   public filterCurrentUser: boolean
 
@@ -148,6 +148,9 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       }),
       // Check for filters on URL
       this.route.queryParams.subscribe(params => {
+        // Apply sort
+        if (params['sort']) this.sortValue = params['sort']
+        // Detect search/filter modes
         if (params['search']) {
           this.searchTerm = params['search']
           this.sortValue = params['sort'] || 'match'
@@ -318,17 +321,17 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * @note does not fire "filterComments", so it can be used internally
    */
   private clearFilters(paramsToKeep?: { line?: string; student?: string }): void {
-    this.sortValue = 'created'
     this.filterMode = 'all' //- default
     if (!paramsToKeep) paramsToKeep = {}
     paramsToKeep['pane'] = 'comments'
     if (!paramsToKeep['student']) this.filterUserId = null
     if (!paramsToKeep['line']) this.comment = null
     if (!paramsToKeep['search']) this.searchTerm = null
+    if (!paramsToKeep['sort']) this.sortValue = 'created'
     // Tell parent component comment is cleared
     this.clearSelected.emit()
     // Merge params to keep with reset/null
-    let params = Object.assign({ student: null, line: null, search: null }, paramsToKeep)
+    let params = Object.assign({ student: null, line: null, search: null, sort: null }, paramsToKeep)
     // Clear URL params
     this.router.navigate(['./'], {
       relativeTo: this.route,
@@ -342,10 +345,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    */
   viewAll(): void {
     this.clearFilters()
-    this.filterComments()
     /**
      * Return scroll to the top
-     * @todo only scroll on filter click
      */
     this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
   }
@@ -354,7 +355,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * Search comments
    */
   viewSearch(): void {
-    // translate filters to search??
     this.filterMode = 'search'
     this.sortValue = 'match'
     this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
@@ -364,14 +364,22 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * Apply search term
    */
   applySearch(): void {
-    // Update URL w/ term
     this.router.navigate(['./'], {
       relativeTo: this.route,
-      queryParams: { search: this.searchTerm },
+      queryParams: { search: this.searchTerm, sort: this.sortValue },
       queryParamsHandling: 'merge',
     })
-    // Process search
-    this.filterComments()
+  }
+
+  /**
+   * Apply sort filter
+   */
+  applySort(sort?: SearchSort) {
+    this.router.navigate(['./'], {
+      relativeTo: this.route,
+      queryParams: { sort: sort },
+      queryParamsHandling: 'merge',
+    })
   }
 
   close() {
@@ -383,7 +391,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     // Clear URL params
     this.router.navigate(['./'], {
       relativeTo: this.route,
-      queryParams: { pane: null, student: null, line: null },
+      queryParams: { pane: null, student: null, line: null, sort: null },
       queryParamsHandling: 'merge',
     })
   }
@@ -475,3 +483,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     return comment._id
   }
 }
+
+type SearchSort = 'created' | 'location' | 'match'
+type SearchFilter = 'line' | 'all' | 'user' | 'search'
