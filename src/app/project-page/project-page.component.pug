@@ -1,7 +1,8 @@
 nav-bar([showProjectInfo]="true")
 owner-tools
 reader-tools
-.container-fluid
+//- Overflow visible allows for comments on last line of content
+.container-fluid(style="overflow:visible;")
   .row.loading(*ngIf="!project._id", style="min-height: 600px;")
   .project-column(*ngIf="!showArchiveModal")
     //- Archived alert for owner
