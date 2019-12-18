@@ -93,6 +93,8 @@ describe('Project Page as an owner using reading report: ', () => {
   })
 
   it('should add an evaluation and verify it shows up', () => {
+    // Scroll down
+    browser.executeScript('document.querySelector("#evalFormText").scrollIntoView()')
     browser.wait(EC.visibilityOf(readingEvalFirst), 7000, 'previous reading evals never became visible')
     browser.wait(
       EC.elementToBeClickable(element(by.id('evalFormText'))),

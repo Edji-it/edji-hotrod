@@ -97,12 +97,6 @@ export class ReadingRecapComponent implements OnInit {
   }
 
   ngOnInit() {
-    // event tracking for opening recap
-    this.angulartics.eventTrack.next({
-      action: 'readingRecap_opened',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
-
     // Subscribe to current user
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
@@ -159,6 +153,16 @@ export class ReadingRecapComponent implements OnInit {
               // SET USER BY ID
               this.selectedStudent = params['recap']
               this.changeStudentSelection()
+            }
+            if (!this.visible) {
+              // event tracking for opening recap
+              this.angulartics.eventTrack.next({
+                action: 'readingRecap_opened',
+                properties: {
+                  category: this._auth.setAnalyticEventCategory(),
+                  label: this._auth.setAnalyticEventLabel(),
+                },
+              })
             }
             this.visible = true
           } else {

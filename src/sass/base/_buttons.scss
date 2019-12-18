@@ -188,11 +188,6 @@ button {
 .btn-row {
   width: 100%;
   text-align: center;
-  // padding: $base-pad/2 0;
-
-  @media screen and (max-width: $tablet) {
-    margin-top: 80px;
-  }
 
   & .hover--tooltip {
     display: inline-block;
