@@ -207,7 +207,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           }
           // Reduce fuzzy value if string is long (value of match scales)
           let fscore = matches / (string.length * 0.5)
+          // Max value of 1
           if (fscore > 0) score += fscore
+          else score -= 1
+        } else {
+          // Reduce score if word is not found
+          score -= 1
         }
       }
       // Save for sorting
