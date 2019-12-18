@@ -47,8 +47,6 @@ $bubbleTopOffset: -126px;
     animation: bubbleFadeOut 300ms 1;
   }
 
-  // Comment Bubble does not currently display on mobile
-  // ($small-screen and $medium-screen)
   @media (max-width: $large-screen) {
     & .icon-comment-arrow {
       display: none;
@@ -56,6 +54,13 @@ $bubbleTopOffset: -126px;
     transform: translateX(0%) translateY(60px);
     width: 320px;
     left: -200px;
+  }
+  @media(max-width: $medium-screen) {
+    left: -55px;
+  }
+  @media (max-width: $small-screen) {
+    width: calc(100% + 60px);
+    left: -55px;
   }
   @media (min-width: $large-screen + 1px) {
     & .icon-comment-arrow {
