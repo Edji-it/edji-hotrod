@@ -145,6 +145,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       // Subscribe to Heat Vision toggle updates
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
+        this.filterComments({ update: true })
       }),
       // Check for filters on URL
       this.route.queryParams.subscribe(params => {
@@ -252,21 +253,27 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       opts = {}
     }
     let sort = opts.sort || this.sortValue
-    let sorted
+    let sorted: EdjiComment[] = this.allComments.slice()
     let comment = this.comment
     // Set loading state
     if (!opts.update) {
       this.loading = true
       this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
     }
+    // Apply Heat Vision
+    if (!this.project.heat_vision && !this.project.isTeaching) {
+      sorted = sorted.filter(c => {
+        return c.user_id === this.user._id
+      })
+    }
     // Handle if reply selected
     if (comment && comment.reply_to) {
-      comment = this.allComments.find(c => {
+      comment = sorted.find(c => {
         return c._id === comment.reply_to
       })
     }
     if (this.searchTerm) {
-      sorted = this.allComments.filter(comment => {
+      sorted = sorted.filter(comment => {
         return this.searchComment(comment, this.searchTerm)
       })
       this.filterMode = 'search'
@@ -279,12 +286,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     } else if (this.filterUserId) {
       this.filterMode = 'user'
       this.filterCurrentUser = this.user._id === this.filterUserId
-      sorted = this.allComments.filter(comment => {
+      sorted = sorted.filter(comment => {
         return comment.user_id === this.filterUserId
       })
     } else {
       this.filterMode = 'all'
-      sorted = this.allComments.filter(comment => {
+      sorted = sorted.filter(comment => {
         // This hides replies from All Comments feed
         return comment.start >= 0
       })
