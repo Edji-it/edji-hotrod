@@ -17,19 +17,22 @@
               .header-text(data-test="allFilterHeader")
                 | {{ commentCount }} Comments
                 .sub-label  All Students
-            //- Search header
-            ng-container(*ngIf="filterMode === 'search'")
-              .header-text.header-text--search(data-test="searchFilterHeader")
-                .input-group
-                  .input-group-prepend-icon
-                    i.icon.icon-search(
-                      (click)="applySearch()"
-                    )
-                  input.form-control(
-                    placeholder="Search Comments",
-                    [(ngModel)]="searchTerm",
-                    (keyup.enter)="applySearch()"
+            //- Search header (we only hide so that input can be focus)
+            .header-text.header-text--search(
+              data-test="searchFilterHeader",
+              [class.hide--off-screen]="filterMode !== 'search'"
+            )
+              .input-group
+                .input-group-prepend-icon
+                  i.icon.icon-search(
+                    (click)="applySearch()"
                   )
+                input.form-control(
+                  #searchInput,
+                  placeholder="Search Comments",
+                  [(ngModel)]="searchTerm",
+                  (keyup.enter)="applySearch()"
+                )
             //- Comments on Line
             ng-container(*ngIf="filterMode === 'line'")
               i.icon.icon-view-line

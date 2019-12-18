@@ -93,6 +93,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   @Output() clearSelected = new EventEmitter()
 
   @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar
+  @ViewChild('searchInput', { static: false }) searchInput
 
   constructor(
     private projectStore: ProjectStore,
@@ -365,6 +366,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     this.filterMode = 'search'
     this.sortValue = 'match'
     this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
+    this.searchInput && this.searchInput.nativeElement.focus()
   }
 
   /**
@@ -398,7 +400,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     // Clear URL params
     this.router.navigate(['./'], {
       relativeTo: this.route,
-      queryParams: { pane: null, student: null, line: null, sort: null },
+      queryParams: { pane: null, student: null, line: null, sort: null, search: null },
       queryParamsHandling: 'merge',
     })
   }
