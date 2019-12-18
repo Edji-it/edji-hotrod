@@ -97,7 +97,7 @@
             style="display: initial;"
           )
         .col-9
-          .h-1.report-text-highlighted {{ recapComment.text ? recapComment.text : '...'}}
+          .h-1.report-text-highlighted {{ recapComment.text || '...'}}
       .row.mt-5(*ngIf="evaluations && evaluations.length>0")
         .col-12
           div Feedback
@@ -106,7 +106,7 @@
       .row(*ngIf="evaluations && evaluations.length>0")
         .col-12(*ngFor="let evaluation of evaluations")
           .sub-label.mb-0 {{ evaluation.createdAt | edjidate }}
-          p.evaluation_text {{ evaluation.evaluation ? evaluation.evaluation : '' }}
+          p.evaluation_text {{ evaluation.data || '' }}
     //- Summarize and Share Block
     .row.mt-5.reading-recap__pdf-hidden
       .col-12
@@ -135,9 +135,6 @@
             placeholder="This student did a great job identifying the main themes...",
             tabindex="0"
           )
-          #msgEvalRequired.alert.alert-info(
-            *ngIf="evaluationForm.controls['inputText'].hasError('required') && evaluationForm.controls['inputText'].dirty"
-          ) Send some feedback for this report!
           //- .col-7.no-gutters.p-0.d-inline-block
           //-   label(for="email") Email
           //-   input#evalFormEmail(

@@ -1,7 +1,6 @@
 import {
   Component,
   ElementRef,
-  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
@@ -11,7 +10,7 @@ import {
   ViewChild,
   AfterViewInit,
 } from '@angular/core'
-import { Subject, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
 import { Location } from '@angular/common'
 
@@ -21,7 +20,6 @@ import {
   AudioService,
   AuthService,
   CommentService,
-  ProjectService,
   ReadingService,
   SocketService,
   UtilToolService,
@@ -29,7 +27,7 @@ import {
   AcademyService,
   AnalyticsService,
 } from '../_services'
-import { CommentPermissions, EdjiComment, Project, Reading, Feedback } from './../shared/datatypes'
+import { EdjiComment, Project, Reading } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
@@ -67,7 +65,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public reading: Reading = <Reading>{}
   public project: Project = <Project>{}
   // Feedback for current user
-  public feedbackForUser: Feedback[] = []
+  public feedbackForUser: EdjiComment[] = []
   public paneCommentComponentUpdates: CommentComponent[]
   // Determines when infinite scroll should begin
   public lastWord: number = 4000
@@ -461,7 +459,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         if (groupUpdate.type === 'feedbackUpdate') {
           let feedback = groupUpdate['feedback']
           this.setFeedback(feedback)
-          if (feedback.user_id === this.user._id) {
+          if (feedback.recipient_id === this.user._id) {
             this.showCommentToast(feedback, 'feedback')
           }
         } else if (groupUpdate.type === 'replyUpdate') {
@@ -1303,9 +1301,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.incrementHighlights(true, span.start, span.end, { start: span.boxStart, end: span.boxEnd })
     // Tell the server we've got a comment!
     this.createComment(span, type)
-    console.log(this.quickSelect)
     this.clearQuickSelect()
-    console.log(this.quickSelect)
   }
 
   /**
@@ -1703,7 +1699,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param comment comment for which you need the real display y position of
    */
   public getCommentDisplayY(comment: EdjiComment): number {
-    let commentIcon = document.querySelector('.w[index="' + comment.start + '"]')
+    // ".w[index..]" elements also exist on images, the child selector is crucial here
+    let commentIcon = document.querySelector('.content > .w[index="' + comment.start + '"]')
     if (commentIcon) {
       let commentTop = commentIcon.getBoundingClientRect().top
       let bodyTop = document.body.getBoundingClientRect().top
@@ -1787,9 +1784,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   // Sets the feedback display for students
   private setFeedback(feedback?: any): void {
     if (!feedback) {
-      this.feedbackForUser = this.project.report_evals.filter(feedback => {
-        return this.user._id == feedback.user_id
-      })
+      this.feedbackForUser = this.projectStore.getFeedbackByStudent(this.user._id)
     } else {
       // the socket update needs to have the latest feedback pushed in
       this.feedbackForUser.push(feedback)

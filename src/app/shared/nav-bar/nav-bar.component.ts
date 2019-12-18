@@ -280,23 +280,20 @@ export class NavBarComponent implements OnInit, OnDestroy {
    * @param code The project's short code
    */
   private joinSession(code: string): void {
-    // console.log("first call", code);
     this.joinLoading = true
     this.projectStore.join(code).subscribe(
       data => {
-        console.log('data', data)
         this.joinLoading = false
         if (data._id) {
           this._router.navigate(['/project', data._id])
         } else {
-          this.errorObject.invalidCode = "We don't think that's a real code :confused:"
-          console.log(this.errorObject)
+          this.errorObject.invalidCode = 'That code was not found :confused:'
         }
       },
       error => {
         this.joinLoading = false
         console.error(error)
-        this.errorObject.invalidCode = "Oh no! Something went wrong and we don't know what happened!"
+        this.errorObject.invalidCode = 'Something went wrong. Please try again or contact us.'
       },
     )
   }

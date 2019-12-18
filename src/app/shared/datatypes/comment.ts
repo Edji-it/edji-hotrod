@@ -25,6 +25,7 @@ export interface EdjiComment extends BaseComment {
 export interface BaseComment {
   _id: string
   user_id: string
+  recipient_id: string
   start: number
   end: number
   data: any

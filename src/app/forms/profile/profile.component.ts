@@ -255,7 +255,6 @@ export class ProfileFormComponent implements OnInit {
     if (this.schoolInfo && this.isSchoolStaff(form.accountRole)) {
       user.school = this.schoolInfo
     }
-    console.log(user)
     // Update user will fetch most recent user object, update properties given
     this._auth
       .updateUser(user)

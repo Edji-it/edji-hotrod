@@ -396,7 +396,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       .catch(error => {
         // TRACK EXCEPTION
         this._analytics.event(type + 'ReplyCreate')
-        console.log(error)
+        console.error(error)
       })
   } // createReplyComment(type: string): void
 

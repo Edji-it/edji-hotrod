@@ -133,10 +133,6 @@ export class ProjectService {
   public putComment(projectId: string, comment: EdjiComment): Observable<any> {
     comment.project_id = projectId // Tell the comment what project it's a part of
 
-    // Clean frontend only properties
-    delete comment['active']
-    delete comment['new']
-
     return this._http.put(
       this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments',
       comment,
@@ -154,6 +150,18 @@ export class ProjectService {
 
     return this._http.delete(
       this._auth.getUrl() + '/api/v1/projects/' + projectId + '/comments' + search_params,
+      this._auth.getOptions(),
+    )
+  }
+
+  /**
+   * Puts a teacher's feedback to its project
+   * @param feedback
+   */
+  public putEval(projectId: string, feedback: Partial<EdjiComment>): Observable<any> {
+    return this._http.put(
+      this._auth.getUrl() + '/api/v1/projects/' + projectId + '/report_evals',
+      feedback,
       this._auth.getOptions(),
     )
   }

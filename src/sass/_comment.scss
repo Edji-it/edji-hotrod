@@ -900,15 +900,16 @@ textarea.text-comment-input,
 
 .comment__count--mobile {
   position: absolute;
-  left: -35px;
+  top: 50%;
   cursor: pointer;
-  color: white;
+  color:#fff;
   font-size: 10px;
   font-weight: 500;
-  margin-top: -7px;
+  left: 0px;
   text-align: center;
-  width: 20px;
+  width: 100%;
   pointer-events: none;
+  transform: translateY(-50%);
 }
 
 $avatarOffset: -23px;
