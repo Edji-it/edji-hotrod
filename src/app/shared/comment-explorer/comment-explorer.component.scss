@@ -371,3 +371,21 @@ $headerIconMargin: 12px;
   margin-top: 0.5em;
   float: right;
 }
+
+.none-found-block {
+  text-align: center;
+  padding: $base-pad 0;
+  color: $medium-gray;
+
+  img {
+    display: block;
+    max-height: 200px;
+    width: auto;
+    margin: $base-pad auto;
+  }
+
+  span > * {
+    display: block;
+    text-align: center;
+  }
+}

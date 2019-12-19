@@ -42,6 +42,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   // Search
   public searchTerm: string = ''
+  public appliedTerm: string = ''
 
   // Sort and Filtering
   public sortValue: SearchSort = 'created' // default to created
@@ -230,7 +231,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     let words = []
     terms.forEach(word => {
       if (!word) return
-      word = word.toLowerCase()
+      // Lower case and escape special characters
+      word = word.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       if (quoteWrapped.test(word)) {
         let unwrappedTerm = word.substring(1, word.length - 1)
         words.push({ str: unwrappedTerm, exact: true })
@@ -317,6 +319,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       })
     }
 
+    this.appliedTerm = this.searchTerm || ''
     this.commentCount = sorted.length
     this.comments = sorted
     setTimeout(() => {

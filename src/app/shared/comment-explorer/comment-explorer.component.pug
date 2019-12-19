@@ -147,6 +147,9 @@
       )
         .row
           .col-12
+            .none-found-block(*ngIf="commentCount < 1 && !loading")
+              img(src="/assets/images/graphic-none-found.svg")
+              span([innerHtml]="appliedTerm ? 'No results for <b>' + appliedTerm + '</b>' : 'No comments found'")
             ng-container(*ngFor="let c of comments; let i = index; trackBy: trackComment")
               hr.comment-block-hr(*ngIf="i > 0")
               //- We do not need to apply "hidden" here since the Explorer is pre-filtered
