@@ -199,8 +199,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       for (let i = 0; i < words.length; i++) {
         let w = words[i]
         let len = w.str.length
-        if (new RegExp('\\b' + w.str + '\\b').test(string)) {
-          // Exact matches, checking for word boundaries
+        if (new RegExp(`\\b${w.str}|${w.str}\\b`).test(string)) {
+          // Partial matches, checking for word boundaries
           score += 1
         } else if (len >= 5 && !w.exact) {
           // Fuzzy search for longer words
