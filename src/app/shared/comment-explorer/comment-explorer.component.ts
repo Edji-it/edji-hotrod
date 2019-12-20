@@ -376,11 +376,16 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * Apply search term
    */
   applySearch(): void {
-    this.router.navigate(['./'], {
-      relativeTo: this.route,
-      queryParams: { search: this.searchTerm, sort: this.sortValue },
-      queryParamsHandling: 'merge',
-    })
+    if (this.searchTerm) {
+      this.router.navigate(['./'], {
+        relativeTo: this.route,
+        queryParams: { search: this.searchTerm, sort: this.sortValue },
+        queryParamsHandling: 'merge',
+      })
+    } else {
+      this.filterComments()
+      this.viewSearch()
+    }
   }
 
   /**

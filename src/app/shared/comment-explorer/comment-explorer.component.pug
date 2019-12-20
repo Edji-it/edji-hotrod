@@ -33,6 +33,10 @@
                   [(ngModel)]="searchTerm",
                   (keyup.enter)="applySearch()"
                 )
+                .form-control-clear.form-control-clear--in-field.icon.icon-close(
+                  *ngIf="searchTerm.length > 0",
+                  (click)="searchTerm = ''; applySearch()"
+                )
             //- Comments on Line
             ng-container(*ngIf="filterMode === 'line'")
               i.icon.icon-view-line
