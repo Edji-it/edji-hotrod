@@ -64,6 +64,7 @@ export class SearchPage implements OnInit {
   public loading: boolean = true
   public previewIndex: number = -1
   public academyState: AcademyState = {}
+  private selectedAcademy: number = -1
 
   // Archiving state
   public readingToArchive: Reading
@@ -194,6 +195,10 @@ export class SearchPage implements OnInit {
       ),
       this._auth.currentAcademyState.subscribe(currentState => {
         this.academyState = currentState
+        if (this.selectedAcademy !== currentState.selected && this.selectedAcademy > -1) {
+          this.loadFeed()
+        }
+        this.selectedAcademy = currentState.selected
       }),
     )
   }
@@ -289,6 +294,9 @@ export class SearchPage implements OnInit {
         this.filterCount = 0
         return
       }
+    } else if (this.searchParams.activeLibrary === 'academy') {
+      this.searchParams.institutionId =
+        this.academyState && this.academyState.academies && this.academyState.academies[this.academyState.selected]._id
     }
 
     let queryString = this._readings.buildSearchParams(this.searchParams)

@@ -88,6 +88,16 @@ nav-bar([showDashboardOptions]="true")
                         )
                             i.icon.icon-district-sm(style="vertical-align:middle;")
                             | My District
+                    //- Academy Library
+                    div
+                        button#discoverAcademyLibrary.btn.btn-filter(
+                            *ngIf="academyState && academyState.academies && academyState.academies.length > 0",
+                            title="Filter by shared readings in your academy",
+                            [class.active]="searchParams.activeLibrary === 'academy'",
+                            (click)="searchParams.activeLibrary = 'academy'; searchParams.first=0; updateSearchParams('filter_academy')"
+                        )
+                            i.icon.icon-district-sm(style="vertical-align:middle;")
+                            | Academy Library
                     //- Following
                     div
                         button#discoverFilterFollowing.btn.btn-filter(
