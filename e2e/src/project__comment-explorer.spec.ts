@@ -117,7 +117,7 @@ describe('Project Page using the comment explorer: ', () => {
     })
 
     // Useful to test after opening the Explorer for other purposes
-    it('should search for a comment after viewing line', () => {
+    it('should search for a comment after viewing line', async () => {
       // Return to all Comments
       browser.wait(
         EC.elementToBeClickable(explorer.allComments),
@@ -141,8 +141,21 @@ describe('Project Page using the comment explorer: ', () => {
       // Verify results load
       let commentResults = element.all(by.css('.sliding-pane-comment edji-comment'))
       browser.wait(EC.visibilityOf(commentResults.first()), 5000, 'comments did not show when searching')
-      let commentCount = element.all(by.css('.sliding-pane-comment edji-comment')).count()
+      let commentCount = await element.all(by.css('.sliding-pane-comment edji-comment')).count()
       expect(commentCount).toBeGreaterThan(0)
+      // Clear search
+      browser.wait(EC.elementToBeClickable(explorer.searchClear), 4000, 'search clear button did not become visible')
+      explorer.searchClear.click()
+      browser.wait(
+        EC.visibilityOf(explorer.searchHeader),
+        3000,
+        'clearing search left search view in explorer (could not see header)',
+      )
+      // Enter term with no results
+      explorer.searchInput.sendKeys('"zebra12345!"')
+      explorer.searchInput.sendKeys(protractor.Key.ENTER)
+      browser.wait(EC.visibilityOf(explorer.loading), 5000, 'did not load when typing second search term')
+      browser.wait(EC.visibilityOf(element(by.css('.none-found-block'))), 5000, 'no results message did not show when results not expected')
     })
   })
 

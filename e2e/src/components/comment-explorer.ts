@@ -18,6 +18,7 @@ export class CommentExplorer {
   public allComments = element(by.css('[data-test="btnAllComments"]'))
   public searchComments = element(by.css('[data-test="btnSearchComments"]'))
   public searchInput = element(by.css('[data-test="inputSearchComments"]'))
+  public searchClear = element(by.css('[data-test="btnClearSearchComments"]'))
 
   public waitForLoad(): void {
     // Wait till no longer loading

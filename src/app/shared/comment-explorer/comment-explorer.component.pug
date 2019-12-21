@@ -36,7 +36,8 @@
                 )
                 .form-control-clear.form-control-clear--in-field.icon.icon-close(
                   *ngIf="searchTerm && searchTerm.length > 0",
-                  (click)="searchTerm = ''; applySearch()"
+                  (click)="searchTerm = ''; applySearch()",
+                  data-test="btnClearSearchComments"
                 )
             //- Comments on Line
             ng-container(*ngIf="filterMode === 'line'")
