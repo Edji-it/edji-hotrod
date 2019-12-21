@@ -12,6 +12,7 @@ import {
   ReadingQuery,
   AcademyState,
   Academy,
+  SecretSwitchesService,
 } from '../_services'
 import { User, Reading, Project } from '../shared/datatypes'
 
@@ -21,6 +22,11 @@ import { User, Reading, Project } from '../shared/datatypes'
   styleUrls: ['./search-page.component.scss'],
 })
 export class SearchPage implements OnInit {
+  /**
+   * TEMP: New feature flag (word highlights)
+   */
+  public academyReadingType: boolean
+
   private subscriptions: Subscription[] = []
 
   public readings = []
@@ -112,6 +118,7 @@ export class SearchPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _locker: LockerService,
+    private _switches: SecretSwitchesService,
   ) {}
 
   ngOnInit() {
@@ -216,6 +223,11 @@ export class SearchPage implements OnInit {
           this.loadFeed()
         }
         this.selectedAcademyNum = currentState.selected
+      }),
+      this._switches.secretSwitchesUpdates.subscribe(switches => {
+        if (switches['academyReading']) {
+          this.academyReadingType = switches['academyReading']
+        }
       }),
     )
   }

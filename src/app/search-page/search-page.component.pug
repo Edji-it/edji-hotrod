@@ -91,7 +91,7 @@ nav-bar([showDashboardOptions]="true")
                     //- Academy Library
                     div
                         button#discoverAcademyLibrary.btn.btn-filter(
-                            *ngIf="academyState && academyState.academies && academyState.academies.length > 0",
+                            *ngIf="academyState && academyState.academies && academyState.academies.length > 0 && academyReadingType",
                             title="Filter by shared readings in your academy",
                             [class.active]="searchParams.activeLibrary === 'academy'",
                             (click)="searchParams.activeLibrary = 'academy'; searchParams.first=0; updateSearchParams('filter_academy')"
@@ -164,7 +164,7 @@ nav-bar([showDashboardOptions]="true")
                             //-     title="Click to see your district"
                             //- )
                             //-     |your district
-            #discoverAcademy.district-header(*ngIf="searchParams.activeLibrary === 'academy'")
+            #discoverAcademy.district-header(*ngIf="searchParams.activeLibrary === 'academy' && academyReadingType")
                 div
                   i.icon-academy-plate.icon-academy-plate-discover
                   h2.district-header__text.font-gray {{ selectedAcademy.name }} 
@@ -194,7 +194,7 @@ nav-bar([showDashboardOptions]="true")
                 p We couldn't find any shared readings from your district. You can see readings from other Teachers in your district by inviting them to Edji.
                 button.btn.btn-primary((click)="showReferral()") Refer a Friend
             //- No results message when user is genuinely searching -- academy library
-            .alert.alert-info(*ngIf="searchAlerts.noResults && searchParams.activeLibrary === 'academy'")
+            .alert.alert-info(*ngIf="searchAlerts.noResults && searchParams.activeLibrary === 'academy' && academyReadingType")
                 b No Shared Readings From Your Academy
                 p We couldn't find any shared readings from the {{ selectedAcademy.name }} 
                     i Academy
