@@ -334,7 +334,12 @@ export class SearchPage implements OnInit {
         this.loading = false
         this.total = data.total
         // Handle no results messaging
-        if ((this.searchParams.searchTerm || this.searchParams.district) && this.readings.length < 1) {
+        if (
+          (this.searchParams.searchTerm ||
+            this.searchParams.district ||
+            this.searchParams.activeLibrary == 'academy') &&
+          this.readings.length < 1
+        ) {
           this.searchAlerts.noResults = true
         }
       },

@@ -96,7 +96,7 @@ nav-bar([showDashboardOptions]="true")
                             [class.active]="searchParams.activeLibrary === 'academy'",
                             (click)="searchParams.activeLibrary = 'academy'; searchParams.first=0; updateSearchParams('filter_academy')"
                         )
-                            i.icon.icon-district-sm(style="vertical-align:middle;")
+                            i.icon.icon-academy-plate(style="vertical-align:middle;")
                             | Academy Library
                     //- Following
                     div
@@ -166,9 +166,9 @@ nav-bar([showDashboardOptions]="true")
                             //-     |your district
             #discoverAcademy.district-header(*ngIf="searchParams.activeLibrary === 'academy'")
                 div
-                  i.icon-academy-plate
-                  h2.district-header__text {{ selectedAcademy.name }} 
-                    i Academy
+                  i.icon-academy-plate.icon-academy-plate-discover
+                  h2.district-header__text.font-gray {{ selectedAcademy.name }} 
+                    i.font-light Academy
                 .district-subheading
                   p.font-gray Readings within your Academy
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
@@ -185,14 +185,24 @@ nav-bar([showDashboardOptions]="true")
                 b Error Loading
                 | There was an error on our server or your connection, please try again or contact us if you continue to have an issue.
             //- No results message when user is genuinely searching
-            .alert.alert-info(*ngIf="searchAlerts.noResults && !searchParams.district")
+            .alert.alert-info(*ngIf="searchAlerts.noResults && !searchParams.district && searchParams.activeLibrary !== 'academy'")
                 b No Readings Found
                 | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters.
-            //- No results message when user is genuinely searching
+            //- No results message when user is genuinely searching -- district library
             .alert.alert-info(*ngIf="searchAlerts.noResults && searchParams.district")
                 b No Shared Readings From Your District
                 p We couldn't find any shared readings from your district. You can see readings from other Teachers in your district by inviting them to Edji.
                 button.btn.btn-primary((click)="showReferral()") Refer a Friend
+            //- No results message when user is genuinely searching -- academy library
+            .alert.alert-info(*ngIf="searchAlerts.noResults && searchParams.activeLibrary === 'academy'")
+                b No Shared Readings From Your Academy
+                p We couldn't find any shared readings from the {{ selectedAcademy.name }} 
+                    i Academy
+                    | . 
+                p You can see readings from other Teachers in the {{ selectedAcademy.name }} 
+                    i Academy 
+                    | by inviting them to Edji and adding them to this Academy.
+                p Contact your Academy Administrator for more information about adding Teachers to this Academy.
             .row.loading(*ngIf="loading")
             ng-container(*ngIf="isSearching || filterCount > 0")
                 .found__readings
