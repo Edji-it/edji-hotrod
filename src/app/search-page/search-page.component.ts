@@ -4,7 +4,15 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService, AcademyService, LockerService, ReadingQuery, AcademyState } from '../_services'
+import {
+  AuthService,
+  ReadingService,
+  AcademyService,
+  LockerService,
+  ReadingQuery,
+  AcademyState,
+  Academy,
+} from '../_services'
 import { User, Reading, Project } from '../shared/datatypes'
 
 @Component({
@@ -64,7 +72,8 @@ export class SearchPage implements OnInit {
   public loading: boolean = true
   public previewIndex: number = -1
   public academyState: AcademyState = {}
-  private selectedAcademy: number = -1
+  private selectedAcademy: Academy = {}
+  private selectedAcademyNum: number = -1
 
   // Archiving state
   public readingToArchive: Reading
@@ -147,7 +156,10 @@ export class SearchPage implements OnInit {
           this.filterCount++
         }
         if (params.from) this.searchParams.first = parseInt(params.from)
-        if (params.district) this.searchParams.district = params.district
+        if (params.district) {
+          this.searchParams.activeLibrary = 'public'
+          this.searchParams.district = params.district
+        }
         /**
          * Load results
          * - Not when opening/closing preview if results are already loaded
@@ -195,10 +207,15 @@ export class SearchPage implements OnInit {
       ),
       this._auth.currentAcademyState.subscribe(currentState => {
         this.academyState = currentState
-        if (this.selectedAcademy !== currentState.selected && this.selectedAcademy > -1) {
+        this.selectedAcademy = currentState.academies[currentState.selected]
+        if (
+          this.searchParams.activeLibrary === 'academy' &&
+          this.selectedAcademyNum !== currentState.selected &&
+          this.selectedAcademyNum > -1
+        ) {
           this.loadFeed()
         }
-        this.selectedAcademy = currentState.selected
+        this.selectedAcademyNum = currentState.selected
       }),
     )
   }
@@ -245,7 +262,10 @@ export class SearchPage implements OnInit {
     if (this.searchParams.first) {
       filterParams['from'] = this.searchParams.first
     }
-    if (this.searchParams.district) filterParams['district'] = this.searchParams.district
+    if (this.searchParams.district) {
+      filterParams['district'] = this.searchParams.district
+      filterParams['library'] = 'public'
+    }
     // fire an analytic event here for tracking purposes
     if (action !== '') {
       this.angulartics.eventTrack.next({
@@ -284,6 +304,10 @@ export class SearchPage implements OnInit {
     this.readings = []
     this.searchAlerts = {}
 
+    // if (this.searchParams.district.length > 0) {
+    //   this.searchParams.activeLibrary = 'public'
+    // }
+
     // pass in the arguments to build the queryParam string
     if (this.searchParams.activeLibrary === 'following') {
       this.searchParams.following = this.user.following
@@ -295,8 +319,7 @@ export class SearchPage implements OnInit {
         return
       }
     } else if (this.searchParams.activeLibrary === 'academy') {
-      this.searchParams.institutionId =
-        this.academyState && this.academyState.academies && this.academyState.academies[this.academyState.selected]._id
+      this.searchParams.institutionId = this.selectedAcademy && this.selectedAcademy._id
     }
 
     let queryString = this._readings.buildSearchParams(this.searchParams)

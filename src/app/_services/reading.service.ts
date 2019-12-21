@@ -387,6 +387,7 @@ export class ReadingService {
         default_instructions: reading.default_instructions,
         // We reset "createdAt" in New Reading when publishing a draft
         createdAt: reading.createdAt,
+        institution_id: reading.institution_id,
       }
 
       return this._http

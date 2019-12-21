@@ -164,6 +164,13 @@ nav-bar([showDashboardOptions]="true")
                             //-     title="Click to see your district"
                             //- )
                             //-     |your district
+            #discoverAcademy.district-header(*ngIf="searchParams.activeLibrary === 'academy'")
+                div
+                  i.icon-academy-plate
+                  h2.district-header__text {{ selectedAcademy.name }} 
+                    i Academy
+                .district-subheading
+                  p.font-gray Readings within your Academy
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.

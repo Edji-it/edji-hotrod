@@ -45,6 +45,7 @@ export interface BaseReading {
   updatedAt?: string
   owner_bookmarked?: boolean
   default_instructions?: string
+  institution_id?: string
 }
 
 export type readingType = 'public' | 'private' | 'academy'
