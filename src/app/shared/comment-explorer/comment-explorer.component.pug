@@ -34,7 +34,7 @@
                   (keyup.enter)="applySearch()"
                 )
                 .form-control-clear.form-control-clear--in-field.icon.icon-close(
-                  *ngIf="searchTerm.length > 0",
+                  *ngIf="searchTerm && searchTerm.length > 0",
                   (click)="searchTerm = ''; applySearch()"
                 )
             //- Comments on Line
@@ -100,7 +100,7 @@
               )
             span By Location
           //- Access to search from other views
-          button#searchBtnXS.btn.btn-xs-primary.has-icon(
+          button#searchBtnXS.btn.btn-primary.btn-sm(
             *ngIf="filterMode !== 'search'",
             (click)="viewSearch()"
           )
