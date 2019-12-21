@@ -31,7 +31,8 @@
                   #searchInput="",
                   placeholder="Search Comments",
                   [(ngModel)]="searchTerm",
-                  (keyup.enter)="applySearch()"
+                  (keyup.enter)="applySearch()",
+                  data-test="inputSearchComments"
                 )
                 .form-control-clear.form-control-clear--in-field.icon.icon-close(
                   *ngIf="searchTerm && searchTerm.length > 0",
@@ -102,7 +103,8 @@
           //- Access to search from other views
           button#searchBtnXS.btn.btn-primary.btn-sm(
             *ngIf="filterMode !== 'search'",
-            (click)="viewSearch()"
+            (click)="viewSearch()",
+            data-test="btnSearchComments"
           )
             i.icon.icon-search
             | Search
@@ -115,7 +117,8 @@
               button.btn.btn-xs-primary.has-icon(
                 *ngIf="filterMode != 'all'",
                 (click)="viewAll()",
-                [disabled]="!project.heat_vision && !project.isTeaching"
+                [disabled]="!project.heat_vision && !project.isTeaching",
+                data-test="btnAllComments"
               )
                 .icon.icon-comments
                 |  All Comments

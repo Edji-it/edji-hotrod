@@ -115,6 +115,35 @@ describe('Project Page using the comment explorer: ', () => {
         'clicking comment portal did not open explorer "Viewing Line"',
       )
     })
+
+    // Useful to test after opening the Explorer for other purposes
+    it('should search for a comment after viewing line', () => {
+      // Return to all Comments
+      browser.wait(
+        EC.elementToBeClickable(explorer.allComments),
+        3000,
+        '"All Comments" was not an option while viewing a line',
+      )
+      explorer.allComments.click()
+      browser.wait(
+        EC.elementToBeClickable(explorer.searchComments),
+        3000,
+        '"Search" was not an option while viewing all comments',
+      )
+      explorer.searchComments.click()
+      // Verify search header
+      browser.wait(EC.visibilityOf(explorer.searchHeader), 6000, 'search button did not open search view')
+      // Input search term
+      browser.wait(EC.elementToBeClickable(explorer.searchInput), 3000, 'search input did not become available')
+      // We expect "testhero" to contain
+      explorer.searchInput.sendKeys('test')
+      explorer.searchInput.sendKeys(protractor.Key.ENTER)
+      // Verify results load
+      let commentResults = element.all(by.css('.sliding-pane-comment edji-comment'))
+      browser.wait(EC.visibilityOf(commentResults.first()), 5000, 'comments did not show when searching')
+      let commentCount = element.all(by.css('.sliding-pane-comment edji-comment')).count()
+      expect(commentCount).toBeGreaterThan(0)
+    })
   })
 
   describe('Student using comment explorer', () => {
