@@ -150,29 +150,37 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       }),
       // Check for filters on URL
       this.route.queryParams.subscribe(params => {
-        // Apply sort
-        if (params['sort']) this.sortValue = params['sort']
-        // Detect search/filter modes
-        if (params['search']) {
-          this.searchTerm = params['search']
-          this.sortValue = params['sort'] || 'match'
-          this.filterComments()
-          this._visible = true
-        } else if (params['student']) {
-          this.clearFilters({ student: params['student'] })
-          this.filterUserId = params['student']
-          this.filterComments()
-          this._visible = true
-        } else if (params['pane'] && params['pane'] === 'comments') {
-          this.filterComments()
-          this._visible = true
-        } else if (this.visible) {
-          this.close()
-        } else {
-          this.closed.emit(false)
-        }
+        this.processParams(params)
       }),
     )
+  }
+
+  /**
+   * Explorer manages state/display via URL params
+   * @param params query params
+   */
+  private processParams(params) {
+    // Apply sort
+    if (params['sort']) this.sortValue = params['sort']
+    // Detect search/filter modes
+    if (params['search']) {
+      this.searchTerm = params['search']
+      this.sortValue = params['sort'] || 'match'
+      this.filterComments()
+      this._visible = true
+    } else if (params['student']) {
+      this.clearFilters({ student: params['student'] })
+      this.filterUserId = params['student']
+      this.filterComments()
+      this._visible = true
+    } else if (params['pane'] && params['pane'] === 'comments') {
+      this.filterComments()
+      this._visible = true
+    } else if (this.visible) {
+      this.close()
+    } else {
+      this.closed.emit(false)
+    }
   }
 
   /**
@@ -330,18 +338,20 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * Clear filters applied to the explorer
    * @note does not fire "filterComments", so it can be used internally
    */
-  private clearFilters(paramsToKeep?: { line?: string; student?: string }): void {
+  private clearFilters(paramsToOverride?: { line?: string; student?: string; pane?: string }): void {
     this.filterMode = 'all' //- default
-    if (!paramsToKeep) paramsToKeep = {}
-    paramsToKeep['pane'] = 'comments'
-    if (!paramsToKeep['student']) this.filterUserId = null
-    if (!paramsToKeep['line']) this.comment = null
-    if (!paramsToKeep['search']) this.searchTerm = null
-    if (!paramsToKeep['sort']) this.sortValue = 'created'
+    if (!paramsToOverride) paramsToOverride = {}
+    if (!paramsToOverride['student']) this.filterUserId = null
+    if (!paramsToOverride['line']) this.comment = null
+    if (!paramsToOverride['search']) this.searchTerm = null
+    if (!paramsToOverride['sort']) this.sortValue = 'created'
     // Tell parent component comment is cleared
     this.clearSelected.emit()
     // Merge params to keep with reset/null
-    let params = Object.assign({ student: null, line: null, search: null, sort: null }, paramsToKeep)
+    let params = Object.assign(
+      { student: null, line: null, search: null, sort: null, pane: 'comments' },
+      paramsToOverride,
+    )
     // Clear URL params
     this.router.navigate(['./'], {
       relativeTo: this.route,
@@ -400,16 +410,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   close() {
     this.visible = false
-    this.comment = null
-    this.filterUserId = ''
-    this.closed.emit(false)
+    this.clearFilters({ pane: null })
     document.body.classList.remove('body__lock-scroll')
-    // Clear URL params
-    this.router.navigate(['./'], {
-      relativeTo: this.route,
-      queryParams: { pane: null, student: null, line: null, sort: null, search: null },
-      queryParamsHandling: 'merge',
-    })
   }
 
   ngOnDestroy() {

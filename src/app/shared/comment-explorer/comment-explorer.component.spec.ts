@@ -40,7 +40,7 @@ describe('Comment Explorer #cExplorer', () => {
       data: 'Not the future. Not wireless.',
       dataArray: [],
       end: 2204,
-      lineY: 2821,
+      lineY: 273,
       project_id: '5dfa814a9eda07002c69ff38',
       replies: [],
       start: 2204,
@@ -113,16 +113,14 @@ describe('Comment Explorer #cExplorer', () => {
         { provide: ElementRef, useValue: {} },
         { provide: ProjectStore, useValue: {} },
         { provide: SocketService, useValue: {} },
-        { provide: Router, useValue: {} },
+        {
+          provide: Router,
+          useValue: {
+            navigate: (param?: any) => {},
+          },
+        },
         { provide: ActivatedRoute, useValue: {} },
         { provide: CommentService, useValue: {} },
-        //     private projectStore: ProjectStore,
-        // private _socket: SocketService,
-        // public el: ElementRef,
-        // private _auth: AuthService,
-        // private router: Router,
-        // private route: ActivatedRoute,
-        // { provide: Angulartics2GoogleGlobalSiteTag, useValue: { startTracking: () => {} } },
       ],
       imports: [ReactiveFormsModule, RouterModule, FormsModule],
     }).compileComponents()
@@ -161,5 +159,40 @@ describe('Comment Explorer #cExplorer', () => {
     // Search and check results
     explorer.filterComments()
     expect(explorer.comments.length).toBe(1)
+  }))
+
+  it('should filter if heat vision is off', async(() => {
+    const fixture = TestBed.createComponent(CommentExplorerComponent)
+    const explorer = fixture.debugElement.componentInstance
+    // Set required defaults
+    explorer.project = { heat_vision: false }
+    explorer.user = { _id: '59bd8e3eee48dfca29138e87' }
+    explorer.allComments = sampleCommentArray
+    // Filter comments
+    explorer.filterComments()
+    expect(explorer.comments.length).toBe(1)
+  }))
+
+  it('should apply views via params (student, search, line)', async(() => {
+    const fixture = TestBed.createComponent(CommentExplorerComponent)
+    const explorer = fixture.debugElement.componentInstance
+    // Set required defaults
+    explorer.project = { heat_vision: true }
+    explorer.user = { _id: '59bd8e3eee48dfca29138e87' }
+    explorer.allComments = sampleCommentArray
+    // Student view params
+    explorer.processParams({ student: '5dfa85fd839a460033eab2ad' })
+    expect(explorer.comments.length).toBe(4)
+    expect(explorer.filterMode).toBe('user')
+    // Search view params
+    explorer.processParams({ search: 'pairing' })
+    expect(explorer.comments.length).toBe(1)
+    expect(explorer.filterMode).toBe('search')
+    // Line view params
+    explorer.processParams({ line: '5dfa891f839a460033eab38c' })
+    explorer.commentByPos = { '273': [sampleCommentArray[0], sampleCommentArray[1]] }
+    explorer.comment = sampleCommentArray[0] // viewing line relies on comment input
+    expect(explorer.comments.length).toBe(2)
+    expect(explorer.filterMode).toBe('line')
   }))
 })
