@@ -29,10 +29,12 @@ export class Discover implements PageObjectInterface {
   public previewTitle = element(by.id('previewTitle'))
   public strategiesBanner = element(by.id('discoverStrategies'))
   public discoverMyDistrict = element(by.id('discoverMyDistrict'))
+  public discoverAcademy = element(by.id('discoverAcademy'))
 
   // Discover Filters
   public filterPublic = element(by.id('discoverFilterPublic'))
   public filterDistrict = element(by.id('discoverFilterDistrict'))
+  public filterAcademy = element(by.id('discoverAcademyLibrary'))
   public filterFollowing = element(by.id('discoverFilterFollowing'))
   public filterStrategies = element(by.id('discoverFilterStrategies'))
   public searchCount = element(by.css('[data-test="searchCount"]'))
