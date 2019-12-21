@@ -28,7 +28,7 @@
                     (click)="applySearch()"
                   )
                 input.form-control(
-                  #searchInput,
+                  #searchInput="",
                   placeholder="Search Comments",
                   [(ngModel)]="searchTerm",
                   (keyup.enter)="applySearch()"

@@ -101,8 +101,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     private _socket: SocketService,
     public el: ElementRef,
     private _auth: AuthService,
-    private _comments: CommentService,
-    private angulartics: Angulartics2,
+    public _comments: CommentService,
     private router: Router,
     private route: ActivatedRoute,
   ) {}
