@@ -5,7 +5,11 @@
     i.icon.icon-shuffle(title="Randomize") S
     .btn.btn-sm.btn-action.float-right() Save
   .tooltip-body(*ngIf="tab === 'emoji'")
-    .palette-btn(*ngFor="let e of emojiOptions", [innerHtml]="':' + e + ':' | emojione")
+    .palette-btn(
+      *ngFor="let e of emojiOptions",
+      [innerHtml]="':' + e + ':' | emojione",
+      (click)="setEmoji(e)"
+    )
   .tooltip-body(*ngIf="tab === 'color'")
-    .palette-btn(*ngFor="let c of colorOptions")
+    .palette-btn(*ngFor="let c of colorOptions", (click)="setColor(c)")
       .spot([style.background]="c")

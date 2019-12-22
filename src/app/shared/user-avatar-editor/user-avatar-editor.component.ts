@@ -116,6 +116,29 @@ export class UserAvatarEditorComponent implements OnInit {
     this.userSubscription && this.userSubscription.unsubscribe()
   }
 
+  setEmoji(emoji: string) {
+    // emoji = ':' + emoji + ':'
+
+    this.tempLocalUserUpdate('initials', ':' + emoji + ':')
+  }
+
+  setColor(color: string) {
+    this.tempLocalUserUpdate('avatar', color)
+  }
+
+  /**
+   * Update local user property for display while editing (eg. initials)
+   * @todo move to AUTH
+   * @param property "initials"
+   * @param value "AB"
+   */
+  private tempLocalUserUpdate(property, value) {
+    let user = this._auth.getUser()
+    user[property] = value
+    // This only updates the user locally, but will save update to DB when user finished
+    this._auth.setUser(user)
+  }
+
   // setDisplayProperties(user: PublicUser) {
   //   if (user) {
   //     this.user = user

@@ -40,6 +40,7 @@ export class UserAvatarComponent implements OnInit {
   public initials: string = ''
   public fullname: string = ''
   public avatar: string = ''
+  public background: string
 
   constructor(private projectStore: ProjectStore) {}
 
@@ -80,7 +81,11 @@ export class UserAvatarComponent implements OnInit {
       this.user = user
       this.fullname = user.fullname
       if (user.avatar) {
-        this.avatar = user.avatar
+        if (user.avatar.indexOf('#') === 0) {
+          this.background = user.avatar
+        } else {
+          this.avatar = user.avatar
+        }
       }
       /**
        * @todo once search/discover uses a store for data, initials should be

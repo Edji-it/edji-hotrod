@@ -1,8 +1,9 @@
 .user-icon(
     [ngClass]="['user-icon--' + size]",
-    [class.selected]="selected"
+    [class.selected]="selected",
+    [style.background]="background"
 )
-    span.user-icon__initials {{ initials }}
+    span.user-icon__initials([innerHtml]="initials | emojione")
     //- @todo enabling avatars
     //- span.user-icon__initials(*ngIf="!avatar") {{ initials }}
     //- img([src]="avatar")
