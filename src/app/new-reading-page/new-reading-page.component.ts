@@ -840,7 +840,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
 
     // add the institution_id if academy
     if (readingForm.reading_type == 'academy') {
-      readingForm.institution_id = this.currentAcademy._id ? this.currentAcademy._id : ''
+      reading.institution_id = this.currentAcademy._id || ''
     }
 
     for (let i = 0; i < editors.length; i++) {
@@ -948,6 +948,7 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
     // Prepare Reading object (and save for reference by Add Group modal and openFirstGroup())
     this.reading = this.formatReading(form)
+    console.log(this.reading)
 
     this._readings.save(this.reading).subscribe(
       data => {
