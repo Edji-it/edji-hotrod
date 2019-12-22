@@ -1,0 +1,11 @@
+.tooltip.tooltip--bottom.tooltip--interactive.show
+  .tooltip-header
+    .btn.btn-link([class.active]="tab === 'emoji'", (click)="tab = 'emoji'") Emoji
+    .btn.btn-link([class.active]="tab === 'color'", (click)="tab = 'color'") Color
+    i.icon.icon-shuffle(title="Randomize") S
+    .btn.btn-sm.btn-action.float-right() Save
+  .tooltip-body(*ngIf="tab === 'emoji'")
+    .palette-btn(*ngFor="let e of emojiOptions", [innerHtml]="':' + e + ':' | emojione")
+  .tooltip-body(*ngIf="tab === 'color'")
+    .palette-btn(*ngFor="let c of colorOptions")
+      .spot([style.background]="c")

@@ -18,6 +18,7 @@ import {
   MessageToastsComponent,
   ShareLinkComponent,
   UserAvatarComponent,
+  UserAvatarEditorComponent,
 } from './shared'
 // Pipes
 import {
@@ -67,6 +68,7 @@ let SHARED_DECLARATIONS = [
   SortByDatePipe,
   SubjectPipe,
   UserAvatarComponent,
+  UserAvatarEditorComponent,
   UserInitialsPipe,
   HotChartHzbarComponent,
   HotChartGaugeComponent,
