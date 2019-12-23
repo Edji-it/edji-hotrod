@@ -17,7 +17,7 @@ export class UserAvatarEditorComponent implements OnInit {
   @Output() close: EventEmitter<any> = new EventEmitter()
 
   private userSubscription: Subscription
-  // private _userDetails: PublicUser
+  private saved: boolean = true
 
   public user: User
 
@@ -27,6 +27,37 @@ export class UserAvatarEditorComponent implements OnInit {
   public error: string
 
   public emojiOptions: string[] = [
+    // faces
+    'laughing',
+    'slight_smile',
+    'nerd',
+    'sunglasses',
+    'thinking',
+    'smirk',
+    // @todo to add when emoji updated
+    // 'woman_astronaut',
+    // 'man_teacher',
+    'cowboy',
+    'heart_eyes',
+    'wink',
+    'blush',
+    'joy',
+    'upside_down',
+    'face_with_raised_eyebrow',
+    'spy',
+    'angel',
+    'runner',
+    'dancer',
+    'metal',
+    'vulcan',
+    'v',
+    'tada',
+    'sparkles',
+    'skull',
+    'ghost',
+    'alien',
+    'robot',
+    'pray',
     'dog',
     'cat',
     'mouse',
@@ -55,7 +86,64 @@ export class UserAvatarEditorComponent implements OnInit {
     'snake',
     'turtle',
     'tropical_fish',
-    'fish',
+    't_rex',
+    'dragon_face',
+    'deciduous_tree',
+    'palm_tree',
+    'shamrock',
+    'hibiscus',
+    'sunflower',
+    'rose',
+    'zap',
+    'fire',
+    'boom',
+    'snowflake',
+    'hamburger',
+    'pizza',
+    'taco',
+    'pancakes',
+    'ramen',
+    'icecream',
+    'cake',
+    'soccer',
+    'basketball',
+    'football',
+    'baseball',
+    'tennis',
+    'volleyball',
+    'rugby_football',
+    '8ball',
+    'golf',
+    'golfer',
+    'ping_pong',
+    'badminton',
+    'hockey',
+    'field_hockey',
+    'fishing_pole_and_fish',
+    'skier',
+    'snowboarder',
+    'swimmer',
+    'surfer',
+    'lifter',
+    'bicyclist',
+    'art',
+    'musical_keyboard',
+    'saxophone',
+    'trumpet',
+    'guitar',
+    'video_game',
+    'helicopter',
+    'airplane',
+    'rocket',
+    'fireworks',
+    'rainbow',
+    'cityscape',
+    'european_castle',
+    'tv',
+    'heart',
+    'gem',
+    'feet',
+    '100',
   ]
 
   public colorOptions: string[] = [
@@ -106,6 +194,12 @@ export class UserAvatarEditorComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    if (!this.saved) {
+      this._auth
+        .updateUser(this.user)
+        .pipe(take(1))
+        .subscribe(data => {})
+    }
     this.userSubscription && this.userSubscription.unsubscribe()
   }
 
@@ -126,6 +220,7 @@ export class UserAvatarEditorComponent implements OnInit {
    * @param value "AB"
    */
   private tempLocalUserUpdate(values) {
+    this.saved = false
     let user = this._auth.getUser()
     user = Object.assign(user, values)
     // This only updates the user locally, but will save update to DB when user finished
@@ -154,6 +249,7 @@ export class UserAvatarEditorComponent implements OnInit {
       this.close.emit()
     }
     this.loading = true
+    this.saved = true
     // Save to user in db
     this._auth
       .updateUser(this.user)
