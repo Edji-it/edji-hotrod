@@ -121,6 +121,13 @@ $mediumAvatarSize: 36px;
     display: block;
     width: 100%;
     text-align: center;
+
+    & .emojioneemoji {
+      // This allows "initials" to handle the alignment
+      vertical-align: top;
+      height: 1.1em;
+      width: 1.1em;
+    }
   }
   &__overflow {
     content: '';
@@ -283,4 +290,40 @@ $mediumAvatarSize: 36px;
     line-height: 11px;
     text-shadow: 0.5px -0.5px 0px #acdef9;
   }
+}
+
+.avatar-editor__wrap {
+  position: relative;
+  display: inline-block;
+
+  & .edit-btn {
+    opacity: 0;
+    transition: opacity 200ms linear;
+    background: rgba(0,0,0,0.3) !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50%;
+    cursor: pointer;
+    line-height: 100%;
+    color: #fff;
+    font-size: 1em;
+
+    &:hover, &:focus {
+        opacity: 1;
+    }
+  }
+
+  // Different sizes
+  &.profile {
+    .edit-btn {
+      line-height: 150px;
+      font-size: 1.25em;
+    }
+  }
+
 }
