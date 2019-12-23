@@ -78,7 +78,6 @@ export class UserAvatarEditorComponent implements OnInit {
 
   public colorOptions: string[] = [
     '#FFB4B4',
-    '#FFB4B4',
     '#FFCFB4',
     '#FFF3B4',
     '#ECFFB4',
@@ -102,6 +101,18 @@ export class UserAvatarEditorComponent implements OnInit {
     '#F254E2',
     '#DBAC8A',
     '#888888',
+    '#920000',
+    '#A74812',
+    '#C8C230',
+    '#89AA2A',
+    '#358742',
+    '#309A87',
+    '#2D6389',
+    '#43529F',
+    '#692A9A',
+    '#822562',
+    '#945527',
+    '#2C2C2C',
   ]
 
   constructor(private _auth: AuthService) {}
@@ -119,11 +130,11 @@ export class UserAvatarEditorComponent implements OnInit {
   setEmoji(emoji: string) {
     // emoji = ':' + emoji + ':'
 
-    this.tempLocalUserUpdate('initials', ':' + emoji + ':')
+    this.tempLocalUserUpdate({ initials: ':' + emoji + ':' })
   }
 
   setColor(color: string) {
-    this.tempLocalUserUpdate('avatar', color)
+    this.tempLocalUserUpdate({ avatar: color })
   }
 
   /**
@@ -132,11 +143,20 @@ export class UserAvatarEditorComponent implements OnInit {
    * @param property "initials"
    * @param value "AB"
    */
-  private tempLocalUserUpdate(property, value) {
+  private tempLocalUserUpdate(values) {
     let user = this._auth.getUser()
-    user[property] = value
+    user = Object.assign(user, values)
     // This only updates the user locally, but will save update to DB when user finished
     this._auth.setUser(user)
+  }
+
+  public randomize() {
+    let options = {
+      initials: ':' + this.emojiOptions[Math.floor(Math.random() * this.emojiOptions.length)] + ':',
+      avatar: this.colorOptions[Math.floor(Math.random() * this.colorOptions.length)],
+    }
+
+    this.tempLocalUserUpdate(options)
   }
 
   // setDisplayProperties(user: PublicUser) {

@@ -1,9 +1,7 @@
-.tooltip.tooltip--bottom.tooltip--interactive.show
+.tooltip.tooltip--bottom.tooltip--interactive.py-0.show
   .tooltip-header
     .btn.btn-link([class.active]="tab === 'emoji'", (click)="tab = 'emoji'") Emoji
     .btn.btn-link([class.active]="tab === 'color'", (click)="tab = 'color'") Color
-    i.icon.icon-shuffle(title="Randomize") S
-    .btn.btn-sm.btn-action.float-right() Save
   .tooltip-body(*ngIf="tab === 'emoji'")
     .palette-btn(
       *ngFor="let e of emojiOptions",
@@ -13,3 +11,7 @@
   .tooltip-body(*ngIf="tab === 'color'")
     .palette-btn(*ngFor="let c of colorOptions", (click)="setColor(c)")
       .spot([style.background]="c")
+  .tooltip-footer
+    .btn-row.right
+      .btn.btn-sm.btn-secondary((click)="randomize()") Shuffle
+      .btn.btn-sm.btn-action() Save
