@@ -297,7 +297,7 @@ $mediumAvatarSize: 36px;
   display: inline-block;
 
   & .edit-btn {
-    opacity: 0;
+    opacity: 0.01;
     transition: opacity 200ms linear;
     background: rgba(0,0,0,0.3) !important;
     position: absolute;
@@ -310,11 +310,12 @@ $mediumAvatarSize: 36px;
     border-radius: 50%;
     cursor: pointer;
     line-height: 100%;
-    color: #fff;
+    color: transparent;
     font-size: 1em;
 
     &:hover, &:focus {
         opacity: 1;
+        color: #fff;
     }
   }
 

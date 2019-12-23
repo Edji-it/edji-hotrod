@@ -7,7 +7,7 @@ nav-bar([showDashboardOptions]="true")
     .profile-pic-container.text-center
       .avatar-editor__wrap.profile
         user-avatar([userDetails]="currentUser", [size]="'profile'")
-        .btn.edit-btn((click)="editAvatar = true") Edit
+        .btn.edit-btn(*ngIf="!editAvatar", (click)="editAvatar = true", data-test="btnAvatarEdit") Edit
         user-avatar-editor(*ngIf="editAvatar", (close)="editAvatar = false")
       //- Edit Profile Picture Button
       //-   - Opens UploadProfPicModal -->

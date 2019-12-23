@@ -42,103 +42,60 @@ describe('Account Page', () => {
     })
   })
 
-  // Created 7.3.17
-  // describe('Avatars', () => {
+  describe('Customize Avatar', () => {
+    let emojiSrc: string = ''
+    let color: string = ''
 
-  //     // 7.3.17
-  //     it('Avatar picture should not be visible, and user initials should be instead', () => {
-  //         // make sure there is no avatar
-  //         browser.wait(EC.invisibilityOf(account.avatarImg), 5000, "should not be able to see the avatar image");
-  //         browser.wait(EC.visibilityOf(account.userInitials), 5000, "should be able to see the user initials");
-  //     });
+    it('should click avatar, make selections, and save', async () => {
+      browser.wait(EC.elementToBeClickable(account.avatarEdit), 3000, 'should see avatar circle and click to edit')
+      account.avatarEdit.click()
+      // Should see editor
+      browser.wait(EC.visibilityOf(account.avatarEditor), 3000, 'avatar editor did not open when edit clicked')
+      // Pick a color
+      let secondColor = account.avatarColorOptions.get(1)
+      browser.wait(EC.elementToBeClickable(secondColor), 3000, 'color options did not become clickable')
+      secondColor.click()
+      color = await secondColor.element(by.css('.spot')).getCssValue('background')
+      // Pick an emoji
+      account.avatarEmojiTab.click()
+      let seventhEmoji = account.avatarEmojiOptions.get(6)
+      browser.wait(EC.elementToBeClickable(seventhEmoji), 3000, 'emoji options did not become clickable')
+      seventhEmoji.click()
+      emojiSrc = await seventhEmoji.element(by.css('img')).getAttribute('src')
+      browser.sleep(400)
+      // Save choices
+      account.avatarSaveBtn.click()
+      // Wait for save and close
+      browser.wait(EC.invisibilityOf(account.avatarEditor), 3000, 'avatar editor did close when saved')
+    })
 
-  //     // 7.3.17
-  //     describe('Changing Avatars', () => {
-  //         it('Clicking "Cancel" on the modal should not set an avatar', () => {
-  //             // Make sure there is no avatar
-  //             browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
-
-  //             // open the upload modal
-  //             account.openModal();
-
-  //             // In the modal...
-  //             browser.wait(EC.presenceOf(account.cancelUploadBtn), 5000, "should be able to see the cancel upload button.");
-  //             account.cancelUploadBtn.click();
-
-  //             // I want to see the modal gone. like my ex-wife.
-  //             browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
-  //         }); // it('Clicking "Cancel" on...
-
-  //         it('Upload an Avatar, then remove it from the modal.', () => {
-  //             // Make sure there is no avatar
-  //             browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
-
-  //             // open the upload modal
-  //             account.openModal();
-
-  //             browser.wait(EC.invisibilityOf(account.uploadedPic), 7000, "should NOT be able to see an uploaded avatar.");
-
-  //             // upload the test image
-  //             // NOTE: consolidate this into one function in the page object.
-  //             let absolutePath = path.resolve(__dirname, account.testAvatarToUpload);
-  //             account.imageFileInput.sendKeys(absolutePath);
-
-  //             // Wait for the image to upload
-  //             browser.wait(EC.visibilityOf(account.uploadedPic), 10000, "should be able to see uploaded avatar.");
-
-  //             // now remove that thing off the face of the Earth
-  //             browser.wait(EC.presenceOf(account.removeBtn), 5000, "should be able to see the remove button.");
-  //             account.removeBtn.click();
-  //             browser.wait(EC.invisibilityOf(account.uploadedPic), 7000, "should NOT be able to see uploaded avatar.");
-
-  //             account.closeModal(); // close this for the next test
-
-  //             // Make sure there is no avatar
-  //             browser.wait(EC.invisibilityOf(account.avatarImg), 2000, "should not be able to see the avatar image");
-  //         }); // it('Upload an Avatar, then remove it from the modal...
-
-  //         it('Upload an Avatar, save it, then remove it.', () => {
-  //             account.getPage();
-
-  //             // open the upload modal
-  //             account.openModal();
-
-  //             browser.wait(EC.invisibilityOf(account.uploadedPic), 5000, "should NOT be able to see an uploaded avatar.");
-
-  //             // upload the test image
-  //             // NOTE: consolidate this into one function in the page object.
-  //             browser.wait(EC.presenceOf(account.imageFileInput), 5000, "should NOT be able to see the imageFileInput.");
-  //             let absolutePath = path.resolve(__dirname, account.testAvatarToUpload);
-  //             account.imageFileInput.sendKeys(absolutePath);
-
-  //             // Wait for the image to upload
-  //             browser.wait(EC.visibilityOf(account.uploadedPic), 10000, "should be able to see uploaded avatar.");
-
-  //             // hit it, Fergie
-  //             browser.wait(EC.visibilityOf(account.saveAvatarBtn), 7000, "should be able to see the saveAvatarBtn.");
-  //             account.saveAvatarBtn.click();
-
-  //             // I want to see the modal gone. like my ex-wife.
-  //             browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
-
-  //             // I want to see a goddamn avatar
-  //             browser.wait(EC.visibilityOf(account.avatarImg), 5000, "should be able to see the avatar.");
-
-  //             // open the upload modal
-  //             account.openModal();
-
-  //             // now remove that pic off the face of the Earth
-  //             browser.wait(EC.presenceOf(account.removeBtn), 5000, "should be able to see the remove button.");
-  //             account.removeBtn.click();
-  //             browser.wait(EC.invisibilityOf(account.uploadedPic), 7000, "should NOT be able to see uploaded avatar.");
-
-  //             // hit it, Fergie
-  //             browser.wait(EC.visibilityOf(account.saveAvatarBtn), 7000, "should be able to see the saveAvatarBtn.");
-  //             account.saveAvatarBtn.click();
-
-  //             // I want to see the modal gone. like my ex-wife.
-  //             browser.wait(EC.invisibilityOf(account.avatarModal), 5000, "should not be able to see the upload avatar modal.");
-  //         }); // it('Upload an Avatar, save it, then remove it...
-  //     }); // describe Changing Avatars
-  // }); // describe('Avatars',
+    it('should verify custom avatar shows on other pages', async () => {
+      // Log out and log back in to verify saved
+      sidebar.clickLogOutButton()
+      login.getPage()
+      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+      login.enterUsername(login.heroUser)
+      login.enterPassword(login.heroPassword)
+      browser.wait(EC.elementToBeClickable(login.loginButton), 5000)
+      login.loginButton.click()
+      browser.wait(EC.urlContains('dashboard'), 5000, 'never arrived at dashboard')
+      // Check avatar
+      let navAvatar = element(by.css('.nav-bar .user-icon'))
+      expect(await navAvatar.element(by.css('img')).getAttribute('src')).toEqual(
+        emojiSrc,
+        'custom avatar emoji did not persist/save',
+      )
+      expect(await navAvatar.getCssValue('background')).toEqual(color, 'custom avatar color did not persist/save')
+      // Reset avatar
+      sidebar.clickAccountButton()
+      browser.wait(EC.urlContains('account'), 5000, 'never arrived at account page')
+      browser.wait(EC.elementToBeClickable(account.avatarEdit), 3000, 'should see avatar circle and click to edit')
+      account.avatarEdit.click()
+      // Should see editor
+      browser.wait(EC.visibilityOf(account.avatarEditor), 3000, 'avatar editor did not open when edit clicked')
+      // Reset avatar
+      account.avatarResetBtn.click()
+      account.avatarSaveBtn.click()
+    })
+  })
 }) // describe 'Account Page'

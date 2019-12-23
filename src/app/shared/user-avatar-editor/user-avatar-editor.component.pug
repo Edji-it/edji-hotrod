@@ -1,23 +1,36 @@
-.tooltip.tooltip--bottom.tooltip--interactive.py-0.show
+.tooltip.tooltip--bottom.tooltip--interactive.py-0.show(data-test="tooltipAvatarEditor")
   .tooltip-header
-    .btn.btn-link([class.active]="tab === 'color'", (click)="tab = 'color'") Color
-    .btn.btn-link([class.active]="tab === 'emoji'", (click)="tab = 'emoji'") Emoji
+    .btn.btn-link(
+      [class.active]="tab === 'color'",
+      (click)="tab = 'color'",
+      data-test="editorTabColor"
+    ) Color
+    .btn.btn-link(
+      [class.active]="tab === 'emoji'",
+      (click)="tab = 'emoji'",
+      data-test="editorTabEmoji"
+    ) Emoji
     button.close((click)='saveAndClose()', type='button') &times;
   .tooltip-body(*ngIf="tab === 'emoji'")
     .palette-btn(
       *ngFor="let e of emojiOptions",
       [innerHtml]="':' + e + ':' | emojione",
-      (click)="setEmoji(e)"
+      (click)="setEmoji(e)",
+      data-test="emojiBtn"
     )
   .tooltip-body(*ngIf="tab === 'color'")
-    .palette-btn(*ngFor="let c of colorOptions", (click)="setColor(c)")
+    .palette-btn(
+      *ngFor="let c of colorOptions",
+      (click)="setColor(c)",
+      data-test="colorBtn"
+    )
       .spot([style.background]="c")
   .tooltip-footer
     .text-danger(*ngIf="error") {{error}}
     .btn-row.right(*ngIf="!loading")
-      .btn.btn-sm.btn-link((click)="reset()") Reset
+      .btn.btn-sm.btn-link((click)="reset()", data-test="avatarReset") Reset
       .btn.btn-sm.btn-secondary((click)="randomize()") Shuffle
-      .btn.btn-sm.btn-action((click)="saveAndClose()") Save
+      .btn.btn-sm.btn-action((click)="saveAndClose()", data-test="avatarSave") Save
     .message-row(*ngIf="loading")
       | Saving
       i.icon.icon-loading
