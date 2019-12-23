@@ -326,4 +326,14 @@ $mediumAvatarSize: 36px;
     }
   }
 
+  &.large {
+    .edit-btn {
+      line-height: 50px;
+      font-size: 1em;
+    }
+  }
+
+  & .user-icon {
+    margin: 0px !important;
+  }
 }

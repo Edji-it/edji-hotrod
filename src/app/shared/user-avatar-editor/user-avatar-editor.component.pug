@@ -1,7 +1,7 @@
 .tooltip.tooltip--bottom.tooltip--interactive.py-0.show
   .tooltip-header
-    .btn.btn-link([class.active]="tab === 'emoji'", (click)="tab = 'emoji'") Emoji
     .btn.btn-link([class.active]="tab === 'color'", (click)="tab = 'color'") Color
+    .btn.btn-link([class.active]="tab === 'emoji'", (click)="tab = 'emoji'") Emoji
     button.close((click)='saveAndClose()', type='button') &times;
   .tooltip-body(*ngIf="tab === 'emoji'")
     .palette-btn(

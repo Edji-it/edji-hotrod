@@ -1,6 +1,9 @@
 
 .profile-card
-    user-avatar([userDetails]="user", [size]="'large'")
+    .avatar-editor__wrap.large
+        user-avatar([userDetails]="user", [size]="'large'")
+        .btn.edit-btn((click)="editAvatar = true") Edit
+        user-avatar-editor(*ngIf="editAvatar", (close)="editAvatar = false")
     .h1([innerHtml]="getProfileName(profileForm)")
     .label.small.text-muted.mb-0(*ngIf="profileForm.controls['school'] && profileForm.controls['school'].value")
         i.icon.icon-school
@@ -12,20 +15,20 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
             .form-group
                 label(for="firstnameInput") First Name
                 input#firstnameInput(
-                    type="text", 
-                    [formControl]="profileForm.controls['firstname']", 
-                    tabindex="0", 
+                    type="text",
+                    [formControl]="profileForm.controls['firstname']",
+                    tabindex="0",
                     [placeholder]="userCopy.firstname",
                     (keyup)="setInitials(profileForm)"
                 )
-                
+
         .col.pl-1
             .form-group
                 label(for="lastnameInput") Last Name
                 input#lastnameInput(
-                    type="text", 
-                    [formControl]="profileForm.controls['lastname']", 
-                    tabindex="0", 
+                    type="text",
+                    [formControl]="profileForm.controls['lastname']",
+                    tabindex="0",
                     [placeholder]="userCopy.lastname",
                     (keyup)="setInitials(profileForm)"
                 )
@@ -85,7 +88,7 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
     .form-group(*ngIf="isSchoolStaff(profileForm.controls['accountRole'].value)")
         label School/District
         hot-school-selector(
-            name="school", 
+            name="school",
             [formControlAlias]="profileForm.controls['school']",
             (schoolDistrictChange)="updateSchoolInfo($event)"
         )
@@ -94,10 +97,10 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
     #msgBadName.alert.alert-warn(*ngIf="errorObject.badName", [innerHtml]="errorObject.badName | emojione")
     .button__row.right
         button#buttonCreateProfile.btn.btn-primary(
-            title="Make sure you've completed all the fields!", 
-            type="submit", 
-            [class.loading]="profileFormLoading", 
-            [disabled]="!profileForm.valid", 
+            title="Make sure you've completed all the fields!",
+            type="submit",
+            [class.loading]="profileFormLoading",
+            [disabled]="!profileForm.valid",
             tabindex="0"
         )
             span(*ngIf="!readingToAdd && !readingToPreview") {{ submitCopy }}

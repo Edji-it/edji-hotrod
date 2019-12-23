@@ -18,6 +18,7 @@ import { ALLSPARK } from '../../app.constants'
 import { take } from 'rxjs/operators'
 import { Title } from '@angular/platform-browser'
 import { User, UserSchoolDistrict } from 'src/app/shared/datatypes'
+import { userColorOptions } from 'src/app/shared/user-avatar-editor/user-avatar-values'
 
 @Component({
   selector: 'hot-profile-form',
@@ -44,6 +45,7 @@ export class ProfileFormComponent implements OnInit {
   // public userReferral: any = {}
   public user: User = <User>{}
   public userCopy: any
+  public editAvatar: boolean
 
   public moreIdentities = [
     {
@@ -60,7 +62,7 @@ export class ProfileFormComponent implements OnInit {
   ]
 
   public showMoreIdentities: boolean
-
+  public colorOptions: string[] = userColorOptions
   public initials: string = ''
   public schoolInfo: UserSchoolDistrict
 
@@ -81,6 +83,8 @@ export class ProfileFormComponent implements OnInit {
   ) {
     // Used for prefilled values
     let userSoFar = this._auth.getUser()
+    // Make sure user object is up-to-date before running setInitials
+    this.user = userSoFar
     let prefillFirst = ''
     let prefillLast = ''
     let prefillIdentity = userSoFar.identities ? userSoFar.identities[0] : 'student'
@@ -152,17 +156,21 @@ export class ProfileFormComponent implements OnInit {
   }
 
   public setInitials(form): string {
-    let initials = ''
+    let options: any = {}
     if (form.controls['firstname'].value) {
-      initials = form.controls['firstname'].value[0]
+      options.initials = form.controls['firstname'].value[0]
     }
     if (form.controls['lastname'].value) {
-      initials += form.controls['lastname'].value[0]
+      options.initials += form.controls['lastname'].value[0]
     }
-    this.initials = initials
+    this.initials = options.initials
+    // Set random bg color
+    if (!this.user.avatar) {
+      options.avatar = this.colorOptions[Math.floor(Math.random() * this.colorOptions.length)]
+    }
     // Update user object to display in Nav
-    this.tempLocalUserUpdate('initials', initials)
-    return initials
+    this.tempLocalUserUpdate(options)
+    return options.initials
   }
 
   public isSchoolStaff(identity: string): boolean {
@@ -182,9 +190,9 @@ export class ProfileFormComponent implements OnInit {
    * @param property "initials"
    * @param value "AB"
    */
-  private tempLocalUserUpdate(property, value) {
+  private tempLocalUserUpdate(values) {
     let user = this._auth.getUser()
-    user[property] = value
+    user = Object.assign(user, values)
     // This only updates the user locally, but will save update to DB when user finished
     this._auth.setUser(user)
   }

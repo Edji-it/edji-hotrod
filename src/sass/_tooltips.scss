@@ -65,7 +65,7 @@ button:disabled > .tooltip--on-disabled {
 
 .tooltip.tooltip--bottom {
   bottom: auto !important;
-  top: calc(100% + 10px);
+  top: calc(100% + 20px);
   transform: translate3d(-50%, -10px, 0);
 
   &::after {
