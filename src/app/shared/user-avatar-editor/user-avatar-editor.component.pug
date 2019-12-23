@@ -2,6 +2,7 @@
   .tooltip-header
     .btn.btn-link([class.active]="tab === 'emoji'", (click)="tab = 'emoji'") Emoji
     .btn.btn-link([class.active]="tab === 'color'", (click)="tab = 'color'") Color
+    button.close((click)='saveAndClose()', type='button') &times;
   .tooltip-body(*ngIf="tab === 'emoji'")
     .palette-btn(
       *ngFor="let e of emojiOptions",
@@ -12,6 +13,11 @@
     .palette-btn(*ngFor="let c of colorOptions", (click)="setColor(c)")
       .spot([style.background]="c")
   .tooltip-footer
-    .btn-row.right
+    .text-danger(*ngIf="error") {{error}}
+    .btn-row.right(*ngIf="!loading")
+      .btn.btn-sm.btn-link((click)="reset()") Reset
       .btn.btn-sm.btn-secondary((click)="randomize()") Shuffle
-      .btn.btn-sm.btn-action() Save
+      .btn.btn-sm.btn-action((click)="saveAndClose()") Save
+    .message-row(*ngIf="loading")
+      | Saving
+      i.icon.icon-loading

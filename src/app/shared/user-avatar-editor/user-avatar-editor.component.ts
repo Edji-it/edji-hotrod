@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 // Project Dependencies
 import { PublicUser, User } from '../datatypes'
@@ -14,23 +14,7 @@ import { AuthService } from 'src/app/_services'
   templateUrl: './user-avatar-editor.component.pug',
 })
 export class UserAvatarEditorComponent implements OnInit {
-  // Can load with either PublicUser or User id
-  // (ID only supported within Project currently)
-  // @Input() userId: string
-  // // Not required, used as fallback fullname for deleted accounts
-  // @Input() tempName: string
-  // @Input() set userDetails(user: PublicUser) {
-  //   this._userDetails = user
-  //   this.setDisplayProperties(user)
-  // }
-  // get userDetails() {
-  //   return this._userDetails
-  // }
-  // // Display/style inputs (treat as static)
-  // @Input() showName: boolean
-  // @Input() size: string // 'medium', 'large'
-  // @Input() selected: boolean
-  // @Input() subLabel: string
+  @Output() close: EventEmitter<any> = new EventEmitter()
 
   private userSubscription: Subscription
   // private _userDetails: PublicUser
@@ -39,10 +23,8 @@ export class UserAvatarEditorComponent implements OnInit {
 
   // Display properties
   public tab: 'emoji' | 'color' = 'emoji'
-
-  // public initials: string = ''
-  // public fullname: string = ''
-  // public avatar: string = ''
+  public loading: boolean
+  public error: string
 
   public emojiOptions: string[] = [
     'dog',
@@ -159,22 +141,32 @@ export class UserAvatarEditorComponent implements OnInit {
     this.tempLocalUserUpdate(options)
   }
 
-  // setDisplayProperties(user: PublicUser) {
-  //   if (user) {
-  //     this.user = user
-  //     this.fullname = user.fullname
-  //     if (user.avatar) {
-  //       this.avatar = user.avatar
-  //     }
-  //     /**
-  //      * @todo once search/discover uses a store for data, initials should be
-  //      * fully handled upstream and this should be removed
-  //      */
-  //     if (user.initials) {
-  //       this.initials = user.initials
-  //     } else {
-  //       this.initials = generateInitialsFromName(user.fullname)
-  //     }
-  //   }
-  // }
+  public reset() {
+    let options = {
+      initials: generateInitialsFromName(this.user.fullname),
+      avatar: '#DEDEDE',
+    }
+    this.tempLocalUserUpdate(options)
+  }
+
+  public saveAndClose() {
+    if (this.error || this.loading) {
+      this.close.emit()
+    }
+    this.loading = true
+    // Save to user in db
+    this._auth
+      .updateUser(this.user)
+      .pipe(take(1))
+      .subscribe(
+        data => {
+          this.loading = false
+          this.close.emit()
+        },
+        err => {
+          this.loading = false
+          this.error = 'Unable to save'
+        },
+      )
+  }
 }

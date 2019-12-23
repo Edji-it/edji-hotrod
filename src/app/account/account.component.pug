@@ -6,7 +6,8 @@ nav-bar([showDashboardOptions]="true")
     //- Profile Pic block
     .profile-pic-container.text-center
       user-avatar([userDetails]="currentUser", [size]="'profile'")
-      user-avatar-editor
+      .btn.btn-link((click)="editAvatar = true") Edit
+      user-avatar-editor(*ngIf="editAvatar", (close)="editAvatar = false")
       //- Edit Profile Picture Button
       //-   - Opens UploadProfPicModal -->
       //-  @todo enabling avatars
