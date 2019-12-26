@@ -123,8 +123,7 @@ $mediumAvatarSize: 36px;
     text-align: center;
 
     & .emojioneemoji {
-      // This allows "initials" to handle the alignment
-      vertical-align: top;
+      vertical-align: middle;
       height: 1.1em;
       width: 1.1em;
     }
