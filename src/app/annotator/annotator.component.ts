@@ -1041,7 +1041,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param end Index of last word
    * @param type What kind of comment: emoji, text...
    */
-  createComment(span: SelectionSpan, type: string): void {
+  createComment(span: SelectionSpan): void {
     let isBox = typeof span.boxStart == 'number' && typeof span.boxEnd == 'number'
     // We need to make sure they aren't already editing a comment
     this.inactivateComment()
@@ -1069,7 +1069,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       data: '',
       start: span.start,
       end: span.end,
-      type: type,
+      type: 'text', // default display type
       text: text,
       loc: this.imageCoords,
     }
@@ -1290,7 +1290,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Add Comment of type
    * - Fired from comment options tooltip
    */
-  addCommentOfType(type: string): void {
+  addCommentOfType(): void {
     // Get selection indices
     let span = this.getSelectionSpan()
 
@@ -1300,7 +1300,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Increment highlight array
     this.incrementHighlights(true, span.start, span.end, { start: span.boxStart, end: span.boxEnd })
     // Tell the server we've got a comment!
-    this.createComment(span, type)
+    this.createComment(span)
     this.clearQuickSelect()
   }
 

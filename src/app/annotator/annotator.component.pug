@@ -17,25 +17,14 @@ scroll-progress([scrollProgress]="currentScroll")
         //- optionsShow
         //- Desktop buttons
         .options.hidden-md-down
-            //- Emoji Comment
+            //- Add Comment
             button#addEmojiComment.emoji(
-                *ngIf="project.types.indexOf('emoji') > -1",
-                (tap)="addCommentOfType('emoji')"
+                (tap)="addCommentOfType()"
             )
-                i.icon.icon-comment-emoji
-            //- Text Comment
-            button#addTextComment.emoji(
-                *ngIf="project.types.indexOf('text') > -1",
-                (tap)="addCommentOfType('text')"
-            )
-                i.icon.icon-comment-text
-            //- Audio Comment
-            button#addAudioComment.emoji(
-                *ngIf="project.types.indexOf('audio') > -1",
-                [class.super-disabled]="audioSupportError",
-                (tap)="addCommentOfType('audio')"
-            )
-                i.icon.icon-mic
+                i.icon.icon-comment-add
+            //- View Comments
+            button#viewComments.emoji()
+                i.icon.icon-search
         //- Mobile buttons
         .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="project.isTeaching")
             //- .mobile-carrot-pointer &#9654;
@@ -45,29 +34,29 @@ scroll-progress([scrollProgress]="currentScroll")
                     *ngIf="project.types.indexOf('emoji') > -1",
                     [ngClass]="'col-' + (12 / directCommentOptions.length)",
                     [class.btn-show--animation]="optionsShow",
-                    (tap)="addCommentOfType('emoji')"
+                    (tap)="addCommentOfType()"
                 )
                     button.emoji.comment__options--mobileButton()
-                        i.icon.icon-comment-emoji
+                        i.icon.icon-comment-add
                 //-- Text Comment
-                #addTextCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
-                    *ngIf="project.types.indexOf('text') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)",
-                    [class.btn-show--animation]="optionsShow",
-                    (tap)="addCommentOfType('text')"
-                )
-                    button.emoji.comment__options--mobileButton()
-                        i.icon.icon-comment-text
-                //-- Audio Comment
-                #addAudioCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
-                    *ngIf="project.types.indexOf('audio') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)",
-                    [class.super-disabled]="audioSupportError",
-                    [class.btn-show--animation]="optionsShow",
-                    (tap)="addCommentOfType('audio')"
-                )
-                    button.emoji.comment__options--mobileButton()
-                        i.icon.icon-mic
+                //- #addTextCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
+                //-     *ngIf="project.types.indexOf('text') > -1",
+                //-     [ngClass]="'col-' + (12 / directCommentOptions.length)",
+                //-     [class.btn-show--animation]="optionsShow",
+                //-     (tap)="addCommentOfType('text')"
+                //- )
+                //-     button.emoji.comment__options--mobileButton()
+                //-         i.icon.icon-comment-text
+                //- //-- Audio Comment
+                //- #addAudioCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
+                //-     *ngIf="project.types.indexOf('audio') > -1",
+                //-     [ngClass]="'col-' + (12 / directCommentOptions.length)",
+                //-     [class.super-disabled]="audioSupportError",
+                //-     [class.btn-show--animation]="optionsShow",
+                //-     (tap)="addCommentOfType('audio')"
+                //- )
+                //-     button.emoji.comment__options--mobileButton()
+                //-         i.icon.icon-mic
     //- end .text-options
     .content--active__wrap
         .alert.alert-warning.alert-dismissible.fade.show(
