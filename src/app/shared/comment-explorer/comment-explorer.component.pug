@@ -16,7 +16,29 @@
               i.icon.icon-comment-feed
               .header-text(data-test="allFilterHeader")
                 | {{ commentCount }} Comments
-                .sub-label All Students
+                .sub-label  All Students
+            //- Search header (we only hide so that input can be focus)
+            .header-text.header-text--search(
+              data-test="searchFilterHeader",
+              [class.hide--off-screen]="filterMode !== 'search'"
+            )
+              .input-group
+                .input-group-prepend-icon
+                  i.icon.icon-search(
+                    (click)="applySearch()"
+                  )
+                input.form-control(
+                  #searchInput="",
+                  placeholder="Search Comments",
+                  [(ngModel)]="searchTerm",
+                  (keyup.enter)="applySearch()",
+                  data-test="inputSearchComments"
+                )
+                .form-control-clear.form-control-clear--in-field.icon.icon-close(
+                  *ngIf="searchTerm && searchTerm.length > 0",
+                  (click)="searchTerm = ''; applySearch()",
+                  data-test="btnClearSearchComments"
+                )
             //- Comments on Line
             ng-container(*ngIf="filterMode === 'line'")
               i.icon.icon-view-line
@@ -40,6 +62,20 @@
               .header-text.no-label(data-test="userFilterHeader")
                 | My Comments
         .col-12(*ngIf="filterMode !== 'line'")
+          label#sortByMatch.form-check-label.form-check-btn.form-check-sm(
+              *ngIf="filterMode === 'search'",
+              [class.active]="sortValue == 'match'",
+              title="Sort comments based on search relevancy"
+            )
+            input.form-check-input(
+                type="radio",
+                name="sortMatch",
+                value="match",
+                [(ngModel)]="sortValue",
+                (click)="applySort('match')",
+                checked
+              )
+            span By Match
           label#sortByCreated.form-check-label.form-check-btn.form-check-sm(
               [class.active]="sortValue == 'created'",
               title="Sort comments in the order they were created"
@@ -49,7 +85,7 @@
                 name="sortCreated",
                 value="created",
                 [(ngModel)]="sortValue",
-                (click)="filterComments({sort: 'created' })",
+                (click)="applySort('created')",
                 checked
               )
             span By Time
@@ -62,16 +98,28 @@
                 name="sortLocation",
                 value="location",
                 [(ngModel)]="sortValue",
-                (click)="filterComments({sort: 'location' })",
+                (click)="applySort('location')",
               )
             span By Location
+          //- Access to search from other views
+          button#searchBtnXS.btn.btn-primary.btn-sm(
+            *ngIf="filterMode !== 'search'",
+            (click)="viewSearch()",
+            data-test="btnSearchComments"
+          )
+            i.icon.icon-search
+            | Search
         .col-12(*ngIf="filterMode !== 'all'")
           .btn-row.right.header__btn-row
+            //- Search count appears below
+            .sub-label.search-count(*ngIf="filterMode === 'search'")
+              | {{ commentCount }} found
             .hover--tooltip(*ngIf="!filterUserId")
               button.btn.btn-xs-primary.has-icon(
                 *ngIf="filterMode != 'all'",
                 (click)="viewAll()",
-                [disabled]="!project.heat_vision && !project.isTeaching"
+                [disabled]="!project.heat_vision && !project.isTeaching",
+                data-test="btnAllComments"
               )
                 .icon.icon-comments
                 |  All Comments
@@ -107,10 +155,13 @@
       )
         .row
           .col-12
+            .none-found-block(*ngIf="commentCount < 1 && !loading")
+              img(src="/assets/images/graphic-none-found.svg")
+              span([innerHtml]="appliedTerm ? 'No results for <b>' + appliedTerm + '</b>' : 'No comments found'")
             ng-container(*ngFor="let c of comments; let i = index; trackBy: trackComment")
               hr.comment-block-hr(*ngIf="i > 0")
+              //- We do not need to apply "hidden" here since the Explorer is pre-filtered
               edji-comment(
-                [class.hidden]="(!project.heat_vision && user._id !== project.teacher_id) && c.user_id !== user._id && c.user_id !== project.teacher_id",
                 [comment]="c",
                 [selected]="comment && c._id === comment._id",
                 (commentActivation)="commentActivationEmitter($event)",

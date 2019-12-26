@@ -11,8 +11,14 @@ export class CommentExplorer {
   public allHeader = element(by.css('[data-test="allFilterHeader"]'))
   public lineHeader = element(by.css('[data-test="lineFilterHeader"]'))
   public userHeader = element(by.css('[data-test="userFilterHeader"]'))
+  public searchHeader = element(by.css('[data-test="searchFilterHeader"]'))
   // Loading state
   public loading = element(by.css('[data-test="explorerLoading"]'))
+  // Action items
+  public allComments = element(by.css('[data-test="btnAllComments"]'))
+  public searchComments = element(by.css('[data-test="btnSearchComments"]'))
+  public searchInput = element(by.css('[data-test="inputSearchComments"]'))
+  public searchClear = element(by.css('[data-test="btnClearSearchComments"]'))
 
   public waitForLoad(): void {
     // Wait till no longer loading

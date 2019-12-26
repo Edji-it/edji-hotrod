@@ -1,4 +1,4 @@
-/*  
+/*
   Last Mod: 8.5.17
 */
 
@@ -8,13 +8,14 @@
  */
 export interface EdjiComment extends BaseComment {
   // Client-side properties
-  lineCount: number
-  expanded: boolean
-  project_id: string
-  active: boolean
-  authorIsTeacher: boolean
-  imagePos: number
-  selected: boolean
+  lineCount?: number
+  expanded?: boolean
+  project_id?: string
+  active?: boolean
+  authorIsTeacher?: boolean
+  imagePos?: number
+  selected?: boolean
+  search_score?: number
 }
 
 /**
@@ -24,7 +25,7 @@ export interface EdjiComment extends BaseComment {
 export interface BaseComment {
   _id: string
   user_id: string
-  recipient_id: string
+  recipient_id?: string
   start: number
   end: number
   data: any
@@ -48,8 +49,8 @@ export interface BaseComment {
   prompt?: string
   new?: boolean
   question_number?: number
-  createdAt?: Date
-  updatedAt?: Date
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 /** Used to control permissions on altering comment data */

@@ -40,9 +40,13 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public commentCount: number = 0
   public commentByPos: any[] = []
 
+  // Search
+  public searchTerm: string = ''
+  public appliedTerm: string = ''
+
   // Sort and Filtering
-  public sortValue: string = 'created' // default to created
-  public filterMode: 'line' | 'all' | 'user' = 'all'
+  public sortValue: SearchSort = 'created' // default to created
+  public filterMode: SearchFilter = 'all'
   public filterUserId: string
   public filterCurrentUser: boolean
 
@@ -90,14 +94,14 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   @Output() clearSelected = new EventEmitter()
 
   @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar
+  @ViewChild('searchInput', { static: false }) searchInput
 
   constructor(
     private projectStore: ProjectStore,
     private _socket: SocketService,
     public el: ElementRef,
     private _auth: AuthService,
-    private _comments: CommentService,
-    private angulartics: Angulartics2,
+    public _comments: CommentService,
     private router: Router,
     private route: ActivatedRoute,
   ) {}
@@ -142,24 +146,111 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       // Subscribe to Heat Vision toggle updates
       this._socket.heatVisionUpdates.subscribe(heatToggle => {
         this.project.heat_vision = heatToggle.heatVision.all
+        this.filterComments({ update: true })
       }),
       // Check for filters on URL
       this.route.queryParams.subscribe(params => {
-        if (params['student']) {
-          this.clearFilters({ student: params['student'] })
-          this.filterUserId = params['student']
-          this.filterComments()
-          this._visible = true
-        } else if (params['pane'] && params['pane'] === 'comments') {
-          this.filterComments()
-          this._visible = true
-        } else if (this.visible) {
-          this.close()
-        } else {
-          this.closed.emit(false)
-        }
+        this.processParams(params)
       }),
     )
+  }
+
+  /**
+   * Explorer manages state/display via URL params
+   * @param params query params
+   */
+  private processParams(params) {
+    // Apply sort
+    if (params['sort']) this.sortValue = params['sort']
+    // Detect search/filter modes
+    if (params['search']) {
+      this.searchTerm = params['search']
+      this.sortValue = params['sort'] || 'match'
+      this.filterComments()
+      this._visible = true
+    } else if (params['student']) {
+      this.clearFilters({ student: params['student'] })
+      this.filterUserId = params['student']
+      this.filterComments()
+      this._visible = true
+    } else if (params['pane'] && params['pane'] === 'comments') {
+      this.filterComments()
+      this._visible = true
+    } else if (this.visible) {
+      this.close()
+    } else {
+      this.closed.emit(false)
+    }
+  }
+
+  /**
+   * Search logic
+   * - Provides client-side fuzziness, relevancy, and exact matches
+   * @param comment
+   * @param term
+   */
+  searchComment(comment: EdjiComment, term: string): boolean {
+    // Reset search score
+    comment.search_score = 0
+    /**
+     * Search Algorithm
+     * - Weights exact matches as 1.0, fuzzy matches as <1
+     * - Attaches search score to comments for sorting (relies on comment pointer)
+     * - Finds only exact matches for quote wrapped terms
+     * @param string Content to search
+     * @param words Search term broken apart
+     * @param ratio how fuzzy to allow (0.1 - 1.0)
+     */
+    function fuzzy(string, words: { str: string; exact?: boolean }[], ratio) {
+      let score = 0
+      string = string.toLowerCase() || ''
+      for (let i = 0; i < words.length; i++) {
+        let w = words[i]
+        let len = w.str.length
+        if (new RegExp(`\\b${w.str}|${w.str}\\b`).test(string)) {
+          // Partial matches, checking for word boundaries
+          score += 1
+        } else if (len >= 5 && !w.exact) {
+          // Fuzzy search for longer words
+          var matches = 0
+          for (var j = 0; j < len; j++) {
+            // check for pairs of letters
+            let pair = w.str[j] + (w.str[j + 1] || '')
+            string.indexOf(pair) > -1 ? (matches += 1) : (matches -= 1)
+          }
+          // Reduce fuzzy value if string is long (value of match scales)
+          let fscore = matches / (string.length * 0.5)
+          // Max value of 1
+          if (fscore > 0) score += fscore
+          else score -= 1
+        } else {
+          // Reduce score if word is not found
+          score -= 1
+        }
+      }
+      // Save for sorting
+      if (score >= 0) comment.search_score = score
+      return score >= ratio || term == ''
+    }
+    // Process the search term once
+    let quoteWrapped = /^(").*(")$/
+    let terms = term.split(/(".*")|\s/)
+    let words = []
+    terms.forEach(word => {
+      if (!word) return
+      // Lower case and escape special characters
+      word = word.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      if (quoteWrapped.test(word)) {
+        let unwrappedTerm = word.substring(1, word.length - 1)
+        words.push({ str: unwrappedTerm, exact: true })
+      } else {
+        words.push({ str: word })
+      }
+    })
+    let commentMatch = comment.data && fuzzy(comment.data, words, 0.2)
+    // Since we don't expect typos in the content, reduce fuzzy matches (see ratio)
+    let contentMatch = comment.text && fuzzy(comment.text, words, 0.75)
+    return contentMatch || commentMatch
   }
 
   /**
@@ -172,20 +263,31 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       opts = {}
     }
     let sort = opts.sort || this.sortValue
-    let sorted
+    let sorted: EdjiComment[] = this.allComments.slice()
     let comment = this.comment
     // Set loading state
     if (!opts.update) {
       this.loading = true
       this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
     }
+    // Apply Heat Vision
+    if (!this.project.heat_vision && !this.project.isTeaching) {
+      sorted = sorted.filter(c => {
+        return c.user_id === this.user._id
+      })
+    }
     // Handle if reply selected
     if (comment && comment.reply_to) {
-      comment = this.allComments.find(c => {
+      comment = sorted.find(c => {
         return c._id === comment.reply_to
       })
     }
-    if (comment && comment.lineY && this.commentByPos && this.commentByPos[comment.lineY]) {
+    if (this.searchTerm) {
+      sorted = sorted.filter(comment => {
+        return this.searchComment(comment, this.searchTerm)
+      })
+      this.filterMode = 'search'
+    } else if (comment && comment.lineY && this.commentByPos && this.commentByPos[comment.lineY]) {
       this.filterMode = 'line'
       this.sortValue = sort = 'location'
       sorted = this.commentByPos[comment.lineY].filter(comment => {
@@ -194,18 +296,22 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     } else if (this.filterUserId) {
       this.filterMode = 'user'
       this.filterCurrentUser = this.user._id === this.filterUserId
-      sorted = this.allComments.filter(comment => {
+      sorted = sorted.filter(comment => {
         return comment.user_id === this.filterUserId
       })
     } else {
       this.filterMode = 'all'
-      sorted = this.allComments.filter(comment => {
+      sorted = sorted.filter(comment => {
         // This hides replies from All Comments feed
         return comment.start >= 0
       })
     }
 
-    if (sort === 'location') {
+    if (sort === 'match' && this.searchTerm) {
+      sorted = sorted.sort(function(a, b) {
+        return b.search_score - a.search_score
+      })
+    } else if (sort === 'location') {
       sorted = sorted.sort(function(a, b) {
         // Turn your strings into dates, and then subtract them
         // to get a value that is either negative, positive, or zero.
@@ -220,6 +326,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       })
     }
 
+    this.appliedTerm = this.searchTerm || ''
     this.commentCount = sorted.length
     this.comments = sorted
     setTimeout(() => {
@@ -231,17 +338,20 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * Clear filters applied to the explorer
    * @note does not fire "filterComments", so it can be used internally
    */
-  private clearFilters(paramsToKeep?: { line?: string; student?: string }): void {
-    this.sortValue = 'created'
+  private clearFilters(paramsToOverride?: { line?: string; student?: string; pane?: string }): void {
     this.filterMode = 'all' //- default
-    if (!paramsToKeep) paramsToKeep = {}
-    paramsToKeep['pane'] = 'comments'
-    if (!paramsToKeep['student']) this.filterUserId = null
-    if (!paramsToKeep['line']) this.comment = null
+    if (!paramsToOverride) paramsToOverride = {}
+    if (!paramsToOverride['student']) this.filterUserId = null
+    if (!paramsToOverride['line']) this.comment = null
+    if (!paramsToOverride['search']) this.searchTerm = null
+    if (!paramsToOverride['sort']) this.sortValue = 'created'
     // Tell parent component comment is cleared
     this.clearSelected.emit()
     // Merge params to keep with reset/null
-    let params = Object.assign({ student: null, line: null }, paramsToKeep)
+    let params = Object.assign(
+      { student: null, line: null, search: null, sort: null, pane: 'comments' },
+      paramsToOverride,
+    )
     // Clear URL params
     this.router.navigate(['./'], {
       relativeTo: this.route,
@@ -255,26 +365,53 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    */
   viewAll(): void {
     this.clearFilters()
-    this.filterComments()
     /**
      * Return scroll to the top
-     * @todo only scroll on filter click
      */
     this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
   }
 
-  close() {
-    this.visible = false
-    this.comment = null
-    this.filterUserId = ''
-    this.closed.emit(false)
-    document.body.classList.remove('body__lock-scroll')
-    // Clear URL params
+  /**
+   * Search comments
+   */
+  viewSearch(): void {
+    this.filterMode = 'search'
+    this.sortValue = 'match'
+    this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
+    this.searchInput && this.searchInput.nativeElement.focus()
+  }
+
+  /**
+   * Apply search term
+   */
+  applySearch(): void {
+    if (this.searchTerm) {
+      this.router.navigate(['./'], {
+        relativeTo: this.route,
+        queryParams: { search: this.searchTerm, sort: this.sortValue },
+        queryParamsHandling: 'merge',
+      })
+    } else {
+      this.filterComments()
+      this.viewSearch()
+    }
+  }
+
+  /**
+   * Apply sort filter
+   */
+  applySort(sort?: SearchSort) {
     this.router.navigate(['./'], {
       relativeTo: this.route,
-      queryParams: { pane: null, student: null, line: null },
+      queryParams: { sort: sort },
       queryParamsHandling: 'merge',
     })
+  }
+
+  close() {
+    this.visible = false
+    this.clearFilters({ pane: null })
+    document.body.classList.remove('body__lock-scroll')
   }
 
   ngOnDestroy() {
@@ -364,3 +501,6 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     return comment._id
   }
 }
+
+type SearchSort = 'created' | 'location' | 'match'
+type SearchFilter = 'line' | 'all' | 'user' | 'search'
