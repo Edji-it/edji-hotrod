@@ -36,6 +36,11 @@ button,
   &.btn-sm {
     padding: 0.25rem 0.5rem;
     font-size: 0.75 * $base-font-size;
+
+    & .icon {
+      margin-right: 0.3em;
+      vertical-align: middle;
+    }
   }
 
   &:hover,
