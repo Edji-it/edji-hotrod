@@ -165,12 +165,12 @@ nav-bar([showDashboardOptions]="true")
                             //- )
                             //-     |your district
             #discoverAcademy.district-header(*ngIf="searchParams.activeLibrary === 'academy' && academyReadingType")
-                div
+                div(*ngIf="selectedAcademy")
                   i.icon-academy-plate.icon-academy-plate-discover
                   h2.district-header__text.font-gray {{ selectedAcademy.name }}
-                    i.font-light Academy
+                    i.font-light &nbsp;Academy
                 .district-subheading
-                  p.font-gray Readings within your Academy
+                  p.font-gray Readings within your Academy Library
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
