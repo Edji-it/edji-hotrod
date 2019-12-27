@@ -9,6 +9,13 @@
   pointer-events: none !important;
 }
 
+.hide--off-screen {
+  display: block !important;
+  position: fixed;
+  bottom: 200%;
+  right: 200%;
+}
+
 /**
  * Color helpers (Backgrounds)
  */
