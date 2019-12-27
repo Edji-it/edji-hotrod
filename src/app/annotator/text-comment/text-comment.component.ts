@@ -3,6 +3,8 @@ import { Component, EventEmitter, ElementRef, Input, Output, OnInit, AfterViewIn
 // Project Dependencies
 import { EdjiComment } from './../../shared/datatypes/comment'
 import { CommentService } from '../../_services'
+import { EmojiOnePipe } from 'src/app/_pipes'
+import * as emoji from 'emojione/lib/js/emojione'
 
 @Component({
   selector: 'text-comment',
@@ -24,12 +26,12 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
   public activated: boolean = false
   public textareaHeight: string = '60px'
 
+  public htmlContents: string
+
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active) {
     setTimeout(() => {
       if (!this.readOnly) {
-        this.activated = active
-
         if (active) {
           this.activateField()
         }
@@ -40,7 +42,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     return this.activated
   }
 
-  constructor(private element: ElementRef, private _comments: CommentService) {}
+  constructor(private element: ElementRef, private _comments: CommentService, private emojiPipe: EmojiOnePipe) {}
 
   ngOnInit() {
     setTimeout(() => {
@@ -69,6 +71,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
   }
 
   activateField() {
+    this.htmlContents = this.emojiPipe.transform(this.comment.data)
     // Set activated
     this.activated = true
     // Set textarea height
@@ -79,7 +82,41 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     this.activate.emit()
   }
 
+  cleanData(html: string): string {
+    /**
+     * To do: DOM manipulation in separate field/element
+     */
+    let plainText = this.textInput.nativeElement.innerText
+    let noText = !plainText.trim()
+
+    let imgs = this.textInput.nativeElement.querySelectorAll('img')
+    imgs.forEach(imgEl => {
+      let code = document.createTextNode(':' + imgEl.getAttribute('title') + ':')
+      imgEl.replaceWith(code)
+    })
+    // Replace html breaks with new line chars
+    // text = text.replace(/<br\s*\/?>/, '\n')
+    let brs = this.textInput.nativeElement.querySelectorAll('br')
+    brs.forEach(brEl => {
+      let br = document.createTextNode('\n')
+      brEl.replaceWith(br)
+    })
+    // Remove any other child elements
+    let children = this.textInput.nativeElement.querySelectorAll(':scope > *')
+    children.forEach(child => {
+      this.textInput.nativeElement.removeChild(child)
+    })
+    // Detect unicode emoji for conversion
+    let text = this.textInput.nativeElement.innerHTML
+    text = emoji.toShort(text)
+    return text
+  }
+
   updateComment(commentData: any) {
+    console.log(commentData)
+    let clean = this.cleanData(commentData)
+    console.log(clean)
+    this.comment.data = clean
     this.activated = false
     this.deactivate.emit()
   }
