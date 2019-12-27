@@ -25,6 +25,7 @@ export class UserAvatarEditorComponent implements OnInit {
   // Display properties
   public tab: 'emoji' | 'color' = 'color'
   public loading: boolean
+  public initialized: boolean
   public error: string
 
   public emojiOptions: string[] = userEmojiOptions
@@ -35,6 +36,10 @@ export class UserAvatarEditorComponent implements OnInit {
   ngOnInit() {
     this.userSubscription = this._auth.currentUser.subscribe(user => {
       this.user = user
+    })
+    // Prevent clickOutside from firing on opening click
+    setTimeout(() => {
+      this.initialized = true
     })
   }
 
@@ -49,8 +54,6 @@ export class UserAvatarEditorComponent implements OnInit {
   }
 
   setEmoji(emoji: string) {
-    // emoji = ':' + emoji + ':'
-
     this.tempLocalUserUpdate({ initials: ':' + emoji + ':' })
   }
 

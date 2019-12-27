@@ -1,6 +1,6 @@
 .tooltip.tooltip--bottom.tooltip--interactive.py-0.show(
   data-test="tooltipAvatarEditor",
-  (clickOutside)="saveAndClose()"
+  (clickOutside)="initialized && saveAndClose()"
 )
   .tooltip-header
     .btn.btn-link(
@@ -13,7 +13,7 @@
       (click)="tab = 'emoji'",
       data-test="editorTabEmoji"
     ) Emoji
-    button.close((click)='saveAndClose()', type='button') &times;
+    button.close((click)='saveAndClose()', type='button', data-test="avatarSave") &times;
   .tooltip-body(*ngIf="tab === 'emoji'")
     .palette-btn(
       *ngFor="let e of emojiOptions",
@@ -31,9 +31,8 @@
   .tooltip-footer
     .text-danger(*ngIf="error") {{error}}
     .btn-row.right(*ngIf="!loading")
-      .btn.btn-sm.btn-link((click)="reset()", data-test="avatarReset") Reset
+      .btn.btn-sm.btn-link((click)="reset()", data-test="avatarReset") Clear
       .btn.btn-sm.btn-secondary((click)="randomize()") Shuffle
-      .btn.btn-sm.btn-action((click)="saveAndClose()", data-test="avatarSave") Save
     .message-row(*ngIf="loading")
       | Saving
       i.icon.icon-loading

@@ -155,7 +155,8 @@ export class AuthService implements CanActivate {
     // Set convenience "isStudent" flag
     // + Default guest/temp to student flag
     let studentId = user.identities && user.identities.includes('student')
-    let schoolStaff = !studentId || ['teacher', 'administrator', 'coach'].some(id => user.identities && user.identities.includes(id))
+    let schoolStaff =
+      !studentId || ['teacher', 'administrator', 'coach'].some(id => user.identities && user.identities.includes(id))
     let missingIdentity: boolean = !user.identities || user.identities.length < 1
     // missingSchool is also used to identify incomplete Clever sign-ups
     let missingSchool: boolean
@@ -323,12 +324,12 @@ export class AuthService implements CanActivate {
    * Updates User object
    * This pulls the latest user object in case a user has multiple sessions at once
    */
-  public refreshUser(): Observable<any> {
+  public refreshUser(doNotSet?: boolean): Observable<any> {
     return this._http.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions()).pipe(
       map((data: any) => {
         let user = data.user
         // If we get a user object, update our local copy
-        if (user._id) {
+        if (!doNotSet && user._id) {
           user = this.setUser(user)
         }
         return user
@@ -437,7 +438,7 @@ export class AuthService implements CanActivate {
     return new Observable(observer => {
       //observer.next(true)
       // Before we update the user, make sure we have the latest copy
-      this.refreshUser()
+      this.refreshUser(true)
         .pipe(take(1))
         .subscribe(
           currentUser => {
