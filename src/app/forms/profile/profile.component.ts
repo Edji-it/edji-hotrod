@@ -177,7 +177,7 @@ export class ProfileFormComponent implements OnInit {
       options.avatar = this.colorOptions[Math.floor(Math.random() * this.colorOptions.length)]
     }
     // Update user object to display in Nav
-    this.tempLocalUserUpdate(options)
+    this.localUpdate(options)
     return options.initials
   }
 
@@ -195,14 +195,9 @@ export class ProfileFormComponent implements OnInit {
 
   /**
    * Update local user property for display while editing (eg. initials)
-   * @param property "initials"
-   * @param value "AB"
    */
-  private tempLocalUserUpdate(values) {
-    let user = this._auth.getUser()
-    user = Object.assign(user, values)
-    // This only updates the user locally, but will save update to DB when user finished
-    this._auth.setUser(user)
+  public localUpdate(values) {
+    this._auth.tempLocalUserUpdate(values)
   }
 
   /**

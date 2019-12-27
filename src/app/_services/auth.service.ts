@@ -183,6 +183,18 @@ export class AuthService implements CanActivate {
     return user
   }
 
+  /**
+   * Update local user property for display while editing (eg. initials)
+   * @param values eg. { initials: 'JK' }
+   * @note Only use in cases where exiting/proceeding saves changes
+   */
+  public tempLocalUserUpdate(values) {
+    let user = this.getUser()
+    user = Object.assign(user, values)
+    // This only updates the user locally, but will save update to DB when user finished
+    this.setUser(user)
+  }
+
   private updateAnalyticsUser(user): void {
     // Ignore if google site tag object is not available
     if (!gtag) {

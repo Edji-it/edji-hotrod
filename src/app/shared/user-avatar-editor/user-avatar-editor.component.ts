@@ -54,36 +54,37 @@ export class UserAvatarEditorComponent implements OnInit {
   }
 
   setEmoji(emoji: string) {
-    this.tempLocalUserUpdate({ initials: ':' + emoji + ':' })
+    this.localUserUpdate({ initials: ':' + emoji + ':' })
   }
 
   setColor(color: string) {
-    this.tempLocalUserUpdate({ avatar: color })
+    this.localUserUpdate({ avatar: color })
   }
 
   /**
    * Update local user property for display while editing (eg. initials)
-   * @todo move to AUTH
-   * @param property "initials"
-   * @param value "AB"
+   * @param values properties to update
    */
-  private tempLocalUserUpdate(values) {
+  private localUserUpdate(values) {
     this.saved = false
-    let user = this._auth.getUser()
-    user = Object.assign(user, values)
-    // This only updates the user locally, but will save update to DB when user finished
-    this._auth.setUser(user)
+    this._auth.tempLocalUserUpdate(values)
   }
 
+  /**
+   * Picks random color and emoji
+   */
   public randomize() {
     let options = {
       initials: ':' + this.emojiOptions[Math.floor(Math.random() * this.emojiOptions.length)] + ':',
       avatar: this.colorOptions[Math.floor(Math.random() * this.colorOptions.length)],
     }
 
-    this.tempLocalUserUpdate(options)
+    this.localUserUpdate(options)
   }
 
+  /**
+   * Resets avatar to default "initials"
+   */
   public reset() {
     let options: any = {
       avatar: '#DEDEDE',
@@ -95,9 +96,13 @@ export class UserAvatarEditorComponent implements OnInit {
     } else {
       options.initials = ''
     }
-    this.tempLocalUserUpdate(options)
+    this.localUserUpdate(options)
   }
 
+  /**
+   * Saves changes to user in DB, closes tooltip
+   * @fires close Output
+   */
   public saveAndClose() {
     if (this.error || this.loading) {
       this.close.emit()
