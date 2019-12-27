@@ -119,6 +119,7 @@ export const userEmojiOptions: string[] = [
 ]
 
 export const userColorOptions: string[] = [
+  // Pastels
   '#FFB4B4',
   '#FFCFB4',
   '#FFF3B4',
@@ -131,6 +132,7 @@ export const userColorOptions: string[] = [
   '#FFB4EA',
   '#F3DADA',
   '#DEDEDE',
+  // Light
   '#F25454',
   '#F28D54',
   '#FAFC80',
@@ -143,6 +145,20 @@ export const userColorOptions: string[] = [
   '#F254E2',
   '#DBAC8A',
   '#888888',
+  // Desaturated
+  '#D68383',
+  '#DFBF99',
+  '#DADC90',
+  '#BDCE8F',
+  '#A3C6A9',
+  '#8ED0B9',
+  '#7EB6C8',
+  '#B3B9DB',
+  '#B8A0CB',
+  '#D88BAB',
+  '#D7CEC1',
+  '#9A8C76',
+  // Darks
   '#920000',
   '#A74812',
   '#C8C230',
