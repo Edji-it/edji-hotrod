@@ -30,6 +30,8 @@ import {
   SubjectPipe,
   UserInitialsPipe,
 } from './_pipes'
+// Directives
+import { ClickOutsideDirective } from './_directives/click-outside.directive'
 // ShareCodeComponent has to be imported here due to its living in the nav bar
 import {
   ReferralModalComponent,
@@ -47,6 +49,7 @@ import { QuickStartFlagComponent } from './shared/quick-start-flag.component'
 
 let SHARED_DECLARATIONS = [
   AddClassPipe,
+  ClickOutsideDirective,
   EdjiDatePipe,
   EmojiOnePipe,
   FeedbackComponent,
