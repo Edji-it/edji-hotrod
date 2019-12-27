@@ -39,6 +39,7 @@ export class SearchPage implements OnInit {
   // User
   public user: User
   public userDistrict: string
+  public userDistrictId: string
   // Main display toggle
   public isSearching: boolean
   // Filters
@@ -129,8 +130,9 @@ export class SearchPage implements OnInit {
       // User subscription needs to be first, prereq for filters
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
-        if (user && user.school && user.school.district_name) {
-          this.userDistrict = user.school.district_name.replace('District', '').trim()
+        if (user && user.school && user.school.district_name && user.school.district_id) {
+          this.userDistrict = user.school.district_name
+          this.userDistrictId = user.school.district_id
         } else {
           this.userDistrict = ''
         }
@@ -470,13 +472,6 @@ export class SearchPage implements OnInit {
     if (context === 'preview') {
       this.showReadingPreviewModal = true
     }
-  }
-
-  /**
-   * Validates the school and district_id properties exist on a user before trying to search by that param
-   */
-  public setDistrictParam(): void {
-    this.searchParams.district = this.user.school && this.user.school.district_id ? this.user.school.district_id : ''
   }
 
   /**
