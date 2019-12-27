@@ -85,9 +85,15 @@ export class UserAvatarEditorComponent implements OnInit {
   }
 
   public reset() {
-    let options = {
-      initials: ('' + this.user.firstname[0] + this.user.lastname[0]).trim(),
+    let options: any = {
       avatar: '#DEDEDE',
+    }
+    if (this.user.firstname && this.user.lastname) {
+      options.initials = ('' + this.user.firstname[0] + this.user.lastname[0]).trim()
+    } else if (this.user.fullname) {
+      options.initials = generateInitialsFromName(this.user.fullname)
+    } else {
+      options.initials = ''
     }
     this.tempLocalUserUpdate(options)
   }

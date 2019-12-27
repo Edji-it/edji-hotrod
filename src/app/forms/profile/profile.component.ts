@@ -85,10 +85,11 @@ export class ProfileFormComponent implements OnInit {
     let userSoFar = this._auth.getUser()
     // Make sure user object is up-to-date before running setInitials
     this.user = userSoFar
+
     let prefillFirst = ''
     let prefillLast = ''
     let prefillIdentity = userSoFar.identities ? userSoFar.identities[0] : 'student'
-    if (userSoFar.fullname) {
+    if (userSoFar.fullname && userSoFar.fullname.length > 0) {
       let i = userSoFar.fullname.indexOf(' ')
       if (i > 0) {
         prefillFirst = userSoFar.fullname.slice(0, i)
@@ -157,7 +158,10 @@ export class ProfileFormComponent implements OnInit {
 
   public setInitials(form): string {
     // Do not set initials if emoji or image selected
-    if (this.user && (this.user.initials.length > 2 || this.user.avatar.length > 7)) {
+    if (
+      this.user &&
+      ((this.user.initials && this.user.initials.length > 2) || (this.user.avatar && this.user.avatar.length > 7))
+    ) {
       return
     }
     let options: any = { initials: '' }
