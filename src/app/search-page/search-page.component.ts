@@ -217,10 +217,11 @@ export class SearchPage implements OnInit {
       this._auth.currentAcademyState.subscribe(currentState => {
         this.academyState = currentState
         this.selectedAcademy = currentState.academies[currentState.selected]
+        // Re-load query on refresh or academy change
         if (
           this.searchParams.activeLibrary === 'academy' &&
           this.selectedAcademyNum !== currentState.selected &&
-          this.selectedAcademyNum > -1
+          currentState.selected > -1
         ) {
           this.loadFeed()
         }
