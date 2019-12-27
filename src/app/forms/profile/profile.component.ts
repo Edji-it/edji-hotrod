@@ -156,9 +156,13 @@ export class ProfileFormComponent implements OnInit {
   }
 
   public setInitials(form): string {
-    let options: any = {}
+    // Do not set initials if emoji or image selected
+    if (this.user && (this.user.initials.length > 2 || this.user.avatar.length > 7)) {
+      return
+    }
+    let options: any = { initials: '' }
     if (form.controls['firstname'].value) {
-      options.initials = form.controls['firstname'].value[0]
+      options.initials += form.controls['firstname'].value[0]
     }
     if (form.controls['lastname'].value) {
       options.initials += form.controls['lastname'].value[0]
@@ -259,7 +263,6 @@ export class ProfileFormComponent implements OnInit {
     user.lastname = form.lastname
     user.fullname = form.firstname + ' ' + form.lastname
     user.identities = [form.accountRole]
-    user.initials = this.initials
     if (this.schoolInfo && this.isSchoolStaff(form.accountRole)) {
       user.school = this.schoolInfo
     }
