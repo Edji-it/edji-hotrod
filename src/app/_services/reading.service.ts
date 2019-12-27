@@ -173,7 +173,8 @@ export class ReadingService {
       const edjiStrategies = '5cc65d8d156b5300215670fe'
       queryString += `&owner_id=${edjiStrategies}`
     } else if (searchParams.activeLibrary === 'academy') {
-      queryString += `&institution_id=${searchParams.institutionId}`
+      // Attaching academy scope is required for search to use the correct validation
+      queryString += `&institution_id=${searchParams.institutionId}&scope=academy`
     }
     // Subjects
     if (searchParams.subjectFilter && searchParams.subjectFilter[0]) {
