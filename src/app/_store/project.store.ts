@@ -984,17 +984,25 @@ export class ProjectStore {
               }
             })
           // attach the basic user information to each students_id
-          currentProject.students = currentProject.students_ids.map(obj => {
-            return userInfo.find(el => {
-              return el._id === obj
+          currentProject.students = currentProject.students_ids
+            .map(id => {
+              return userInfo.find(el => {
+                return el._id === id
+              })
             })
-          })
+            .filter(user => {
+              return !!user
+            })
           // attach the basic user information to each temp_id
-          currentProject.temps = currentProject.temp_ids.map(obj => {
-            return userInfo.find(el => {
-              return el._id === obj
+          currentProject.temps = currentProject.temp_ids
+            .map(id => {
+              return userInfo.find(el => {
+                return el._id === id
+              })
             })
-          })
+            .filter(user => {
+              return !!user
+            })
           this._commentStats.addUsersToStats(this.commentStats._stats, currentProject)
           this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, currentProject)
         },

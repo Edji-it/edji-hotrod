@@ -31,7 +31,7 @@
         span.answer-circle__group.mr-2.live-status([attr.title]="commentUser.fullname + ' is ' + commentUser.status")
           .circle.filled([ngClass]="commentUser.status")
         span.user-list__name([attr.id]="'studentName'+i")
-          user-avatar([userId]="commentUser._id", [showName]="true")
+          user-avatar([userId]="commentUser._id", [tempName]="commentUser.fullname", [showName]="true")
           .ml-1.badge.badge-pill.badge-teacher--label.hover--tooltip(
             *ngIf="isStudentCoTeacher(commentUser)",
               style="position:relative;"
