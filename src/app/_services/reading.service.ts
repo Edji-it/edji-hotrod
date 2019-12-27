@@ -371,8 +371,6 @@ export class ReadingService {
   // Push new or update Reading
   public save(reading: Reading): Observable<Reading> {
     // owner_id is defaulted by the service
-    console.log(reading)
-
     if (reading._id) {
       let putReading = {
         title: reading.title,
@@ -389,7 +387,6 @@ export class ReadingService {
         createdAt: reading.createdAt,
         institution_id: reading.institution_id,
       }
-      console.log(putReading)
       return this._http
         .put<{}>(this._auth.getUrl() + '/api/v1/readings/' + reading['_id'], putReading, this._auth.getOptions())
         .pipe(

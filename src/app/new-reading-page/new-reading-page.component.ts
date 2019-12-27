@@ -948,7 +948,6 @@ export class NewReadingPage implements OnInit, OnDestroy {
     }
     // Prepare Reading object (and save for reference by Add Group modal and openFirstGroup())
     this.reading = this.formatReading(form)
-    console.log(this.reading)
 
     this._readings.save(this.reading).subscribe(
       data => {
