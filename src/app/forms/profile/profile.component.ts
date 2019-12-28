@@ -88,7 +88,7 @@ export class ProfileFormComponent implements OnInit {
 
     let prefillFirst = ''
     let prefillLast = ''
-    let prefillIdentity = userSoFar.identities ? userSoFar.identities[0] : 'student'
+    let prefillIdentity = userSoFar.identities && userSoFar.identities[0] ? userSoFar.identities[0] : 'student'
     if (userSoFar.fullname && userSoFar.fullname.length > 0) {
       let i = userSoFar.fullname.indexOf(' ')
       if (i > 0) {
