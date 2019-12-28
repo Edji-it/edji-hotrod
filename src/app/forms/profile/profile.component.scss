@@ -9,8 +9,9 @@
     padding: $base-pad;
     margin-bottom: $base-pad;
     padding-left: 95px;
+    z-index: 5000; // allows for tooltips within
 
-    & user-avatar {
+    & .avatar-editor__wrap {
         position: absolute;
         top: 50%;
         left: $base-pad;

@@ -20,10 +20,10 @@
                 .icon.icon-folder
               .reading-title([class.no-version]="!reading.version_count")
                 .reading-title--center-row
-                  h1#previewTitle.small.reading-title__text {{reading.title}} 
+                  h1#previewTitle.small.reading-title__text {{reading.title}}
                     span(*ngIf="!reading.title")
                       i Untitled
-              button#readingPreviewClose.close.btn-icon--round((click)='close()') 
+              button#readingPreviewClose.close.btn-icon--round((click)='close()')
                 span(aria-hidden="true") &times;
             .modal-body
               #readingPreviewContent.reading-preview__words.words--read-only
@@ -54,17 +54,17 @@
               button#shareReadingButton.btn.btn-action(
                 (click)="createReading()",
                 title="Use this Reading with your class"
-              ) 
+              )
                 | {{ copy.share }}
                 i.icon.icon-megaphone.mr-0.icon--btn-inline
               button#editReadingButton.btn.btn-primary(
                 (click)="copyReading()",
                 title="Make a copy of this Reading, and edit it"
-              ) 
+              )
                 | {{ copy.edit }}
                 i.icon.icon-create.mr-0.icon--btn-inline
             ng-container(*ngIf="!loggedIn")
-              button#loginFromPreview.btn.btn-primary((click)="close(true)") 
+              button#loginFromPreview.btn.btn-primary((click)="close(true)")
                 | Log In
             ng-container(*ngIf="copy.send")
               button#sendReadingLink.btn.btn-clear(
@@ -75,7 +75,7 @@
                 i.icon.icon-reading-link.mr-0.icon--btn-inline
 //- Reading link modal
 edji-reading-link(
-    *ngIf="showReadingLinkModal", 
+    *ngIf="showReadingLinkModal",
     [reading]="reading",
     (closeModal)="showReadingLinkModal = false"
 )
