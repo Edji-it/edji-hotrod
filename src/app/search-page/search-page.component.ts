@@ -4,7 +4,16 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ReadingService, AcademyService, LockerService, ReadingQuery, AcademyState } from '../_services'
+import {
+  AuthService,
+  ReadingService,
+  AcademyService,
+  LockerService,
+  ReadingQuery,
+  AcademyState,
+  Academy,
+  SecretSwitchesService,
+} from '../_services'
 import { User, Reading, Project } from '../shared/datatypes'
 
 @Component({
@@ -13,6 +22,11 @@ import { User, Reading, Project } from '../shared/datatypes'
   styleUrls: ['./search-page.component.scss'],
 })
 export class SearchPage implements OnInit {
+  /**
+   * TEMP: New feature flag (word highlights)
+   */
+  public academyReadingType: boolean
+
   private subscriptions: Subscription[] = []
 
   public readings = []
@@ -25,6 +39,7 @@ export class SearchPage implements OnInit {
   // User
   public user: User
   public userDistrict: string
+  public userDistrictId: string
   // Main display toggle
   public isSearching: boolean
   // Filters
@@ -64,6 +79,8 @@ export class SearchPage implements OnInit {
   public loading: boolean = true
   public previewIndex: number = -1
   public academyState: AcademyState = {}
+  private selectedAcademy: Academy = {}
+  private selectedAcademyNum: number = -1
 
   // Archiving state
   public readingToArchive: Reading
@@ -102,6 +119,7 @@ export class SearchPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _locker: LockerService,
+    private _switches: SecretSwitchesService,
   ) {}
 
   ngOnInit() {
@@ -112,8 +130,9 @@ export class SearchPage implements OnInit {
       // User subscription needs to be first, prereq for filters
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
-        if (user && user.school && user.school.district_name) {
-          this.userDistrict = user.school.district_name.replace('District', '').trim()
+        if (user && user.school && user.school.district_name && user.school.district_id) {
+          this.userDistrict = user.school.district_name
+          this.userDistrictId = user.school.district_id
         } else {
           this.userDistrict = ''
         }
@@ -146,7 +165,10 @@ export class SearchPage implements OnInit {
           this.filterCount++
         }
         if (params.from) this.searchParams.first = parseInt(params.from)
-        if (params.district) this.searchParams.district = params.district
+        if (params.district) {
+          this.searchParams.activeLibrary = 'public'
+          this.searchParams.district = params.district
+        }
         /**
          * Load results
          * - Not when opening/closing preview if results are already loaded
@@ -194,6 +216,21 @@ export class SearchPage implements OnInit {
       ),
       this._auth.currentAcademyState.subscribe(currentState => {
         this.academyState = currentState
+        this.selectedAcademy = currentState.academies[currentState.selected]
+        // Re-load query on refresh or academy change
+        if (
+          this.searchParams.activeLibrary === 'academy' &&
+          this.selectedAcademyNum !== currentState.selected &&
+          currentState.selected > -1
+        ) {
+          this.loadFeed()
+        }
+        this.selectedAcademyNum = currentState.selected
+      }),
+      this._switches.secretSwitchesUpdates.subscribe(switches => {
+        if (switches['academyReading']) {
+          this.academyReadingType = switches['academyReading']
+        }
       }),
     )
   }
@@ -240,7 +277,10 @@ export class SearchPage implements OnInit {
     if (this.searchParams.first) {
       filterParams['from'] = this.searchParams.first
     }
-    if (this.searchParams.district) filterParams['district'] = this.searchParams.district
+    if (this.searchParams.district) {
+      filterParams['district'] = this.searchParams.district
+      filterParams['library'] = 'public'
+    }
     // fire an analytic event here for tracking purposes
     if (action !== '') {
       this.angulartics.eventTrack.next({
@@ -279,6 +319,10 @@ export class SearchPage implements OnInit {
     this.readings = []
     this.searchAlerts = {}
 
+    // if (this.searchParams.district.length > 0) {
+    //   this.searchParams.activeLibrary = 'public'
+    // }
+
     // pass in the arguments to build the queryParam string
     if (this.searchParams.activeLibrary === 'following') {
       this.searchParams.following = this.user.following
@@ -289,6 +333,8 @@ export class SearchPage implements OnInit {
         this.filterCount = 0
         return
       }
+    } else if (this.searchParams.activeLibrary === 'academy') {
+      this.searchParams.institutionId = this.selectedAcademy && this.selectedAcademy._id
     }
 
     let queryString = this._readings.buildSearchParams(this.searchParams)
@@ -303,7 +349,12 @@ export class SearchPage implements OnInit {
         this.loading = false
         this.total = data.total
         // Handle no results messaging
-        if ((this.searchParams.searchTerm || this.searchParams.district) && this.readings.length < 1) {
+        if (
+          (this.searchParams.searchTerm ||
+            this.searchParams.district ||
+            this.searchParams.activeLibrary == 'academy') &&
+          this.readings.length < 1
+        ) {
           this.searchAlerts.noResults = true
         }
       },
@@ -422,13 +473,6 @@ export class SearchPage implements OnInit {
     if (context === 'preview') {
       this.showReadingPreviewModal = true
     }
-  }
-
-  /**
-   * Validates the school and district_id properties exist on a user before trying to search by that param
-   */
-  public setDistrictParam(): void {
-    this.searchParams.district = this.user.school && this.user.school.district_id ? this.user.school.district_id : ''
   }
 
   /**

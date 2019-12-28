@@ -123,7 +123,11 @@ $grayFont: #727272;
 }
 
 .font-gray {
-  color: $grayFont;
+  color: $grayFont !important;
+}
+
+.font-light {
+  font-weight: lighter;
 }
 
 img.academy-logo {
