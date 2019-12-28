@@ -983,26 +983,14 @@ export class ProjectStore {
                 user.initials = generateInitialsFromName(user.fullname)
               }
             })
-          // attach the basic user information to each students_id
-          currentProject.students = currentProject.students_ids
-            .map(id => {
-              return userInfo.find(el => {
-                return el._id === id
-              })
-            })
-            .filter(user => {
-              return !!user
-            })
-          // attach the basic user information to each temp_id
-          currentProject.temps = currentProject.temp_ids
-            .map(id => {
-              return userInfo.find(el => {
-                return el._id === id
-              })
-            })
-            .filter(user => {
-              return !!user
-            })
+          // Build students array
+          currentProject.students = userInfo.filter(user => {
+            return user._id && currentProject.students_ids.includes(user._id)
+          })
+          // Build temps array
+          currentProject.temps = userInfo.filter(user => {
+            return user._id && currentProject.temp_ids.includes(user._id)
+          })
           this._commentStats.addUsersToStats(this.commentStats._stats, currentProject)
           this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, currentProject)
         },
