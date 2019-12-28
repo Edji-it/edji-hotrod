@@ -47,7 +47,7 @@
       [queryParams]="{ student: user._id }",
       [class.btn-show--animation]="readerToolShow",
     )
-      i#toggleMyCommentsMobile.icon-comment-count.toolbar-icon-mobile
+      i#toggleMyCommentsMobile.icon.icon-comment-count.toolbar-icon-mobile
   a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot(
     *ngIf="!readerToolShow",
     (tap)="readerToolShow = true"
