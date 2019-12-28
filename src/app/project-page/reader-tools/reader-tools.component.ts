@@ -20,7 +20,8 @@ export class ReaderToolsComponent implements OnInit {
   public currentProject: Project
   public currentReading: Reading
   public user: any = {}
-  public ownerToolBlockHeight: string
+
+  public readerToolShow: boolean
 
   // State vars
   public powersLoading: any = {}
