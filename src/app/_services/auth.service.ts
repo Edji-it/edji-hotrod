@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router'
-import { Observable, BehaviorSubject, Subject, from, forkJoin, of } from 'rxjs'
+import { Observable, BehaviorSubject, Subject, from, forkJoin, of, throwError } from 'rxjs'
 import { map, take, catchError, combineAll } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
@@ -333,15 +333,23 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Fetches version of user from database
+   * - Uses current user's id
+   */
+  private fetchUser(): Observable<{ user?: User }> {
+    return this._http.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions())
+  }
+
+  /**
    * Updates User object
    * This pulls the latest user object in case a user has multiple sessions at once
    */
-  public refreshUser(doNotSet?: boolean): Observable<any> {
-    return this._http.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions()).pipe(
-      map((data: any) => {
+  public refreshUser(): Observable<User> {
+    return this.fetchUser().pipe(
+      map((data: { user: User }) => {
         let user = data.user
         // If we get a user object, update our local copy
-        if (!doNotSet && user._id) {
+        if (user._id) {
           user = this.setUser(user)
         }
         return user
@@ -450,8 +458,17 @@ export class AuthService implements CanActivate {
     return new Observable(observer => {
       //observer.next(true)
       // Before we update the user, make sure we have the latest copy
-      this.refreshUser(true)
-        .pipe(take(1))
+      this.fetchUser()
+        .pipe(
+          take(1),
+          map(data => {
+            if (data.user && data.user._id) {
+              return data.user
+            } else {
+              throw throwError(data)
+            }
+          }),
+        )
         .subscribe(
           currentUser => {
             let mergedUser = Object.assign({}, currentUser)
