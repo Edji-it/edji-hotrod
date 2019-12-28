@@ -58,7 +58,6 @@ import { ProjectStore, ProjectListStore } from './_store'
 // Directives
 import { MediumEditorModule } from 'angular2-medium-editor'
 import { MultiselectDropdownModule } from './_directives'
-import { ClickOutsideDirective } from './_directives/click-outside.directive'
 
 // Components
 import {
@@ -206,7 +205,6 @@ const routerOptions: ExtraOptions = {
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [
-    ClickOutsideDirective,
     RedeemToken,
     RegisterPageComponent,
     CreateProfilePageComponent,

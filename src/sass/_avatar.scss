@@ -112,6 +112,7 @@ $mediumAvatarSize: 36px;
     color: #fff;
     font-size: 12px;
     text-transform: uppercase;
+    line-height: 1em;
     // Centering
     position: absolute;
     top: 50%;
@@ -120,6 +121,12 @@ $mediumAvatarSize: 36px;
     display: block;
     width: 100%;
     text-align: center;
+
+    & .emojioneemoji {
+      vertical-align: middle;
+      height: 1.1em;
+      width: 1.1em;
+    }
   }
   &__overflow {
     content: '';
@@ -281,5 +288,52 @@ $mediumAvatarSize: 36px;
     border-radius: 6px;
     line-height: 11px;
     text-shadow: 0.5px -0.5px 0px #acdef9;
+  }
+}
+
+.avatar-editor__wrap {
+  position: relative;
+  display: inline-block;
+
+  & .edit-btn {
+    opacity: 0.01;
+    transition: opacity 200ms linear;
+    background: rgba(0,0,0,0.3) !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50%;
+    cursor: pointer;
+    line-height: 100%;
+    color: transparent;
+    font-size: 1em;
+
+    &:hover, &:focus {
+        opacity: 1;
+        color: #fff;
+    }
+  }
+
+  // Different sizes
+  &.profile {
+    .edit-btn {
+      line-height: 150px;
+      font-size: 1.25em;
+    }
+  }
+
+  &.large {
+    .edit-btn {
+      line-height: 50px;
+      font-size: 1em;
+    }
+  }
+
+  & .user-icon {
+    margin: 0px !important;
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute } from '@angular/router'
-import { Observable, BehaviorSubject, Subject, from, forkJoin, of } from 'rxjs'
+import { Observable, BehaviorSubject, Subject, from, forkJoin, of, throwError } from 'rxjs'
 import { map, take, catchError, combineAll } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
@@ -181,6 +181,18 @@ export class AuthService implements CanActivate {
     return user
   }
 
+  /**
+   * Update local user property for display while editing (eg. initials)
+   * @param values eg. { initials: 'JK' }
+   * @note Only use in cases where exiting/proceeding saves changes
+   */
+  public tempLocalUserUpdate(values) {
+    let user = this.getUser()
+    user = Object.assign(user, values)
+    // This only updates the user locally, but will save update to DB when user finished
+    this.setUser(user)
+  }
+
   private updateAnalyticsUser(user): void {
     // Ignore if google site tag object is not available
     if (!gtag) {
@@ -295,12 +307,20 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Fetches version of user from database
+   * - Uses current user's id
+   */
+  private fetchUser(): Observable<{ user?: User }> {
+    return this._http.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions())
+  }
+
+  /**
    * Updates User object
    * This pulls the latest user object in case a user has multiple sessions at once
    */
-  public refreshUser(): Observable<any> {
-    return this._http.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions()).pipe(
-      map((data: any) => {
+  public refreshUser(): Observable<User> {
+    return this.fetchUser().pipe(
+      map((data: { user: User }) => {
         let user = data.user
         // If we get a user object, update our local copy
         if (user._id) {
@@ -412,8 +432,17 @@ export class AuthService implements CanActivate {
     return new Observable(observer => {
       //observer.next(true)
       // Before we update the user, make sure we have the latest copy
-      this.refreshUser()
-        .pipe(take(1))
+      this.fetchUser()
+        .pipe(
+          take(1),
+          map(data => {
+            if (data.user && data.user._id) {
+              return data.user
+            } else {
+              throw throwError(data)
+            }
+          }),
+        )
         .subscribe(
           currentUser => {
             let mergedUser = Object.assign({}, currentUser)
