@@ -28,14 +28,14 @@
 
 .toolbar__btn--mobile.hidden-lg-up(*ngIf="currentProject && !currentProject.isTeaching")
   //- Mobile Buttons
-  .toolbar-group--mobile([class.btn-group-show--animation]="ownerToolShow", [style.max-height]="'130px'")
+  .toolbar-group--mobile([class.btn-group-show--animation]="readerToolShow", [style.max-height]="'130px'")
     //- All Comments toggle
     a.btn.btn-icon--circle-shadow.toolbar--mobile(
       type="button",
-      (tap)="ownerToolShow=!ownerToolShow",
+      (tap)="readerToolShow=!readerToolShow",
       [routerLink]="'./'",
       [queryParams]="{ pane: 'comments' }",
-      [class.btn-show--animation]="ownerToolShow",
+      [class.btn-show--animation]="readerToolShow",
       [class.disabled]="currentProject.archived || !currentProject.heat_vision"
     )
       i#toggleAllCommentsMobile.icon-comment-feed.toolbar-icon-mobile
@@ -45,8 +45,16 @@
       type="button",
       [routerLink]="'./'",
       [queryParams]="{ student: user._id }",
-      [class.btn-show--animation]="ownerToolShow",
+      [class.btn-show--animation]="readerToolShow",
     )
       i#toggleMyCommentsMobile.icon-comment-feed.toolbar-icon-mobile
-  a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="ownerToolShow=!ownerToolShow")
+  a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot(
+    *ngIf="!readerToolShow",
+    (tap)="readerToolShow = true"
+  )
     span(style="font-size: 11px;") Tools
+  a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot(
+    *ngIf="readerToolShow",
+    (tap)="readerToolShow = false"
+  )
+    span.label.text-muted Close
