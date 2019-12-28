@@ -104,8 +104,16 @@
       )
         i#toggleQuestionfeedMobile.icon-question.toolbar-icon-mobile(*ngIf="currentProject")
         //- label Questions
-  a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot((tap)="ownerToolShow=!ownerToolShow")
-    span(style="font-size: 11px;") Tools
+  a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot(
+    *ngIf="!ownerToolShow",
+    (tap)="ownerToolShow = true"
+  )
+    span.label Tools
+  a#buttonOwnerToolToggle.btn.btn-icon--circle-shadow.mobile-menu-spot(
+    *ngIf="ownerToolShow",
+    (tap)="ownerToolShow = false"
+  )
+    span.label.text-muted Close
 
 //- Leaderboard goes here
 hot-leaderboard(
