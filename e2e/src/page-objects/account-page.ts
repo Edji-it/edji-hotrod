@@ -39,8 +39,16 @@ export class Account implements PageObjectInterface {
   public heroResubscribeBtn = element(by.id('heroResubscribeBtn'))
   public subHero = element(by.id('subHero'))
 
+  // Avatar Management
   public testAvatarToUpload: string = '../../assets/test-avatar/shia.jpg'
-
+  public avatarEdit = element(by.css('[data-test="btnAvatarEdit"]'))
+  public avatarEditor = element(by.css('[data-test="tooltipAvatarEditor"]'))
+  public avatarColorOptions = element.all(by.css('[data-test="colorBtn"]'))
+  public avatarEmojiOptions = element.all(by.css('[data-test="emojiBtn"]'))
+  public avatarColorTab = element(by.css('[data-test="editorTabColor"]'))
+  public avatarEmojiTab = element(by.css('[data-test="editorTabEmoji"]'))
+  public avatarSaveBtn = element(by.css('[data-test="avatarSave"]'))
+  public avatarResetBtn = element(by.css('[data-test="avatarReset"]'))
   // get the login page
   getPage(): void {
     browser.get('/#/account')

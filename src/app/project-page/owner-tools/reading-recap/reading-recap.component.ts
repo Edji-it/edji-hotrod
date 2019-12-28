@@ -182,7 +182,7 @@ export class ReadingRecapComponent implements OnInit {
   private getReadingCounts(project: Project): void {
     // handle overall reading counts here
     this.wordCount = Math.round(project.reading_id.words.length / 2)
-    this.questionCount = project.reading_id.questions.length
+    this.questionCount = project.reading_id.questions ? project.reading_id.questions.length : 0
     let wordsLength = project.reading_id.words.length
     for (let i = 0; i < wordsLength; i++) {
       let word = project.reading_id.words[i]

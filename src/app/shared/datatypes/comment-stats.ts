@@ -101,13 +101,14 @@ export class CommentStats {
     for (let i = 0; i < len; i++) {
       let student = project.students[i]
       // see if there is a student in the stats list already
-      let studentFound = commentStats.userStats.find(el => el._id === student._id)
+      let studentFound
+      if (student) studentFound = commentStats.userStats.find(el => el._id === student._id)
       // check for answered questions
       let studentQuestions = project.reading_id.questions
         ? this.getAnswers(project.reading_id.questions, project.answers, student)
         : []
       // add the student if they are not already in the list
-      if (!studentFound) {
+      if (!studentFound && student) {
         commentStats.userStats.push({
           _id: student._id,
           comment_count: 0,
@@ -128,13 +129,14 @@ export class CommentStats {
     for (let i = 0; i < len; i++) {
       let student = project.temps[i]
       // see if there is a student in the stats list already
-      let studentFound = commentStats.userStats.find(el => el._id === student._id)
+      let studentFound
+      if (student) studentFound = commentStats.userStats.find(el => el._id === student._id)
       // check for answered questions
       let studentQuestions = project.reading_id.questions
         ? this.getAnswers(project.reading_id.questions, project.answers, student)
         : []
       // add the student if they are not already in the list
-      if (!studentFound) {
+      if (!studentFound && student) {
         commentStats.userStats.push({
           _id: student._id,
           comment_count: 0,

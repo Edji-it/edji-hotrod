@@ -409,7 +409,6 @@ export var emojiFilters: EmojiFilter[] = [
       'badminton',
       'hockey',
       'field_hockey',
-      'cricket',
       'ski',
       'skier',
       'snowboarder',

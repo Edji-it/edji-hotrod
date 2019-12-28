@@ -544,6 +544,10 @@ $iconGrayOpacity: 0.6;
 
 .icon-search {
   @include icon('icon-search.svg');
+
+  .btn:hover & {
+    @include icon('icon-search--white.svg');
+  }
 }
 
 .icon-stop {

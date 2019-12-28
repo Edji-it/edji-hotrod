@@ -18,6 +18,7 @@ import { ALLSPARK } from '../../app.constants'
 import { take } from 'rxjs/operators'
 import { Title } from '@angular/platform-browser'
 import { User, UserSchoolDistrict } from 'src/app/shared/datatypes'
+import { userColorOptions } from 'src/app/shared/user-avatar-editor/user-avatar-values'
 
 @Component({
   selector: 'hot-profile-form',
@@ -44,6 +45,7 @@ export class ProfileFormComponent implements OnInit {
   // public userReferral: any = {}
   public user: User = <User>{}
   public userCopy: any
+  public editAvatar: boolean
 
   public moreIdentities = [
     {
@@ -60,7 +62,7 @@ export class ProfileFormComponent implements OnInit {
   ]
 
   public showMoreIdentities: boolean
-
+  public colorOptions: string[] = userColorOptions
   public initials: string = ''
   public schoolInfo: UserSchoolDistrict
 
@@ -81,10 +83,13 @@ export class ProfileFormComponent implements OnInit {
   ) {
     // Used for prefilled values
     let userSoFar = this._auth.getUser()
+    // Make sure user object is up-to-date before running setInitials
+    this.user = userSoFar
+
     let prefillFirst = ''
     let prefillLast = ''
-    let prefillIdentity = userSoFar.identities ? userSoFar.identities[0] : 'student'
-    if (userSoFar.fullname) {
+    let prefillIdentity = userSoFar.identities && userSoFar.identities[0] ? userSoFar.identities[0] : 'student'
+    if (userSoFar.fullname && userSoFar.fullname.length > 0) {
       let i = userSoFar.fullname.indexOf(' ')
       if (i > 0) {
         prefillFirst = userSoFar.fullname.slice(0, i)
@@ -152,17 +157,28 @@ export class ProfileFormComponent implements OnInit {
   }
 
   public setInitials(form): string {
-    let initials = ''
+    // Do not set initials if emoji or image selected
+    if (
+      this.user &&
+      ((this.user.initials && this.user.initials.length > 2) || (this.user.avatar && this.user.avatar.length > 7))
+    ) {
+      return
+    }
+    let options: any = { initials: '' }
     if (form.controls['firstname'].value) {
-      initials = form.controls['firstname'].value[0]
+      options.initials += form.controls['firstname'].value[0]
     }
     if (form.controls['lastname'].value) {
-      initials += form.controls['lastname'].value[0]
+      options.initials += form.controls['lastname'].value[0]
     }
-    this.initials = initials
+    this.initials = options.initials
+    // Set random bg color
+    if (!this.user.avatar) {
+      options.avatar = this.colorOptions[Math.floor(Math.random() * this.colorOptions.length)]
+    }
     // Update user object to display in Nav
-    this.tempLocalUserUpdate('initials', initials)
-    return initials
+    this.localUpdate(options)
+    return options.initials
   }
 
   public isSchoolStaff(identity: string): boolean {
@@ -179,14 +195,9 @@ export class ProfileFormComponent implements OnInit {
 
   /**
    * Update local user property for display while editing (eg. initials)
-   * @param property "initials"
-   * @param value "AB"
    */
-  private tempLocalUserUpdate(property, value) {
-    let user = this._auth.getUser()
-    user[property] = value
-    // This only updates the user locally, but will save update to DB when user finished
-    this._auth.setUser(user)
+  public localUpdate(values) {
+    this._auth.tempLocalUserUpdate(values)
   }
 
   /**
@@ -251,7 +262,6 @@ export class ProfileFormComponent implements OnInit {
     user.lastname = form.lastname
     user.fullname = form.firstname + ' ' + form.lastname
     user.identities = [form.accountRole]
-    user.initials = this.initials
     if (this.schoolInfo && this.isSchoolStaff(form.accountRole)) {
       user.school = this.schoolInfo
     }

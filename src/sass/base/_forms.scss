@@ -216,6 +216,22 @@ label textarea {
     opacity: 1;
   }
 }
+
+.in-field--left {
+  position: absolute;
+  font-size: 0.75em;
+  right: calc(100% - 2.5em);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: $zMid;
+  margin: 0px !important;
+
+  + input.form-control {
+    padding-left: 2.5em;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+}
 // Autosizing classes
 .form-control-dummysize {
   position: fixed !important;
@@ -278,8 +294,9 @@ label.border-wrap {
     top: 50%;
     left: 0.7em;
     transform: translateY(-50%);
-    height: 1em;
-    width: 1em;
+    height: 1em !important;
+    width: 1em !important;
+    margin: 0px;
 
     .input-group-lg & {
       left: 0.3em;
@@ -289,7 +306,7 @@ label.border-wrap {
   }
 
   & + .form-control {
-    padding-left: 2em;
+    padding-left: 2.25em;
     border-radius: 0.3rem !important;
   }
 }

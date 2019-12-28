@@ -32,6 +32,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   public canceled: boolean = false
   public academyHero: boolean = false
+  public editAvatar: boolean = false
 
   private subscriptions: any[] = []
 
