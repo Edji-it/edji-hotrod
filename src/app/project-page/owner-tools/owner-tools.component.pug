@@ -61,7 +61,6 @@
     //- Comment Stats pane
     a#toggleLeaderboard--narrow-viewport.btn.btn-icon--circle-shadow.toolbar--mobile(
       type="button",
-      (tap)="ownerToolShow=!ownerToolShow",
       [routerLink]="'./'",
       [queryParams]="{ pane: 'students' }",
       [class.btn-show--animation]="ownerToolShow",
@@ -83,7 +82,6 @@
     //- All Comments toggle
     a.btn.btn-icon--circle-shadow.toolbar--mobile(
       type="button",
-      (tap)="ownerToolShow=!ownerToolShow",
       [routerLink]="'./'",
       [queryParams]="{ pane: 'comments' }",
       [class.btn-show--animation]="ownerToolShow",
@@ -96,7 +94,6 @@
     div(*ngIf="currentReading.questions && currentReading.questions.length>0")
       a.btn.btn-icon--circle-shadow.toolbar--mobile(
         type="button",
-        (tap)="ownerToolShow=!ownerToolShow",
         [routerLink]="'./'",
         [queryParams]="{ pane: 'questions' }",
         [class.btn-show--animation]="ownerToolShow",
