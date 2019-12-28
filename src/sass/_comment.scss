@@ -751,9 +751,17 @@ $progressStart: 51px;
 }
 
 .text-comment-input {
+  & img {
+    margin-right: 0.2em;
+  }
+
   &.replyDisplay {
     width: 100% !important;
     // overflow: visible;
+  }
+
+  &.large-emoji {
+    font-size: 1.75em;
   }
 }
 

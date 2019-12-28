@@ -66,16 +66,15 @@ div([id]="'comment-' + comment._id")
                   [ngClass]="[ comment.type + '' ]",
                   [class.input-wrapper--reply]="reply || comment.reply_to"
                 )
-                    emoji-comment(
-                        *ngIf="comment.type == 'emoji' || !comment.type",
-                        [comment]="comment",
-                        [readOnly]="userPermission < 5",
-                        [reply]="reply",
-                        (activate)="activate()",
-                        (deactivate)="deactivate(comment)"
-                    )
+                    //- emoji-comment(
+                    //-     *ngIf="comment.type == 'emoji' || !comment.type",
+                    //-     [comment]="comment",
+                    //-     [readOnly]="userPermission < 5",
+                    //-     [reply]="reply",
+                    //-     (activate)="activate()",
+                    //-     (deactivate)="deactivate(comment)"
+                    //- )
                     text-comment(
-                        *ngIf="comment.type == 'text'",
                         [readOnly]="userPermission < 5",
                         [comment]="comment",
                         [active]="comment.active",
@@ -107,7 +106,7 @@ div([id]="'comment-' + comment._id")
                 ng-container(*ngIf="userPermission >= 3")
                     .action-separator
                     button.btn.btn-xs-danger.e2e-delete-button((tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
-                ng-container(*ngIf="comment.type != 'audio' && userPermission >= 5 && !comment.active")
+                ng-container(*ngIf="userPermission >= 5 && !comment.active")
                     .action-separator
                     button.btn.btn-xs-primary((tap)="activate(comment)") Edit
                 ng-container(*ngIf="comment.active && userPermission >= 5 && !readingReport")

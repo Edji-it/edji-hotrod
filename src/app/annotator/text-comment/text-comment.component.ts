@@ -82,18 +82,25 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     this.activate.emit()
   }
 
-  cleanData(html: string): string {
+  cleanData(html: string): any {
     /**
      * To do: DOM manipulation in separate field/element
      */
     let plainText = this.textInput.nativeElement.innerText
     let noText = !plainText.trim()
+    let type = 'text'
 
     let imgs = this.textInput.nativeElement.querySelectorAll('img')
     imgs.forEach(imgEl => {
+      // @todo handle non emoji images
       let code = document.createTextNode(':' + imgEl.getAttribute('title') + ':')
       imgEl.replaceWith(code)
     })
+    console.log(plainText, 'no text', noText, ' imgs', imgs.length)
+    if (noText && imgs.length > 0 && imgs.length < 6) {
+      // Large emoji only display
+      type = 'emoji'
+    }
     // Replace html breaks with new line chars
     // text = text.replace(/<br\s*\/?>/, '\n')
     let brs = this.textInput.nativeElement.querySelectorAll('br')
@@ -109,14 +116,15 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     // Detect unicode emoji for conversion
     let text = this.textInput.nativeElement.innerHTML
     text = emoji.toShort(text)
-    return text
+    return { data: text, type: type }
   }
 
   updateComment(commentData: any) {
     console.log(commentData)
-    let clean = this.cleanData(commentData)
+    let clean: any = this.cleanData(this.textInput.nativeElement.innerHTML)
     console.log(clean)
-    this.comment.data = clean
+    this.comment.data = clean.data
+    this.comment.type = this.comment.url ? 'audio' : clean.type
     this.activated = false
     this.deactivate.emit()
   }

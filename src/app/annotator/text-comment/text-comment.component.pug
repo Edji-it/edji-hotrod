@@ -10,7 +10,7 @@ doctype html
     placeholder="Comment...",
     [class.disabled]="readOnly",
     [innerHtml]="htmlContents",
-    (blur)='updateComment($event.target.innerHTML)',
+    (blur)='updateComment()',
     (keydown.enter)='blurField($event)',
     (keydown.shift.enter)='blurField($event)',
     (keyup.esc)='blurField($event)',
@@ -21,6 +21,6 @@ doctype html
   #textCommentInput.text-comment-input(
     #textDisplay,
     [innerHtml]="comment.data | linkify | emojione",
-    [ngClass]="{ 'replyDisplay': reply, 'hide': activated }",
+    [ngClass]="{ 'replyDisplay': reply, 'hide': activated, 'large-emoji': comment.type === 'emoji' }",
     (tap)="clickToggleActive($event)"
   )
