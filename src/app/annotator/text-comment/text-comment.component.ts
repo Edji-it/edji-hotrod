@@ -36,9 +36,9 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
   @Input() set active(active) {
     setTimeout(() => {
       if (!this.readOnly) {
-        if (active) {
+        if (active && !this.active) {
           this.activateField()
-        } else {
+        } else if (!active && this.active) {
           this.blurField()
         }
       }
@@ -51,12 +51,6 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
   constructor(private element: ElementRef, private _comments: CommentService, private emojiPipe: EmojiOnePipe) {}
 
   ngOnInit() {
-    setTimeout(() => {
-      if (this.comment.active == true) {
-        this.textInput && this.textInput.nativeElement.focus({ preventScroll: true })
-      }
-    }, 200)
-
     this.subscriptions.push(
       this._comments.emojiEdit.subscribe(emoji => {
         if (this.comment._id === this._comments.activeComment._id) {
@@ -107,23 +101,44 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     this.activated = true
     // Set textarea height
     this.textareaHeight = this.textDisplay ? this.textDisplay.nativeElement.scrollHeight + 'px' : '60px'
-    // Focus text field
-    var sel = Rangy.getSelection()
-    sel.selectAllChildren(this.textInput.nativeElement)
-    sel.collapseToEnd()
+    this.focusField()
     // Notify output
     this.activate.emit()
   }
 
-  cleanData(html: string): any {
-    /**
-     * To do: DOM manipulation in separate field/element
-     */
-    let plainText = this.textInput.nativeElement.innerText
-    let noText = !plainText.trim()
-    let type = 'text'
-    let el = this.textInput.nativeElement.cloneNode(true)
+  /**
+   * Focuses input field with caret/cursor at end
+   */
+  focusField() {
+    // Focus field once present
+    setTimeout(() => {
+      let target = this.textInput.nativeElement
+      let sel = Rangy.getSelection()
+      let range = Rangy.createRange()
+      range.selectNodeContents(target)
+      range.collapse(false)
+      sel.removeAllRanges()
+      sel.addRange(range)
+      target.focus({ preventScroll: true })
+      range.detach()
+    })
+  }
 
+  /**
+   * Processes input as html to handle:
+   * - Converting emojis in various forms (shortcode, image, unicode)
+   * - Parsing/display hashtags and Quick Labels
+   * - Removing other pasted html
+   * @param html
+   */
+  cleanData(html: string): { data: string; type: string } {
+    let type = 'text'
+    let el = document.createElement('div')
+    // We have to use the pipe to check for typed shortcodes
+    el.innerHTML = this.emojiPipe.transform(html)
+    let plainText = el.innerText
+    let noText = !plainText.trim()
+    // Process emojis as images (default state in content editable)
     let imgs = el.querySelectorAll('img')
     imgs.forEach(imgEl => {
       let title = imgEl.getAttribute('title')
@@ -132,7 +147,6 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
         imgEl.replaceWith(code)
       }
     })
-    console.log(plainText, 'has text', !noText, ' imgs', imgs.length)
     if (noText && imgs.length > 0 && imgs.length < 6) {
       // Large emoji only display
       type = 'emoji'
@@ -152,7 +166,6 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
 
   updateComment() {
     let clean: any = this.cleanData(this.textInput.nativeElement.innerHTML)
-    console.log(clean)
     this.comment.data = clean.data
     this.comment.type = this.comment.url ? 'audio' : clean.type
     this.activated = false
@@ -163,16 +176,11 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
   blurField(event?: Event) {
     if (!this._comments.emojiActive) {
       this.activated = false
-      event.preventDefault()
+      event && event.preventDefault()
       this.updateComment()
-      console.log("type ", event.type)
-      if (event && event.type !== 'blur') {
+      if (document.activeElement === this.textInput.nativeElement) {
         this.textInput.nativeElement.blur()
       }
     }
-  }
-
-  focusField(event) {
-    this.element.nativeElement.select()
   }
 }

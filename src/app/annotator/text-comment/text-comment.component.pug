@@ -10,7 +10,6 @@ doctype html
     placeholder="Comment...",
     [class.disabled]="readOnly",
     [innerHtml]="htmlContents",
-    (clickOutside)='blurField($event)',
     (keydown.enter)='blurField($event)',
     (keydown.shift.enter)='blurField($event)',
     (keyup.esc)='blurField($event)',

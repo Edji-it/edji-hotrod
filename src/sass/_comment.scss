@@ -767,6 +767,9 @@ $progressStart: 51px;
 .text-comment-input {
   & img {
     margin-right: 0.2em;
+    &::selection {
+      background: #cdcdcd !important;
+    }
   }
 
   &.replyDisplay {

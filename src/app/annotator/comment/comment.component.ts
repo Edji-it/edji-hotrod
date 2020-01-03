@@ -186,6 +186,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     if (comment && !noUpdate) {
       this.updateComment(comment)
     }
+    // Deactivate emoji keyboard
+    this._comments.setEmojiActive(false)
   } // deactivate()
 
   /**

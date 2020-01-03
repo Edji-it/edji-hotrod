@@ -16,7 +16,7 @@
 }
 
 .audio-comment-input-wrapper {
-  max-height: $readingLineHeight;
+  max-height: $readingLineHeight + 2px;
   border-color: #e0e4e8;
   white-space: nowrap;
   overflow: hidden;
