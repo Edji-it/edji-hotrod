@@ -19,8 +19,13 @@ export class CommentService {
   public showDeleteCommentModal: boolean
   public commentContext: string
 
+  // Deactivate all comments observable
   public clearActiveCommentsSource: Subject<boolean> = new Subject()
   public clearActiveComments: Observable<boolean> = this.clearActiveCommentsSource.asObservable()
+
+  // Emoji keyboard insert observable
+  public emojiEditSource: Subject<string> = new Subject()
+  public emojiEdit: Observable<string> = this.emojiEditSource.asObservable()
 
   /*
   Last Modified: 6 June 2017
@@ -163,6 +168,10 @@ export class CommentService {
     } else {
       this.emojiActive = true
     }
+  }
+
+  public sendEmojiToActive(shortCode: string) {
+    this.emojiEditSource.next(shortCode)
   }
 
   /**

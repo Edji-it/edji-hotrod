@@ -427,9 +427,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   /**
    * Opens emoji keyboard
    */
-  activateEmojiKeyboard() {
+  activateEmojiKeyboard(event: Event) {
+    event.stopPropagation()
     // Activate comment
-    this.activate()
+    if (!this.comment.active) {
+      this.activate()
+    }
     // Open keyboard
     this._comments.setEmojiActive()
   }

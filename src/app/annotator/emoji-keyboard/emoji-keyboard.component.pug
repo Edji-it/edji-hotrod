@@ -4,10 +4,7 @@
 			.emojionearea-filters
 				i.emojionearea-filter(*ngFor='let category of emojifilters; let i = index', [attr.title]='category.title', [innerHtml]='category.icon | emojione', (tap)='goToCategory(i)', [ngClass]="{ 'below-scroll': category['scrollY'] >= scrollAreaOffset }")
 				i#keyboardDoneBtn.keyboard-btn((tap)='makeInactive()', style='float: right;')
-					| Done
-				i.keyboard-btn((tap)='clearEmoji()', style='float: right;')
-					| Clear
-				i.keyboard-btn((tap)='deleteLastEmoji()', style='float: right; padding-top: 2px;font-size:21.25px;', [innerHtml]="':back:' | emojione")
+					| Save
 			.emojionearea-scroll-area(#emojiScrollArea, (window:resize)='updateScrollValues()', (scroll)='scrollUpdate($event)')
 				.input-group.input-group-sm.input--emoji-search
 					.input-group-prepend-icon

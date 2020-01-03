@@ -227,8 +227,7 @@ scroll-progress([scrollProgress]="currentScroll")
 //- Emoji Keyboard: Custom Emoji entry component
     [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''",
 emoji-keyboard(
-    [isActive]="_comments.emojiActive",
-    (commentChange)="updateActiveComment($event)",
+    [isActive]="_comments.emojiActive"
 )
 
 comment-explorer(

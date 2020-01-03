@@ -241,6 +241,10 @@ edji-comment {
   border-bottom: 2px solid #fef3bb;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
+
+  .comment-input-wrapper:hover + &, .active & {
+    margin-top: 2px;
+  }
 }
 
 .comment--placeholder {

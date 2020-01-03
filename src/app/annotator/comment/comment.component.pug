@@ -83,7 +83,7 @@ div([id]="'comment-' + comment._id")
                         (deactivate)="deactivate(comment, $event)"
                     )
                     .icon-group--in-field(*ngIf="userPermission >= 5 && !_comments.emojiActive")
-                        .icon.icon-comment-emoji.hover--tooltip((click)="activateEmojiKeyboard()")
+                        .icon.icon-comment-emoji.hover--tooltip((click)="activateEmojiKeyboard($event)")
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Emoji

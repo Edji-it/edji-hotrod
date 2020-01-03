@@ -1203,14 +1203,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Receive comment data from input sources:
-   * - Gets event from Emoji Keyboard
-   */
-  updateActiveComment(commentData: string) {
-    this._comments.activeComment.data = commentData
-  }
-
-  /**
    * Returns Start and End word indices of text selection
    * @description Provides start/end AND clears selection
    */
