@@ -464,3 +464,20 @@ user-avatar {
   z-index: -1;
 }
 
+.icon-group--in-field {
+  position: absolute;
+  bottom: 0.5em;
+  right: 0.5em;
+  cursor: pointer;
+  z-index: 6000; // Keep tooltips above comment bubble elements
+
+  & .icon {
+    vertical-align: bottom;
+    opacity: 0.8;
+    position: relative;
+
+    &:hover, &:focus {
+      opacity: 1;
+    }
+  }
+}

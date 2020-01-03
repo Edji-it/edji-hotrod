@@ -43,11 +43,14 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public readingReport: boolean = false
   @Input()
   set isActive(isActive: boolean) {
+    console.log("Set comment active", isActive)
     if (typeof isActive !== 'undefined' && this.active !== isActive) {
       this.active = isActive
       if (!isActive) {
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
+      } else {
+        this.activate()
       }
     }
   }
@@ -409,7 +412,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   private activeEmojiKeyboardReply(activeReply: any): void {
     this._comments.activeComment = activeReply
-    this._comments.setEmojiKeyboardActive(this.user)
+    this._comments.setEmojiActive()
   }
 
   public copyLink() {
@@ -419,5 +422,31 @@ export class CommentComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.linkCopied = false
     }, 3000)
+  }
+
+  /**
+   * Opens emoji keyboard
+   */
+  activateEmojiKeyboard() {
+    // Activate comment
+    this.activate()
+    // Open keyboard
+    this._comments.setEmojiActive()
+  }
+
+  /**
+   * Attach audio
+   */
+  addAudio() {
+    this.comment.type = 'audio'
+  }
+
+  /**
+   * Remove audio
+   */
+  removeAudio() {
+    this.comment.url = ''
+    this.comment.dataArray = []
+    this.comment.type = 'text'
   }
 }

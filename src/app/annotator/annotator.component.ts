@@ -1044,7 +1044,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   createComment(span: SelectionSpan): void {
     let isBox = typeof span.boxStart == 'number' && typeof span.boxEnd == 'number'
     // We need to make sure they aren't already editing a comment
-    this.inactivateComment()
+    this.deactivateComment()
 
     // Attach highlighted text to comment
     let text: string = ''
@@ -1186,7 +1186,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number, comment?: EdjiComment): void {
     // Any currrently active comments need to be deactivated
-    this.inactivateComment()
+    this.deactivateComment()
     if (isActive) {
       if (typeof comment !== 'undefined') {
         this._comments.activeComment = comment
@@ -1198,11 +1198,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  inactivateComment(): void {
-    if (this._comments.activeComment.start !== undefined) {
-      this._comments.activeComment.active = false
-      this._comments.activeComment = <EdjiComment>{}
-    }
+  deactivateComment(): void {
+    this._comments.deactivateComment()
   }
 
   /**
@@ -1594,14 +1591,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Decides if the Emoji Keyboard is active
-   */
-  public isEmojiKeyboardActive(): boolean {
-    // return this._comments.isEmojiKeyboardActive(this.user)
-    return this._comments.setEmojiKeyboardActive(this.user)
-  }
-
-  /**
    * setLinePositions gives us the number of lines in the project
    *
    * If the height of the word element does not match the one before it, this counts as a new line
@@ -1690,7 +1679,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // reset our icon arrow position
       this.commentHeightPos = 0
       // Run the standard comment inactivation to reset variables and do things like close the Keyboard
-      this.inactivateComment()
+      this.deactivateComment()
     }
   }
 
@@ -1729,7 +1718,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           this._comments.commentDeleted()
         })
         .catch(error => {
-          this.inactivateComment()
+          this.deactivateComment()
           console.error(error)
         })
     } else {
@@ -1741,7 +1730,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           this._comments.commentDeleted()
         })
         .catch(error => {
-          this.inactivateComment()
+          this.deactivateComment()
           console.error(error)
         })
     }

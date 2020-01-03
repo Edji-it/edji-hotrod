@@ -130,9 +130,11 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
   }
 
   blurField(event) {
-    this.activated = false
-    event.preventDefault()
-    this.textInput.nativeElement.blur()
+    if (!this._comments.emojiActive) {
+      this.activated = false
+      event.preventDefault()
+      this.textInput.nativeElement.blur()
+    }
   }
 
   focusField(event) {

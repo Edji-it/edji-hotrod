@@ -12,7 +12,7 @@ import { ProjectStore } from '../_store'
 export class CommentService {
   private ctx
   private colors
-  public keyboardActive: boolean
+  public emojiActive: boolean
   public activeComment: EdjiComment = <EdjiComment>{}
   public deleteCommentRef: EdjiComment = <EdjiComment>{}
   // public deleteAudioRef: EdjiComment = <EdjiComment>{}
@@ -41,6 +41,13 @@ export class CommentService {
    */
   public deactivateAllComments(): void {
     this.clearActiveCommentsSource.next(true)
+  }
+
+  public deactivateComment(): void {
+    if (this.activeComment._id !== undefined) {
+      this.activeComment.active = false
+      this.activeComment = <EdjiComment>{}
+    }
   }
 
   /**
@@ -150,17 +157,12 @@ export class CommentService {
   /**
    * Decides if the Emoji Keyboard is active
    */
-  public setEmojiKeyboardActive(user: any): boolean {
-    if (this.activeComment.type !== 'emoji') {
-      this.keyboardActive = false
+  public setEmojiActive(value?: boolean) {
+    if (value !== undefined) {
+      this.emojiActive = value
     } else {
-      this.keyboardActive =
-        this.activeComment &&
-        (!this.activeComment.type || this.activeComment.type === 'emoji') &&
-        this.activeComment.active &&
-        this.activeComment.user_id === user._id
+      this.emojiActive = true
     }
-    return this.keyboardActive
   }
 
   /**

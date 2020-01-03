@@ -82,8 +82,20 @@ div([id]="'comment-' + comment._id")
                         (activate)="activate()",
                         (deactivate)="deactivate(comment, $event)"
                     )
+                    .icon-group--in-field(*ngIf="userPermission >= 5 && !_comments.emojiActive")
+                        .icon.icon-comment-emoji.hover--tooltip((click)="activateEmojiKeyboard()")
+                            .tooltip-wrap
+                                .tooltip
+                                    .tooltip-title Add Emoji
+                        .icon.icon-comment-audio.hover--tooltip(
+                          *ngIf="comment.type !== 'audio'",
+                          (click)="addAudio()"
+                        )
+                            .tooltip-wrap
+                                .tooltip
+                                    .tooltip-title Add Recording
+                .comment-attachment-wrapper(*ngIf="comment.type == 'audio'")
                     audio-comment(
-                        *ngIf="comment.type == 'audio'",
                         [comment]="comment",
                         (save)="deactivate(comment)",
                         [active]="comment.active",
@@ -91,6 +103,8 @@ div([id]="'comment-' + comment._id")
                         [reply]="reply",
                         [commentContext]="commentContext"
                     )
+                    .icon-group--in-field
+                        .icon.icon-close(*ngIf="userPermission >= 5", (click)="removeAudio()")
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0(*ngIf="!readingReport", [class.reply-gap]="repliesShowing")
                 ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")

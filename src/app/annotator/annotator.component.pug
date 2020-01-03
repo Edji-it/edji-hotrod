@@ -219,7 +219,7 @@ scroll-progress([scrollProgress]="currentScroll")
         [pageObjs]="guideContent",
         [pager]="guideStepNo",
         (pageChange)="guideStepNo = $event",
-        [class.keyboard-offset]="isEmojiKeyboardActive()",
+        [class.keyboard-offset]="_comments.emojiActive",
         [class.mobile-toolbar-offset]="optionsShow",
         [forceCollapse]="true"
     )
@@ -227,9 +227,8 @@ scroll-progress([scrollProgress]="currentScroll")
 //- Emoji Keyboard: Custom Emoji entry component
     [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''",
 emoji-keyboard(
-    [isActive]="isEmojiKeyboardActive()",
+    [isActive]="_comments.emojiActive",
     (commentChange)="updateActiveComment($event)",
-    (dismissKeyboard)="inactivateComment()"
 )
 
 comment-explorer(

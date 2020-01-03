@@ -145,7 +145,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   // Runs on view init and onresize, to keep scroll event light
   updateScrollValues() {
     // Get Y values for categories
-    if (this._comments.keyboardActive) {
+    if (this._comments.emojiActive) {
       let filtersLength = this.emojifilters.length
       for (let i = 0; i < filtersLength; i++) {
         this.emojifilters[i]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category' + i).offsetTop
@@ -187,6 +187,11 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   }
 
   makeInactive(): void {
+    // Hide keyboard
+    this._comments.setEmojiActive(false)
+    // Deactivate focused comment
+    this._comments.deactivateComment()
+    // Notify parent, if needed
     this.dismissKeyboard.emit()
   }
 }
