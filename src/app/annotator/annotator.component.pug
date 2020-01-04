@@ -23,7 +23,9 @@ scroll-progress([scrollProgress]="currentScroll")
             )
                 i.icon.icon-comment-add
             //- View Comments
-            button#viewComments.emoji()
+            button#viewComments.emoji(
+                (tap)="viewCommentsOnSelection()"
+            )
                 i.icon.icon-search
         //- Mobile buttons
         .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="project.isTeaching")

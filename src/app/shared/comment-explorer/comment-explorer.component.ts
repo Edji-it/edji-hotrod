@@ -15,12 +15,13 @@ import {
 } from '@angular/core'
 
 // Project Dependencies
-import { AuthService, CommentService, SocketService } from '../../_services'
+import { AuthService, CommentService, SocketService, ReadingService } from '../../_services'
 import { Angulartics2 } from 'angulartics2'
 import { CommentComponent } from 'src/app/annotator/comment/comment.component'
 import { ProjectStore } from 'src/app/_store'
 import { NgScrollbar } from 'ngx-scrollbar'
 import { Router, ActivationEnd, ActivatedRoute } from '@angular/router'
+import { take } from 'rxjs/operators'
 @Component({
   selector: 'comment-explorer',
   templateUrl: './comment-explorer.component.pug',
@@ -49,6 +50,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public filterMode: SearchFilter = 'all'
   public filterUserId: string
   public filterCurrentUser: boolean
+  public filterSpan: { start: number; end: number }
+  public filterSpanText: string
 
   // Display
   public loading: boolean
@@ -98,6 +101,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   constructor(
     private projectStore: ProjectStore,
+    private _readings: ReadingService,
     private _socket: SocketService,
     public el: ElementRef,
     private _auth: AuthService,
@@ -173,6 +177,21 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.filterUserId = params['student']
       this.filterComments()
       this._visible = true
+    } else if (params['start']) {
+      this.filterSpan = {
+        start: parseInt(params['start']),
+        end: params['end'] ? parseInt(params['end']) : parseInt(params['start']),
+      }
+      this._readings.currentReading.pipe(take(1)).subscribe(reading => {
+        if (!reading.words || !reading.words[0]) return
+        this.filterSpanText = reading.words
+          .slice(this.filterSpan.start, this.filterSpan.end + 1)
+          .reduce((acc, word) => {
+            return acc + (word.str ? word.str : ' ')
+          }, '')
+      })
+      this._visible = true
+      this.filterComments()
     } else if (params['pane'] && params['pane'] === 'comments') {
       this.filterComments()
       this._visible = true
@@ -292,6 +311,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.sortValue = sort = 'location'
       sorted = this.commentByPos[comment.lineY].filter(comment => {
         return comment.start >= 0
+      })
+    } else if (this.filterSpan) {
+      this.filterMode = 'indices'
+      this.sortValue = sort = 'location'
+      sorted = sorted.filter(comment => {
+        return this.filterSpan.start <= comment.start && this.filterSpan.end >= comment.end
       })
     } else if (this.filterUserId) {
       this.filterMode = 'user'
@@ -503,4 +528,4 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 }
 
 type SearchSort = 'created' | 'location' | 'match'
-type SearchFilter = 'line' | 'all' | 'user' | 'search'
+type SearchFilter = 'line' | 'all' | 'user' | 'search' | 'indices'

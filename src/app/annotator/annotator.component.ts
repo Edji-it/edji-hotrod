@@ -1293,6 +1293,21 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clearQuickSelect()
   }
 
+  viewCommentsOnSelection(): void {
+    // Get selection indices
+    let span = this.getSelectionSpan()
+
+    if (!(span.start >= 0) || !(span.end >= 0)) {
+      return
+    }
+    // Open in Explorer
+    this._router.navigate(['./'], {
+      relativeTo: this.route,
+      queryParams: { ...span, pane: 'comments' },
+      queryParamsHandling: 'merge',
+    })
+  }
+
   /**
    * Loops through child elements to find textnodes
    * Pushes text nodes as formatted objects into this.words
