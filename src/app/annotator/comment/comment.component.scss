@@ -466,8 +466,8 @@ user-avatar {
 
 .icon-group--in-field {
   position: absolute;
-  bottom: 9px;
-  right: 0.5em;
+  bottom: 0px;
+  right: 3px;// 0.5em;
   cursor: pointer;
   z-index: 6000; // Keep tooltips above comment bubble elements
 
@@ -475,9 +475,14 @@ user-avatar {
     vertical-align: bottom;
     opacity: 0.8;
     position: relative;
+    padding: 16px 12px;
+    background-size: auto 65%;
+    border-radius: 3px;
+    margin-left: 1px;
 
     &:hover, &:focus {
       opacity: 1;
+      background-color: rgba(0,0,0,0.05);
     }
   }
 

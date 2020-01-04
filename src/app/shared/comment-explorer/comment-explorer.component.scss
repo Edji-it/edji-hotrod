@@ -46,6 +46,14 @@ $headerIconMargin: 12px;
   &.no-label {
     line-height: 1.75em;
   }
+
+  & .comment__highlight {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    width: auto;
+    display: inline-block;
+  }
 }
 
 .comment-container {

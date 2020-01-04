@@ -195,7 +195,7 @@ edji-comment {
   padding: 5px 10px;
   position: relative;
   font-size: $commentFontSize;
-  line-height: 1.1em;
+  line-height: 1.5em;
   background:$oneHighlightColor;
   border-color: $oneHighlightColor;
   border-radius: 4px 4px 0px 0px;
@@ -251,6 +251,11 @@ edji-comment {
 
   .comment-input-wrapper:hover + &, .active & {
     margin-top: 2px;
+  }
+
+  .icon-group--in-field {
+    bottom: 3px;
+    right: 6px;
   }
 }
 
