@@ -48,7 +48,11 @@ div([id]="'comment-' + comment._id")
             .comment__content
                 ng-container(*ngIf="!reply && !comment.reply_to")
                   //- Text that was commented on
-                  .comment__highlight(*ngIf="!isImageSpot && !readingReport", data-test="commentAnnotatedText")
+                  .comment__highlight.comment__highlight--clickable(
+                    *ngIf="!isImageSpot && !readingReport",
+                    data-test="commentAnnotatedText",
+                    (click)="viewCommentsOnWords()"
+                  )
                       | {{ comment.text ? comment.text : '...'}}
                   //- Image comment handling
                   .comment__highlight(*ngIf="isImageSpot && !readingReport")

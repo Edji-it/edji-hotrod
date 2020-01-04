@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
 import { AuthService, CommentService, SocketService, AnalyticsService } from '../../_services'
@@ -77,6 +77,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     private _socket: SocketService,
     public _analytics: AnalyticsService,
     private route: ActivatedRoute,
+    private _router: Router,
   ) {}
 
   ngOnInit() {
@@ -366,6 +367,13 @@ export class CommentComponent implements OnInit, OnDestroy {
       let yPos = this.getOffset(imageElement).top
       window.scrollTo(0, yPos - yOffset)
     }
+  }
+
+  public viewCommentsOnWords() {
+    this._router.navigate(['.'], {
+      relativeTo: this.route,
+      queryParams: { start: this.comment.start, end: this.comment.end, pane: 'comments' },
+    })
   }
 
   /**

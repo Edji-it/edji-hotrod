@@ -21,7 +21,7 @@
             ng-container(*ngIf="filterMode === 'indices'")
               i.icon.icon-search
               .header-text(data-test="indicesFilterHeader")
-                | {{ filterSpanText }}
+                .comment__highlight {{ filterSpanText }}
                 //- | {{ commentCount }} Comments
                 .sub-label  Comments on Phrase
             //- Search header (we only hide so that input can be focus)

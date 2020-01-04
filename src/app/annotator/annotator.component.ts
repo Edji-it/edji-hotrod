@@ -1303,8 +1303,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Open in Explorer
     this._router.navigate(['./'], {
       relativeTo: this.route,
-      queryParams: { ...span, pane: 'comments' },
-      queryParamsHandling: 'merge',
+      queryParams: { ...span },
     })
   }
 

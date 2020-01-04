@@ -5,6 +5,7 @@ $commentWidth: 175px;
 $commentPad: 4px;
 $commentFontSize: 13px;
 $oneHighlightColor: #fef3bb;
+$twoHighlightColor: #fde7b3;
 $commentBorder: 1px solid $oneHighlightColor;
 $expandBg: #e0e4e8;
 $multiLineBlockWidth: 250px;
@@ -194,10 +195,16 @@ edji-comment {
   padding: 5px 10px;
   position: relative;
   font-size: $commentFontSize;
+  line-height: 1.1em;
   background:$oneHighlightColor;
   border-color: $oneHighlightColor;
   border-radius: 4px 4px 0px 0px;
   color: #121212;
+
+  &--clickable:hover {
+    cursor: pointer;
+    background: $twoHighlightColor;
+  }
 }
 
 .comment__content {
