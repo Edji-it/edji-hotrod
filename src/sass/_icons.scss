@@ -682,7 +682,7 @@ $iconGrayOpacity: 0.6;
   z-index: $zMid + 999;
   left: 264px;
   margin-left: -15px;
-
+  pointer-events: none; // should never be clickable
   transition: opacity $slidingPaneTime linear;
   opacity: 0;
 

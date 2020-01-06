@@ -17,9 +17,9 @@ doctype html
     [style.minHeight]="textareaHeight"
   )
   //- Comment Display
-  #textCommentInput.text-comment-input(
+  #textCommentInput.text-comment-input.text-comment-display(
     #textDisplay,
-    [innerHtml]="comment.data | linkify | emojione",
+    [innerHtml]="comment.data ? (comment.data | linkify | emojione) : 'Share your thoughts...'",
     [ngClass]="{ 'replyDisplay': reply, 'hide': activated, 'large-emoji': comment.type === 'emoji' }",
     (tap)="clickToggleActive($event)"
   )

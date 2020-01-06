@@ -26,7 +26,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
   @Output() deactivate: EventEmitter<any> = new EventEmitter<any>()
 
   public activated: boolean = false
-  public textareaHeight: string = '60px'
+  public textareaHeight: string = '32px'
 
   public htmlContents: string
 
@@ -101,7 +101,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     // Set activated
     this.activated = true
     // Set textarea height
-    this.textareaHeight = this.textDisplay ? this.textDisplay.nativeElement.scrollHeight + 'px' : '60px'
+    this.textareaHeight = this.textDisplay ? this.textDisplay.nativeElement.scrollHeight + 'px' : '32px'
     this.focusField()
     // Notify output
     this.activate.emit()

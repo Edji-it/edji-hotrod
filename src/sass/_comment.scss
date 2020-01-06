@@ -831,12 +831,11 @@ $progressStart: 51px;
   }
 }
 
-
 textarea.text-comment-input,
 .text-comment-input {
   text-align: left;
   background: #fff;
-  padding: 8px 23px 8px 10px;
+  padding: 8px 10px 8px 10px;
   width: 180px;
   min-height: 30px;
   height: auto;
@@ -900,6 +899,32 @@ textarea.text-comment-input,
     opacity: 1 !important;
     color: #777 !important;
     -webkit-text-fill-color: #777;
+  }
+}
+
+
+.text-comment-input.text-comment-display {
+  .is-draft & {
+    color:#cacaca;
+    background: #f9f9f9;
+    font-style: italic !important;
+    font-size: 0.75em !important;
+  }
+}
+
+.text-comment-input:after {
+  // Spacer for content butons
+  content: '';
+  border-radius: 5px;
+  background: transparent;
+  width: 51px;
+  height: 28px;
+  float: right;
+  margin-bottom: -6px;
+  margin-right: -9px;
+  // Hide if not user's comment
+  .read-only & {
+    display: none;
   }
 }
 

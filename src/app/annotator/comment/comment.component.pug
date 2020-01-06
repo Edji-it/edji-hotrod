@@ -6,7 +6,8 @@ div([id]="'comment-' + comment._id")
         [class.active]="comment.active",
         [class.read-only]="userPermission < 5",
         [class.comment--reply]="reply || comment.reply_to",
-        [class.comment--large]="largeDisplay",
+        [class.comment--large]="largeDisplay",,
+        [class.is-draft]="_comments.isCommentNewDraft(comment)",
         [ngClass]="[ readingReport ? 'comment-block--align-top':'' ]",
     )
         user-avatar(
@@ -22,8 +23,7 @@ div([id]="'comment-' + comment._id")
                 [queryParams]="{ student: comment.user_id }"
             ) {{ comment.author }}
             a.link.sub-label(
-              (click)="copyLink()",
-              [class.is-draft]="_comments.isCommentNewDraft(comment)"
+              (click)="copyLink()"
             )
               span.time-text--draft New
               span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
@@ -41,7 +41,6 @@ div([id]="'comment-' + comment._id")
                 a.link.comment-meta__time(
                   [routerLink]="['./']",
                   [queryParams]="reply ? { reply: comment._id, comment: comment.reply_to } : { comment: comment._id }",
-                  [class.is-draft]="_comments.isCommentNewDraft(comment)"
                 ) &nbsp;
                     span.time-text--draft New
                     span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
@@ -70,14 +69,6 @@ div([id]="'comment-' + comment._id")
                   [ngClass]="[ comment.type + '' ]",
                   [class.input-wrapper--reply]="reply || comment.reply_to"
                 )
-                    //- emoji-comment(
-                    //-     *ngIf="comment.type == 'emoji' || !comment.type",
-                    //-     [comment]="comment",
-                    //-     [readOnly]="userPermission < 5",
-                    //-     [reply]="reply",
-                    //-     (activate)="activate()",
-                    //-     (deactivate)="deactivate(comment)"
-                    //- )
                     text-comment(
                         [readOnly]="userPermission < 5",
                         [comment]="comment",
