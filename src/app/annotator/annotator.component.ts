@@ -1293,6 +1293,9 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clearQuickSelect()
   }
 
+  /**
+   * Opens Explorer, viewing comments within selection
+   */
   viewCommentsOnSelection(): void {
     // Get selection indices
     let span = this.getSelectionSpan()

@@ -50,7 +50,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public filterMode: SearchFilter = 'all'
   public filterUserId: string
   public filterCurrentUser: boolean
-  public filterSpan: { start: number; end: number }
+  public filterSpan: { start: number; end: number; boxStart?: number; boxEnd?: number }
   public filterSpanText: string
 
   // Display
@@ -183,12 +183,26 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         start: parseInt(params['start']),
         end: params['end'] ? parseInt(params['end']) : parseInt(params['start']),
       }
+      // Handle Box params
+      if (params['boxStart']) {
+        this.filterSpan.boxStart = params['boxStart']
+        this.filterSpan.boxEnd = params['boxEnd'] ? parseInt(params['boxEnd']) : parseInt(params['boxStart'])
+      }
       this._readings.currentReading.pipe(take(1)).subscribe(reading => {
         if (!reading.words || !reading.words[0]) return
         this.filterSpanText = reading.words
           .slice(this.filterSpan.start, this.filterSpan.end + 1)
           .reduce((acc, word) => {
-            return acc + (word.str ? word.str : ' ')
+            if (word.boxes) {
+              return (
+                acc +
+                word.boxes.slice(this.filterSpan.boxStart, this.filterSpan.boxEnd + 1).reduce((bAcc, bWord) => {
+                  return bAcc + (bWord.str ? bWord.str + ' ' : '')
+                }, '')
+              )
+            } else {
+              return acc + (word.str ? word.str : ' ')
+            }
           }, '')
       })
       this.clearFilters(this.filterSpan)
@@ -318,7 +332,15 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.filterMode = 'indices'
       this.sortValue = sort = 'location'
       sorted = sorted.filter(comment => {
-        return this.filterSpan.start <= comment.start && this.filterSpan.end >= comment.end
+        let wordMatch = this.filterSpan.start <= comment.start && this.filterSpan.end >= comment.end
+        let boxMatch
+        if (this.filterSpan.boxStart) {
+          boxMatch =
+            comment.box && this.filterSpan.boxStart <= comment.box.start && this.filterSpan.boxEnd >= comment.box.end
+        } else {
+          boxMatch = true
+        }
+        return wordMatch && boxMatch
       })
     } else if (this.filterUserId) {
       this.filterMode = 'user'
