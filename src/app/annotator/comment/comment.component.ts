@@ -31,12 +31,23 @@ export class CommentComponent implements OnInit, OnDestroy {
   private repliesById: any = {}
   private project: any
   private fragment: string
+  private _commentUserId: string
 
   @Input() public comment: EdjiComment
   @Input() public reply: boolean = false // Is it a reply to another comment?
   @Input() private commentContext: string = 'comment' // See NOTES in summary.
   @Input() public selected: boolean = false
   @Input() public largeDisplay: boolean = false
+  /**
+   * Ensure permissions update if comment changes
+   * @note REQUIRED when dynamically changing comment input
+   */
+  @Input()
+  set commentUserId(id: string) {
+    let authorChanged: boolean = this._commentUserId && id !== this._commentUserId
+    this._commentUserId = id
+    authorChanged && this.checkPermissions()
+  }
   // Reading recap has a specialized display
   @Input() public readingReport: boolean = false
   @Input()
@@ -149,7 +160,7 @@ export class CommentComponent implements OnInit, OnDestroy {
    */
   private checkPermissions(): void {
     if (this.comment && this.user && this.project) {
-      this.userPermission = this._comments.getCommentPermissions(this.comment, this.user, this.project)
+      this.userPermission = this._comments.getCommentPermissions(this.comment.user_id, this.user, this.project)
     }
     // Set readonly flag
     this.readOnly = this.userPermission === CommentPermissions.READ
@@ -406,8 +417,8 @@ export class CommentComponent implements OnInit, OnDestroy {
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object
    */
-  private getCommentPermissions(comment: any): number {
-    return this._comments.getCommentPermissions(comment, this.user, this.project)
+  private getCommentPermissions(commentUser: any): number {
+    return this._comments.getCommentPermissions(commentUser, this.user, this.project)
   }
 
   private activeEmojiKeyboardReply(activeReply: any): void {

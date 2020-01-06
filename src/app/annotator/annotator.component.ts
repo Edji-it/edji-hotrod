@@ -1523,13 +1523,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  /** Used to determine which level of permission the user has for a specific comment
-   * @param comment A comment object
-   */
-  private getCommentPermissions(comment: any): number {
-    return this._comments.getCommentPermissions(comment, this.user, this.project)
-  }
-
   /**
    * For image hit/word box comments: Determines relative middle of word
    */

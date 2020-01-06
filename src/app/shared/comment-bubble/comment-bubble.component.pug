@@ -13,7 +13,8 @@
   edji-comment(
     [comment]="comment",
     [largeDisplay]="true",
-    (commentDeleted)="close()"
+    (commentDeleted)="close()",
+    [commentUserId]="comment.user_id",
   )
   .btn-row.right
     a.btn.btn-xs-primary.has-icon(

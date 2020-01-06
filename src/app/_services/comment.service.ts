@@ -146,11 +146,11 @@ export class CommentService {
    * @param user A user object
    * @param project A project object
    */
-  public getCommentPermissions(comment: any, user: any, project: Project): number {
-    if (!comment || !user) {
+  public getCommentPermissions(commentUser: any, user: any, project: Project): number {
+    if (!commentUser || !user) {
       // Fallback to read-only
       return CommentPermissions.READ
-    } else if (user._id == comment.user_id) {
+    } else if (user._id == commentUser) {
       return CommentPermissions.EDIT
     } else if (project && project.isTeaching) {
       return CommentPermissions.DELETE
