@@ -14,8 +14,6 @@ import { copyToClipboard } from 'src/app/shared/clipboard'
   styleUrls: ['./comment.component.scss'],
 })
 export class CommentComponent implements OnInit, OnDestroy {
-  public lineCount: number = 1
-  public indexOnLine: number = 1
   public repliesShowing: boolean = false
   public isImageSpot: boolean = false
   public linkCopied: boolean = false
@@ -43,7 +41,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public readingReport: boolean = false
   @Input()
   set isActive(isActive: boolean) {
-    console.log("Set comment active", isActive)
     if (typeof isActive !== 'undefined' && this.active !== isActive) {
       this.active = isActive
       if (!isActive) {
@@ -81,16 +78,9 @@ export class CommentComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Set initial values if passed
-    if (!this.reply) {
-      if (this.comment.lineCount) {
-        this.lineCount = this.comment.lineCount
-      }
-    }
     // Identify if it's an image spot comment
-    if (this.comment.loc && typeof this.comment.loc.x == 'number' && !this.comment.text && !this.comment.box) {
-      this.isImageSpot = true
-    }
+    this.isImageSpot =
+      this.comment.loc && typeof this.comment.loc.x == 'number' && !this.comment.text && !this.comment.box
 
     /** Set the current user every time it changes */
     this.subscriptions.push(
