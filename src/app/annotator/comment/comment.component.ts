@@ -129,8 +129,10 @@ export class CommentComponent implements OnInit, OnDestroy {
       ),
       // Certain events require a top-down decision to deactivate comments
       this._comments.clearActiveComments.subscribe(
-        deactivate => {
-          this.deactivate()
+        activeComment => {
+          if (activeComment !== this.comment._id && this.active) {
+            this.deactivate()
+          }
         },
         error => {
           console.error(error)
@@ -167,11 +169,15 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   activate(event?: any): void {
-    // Deactivate any active comments
-    this._comments.deactivateAllComments()
+    // Deactivate any other active comments
+    this._comments.deactivateAllComments(this.comment._id)
     // Activate this comment
     this.comment.active = this.active = true
     this._comments.activeComment = this.comment
+    // Open emoji keyboard for emoji comments
+    if (this.comment.type === 'emoji') {
+      this.activateEmojiKeyboard(new Event('created'))
+    }
   }
 
   /**
@@ -183,13 +189,15 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.comment.active = this.active = false
     this.comment.new = false
 
-    this._comments.activeComment.active = false
+    if (this._comments.activeComment && this._comments.activeComment._id === this.comment._id) {
+      this._comments.activeComment.active = false
+      // Deactivate emoji keyboard
+      this._comments.setEmojiActive(false)
+    }
     // Save when comment is toggled away from
     if (comment && !noUpdate) {
       this.updateComment(comment)
     }
-    // Deactivate emoji keyboard
-    this._comments.setEmojiActive(false)
   } // deactivate()
 
   /**

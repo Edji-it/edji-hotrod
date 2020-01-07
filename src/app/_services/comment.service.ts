@@ -20,8 +20,8 @@ export class CommentService {
   public commentContext: string
 
   // Deactivate all comments observable
-  public clearActiveCommentsSource: Subject<boolean> = new Subject()
-  public clearActiveComments: Observable<boolean> = this.clearActiveCommentsSource.asObservable()
+  public clearActiveCommentsSource: Subject<string> = new Subject()
+  public clearActiveComments: Observable<string> = this.clearActiveCommentsSource.asObservable()
 
   // Emoji keyboard insert observable
   public emojiEditSource: Subject<string> = new Subject()
@@ -43,9 +43,10 @@ export class CommentService {
   /**
    * Deactivates all Comment Components
    * - Fires clearActiveComments observable
+   * @param activeComment comment id to not deactivate
    */
-  public deactivateAllComments(): void {
-    this.clearActiveCommentsSource.next(true)
+  public deactivateAllComments(activeComment?: string): void {
+    this.clearActiveCommentsSource.next(activeComment)
   }
 
   public deactivateComment(): void {
@@ -163,6 +164,7 @@ export class CommentService {
    * Decides if the Emoji Keyboard is active
    */
   public setEmojiActive(value?: boolean) {
+    console.log("set emoji active", value)
     if (value !== undefined) {
       this.emojiActive = value
     } else {

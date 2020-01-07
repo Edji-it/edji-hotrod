@@ -799,6 +799,8 @@ $progressStart: 51px;
 .text-comment-input {
   & img {
     margin-right: 0.2em;
+    margin-bottom: 0.2em;
+
     &::selection {
       background: #cdcdcd !important;
     }
@@ -811,6 +813,10 @@ $progressStart: 51px;
 
   &.large-emoji {
     font-size: 1.75em;
+
+    .read-only & img {
+      margin-bottom: 0px;
+    }
   }
 }
 

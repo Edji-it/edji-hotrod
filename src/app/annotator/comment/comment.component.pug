@@ -153,7 +153,8 @@ div([id]="'comment-' + comment._id")
         .reply-row
           user-avatar.comment__avatar.show([userDetails]="user")
           .reply-input__line
-          .replyInput((click)="addReplyOfType(comment, 'text')") Add Reply...
+          .reply-input__wrap
+            .replyInput((click)="addReplyOfType(comment, 'text')") Add Reply...
             //--Add reply buttons--
             .icon-group--in-field
                 .icon.icon-comment-emoji.hover--tooltip(
