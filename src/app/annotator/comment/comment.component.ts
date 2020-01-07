@@ -78,12 +78,12 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Output() toggleCommentExplorer = new EventEmitter<boolean>()
 
   constructor(
-    private projectStore: ProjectStore,
-    private _comments: CommentService,
-    private _auth: AuthService,
-    public el: ElementRef,
-    private _socket: SocketService,
     public _analytics: AnalyticsService,
+    public _comments: CommentService,
+    public el: ElementRef,
+    private projectStore: ProjectStore,
+    private _auth: AuthService,
+    private _socket: SocketService,
     private route: ActivatedRoute,
     private _router: Router,
   ) {}
