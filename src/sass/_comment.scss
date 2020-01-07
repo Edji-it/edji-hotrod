@@ -791,7 +791,7 @@ $progressStart: 51px;
 }
 
 .emojionearea {
-  &.replyDisplay {
+  &.reply-display {
     width: 100% !important;
   }
 }
@@ -806,7 +806,7 @@ $progressStart: 51px;
     }
   }
 
-  &.replyDisplay {
+  &.reply-display {
     width: 100% !important;
     // overflow: visible;
   }
@@ -821,7 +821,7 @@ $progressStart: 51px;
 }
 
 .audio-comment-input-wrapper {
-  &.replyDisplay {
+  &.reply-display {
     width: 100% !important;
     // overflow: visible;
   }

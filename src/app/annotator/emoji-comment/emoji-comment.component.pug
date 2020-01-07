@@ -1,5 +1,5 @@
 .emoji-comment-input-wrapper.emojionearea.input-wrap(
-    [ngClass]="[comment.active ? 'active' : '', reply ? 'replyDisplay' : '']",
+    [ngClass]="[comment.active ? 'active' : '', reply ? 'reply-display' : '']",
     (tap)="!readOnly && activate.emit()"
 )
     #emojiCommentInput.emoji-comment-input(

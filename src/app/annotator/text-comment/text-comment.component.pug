@@ -13,13 +13,13 @@ doctype html
     (keydown.enter)='blurField($event)',
     (keydown.shift.enter)='blurField($event)',
     (keyup.esc)='blurField($event)',
-    [ngClass]="{ 'replyDisplay': reply, 'disabled': readOnly, 'hide': !activated }",
+    [ngClass]="{ 'reply-display': reply, 'disabled': readOnly, 'hide': !activated }",
     [style.minHeight]="textareaHeight"
   )
   //- Comment Display
   #textCommentInput.text-comment-input.text-comment-display(
     #textDisplay,
     [innerHtml]="comment.data ? (comment.data | linkify | emojione) : 'Share your thoughts...'",
-    [ngClass]="{ 'replyDisplay': reply, 'hide': activated, 'large-emoji': comment.type === 'emoji' }",
+    [ngClass]="{ 'reply-display': reply, 'hide': activated, 'large-emoji': comment.type === 'emoji' }",
     (tap)="clickToggleActive($event)"
   )
