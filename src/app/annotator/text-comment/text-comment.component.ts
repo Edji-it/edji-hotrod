@@ -137,7 +137,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
     let el = document.createElement('div')
     // We have to use the pipe to check for typed shortcodes
     el.innerHTML = this.emojiPipe.transform(html)
-    let plainText = el.innerText
+    let plainText = el.innerText || el.textContent
     let noText = !plainText.trim()
     // Process emojis as images (default state in content editable)
     let imgs = el.querySelectorAll('img')
@@ -159,7 +159,7 @@ export class TextCommentComponent implements OnInit, AfterViewInit {
       brEl.replaceWith(br)
     })
     // Strip any other HTML by using innerText
-    let text = el.innerText
+    let text = el.innerText || el.textContent
     // Detect unicode emoji for conversion
     text = emoji.toShort(text)
     return { data: text, type: type }
