@@ -111,6 +111,8 @@ export class SearchPage implements OnInit {
     dynamicTitleMaxItems: 4,
   }
 
+  public followingTest: any = {}
+
   constructor(
     private _auth: AuthService,
     private _readings: ReadingService,
@@ -120,7 +122,28 @@ export class SearchPage implements OnInit {
     private router: Router,
     private _locker: LockerService,
     private _switches: SecretSwitchesService,
-  ) {}
+  ) {
+    this.followingTest = [
+      {
+        fullname: 'Josh Kyburz',
+        username: 'jzkyburz',
+        initials: 'JK',
+        hero_status: true,
+      },
+      {
+        fullname: 'Corbin Fonville',
+        username: 'corbfon',
+        initials: 'CF',
+        hero_status: true,
+      },
+      {
+        fullname: 'Cody Pumper',
+        username: 'codiak',
+        initials: 'CP',
+        hero_status: true,
+      },
+    ]
+  }
 
   ngOnInit() {
     if (this.router.url.indexOf('/discover/search') >= 0 || this.searchParams.searchTerm.length > 0) {
@@ -496,6 +519,24 @@ export class SearchPage implements OnInit {
    */
   public goToAcademyPricing(): void {
     this.router.navigate(['/plans'], { fragment: 'academy' })
+  }
+
+  /**
+   * A 3 column layout is used in the template for the following cases:
+   *  - District Library when user is not in an Academy
+   *  - Academy Library when there are top users to follow (active teachers list)
+   */
+  public threeColLayout(): boolean {
+    if (
+      this.searchParams.district.length > 0 &&
+      this.academyState &&
+      this.academyState.academies &&
+      this.academyState.academies.length === 0
+    ) {
+      return true
+    }
+    if (this.searchParams.activeLibrary === 'academy') return true
+    return false
   }
 }
 
