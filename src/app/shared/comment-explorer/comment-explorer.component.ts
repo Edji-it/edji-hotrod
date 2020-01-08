@@ -1,27 +1,13 @@
-import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs'
-import { CommentPermissions, EdjiComment } from '../datatypes/index'
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-  ViewChildren,
-  QueryList,
-} from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { take } from 'rxjs/operators'
+import { NgScrollbar } from 'ngx-scrollbar'
 
 // Project Dependencies
+import { EdjiComment, Project, User } from '../datatypes'
 import { AuthService, CommentService, SocketService, ReadingService } from '../../_services'
-import { Angulartics2 } from 'angulartics2'
-import { CommentComponent } from 'src/app/annotator/comment/comment.component'
 import { ProjectStore } from 'src/app/_store'
-import { NgScrollbar } from 'ngx-scrollbar'
-import { Router, ActivationEnd, ActivatedRoute } from '@angular/router'
-import { take } from 'rxjs/operators'
 @Component({
   selector: 'comment-explorer',
   templateUrl: './comment-explorer.component.pug',
