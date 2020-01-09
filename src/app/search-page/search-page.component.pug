@@ -56,14 +56,14 @@ nav-bar([showDashboardOptions]="true")
                             button.btn.btn-academy((click)="goToAcademyPricing()") Becoming an Academy
         .col-lg-3.order-md-1.mb-4(*ngIf="threeColLayout() && searchParams.activeLibrary === 'academy'")
             #topTeachersList
-                .container
+                .container.pl-0
                     .row
                         .col-12
                             p Active Teachers to Follow
                     div(*ngFor="let teacher of followingTest")
-                        .row
+                        .row.ml-0
                             .col-3.p-0
-                                user-avatar([userDetails]="teacher")
+                                user-avatar([userDetails]="teacher", [size]="'medium'")
                             .col-9.p-0
                                 p.m-0 {{ teacher.fullname }}
                                 follow-tag([owner]="teacher", [tagOnly]="true")
