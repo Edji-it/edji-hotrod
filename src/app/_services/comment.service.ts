@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { ProjectService, ReadingService, SocketService } from './'
-import { Angulartics2 } from 'angulartics2'
 import { EdjiComment, CommentPermissions, Project } from '../shared/datatypes'
 import { ProjectStore } from '../_store'
 
@@ -164,7 +164,6 @@ export class CommentService {
    * Decides if the Emoji Keyboard is active
    */
   public setEmojiActive(value?: boolean) {
-    console.log("set emoji active", value)
     if (value !== undefined) {
       this.emojiActive = value
     } else {

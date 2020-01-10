@@ -396,6 +396,19 @@ export class CommentComponent implements OnInit, OnDestroy {
 
     this._analytics.event(type + 'ReplyCreate')
 
+    // Check if there is a draft reply in progress, to prevent spamming
+    let replies = this.repliesById[this.comment._id]
+    let lastReply = replies ? replies[replies.length - 1] : false
+    // If last reply is user's own draft, focus it!
+    if (lastReply && lastReply.user_id === this.user._id && this._comments.isCommentNewDraft(lastReply)) {
+      // Focus last draft
+      lastReply.active = true
+      // Set selected type
+      lastReply.type = type
+      this._comments.activeComment = lastReply
+      return
+    }
+
     var replyCommentNew = <EdjiComment>{
       user_id: this.user._id,
       author: this.user.fullname,
