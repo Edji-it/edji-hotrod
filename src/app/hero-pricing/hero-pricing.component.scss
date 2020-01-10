@@ -7,6 +7,47 @@
 
 .card-text {
   margin-bottom: 24px;
+
+  & .emojioneemoji {
+    font-size: 1.25em;
+    margin: 4px;
+  }
+
+  &.plan-detail {
+    text-indent: -2em;
+    margin-left: 2em;
+    line-height: 1em;
+    font-size: 14px;
+    min-height: 1.25em;
+  }
+}
+
+.card-body {
+  & .clickable:hover {
+    cursor: pointer;
+    color: $blue;
+  }
+
+  & .clickable {
+    position: relative;
+
+    // &:after {
+    //   content: 'Learn More';
+    //   position: absolute;
+    //   left: 3em;
+    //   bottom: 0px;
+    //   font-size: 10px;
+    //   text-decoration: underline;
+    // }
+  }
+}
+
+.card-footer {
+  background: #fff;
+}
+
+.card-img-top {
+  padding: 0 4px;
 }
 
 .pricing {
@@ -16,6 +57,15 @@
 
   &.deal {
     color: $red;
+  }
+
+  &.link {
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: $blue;
+    }
   }
 }
 
