@@ -121,7 +121,7 @@ describe('Project Page', () => {
       // Verify emoji and text are in comment
       browser.wait(EC.visibilityOf(project.commentContentDisplay), 3000, 'comment display did not show after save')
       expect(project.commentContentDisplay.getAttribute('innerHTML')).toContain('test comment')
-      expect(project.commentContentDisplay.getAttribute('innerHTML')).toContain(':heart_eyes:')
+      expect(project.commentContentDisplay.getAttribute('innerHTML')).toContain('heart_eyes')
       // delete the comment
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
       project.commentDelete.click()
