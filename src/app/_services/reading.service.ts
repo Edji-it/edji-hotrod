@@ -172,7 +172,7 @@ export class ReadingService {
       // strategies filter will hard-code to the edji strategies account
       const edjiStrategies = '5cc65d8d156b5300215670fe'
       queryString += `&owner_id=${edjiStrategies}`
-    } else if (searchParams.activeLibrary === 'academy') {
+    } else if (searchParams.activeLibrary === 'academy' && searchParams.institutionId) {
       // Attaching academy scope is required for search to use the correct validation
       queryString += `&institution_id=${searchParams.institutionId}&scope=academy`
     }

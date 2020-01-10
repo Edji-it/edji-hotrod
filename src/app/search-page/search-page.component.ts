@@ -357,7 +357,8 @@ export class SearchPage implements OnInit {
         return
       }
     } else if (this.searchParams.activeLibrary === 'academy') {
-      this.searchParams.institutionId = this.selectedAcademy && this.selectedAcademy._id
+      this.searchParams.institutionId =
+        this.selectedAcademy && this.selectedAcademy._id.length > 0 && this.selectedAcademy._id
     }
 
     let queryString = this._readings.buildSearchParams(this.searchParams)
