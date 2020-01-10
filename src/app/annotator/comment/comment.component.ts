@@ -459,6 +459,22 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Ensures comment type is allowed for different contexts
+   * @param commentContext
+   * @param type
+   */
+  availableInContext(types: string | string[]) {
+    if (typeof types === 'string') {
+      types = [types]
+    }
+    if (this.commentContext === 'answer' && !types.includes(this.comment.type)) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  /**
    * Attach audio
    */
   addAudio() {

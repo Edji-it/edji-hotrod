@@ -66,7 +66,7 @@ div([id]="'comment-' + comment._id")
                     | Reply
                     i.icon.icon-reply-arrow
                 .comment-input-wrapper(
-                  *ngIf="comment.data || userPermission >= 5",
+                  *ngIf="(comment.data || userPermission >= 5) && availableInContext(['emoji','text'])",
                   [ngClass]="[ comment.type + '' ]",
                   [class.input-wrapper--reply]="reply || comment.reply_to"
                 )
@@ -80,20 +80,20 @@ div([id]="'comment-' + comment._id")
                     )
                     .icon-group--in-field(*ngIf="userPermission >= 5 && !_comments.emojiActive")
                         #commentAddEmoji.icon.icon-comment-emoji.hover--tooltip(
-                          *ngIf="project.types.indexOf('emoji') > -1",
+                          *ngIf="project.types.indexOf('emoji') > -1 && availableInContext('emoji')",
                           (click)="activateEmojiKeyboard($event)"
                         )
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Emoji
                         #commentAddAudio.icon.icon-comment-audio.hover--tooltip(
-                          *ngIf="comment.type !== 'audio' && project.types.indexOf('audio') > -1",
+                          *ngIf="comment.type !== 'audio' && project.types.indexOf('audio') > -1 && availableInContext('audio')",
                           (click)="addAudio()"
                         )
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Recording
-                .comment-attachment-wrapper(*ngIf="comment.type == 'audio'")
+                .comment-attachment-wrapper(*ngIf="comment.type == 'audio' && availableInContext('audio')")
                     audio-comment(
                         [comment]="comment",
                         (save)="deactivate(comment)",
@@ -102,7 +102,7 @@ div([id]="'comment-' + comment._id")
                         [reply]="reply",
                         [commentContext]="commentContext"
                     )
-                    .icon-group--in-field
+                    .icon-group--in-field(*ngIf="availableInContext('text')")
                         .icon.icon-close(*ngIf="userPermission >= 5", (click)="removeAudio()")
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0(*ngIf="!readingReport", [class.reply-gap]="repliesShowing")
