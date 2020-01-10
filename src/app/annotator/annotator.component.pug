@@ -16,17 +16,19 @@ scroll-progress([scrollProgress]="currentScroll")
     )
         //- optionsShow
         //- Desktop buttons
-        .options.hidden-md-down
+        .highlight-options.hidden-md-down
             //- Add Comment
             button#addComment.emoji(
                 (tap)="addCommentOfType()"
             )
                 i.icon.icon-comment-add
+                label New
             //- View Comments
             button#viewComments.emoji(
                 (tap)="viewCommentsOnSelection()"
             )
                 i.icon.icon-search
+                label View
         //- Mobile buttons
         .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="project.isTeaching")
             //- .mobile-carrot-pointer &#9654;

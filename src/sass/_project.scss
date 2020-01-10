@@ -132,7 +132,7 @@ $hudColor: #676767;
   margin-right: 2px;
 }
 
-.options {
+.highlight-options {
   $shadowOffset: 2px;
 
   // Space from edge of element/reading
@@ -147,7 +147,7 @@ $hudColor: #676767;
   z-index: 1000;
   padding: 2px; // 5px 4px 5px 5px;
   width: auto;
-  height: 40px;
+  height: 50px;
 
   // box-shadow: 0px 1px 15px 0px rgba(0,0,0,0.1);
   //box-shadow: -3px 3px 0px 0px $purple;
@@ -171,25 +171,25 @@ $hudColor: #676767;
   }
 }
 
-.options.url-mode {
+.highlight-options.url-mode {
   width: 275px;
   margin-left: -137px;
 }
 
-.options.url-mode .bold,
-.options.url-mode .italic,
-.options.url-mode .quote {
+.highlight-options.url-mode .bold,
+.highlight-options.url-mode .italic,
+.highlight-options.url-mode .quote {
   width: 0px;
   overflow: hidden;
   margin-right: 0px;
   opacity: 0;
 }
 
-.options .italic {
+.highlight-options .italic {
   font-style: italic;
 }
 
-.options button {
+.highlight-options button {
   -webkit-transition: all 250ms ease-in-out;
   -moz-transition: all 250ms ease-in-out;
   -ms-transition: all 250ms ease-in-out;
@@ -203,12 +203,16 @@ $hudColor: #676767;
   padding: 5px 2.5px !important;
   background-color: $bubbleColor !important;
   text-align: center;
+  filter: grayscale(25%);
 
   & label {
+    font-family: 'Open Sans', Arial, sans-serif;
     text-transform: uppercase;
-    color: #333;
+    letter-spacing: 0.5px;
+    color: #6a6a6a;
     font-size: 10px;
     display: block;
+    cursor: pointer;
   }
 
   &:first-of-type {
@@ -219,7 +223,12 @@ $hudColor: #676767;
   }
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    filter: grayscale(0%);
+
+    & label {
+      color: $blue;
+    }
   }
 
   &:active {
@@ -228,14 +237,14 @@ $hudColor: #676767;
   }
 }
 
-.options.url-mode input {
+.highlight-options.url-mode input {
   border-left: 2px solid transparent;
   padding-right: 5px;
   padding-left: 5px;
   width: 236px;
 }
 
-.options input {
+.highlight-options input {
   -webkit-transition: all 300ms ease-in-out;
   -moz-transition: all 300ms ease-in-out;
   -ms-transition: all 300ms ease-in-out;
@@ -253,20 +262,20 @@ $hudColor: #676767;
   width: 0px;
 }
 
-.options button.active {
+.highlight-options button.active {
   background-color: rgba(255, 255, 255, 0.4);
   opacity: 1;
 }
 
-.yang .options button.active {
+.yang .highlight-options button.active {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.options button:hover {
+.highlight-options button:hover {
   //opacity: 0.95;
 }
 
-.options:before {
+.highlight-options:before {
   content: '';
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
