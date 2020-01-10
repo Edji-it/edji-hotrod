@@ -61,6 +61,13 @@ describe('Project Page using the comment explorer: ', () => {
       sidebar.ownerToolToggle()
       browser.wait(EC.elementToBeClickable(sidebar.commentsButton), 5000, 'never found the Comments owner tool button')
       sidebar.commentsButton.click()
+      // Wait for Explorer to open
+      browser.sleep(500)
+      browser.wait(
+        EC.elementToBeClickable(element(by.css('edji-comment'))),
+        5000,
+        'comments did not appear in Explorer',
+      )
       // Filter on first student's comments
       let commentAuthorLinks = element.all(by.css('.comment__user-link'))
       // Get first name, then click it to filter
@@ -74,6 +81,8 @@ describe('Project Page using the comment explorer: ', () => {
       )
       // Let content load
       explorer.waitForLoad()
+      // Ensure URL is updated with line parameter
+      expect(browser.getCurrentUrl()).toContain('student=')
       browser.wait(
         EC.invisibilityOf(explorer.allHeader),
         3000,
@@ -92,7 +101,6 @@ describe('Project Page using the comment explorer: ', () => {
       browser.sleep(400)
     })
 
-    // Useful to test after opening the Explorer for other purposes
     it('should open a comment, view line, and see comment line', () => {
       let commentPortals = element.all(by.css('avatar-portal:not(.hide) .user-icon__wrap'))
       browser.wait(
@@ -114,6 +122,31 @@ describe('Project Page using the comment explorer: ', () => {
         6000,
         'clicking comment portal did not open explorer "Viewing Line"',
       )
+      // Ensure URL is updated with line parameter
+      expect(browser.getCurrentUrl()).toContain('line=')
+    })
+
+    // Test viewing comments on a phrase
+    it('should view comments on a selection', async () => {
+      // Selection 458 - 494 (exact) has at least one comment
+      browser.wait(EC.elementToBeClickable(project.word(458)), 3000, 'never found words to click on')
+      project.word(458).click()
+      browser.sleep(300) // allow for quick select animation
+      project.word(494).click()
+      // View Comments
+      browser.wait(
+        EC.elementToBeClickable(project.viewCommentBtn),
+        5000,
+        'View Words selection option did not become clickable',
+      )
+      project.viewCommentBtn.click()
+      // Should see "Phrase"/Indices view in Explorer
+      browser.wait(EC.visibilityOf(explorer.viewHeader), 5000, 'selected phrase did not show in Explorer')
+      let commentCount = await element.all(by.css('.sliding-pane-comment edji-comment')).count()
+      // We expect at least one comment on the selection
+      expect(commentCount).toBeGreaterThan(0)
+      // Ensure URL is updated with selection indices
+      expect(browser.getCurrentUrl()).toContain('start=458&end=494')
     })
 
     // Useful to test after opening the Explorer for other purposes
@@ -143,6 +176,8 @@ describe('Project Page using the comment explorer: ', () => {
       browser.wait(EC.visibilityOf(commentResults.first()), 5000, 'comments did not show when searching')
       let commentCount = await element.all(by.css('.sliding-pane-comment edji-comment')).count()
       expect(commentCount).toBeGreaterThan(0)
+      // Ensure URL is updated with search parameter
+      expect(browser.getCurrentUrl()).toContain('search=test')
       // Clear search
       browser.wait(EC.elementToBeClickable(explorer.searchClear), 4000, 'search clear button did not become visible')
       explorer.searchClear.click()
@@ -155,7 +190,11 @@ describe('Project Page using the comment explorer: ', () => {
       explorer.searchInput.sendKeys('"zebra12345!"')
       explorer.searchInput.sendKeys(protractor.Key.ENTER)
       browser.wait(EC.visibilityOf(explorer.loading), 5000, 'did not load when typing second search term')
-      browser.wait(EC.visibilityOf(element(by.css('.none-found-block'))), 5000, 'no results message did not show when results not expected')
+      browser.wait(
+        EC.visibilityOf(element(by.css('.none-found-block'))),
+        5000,
+        'no results message did not show when results not expected',
+      )
     })
   })
 

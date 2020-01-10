@@ -294,7 +294,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     // Apply Heat Vision
     if (!this.project.heat_vision && !this.project.isTeaching) {
       sorted = sorted.filter(c => {
-        return c.user_id === this.user._id
+        return c.user_id === this.user._id || c.authorIsTeacher
       })
     }
     // Handle if reply selected

@@ -17,6 +17,8 @@ export class Project implements PageObjectInterface {
   // Element References
   public addCommentBtn = element(by.id('addComment'))
   public addCommentMobileBtn = element(by.id('addCommentMobile'))
+  public viewCommentBtn = element(by.id('viewComments'))
+  public viewCommentMobileBtn = element(by.id('viewCommentsMobile'))
   public addEmojiBtn = element(by.id('commentAddEmoji'))
   public addAudioBtn = element(by.id('commentAddAudio'))
   public addTextReplyBtn = element(by.id('addTextReply'))
