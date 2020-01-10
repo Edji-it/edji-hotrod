@@ -6,7 +6,7 @@ doctype html
     - Tying in comments and comment creation methods
 scroll-progress([scrollProgress]="currentScroll")
 #emojiAnnotator.annotator.reading-page(
-    [ngClass]="[ lineExpanded ? 'comment-expanded' : '' , commentPane ? 'sliding-out' : '']",
+    [ngClass]="[ commentPane ? 'sliding-out' : '']",
     [style.min-height]="currentDocHeight + 'px'"
 )
     .text-options(

@@ -24,6 +24,7 @@ export class Project implements PageObjectInterface {
   public addTextReplyBtn = element(by.id('addTextReply'))
   public addEmojiReplyBtn = element(by.id('addEmojiReply'))
   public addAudioReplyBtn = element(by.id('addAudioReply'))
+  public emojiClose = element(by.id('keyboardDoneBtn'))
   public image = element(by.css('#annotatorContent .img-wrap > img'))
   public imageWordBoxes = element.all(by.css('#annotatorContent .img-wrap .w-box'))
   public textComment = element(by.css('.new textarea.text-comment-input'))
@@ -41,6 +42,7 @@ export class Project implements PageObjectInterface {
   public commentNotHidden = element(by.css('avatar-portal:not(.hide)'))
   public getEmojiFromKeyboard = (locator: string) => element(by.css('emoji-keyboard')).element(by.css(locator))
   public textCommentInput = element(by.css('.text-comment-input[contenteditable="true"]'))
+  public commentContentDisplay = element(by.css('.text-comment-display'))
   public word = (index: string | number) => element(by.css(`.w[index='${index}']`))
   public commentAnnotatedText = element(by.css('[data-test="commentAnnotatedText"]'))
 
