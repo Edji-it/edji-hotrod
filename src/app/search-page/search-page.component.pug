@@ -60,7 +60,7 @@ nav-bar([showDashboardOptions]="true")
                     .row
                         .col-12
                             p Active Teachers to Follow
-                    div(*ngFor="let teacher of followingTest")
+                    div(*ngFor="let teacher of followTeachers")
                         .row.ml-0
                             .col-3.p-0
                                 user-avatar([userDetails]="teacher", [size]="'medium'")

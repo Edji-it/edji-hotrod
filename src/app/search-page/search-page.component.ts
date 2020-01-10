@@ -53,6 +53,7 @@ export class SearchPage implements OnInit {
     activeLibrary: 'public', // defaulted to public,
     district: '', // defaulted to empty
   }
+  public followTeachers: User
 
   public rows: number = 15
   public total: number = 15
@@ -111,8 +112,6 @@ export class SearchPage implements OnInit {
     dynamicTitleMaxItems: 4,
   }
 
-  public followingTest: any = {}
-
   constructor(
     private _auth: AuthService,
     private _readings: ReadingService,
@@ -122,28 +121,7 @@ export class SearchPage implements OnInit {
     private router: Router,
     private _locker: LockerService,
     private _switches: SecretSwitchesService,
-  ) {
-    this.followingTest = [
-      {
-        fullname: 'Josh Kyburz',
-        username: 'jzkyburz',
-        initials: 'JK',
-        hero_status: true,
-      },
-      {
-        fullname: 'Corbin Fonville',
-        username: 'corbfon',
-        initials: 'CF',
-        hero_status: true,
-      },
-      {
-        fullname: 'Cody Pumper',
-        username: 'codiak',
-        initials: 'CP',
-        hero_status: true,
-      },
-    ]
-  }
+  ) {}
 
   ngOnInit() {
     if (this.router.url.indexOf('/discover/search') >= 0 || this.searchParams.searchTerm.length > 0) {
@@ -357,8 +335,7 @@ export class SearchPage implements OnInit {
         return
       }
     } else if (this.searchParams.activeLibrary === 'academy') {
-      this.searchParams.institutionId =
-        this.selectedAcademy && this.selectedAcademy._id.length > 0 && this.selectedAcademy._id
+      this.searchParams.institutionId = this.selectedAcademy && this.selectedAcademy._id
     }
 
     let queryString = this._readings.buildSearchParams(this.searchParams)
@@ -380,6 +357,20 @@ export class SearchPage implements OnInit {
           this.readings.length < 1
         ) {
           this.searchAlerts.noResults = true
+        }
+        // handle bucket items (top followers, etc..)
+        if (data && data.buckets) {
+          if (data.buckets.owner_id && data.buckets.owner_id.length > 0) {
+            let userIds = data.buckets.owner_id.map(obj => obj.key)
+            this._auth.getPublicUsers(userIds).subscribe(
+              userInfo => {
+                this.followTeachers = userInfo
+              },
+              error => {
+                console.error(error)
+              },
+            )
+          }
         }
       },
       err => {

@@ -156,6 +156,8 @@ export class ReadingService {
    * @param searchParams is our object that contains properties to build a proper query param string
    */
   public buildSearchParams(searchParams: ReadingQuery): string {
+    // set the maximum number of followers to return here
+    let maxFollowers = 3
     // Construct search query
     let queryString = `from=${searchParams.first}`
     if (searchParams.searchTerm) {
@@ -174,7 +176,7 @@ export class ReadingService {
       queryString += `&owner_id=${edjiStrategies}`
     } else if (searchParams.activeLibrary === 'academy' && searchParams.institutionId) {
       // Attaching academy scope is required for search to use the correct validation
-      queryString += `&institution_id=${searchParams.institutionId}&scope=academy`
+      queryString += `&institution_id=${searchParams.institutionId}&scope=academy&buckets=owner_id&bucket_max=${maxFollowers}`
     }
     // Subjects
     if (searchParams.subjectFilter && searchParams.subjectFilter[0]) {
