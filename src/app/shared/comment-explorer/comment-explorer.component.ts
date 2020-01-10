@@ -403,6 +403,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       relativeTo: this.route,
       queryParams: params,
       queryParamsHandling: 'merge',
+      // By ignoring "override" clear events, we preserve browser back/forward functionality
+      skipLocationChange: !!paramsToOverride,
     })
   }
 
