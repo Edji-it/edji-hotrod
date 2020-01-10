@@ -408,4 +408,25 @@ describe('Discover Feed', () => {
       browser.wait(EC.elementToBeClickable(discover.discoverMyDistrict), 5000, 'never saw my district header')
     })
   })
+
+  describe('Academy Library Filter', () => {
+    beforeAll(() => {
+      sidebar.logout()
+      login.getPage()
+      login.loginAndVerify(login.adminUser, login.adminPassword)
+      sidebar.navDiscover.click()
+    })
+
+    it('should open academy library readings and see academy library header', () => {
+      browser.wait(
+        EC.elementToBeClickable(discover.firstFeedReading),
+        5000,
+        'never saw first reading in discover feed public view',
+      )
+      // View academy library readings
+      browser.wait(EC.elementToBeClickable(discover.filterAcademy), 5000, 'academy library button was not clickable')
+      discover.filterAcademy.click()
+      browser.wait(EC.elementToBeClickable(discover.discoverAcademy), 5000, 'never saw academy library header')
+    })
+  })
 })

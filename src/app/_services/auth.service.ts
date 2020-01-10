@@ -167,10 +167,8 @@ export class AuthService implements CanActivate {
     }
     // Determine if user has completed required profile fields
     user.profileIncomplete = user.type !== 'temp' && (!user.fullname || missingSchool || missingIdentity)
-    // Determine if user is an Academy Admin
-    if (user && user.license_ids && user.license_ids[0]) {
-      this.fetchAcademies(user)
-    }
+    // Fetch user's academy information
+    this.fetchAcademies(user)
     // If user does not have initials, set them
     if (user && !user.initials && user.fullname) {
       user.initials = generateInitialsFromName(user.fullname)
@@ -209,56 +207,32 @@ export class AuthService implements CanActivate {
   }
 
   /**
-   * Retrieve academy objects
-   * @description Updates ACADEMY OBSERVABLE and user's isAcademyAdmin property
+   * Fetches Academy Info
+   * @description Updates ACADEMY STATE OBSERVABLE and user's isAcademyAdmin property
    */
   private fetchAcademies(user: User): void {
-    // Fetch license and academy information for admins and owners
-    this._http
-      .get<any>(this.getUrl() + '/api/v1/licenses', { headers: this.getHeaders() })
-      .pipe(take(1))
-      .subscribe(
-        data => {
-          // Attach properties for Academy users
-          if (data.licenses) {
-            let licenseCount = data.licenses.length
-            let academies = []
-            for (let i = 0; i < licenseCount; i++) {
-              let license = data.licenses[i]
-              license.roles.forEach(roleObj => {
-                // Detect Admin
-                if (roleObj.role === 'owner' || roleObj.role === 'administrator') {
-                  user.isAcademyAdmin = true
-                }
-              })
-              // Attach academies to user
-              academies.push(license.owning_institution)
-            }
-            this.setAcademies(academies)
+    // It's only necessary to make this call when user has associated institution ids
+    if (user.institution_ids && user.institution_ids[0]) {
+      this._http
+        .get<any>(this.getUrl() + '/api/v1/users/@me/academies', {
+          headers: this.getHeaders(),
+        })
+        .pipe(take(1))
+        .subscribe(data => {
+          if (data.academies) {
+            // Check for admin
+            data.academies.forEach(academy => {
+              if (academy.roles.indexOf('owner') > -1 || academy.roles.indexOf('administrator') > -1) {
+                user.isAcademyAdmin = true
+                //  Update user
+                this.currentUserSource.next(user)
+                this._locker.set('user', user)
+              }
+            })
+            this.setAcademies(data.academies)
           }
-          this.currentUserSource.next(user)
-          this._locker.set('user', user)
-        },
-        err => {
-          // Fetch academy information for teacher (non-admin) users
-          if (err.status == 404 && user.institution_ids && user.institution_ids[0]) {
-            this._http
-              .get<any>(this.getUrl() + '/api/v1/institutions/' + user.institution_ids[0], {
-                headers: this.getHeaders(),
-              })
-              .pipe(take(1))
-              .subscribe(data => {
-                let academy = data.institution
-                if (academy) {
-                  let academies = [academy]
-                  this.setAcademies(academies)
-                }
-              })
-          } else {
-            console.error(err)
-          }
-        },
-      )
+        })
+    }
   }
 
   /**

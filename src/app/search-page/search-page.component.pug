@@ -81,13 +81,23 @@ nav-bar([showDashboardOptions]="true")
                     //- My District
                     div
                         button#discoverFilterDistrict.btn.btn-filter(
-                            *ngIf="userDistrict",
+                            *ngIf="userDistrict && userDistrictId",
                             title="Filter by shared readings in your district",
                             [class.active]="searchParams.district.length > 0",
-                            (click)="setDistrictParam(); searchParams.first=0; updateSearchParams('filter_district')"
+                            (click)="searchParams.district = userDistrictId; searchParams.first=0; updateSearchParams('filter_district')"
                         )
                             i.icon.icon-district-sm(style="vertical-align:middle;")
                             | My District
+                    //- Academy Library
+                    div
+                        button#discoverAcademyLibrary.btn.btn-filter(
+                            *ngIf="academyState && academyState.academies && academyState.academies.length > 0 && academyReadingType",
+                            title="Filter by shared readings in your academy",
+                            [class.active]="searchParams.activeLibrary === 'academy'",
+                            (click)="searchParams.activeLibrary = 'academy'; searchParams.first=0; updateSearchParams('filter_academy')"
+                        )
+                            i.icon.icon-academy-plate(style="vertical-align:middle;")
+                            | Academy Library
                     //- Following
                     div
                         button#discoverFilterFollowing.btn.btn-filter(
@@ -144,7 +154,7 @@ nav-bar([showDashboardOptions]="true")
             #discoverMyDistrict.district-header(*ngIf="searchParams.district.length > 0")
                 div
                   i.icon-district-lg
-                  h2.district-header__text {{ userDistrict }} District
+                  h2.district-header__text {{ userDistrict }}
                 .district-subheading
                   p.font-gray Reading from teachers in your district
                             //- @todo: Enable link when district is displayed on account
@@ -154,6 +164,13 @@ nav-bar([showDashboardOptions]="true")
                             //-     title="Click to see your district"
                             //- )
                             //-     |your district
+            #discoverAcademy.district-header(*ngIf="searchParams.activeLibrary === 'academy' && academyReadingType")
+                div(*ngIf="selectedAcademy")
+                  i.icon-academy-plate.icon-academy-plate-discover
+                  h2.district-header__text.font-gray {{ selectedAcademy.name }}
+                    i.font-light &nbsp;Academy
+                .district-subheading
+                  p.font-gray Readings within your Academy Library
             #notFollowingMessage.alert.alert-light(*ngIf="searchAlerts.notFollowing")
                 h4 Time to follow someone!
                 p Follow Edji to see some of our latest curated Readings.
@@ -168,14 +185,24 @@ nav-bar([showDashboardOptions]="true")
                 b Error Loading
                 | There was an error on our server or your connection, please try again or contact us if you continue to have an issue.
             //- No results message when user is genuinely searching
-            .alert.alert-info(*ngIf="searchAlerts.noResults && !searchParams.district")
+            .alert.alert-info(*ngIf="searchAlerts.noResults && !searchParams.district && searchParams.activeLibrary !== 'academy'")
                 b No Readings Found
                 | There are no readings for "{{searchParams.searchTerm}}" with your current filters, please try a different term or expanding your filters.
-            //- No results message when user is genuinely searching
+            //- No results message when user is genuinely searching -- district library
             .alert.alert-info(*ngIf="searchAlerts.noResults && searchParams.district")
                 b No Shared Readings From Your District
                 p We couldn't find any shared readings from your district. You can see readings from other Teachers in your district by inviting them to Edji.
                 button.btn.btn-primary((click)="showReferral()") Refer a Friend
+            //- No results message when user is genuinely searching -- academy library
+            .alert.alert-info(*ngIf="searchAlerts.noResults && searchParams.activeLibrary === 'academy' && academyReadingType")
+                b No Shared Readings From Your Academy
+                p We couldn't find any shared readings from the {{ selectedAcademy.name }}
+                    i Academy
+                    | .
+                p You can see readings from other Teachers in the {{ selectedAcademy.name }}
+                    i Academy
+                    | by inviting them to Edji and adding them to this Academy.
+                p Contact your Academy Administrator for more information about adding Teachers to this Academy.
             .row.loading(*ngIf="loading")
             ng-container(*ngIf="isSearching || filterCount > 0")
                 .found__readings

@@ -76,6 +76,12 @@ $iconGrayOpacity: 0.6;
     height: 1.125em;
     vertical-align: middle;
   }
+  &-discover {
+    width: 3em;
+    height: 3em;
+    vertical-align: middle;
+    display: inline-block;
+  }
 }
 
 .icon-add-question {

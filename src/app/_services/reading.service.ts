@@ -172,8 +172,9 @@ export class ReadingService {
       // strategies filter will hard-code to the edji strategies account
       const edjiStrategies = '5cc65d8d156b5300215670fe'
       queryString += `&owner_id=${edjiStrategies}`
-    } else if (searchParams.activeLibrary !== 'public') {
-      // Handle academy/institution id filter
+    } else if (searchParams.activeLibrary === 'academy') {
+      // Attaching academy scope is required for search to use the correct validation
+      queryString += `&institution_id=${searchParams.institutionId}&scope=academy`
     }
     // Subjects
     if (searchParams.subjectFilter && searchParams.subjectFilter[0]) {
@@ -371,7 +372,6 @@ export class ReadingService {
   // Push new or update Reading
   public save(reading: Reading): Observable<Reading> {
     // owner_id is defaulted by the service
-
     if (reading._id) {
       let putReading = {
         title: reading.title,
@@ -386,8 +386,8 @@ export class ReadingService {
         default_instructions: reading.default_instructions,
         // We reset "createdAt" in New Reading when publishing a draft
         createdAt: reading.createdAt,
+        institution_id: reading.institution_id,
       }
-
       return this._http
         .put<{}>(this._auth.getUrl() + '/api/v1/readings/' + reading['_id'], putReading, this._auth.getOptions())
         .pipe(
@@ -508,9 +508,10 @@ export interface ReadingQuery {
   scope?: Scope
   pop?: POP
   district?: string
+  institutionId?: string
 }
 
 type POP = 'projects'
 type CreatedCollection = 'bookmarked' | 'recent' | 'versions'
 type Scope = 'public' | 'owner'
-type ActiveLibrary = 'public' | 'following' | 'strategies'
+type ActiveLibrary = 'public' | 'following' | 'strategies' | 'academy'

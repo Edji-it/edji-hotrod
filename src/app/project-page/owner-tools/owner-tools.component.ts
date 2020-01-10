@@ -24,6 +24,7 @@ export class OwnerToolsComponent implements OnInit {
   public currentReading: Reading
   public user: any = {}
 
+  public ownerToolShow: boolean
   public ownerToolBlockHeight: string
 
   // State vars

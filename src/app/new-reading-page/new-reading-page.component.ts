@@ -754,7 +754,8 @@ export class NewReadingPage implements OnInit, OnDestroy {
       form.title.length < 1 ||
       this.readingIsBlank ||
       !questionsValid ||
-      (form.reading_type == 'public' && (form.grade_levels.length < 1 || form.subjects.length < 1))
+      ((form.reading_type == 'public' || form.reading_type == 'academy') &&
+        (form.grade_levels.length < 1 || form.subjects.length < 1))
     ) {
       return false
     } else {
@@ -836,6 +837,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
     let editors: any = document.querySelectorAll('#readingPageForm #angularMediumEditor')
     let concatHtml = ''
     // Loop through Medium-Editor elements, and get child elements???
+
+    // add the institution_id if academy
+    if (readingForm.reading_type == 'academy') {
+      reading.institution_id = this.currentAcademy._id || ''
+    }
 
     for (let i = 0; i < editors.length; i++) {
       let contentEl = editors[i]
