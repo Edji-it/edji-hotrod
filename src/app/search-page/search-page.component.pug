@@ -59,15 +59,15 @@ nav-bar([showDashboardOptions]="true")
                 .container.pl-0
                     .row
                         .col-12
-                            p Active Teachers to Follow
-                    div(*ngFor="let teacher of followTeachers")
+                            p.font-gray.txt-md Active Teachers to Follow
+                    .mt-2(*ngFor="let teacher of followTeachers; let i = index")
+                        hr.my-3(*ngIf="i > 0")
                         .row.ml-0
                             .col-3.p-0
                                 user-avatar([userDetails]="teacher", [size]="'medium'")
                             .col-9.p-0
                                 p.m-0 {{ teacher.fullname }}
                                 follow-tag([owner]="teacher", [tagOnly]="true")
-                        hr.my-4
         .col-md-3
                 .form-group(*ngIf="!isSearching")
                     .input-group.input-group

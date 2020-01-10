@@ -364,7 +364,8 @@ export class SearchPage implements OnInit {
             let userIds = data.buckets.owner_id.map(obj => obj.key)
             this._auth.getPublicUsers(userIds).subscribe(
               userInfo => {
-                this.followTeachers = userInfo
+                // Display top teachers to follow, but make sure we're filtering out the current teacher (that'd be weird)
+                this.followTeachers = userInfo.filter(teacher => teacher._id !== this.user._id)
               },
               error => {
                 console.error(error)
