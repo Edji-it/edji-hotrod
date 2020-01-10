@@ -70,7 +70,7 @@ div([id]="'comment-' + comment._id")
                   [ngClass]="[ comment.type + '' ]",
                   [class.input-wrapper--reply]="reply || comment.reply_to"
                 )
-                    text-comment(
+                    comment-input(
                         [readOnly]="userPermission < 5",
                         [comment]="comment",
                         [active]="comment.active",

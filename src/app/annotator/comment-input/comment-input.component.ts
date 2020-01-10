@@ -1,7 +1,7 @@
 import { Component, EventEmitter, ElementRef, Input, Output, OnInit, AfterViewInit, ViewChild } from '@angular/core'
 
 // Project Dependencies
-import { EdjiComment } from './../../shared/datatypes/comment'
+import { EdjiComment } from '../../shared/datatypes/comment'
 import { CommentService } from '../../_services'
 import { EmojiOnePipe } from 'src/app/_pipes'
 import * as emoji from 'emojione/lib/js/emojione'
@@ -9,11 +9,11 @@ import { Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
 
 @Component({
-  selector: 'text-comment',
-  templateUrl: './text-comment.component.pug',
-  styleUrls: ['./text-comment.component.scss'],
+  selector: 'comment-input',
+  templateUrl: './comment-input.component.pug',
+  styleUrls: ['./comment-input.component.scss'],
 })
-export class TextCommentComponent implements OnInit, AfterViewInit {
+export class CommentInputComponent implements OnInit, AfterViewInit {
   @ViewChild('textInput', { static: false }) public textInput: ElementRef
   @ViewChild('textDisplay', { static: false }) public textDisplay: ElementRef
 

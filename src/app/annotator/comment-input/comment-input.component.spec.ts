@@ -5,18 +5,17 @@ import { Angulartics2 } from 'angulartics2'
 
 // Local
 import { AuthService, MessageService, SocketService, CommentService } from '../../_services'
-import { TextCommentComponent } from './text-comment.component'
+import { CommentInputComponent } from './comment-input.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule, Router, ActivatedRoute } from '@angular/router'
 import { EmojiOnePipe, EdjiDatePipe, LinkifyPipe } from 'src/app/_pipes'
 import { ProjectStore } from 'src/app/_store'
 
 describe('Text Comment Input', () => {
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [EmojiOnePipe, EdjiDatePipe, LinkifyPipe, TextCommentComponent],
+      declarations: [EmojiOnePipe, EdjiDatePipe, LinkifyPipe, CommentInputComponent],
       providers: [
         { provide: AuthService, useValue: {} },
         { provide: MessageService, useValue: { init: () => {} } },
@@ -38,13 +37,13 @@ describe('Text Comment Input', () => {
     }).compileComponents()
   }))
   it('should build the Text Comment Component', async(() => {
-    const fixture = TestBed.createComponent(TextCommentComponent)
+    const fixture = TestBed.createComponent(CommentInputComponent)
     const explorer = fixture.debugElement.componentInstance
     expect(explorer).toBeTruthy()
   }))
 
   it('should process content editable html properly', async(() => {
-    const fixture = TestBed.createComponent(TextCommentComponent)
+    const fixture = TestBed.createComponent(CommentInputComponent)
     const textComment = fixture.componentInstance
     // Html Elements should be removed
     let emptyHtml = textComment.cleanData('<div><table></table></div>')
