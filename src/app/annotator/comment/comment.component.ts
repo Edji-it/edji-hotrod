@@ -69,9 +69,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Output() commentDeleted = new EventEmitter<string>()
   @Output() commentActivation = new EventEmitter<boolean>()
   @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>()
-  @Output() expandLine = new EventEmitter<number>()
   @Output() commentPaneExpand = new EventEmitter<number>()
-  @Output() collapseLine = new EventEmitter<number>()
   @Output() dismissKeyboard = new EventEmitter()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
@@ -318,20 +316,6 @@ export class CommentComponent implements OnInit, OnDestroy {
    */
   public hasReplies(comment): boolean {
     return this.repliesById[comment._id] && this.repliesById[comment._id].length > 0
-  }
-
-  /**
-   * Collapse all stacked comments on the same line
-   */
-  collapse(): void {
-    this.collapseLine.emit(this.comment.lineY)
-  }
-
-  /**
-   * Expand all stacked comments on the same line
-   */
-  expand(): void {
-    this.expandLine.emit(this.comment.lineY)
   }
 
   ngOnDestroy() {

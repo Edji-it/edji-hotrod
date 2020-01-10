@@ -90,7 +90,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public lineNumRunning: boolean
   public commentPane: boolean
   public commentBubble: boolean
-  public lineExpanded: number
 
   public replyComment: EdjiComment = <EdjiComment>{}
   public selectedComment: EdjiComment = <EdjiComment>{}
@@ -944,25 +943,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     let images: any[] = Array.from(document.querySelectorAll('#annotatorContent .img-wrap img'))
     for (let i = 0; i < images.length; i++) {
       this.imageHeight[images[i].getAttribute('index')] = images[i].clientHeight
-    }
-  }
-
-  /**
-   * Fired by Output from the Comment Component
-   * - References projectStore.commentByPos
-   */
-  expandLine(lineY: number, forceSet?: boolean) {
-    let commentsByPos = this.projectStore.commentByPosSource
-    // If collapsing a line, make sure to deactivate all comments
-    if (forceSet === false) {
-      this._comments.deactivateAllComments()
-      this.lineExpanded = 0
-    }
-    if (commentsByPos[lineY]) {
-      // Keep track of which line is expanded
-      if (forceSet === true) {
-        this.lineExpanded = lineY
-      }
     }
   }
 
