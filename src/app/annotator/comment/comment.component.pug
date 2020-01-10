@@ -79,14 +79,14 @@ div([id]="'comment-' + comment._id")
                         (deactivate)="deactivate(comment, $event)"
                     )
                     .icon-group--in-field(*ngIf="userPermission >= 5 && !_comments.emojiActive")
-                        .icon.icon-comment-emoji.hover--tooltip(
+                        #commentAddEmoji.icon.icon-comment-emoji.hover--tooltip(
                           *ngIf="project.types.indexOf('emoji') > -1",
                           (click)="activateEmojiKeyboard($event)"
                         )
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Emoji
-                        .icon.icon-comment-audio.hover--tooltip(
+                        #commentAddAudio.icon.icon-comment-audio.hover--tooltip(
                           *ngIf="comment.type !== 'audio' && project.types.indexOf('audio') > -1",
                           (click)="addAudio()"
                         )
@@ -154,17 +154,17 @@ div([id]="'comment-' + comment._id")
           user-avatar.comment__avatar.show([userDetails]="user")
           .reply-input__line
           .reply-input__wrap
-            .replyInput((click)="addReplyOfType(comment, 'text')") Add Reply...
+            #addTextReply.replyInput((click)="addReplyOfType(comment, 'text')") Add Reply...
             //--Add reply buttons--
             .icon-group--in-field
-                .icon.icon-comment-emoji.hover--tooltip(
+                #addEmojiReply.icon.icon-comment-emoji.hover--tooltip(
                   *ngIf="project.types.indexOf('emoji') > -1",
                   (click)="addReplyOfType(comment, 'emoji')"
                 )
                     .tooltip-wrap
                         .tooltip
                             .tooltip-title Reply with Emoji
-                .icon.icon-comment-audio.hover--tooltip(
+                #addAudioReply.icon.icon-comment-audio.hover--tooltip(
                   *ngIf="project.types.indexOf('audio') > -1",
                   (click)="addReplyOfType(comment, 'audio')"
                 )

@@ -132,10 +132,6 @@ describe('Project Page', () => {
       // Add audio comment
       project.addAudioComment()
 
-      // Make sure audio comment works even when not marked as active
-      browser.sleep(1000) // - audio comment rendering
-      project.commentActionSave.click()
-
       // Wait 5 seconds for record button to become clickable and click the record audio button to start recording
       browser.wait(EC.elementToBeClickable(project.audioRecord), 7000, 'never found the record audio button')
       project.audioRecord.click()
@@ -195,7 +191,7 @@ describe('Project Page', () => {
       project.addTextReplyBtn.click()
       browser.sleep(1000)
       browser.wait(
-        EC.presenceOf(element(by.css('textarea.text-comment-input'))),
+        EC.presenceOf(element(by.css('.text-comment-input.reply-display'))),
         5000,
         'wait for text reply input to show',
       )

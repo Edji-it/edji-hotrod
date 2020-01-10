@@ -18,7 +18,7 @@ scroll-progress([scrollProgress]="currentScroll")
         //- Desktop buttons
         .options.hidden-md-down
             //- Add Comment
-            button#addEmojiComment.emoji(
+            button#addComment.emoji(
                 (tap)="addCommentOfType()"
             )
                 i.icon.icon-comment-add
@@ -32,7 +32,7 @@ scroll-progress([scrollProgress]="currentScroll")
             //- .mobile-carrot-pointer &#9654;
             .comment__options--mobileRow.comment-options-group--mobile([class.btn-group-show--animation]="optionsShow")
                 //- Add Comment (Mobile)
-                #addEmojiCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile.col-6(
+                #addCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile.col-6(
                     *ngIf="project.types.indexOf('emoji') > -1",
                     [class.btn-show--animation]="optionsShow",
                     (tap)="addCommentOfType()"
