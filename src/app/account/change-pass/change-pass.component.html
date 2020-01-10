@@ -13,11 +13,11 @@
               type="password"
               id="old-password-input"
               class="form-control"
-              [formControl]="passwordForm.controls['oldPassword']"
+              [formControl]="passwordForm.controls['old_password']"
             />
             <div
               *ngIf="
-                passwordForm.controls['oldPassword'].hasError('required') && passwordForm.controls['oldPassword'].dirty
+                passwordForm.controls['old_password'].hasError('required') && passwordForm.controls['old_password'].dirty
               "
               class="alert alert-info"
             >
@@ -31,11 +31,11 @@
               type="password"
               id="new-password-input"
               class="form-control"
-              [formControl]="passwordForm.controls['newPassword']"
+              [formControl]="passwordForm.controls['new_password']"
             />
             <div
               *ngIf="
-                passwordForm.controls['newPassword'].hasError('required') && passwordForm.controls['newPassword'].dirty
+                passwordForm.controls['new_password'].hasError('required') && passwordForm.controls['new_password'].dirty
               "
               class="alert alert-info"
             >
@@ -43,7 +43,7 @@
             </div>
             <div
               *ngIf="
-                passwordForm.controls['newPassword'].hasError('minlength') && passwordForm.controls['newPassword'].dirty
+                passwordForm.controls['new_password'].hasError('minlength') && passwordForm.controls['new_password'].dirty
               "
               class="alert alert-warning"
             >
@@ -76,26 +76,16 @@
             Reset Password
           </button>
         </div>
-        <div *ngIf="messages.success" class="modal-footer">
-          <div class="alert alert-success">
+        <div *ngIf="messages.success || messages.serviceError" class="modal-footer">
+          <div id="msgServiceError" class="alert alert-danger" *ngIf="messages.serviceError">
+            We encountered an error while changing your password. Please try again or contact support.
+          </div>
+          <div id="msgServiceSuccess" class="alert alert-success" *ngIf="messages.success">
             Way to go, you reset your password!
             <button (click)="closeAndReset()" type="button" class="btn ml-2" data-dismiss="modal">Close</button>
           </div>
         </div>
       </form>
-      <div id="msgServiceError" class="alert alert-danger" *ngIf="messages.serviceError">
-        We encountered an error while changing your password. Please try again or contact support.
-      </div>
-    </div>
-    <div *ngIf="messages.success" class="modal-footer">
-      <div class="alert alert-success">
-        Way to go, you reset your password!
-        <button (click)="closeAndReset()" type="button" class="btn ml-2" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-    ]
-    <div id="msgServiceError" class="alert alert-danger" *ngIf="messages.serviceError">
-      We encountered an error while changing your password. Please try again or contact support.
     </div>
   </div>
 </div>
