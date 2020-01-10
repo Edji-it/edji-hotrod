@@ -6,7 +6,7 @@ div([id]="'comment-' + comment._id")
         [class.active]="comment.active",
         [class.read-only]="userPermission < 5",
         [class.comment--reply]="reply || comment.reply_to",
-        [class.comment--large]="largeDisplay",,
+        [class.comment--large]="largeDisplay",
         [class.is-draft]="_comments.isCommentNewDraft(comment)",
         [ngClass]="[ readingReport ? 'comment-block--align-top':'' ]",
     )

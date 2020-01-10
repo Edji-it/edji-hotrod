@@ -34,7 +34,6 @@ export class CommentInputComponent implements OnInit, AfterViewInit {
 
   // We need to know when changes to inactive to clear the editing variable
   @Input() set active(active) {
-    // setTimeout(() => {
     if (!this.readOnly) {
       if (active && !this.active) {
         this.activated = active
@@ -43,7 +42,6 @@ export class CommentInputComponent implements OnInit, AfterViewInit {
         this.blurField()
       }
     }
-    // }, 1)
   }
   get active() {
     return this.activated
