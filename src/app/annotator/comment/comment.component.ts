@@ -393,6 +393,11 @@ export class CommentComponent implements OnInit, OnDestroy {
       return
     }
 
+    // If not adding emoji reply, make sure keyboard is closed
+    if (this._comments.emojiActive && type !== 'emoji') {
+      this._comments.setEmojiActive(false)
+    }
+
     var replyCommentNew = <EdjiComment>{
       user_id: this.user._id,
       author: this.user.fullname,
