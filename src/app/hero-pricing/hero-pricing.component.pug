@@ -20,8 +20,8 @@ nav-bar
           | Go Hero
 .container
   .row.row-xl-pad.align-items-top
-    .col-sm-4
-      .card.card-outline-secondary(style="margin-top: 183px;")
+    .col-sm-4(style='padding-top:21%;')
+      .card.card-outline-secondary
         .card-body
           h2.card-title Edji Free
           span.pricing Free
@@ -41,7 +41,10 @@ nav-bar
           )
             hr
             .label([innerHtml]="detail.label")
-            p.card-text.plan-detail([innerHtml]="detail.free | emojione")
+            p.card-text.plan-detail
+              span([innerHtml]="detail.free | emojione")
+              i.icon__tooltip
+                span.icon.icon-circle.icon-info  i
         .card-footer
           a.btn.btn-primary.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", [routerLink]="['/register']")
             | Register
@@ -50,7 +53,7 @@ nav-bar
     .col-sm-4
       .card.card-outline-danger
         .card-body
-          img.card-img-top.py-3(src='/assets/images/hero-lg.png')
+          img.card-img-top(src='/assets/images/hero-lg.png', style="padding-top:15.5%;")
           h2.card-title Edji Hero
           //- $5<span class="small"> / month or </span>
           p.small.hero-color-text(*ngIf="offerDetails")
@@ -74,7 +77,10 @@ nav-bar
           )
             hr
             .label([innerHtml]="detail.label")
-            p.card-text.plan-detail([innerHtml]="detail.hero | emojione")
+            p.card-text.plan-detail
+              span([innerHtml]="detail.hero | emojione")
+              i.icon__tooltip
+                span.icon.icon-circle.icon-info  i
         .card-footer
           a.btn.btn-hero.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", tabindex='1', (click)='goHero("pricingHeroCard")') Go Hero
           a.btn.btn-hero.btn-lg.btn-block(*ngIf="user && user.isLoggedIn && user.hero_status", [routerLink]="['/account']", [innerHtml]="'Current Plan &nbsp;:tada:' | emojione")
@@ -99,11 +105,12 @@ nav-bar
           )
             hr
             .label([innerHtml]="detail.label")
-            p.card-text.plan-detail([innerHtml]="detail.academy | emojione")
+            p.card-text.plan-detail
+              span([innerHtml]="detail.academy | emojione")
+              i.icon__tooltip
+                span.icon.icon-circle.icon-info  i
         .card-footer
           button.btn.btn-primary.btn-lg.btn-block((click)="showRequestAcademyModal = true") Get Quote
-  .row.mt-4
-    .hero-rule
   //- .row.no-gutters
   //-   .col-12
   //-     .my-2
@@ -120,8 +127,8 @@ nav-bar
   //-             tr([class.row-hover]="feature.info",  (click)="feature.info ? triggerInfoModal(feature.info) : null")
   //-               td
   //-                 span([innerHtml]="feature.name + ' '")
-  //-                 i.icon__tooltip(*ngIf="feature.info")
-  //-                   span.icon.icon-circle.icon-info  i
+                  //- i.icon__tooltip(*ngIf="feature.info")
+                  //-   span.icon.icon-circle.icon-info  i
   //-                 span.text-primary.learn-more.small Learn more
   //-               //- Standard check display
   //-               td.feature-check(*ngIf="!feature.free_override", [innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
@@ -129,8 +136,6 @@ nav-bar
   //-               //- Override text display
   //-               td.feature-check(*ngIf="feature.free_override", [innerHtml]="feature.free_override")
   //-               td.feature-check(*ngIf="feature.hero_override", [innerHtml]="feature.hero_override")
-  .row
-    .hero-rule
 .container-fluid
   .row.navy.row-xl-pad.has-sparks
       .sparks
