@@ -93,13 +93,11 @@ export class RequestAcademyModal implements OnInit {
 
   private open(): void {
     this.openModal.emit()
-    this._util.showFeedbackModal = true
-
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
     document.body.style.overflow = 'hidden'
   }
 
-  public close(): void {
+  public close(success?: boolean): void {
     this.router.navigate(['./'], {
       relativeTo: this.route,
       queryParams: { request: null },
@@ -107,18 +105,20 @@ export class RequestAcademyModal implements OnInit {
     })
 
     this.closeModal.emit()
-    this.angulartics.eventTrack.next({
-      action: 'academyRequest_academyModal_revoked',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
-    this._util.showFeedbackModal = false
-
+    if (!success) {
+      this.angulartics.eventTrack.next({
+        action: 'academyRequest_academyModal_revoked',
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+      })
+    }
     // Workaround: This modal is long enough that it needs to scroll and we don't want two scrollbars
     document.body.style.overflow = ''
   }
 
   public successClose(): void {
     this.showRequestSuccess = false
+    // Close request
+    this.close()
   }
 
   /** Sends feedback to bumblebee */
@@ -134,6 +134,12 @@ export class RequestAcademyModal implements OnInit {
     }
     // Attach contact preference
     formValue.content = formValue.content + `\nQuote for: ${formValue.count} ${formValue.countType}`
+    // Include institution info
+    if (this.user.school) {
+      formValue.content =
+        formValue.content +
+        `\nUser's School: ${this.user.school.school_name} \nUser's District: ${this.user.school.district_name}`
+    }
 
     // Only send the user properties we need to bumblebee
     var userSend: any = {
