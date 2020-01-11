@@ -513,24 +513,6 @@ export class SearchPage implements OnInit {
   public goToAcademyPricing(): void {
     this.router.navigate(['/plans'], { fragment: 'academy' })
   }
-
-  /**
-   * A 3 column layout is used in the template for the following cases:
-   *  - District Library when user is not in an Academy
-   *  - Academy Library when there are top users to follow (active teachers list)
-   */
-  public threeColLayout(): boolean {
-    if (
-      this.searchParams.district.length > 0 &&
-      this.academyState &&
-      this.academyState.academies &&
-      this.academyState.academies.length === 0
-    ) {
-      return true
-    }
-    if (this.searchParams.activeLibrary === 'academy') return true
-    return false
-  }
 }
 
 export interface LoginParams {
