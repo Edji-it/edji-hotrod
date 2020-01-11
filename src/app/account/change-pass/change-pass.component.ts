@@ -22,8 +22,8 @@ export class ChangePassComponent implements OnInit {
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
     this.passwordForm = fb.group(
       {
-        oldPassword: [null, Validators.required],
-        newPassword: [null, [Validators.required, Validators.minLength(6)]],
+        old_password: [null, Validators.required],
+        new_password: [null, [Validators.required, Validators.minLength(6)]],
         newPasswordConfirm: [null, Validators.required],
       },
       { validator: this.passwordsEqual },
@@ -34,7 +34,7 @@ export class ChangePassComponent implements OnInit {
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   private passwordsEqual(group: FormGroup) {
-    return group.get('newPassword').value === group.get('newPasswordConfirm').value ? null : { mismatch: true }
+    return group.get('new_password').value === group.get('newPasswordConfirm').value ? null : { mismatch: true }
   }
 
   public onSubmit(value: any): void {
@@ -46,8 +46,8 @@ export class ChangePassComponent implements OnInit {
 
     this._auth
       .resetPassword({
-        oldPassword: this.passwordForm.get('oldPassword').value,
-        newPassword: this.passwordForm.get('newPassword').value,
+        old_password: this.passwordForm.get('old_password').value,
+        new_password: this.passwordForm.get('new_password').value,
       })
       .then(res => {
         this.messages.success = true
