@@ -53,6 +53,7 @@ export class SearchPage implements OnInit {
     activeLibrary: 'public', // defaulted to public,
     district: '', // defaulted to empty
   }
+  public followTeachers: User
 
   public rows: number = 15
   public total: number = 15
@@ -356,6 +357,21 @@ export class SearchPage implements OnInit {
           this.readings.length < 1
         ) {
           this.searchAlerts.noResults = true
+        }
+        // handle bucket items (top followers, etc..)
+        if (data && data.buckets) {
+          if (data.buckets.owner_id && data.buckets.owner_id.length > 0) {
+            let userIds = data.buckets.owner_id.map(obj => obj.key)
+            this._auth.getPublicUsers(userIds).subscribe(
+              userInfo => {
+                // Display top teachers to follow, but make sure we're filtering out the current teacher (that'd be weird)
+                this.followTeachers = userInfo.filter(teacher => teacher._id !== this.user._id)
+              },
+              error => {
+                console.error(error)
+              },
+            )
+          }
         }
       },
       err => {

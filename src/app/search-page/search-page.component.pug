@@ -1,5 +1,5 @@
 nav-bar([showDashboardOptions]="true")
-.mt-4.overflow-override([ngClass]="searchParams.district.length > 0 && academyState && academyState.academies && academyState.academies.length===0 ? 'container-fluid' : 'container'")
+.mt-4.overflow-override([ngClass]="(searchParams.district.length>0 && academyState && academyState.academies && academyState.academies.length===0) || searchParams.activeLibrary === 'academy' ? 'container-fluid' : 'container'")
     .row
         .col-12.my-4
             ng-container(*ngIf="!isSearching")
@@ -40,7 +40,7 @@ nav-bar([showDashboardOptions]="true")
                         i.icon.icon-close.mx-1
                 br
     .row
-        .col-lg-3.order-md-1.mb-4(*ngIf="searchParams.district.length > 0 && academyState && academyState.academies && academyState.academies.length===0")
+        .col-lg-3.order-md-1.mb-4(*ngIf="(searchParams.district.length>0 && academyState && academyState.academies && academyState.academies.length===0) && searchParams.activeLibrary !== 'academy'")
             #academyBanner
                 .container
                     .row.mb-3
@@ -54,6 +54,20 @@ nav-bar([showDashboardOptions]="true")
                             p.academy-text.mb-4 Edji Academy makes it easy for your school or district to get you Hero, while also establishing an Academy Library.
                         .col-12.p-0.center
                             button.btn.btn-academy((click)="goToAcademyPricing()") Becoming an Academy
+        .col-lg-3.order-md-1.mb-4(*ngIf="(searchParams.district.length>0 && academyState && academyState.academies && academyState.academies.length===0) || searchParams.activeLibrary === 'academy'")
+            #topTeachersList
+                .container.pl-0
+                    .row
+                        .col-12
+                            p.font-gray.txt-md Active Teachers to Follow
+                    .mt-2(*ngFor="let teacher of followTeachers; let i = index")
+                        hr.my-3(*ngIf="i > 0")
+                        .row.ml-0
+                            .col-3.px-0.py-2
+                                user-avatar([userDetails]="teacher", [size]="'medium'")
+                            .col-9.p-0
+                                p.m-0 {{ teacher.fullname }}
+                                follow-tag([owner]="teacher", [tagOnly]="true")
         .col-md-3
                 .form-group(*ngIf="!isSearching")
                     .input-group.input-group
@@ -140,7 +154,7 @@ nav-bar([showDashboardOptions]="true")
                 //- .form-group
                 //-     label Subjects
                     //- ss-multiselect-dropdown([options]="subjects", [(ngModel)]="searchParams.subjectFilter", [settings]="subjectDropSettings")
-        div([ngClass]="searchParams.district.length > 0 && academyState && academyState.academies && academyState.academies.length===0 ? 'col-md-6' : 'col-md-9'")
+        div([ngClass]="(searchParams.district.length>0 && academyState && academyState.academies && academyState.academies.length===0) || searchParams.activeLibrary === 'academy' ? 'col-md-6' : 'col-md-9'")
             #discoverStrategies.strategies-banner.mb-5.p-3(*ngIf="searchParams.activeLibrary === 'strategies'")
                 .row
                     .col-2.px-4.py-0
