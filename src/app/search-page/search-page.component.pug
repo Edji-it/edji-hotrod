@@ -63,7 +63,7 @@ nav-bar([showDashboardOptions]="true")
                     .mt-2(*ngFor="let teacher of followTeachers; let i = index")
                         hr.my-3(*ngIf="i > 0")
                         .row.ml-0
-                            .col-3.p-0
+                            .col-3.px-0.py-2
                                 user-avatar([userDetails]="teacher", [size]="'medium'")
                             .col-9.p-0
                                 p.m-0 {{ teacher.fullname }}
