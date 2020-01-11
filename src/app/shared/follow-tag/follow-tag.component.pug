@@ -1,5 +1,5 @@
-.user-tag
-    .user-tag__name(title="Reading Creator") {{owner.fullname}}
+.user-tag([class.tag-only]="tagOnly")
+    .user-tag__name(*ngIf="!tagOnly", title="Reading Creator") {{owner.fullname}}
     span(data-test="followStatusTag", *ngIf="user._id != owner._id && user.type != 'temp'")
         span.badge.badge-pill.badge-button.badge-secondary.badge-follow(
                 title="Click to follow!", 
