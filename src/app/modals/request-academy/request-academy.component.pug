@@ -1,83 +1,91 @@
-.modal
+.modal([class.fade-out]="showRequestSuccess")
   .modal-dialog(role="document")
     .modal-content
       .modal-header
-        h4.modal-title 
+        h4.modal-title
           span.hero-tag--lg H
-          | &nbsp;Discover Hero Academy
-        button.close.btn-icon--round(type="button", (click)="feedbackClose()", aria-label="Close")
+          | &nbsp;Request Hero Academy Quote
+        button.close.btn-icon--round(type="button", (click)="close()", aria-label="Close")
           span(aria-hidden="true") &times;
 
-      form#feedbackForm([formGroup]="feedbackForm", (ngSubmit)="sendFeedback(feedbackForm.value)") 
+      form#feedbackForm([formGroup]="feedbackForm", (ngSubmit)="sendFeedback(feedbackForm.value)")
         .modal-body
           .row
-            .col-7
-              p.small Academy is a great way for a school or district to provide its teachers with Hero, and get even more from Edji. To learn more, request below, and we will reach out to you!
-            .col-5  
+            .col-8
+              p.small Academy is a great way for a school or district to provide its teachers with Hero, and get even more from Edji.
+              p.small Request your quote to see how you could save.
+            .col-4
               img.pr-2(src="/assets/images/logo-academy.svg")
-          label(for="nameInput") Name
-          input#nameInput(type="text", [placeholder]="userCopy.fullname", [formControl]="feedbackForm.controls['name']", tabindex="0")
-          #msgNameRequired.alert.alert-info(*ngIf="feedbackForm.controls['name'].hasError('required')")
-            strong Info&nbsp;
-            | Let us know who you are!
+          label.mb-3(for="nameInput") Name
+            input#nameInput(type="text", [placeholder]="userCopy.fullname", [formControl]="feedbackForm.controls['name']", tabindex="0")
+            #msgNameRequired.alert.alert-info(*ngIf="feedbackForm.controls['name'].hasError('required')")
+              strong Info&nbsp;
+              | Let us know who you are!
           //- Email
-          label(for="emailInput") Email
-          input#emailInput(type="text", [placeholder]="userCopy.email", [formControl]="feedbackForm.controls['email']", tabindex="0")
-          #msgEmailRequired.alert.alert-info(*ngIf="feedbackForm.controls['email'].hasError('required')")
-            strong Info&nbsp;
-            | Where would you like follow-up emails sent?
-          #msgEmailIncorrect.alert.alert-info(*ngIf="!feedbackForm.controls['email'].hasError('required') && feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty")
-            strong Info&nbsp;
-            | We're not sure that's a real email
+          label.mb-3(for="emailInput") Email
+            input#emailInput(type="text", [placeholder]="userCopy.email", [formControl]="feedbackForm.controls['email']", tabindex="0")
+            #msgEmailRequired.alert.alert-info(*ngIf="feedbackForm.controls['email'].hasError('required')")
+              strong Info&nbsp;
+              | Where would you like follow-up emails sent?
+            #msgEmailIncorrect.alert.alert-info(*ngIf="!feedbackForm.controls['email'].hasError('required') && feedbackForm.controls['email'].hasError('emailIncorrect') && feedbackForm.controls['email'].dirty")
+              strong Info&nbsp;
+              | We're not sure that's a real email
           //- Phone Number
-          label(for="emailInput") Phone 
-          input#phoneInput(type="tel", placeholder="612-567-8391", [formControl]="feedbackForm.controls['phone']", tabindex="0")
-           //- Additional Info
-          label(for="feedbackInput") Additional Request Info
-          textarea#feedbackInput([formControl]="feedbackForm.controls['content']", maxlength="1000", rows="3", name="content", tabindex="0", placeholder="Any specific questions about Hero Academy?")
-          label(for="contactType") Preferred Contact Method
+          label.mb-3(for="emailInput") Phone
+            input#poneInput(type="tel", placeholder="612-567-8391", [formControl]="feedbackForm.controls['phone']", tabindex="0")
+          //- Additional Info
+          //- label(for="feedbackInput") Additional Request Info
+          //- textarea#feedbackInput([formControl]="feedbackForm.controls['content']", maxlength="1000", rows="3", name="content", tabindex="0", placeholder="Any specific questions about Hero Academy?")
+          label.mb-3(for="role") Academy Role
             .input-group.pt-1
-              .form-check
-                label#contactTypeEmail.form-check-label.form-check-btn(
-                  [class.active]="feedbackForm.controls['contactType'].value == 'email'"
+              label#roleEmail.form-check-label.form-check-btn(
+                *ngFor="let role of academyRoles",
+                [class.active]="feedbackForm.controls['role'].value == role.name"
+              )
+                input.form-check-input(
+                        type="radio",
+                        name="role",
+                        [value]="role.name",
+                        [formControl]="feedbackForm.controls['role']",
+                        checked
+                      )
+                span([innerHTML]="role.displayName | emojione")
+            .input-group(*ngIf="feedbackForm.controls['role'].value == 'other'")
+                input.form-control(
+                  type="text",
+                  placeholder="Other role...",
+                  [formControl]="feedbackForm.controls['roleOther']"
                 )
-                  input.form-check-input(
-                          type="radio", 
-                          name="contactType", 
-                          value="email", 
-                          [formControl]="feedbackForm.controls['contactType']",
-                          checked
-                        )
-                  span([innerHTML]="':e-mail: Email' | emojione")
-                label#contactTypePhone.form-check-label.form-check-btn(
-                  [class.active]="feedbackForm.controls['contactType'].value == 'phone'"
-                )
-                  input.form-check-input(
-                      type="radio", 
-                      name="contactType", 
-                      value="phone", 
-                      [formControl]="feedbackForm.controls['contactType']"
-                    )
-                  span([innerHTML]="':telephone: Phone Call' | emojione")
-                label#contactTypeText.form-check-label.form-check-btn(
-                  [class.active]="feedbackForm.controls['contactType'].value == 'text'"
-                )
-                  input.form-check-input(
-                      type="radio", 
-                      name="contactType", 
-                      value="text", 
-                      [formControl]="feedbackForm.controls['contactType']"
-                    )
-                  span([innerHTML]="':speech_balloon: Text' | emojione")
+          //- License Count
+          label.mb-3(for="emailInput") Academy Size
+            .input-group
+              input.form-control#countInput(
+                type="number",
+                placeholder="20",
+                [formControl]="feedbackForm.controls['count']",
+                tabindex="0",
+                step="1", min="5"
+              )
+              select.form-control#countTypeInput(
+                formControlName="countType",
+                tabindex="0",
+                style="margin-top: 0.25em;",
+              )
+                option(value="Teachers", selected) Teachers
+                option(value="Schools") Schools
+              //- <select formControlName="orders" id="orders">
+              //- <option *ngFor="let order of orders; let i = index" [value]="orders[i].id">
+              //-   {{orders[i].name}}
+              //- </option>
           #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
             strong Oh no!&nbsp;
             | {{errorObject.serverError}}
         .modal-footer
-            button.btn.btn-secondary(type="button", (click)="feedbackClose()") Cancel
-            button.btn.btn-primary(type="submit", [disabled]="!feedbackForm.valid", [class.loading]="loading", name="send feedback", tabindex="0") Request Info
+            button.btn.btn-secondary(type="button", (click)="close()") Cancel
+            button.btn.btn-primary(type="submit", [disabled]="!feedbackForm.valid", [class.loading]="loading", name="send feedback", tabindex="0") Request Quote
 
 //- Success Modal
-.modal-will-fade([class.show]="showRequestSuccess") 
+.modal-will-fade([class.show]="showRequestSuccess")
   .modal
     .modal-dialog(role="document")
       .modal-content
@@ -87,6 +95,8 @@
             span(aria-hidden="true") &times;
         .modal-body.text-center
           img.mb-4(src="/assets/images/logo-academy.svg", style="max-width: 200px;")
-          p We will be reaching out to you soon{{ this.user.fullname ? ', ' + this.user.fullname : '' }}!
+          .alert.alert-success.text-left
+            b Thank you{{ this.user.fullname ? ', ' + this.user.fullname : '' }}!
+            | We’ll be in touch within 24 hours with your quote, and more information on setting up your Academy.
         .modal-footer
-          button.btn.btn-secondary(type="button", (click)="successClose()") Great!
+          button.btn.btn-secondary(type="button", (click)="successClose()") Close

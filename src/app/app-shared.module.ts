@@ -43,7 +43,6 @@ import {
 import { GoogleClassroomShareButton, CopyLinkShareButton, CopyEmbedButton } from './buttons'
 import { HotChartHzbarComponent } from './shared/hot-chart-hzbar/hot-chart-hzbar.component'
 import { HotChartGaugeComponent } from './shared/hot-chart-gauge/hot-chart-gauge.component'
-import { PromoPageComponent } from './promo/promo.component'
 import { ShareSocialIconsComponent } from './shared/share-social-icons/share-social-icons.component'
 import { QuickStartFlagComponent } from './shared/quick-start-flag.component'
 
@@ -91,7 +90,7 @@ let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, NgScrollba
    * Declarations are private to AppShared
    * - SharedModule shouldn't need any private components
    */
-  declarations: [SHARED_DECLARATIONS, PromoPageComponent],
+  declarations: [SHARED_DECLARATIONS],
   /**
    * Exports are made available to children modules
    * (essentially PUBLIC DECLARATIONS)

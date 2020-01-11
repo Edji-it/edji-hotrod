@@ -34,6 +34,12 @@ $modalBodyBg: #fff;
   }
 }
 
+.modal.fade-out {
+  opacity: 0 !important;
+  pointer-events: none;
+  transition: all ease 0.3s;
+}
+
 .modal {
   z-index: 9000;
   background: rgba(0, 0, 0, 0.3);

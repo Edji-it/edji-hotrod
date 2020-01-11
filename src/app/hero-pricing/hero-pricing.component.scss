@@ -7,6 +7,58 @@
 
 .card-text {
   margin-bottom: 24px;
+
+  & .emojioneemoji {
+    font-size: 1.25em;
+    margin: 4px;
+  }
+
+  &.plan-detail {
+    text-indent: -2em;
+    margin-left: 2em;
+    line-height: 1em;
+    font-size: 14px;
+    min-height: 1.25em;
+  }
+}
+
+.card-body {
+
+  & .icon__tooltip {
+    display: none;
+  }
+
+  & .clickable {
+    position: relative;
+
+    & .icon__tooltip {
+      display: inline-block;
+    }
+    & .icon-info {
+      margin-left: 3px;
+      transition: transform 200ms linear;
+      transform: scale(1);
+    }
+
+    &:hover, &:focus {
+      cursor: pointer;
+      color: $blue;
+
+      & .icon-info {
+        border-color: $blue;
+        color: $blue;
+        transform: scale(1.2);
+      }
+    }
+  }
+}
+
+.card-footer {
+  background: #fff;
+}
+
+.card-img-top {
+  padding: 0 4px;
 }
 
 .pricing {
@@ -16,6 +68,15 @@
 
   &.deal {
     color: $red;
+  }
+
+  &.link {
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: $blue;
+    }
   }
 }
 
@@ -92,3 +153,8 @@
     opacity: 0.8;
   }
 }
+
+.icon__tooltip {
+  text-indent: 0px;
+}
+
