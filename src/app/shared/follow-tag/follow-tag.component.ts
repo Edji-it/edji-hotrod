@@ -13,6 +13,7 @@ import { User } from '../datatypes'
 })
 export class FollowTag implements OnInit {
   @Input() owner: User
+  @Input() tagOnly: Boolean
   @Output() followEvent: EventEmitter<boolean> = new EventEmitter()
 
   public user: User = <User>{}
