@@ -1,4 +1,4 @@
-.modal
+.modal([class.fade-out]="showRequestSuccess")
   .modal-dialog(role="document")
     .modal-content
       .modal-header
@@ -95,6 +95,8 @@
             span(aria-hidden="true") &times;
         .modal-body.text-center
           img.mb-4(src="/assets/images/logo-academy.svg", style="max-width: 200px;")
-          p We will be reaching out to you soon{{ this.user.fullname ? ', ' + this.user.fullname : '' }}!
+          .alert.alert-success.text-left
+            b Thank you{{ this.user.fullname ? ', ' + this.user.fullname : '' }}!
+            | We’ll be in touch within 24 hours with your quote, and more information on setting up your Academy.
         .modal-footer
-          button.btn.btn-secondary(type="button", (click)="successClose()") Great!
+          button.btn.btn-secondary(type="button", (click)="successClose()") Close

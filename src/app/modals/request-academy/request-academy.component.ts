@@ -72,7 +72,7 @@ export class RequestAcademyModal implements OnInit {
       phone: [],
       role: [prefillIdentity, Validators.required],
       roleOther: [],
-      count: ['5', Validators.required],
+      count: [null, Validators.required],
       countType: ['Teachers', Validators.required],
     })
 
@@ -125,13 +125,15 @@ export class RequestAcademyModal implements OnInit {
   public sendFeedback(formValue: any): void {
     this.loading = true
     // Add Request type
-    formValue.content = '\nRequest Type: Hero Academy Request'
-
-    // Attach phone number
-    formValue.content = formValue.content + '\nPhone: ' + formValue.phone
-
+    formValue.content = '\nRequest Type: Hero Academy Quote :hero:'
+    // Attach role
+    formValue.content = formValue.content + `\nRole: ${formValue.role} ${formValue.roleOther || ''}`
+    if (formValue.phone) {
+      // Attach phone number
+      formValue.content = formValue.content + '\nPhone: ' + formValue.phone
+    }
     // Attach contact preference
-    formValue.content = formValue.content + '\nPreferred contact method: ' + formValue.contactType
+    formValue.content = formValue.content + `\nQuote for: ${formValue.count} ${formValue.countType}`
 
     // Only send the user properties we need to bumblebee
     var userSend: any = {
@@ -162,7 +164,6 @@ export class RequestAcademyModal implements OnInit {
           })
           this.requestSuccess = true
           this._locker.remove('requestAcademyFormData')
-          this.close()
           this.showRequestSuccess = true
         },
         err => {
