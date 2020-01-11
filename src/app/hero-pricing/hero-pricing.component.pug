@@ -89,7 +89,10 @@ nav-bar
         .card-body
           img.card-img-top(src='/assets/images/hero-academy-lg.png')
           h2.card-title Academy
-          .link.pricing((click)="showRequestAcademyModal = true") Get a Quote
+          a.link.pricing(
+            [routerLink]="'./'",
+            [queryParams]="{ request: 'academy' }",
+            ) Request a Quote
           p.small Starting at $180/yr for 5 licenses
           hr
           p.card-text
@@ -110,7 +113,10 @@ nav-bar
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
         .card-footer
-          button.btn.btn-primary.btn-lg.btn-block((click)="showRequestAcademyModal = true") Get Quote
+          a.btn.btn-primary.btn-lg.btn-block(
+            [routerLink]="'./'",
+            [queryParams]="{ request: 'academy' }",
+          ) Request Quote
   //- .row.no-gutters
   //-   .col-12
   //-     .my-2

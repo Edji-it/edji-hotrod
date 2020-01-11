@@ -7,6 +7,7 @@ import { AuthService, BumblebeeService, UtilToolService } from '../../_services'
 import { ALLSPARK } from '../../app.constants'
 import { LockerService } from '../../_services/locker.service'
 import { Copy } from '../../shared'
+import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
   selector: 'request-academy-modal',
@@ -33,6 +34,23 @@ export class RequestAcademyModal implements OnInit {
     serverError?: string
   } = {}
 
+  public academyRoles = [
+    {
+      name: 'teacher',
+      id: 'typeTeacherInput',
+      displayName: ':apple: Teacher',
+      emoji: ':apple:',
+    },
+    {
+      name: 'administrator',
+      id: 'typeAdministratorInput',
+      displayName: ':clipboard: Administrator',
+      emoji: ':clipboard:',
+    },
+    { name: 'coach', id: 'typeCoachInput', displayName: ':computer: Coach', emoji: ':computer:' },
+    { name: 'other', id: 'typeOtherInput', displayName: ':sparkles: Other', emoji: ':sparkles:' },
+  ]
+
   constructor(
     private _auth: AuthService,
     private _bumblebee: BumblebeeService,
@@ -40,17 +58,22 @@ export class RequestAcademyModal implements OnInit {
     fb: FormBuilder,
     public _util: UtilToolService,
     private _locker: LockerService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.user = this._auth.getUser()
 
     let prevData: any = this._locker.get('requestAcademyFormData') || {}
+    let prefillIdentity = this.user.identities && this.user.identities[0] ? this.user.identities[0] : 'teacher'
 
     this.feedbackForm = fb.group({
       name: [this.user.fullname, Validators.required],
       email: [this.user.email, [Validators.required, this.emailValidator]],
       phone: [],
-      content: [prevData.content],
-      contactType: ['email'],
+      role: [prefillIdentity, Validators.required],
+      roleOther: [],
+      count: ['5', Validators.required],
+      countType: ['Teachers', Validators.required],
     })
 
     this.window = window
@@ -76,7 +99,13 @@ export class RequestAcademyModal implements OnInit {
     document.body.style.overflow = 'hidden'
   }
 
-  public feedbackClose(): void {
+  public close(): void {
+    this.router.navigate(['./'], {
+      relativeTo: this.route,
+      queryParams: { request: null },
+      queryParamsHandling: 'merge',
+    })
+
     this.closeModal.emit()
     this.angulartics.eventTrack.next({
       action: 'academyRequest_academyModal_revoked',
@@ -133,7 +162,7 @@ export class RequestAcademyModal implements OnInit {
           })
           this.requestSuccess = true
           this._locker.remove('requestAcademyFormData')
-          this.feedbackClose()
+          this.close()
           this.showRequestSuccess = true
         },
         err => {

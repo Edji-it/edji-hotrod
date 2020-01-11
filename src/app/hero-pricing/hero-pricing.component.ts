@@ -206,6 +206,11 @@ export class HeroPricingComponent implements OnInit {
           this.offerDetails = promo.offerDetails
         }
       }),
+      this.route.queryParams.subscribe(params => {
+        if (params['request']) {
+          this.showRequestAcademyModal = params['request'] === 'academy'
+        }
+      }),
     )
 
     if (this._auth.getUser().email) {
