@@ -90,7 +90,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   public lineNumRunning: boolean
   public commentPane: boolean
   public commentBubble: boolean
-  public lineExpanded: number
 
   public replyComment: EdjiComment = <EdjiComment>{}
   public selectedComment: EdjiComment = <EdjiComment>{}
@@ -948,25 +947,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Fired by Output from the Comment Component
-   * - References projectStore.commentByPos
-   */
-  expandLine(lineY: number, forceSet?: boolean) {
-    let commentsByPos = this.projectStore.commentByPosSource
-    // If collapsing a line, make sure to deactivate all comments
-    if (forceSet === false) {
-      this._comments.deactivateAllComments()
-      this.lineExpanded = 0
-    }
-    if (commentsByPos[lineY]) {
-      // Keep track of which line is expanded
-      if (forceSet === true) {
-        this.lineExpanded = lineY
-      }
-    }
-  }
-
-  /**
    * Add new highlights to local array
    */
   incrementHighlights(
@@ -1041,10 +1021,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param end Index of last word
    * @param type What kind of comment: emoji, text...
    */
-  createComment(span: SelectionSpan, type: string): void {
+  createComment(span: SelectionSpan): void {
     let isBox = typeof span.boxStart == 'number' && typeof span.boxEnd == 'number'
     // We need to make sure they aren't already editing a comment
-    this.inactivateComment()
+    this.deactivateComment()
 
     // Attach highlighted text to comment
     let text: string = ''
@@ -1069,7 +1049,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       data: '',
       start: span.start,
       end: span.end,
-      type: type,
+      type: 'text', // default display type
       text: text,
       loc: this.imageCoords,
     }
@@ -1186,7 +1166,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
 
   setActiveCommentByIndex(isActive: boolean, wordIndex: number, commentIndex: number, comment?: EdjiComment): void {
     // Any currrently active comments need to be deactivated
-    this.inactivateComment()
+    this.deactivateComment()
     if (isActive) {
       if (typeof comment !== 'undefined') {
         this._comments.activeComment = comment
@@ -1198,19 +1178,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  inactivateComment(): void {
-    if (this._comments.activeComment.start !== undefined) {
-      this._comments.activeComment.active = false
-      this._comments.activeComment = <EdjiComment>{}
-    }
-  }
-
-  /**
-   * Receive comment data from input sources:
-   * - Gets event from Emoji Keyboard
-   */
-  updateActiveComment(commentData: string) {
-    this._comments.activeComment.data = commentData
+  deactivateComment(): void {
+    this._comments.deactivateComment()
   }
 
   /**
@@ -1290,7 +1259,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * Add Comment of type
    * - Fired from comment options tooltip
    */
-  addCommentOfType(type: string): void {
+  addCommentOfType(): void {
     // Get selection indices
     let span = this.getSelectionSpan()
 
@@ -1300,8 +1269,25 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // Increment highlight array
     this.incrementHighlights(true, span.start, span.end, { start: span.boxStart, end: span.boxEnd })
     // Tell the server we've got a comment!
-    this.createComment(span, type)
+    this.createComment(span)
     this.clearQuickSelect()
+  }
+
+  /**
+   * Opens Explorer, viewing comments within selection
+   */
+  viewCommentsOnSelection(): void {
+    // Get selection indices
+    let span = this.getSelectionSpan()
+
+    if (!(span.start >= 0) || !(span.end >= 0)) {
+      return
+    }
+    // Open in Explorer
+    this._router.navigate(['./'], {
+      relativeTo: this.route,
+      queryParams: { ...span },
+    })
   }
 
   /**
@@ -1517,13 +1503,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  /** Used to determine which level of permission the user has for a specific comment
-   * @param comment A comment object
-   */
-  private getCommentPermissions(comment: any): number {
-    return this._comments.getCommentPermissions(comment, this.user, this.project)
-  }
-
   /**
    * For image hit/word box comments: Determines relative middle of word
    */
@@ -1591,14 +1570,6 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       x: parseFloat((((PosX - ImgPos[0]) / target['clientWidth']) * 100).toFixed(3)),
       y: parseFloat((((PosY = PosY - ImgPos[1]) / target['clientHeight']) * 100).toFixed(3)),
     }
-  }
-
-  /**
-   * Decides if the Emoji Keyboard is active
-   */
-  public isEmojiKeyboardActive(): boolean {
-    // return this._comments.isEmojiKeyboardActive(this.user)
-    return this._comments.setEmojiKeyboardActive(this.user)
   }
 
   /**
@@ -1690,7 +1661,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // reset our icon arrow position
       this.commentHeightPos = 0
       // Run the standard comment inactivation to reset variables and do things like close the Keyboard
-      this.inactivateComment()
+      this.deactivateComment()
     }
   }
 
@@ -1729,7 +1700,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           this._comments.commentDeleted()
         })
         .catch(error => {
-          this.inactivateComment()
+          this.deactivateComment()
           console.error(error)
         })
     } else {
@@ -1741,7 +1712,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           this._comments.commentDeleted()
         })
         .catch(error => {
-          this.inactivateComment()
+          this.deactivateComment()
           console.error(error)
         })
     }

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { ProjectService, ReadingService, SocketService } from './'
-import { Angulartics2 } from 'angulartics2'
 import { EdjiComment, CommentPermissions, Project } from '../shared/datatypes'
 import { ProjectStore } from '../_store'
 
@@ -12,15 +12,20 @@ import { ProjectStore } from '../_store'
 export class CommentService {
   private ctx
   private colors
-  public keyboardActive: boolean
+  public emojiActive: boolean
   public activeComment: EdjiComment = <EdjiComment>{}
   public deleteCommentRef: EdjiComment = <EdjiComment>{}
   // public deleteAudioRef: EdjiComment = <EdjiComment>{}
   public showDeleteCommentModal: boolean
   public commentContext: string
 
-  public clearActiveCommentsSource: Subject<boolean> = new Subject()
-  public clearActiveComments: Observable<boolean> = this.clearActiveCommentsSource.asObservable()
+  // Deactivate all comments observable
+  public clearActiveCommentsSource: Subject<string> = new Subject()
+  public clearActiveComments: Observable<string> = this.clearActiveCommentsSource.asObservable()
+
+  // Emoji keyboard insert observable
+  public emojiEditSource: Subject<string> = new Subject()
+  public emojiEdit: Observable<string> = this.emojiEditSource.asObservable()
 
   /*
   Last Modified: 6 June 2017
@@ -38,9 +43,17 @@ export class CommentService {
   /**
    * Deactivates all Comment Components
    * - Fires clearActiveComments observable
+   * @param activeComment comment id to not deactivate
    */
-  public deactivateAllComments(): void {
-    this.clearActiveCommentsSource.next(true)
+  public deactivateAllComments(activeComment?: string): void {
+    this.clearActiveCommentsSource.next(activeComment)
+  }
+
+  public deactivateComment(): void {
+    if (this.activeComment._id !== undefined) {
+      this.activeComment.active = false
+      this.activeComment = <EdjiComment>{}
+    }
   }
 
   /**
@@ -134,11 +147,11 @@ export class CommentService {
    * @param user A user object
    * @param project A project object
    */
-  public getCommentPermissions(comment: any, user: any, project: Project): number {
-    if (!comment || !user) {
+  public getCommentPermissions(commentUser: any, user: any, project: Project): number {
+    if (!commentUser || !user) {
       // Fallback to read-only
       return CommentPermissions.READ
-    } else if (user._id == comment.user_id) {
+    } else if (user._id == commentUser) {
       return CommentPermissions.EDIT
     } else if (project && project.isTeaching) {
       return CommentPermissions.DELETE
@@ -150,17 +163,16 @@ export class CommentService {
   /**
    * Decides if the Emoji Keyboard is active
    */
-  public setEmojiKeyboardActive(user: any): boolean {
-    if (this.activeComment.type !== 'emoji') {
-      this.keyboardActive = false
+  public setEmojiActive(value?: boolean) {
+    if (value !== undefined) {
+      this.emojiActive = value
     } else {
-      this.keyboardActive =
-        this.activeComment &&
-        (!this.activeComment.type || this.activeComment.type === 'emoji') &&
-        this.activeComment.active &&
-        this.activeComment.user_id === user._id
+      this.emojiActive = true
     }
-    return this.keyboardActive
+  }
+
+  public emitEmojiToActive(shortCode: string) {
+    this.emojiEditSource.next(shortCode)
   }
 
   /**

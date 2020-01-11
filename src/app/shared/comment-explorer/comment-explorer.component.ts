@@ -1,26 +1,13 @@
-import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs'
-import { CommentPermissions, EdjiComment } from '../datatypes/index'
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-  ViewChildren,
-  QueryList,
-} from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { take } from 'rxjs/operators'
+import { NgScrollbar } from 'ngx-scrollbar'
 
 // Project Dependencies
-import { AuthService, CommentService, SocketService } from '../../_services'
-import { Angulartics2 } from 'angulartics2'
-import { CommentComponent } from 'src/app/annotator/comment/comment.component'
+import { EdjiComment, Project, User } from '../datatypes'
+import { AuthService, CommentService, SocketService, ReadingService } from '../../_services'
 import { ProjectStore } from 'src/app/_store'
-import { NgScrollbar } from 'ngx-scrollbar'
-import { Router, ActivationEnd, ActivatedRoute } from '@angular/router'
 @Component({
   selector: 'comment-explorer',
   templateUrl: './comment-explorer.component.pug',
@@ -49,6 +36,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public filterMode: SearchFilter = 'all'
   public filterUserId: string
   public filterCurrentUser: boolean
+  public filterSpan: { start: number; end: number; boxStart?: number; boxEnd?: number }
+  public filterSpanText: string
 
   // Display
   public loading: boolean
@@ -98,6 +87,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   constructor(
     private projectStore: ProjectStore,
+    private _readings: ReadingService,
     private _socket: SocketService,
     public el: ElementRef,
     private _auth: AuthService,
@@ -164,6 +154,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     if (params['sort']) this.sortValue = params['sort']
     // Detect search/filter modes
     if (params['search']) {
+      this.clearFilters({ search: params['search'] })
       this.searchTerm = params['search']
       this.sortValue = params['sort'] || 'match'
       this.filterComments()
@@ -173,6 +164,36 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.filterUserId = params['student']
       this.filterComments()
       this._visible = true
+    } else if (params['start']) {
+      this.filterSpan = {
+        start: parseInt(params['start']),
+        end: params['end'] ? parseInt(params['end']) : parseInt(params['start']),
+      }
+      // Handle Box params
+      if (params['boxStart']) {
+        this.filterSpan.boxStart = params['boxStart']
+        this.filterSpan.boxEnd = params['boxEnd'] ? parseInt(params['boxEnd']) : parseInt(params['boxStart'])
+      }
+      this._readings.currentReading.pipe(take(1)).subscribe(reading => {
+        if (!reading.words || !reading.words[0]) return
+        this.filterSpanText = reading.words
+          .slice(this.filterSpan.start, this.filterSpan.end + 1)
+          .reduce((acc, word) => {
+            if (word.boxes) {
+              return (
+                acc +
+                word.boxes.slice(this.filterSpan.boxStart, this.filterSpan.boxEnd + 1).reduce((bAcc, bWord) => {
+                  return bAcc + (bWord.str ? bWord.str + ' ' : '')
+                }, '')
+              )
+            } else {
+              return acc + (word.str ? word.str : ' ')
+            }
+          }, '')
+      })
+      this.clearFilters(this.filterSpan)
+      this._visible = true
+      this.filterComments()
     } else if (params['pane'] && params['pane'] === 'comments') {
       this.filterComments()
       this._visible = true
@@ -268,12 +289,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     // Set loading state
     if (!opts.update) {
       this.loading = true
-      this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
+      this.scrollable && this.scrollable.viewport && this.scrollable.scrollTo({ top: 0, duration: 0 })
     }
     // Apply Heat Vision
     if (!this.project.heat_vision && !this.project.isTeaching) {
       sorted = sorted.filter(c => {
-        return c.user_id === this.user._id
+        return c.user_id === this.user._id || c.authorIsTeacher
       })
     }
     // Handle if reply selected
@@ -292,6 +313,20 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.sortValue = sort = 'location'
       sorted = this.commentByPos[comment.lineY].filter(comment => {
         return comment.start >= 0
+      })
+    } else if (this.filterSpan) {
+      this.filterMode = 'indices'
+      this.sortValue = sort = 'location'
+      sorted = sorted.filter(comment => {
+        let wordMatch = this.filterSpan.start <= comment.start && this.filterSpan.end >= comment.end
+        let boxMatch
+        if (this.filterSpan.boxStart) {
+          boxMatch =
+            comment.box && this.filterSpan.boxStart <= comment.box.start && this.filterSpan.boxEnd >= comment.box.end
+        } else {
+          boxMatch = true
+        }
+        return wordMatch && boxMatch
       })
     } else if (this.filterUserId) {
       this.filterMode = 'user'
@@ -338,18 +373,29 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * Clear filters applied to the explorer
    * @note does not fire "filterComments", so it can be used internally
    */
-  private clearFilters(paramsToOverride?: { line?: string; student?: string; pane?: string }): void {
+  private clearFilters(paramsToOverride?: {
+    search?: string
+    line?: string
+    student?: string
+    pane?: string
+    start?: number
+    end?: number
+  }): void {
     this.filterMode = 'all' //- default
     if (!paramsToOverride) paramsToOverride = {}
     if (!paramsToOverride['student']) this.filterUserId = null
     if (!paramsToOverride['line']) this.comment = null
     if (!paramsToOverride['search']) this.searchTerm = null
     if (!paramsToOverride['sort']) this.sortValue = 'created'
+    if (!paramsToOverride['start']) {
+      this.filterSpan = null
+      this.filterSpanText = null
+    }
     // Tell parent component comment is cleared
     this.clearSelected.emit()
     // Merge params to keep with reset/null
     let params = Object.assign(
-      { student: null, line: null, search: null, sort: null, pane: 'comments' },
+      { student: null, line: null, search: null, sort: null, start: null, end: null, pane: 'comments' },
       paramsToOverride,
     )
     // Clear URL params
@@ -357,6 +403,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       relativeTo: this.route,
       queryParams: params,
       queryParamsHandling: 'merge',
+      // By ignoring "override" clear events, we preserve browser back/forward functionality
+      skipLocationChange: !!paramsToOverride,
     })
   }
 
@@ -377,7 +425,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   viewSearch(): void {
     this.filterMode = 'search'
     this.sortValue = 'match'
-    this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
+    this.scrollable && this.scrollable.viewport && this.scrollable.scrollTo({ top: 0, duration: 0 })
     this.searchInput && this.searchInput.nativeElement.focus()
   }
 
@@ -447,7 +495,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       // Found comment, scroll!
       if (commentEl) {
         this.scrollable &&
-          this.visible &&
+          this.scrollable.viewport &&
           this.scrollable.scrollToElement(commentEl, { top: 0, left: -100, duration: 400 })
       }
     }, 1)
@@ -503,4 +551,4 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 }
 
 type SearchSort = 'created' | 'location' | 'match'
-type SearchFilter = 'line' | 'all' | 'user' | 'search'
+type SearchFilter = 'line' | 'all' | 'user' | 'search' | 'indices'

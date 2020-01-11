@@ -16,7 +16,7 @@
             .form-group
                 p(*ngIf='subheading') {{ subheading }}
             .form-group
-                label(for='newProjectLabel') 
+                label(for='newProjectLabel')
                     | Group Name
                     i.icon__tooltip(tooltipPosition="right", pTooltip="A group is a section of students on a Reading", tooltipZIndex="9000")
                         span.icon.icon-circle.icon-info  i
@@ -31,23 +31,19 @@
                         span.icon.icon-circle.icon-info  i
                 textarea#groupInstructions.form-control.mGroup([formControl]="projectForm.controls['groupInstructions']", type='text', placeholder="For today's lesson, you will...")
             .form-group.row()
-                label.col-12 Comment Types
-                .input-group.col-6
+                label.col-12 Comment Abilities
+                .input-group.col-4
                     .custom-control.custom-checkbox
                         input#emojiCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['emojiType']")
-                        label.custom-control-label(for="emojiCommenting") Emoji Commenting
-                .input-group.col-6
-                    .custom-control.custom-checkbox
-                        input#textCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['textType']")
-                        label.custom-control-label(for="textCommenting") Text Commenting
-                .input-group.col-6
+                        label.custom-control-label(for="emojiCommenting") Emoji
+                .input-group.col-4
                     .custom-control.custom-checkbox
                         input#audioCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['audioType']")
-                        label.custom-control-label(for="audioCommenting") Audio Commenting
-                .input-group.col-6
+                        label.custom-control-label(for="audioCommenting") Audio
+                .input-group.col-4
                     .custom-control.custom-checkbox
                         input#replyCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['replyType']")
-                        label.custom-control-label(for="replyCommenting") Comment Replies
+                        label.custom-control-label(for="replyCommenting") Replies
             div([class.hero-box]="!isHero")
                 .form-group.p-0(*ngIf="!isHero")
                     .row.no-gutters
@@ -55,8 +51,8 @@
                             a.float-right.btn.btn-sm.btn-hero(target="_blank" href="/#/plans") Learn More
                 .form-group.pb-0([class.disabled]='!isHero')
                     label(for='customCodeInput')
-                        | Custom Code 
-                        span.hero-h(title='Hero Power') 
+                        | Custom Code
+                        span.hero-h(title='Hero Power')
                             ='H'
                     input#customCodeInput.form-control.text-code.h3.mGroup([formControl]="projectForm.controls['customCode']", type='text', placeholder='(optional)', style='text-transform:lowercase;')
                     #errorInvalidCustomCode.alert.alert-warning(*ngIf='errors.invalidCode') Whoops, someone is already using that group code. Could you pick another?
@@ -64,9 +60,9 @@
             .button__row(style='padding-top:0px;')
                 button.btn.btn-primary(
                     [attr.id]=" (!reading._id || loading) ? 'loading-buttonCreateGroup' : 'buttonCreateGroup'",
-                    tabindex='0', 
-                    type='submit', 
+                    tabindex='0',
+                    type='submit',
                     [class.loading]='!reading._id || loading',
-                    name='Add Project', 
+                    name='Add Project',
                     style='margin: 5px 3px; width:100%;') Create Group
             #msgServiceError.alert.alert-warning(*ngIf='formSubmitted && errors.serviceError', role='alert') There was an error in while creating your reading. Try again or contact support.

@@ -185,13 +185,6 @@ export class QuestionComponent implements OnInit, OnDestroy {
     }
   } // private enableOptionOfType(type: string)
 
-  /** Used to determine which level of permission the user has for a specific comment
-   * @param comment A comment object
-   */
-  private getCommentPermissions(comment: any): number {
-    return this._comments.getCommentPermissions(comment, this.user, this.project)
-  } //  private getCommentPermissions(comment: any): number
-
   /** Used to set the available answer and option types and also to set the current question position
    *
    */

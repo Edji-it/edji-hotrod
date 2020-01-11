@@ -6,7 +6,7 @@ doctype html
     - Tying in comments and comment creation methods
 scroll-progress([scrollProgress]="currentScroll")
 #emojiAnnotator.annotator.reading-page(
-    [ngClass]="[ lineExpanded ? 'comment-expanded' : '' , commentPane ? 'sliding-out' : '']",
+    [ngClass]="[ commentPane ? 'sliding-out' : '']",
     [style.min-height]="currentDocHeight + 'px'"
 )
     .text-options(
@@ -16,58 +16,38 @@ scroll-progress([scrollProgress]="currentScroll")
     )
         //- optionsShow
         //- Desktop buttons
-        .options.hidden-md-down
-            //- Emoji Comment
-            button#addEmojiComment.emoji(
-                *ngIf="project.types.indexOf('emoji') > -1",
-                (tap)="addCommentOfType('emoji')"
+        .highlight-options.hidden-md-down
+            //- Add Comment
+            button#addComment.emoji(
+                (tap)="addCommentOfType()"
             )
-                i.icon.icon-comment-emoji
-            //- Text Comment
-            button#addTextComment.emoji(
-                *ngIf="project.types.indexOf('text') > -1",
-                (tap)="addCommentOfType('text')"
+                i.icon.icon-comment-add
+                label New
+            //- View Comments
+            button#viewComments.emoji(
+                (tap)="viewCommentsOnSelection()"
             )
-                i.icon.icon-comment-text
-            //- Audio Comment
-            button#addAudioComment.emoji(
-                *ngIf="project.types.indexOf('audio') > -1",
-                [class.super-disabled]="audioSupportError",
-                (tap)="addCommentOfType('audio')"
-            )
-                i.icon.icon-mic
+                i.icon.icon-search
+                label View
         //- Mobile buttons
         .comment-options__mobile-wrap.hidden-lg-up([class.bottom-bar-offset]="project.isTeaching")
             //- .mobile-carrot-pointer &#9654;
             .comment__options--mobileRow.comment-options-group--mobile([class.btn-group-show--animation]="optionsShow")
-                //- Emoji Comment
-                #addEmojiCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
+                //- Add Comment (Mobile)
+                #addCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile.col-6(
                     *ngIf="project.types.indexOf('emoji') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)",
                     [class.btn-show--animation]="optionsShow",
-                    (tap)="addCommentOfType('emoji')"
+                    (tap)="addCommentOfType()"
                 )
                     button.emoji.comment__options--mobileButton()
-                        i.icon.icon-comment-emoji
-                //-- Text Comment
-                #addTextCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
-                    *ngIf="project.types.indexOf('text') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)",
+                        i.icon.icon-comment-add
+                //- View Comments (Mobile)
+                #viewCommentsMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile.col-6(
                     [class.btn-show--animation]="optionsShow",
-                    (tap)="addCommentOfType('text')"
+                    (tap)="viewCommentsOnSelection()"
                 )
                     button.emoji.comment__options--mobileButton()
-                        i.icon.icon-comment-text
-                //-- Audio Comment
-                #addAudioCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile(
-                    *ngIf="project.types.indexOf('audio') > -1",
-                    [ngClass]="'col-' + (12 / directCommentOptions.length)",
-                    [class.super-disabled]="audioSupportError",
-                    [class.btn-show--animation]="optionsShow",
-                    (tap)="addCommentOfType('audio')"
-                )
-                    button.emoji.comment__options--mobileButton()
-                        i.icon.icon-mic
+                        i.icon.icon-search
     //- end .text-options
     .content--active__wrap
         .alert.alert-warning.alert-dismissible.fade.show(
@@ -230,7 +210,7 @@ scroll-progress([scrollProgress]="currentScroll")
         [pageObjs]="guideContent",
         [pager]="guideStepNo",
         (pageChange)="guideStepNo = $event",
-        [class.keyboard-offset]="isEmojiKeyboardActive()",
+        [class.keyboard-offset]="_comments.emojiActive",
         [class.mobile-toolbar-offset]="optionsShow",
         [forceCollapse]="true"
     )
@@ -238,9 +218,7 @@ scroll-progress([scrollProgress]="currentScroll")
 //- Emoji Keyboard: Custom Emoji entry component
     [currentComment]="_comments.activeComment && _comments.activeComment.data ? _comments.activeComment.data : ''",
 emoji-keyboard(
-    [isActive]="isEmojiKeyboardActive()",
-    (commentChange)="updateActiveComment($event)",
-    (dismissKeyboard)="inactivateComment()"
+    [isActive]="_comments.emojiActive"
 )
 
 comment-explorer(

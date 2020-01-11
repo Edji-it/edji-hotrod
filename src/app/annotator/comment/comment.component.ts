@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
 import { AuthService, CommentService, SocketService, AnalyticsService } from '../../_services'
@@ -14,8 +14,6 @@ import { copyToClipboard } from 'src/app/shared/clipboard'
   styleUrls: ['./comment.component.scss'],
 })
 export class CommentComponent implements OnInit, OnDestroy {
-  public lineCount: number = 1
-  public indexOnLine: number = 1
   public repliesShowing: boolean = false
   public isImageSpot: boolean = false
   public linkCopied: boolean = false
@@ -33,12 +31,23 @@ export class CommentComponent implements OnInit, OnDestroy {
   private repliesById: any = {}
   private project: any
   private fragment: string
+  private _commentUserId: string
 
   @Input() public comment: EdjiComment
   @Input() public reply: boolean = false // Is it a reply to another comment?
   @Input() private commentContext: string = 'comment' // See NOTES in summary.
   @Input() public selected: boolean = false
   @Input() public largeDisplay: boolean = false
+  /**
+   * Ensure permissions update if comment changes
+   * @note REQUIRED when dynamically changing comment input
+   */
+  @Input()
+  set commentUserId(id: string) {
+    let authorChanged: boolean = this._commentUserId && id !== this._commentUserId
+    this._commentUserId = id
+    authorChanged && this.checkPermissions()
+  }
   // Reading recap has a specialized display
   @Input() public readingReport: boolean = false
   @Input()
@@ -48,6 +57,8 @@ export class CommentComponent implements OnInit, OnDestroy {
       if (!isActive) {
         // Trigger save when deactivated externally i.e. emoji keyboard
         this.deactivate(this.comment)
+      } else {
+        this.activate()
       }
     }
   }
@@ -58,35 +69,27 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Output() commentDeleted = new EventEmitter<string>()
   @Output() commentActivation = new EventEmitter<boolean>()
   @Output() commentDeactivate: EventEmitter<any> = new EventEmitter<any>()
-  @Output() expandLine = new EventEmitter<number>()
   @Output() commentPaneExpand = new EventEmitter<number>()
-  @Output() collapseLine = new EventEmitter<number>()
   @Output() dismissKeyboard = new EventEmitter()
   @Output() commentUpdated: EventEmitter<any> = new EventEmitter()
   @Output() commentReply = new EventEmitter()
   @Output() toggleCommentExplorer = new EventEmitter<boolean>()
 
   constructor(
-    private projectStore: ProjectStore,
-    private _comments: CommentService,
-    private _auth: AuthService,
-    public el: ElementRef,
-    private _socket: SocketService,
     public _analytics: AnalyticsService,
+    public _comments: CommentService,
+    public el: ElementRef,
+    private projectStore: ProjectStore,
+    private _auth: AuthService,
+    private _socket: SocketService,
     private route: ActivatedRoute,
+    private _router: Router,
   ) {}
 
   ngOnInit() {
-    // Set initial values if passed
-    if (!this.reply) {
-      if (this.comment.lineCount) {
-        this.lineCount = this.comment.lineCount
-      }
-    }
     // Identify if it's an image spot comment
-    if (this.comment.loc && typeof this.comment.loc.x == 'number' && !this.comment.text && !this.comment.box) {
-      this.isImageSpot = true
-    }
+    this.isImageSpot =
+      this.comment.loc && typeof this.comment.loc.x == 'number' && !this.comment.text && !this.comment.box
 
     /** Set the current user every time it changes */
     this.subscriptions.push(
@@ -124,8 +127,10 @@ export class CommentComponent implements OnInit, OnDestroy {
       ),
       // Certain events require a top-down decision to deactivate comments
       this._comments.clearActiveComments.subscribe(
-        deactivate => {
-          this.deactivate()
+        activeComment => {
+          if (activeComment !== this.comment._id && this.active) {
+            this.deactivate()
+          }
         },
         error => {
           console.error(error)
@@ -155,18 +160,22 @@ export class CommentComponent implements OnInit, OnDestroy {
    */
   private checkPermissions(): void {
     if (this.comment && this.user && this.project) {
-      this.userPermission = this._comments.getCommentPermissions(this.comment, this.user, this.project)
+      this.userPermission = this._comments.getCommentPermissions(this.comment.user_id, this.user, this.project)
     }
     // Set readonly flag
     this.readOnly = this.userPermission === CommentPermissions.READ
   }
 
   activate(event?: any): void {
-    // Deactivate any active comments
-    this._comments.deactivateAllComments()
+    // Deactivate any other active comments
+    this._comments.deactivateAllComments(this.comment._id)
     // Activate this comment
     this.comment.active = this.active = true
     this._comments.activeComment = this.comment
+    // Open emoji keyboard for emoji comments
+    if (this.comment.type === 'emoji') {
+      this.activateEmojiKeyboard(new Event('created'))
+    }
   }
 
   /**
@@ -178,7 +187,11 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.comment.active = this.active = false
     this.comment.new = false
 
-    this._comments.activeComment.active = false
+    if (this._comments.activeComment && this._comments.activeComment._id === this.comment._id) {
+      this._comments.activeComment.active = false
+      // Deactivate emoji keyboard
+      this._comments.setEmojiActive(false)
+    }
     // Save when comment is toggled away from
     if (comment && !noUpdate) {
       this.updateComment(comment)
@@ -305,20 +318,6 @@ export class CommentComponent implements OnInit, OnDestroy {
     return this.repliesById[comment._id] && this.repliesById[comment._id].length > 0
   }
 
-  /**
-   * Collapse all stacked comments on the same line
-   */
-  collapse(): void {
-    this.collapseLine.emit(this.comment.lineY)
-  }
-
-  /**
-   * Expand all stacked comments on the same line
-   */
-  expand(): void {
-    this.expandLine.emit(this.comment.lineY)
-  }
-
   ngOnDestroy() {
     // Deactivate comment (for instance, ensures emoji keyboard closes)
     if (this.comment.active) {
@@ -363,6 +362,13 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
   }
 
+  public viewCommentsOnWords() {
+    this._router.navigate(['.'], {
+      relativeTo: this.route,
+      queryParams: { start: this.comment.start, end: this.comment.end, pane: 'comments' },
+    })
+  }
+
   /**
    * Create a Reply Comment of any Type
    * - Fired from comment options tooltip
@@ -373,6 +379,24 @@ export class CommentComponent implements OnInit, OnDestroy {
     let commentId = comment._id
 
     this._analytics.event(type + 'ReplyCreate')
+
+    // Check if there is a draft reply in progress, to prevent spamming
+    let replies = this.repliesById[this.comment._id]
+    let lastReply = replies ? replies[replies.length - 1] : false
+    // If last reply is user's own draft, focus it!
+    if (lastReply && lastReply.user_id === this.user._id && this._comments.isCommentNewDraft(lastReply)) {
+      // Focus last draft
+      lastReply.active = true
+      // Set selected type
+      lastReply.type = type
+      this._comments.activeComment = lastReply
+      return
+    }
+
+    // If not adding emoji reply, make sure keyboard is closed
+    if (this._comments.emojiActive && type !== 'emoji') {
+      this._comments.setEmojiActive(false)
+    }
 
     var replyCommentNew = <EdjiComment>{
       user_id: this.user._id,
@@ -403,13 +427,13 @@ export class CommentComponent implements OnInit, OnDestroy {
   /** Used to determine which level of permission the user has for a specific comment
    * @param comment A comment object
    */
-  private getCommentPermissions(comment: any): number {
-    return this._comments.getCommentPermissions(comment, this.user, this.project)
+  private getCommentPermissions(commentUser: any): number {
+    return this._comments.getCommentPermissions(commentUser, this.user, this.project)
   }
 
   private activeEmojiKeyboardReply(activeReply: any): void {
     this._comments.activeComment = activeReply
-    this._comments.setEmojiKeyboardActive(this.user)
+    this._comments.setEmojiActive()
   }
 
   public copyLink() {
@@ -419,5 +443,50 @@ export class CommentComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.linkCopied = false
     }, 3000)
+  }
+
+  /**
+   * Opens emoji keyboard
+   */
+  activateEmojiKeyboard(event: Event) {
+    event.stopPropagation()
+    // Activate comment
+    if (!this.comment.active) {
+      this.activate()
+    }
+    // Open keyboard
+    this._comments.setEmojiActive()
+  }
+
+  /**
+   * Ensures comment type is allowed for different contexts
+   * @param commentContext
+   * @param type
+   */
+  availableInContext(types: string | string[]) {
+    if (typeof types === 'string') {
+      types = [types]
+    }
+    if (this.commentContext === 'answer' && !types.includes(this.comment.type)) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  /**
+   * Attach audio
+   */
+  addAudio() {
+    this.comment.type = 'audio'
+  }
+
+  /**
+   * Remove audio
+   */
+  removeAudio() {
+    this.comment.url = ''
+    this.comment.dataArray = []
+    this.comment.type = 'text'
   }
 }

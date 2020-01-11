@@ -171,6 +171,10 @@ $iconGrayOpacity: 0.6;
   }
 }
 
+.icon-comment-add {
+  @include icon('icon-comment-add.svg');
+}
+
 .icon-comment-audio {
   @include icon('icon-mic.svg');
   display: inline-block;
@@ -684,7 +688,7 @@ $iconGrayOpacity: 0.6;
   z-index: $zMid + 999;
   left: 264px;
   margin-left: -15px;
-
+  pointer-events: none; // should never be clickable
   transition: opacity $slidingPaneTime linear;
   opacity: 0;
 

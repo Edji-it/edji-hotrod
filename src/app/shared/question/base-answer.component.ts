@@ -71,6 +71,6 @@ export abstract class BaseAnswerComponent implements OnInit {
 
   public activeEmojiKeyboardReply(comment: EdjiComment): void {
     this._comments.activeComment = comment
-    this._comments.setEmojiKeyboardActive(this.user)
+    this._comments.setEmojiActive()
   }
 }

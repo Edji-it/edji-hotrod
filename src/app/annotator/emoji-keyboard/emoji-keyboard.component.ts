@@ -31,12 +31,6 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     return this._isActive
   }
 
-  // @Input() private currentComment: string;
-
-  // We have to tell the parent the comment updated since the keyboard doesn't maintain the comment
-  @Output() commentChange = new EventEmitter()
-  // The keyboard's presence is controlled by the parent BUT the keyboard can also dismiss itself
-  @Output() dismissKeyboard = new EventEmitter()
   // Handy internal element reference for controlling the emoji filter actions
   @ViewChild('emojiScrollArea', { static: false }) emojiScrollArea
 
@@ -145,7 +139,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   // Runs on view init and onresize, to keep scroll event light
   updateScrollValues() {
     // Get Y values for categories
-    if (this._comments.keyboardActive) {
+    if (this._comments.emojiActive) {
       let filtersLength = this.emojifilters.length
       for (let i = 0; i < filtersLength; i++) {
         this.emojifilters[i]['scrollY'] = this.emojiScrollArea.nativeElement.querySelector('#category' + i).offsetTop
@@ -154,12 +148,10 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   }
 
   addEmoji(emoji: string): void {
-    this.currentComment += emoji
-    this.commentChange.emit(this.currentComment)
-
+    this._comments.emitEmojiToActive(emoji)
+    // Update Recent Emoji
     let emojiLabel = emoji.replace(/:/g, '')
     let index = this.emojifilters[0].emoji.indexOf(emojiLabel)
-    // Update recent emojis
     if (index < 0) {
       this.emojifilters[0].emoji.unshift(emojiLabel)
     } else {
@@ -174,19 +166,10 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
     this._locker.set('recentEmojis', this.emojifilters[0].emoji)
   }
 
-  // Empty the currentComment
-  clearEmoji(): void {
-    this.currentComment = ''
-    this.commentChange.emit(this.currentComment)
-  }
-
-  // Removes last emoji from currentComment
-  deleteLastEmoji(): void {
-    this.currentComment = this.currentComment.replace(/:[a-zA-Z0-9\-\_]*:$/, '')
-    this.commentChange.emit(this.currentComment)
-  }
-
   makeInactive(): void {
-    this.dismissKeyboard.emit()
+    // Hide keyboard
+    this._comments.setEmojiActive(false)
+    // Deactivate focused comment
+    this._comments.deactivateComment()
   }
 }

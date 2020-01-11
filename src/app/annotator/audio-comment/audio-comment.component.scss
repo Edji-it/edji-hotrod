@@ -16,23 +16,8 @@
 }
 
 .audio-comment-input-wrapper {
-  max-height: $readingLineHeight;
-  // Sit on top of comment box
-  overflow: hidden;
-  border: none;
-  display: block;
-  position: relative !important;
-  padding: 0;
-  font-size: 14px;
-  border: 0;
-  background-color: #e0e4e8;
-  border: 1px solid #e0e4e8;
-  border-radius: 3px;
-  -moz-transition: border-color 0.15s ease-in-out, -moz-box-shadow 0.15s ease-in-out;
-  -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-
+  max-height: $readingLineHeight + 2px;
+  border-color: #e0e4e8;
   white-space: nowrap;
   overflow: hidden;
 

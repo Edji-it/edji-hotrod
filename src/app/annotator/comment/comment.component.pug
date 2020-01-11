@@ -7,6 +7,7 @@ div([id]="'comment-' + comment._id")
         [class.read-only]="userPermission < 5",
         [class.comment--reply]="reply || comment.reply_to",
         [class.comment--large]="largeDisplay",
+        [class.is-draft]="_comments.isCommentNewDraft(comment)",
         [ngClass]="[ readingReport ? 'comment-block--align-top':'' ]",
     )
         user-avatar(
@@ -22,8 +23,7 @@ div([id]="'comment-' + comment._id")
                 [queryParams]="{ student: comment.user_id }"
             ) {{ comment.author }}
             a.link.sub-label(
-              (click)="copyLink()",
-              [class.is-draft]="_comments.isCommentNewDraft(comment)"
+              (click)="copyLink()"
             )
               span.time-text--draft New
               span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
@@ -41,14 +41,17 @@ div([id]="'comment-' + comment._id")
                 a.link.comment-meta__time(
                   [routerLink]="['./']",
                   [queryParams]="reply ? { reply: comment._id, comment: comment.reply_to } : { comment: comment._id }",
-                  [class.is-draft]="_comments.isCommentNewDraft(comment)"
                 ) &nbsp;
                     span.time-text--draft New
                     span.time-text--date {{ comment.createdAt | edjidate:'timeAgo':null }}
             .comment__content
                 ng-container(*ngIf="!reply && !comment.reply_to")
                   //- Text that was commented on
-                  .comment__highlight(*ngIf="!isImageSpot && !readingReport", data-test="commentAnnotatedText")
+                  .comment__highlight.comment__highlight--clickable(
+                    *ngIf="!isImageSpot && !readingReport",
+                    data-test="commentAnnotatedText",
+                    (click)="viewCommentsOnWords()"
+                  )
                       | {{ comment.text ? comment.text : '...'}}
                   //- Image comment handling
                   .comment__highlight(*ngIf="isImageSpot && !readingReport")
@@ -63,19 +66,11 @@ div([id]="'comment-' + comment._id")
                     | Reply
                     i.icon.icon-reply-arrow
                 .comment-input-wrapper(
+                  *ngIf="(comment.data || userPermission >= 5) && availableInContext(['emoji','text'])",
                   [ngClass]="[ comment.type + '' ]",
                   [class.input-wrapper--reply]="reply || comment.reply_to"
                 )
-                    emoji-comment(
-                        *ngIf="comment.type == 'emoji' || !comment.type",
-                        [comment]="comment",
-                        [readOnly]="userPermission < 5",
-                        [reply]="reply",
-                        (activate)="activate()",
-                        (deactivate)="deactivate(comment)"
-                    )
-                    text-comment(
-                        *ngIf="comment.type == 'text'",
+                    comment-input(
                         [readOnly]="userPermission < 5",
                         [comment]="comment",
                         [active]="comment.active",
@@ -83,8 +78,23 @@ div([id]="'comment-' + comment._id")
                         (activate)="activate()",
                         (deactivate)="deactivate(comment, $event)"
                     )
+                    .icon-group--in-field(*ngIf="userPermission >= 5 && !_comments.emojiActive")
+                        #commentAddEmoji.icon.icon-comment-emoji.hover--tooltip(
+                          *ngIf="project.types.indexOf('emoji') > -1 && availableInContext('emoji')",
+                          (click)="activateEmojiKeyboard($event)"
+                        )
+                            .tooltip-wrap
+                                .tooltip
+                                    .tooltip-title Add Emoji
+                        #commentAddAudio.icon.icon-comment-audio.hover--tooltip(
+                          *ngIf="comment.type !== 'audio' && project.types.indexOf('audio') > -1 && availableInContext('audio')",
+                          (click)="addAudio()"
+                        )
+                            .tooltip-wrap
+                                .tooltip
+                                    .tooltip-title Add Recording
+                .comment-attachment-wrapper(*ngIf="comment.type == 'audio' && availableInContext('audio')")
                     audio-comment(
-                        *ngIf="comment.type == 'audio'",
                         [comment]="comment",
                         (save)="deactivate(comment)",
                         [active]="comment.active",
@@ -92,6 +102,8 @@ div([id]="'comment-' + comment._id")
                         [reply]="reply",
                         [commentContext]="commentContext"
                     )
+                    .icon-group--in-field(*ngIf="availableInContext('text')")
+                        .icon.icon-close(*ngIf="userPermission >= 5", (click)="removeAudio()")
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0(*ngIf="!readingReport", [class.reply-gap]="repliesShowing")
                 ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")
@@ -107,7 +119,7 @@ div([id]="'comment-' + comment._id")
                 ng-container(*ngIf="userPermission >= 3")
                     .action-separator
                     button.btn.btn-xs-danger.e2e-delete-button((tap)="userPermission > 3 ? deleteComment(comment) : _comments.deleteCommentConfirmation(comment, commentContext)") Delete
-                ng-container(*ngIf="comment.type != 'audio' && userPermission >= 5 && !comment.active")
+                ng-container(*ngIf="userPermission >= 5 && !comment.active")
                     .action-separator
                     button.btn.btn-xs-primary((tap)="activate(comment)") Edit
                 ng-container(*ngIf="comment.active && userPermission >= 5 && !readingReport")
@@ -141,12 +153,21 @@ div([id]="'comment-' + comment._id")
         .reply-row
           user-avatar.comment__avatar.show([userDetails]="user")
           .reply-input__line
-          .replyInput Add Reply
-          //--Add reply buttons--
-          .replyButtonGroup
-            button#addEmojiReply.emoji(*ngIf="project.types.indexOf('emoji') > -1", (click)="addReplyOfType(comment, 'emoji')")
-              i.icon.icon-comment-emoji
-            button#addTextReply.emoji(*ngIf="project.types.indexOf('text') > -1", (click)="addReplyOfType(comment, 'text')")
-              i.icon.icon-comment-text
-            button#addAudioReply.emoji(*ngIf="project.types.indexOf('audio') > -1", (click)="addReplyOfType(comment, 'audio')")
-              i.icon.icon-mic
+          .reply-input__wrap
+            #addTextReply.replyInput((click)="addReplyOfType(comment, 'text')") Add Reply...
+            //--Add reply buttons--
+            .icon-group--in-field
+                #addEmojiReply.icon.icon-comment-emoji.hover--tooltip(
+                  *ngIf="project.types.indexOf('emoji') > -1",
+                  (click)="addReplyOfType(comment, 'emoji')"
+                )
+                    .tooltip-wrap
+                        .tooltip
+                            .tooltip-title Reply with Emoji
+                #addAudioReply.icon.icon-comment-audio.hover--tooltip(
+                  *ngIf="project.types.indexOf('audio') > -1",
+                  (click)="addReplyOfType(comment, 'audio')"
+                )
+                    .tooltip-wrap
+                        .tooltip
+                            .tooltip-title Reply with Recording
