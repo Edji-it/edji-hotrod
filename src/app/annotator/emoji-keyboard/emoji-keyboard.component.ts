@@ -148,7 +148,7 @@ export class EmojiKeyboardComponent implements OnInit, AfterViewInit {
   }
 
   addEmoji(emoji: string): void {
-    this._comments.sendEmojiToActive(emoji)
+    this._comments.emitEmojiToActive(emoji)
     // Update Recent Emoji
     let emojiLabel = emoji.replace(/:/g, '')
     let index = this.emojifilters[0].emoji.indexOf(emojiLabel)
