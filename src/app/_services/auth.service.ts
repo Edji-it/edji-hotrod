@@ -693,19 +693,13 @@ export class AuthService implements CanActivate {
 
   /**
    * This is only used for:
-   *  1) User is logged in and resetting password => resetObject should be assigned properties oldPassword, newPassword
-   * @param resetObject Can have properties: oldPassword, newPassword
+   *  1) User is logged in and resetting password => resetObject should be assigned properties old_password, new_password
+   * @param resetObject Can have properties: old_password, new_password
    * @returns Chainable promise resolved with json data containing either a user object & token or errors
    **/
-  public resetPassword(resetObject: any) {
+  public resetPassword(resetObject: { old_password: string; new_password: string }) {
     return this._http
-      .post(
-        [this.baseUrl, 'users', 'reset_password'].join('/'),
-        {
-          resetObject: resetObject,
-        },
-        this.getOptions(),
-      )
+      .post(this.baseUrl + '/api/v1/users/@me/change_password', resetObject, this.getOptions())
       .toPromise()
       .then((data: any) => {
         if (data.token && data.user) {
