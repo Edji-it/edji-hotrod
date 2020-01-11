@@ -198,10 +198,12 @@ medium-editor.content {
 .medium-editor-toolbar-save {
   font-family: Courier New, Courier, monospace;
   color: $green;
+  vertical-align: middle;
 }
 
 .medium-editor-toolbar-close {
   color: #ea5959;
+  vertical-align: middle;
 }
 
 .medium-editor-toolbar-form {
@@ -228,5 +230,5 @@ medium-editor.content {
 }
 
 .medium-toolbar-arrow-under:after {
-  top: 43px;
+  top: 100%;
 }

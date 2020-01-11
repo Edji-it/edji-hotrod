@@ -15,15 +15,16 @@ export class Project implements PageObjectInterface {
   public readingTitle = element(by.id('inProjectReadingTitle'))
 
   // Element References
-  public addEmojiBtn = element(by.id('addEmojiComment'))
-  public addTextBtn = element(by.id('addTextComment'))
-  public addAudioBtn = element(by.id('addAudioComment'))
-  public addEmojiBtnMobile = element(by.id('addEmojiCommentMobile'))
-  public addTextBtnMobile = element(by.id('addTextCommentMobile'))
-  public addAudioBtnMobile = element(by.id('addAudioCommentMobile'))
+  public addCommentBtn = element(by.id('addComment'))
+  public addCommentMobileBtn = element(by.id('addCommentMobile'))
+  public viewCommentBtn = element(by.id('viewComments'))
+  public viewCommentMobileBtn = element(by.id('viewCommentsMobile'))
+  public addEmojiBtn = element(by.id('commentAddEmoji'))
+  public addAudioBtn = element(by.id('commentAddAudio'))
   public addTextReplyBtn = element(by.id('addTextReply'))
   public addEmojiReplyBtn = element(by.id('addEmojiReply'))
   public addAudioReplyBtn = element(by.id('addAudioReply'))
+  public emojiClose = element(by.id('keyboardDoneBtn'))
   public image = element(by.css('#annotatorContent .img-wrap > img'))
   public imageWordBoxes = element.all(by.css('#annotatorContent .img-wrap .w-box'))
   public textComment = element(by.css('.new textarea.text-comment-input'))
@@ -40,7 +41,8 @@ export class Project implements PageObjectInterface {
   public commentOptionsShow = element(by.css('.text-options.active'))
   public commentNotHidden = element(by.css('avatar-portal:not(.hide)'))
   public getEmojiFromKeyboard = (locator: string) => element(by.css('emoji-keyboard')).element(by.css(locator))
-  public textCommentInput = element(by.css('textarea.text-comment-input'))
+  public textCommentInput = element(by.css('.text-comment-input[contenteditable="true"]'))
+  public commentContentDisplay = element(by.css('.text-comment-display'))
   public word = (index: string | number) => element(by.css(`.w[index='${index}']`))
   public commentAnnotatedText = element(by.css('[data-test="commentAnnotatedText"]'))
 
@@ -151,77 +153,45 @@ export class Project implements PageObjectInterface {
     })
   }
 
-  public addEmojiComment(): void {
+  public addComment(): void {
     browser.wait(this.EC.presenceOf(this.commentOptionsShow), 5000, 'never found comment options')
-    this.addEmojiBtn.isPresent().then(result => {
+    this.addCommentBtn.isPresent().then(result => {
       if (result) {
-        this.addEmojiBtn.isDisplayed().then(result => {
+        this.addCommentBtn.isDisplayed().then(result => {
           if (result) {
             // Desktop clicking of the add emoji comment button
-            this.addEmojiBtn.click()
+            this.addCommentBtn.click()
           } else {
             // Mobile clicking of the add emoji comment button
-            this.addEmojiBtnMobile.click()
+            this.addCommentMobileBtn.click()
           }
         })
       }
     })
-    // sleep() reason: Give comment explorer time to slide in
-    browser.sleep(1000)
   }
 
   public addTextComment(): void {
-    browser.wait(this.EC.presenceOf(this.commentOptionsShow), 5000, 'never found comment options')
-    this.addTextBtn.isPresent().then(result => {
-      if (result) {
-        this.addTextBtn.isDisplayed().then(result => {
-          if (result) {
-            // Desktop clicking of the add emoji comment button
-            browser.wait(this.EC.elementToBeClickable(this.addTextBtn), 5000, 'never found the add text comment button')
-            this.addTextBtn.click()
-          } else {
-            // Mobile clicking of the add emoji comment button
-            browser.wait(
-              this.EC.elementToBeClickable(this.addTextBtnMobile),
-              5000,
-              'never found the add text comment button',
-            )
-            this.addTextBtnMobile.click()
-          }
-        })
-      }
-    })
-    // sleep() reason: Give comment explorer time to slide in
-    browser.sleep(1000)
+    this.addComment()
+    // sleep() reason: Give comment time to appear
+    browser.sleep(500)
+  }
+
+  public addEmojiComment(): void {
+    this.addComment()
+    // sleep() reason: Give comment time to appear
+    browser.sleep(500)
+    // Select emoji
+    browser.wait(this.EC.elementToBeClickable(this.addEmojiBtn), 3000, 'never saw add emoji button on new comment')
+    this.addEmojiBtn.click()
   }
 
   public addAudioComment(): void {
-    browser.wait(this.EC.presenceOf(this.commentOptionsShow), 5000, 'never found comment options')
-    this.addAudioBtn.isPresent().then(result => {
-      if (result) {
-        this.addAudioBtn.isDisplayed().then(result => {
-          if (result) {
-            // Desktop clicking of the add emoji comment button
-            browser.wait(
-              this.EC.elementToBeClickable(this.addAudioBtn),
-              5000,
-              'never found the add audio comment button',
-            )
-            this.addAudioBtn.click()
-          } else {
-            // Mobile clicking of the add audio comment button
-            browser.wait(
-              this.EC.elementToBeClickable(this.addAudioBtnMobile),
-              5000,
-              'never found the add audio comment button',
-            )
-            this.addAudioBtnMobile.click()
-          }
-        })
-      }
-    })
-    // sleep() reason: Give comment explorer time to slide in
-    browser.sleep(1000)
+    this.addComment()
+    // sleep() reason: Give comment time to appear
+    browser.sleep(500)
+    // Select emoji
+    browser.wait(this.EC.elementToBeClickable(this.addAudioBtn), 3000, 'never saw add audio button on new comment')
+    this.addAudioBtn.click()
   }
 
   public openReplyPane(): void {

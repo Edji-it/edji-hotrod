@@ -4,7 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, ElementRef } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 
 // Local
-import { AuthService, MessageService, SocketService, CommentService } from '../../_services'
+import { AuthService, MessageService, SocketService, CommentService, ReadingService } from '../../_services'
 import { CommentExplorerComponent } from './comment-explorer.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule, Router, ActivatedRoute } from '@angular/router'
@@ -113,6 +113,7 @@ describe('Comment Explorer #cExplorer', () => {
         { provide: ElementRef, useValue: {} },
         { provide: ProjectStore, useValue: {} },
         { provide: SocketService, useValue: {} },
+        { provide: ReadingService, useValue: {} },
         {
           provide: Router,
           useValue: {

@@ -17,6 +17,12 @@
               .header-text(data-test="allFilterHeader")
                 | {{ commentCount }} Comments
                 .sub-label  All Students
+            //- Selection/Words/Indices header
+            ng-container(*ngIf="filterMode === 'indices'")
+              .header-text.header-text--search(data-test="indicesFilterHeader")
+                .sub-label {{ commentCount }} Comments on:
+                .comment__highlight {{ filterSpanText }}
+                //- | {{ commentCount }} Comments
             //- Search header (we only hide so that input can be focus)
             .header-text.header-text--search(
               data-test="searchFilterHeader",
@@ -61,7 +67,7 @@
                 .count {{ commentCount }}
               .header-text.no-label(data-test="userFilterHeader")
                 | My Comments
-        .col-12(*ngIf="filterMode !== 'line'")
+        .col-12(*ngIf="!['line', 'indices'].includes(filterMode)")
           label#sortByMatch.form-check-label.form-check-btn.form-check-sm(
               *ngIf="filterMode === 'search'",
               [class.active]="sortValue == 'match'",
@@ -126,6 +132,14 @@
                 .tooltip-wrap.tooltip--on-disabled
                   .tooltip
                     .tooltip-title Heat Vision is disabled
+            //- Word Selection options
+            ng-container(*ngIf="filterSpanText")
+              a.btn.btn-xs-primary.has-icon(
+                [routerLink]="'./'",
+                [queryParams]="{ search: filterSpanText }"
+              )
+                .icon.icon-search
+                | Search Phrase
             //- Student view actions/options
             ng-container(*ngIf="filterUserId")
               a.btn.btn-xs-primary.has-icon(

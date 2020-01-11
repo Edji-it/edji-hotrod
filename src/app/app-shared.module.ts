@@ -97,5 +97,6 @@ let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, NgScrollba
    * (essentially PUBLIC DECLARATIONS)
    */
   exports: [SHARED_DECLARATIONS, SHARED_IMPORTS],
+  providers: [EmojiOnePipe],
 })
 export class SharedModule {}
