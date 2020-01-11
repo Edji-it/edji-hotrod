@@ -18,6 +18,7 @@ nav-bar
       .btn-row.text-left
         button#topHeroCTA.btn.btn-lg.btn-hero((click)='goHero("upperCTA")')
           | Go Hero
+//- Plan Details (Free, Hero, Academy) Boxes
 .container
   .row.row-xl-pad.align-items-center
     .col-sm-4
@@ -67,6 +68,14 @@ nav-bar
           button.btn.btn-primary.btn-lg.btn-block((click)="showRequestAcademyModal = true") Request More Info
   .row.mt-4
     .hero-rule
+  //- Academy Pricing Slider
+  .row
+    .col-12
+      h1 Academy Pricing Slider Here
+      mat-slider([min]="0", [max]="5", [step]="1", [thumbLabel]="true")
+  .row.mt-4
+    .hero-rule
+  //- Feature Checkboxes
   .row.no-gutters
     .col-12
       .my-2
@@ -107,11 +116,17 @@ nav-bar
               | Go Hero 
               span(style='font-weight: 700;')
 hot-login-register.modal-will-fade(
-    [loginHeader]='"To go Hero, first you\'ll need an account"',
-    [class.show]='showLoginModal',
-    (closeModal)='showLoginModal = false',
-    (loginSuccess)='showHeroSubModal = true')
-hero-subscribe-modal.modal-will-fade([class.show]='showHeroSubModal', [goHeroLocation]="'heroPricingPage'", (closeModal)='showHeroSubModal = !showHeroSubModal', (heroWasBorn)="_router.navigate(['/dashboard'])")
+  [loginHeader]='"To go Hero, first you\'ll need an account"',
+  [class.show]='showLoginModal',
+  (closeModal)='showLoginModal = false',
+  (loginSuccess)='showHeroSubModal = true'
+)
+hero-subscribe-modal.modal-will-fade(
+  [class.show]='showHeroSubModal', 
+  [goHeroLocation]="'heroPricingPage'", 
+  (closeModal)='showHeroSubModal = !showHeroSubModal', 
+  (heroWasBorn)="_router.navigate(['/dashboard'])"
+)
 request-academy-modal.modal-will-fade(
   [class.show]="showRequestAcademyModal",
   (closeModal)="showRequestAcademyModal = false"
