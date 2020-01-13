@@ -1223,30 +1223,31 @@ export class NewReadingPage implements OnInit, OnDestroy {
   public addQuestionInLine() {
     if (this.insertNode && this.insertNode.parentNode) {
       let { editor, index } = this.getContainingEditor(this.insertNode)
-      if (index >= 0) {
-        let newEditorIndex = index + 1
-        // If there is a reference node for cursor position, insert at cursor
-        // Get and clear all elements in the medium editor block after the cursor position
-        let cutHtml = this.cutBlockContentsFromCaret()
-        // Send the 'enter' key
-        const event = new KeyboardEvent('keypress', {
-          key: 'Enter',
-        })
-        document.dispatchEvent(event)
-        // Update model with modified HTML (isn't triggered programmatically)
-        let precedingHtml = editor.querySelector('.medium-editor-element').innerHTML
-        this.readingHtml[index].text = precedingHtml
-        /**
-         * Make the html fragment a real piece of html!
-         * - Closes any tags broken when "cut"
-         */
-        var div = document.createElement('div')
-        div.appendChild(cutHtml.cloneNode(true))
-        var html = div.innerHTML
-        this.addQuestion(html, newEditorIndex)
-      } else {
+      let newEditorIndex = index + 1
+      // If there is a reference node for cursor position, insert at cursor
+      // Get and clear all elements in the medium editor block after the cursor position
+      let cutHtml = this.cutBlockContentsFromCaret()
+      // If unable to cut, add question to end
+      if (!cutHtml || index < 0) {
         this.addQuestion()
+        return
       }
+      // Send the 'enter' key
+      const event = new KeyboardEvent('keypress', {
+        key: 'Enter',
+      })
+      document.dispatchEvent(event)
+      // Update model with modified HTML (isn't triggered programmatically)
+      let precedingHtml = editor.querySelector('.medium-editor-element').innerHTML
+      this.readingHtml[index].text = precedingHtml
+      /**
+       * Make the html fragment a real piece of html!
+       * - Closes any tags broken when "cut"
+       */
+      var div = document.createElement('div')
+      div.appendChild(cutHtml.cloneNode(true))
+      var html = div.innerHTML
+      this.addQuestion(html, newEditorIndex)
     } else {
       // If no reference node (field has not been interacted with) insert question at end
       this.addQuestion()
@@ -1274,6 +1275,11 @@ export class NewReadingPage implements OnInit, OnDestroy {
           } else {
             break
           }
+        }
+        // Only cut from medium editors
+        // - Loop will result in "<html>", indicating no editor parent found
+        if (!containingNode.parentNode) {
+          return null
         }
         range.selectNodeContents(containingNode)
         range.setStart(selRange.endContainer, selRange.endOffset)
