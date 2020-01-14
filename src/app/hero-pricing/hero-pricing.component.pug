@@ -82,8 +82,20 @@ nav-bar
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
         .card-footer
-          a.btn.btn-hero.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", tabindex='1', (click)='goHero("pricingHeroCard")') Go Hero
-          a.btn.btn-hero.btn-lg.btn-block(*ngIf="user && user.isLoggedIn && user.hero_status", [routerLink]="['/account']", [innerHtml]="'Current Plan &nbsp;:tada:' | emojione")
+          a.btn.btn-hero.btn-lg.btn-block(
+            *ngIf="!isHero && !isAcademyHero",
+            tabindex='1',
+            (click)='goHero("pricingHeroCard")'
+          ) Go Hero
+          a.btn.btn-hero.btn-lg.btn-block(
+            *ngIf="isHero && !isAcademyHero",
+            [routerLink]="['/account']",
+            [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
+          )
+          a.btn.btn-primary.disabled.btn-block(
+            *ngIf="isAcademyHero",
+            disabled
+          ) Provided by Academy
     #academy.col-sm-4
       .card.card-outline-secondary
         .card-body
@@ -114,9 +126,15 @@ nav-bar
                 span.icon.icon-circle.icon-info  i
         .card-footer
           a.btn.btn-primary.btn-lg.btn-block(
+            *ngIf="!isAcademyHero",
             [routerLink]="'./'",
             [queryParams]="{ request: 'academy' }",
           ) Request Quote
+          a.btn.btn-hero.btn-lg.btn-block(
+            *ngIf="isAcademyHero",
+            [routerLink]="['/account']",
+            [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
+          )
   //- .row.no-gutters
   //-   .col-12
   //-     .my-2

@@ -29,6 +29,8 @@ export class HeroPricingComponent implements OnInit {
     free_override?: string
     hero_override?: string
   } = {}
+  public isHero: boolean
+  public isAcademyHero: boolean
   // Personal Hero license sitewide offer
   public offerDetails: string
 
@@ -200,6 +202,7 @@ export class HeroPricingComponent implements OnInit {
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
+        this.isHero = user && user.isLoggedIn && user.hero_status
       }),
       this._copy.activePromotions.subscribe(promo => {
         if (promo.offerDetails) {
@@ -210,6 +213,10 @@ export class HeroPricingComponent implements OnInit {
         if (params['request']) {
           this.showRequestAcademyModal = params['request'] === 'academy'
         }
+      }),
+      // Academy Flag
+      this._auth.currentAcademyState.subscribe(academyState => {
+        this.isAcademyHero = academyState && academyState.academies && academyState.academies.length > 0
       }),
     )
 
