@@ -52,12 +52,14 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // this makes the window always render scrolled to the top
-    this._router.events.subscribe(() => {
-      window.scrollTo(0, 0)
-    })
+    /**
+     * Ensure window is scroll to top when first loading a Project/Reading
+     * - Specifically an issue when loading a reading immediately after creating
+     *   it since the reading data is available before loading this page
+     */
+    window.scrollTo(0, 0)
 
-    // gets id from route
+    // Gets id from route
     let idParam: string = this.route.snapshot.params['id']
 
     /** Set the current user every time it changes */
