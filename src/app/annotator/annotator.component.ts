@@ -1616,16 +1616,17 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param selectedReply reply if applicable (results in expanding replies)
    */
   public openComment(focusComment?: boolean, selectedComment?: EdjiComment, selectedReply?): void {
-    if (!focusComment) {
-      this.commentBubble = false
-      this.toggleCommentExplorer(true, selectedComment, selectedReply)
-    } else {
+    if (focusComment) {
       // Set the icon arrow position based on lineY and offsets
       this.commentHeightPos = this.getCommentDisplayY(selectedComment)
       // Open Comment Bubble
       this.selectedComment = selectedComment
       this.commentPane = false
       this.commentBubble = true
+    } else {
+      // View Line
+      this.commentBubble = false
+      this.toggleCommentExplorer(true, selectedComment, selectedReply)
     }
   }
 
