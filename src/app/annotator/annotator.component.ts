@@ -589,7 +589,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // settimeout here to prevent errors where expression changes after checked
     setTimeout(() => {
       // Scroll to line in reading where comment was made
-      commentEl && commentEl.scrollEl.nativeElement.scrollIntoView({ behavior: 'smooth' })
+      commentEl && commentEl.scrollEl && commentEl.scrollEl.nativeElement.scrollIntoView({ behavior: 'smooth' })
       // Toggle the comment pane
       if (isReply) {
         let reply = this.project.comments.find(comment => {
@@ -1616,6 +1616,16 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param selectedReply reply if applicable (results in expanding replies)
    */
   public openComment(focusComment?: boolean, selectedComment?: EdjiComment, selectedReply?): void {
+    // If currently open comment is active, deactivate and allow for animation
+    if (this.selectedComment && this.selectedComment.active && this.selectedComment._id !== selectedComment._id) {
+      this.selectedComment.active = false
+      this.commentBubble = false
+      setTimeout(() => {
+        this.openComment(focusComment, selectedComment, selectedReply)
+      }, 1000)
+      return
+    }
+    // Display Comment Bubble OR Explorer
     if (focusComment) {
       // Set the icon arrow position based on lineY and offsets
       this.commentHeightPos = this.getCommentDisplayY(selectedComment)
@@ -1626,18 +1636,22 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.commentPane = false
       this._router.navigate(['./'], {
         relativeTo: this.route,
-        queryParams: { pane: null, comment: selectedComment._id },
-        queryParamsHandling: 'merge',
+        queryParams: { comment: selectedComment._id },
       })
     } else {
       // View Line
       this.commentBubble = false
       this.toggleCommentExplorer(true, selectedComment, selectedReply)
+      // Update URL
+      this._router.navigate(['./'], {
+        relativeTo: this.route,
+        queryParams: { line: selectedComment._id, pane: 'comments' },
+      })
     }
   }
 
   /**
-   * Toggles Comment Explorer/Pane
+   * Updates local Comment Explorer/Pane vars, and arrow position
    * - Primarily used by openComment()
    * - Remains "public" for toggling closed interactions
    */

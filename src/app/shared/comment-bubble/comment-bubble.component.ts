@@ -12,7 +12,24 @@ import { EdjiComment } from '../datatypes'
 export class CommentBubbleComponent {
   @Input() public comment: EdjiComment
   @Input() public top: string
-  @Input() public visible: boolean
+  private _visible: boolean
+  @Input()
+  set visible(visible: boolean) {
+    if (!visible && this._visible) {
+      // Fade out animation
+      this.fadeOut = true
+      setTimeout(() => {
+        this.fadeOut = false
+        this._visible = false
+      }, 500)
+    } else {
+      this._visible = visible
+    }
+  }
+  get visible(): boolean {
+    return this._visible
+  }
+
   @Output() closed = new EventEmitter()
 
   public fadeOut: boolean

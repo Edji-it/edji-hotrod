@@ -191,8 +191,8 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     this.activated = false
     this.htmlContents = ''
     // Prevent excess comment save calls
-    let shouldSave = previousData !== this.comment.data
-    this.deactivate.emit(shouldSave)
+    let shouldNotSave = previousData === this.comment.data
+    this.deactivate.emit(shouldNotSave)
   }
 
   blurField(event?: Event) {
