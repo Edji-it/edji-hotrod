@@ -1621,8 +1621,14 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.commentHeightPos = this.getCommentDisplayY(selectedComment)
       // Open Comment Bubble
       this.selectedComment = selectedComment
-      this.commentPane = false
       this.commentBubble = true
+      // Update Explorer and URL
+      this.commentPane = false
+      this._router.navigate(['./'], {
+        relativeTo: this.route,
+        queryParams: { pane: null, comment: selectedComment._id },
+        queryParamsHandling: 'merge',
+      })
     } else {
       // View Line
       this.commentBubble = false
@@ -1652,6 +1658,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
+      // Ensure bubble closes
+      this.commentBubble = false
     } else {
       // iOS selection
       let selec = Rangy.getSelection()

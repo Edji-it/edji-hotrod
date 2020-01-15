@@ -38,37 +38,22 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public filterCurrentUser: boolean
   public filterSpan: { start: number; end: number; boxStart?: number; boxEnd?: number }
   public filterSpanText: string
+  public filterLineId: string
 
   // Display
   public loading: boolean
 
-  // Comment Pane Component Inputs
-  private _comment: EdjiComment
-  @Input()
-  set comment(comment: EdjiComment) {
-    let commentApplied: boolean
-    if (!this._comment || (comment && comment._id !== this._comment._id)) {
-      commentApplied = true
-    }
-    this._comment = comment
-    if (commentApplied) {
-      this.filterComments()
-      this.evaluateShouldScroll()
-    }
-  }
-  get comment(): EdjiComment {
-    return this._comment
-  }
-
   private _visible: boolean
-  @Input()
   set visible(visible: boolean) {
-    let madeVisible: boolean = visible !== this._visible && visible
+    let changed: boolean = visible !== this._visible
     this._visible = visible
-    if (madeVisible) {
+    if (changed && visible) {
       this.filterComments()
       this.evaluateShouldScroll()
+      this.visibleChange.emit(true)
       document.body.classList.add('body__lock-scroll')
+    } else if (changed && !visible) {
+      this.visibleChange.emit(false)
     }
     if (!visible) {
       document.body.classList.remove('body__lock-scroll')
@@ -79,7 +64,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   }
 
   // Comment Pane Component Outputs
-  @Output() closed = new EventEmitter()
+  @Output() visibleChange = new EventEmitter()
   @Output() clearSelected = new EventEmitter()
 
   @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar
@@ -104,10 +89,9 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           this.commentByPos = commentByPos
           /**
            * Ensure we update explorer when:
-           *  - line is re-evaluated for a new comment
            *  - New comment added via sockets
            */
-          if ((this.comment && this.comment.new) || this.filterMode === 'all') {
+          if (this.filterMode === 'all') {
             this.filterComments({ update: true })
           }
         },
@@ -158,12 +142,12 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.searchTerm = params['search']
       this.sortValue = params['sort'] || 'match'
       this.filterComments()
-      this._visible = true
+      this.visible = true
     } else if (params['student']) {
       this.clearFilters({ student: params['student'] })
       this.filterUserId = params['student']
       this.filterComments()
-      this._visible = true
+      this.visible = true
     } else if (params['start']) {
       this.filterSpan = {
         start: parseInt(params['start']),
@@ -192,15 +176,20 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           }, '')
       })
       this.clearFilters(this.filterSpan)
-      this._visible = true
+      this.visible = true
       this.filterComments()
+    } else if (params['line']) {
+      this.filterLineId = params['line']
+      this.clearFilters({ line: this.filterLineId })
+      this.filterComments()
+      this.visible = true
     } else if (params['pane'] && params['pane'] === 'comments') {
       this.filterComments()
-      this._visible = true
+      this.visible = true
     } else if (this.visible) {
       this.close()
     } else {
-      this.closed.emit(false)
+      this.visible = false
     }
   }
 
@@ -285,7 +274,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     }
     let sort = opts.sort || this.sortValue
     let sorted: EdjiComment[] = this.allComments.slice()
-    let comment = this.comment
+    let comment
+    // let comment = this.comment
     // Set loading state
     if (!opts.update) {
       this.loading = true
@@ -297,20 +287,27 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         return c.user_id === this.user._id || c.authorIsTeacher
       })
     }
-    // Handle if reply selected
-    if (comment && comment.reply_to) {
-      comment = sorted.find(c => {
-        return c._id === comment.reply_to
-      })
+    // Pull Comment for line filtering
+    if (this.filterLineId) {
+      // Get lineY
+      comment = this.allComments.find(comment => comment._id === this.filterLineId)
+      // Handle if reply selected
+      if (comment && comment.reply_to) {
+        comment = sorted.find(c => {
+          return c._id === comment.reply_to
+        })
+      }
     }
+
     if (this.searchTerm) {
       sorted = sorted.filter(comment => {
         return this.searchComment(comment, this.searchTerm)
       })
       this.filterMode = 'search'
-    } else if (comment && comment.lineY && this.commentByPos && this.commentByPos[comment.lineY]) {
+    } else if (this.filterLineId && comment && comment.lineY) {
       this.filterMode = 'line'
       this.sortValue = sort = 'location'
+      // Filter by lineY
       sorted = this.commentByPos[comment.lineY].filter(comment => {
         return comment.start >= 0
       })
@@ -384,7 +381,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     this.filterMode = 'all' //- default
     if (!paramsToOverride) paramsToOverride = {}
     if (!paramsToOverride['student']) this.filterUserId = null
-    if (!paramsToOverride['line']) this.comment = null
+    if (!paramsToOverride['line']) this.filterLineId = null
     if (!paramsToOverride['search']) this.searchTerm = null
     if (!paramsToOverride['sort']) this.sortValue = 'created'
     if (!paramsToOverride['start']) {
@@ -477,8 +474,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       return
     }
     // if the comment is new, let's adjust the scroll position if there are a ton of comments
-    if (this.comment) {
-      this.scrollToComment(this.comment)
+    if (this.filterLineId) {
+      this.scrollToComment(this.filterLineId)
     }
   }
 
@@ -488,10 +485,10 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * @note We check "visible" before scrolling since content is required
    * - it is also possible to check this.scrollable.viewport (the reason it fails)
    */
-  scrollToComment(targetComment: EdjiComment, isReply?: boolean) {
+  scrollToComment(targetCommentId: string, isReply?: boolean) {
     // Replies are opened by comment component based on URL param
     setTimeout(() => {
-      let commentEl = document.getElementById('comment-' + targetComment._id)
+      let commentEl = document.getElementById('comment-' + targetCommentId)
       // Found comment, scroll!
       if (commentEl) {
         this.scrollable &&
