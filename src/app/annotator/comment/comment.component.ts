@@ -128,8 +128,8 @@ export class CommentComponent implements OnInit, OnDestroy {
       // Certain events require a top-down decision to deactivate comments
       this._comments.clearActiveComments.subscribe(
         activeComment => {
-          if (activeComment !== this.comment._id && this.active) {
-            this.deactivate()
+          if (activeComment !== this.comment._id && this.isActive) {
+            this.deactivate(this.comment)
           }
         },
         error => {
@@ -137,6 +137,17 @@ export class CommentComponent implements OnInit, OnDestroy {
         },
       ),
     )
+  }
+
+  ngOnDestroy() {
+    // Deactivate comment (for instance, ensures emoji keyboard closes)
+    if (this.isActive) {
+      // We let inputs handle saving on blur/destroy
+      this.deactivate(this.comment, true)
+    }
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
   }
 
   /**
@@ -182,12 +193,12 @@ export class CommentComponent implements OnInit, OnDestroy {
    * Deactivates/unfocuses comment, and optionally triggers save
    * @param comment (optional) Full EdjiComment object
    */
-  deactivate(comment?: any, noUpdate?: boolean): void {
+  deactivate(comment: any, noUpdate?: boolean): void {
     // Deactivate this comment
-    this.comment.active = this.active = false
-    this.comment.new = false
+    comment.active = this.active = false
+    comment.new = false
 
-    if (this._comments.activeComment && this._comments.activeComment._id === this.comment._id) {
+    if (this._comments.activeComment && this._comments.activeComment._id === comment._id) {
       this._comments.activeComment.active = false
       // Deactivate emoji keyboard
       this._comments.setEmojiActive(false)
@@ -316,16 +327,6 @@ export class CommentComponent implements OnInit, OnDestroy {
    */
   public hasReplies(comment): boolean {
     return this.repliesById[comment._id] && this.repliesById[comment._id].length > 0
-  }
-
-  ngOnDestroy() {
-    // Deactivate comment (for instance, ensures emoji keyboard closes)
-    if (this.comment.active) {
-      this.deactivate()
-    }
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe()
-    })
   }
 
   toggleCPane(comment?, forceOpen?: boolean): void {
