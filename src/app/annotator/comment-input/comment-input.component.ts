@@ -46,7 +46,6 @@ export class CommentInputComponent implements OnInit, OnDestroy {
   @Input() set active(active) {
     if (!this.readOnly) {
       if (active && !this.active) {
-        this.activated = active
         this.activateField()
       } else if (!active && this.active) {
         this.blurField()
@@ -75,6 +74,10 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     if (this.active) {
       this.updateComment()
     }
+    // Handle subscriptions
+    this.subscriptions.forEach(subscription => {
+      subscription && subscription.unsubscribe()
+    })
   }
 
   insertAtCaret(html) {
@@ -82,9 +85,11 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     if (!txtarea) {
       return
     }
+    // Construct node to insert
     let template = document.createElement('template')
     template.innerHTML = html
     let node = template.content.firstChild
+    // Insert node at selection/focus
     let sel = Rangy.getSelection()
     let range = sel.getRangeAt(0)
     range.insertNode(node)
