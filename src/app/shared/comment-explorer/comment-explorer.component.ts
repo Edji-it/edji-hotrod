@@ -304,7 +304,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
         return this.searchComment(comment, this.searchTerm)
       })
       this.filterMode = 'search'
-    } else if (this.filterLineId && comment && comment.lineY) {
+    } else if (this.filterLineId && comment && comment.lineY && this.commentByPos[comment.lineY]) {
       this.filterMode = 'line'
       this.sortValue = sort = 'location'
       // Filter by lineY
