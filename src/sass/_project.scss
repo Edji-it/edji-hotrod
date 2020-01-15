@@ -169,6 +169,11 @@ $hudColor: #676767;
       float: none !important;
     }
   }
+
+  // Prevents clicking text causing options to dismiss with clicking button
+  & label {
+    pointer-events: none;
+  }
 }
 
 .highlight-options.url-mode {
