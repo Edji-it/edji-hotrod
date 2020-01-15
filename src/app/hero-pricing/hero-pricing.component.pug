@@ -3,22 +3,36 @@ nav-bar
 .container-fluid
   promo-banner([currentPage]="'hero'")
   //- Promo row
-  .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
-    .sparks
-    img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
-    img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
+  .row(style="background: #44caf3; padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
+    //- .sparks
+    //- img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
+    //- img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
     .col-md-11.offset-md-1(style="padding-bottom:25px;")
-      h1.big-bold(style="color:#fff;") Answer the Call
-    .col-md-1
-    .col-md-6
-      p.row-xl-pad(style='font-size:1.25em; padding-top: 0px;')
-        | Hero unleashes the full power of Edji, giving you unlimited access to all of your Readings, and allowing you to evaluate student engagement and provide powerful feedback right when it’s needed
+      h1.big-bold(style="color:#fff;") Engage Every <br/>Student
+    //- .col-md-1
+    .col-md-6.offset-md-1
+      p.on-dark(style='font-size:1.25em; padding-top: 0px;')
+        | With a Hero subscription, every subject can be engaging
         | &nbsp;
-        span([innerHTML]="':tada:' | emojione")
-      .btn-row.text-left
-        button#topHeroCTA.btn.btn-lg.btn-hero((click)='goHero("upperCTA")')
-          | Go Hero
+        //- span([innerHTML]="':tada:' | emojione")
+      .btn-row.left
+        button#topHeroCTA.btn.btn-primary((click)='goHero("upperCTA")')
+          | Compare Plans
 .container
+  .row.row-xl-pad
+    .col-4.text-center
+      img()
+      h4 Create endless readings
+      p No more limits on number of active readings
+    .col-4.text-center
+      img()
+      h4 Access your archive
+      p View and edit any previously created readings
+    .col-4.text-center
+      img()
+      h4 Plan lessons ahead of time
+      p With unlimited readings, you can prepare your whole syllabus
+  .hero-rule
   .row.row-xl-pad.align-items-top
     .col-sm-4(style='padding-top:21%;')
       .card.card-outline-secondary
@@ -135,6 +149,11 @@ nav-bar
             [routerLink]="['/account']",
             [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
           )
+    .hero-rule
+    .row.row-xl-pad
+      .col-8.offset-md-2
+        h4 Teacher Reimbursement Program
+        p Thousands of individual teachers subscribe to Edji, and we are thankful that they support us. But we don't think teachers should need to pay out of pocket for the tools they need for their classroom. For this reason, if your school or district <a class="link" [routerLink]="'./'" [queryParams]="{ request: 'academy' }">subscribes to Academy</a>, we will reimburse your personal Hero subscription. Just <a class="link" href="mailto:support@edji.it">drop us an email</a>, and we will send you your refund.
   //- .row.no-gutters
   //-   .col-12
   //-     .my-2
