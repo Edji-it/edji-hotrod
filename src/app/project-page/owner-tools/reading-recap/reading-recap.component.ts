@@ -8,8 +8,8 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { CommentFilter } from 'src/app/_services/project.service'
-import { User, Project, EdjiComment, CommentStats } from '../../../shared/datatypes'
-import { AuthService, AcademyService, SocketService } from '../../../_services'
+import { User, Project, EdjiComment, CommentStats, Reading } from '../../../shared/datatypes'
+import { AuthService, AcademyService, SocketService, ReadingService } from '../../../_services'
 import { ALLSPARK } from '../../../app.constants'
 import { EdjiDatePipe } from '../../../_pipes/edjidate.pipe'
 import { ProjectStore } from 'src/app/_store'
@@ -81,6 +81,7 @@ export class ReadingRecapComponent implements OnInit {
 
   constructor(
     private projectStore: ProjectStore,
+    private readingService: ReadingService,
     private _auth: AuthService,
     private _fb: FormBuilder,
     private _academy: AcademyService,
@@ -112,8 +113,6 @@ export class ReadingRecapComponent implements OnInit {
               this.teacherId = project.teacher_id
               // need to wait until we have the project loaded before we can proceed
               if (project && project.comments) {
-                // Get Reading counts
-                this.getReadingCounts(project)
                 // Get time on reading data
                 this._academy
                   .getTimeOnReading(this.project._id)
@@ -146,6 +145,12 @@ export class ReadingRecapComponent implements OnInit {
             console.error(error)
           },
         ),
+        // Get Reading stats
+        this.readingService.currentReading.subscribe(reading => {
+          if (reading && reading.words) {
+            this.getReadingCounts(reading)
+          }
+        }),
         // Check for recap opened via url
         this.route.queryParams.subscribe(params => {
           if (params['recap']) {
@@ -179,13 +184,13 @@ export class ReadingRecapComponent implements OnInit {
   /** Get Reading specific stats
    * @description Gets counts for this Reading, student agnostic stats
    */
-  private getReadingCounts(project: Project): void {
+  private getReadingCounts(reading: Reading): void {
     // handle overall reading counts here
-    this.wordCount = Math.round(project.reading_id.words.length / 2)
-    this.questionCount = project.reading_id.questions ? project.reading_id.questions.length : 0
-    let wordsLength = project.reading_id.words.length
+    this.wordCount = Math.round((reading.words.length || 0) / 2)
+    this.questionCount = reading.questions ? reading.questions.length : 0
+    let wordsLength = reading.words.length
     for (let i = 0; i < wordsLength; i++) {
-      let word = project.reading_id.words[i]
+      let word = reading.words[i]
       if (word && word.styles && word.styles.includes('img')) {
         this.imageCount += 1
       }
