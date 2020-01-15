@@ -72,7 +72,7 @@ nav-bar
   .row
     .col-12
       h1 Academy Pricing Slider Here
-      mat-slider([min]="0", [max]="5", [step]="1", [thumbLabel]="true")
+      mat-slider.cdk-focused([min]="0", [max]="5", [step]="1", [thumbLabel]="true", [displayWith]="formatRateLabel", [(ngModel)]="value")
   .row.mt-4
     .hero-rule
   //- Feature Checkboxes

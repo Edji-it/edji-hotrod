@@ -59,6 +59,7 @@ $seamlessPlaceholderColor: #cdcdcd;
 @import 'emojionearea';
 @import 'comment';
 @import 'sliding-pane';
+@import 'sliding-toggle';
 @import 'modals';
 @import 'medium-editor';
 @import 'badges';
@@ -615,4 +616,24 @@ div#driver-highlighted-element-stage {
 .user-list__action .emojioneemoji {
   vertical-align: middle;
   margin-bottom: 1px;
+}
+
+$sliderHeight: 10px;
+
+.mat-slider {
+  &-horizontal {
+    width: 100%;
+  }
+  &-track-background {
+    height: $sliderHeight !important;
+  }
+  &-track-fill {
+    height: $sliderHeight !important;
+  }
+  &-track-wrapper {
+    height: $sliderHeight !important;
+  }
+  &-wrapper {
+    height: $sliderHeight !important;
+  }
 }

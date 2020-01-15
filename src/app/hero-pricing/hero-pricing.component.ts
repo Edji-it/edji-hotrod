@@ -136,6 +136,12 @@ export class HeroPricingComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
 
+  private academyPlans = ['Intro Plan', 'Team Plan', 'Small School', 'Large School', 'Small District', 'Large District']
+
+  public formatRateLabel = (v: number) => {
+    return this.academyPlans[v]
+  }
+
   constructor(
     public _router: Router,
     private _auth: AuthService,
