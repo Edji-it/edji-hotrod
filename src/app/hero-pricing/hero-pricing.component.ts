@@ -241,4 +241,9 @@ export class HeroPricingComponent implements OnInit {
     this.infoModalInfo = info
     this.showInfoModal = true
   }
+
+  public scrollTo(id: string) {
+    let el = document.getElementById(id)
+    el && el.scrollIntoView({ behavior: 'smooth' })
+  }
 }

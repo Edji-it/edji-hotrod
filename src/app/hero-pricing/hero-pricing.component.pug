@@ -16,7 +16,7 @@ nav-bar
         | &nbsp;
         //- span([innerHTML]="':tada:' | emojione")
       .btn-row.left
-        button#topHeroCTA.btn.btn-primary((click)='goHero("upperCTA")')
+        button#topHeroCTA.btn.btn-primary((click)='scrollTo("plansRow")')
           | Compare Plans
 .container
   .row.row-xl-pad
@@ -33,7 +33,7 @@ nav-bar
       h4 Plan lessons ahead of time
       p With unlimited readings, you can prepare your whole syllabus
   .hero-rule
-  .row.row-xl-pad.align-items-top
+  #plansRow.row.row-xl-pad.align-items-top
     .col-sm-4(style='padding-top:21%;')
       .card.card-outline-secondary
         .card-body
@@ -153,7 +153,8 @@ nav-bar
     .row.row-xl-pad
       .col-8.offset-md-2
         h4 Teacher Reimbursement Program
-        p Thousands of individual teachers subscribe to Edji, and we are thankful that they support us. But we don't think teachers should need to pay out of pocket for the tools they need for their classroom. For this reason, if your school or district <a class="link" [routerLink]="'./'" [queryParams]="{ request: 'academy' }">subscribes to Academy</a>, we will reimburse your personal Hero subscription. Just <a class="link" href="mailto:support@edji.it">drop us an email</a>, and we will send you your refund.
+        p Hundreds of individual teachers subscribe to Edji, and we are thankful that they support us. But we don't think teachers should need to pay out of pocket for the tools they need for their classroom. For this reason, if your school or district <a class="link" [routerLink]="'./'" [queryParams]="{ request: 'academy' }">subscribes to Academy</a>, we will reimburse your personal Hero subscription. Just <a class="link" href="mailto:support@edji.it">drop us an email</a>, and we will send you your refund.
+        p It's our way of thanking you for teaching the next generation and spreading Edji.
   //- .row.no-gutters
   //-   .col-12
   //-     .my-2
