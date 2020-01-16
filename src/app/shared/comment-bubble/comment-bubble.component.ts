@@ -15,12 +15,12 @@ export class CommentBubbleComponent {
   private _visible: boolean
   @Input()
   set visible(visible: boolean) {
-    if (!visible && this._visible) {
+    if (!visible && this._visible && !this.fadeOut) {
       // Fade out animation
       this.fadeOut = true
       setTimeout(() => {
         this.fadeOut = false
-        this._visible = false
+        this.closed.emit(true)
       }, 500)
     } else {
       this._visible = visible
