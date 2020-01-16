@@ -1615,7 +1615,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param selectedComment comment to display
    * @param selectedReply reply if applicable (results in expanding replies)
    */
-  public openComment(focusComment?: boolean, selectedComment?: EdjiComment, selectedReply?): void {
+  public openComment(focusComment?: boolean, selectedComment?: EdjiComment, selectedReply?: EdjiComment): void {
     // If currently open comment is active, deactivate and allow for animation
     if (this.selectedComment && this.selectedComment.active && this.selectedComment._id !== selectedComment._id) {
       this.selectedComment.active = false
@@ -1636,7 +1636,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       this.commentPane = false
       this._router.navigate(['./'], {
         relativeTo: this.route,
-        queryParams: { comment: selectedComment._id },
+        queryParams: { comment: selectedComment._id, reply: selectedReply ? selectedReply._id : null },
       })
     } else {
       // View Line
