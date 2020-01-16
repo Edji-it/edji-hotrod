@@ -344,7 +344,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
        */
       this._socket.commentUpdates.subscribe(
         commentUpdate => {
-          let comment = commentUpdate.comment
+          let comment: EdjiComment = commentUpdate.comment
           let wIndex = comment.start
           let cIndex = -1
           let selfUpdate = comment.user_id === this.user._id
@@ -369,8 +369,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           // If comment is updated to be empty, we consider a "DRAFT", and deleted to other users
           if (this.projectStore.isCommentHiddenDraft(commentUpdate.comment)) {
             commentUpdate.action = 'DELETE'
+          } else {
+            // Flag teacher's comments
+            comment.authorIsTeacher = this._comments.isAuthorTeacher(this.project, comment)
           }
-
           // Process different live comment updates
           if (commentUpdate.action === 'DELETE') {
             if (cIndex > -1) {

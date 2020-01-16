@@ -157,14 +157,7 @@ export class CommentComponent implements OnInit, OnDestroy {
    * @param project
    */
   private setAuthorOwner(project): void {
-    if (
-      this.comment.user_id === project.teacher_id ||
-      (project.co_owner_ids && project.co_owner_ids.indexOf(this.comment.user_id) > -1)
-    ) {
-      this.comment.authorIsTeacher = true
-    } else {
-      this.comment.authorIsTeacher = false
-    }
+    this.comment.authorIsTeacher = this._comments.isAuthorTeacher(project, this.comment)
   }
 
   /**
