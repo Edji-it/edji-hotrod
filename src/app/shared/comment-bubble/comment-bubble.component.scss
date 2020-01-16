@@ -29,7 +29,7 @@ $bubbleTopOffset: -126px;
   box-shadow: 1px 1px 15px rgba(0,0,0,0.2);
   width: 256px;
   left: 0px;
-  transform: translateX(-100%);
+  transform: translate3d(-100%, 0, 1px);
   opacity: 0;
   // transition: opacity linear 2000ms, margin linear 2000ms;
   // transition-delay: 200ms;

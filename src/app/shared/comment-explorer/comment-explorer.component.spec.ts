@@ -190,9 +190,8 @@ describe('Comment Explorer #cExplorer', () => {
     expect(explorer.comments.length).toBe(1)
     expect(explorer.filterMode).toBe('search')
     // Line view params
-    explorer.processParams({ line: '5dfa891f839a460033eab38c' })
     explorer.commentByPos = { '273': [sampleCommentArray[0], sampleCommentArray[1]] }
-    explorer.comment = sampleCommentArray[0] // viewing line relies on comment input
+    explorer.processParams({ line: '5dfa891f839a460033eab38c' })
     expect(explorer.comments.length).toBe(2)
     expect(explorer.filterMode).toBe('line')
   }))

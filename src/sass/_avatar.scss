@@ -146,6 +146,12 @@ $mediumAvatarSize: 36px;
     }
   }
 
+  &.draft .user-icon {
+    opacity: 0.5;
+    border-color: #343434; //$blue;
+    border-style: dashed;
+  }
+
    // Classes for the comment avatars with tooltips:
    & .tooltipbody {
     font-family: 'Open Sans', Arial;
