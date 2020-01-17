@@ -246,16 +246,42 @@
   color: #fff;
 }
 
+
+@keyframes wavin {
+  0% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+  100% { transform: rotate(-6deg); }
+}
+
 .promo-spotlight {
   position: absolute;
-  right: 8%;
-  bottom: -20%;
-  height: 110%;
+  right: 5%;
+  bottom: -10%;
+  height: 100%;
   opacity: 0.8;
+  transform-origin: bottom left;
+  animation-name: wavin;
+  animation-duration: 16000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
 
   @media (max-width: $tablet) {
-    height: 400px;
     opacity: 0.4;
+  }
+}
+
+.promo-skyline {
+  width:100%;
+  position: absolute;
+  bottom: -60px;
+
+  @media (max-width: $tablet) {
+    bottom: 0;
+    width: 120%;
+  }
+
+  @media (min-width: $xldesktop) {
+    bottom: -150px;
   }
 }
 
