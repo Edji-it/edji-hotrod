@@ -136,10 +136,20 @@ export class HeroPricingComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
 
-  private academyPlans = ['Intro Plan', 'Team Plan', 'Small School', 'Large School', 'Small District', 'Large District']
+  private academyPlans = [
+    { plan: 'Intro Plan', size: '5 Teachers', cost: '$180' },
+    { plan: 'Team Plan', size: '25 Teachers', cost: '$690' },
+    { plan: 'Small School', size: '50 Teachers', cost: '$990' },
+    { plan: 'Large School', size: 'Whole School', cost: '$1990' },
+    { plan: 'Small District', size: '6 Schools', cost: '$4900' },
+    { plan: 'Large District', size: 'Whole District', cost: 'Contact Us' },
+  ]
 
+  public sliderVal: number = 1
+  public currentSliderVal: number = 1
   public formatRateLabel = (v: number) => {
-    return this.academyPlans[v]
+    this.currentSliderVal = v
+    return this.academyPlans[v].plan
   }
 
   constructor(

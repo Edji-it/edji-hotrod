@@ -16,6 +16,12 @@ $sliderHeight: 10px;
   &-thumb {
     background-color: $red !important;
     border: solid 3px $gray !important;
+    .label-sticky & {
+      transform: scale(0.7) !important;
+    }
+    .cdk-focused & {
+      transform: scale(0.9) !important;
+    }
     &-label {
       background-color: $red !important;
       transform: rotate(0deg) !important;
@@ -25,13 +31,16 @@ $sliderHeight: 10px;
       top: -64px !important;
       border-radius: 50% !important;
       opacity: 0 !important;
-      .cdk-focused & {
+      .cdk-focused &, .label-sticky & {
         opacity: 1 !important;
         transition: opacity .8s cubic-bezier(.25,.8,.25,1);
       }
       &-text {
         transform: none !important;
         color: #fff !important;
+        .label-sticky & {
+          opacity: 1;
+        }
       }
       &::after{
         content: '';

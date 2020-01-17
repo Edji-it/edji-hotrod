@@ -71,9 +71,22 @@ nav-bar
   //- Academy Pricing Slider
   .row
     .col-12
-      h1 Academy Pricing Slider Here
-      mat-slider.cdk-focused([min]="0", [max]="5", [step]="1", [thumbLabel]="true", [displayWith]="formatRateLabel", [(ngModel)]="value")
+      h1.mb-5 Academy Plans
+      mat-slider.label-sticky(
+        [min]="0", 
+        [max]="5", 
+        [step]="1", 
+        [thumbLabel]="true", 
+        [displayWith]="formatRateLabel", 
+        [(ngModel)]="sliderVal",
+        [tickInterval]="1"
+      )
   .row.mt-4
+    .col-6
+      h4 {{ academyPlans[currentSliderVal].plan }}
+      h3 {{ academyPlans[currentSliderVal].size }} | {{ academyPlans[currentSliderVal].cost }}
+    .col-6
+
     .hero-rule
   //- Feature Checkboxes
   .row.no-gutters
