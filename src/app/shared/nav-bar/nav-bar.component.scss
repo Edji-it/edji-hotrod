@@ -482,21 +482,34 @@ $avatarDropArrowRight: 15px;
     pointer-events: all;
     // transition-delay: 0s, 0s, 0.3s;
   }
-  & .list-group-item {
+
+  & .list-group-item, & a.list-group-item {
     text-align: left;
     color: rgba(0, 0, 0, 0.6);
+    border-radius: 0px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+
+    &.active {
+      background: #fafafa;
+      color: $btnPrimaryColor;
+      outline: none;
+      border-color: $btnPrimaryColor;
+      border-left-width: 0px;
+      border-right-width: 0px;
+      cursor: default;
+    }
+
     &:hover {
       color: $btnPrimaryColor;
     }
-    &:first-child {
-      border-top-right-radius: 12px;
-      border-top-left-radius: 12px;
-    }
-    &:last-child {
-      border-bottom-right-radius: 12px;
-      border-bottom-left-radius: 12px;
-    }
   }
+}
+
+.avatar__drop-down-contents {
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .list-icon--right {
