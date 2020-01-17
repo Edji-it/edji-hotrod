@@ -47,11 +47,11 @@ nav-bar
           span.pricing Free
           p.small &nbsp;
           hr
-          p.card-text
+          p.card-text.card-text--pricing
             //- | Edji Free is an advanced set of reading creation, annotation and discussion tools for easy classroom reading and discussion.
             | 2 Reading Trial
           //- label Who is it for?
-          //- p.card-text
+          //- p.card-text.card-text--pricing
           //-   | Teachers that want their class to read occasionally and see their thoughts.
           //- Plan Details
           div(
@@ -61,7 +61,7 @@ nav-bar
           )
             hr
             .label([innerHtml]="detail.label")
-            p.card-text.plan-detail
+            p.card-text.card-text--pricing.plan-detail
               span([innerHtml]="detail.free | emojione")
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
@@ -84,11 +84,11 @@ nav-bar
             span.small  / month
           p.small Charged annually per teacher
           hr
-          p.card-text
+          p.card-text.card-text--pricing
             //- | Hero takes the limits off of Edji and gives teachers powerful evaluation and feedback tools to assist and assess their students as they read.
             | Unlimited Readings
           //- label Who is it for?
-          //- p.card-text Teachers who make reading a staple of their class and want a detailed history of their classroom engagement
+          //- p.card-text.card-text--pricing Teachers who make reading a staple of their class and want a detailed history of their classroom engagement
           //- Plan Details
           div(
             *ngFor="let detail of planDetails",
@@ -97,7 +97,7 @@ nav-bar
           )
             hr
             .label([innerHtml]="detail.label")
-            p.card-text.plan-detail
+            p.card-text.card-text--pricing.plan-detail
               span([innerHtml]="detail.hero | emojione")
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
@@ -127,11 +127,11 @@ nav-bar
             ) Request a Quote
           p.small Starting at $180/yr for 5 licenses
           hr
-          p.card-text
+          p.card-text.card-text--pricing
             //- | Academy is the easy way to get all your schools' teachers full access to Edji Hero features. Easily get teachers signed on and manage your Academy licenses.
             | For Schools and Districts
           //- label Who is it for?
-          //- p.card-text Teachers and Administrators who want to collaborate within their school.
+          //- p.card-text.card-text--pricing Teachers and Administrators who want to collaborate within their school.
           //- Plan Details
           div(
             *ngFor="let detail of planDetails",
@@ -140,7 +140,7 @@ nav-bar
           )
             hr
             .label([innerHtml]="detail.label")
-            p.card-text.plan-detail
+            p.card-text.card-text--pricing.plan-detail
               span([innerHtml]="detail.academy | emojione")
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i

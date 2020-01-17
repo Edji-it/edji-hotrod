@@ -14,7 +14,6 @@ import { map, take } from 'rxjs/operators'
   selector: 'hero-pricing',
   templateUrl: './hero-pricing.component.pug',
   styleUrls: ['./hero-pricing.component.scss'],
-  encapsulation: ViewEncapsulation.None, // enable styling emoji
 })
 export class HeroPricingComponent implements OnInit {
   public user: User = <any>{}
