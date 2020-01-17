@@ -1,13 +1,99 @@
 @import '../../sass/base/variables';
 
-#promoCircleGraphic {
+
+.promo-circle-graphic__wrap {
+  position: absolute;
+  top: -45px;
+  right: -60px;
+  width: 100%;
+  height: calc(100% + 60px);
+
+  @media(min-width: $desktop) {
+    right: 15px;
+  }
+
+  @media(min-width: $xldesktop + 100px) {
+    right: 0px;
+    transform: scale(1.05);
+    transform-origin: right;
+  }
+
+  @media(min-width: $xldesktop + 250px) {
+    right: 5%;
+    transform: scale(1.2);
+    transform-origin: right;
+  }
+}
+
+@keyframes spin {
+  from {transform:rotate(0deg);}
+  to {transform:rotate(360deg);}
+}
+
+#promoCircleGraphicBottom,
+#promoCircleGraphicMid,
+#promoCircleGraphicTop {
   position:absolute;
-  top:0;
-  right:-100px;
-  max-height:110%;
+  top: 0px;
+  right: 0px;
+  height: 600px;
+  animation-name: spin;
+  animation-duration: 40000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 
   @media (max-width: $desktop) {
     opacity: 0.4;
+  }
+}
+
+#promoCircleGraphicMid {
+  top: 156px;
+  right: 137px;
+  height: 311px;
+  animation-direction: reverse;
+}
+
+#promoCircleGraphicTop {
+  top: 40px;
+  right: -3px;
+  height: 545px;
+  animation: none;
+}
+
+@keyframes growin  {
+  0% { transform: scale(1); }
+  45% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  55% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+#promoCircleGraphicSpotlight {
+  // This should stay still
+  position: absolute;
+  top: 237px;
+  right: 221px;
+  height: 144px;
+  animation: none;
+}
+
+#promoCircleGraphicHero {
+  position: absolute;
+  top: 257px;
+  right: 227px;
+  height: 95px;
+  animation-name: growin;
+  animation-duration: 10000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
+}
+
+#promoCircleGraphicSpotlight,
+#promoCircleGraphicHero {
+  @media (max-width: $desktop) {
+    opacity: 0.4;
+    animation: none;
   }
 }
 

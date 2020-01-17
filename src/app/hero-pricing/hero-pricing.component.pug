@@ -4,16 +4,18 @@ nav-bar
   promo-banner([currentPage]="'hero'")
   //- Promo row
   .row(style="background: #44caf3; padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
-    //- .sparks
-    //- img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
-    //- img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
-    img#promoCircleGraphic(src="/assets/images/promo-home.svg")
+    .promo-circle-graphic__wrap
+      img#promoCircleGraphicBottom(src="/assets/images/hero-graphic/bottom-circles.svg")
+      img#promoCircleGraphicMid(src="/assets/images/hero-graphic/top-circles.svg")
+      img#promoCircleGraphicSpotlight(src="/assets/images/hero-graphic/white-circle.svg")
+      img#promoCircleGraphicTop(src="/assets/images/hero-graphic/hands.svg")
+      img#promoCircleGraphicHero(src="/assets/images/hero-lg.png")
     .col-md-11.offset-md-1(style="padding-bottom:25px;")
       h1.big-bold(style="color:#fff;") Engage Every <br/>Student
     //- .col-md-1
     .col-md-6.offset-md-1
       p.on-dark(style='font-size:1.25em; padding-top: 0px;')
-        | With a Hero subscription, every subject can be engaging
+        | With a Hero subscription, <br/>every subject can be engaging
         | &nbsp;
         //- span([innerHTML]="':tada:' | emojione")
       .btn-row.left
