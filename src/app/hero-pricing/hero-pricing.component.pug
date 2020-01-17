@@ -163,31 +163,6 @@ nav-bar
           img.ml-2(src="/assets/images/promo-heart-hand.svg", style="height: 2em; width: auto;")
         p Hundreds of individual teachers subscribe to Edji, and we are thankful that they support us. But we don't think teachers should need to pay out of pocket for the tools they need for their classroom. For this reason, if your school or district <a class="link" [routerLink]="'./'" [queryParams]="{ request: 'academy' }">subscribes to Academy</a>, we will reimburse your personal Hero subscription. Just <a class="link" href="mailto:support@edji.it">drop us an email</a>, and we will send you your refund.
         p It's our way of thanking you for teaching the next generation and spreading Edji.
-  //- .row.no-gutters
-  //-   .col-12
-  //-     .my-2
-  //-       h2 What's included?
-  //-     .table-responsive
-  //-       table.table.table-features
-  //-         thead
-  //-           tr
-  //-             th(scope="col", style="width:50%;") Feature
-  //-             th.text-center(scope="col") Edji Free
-  //-             th.text-center(scope="col") Edji Hero
-  //-         tbody
-  //-           ng-container(*ngFor="let feature of featureValues")
-  //-             tr([class.row-hover]="feature.info",  (click)="feature.info ? triggerInfoModal(feature.info) : null")
-  //-               td
-  //-                 span([innerHtml]="feature.name + ' '")
-                  //- i.icon__tooltip(*ngIf="feature.info")
-                  //-   span.icon.icon-circle.icon-info  i
-  //-                 span.text-primary.learn-more.small Learn more
-  //-               //- Standard check display
-  //-               td.feature-check(*ngIf="!feature.free_override", [innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
-  //-               td.feature-check(*ngIf="!feature.free_override", [innerHtml]="':white_check_mark:' | emojione")
-  //-               //- Override text display
-  //-               td.feature-check(*ngIf="feature.free_override", [innerHtml]="feature.free_override")
-  //-               td.feature-check(*ngIf="feature.hero_override", [innerHtml]="feature.hero_override")
 .container-fluid
   .row.navy.row-xl-pad.has-sparks
       .sparks
