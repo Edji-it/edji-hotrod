@@ -21,16 +21,19 @@ nav-bar
           | Compare Plans
 .container
   .row.row-xl-pad
-    .col-4.text-center
-      img()
+    .col-12.col-md-4.text-center
+      .promo-icon-circle-wrap.blue
+        img.pl-1(src="/assets/images/icon-create.svg")
       h4 Create endless readings
       p No more limits on number of active readings
-    .col-4.text-center
-      img()
+    .col-12.col-md-4.text-center
+      .promo-icon-circle-wrap.yellow
+        img(src="/assets/images/icon-folder.svg")
       h4 Access your archive
       p View and edit any previously created readings
-    .col-4.text-center
-      img()
+    .col-12.col-md-4.text-center
+      .promo-icon-circle-wrap.red
+        span([innerHtml]="':calendar:' | emojione")
       h4 Plan lessons ahead of time
       p With unlimited readings, you can prepare your whole syllabus
   .hero-rule
