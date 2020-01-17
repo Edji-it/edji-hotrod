@@ -13,6 +13,11 @@ $sliderHeight: 10px;
     height: $sliderHeight;
     background-color: $red !important;
   }
+  &-ticks {
+    .label-sticky & {
+      opacity: 1;
+    }
+  }
   &-thumb {
     background-color: $red !important;
     border: solid 3px $gray !important;

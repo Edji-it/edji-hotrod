@@ -1,26 +1,13 @@
-import { Project, User } from '../datatypes'
 import { Subscription } from 'rxjs'
-import { CommentPermissions, EdjiComment } from '../datatypes/index'
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-  ViewChildren,
-  QueryList,
-} from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { Router, ActivatedRoute } from '@angular/router'
+import { take } from 'rxjs/operators'
+import { NgScrollbar } from 'ngx-scrollbar'
 
 // Project Dependencies
-import { AuthService, CommentService, SocketService } from '../../_services'
-import { Angulartics2 } from 'angulartics2'
-import { CommentComponent } from 'src/app/annotator/comment/comment.component'
+import { EdjiComment, Project, User } from '../datatypes'
+import { AuthService, CommentService, SocketService, ReadingService } from '../../_services'
 import { ProjectStore } from 'src/app/_store'
-import { NgScrollbar } from 'ngx-scrollbar'
-import { Router, ActivationEnd, ActivatedRoute } from '@angular/router'
 @Component({
   selector: 'comment-explorer',
   templateUrl: './comment-explorer.component.pug',
@@ -49,37 +36,24 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public filterMode: SearchFilter = 'all'
   public filterUserId: string
   public filterCurrentUser: boolean
+  public filterSpan: { start: number; end: number; boxStart?: number; boxEnd?: number }
+  public filterSpanText: string
+  public filterLineId: string
 
   // Display
   public loading: boolean
 
-  // Comment Pane Component Inputs
-  private _comment: EdjiComment
-  @Input()
-  set comment(comment: EdjiComment) {
-    let commentApplied: boolean
-    if (!this._comment || (comment && comment._id !== this._comment._id)) {
-      commentApplied = true
-    }
-    this._comment = comment
-    if (commentApplied) {
-      this.filterComments()
-      this.evaluateShouldScroll()
-    }
-  }
-  get comment(): EdjiComment {
-    return this._comment
-  }
-
   private _visible: boolean
-  @Input()
   set visible(visible: boolean) {
-    let madeVisible: boolean = visible !== this._visible && visible
+    let changed: boolean = visible !== this._visible
     this._visible = visible
-    if (madeVisible) {
+    if (changed && visible) {
       this.filterComments()
       this.evaluateShouldScroll()
+      this.visibleChange.emit(true)
       document.body.classList.add('body__lock-scroll')
+    } else if (changed && !visible) {
+      this.visibleChange.emit(false)
     }
     if (!visible) {
       document.body.classList.remove('body__lock-scroll')
@@ -90,7 +64,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   }
 
   // Comment Pane Component Outputs
-  @Output() closed = new EventEmitter()
+  @Output() visibleChange = new EventEmitter()
   @Output() clearSelected = new EventEmitter()
 
   @ViewChild(NgScrollbar, { static: true }) scrollable: NgScrollbar
@@ -98,6 +72,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 
   constructor(
     private projectStore: ProjectStore,
+    private _readings: ReadingService,
     private _socket: SocketService,
     public el: ElementRef,
     private _auth: AuthService,
@@ -114,10 +89,9 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
           this.commentByPos = commentByPos
           /**
            * Ensure we update explorer when:
-           *  - line is re-evaluated for a new comment
            *  - New comment added via sockets
            */
-          if ((this.comment && this.comment.new) || this.filterMode === 'all') {
+          if (this.filterMode === 'all') {
             this.filterComments({ update: true })
           }
         },
@@ -164,22 +138,58 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     if (params['sort']) this.sortValue = params['sort']
     // Detect search/filter modes
     if (params['search']) {
+      this.clearFilters({ search: params['search'] })
       this.searchTerm = params['search']
       this.sortValue = params['sort'] || 'match'
       this.filterComments()
-      this._visible = true
+      this.visible = true
     } else if (params['student']) {
       this.clearFilters({ student: params['student'] })
       this.filterUserId = params['student']
       this.filterComments()
-      this._visible = true
+      this.visible = true
+    } else if (params['start']) {
+      this.filterSpan = {
+        start: parseInt(params['start']),
+        end: params['end'] ? parseInt(params['end']) : parseInt(params['start']),
+      }
+      // Handle Box params
+      if (params['boxStart']) {
+        this.filterSpan.boxStart = params['boxStart']
+        this.filterSpan.boxEnd = params['boxEnd'] ? parseInt(params['boxEnd']) : parseInt(params['boxStart'])
+      }
+      this._readings.currentReading.pipe(take(1)).subscribe(reading => {
+        if (!reading.words || !reading.words[0]) return
+        this.filterSpanText = reading.words
+          .slice(this.filterSpan.start, this.filterSpan.end + 1)
+          .reduce((acc, word) => {
+            if (word.boxes) {
+              return (
+                acc +
+                word.boxes.slice(this.filterSpan.boxStart, this.filterSpan.boxEnd + 1).reduce((bAcc, bWord) => {
+                  return bAcc + (bWord.str ? bWord.str + ' ' : '')
+                }, '')
+              )
+            } else {
+              return acc + (word.str ? word.str : ' ')
+            }
+          }, '')
+      })
+      this.clearFilters(this.filterSpan)
+      this.visible = true
+      this.filterComments()
+    } else if (params['line']) {
+      this.filterLineId = params['line']
+      this.clearFilters({ line: this.filterLineId })
+      this.filterComments()
+      this.visible = true
     } else if (params['pane'] && params['pane'] === 'comments') {
       this.filterComments()
-      this._visible = true
+      this.visible = true
     } else if (this.visible) {
       this.close()
     } else {
-      this.closed.emit(false)
+      this.visible = false
     }
   }
 
@@ -264,34 +274,56 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     }
     let sort = opts.sort || this.sortValue
     let sorted: EdjiComment[] = this.allComments.slice()
-    let comment = this.comment
+    let comment
+    // let comment = this.comment
     // Set loading state
     if (!opts.update) {
       this.loading = true
-      this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
+      this.scrollable && this.scrollable.viewport && this.scrollable.scrollTo({ top: 0, duration: 0 })
     }
     // Apply Heat Vision
     if (!this.project.heat_vision && !this.project.isTeaching) {
       sorted = sorted.filter(c => {
-        return c.user_id === this.user._id
+        return c.user_id === this.user._id || c.authorIsTeacher
       })
     }
-    // Handle if reply selected
-    if (comment && comment.reply_to) {
-      comment = sorted.find(c => {
-        return c._id === comment.reply_to
-      })
+    // Pull Comment for line filtering
+    if (this.filterLineId) {
+      // Get lineY
+      comment = this.allComments.find(comment => comment._id === this.filterLineId)
+      // Handle if reply selected
+      if (comment && comment.reply_to) {
+        comment = sorted.find(c => {
+          return c._id === comment.reply_to
+        })
+      }
     }
+
     if (this.searchTerm) {
       sorted = sorted.filter(comment => {
         return this.searchComment(comment, this.searchTerm)
       })
       this.filterMode = 'search'
-    } else if (comment && comment.lineY && this.commentByPos && this.commentByPos[comment.lineY]) {
+    } else if (this.filterLineId && comment && comment.lineY && this.commentByPos[comment.lineY]) {
       this.filterMode = 'line'
       this.sortValue = sort = 'location'
+      // Filter by lineY
       sorted = this.commentByPos[comment.lineY].filter(comment => {
         return comment.start >= 0
+      })
+    } else if (this.filterSpan) {
+      this.filterMode = 'indices'
+      this.sortValue = sort = 'location'
+      sorted = sorted.filter(comment => {
+        let wordMatch = this.filterSpan.start <= comment.start && this.filterSpan.end >= comment.end
+        let boxMatch
+        if (this.filterSpan.boxStart) {
+          boxMatch =
+            comment.box && this.filterSpan.boxStart <= comment.box.start && this.filterSpan.boxEnd >= comment.box.end
+        } else {
+          boxMatch = true
+        }
+        return wordMatch && boxMatch
       })
     } else if (this.filterUserId) {
       this.filterMode = 'user'
@@ -338,18 +370,29 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * Clear filters applied to the explorer
    * @note does not fire "filterComments", so it can be used internally
    */
-  private clearFilters(paramsToOverride?: { line?: string; student?: string; pane?: string }): void {
+  private clearFilters(paramsToOverride?: {
+    search?: string
+    line?: string
+    student?: string
+    pane?: string
+    start?: number
+    end?: number
+  }): void {
     this.filterMode = 'all' //- default
     if (!paramsToOverride) paramsToOverride = {}
     if (!paramsToOverride['student']) this.filterUserId = null
-    if (!paramsToOverride['line']) this.comment = null
+    if (!paramsToOverride['line']) this.filterLineId = null
     if (!paramsToOverride['search']) this.searchTerm = null
     if (!paramsToOverride['sort']) this.sortValue = 'created'
+    if (!paramsToOverride['start']) {
+      this.filterSpan = null
+      this.filterSpanText = null
+    }
     // Tell parent component comment is cleared
     this.clearSelected.emit()
     // Merge params to keep with reset/null
     let params = Object.assign(
-      { student: null, line: null, search: null, sort: null, pane: 'comments' },
+      { student: null, line: null, search: null, sort: null, start: null, end: null, pane: 'comments' },
       paramsToOverride,
     )
     // Clear URL params
@@ -357,6 +400,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       relativeTo: this.route,
       queryParams: params,
       queryParamsHandling: 'merge',
+      // By ignoring "override" clear events, we preserve browser back/forward functionality
+      skipLocationChange: !!paramsToOverride,
     })
   }
 
@@ -377,7 +422,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   viewSearch(): void {
     this.filterMode = 'search'
     this.sortValue = 'match'
-    this.scrollable && this.visible && this.scrollable.scrollTo({ top: 0, duration: 0 })
+    this.scrollable && this.scrollable.viewport && this.scrollable.scrollTo({ top: 0, duration: 0 })
     this.searchInput && this.searchInput.nativeElement.focus()
   }
 
@@ -429,8 +474,8 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       return
     }
     // if the comment is new, let's adjust the scroll position if there are a ton of comments
-    if (this.comment) {
-      this.scrollToComment(this.comment)
+    if (this.filterLineId) {
+      this.scrollToComment(this.filterLineId)
     }
   }
 
@@ -440,14 +485,14 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    * @note We check "visible" before scrolling since content is required
    * - it is also possible to check this.scrollable.viewport (the reason it fails)
    */
-  scrollToComment(targetComment: EdjiComment, isReply?: boolean) {
+  scrollToComment(targetCommentId: string, isReply?: boolean) {
     // Replies are opened by comment component based on URL param
     setTimeout(() => {
-      let commentEl = document.getElementById('comment-' + targetComment._id)
+      let commentEl = document.getElementById('comment-' + targetCommentId)
       // Found comment, scroll!
       if (commentEl) {
         this.scrollable &&
-          this.visible &&
+          this.scrollable.viewport &&
           this.scrollable.scrollToElement(commentEl, { top: 0, left: -100, duration: 400 })
       }
     }, 1)
@@ -503,4 +548,4 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 }
 
 type SearchSort = 'created' | 'location' | 'match'
-type SearchFilter = 'line' | 'all' | 'user' | 'search'
+type SearchFilter = 'line' | 'all' | 'user' | 'search' | 'indices'

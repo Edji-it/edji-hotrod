@@ -731,6 +731,8 @@ pre.btn {
   text-decoration: none !important;
   // Padding provides space for icon
   padding: 1px 5px 1px 5px;
+  // Buttons are too small for transitions to look good
+  transition-duration: 0s;
 
   &:hover {
     color: #fff !important;
@@ -774,6 +776,11 @@ pre.btn {
   @extend .btn-xs;
   &:hover {
     background: $btnPrimaryFocusColor;
+
+    & .icon-search {
+      background-color: $btnPrimaryFocusColor;
+      border-color: $btnPrimaryFocusColor;
+    }
   }
   &:focus {
     box-shadow: none;

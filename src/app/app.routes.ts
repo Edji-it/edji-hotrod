@@ -18,7 +18,6 @@ import { OAuthComponent } from './oauth-redirect/oauth-redirect.component'
 import { LicenseRedirectComponent } from './license-redirect/license-redirect.component'
 import { LicenseWelcomeComponent } from './license-welcome/license-welcome.component'
 import { TeamPageComponent } from './team-page/team-page.component'
-import { PromoPageComponent } from './promo/promo.component'
 import { SearchPage } from './search-page/search-page.component'
 import { ResetComponent } from './shared'
 
@@ -73,7 +72,6 @@ export const ROUTES: Routes = [
   { path: 'hero', redirectTo: '/plans', pathMatch: 'full' },
   { path: 'pricing', redirectTo: '/plans', pathMatch: 'full' },
   { path: 'plans', component: HeroPricingComponent, pathMatch: 'full' },
-  { path: 'promo', component: PromoPageComponent, pathMatch: 'full' },
   { path: 'about', component: TeamPageComponent },
   { path: 'academy', loadChildren: './academy/academy.module#AcademyModule' },
   { path: 'oauth/:type', component: OAuthComponent, pathMatch: 'full' },

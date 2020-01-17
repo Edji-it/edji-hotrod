@@ -4,7 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, ElementRef } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 
 // Local
-import { AuthService, MessageService, SocketService, CommentService } from '../../_services'
+import { AuthService, MessageService, SocketService, CommentService, ReadingService } from '../../_services'
 import { CommentExplorerComponent } from './comment-explorer.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule, Router, ActivatedRoute } from '@angular/router'
@@ -113,6 +113,7 @@ describe('Comment Explorer #cExplorer', () => {
         { provide: ElementRef, useValue: {} },
         { provide: ProjectStore, useValue: {} },
         { provide: SocketService, useValue: {} },
+        { provide: ReadingService, useValue: {} },
         {
           provide: Router,
           useValue: {
@@ -189,9 +190,8 @@ describe('Comment Explorer #cExplorer', () => {
     expect(explorer.comments.length).toBe(1)
     expect(explorer.filterMode).toBe('search')
     // Line view params
-    explorer.processParams({ line: '5dfa891f839a460033eab38c' })
     explorer.commentByPos = { '273': [sampleCommentArray[0], sampleCommentArray[1]] }
-    explorer.comment = sampleCommentArray[0] // viewing line relies on comment input
+    explorer.processParams({ line: '5dfa891f839a460033eab38c' })
     expect(explorer.comments.length).toBe(2)
     expect(explorer.filterMode).toBe('line')
   }))

@@ -15,7 +15,18 @@ import { generateInitialsFromName } from 'src/app/_store/user.decorators'
 export class UserAvatarComponent implements OnInit {
   // Can load with either PublicUser or User id
   // (ID only supported within Project currently)
-  @Input() userId: string
+  @Input() set userId(id: string) {
+    let idChange = this._userId && id !== this._userId
+    this._userId = id
+    if (idChange) {
+      this.resetDisplayProperties()
+      // Refresh subscription
+      this.subscribeToUserDetails()
+    }
+  }
+  get userId() {
+    return this._userId
+  }
   // Not required, used as fallback fullname for deleted accounts
   @Input() tempName: string
   @Input() set userDetails(user: PublicUser) {
@@ -33,6 +44,7 @@ export class UserAvatarComponent implements OnInit {
 
   private userSubscription: Subscription
   private _userDetails: PublicUser
+  private _userId: string
 
   public user: PublicUser
 
@@ -45,6 +57,16 @@ export class UserAvatarComponent implements OnInit {
   constructor(private projectStore: ProjectStore) {}
 
   ngOnInit() {
+    this.subscribeToUserDetails()
+  }
+
+  ngOnDestroy() {
+    this.userSubscription && this.userSubscription.unsubscribe()
+  }
+
+  subscribeToUserDetails() {
+    this.userSubscription && this.userSubscription.unsubscribe()
+    // Subscribe if only id is available
     if (!this.userDetails && this.userId) {
       this.userSubscription = this.projectStore.joinedUsers
         .pipe(
@@ -72,10 +94,6 @@ export class UserAvatarComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    this.userSubscription && this.userSubscription.unsubscribe()
-  }
-
   setDisplayProperties(user: PublicUser) {
     if (user) {
       this.user = user
@@ -97,5 +115,12 @@ export class UserAvatarComponent implements OnInit {
         this.initials = generateInitialsFromName(user.fullname)
       }
     }
+  }
+
+  resetDisplayProperties() {
+    this.initials = ''
+    this.fullname = ''
+    this.avatar = ''
+    this.background = ''
   }
 }

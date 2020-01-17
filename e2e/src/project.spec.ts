@@ -91,7 +91,7 @@ describe('Project Page', () => {
       // Comment Explorer should close when only comment is deleted
     })
 
-    it('should make a comment on an image by clicking on image', async () => {
+    it('should make a text AND emoji comment on an image by clicking on image', async () => {
       // Find and click on image
       browser.wait(EC.presenceOf(project.image), 10000, 'never found the image')
       await browser.executeScript(
@@ -107,12 +107,21 @@ describe('Project Page', () => {
         .actions()
         .sendKeys('test comment')
         .perform()
-      // Press ENTER to save
-      browser
-        .actions()
-        .sendKeys(protractor.Key.ENTER)
-        .perform()
-
+      // Add emoji
+      project.addEmojiBtn.click()
+      browser.sleep(500) // wait for Emoji KB to slide in
+      let heartEyesEmoji = project.getEmojiFromKeyboard("[dataname=':heart_eyes:']")
+      browser.wait(
+        EC.elementToBeClickable(heartEyesEmoji),
+        3000,
+        'Heart Eyes emoji was not clickable after adding text comment',
+      )
+      heartEyesEmoji.click()
+      project.emojiClose.click()
+      // Verify emoji and text are in comment
+      browser.wait(EC.visibilityOf(project.commentContentDisplay), 3000, 'comment display did not show after save')
+      expect(project.commentContentDisplay.getAttribute('innerHTML')).toContain('test comment')
+      expect(project.commentContentDisplay.getAttribute('innerHTML')).toContain('heart_eyes')
       // delete the comment
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
       project.commentDelete.click()
@@ -131,10 +140,6 @@ describe('Project Page', () => {
 
       // Add audio comment
       project.addAudioComment()
-
-      // Make sure audio comment works even when not marked as active
-      browser.sleep(1000) // - audio comment rendering
-      project.commentActionSave.click()
 
       // Wait 5 seconds for record button to become clickable and click the record audio button to start recording
       browser.wait(EC.elementToBeClickable(project.audioRecord), 7000, 'never found the record audio button')
@@ -195,7 +200,7 @@ describe('Project Page', () => {
       project.addTextReplyBtn.click()
       browser.sleep(1000)
       browser.wait(
-        EC.presenceOf(element(by.css('textarea.text-comment-input'))),
+        EC.presenceOf(element(by.css('.text-comment-input.reply-display'))),
         5000,
         'wait for text reply input to show',
       )

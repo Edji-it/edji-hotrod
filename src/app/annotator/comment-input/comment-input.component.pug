@@ -1,0 +1,25 @@
+doctype html
+.text-comment.input-wrap([ngClass]="[activated ? 'active' : '']")
+  //- Comment Input
+  .text-comment-input(
+    #textInput,
+    contenteditable="true",
+    type='text',
+    role="textbox",
+    spellcheck="true",
+    placeholder="Comment...",
+    [class.disabled]="readOnly",
+    [innerHtml]="htmlContents",
+    (keydown.enter)='blurField($event)',
+    (keydown.shift.enter)='blurField($event)',
+    (keyup.esc)='blurField($event)',
+    [ngClass]="{ 'reply-display': reply, 'disabled': readOnly, 'hide': !activated }",
+    [style.minHeight]="textareaHeight"
+  )
+  //- Comment Display
+  #textCommentInput.text-comment-input.text-comment-display(
+    #textDisplay,
+    [innerHtml]="comment.data ? (comment.data | linkify | emojione) : 'Share your thoughts...'",
+    [ngClass]="{ 'reply-display': reply, 'hide': activated, 'large-emoji': comment.type === 'emoji' }",
+    (tap)="clickToggleActive($event)"
+  )
