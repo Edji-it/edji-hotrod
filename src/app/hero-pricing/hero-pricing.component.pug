@@ -15,7 +15,7 @@ nav-bar
     //- .col-md-1
     .col-md-6.offset-md-1
       p.on-dark(style='font-size:1.25em; padding-top: 0px;')
-        | With a Hero subscription, <br/>every subject can be engaging
+        | With a Hero subscription, <br/>every lesson can be engaging
         | &nbsp;
         //- span([innerHTML]="':tada:' | emojione")
       .btn-row.left
@@ -40,7 +40,7 @@ nav-bar
       p With unlimited readings, you can prepare your whole syllabus
   .hero-rule
   #plansRow.row.row-xl-pad.align-items-top
-    .col-sm-4(style='padding-top:21%;')
+    .col-12.col-md-6.col-lg-4.col--free-top-offset
       .card.card-outline-secondary
         .card-body
           h2.card-title Edji Free
@@ -70,7 +70,7 @@ nav-bar
             | Register
           a.btn.btn-primary.btn-lg.btn-block.disabled(*ngIf="user && user.isLoggedIn && user.hero_status", disabled)
             | {{ user.hero_status ? 'Included' : 'Current Plan'}}
-    .col-sm-4
+    .col-12.col-md-6.col-lg-4
       .card.card-outline-danger
         .card-body
           img.card-img-top(src='/assets/images/hero-lg.png', style="padding-top:15.5%;")
@@ -116,7 +116,7 @@ nav-bar
             *ngIf="isAcademyHero",
             disabled
           ) Provided by Academy
-    #academy.col-sm-4
+    #academy.col-12.col-md-6.offset-md-3.col-lg-4.offset-lg-0
       .card.card-outline-secondary
         .card-body
           img.card-img-top(src='/assets/images/hero-academy-lg.png')
@@ -157,7 +157,7 @@ nav-bar
           )
     .hero-rule
     .row.row-xl-pad
-      .col-8.offset-md-2
+      .col-12.col-md-8.offset-md-2
         h4
           | Teacher Reimbursement Program
           img.ml-2(src="/assets/images/promo-heart-hand.svg", style="height: 2em; width: auto;")
@@ -191,6 +191,7 @@ nav-bar
 .container-fluid
   .row.navy.row-xl-pad.has-sparks
       .sparks
+      img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
       .col-12.text-center
         h1.big-light.on-dark(style="margin:0px;")
           | Answer the Call

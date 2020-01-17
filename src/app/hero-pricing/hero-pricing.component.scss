@@ -145,6 +145,24 @@
   }
 }
 
+#plansRow .col-12 {
+  @media (max-width: $desktop) {
+    margin-bottom: 30px;
+
+    .card-img-top {
+      padding: 0 90px !important;
+    }
+  }
+}
+
+.col--free-top-offset {
+  padding-top: 19.5%;
+
+  @media (min-width: $xldesktop) {
+    padding-top: 21%;
+  }
+}
+
 .card-footer {
   background: #fff;
 }
@@ -230,19 +248,14 @@
 
 .promo-spotlight {
   position: absolute;
-  right: 10%;
-  bottom: 0px;
-  height: 95%;
-  opacity: 0.9;
+  right: 8%;
+  bottom: -20%;
+  height: 110%;
+  opacity: 0.8;
 
   @media (max-width: $tablet) {
     height: 400px;
-    opacity: 0.8;
-  }
-
-  @media (max-width: $phone) {
-    height: 250px;
-    opacity: 0.8;
+    opacity: 0.4;
   }
 }
 
