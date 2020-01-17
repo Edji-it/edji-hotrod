@@ -9,8 +9,11 @@ nav-bar
       img#promoCircleGraphicMid(src="/assets/images/hero-graphic/top-circles.svg")
       img#promoCircleGraphicSpotlight(src="/assets/images/hero-graphic/white-circle.svg")
       img#promoCircleGraphicTop(src="/assets/images/hero-graphic/hands.svg")
-      img#promoCircleGraphicHero(src="/assets/images/hero-lg.png")
-    .col-md-11.offset-md-1(style="padding-bottom:25px;")
+      img#promoCircleGraphicHero(
+        src="/assets/images/hero-lg.png",
+        (click)='scrollTo("plansRow")'
+      )
+    .col-md-11.offset-md-1(style="padding-bottom:25px; pointer-events:none;")
       h1.big-bold(style="color:#fff;") Engage Every <br/>Student
     //- .col-md-1
     .col-md-6.offset-md-1

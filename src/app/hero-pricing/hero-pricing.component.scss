@@ -23,6 +23,12 @@
     transform: scale(1.2);
     transform-origin: right;
   }
+
+  &:hover, &:focus {
+    & #promoCircleGraphicHero {
+      transform: scale(1.15);
+    }
+  }
 }
 
 @keyframes spin {
@@ -61,14 +67,6 @@
   animation: none;
 }
 
-@keyframes growin  {
-  0% { transform: scale(1); }
-  45% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  55% { transform: scale(1); }
-  100% { transform: scale(1); }
-}
-
 #promoCircleGraphicSpotlight {
   // This should stay still
   position: absolute;
@@ -83,10 +81,9 @@
   top: 257px;
   right: 227px;
   height: 95px;
-  animation-name: growin;
-  animation-duration: 10000ms;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease;
+  transform: scale(1);
+  transition: transform 800ms ease;
+  cursor: pointer;
 }
 
 #promoCircleGraphicSpotlight,
