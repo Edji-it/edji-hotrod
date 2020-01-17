@@ -102,7 +102,7 @@ nav-bar
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
         .card-footer
-          a.btn.btn-hero.btn-lg.btn-block(
+          a#priceCardCTA.btn.btn-hero.btn-lg.btn-block(
             *ngIf="!isHero && !isAcademyHero",
             tabindex='1',
             (click)='goHero("pricingHeroCard")'
