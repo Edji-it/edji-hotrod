@@ -1,5 +1,16 @@
 @import '../../sass/base/variables';
 
+#promoCircleGraphic {
+  position:absolute;
+  top:0;
+  right:-50px;
+  max-height:110%;
+
+  @media (max-width: $tablet) {
+    display: none;
+  }
+}
+
 .card-title {
   font-size: 42px;
   font-weight: 200;
