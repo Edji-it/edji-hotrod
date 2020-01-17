@@ -31,23 +31,28 @@ export class CommentComponent implements OnInit, OnDestroy {
   private repliesById: any = {}
   private project: any
   private fragment: string
-  private _commentUserId: string
 
-  @Input() public comment: EdjiComment
+  private _comment: EdjiComment
+  @Input()
+  set comment(c: EdjiComment) {
+    let differentComment = this._comment && c._id !== this._comment._id
+    // Set
+    this._comment = c
+    // Initialize
+    if (differentComment || !this._comment) {
+      // Identify if it's an image spot comment
+      this.isImageSpot = c.loc && typeof c.loc.x == 'number' && !c.text && !c.box
+      // Check/Reset permissions
+      this.checkPermissions()
+    }
+  }
+  get comment(): EdjiComment {
+    return this._comment
+  }
   @Input() public reply: boolean = false // Is it a reply to another comment?
   @Input() private commentContext: string = 'comment' // See NOTES in summary.
   @Input() public selected: boolean = false
   @Input() public largeDisplay: boolean = false
-  /**
-   * Ensure permissions update if comment changes
-   * @note REQUIRED when dynamically changing comment input
-   */
-  @Input()
-  set commentUserId(id: string) {
-    let authorChanged: boolean = this._commentUserId && id !== this._commentUserId
-    this._commentUserId = id
-    authorChanged && this.checkPermissions()
-  }
   // Reading recap has a specialized display
   @Input() public readingReport: boolean = false
   @Input()
@@ -87,10 +92,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Identify if it's an image spot comment
-    this.isImageSpot =
-      this.comment.loc && typeof this.comment.loc.x == 'number' && !this.comment.text && !this.comment.box
-
     /** Set the current user every time it changes */
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
@@ -128,8 +129,8 @@ export class CommentComponent implements OnInit, OnDestroy {
       // Certain events require a top-down decision to deactivate comments
       this._comments.clearActiveComments.subscribe(
         activeComment => {
-          if (activeComment !== this.comment._id && this.active) {
-            this.deactivate()
+          if (activeComment !== this.comment._id && this.isActive) {
+            this.deactivate(this.comment)
           }
         },
         error => {
@@ -139,20 +140,24 @@ export class CommentComponent implements OnInit, OnDestroy {
     )
   }
 
+  ngOnDestroy() {
+    // Deactivate comment (for instance, ensures emoji keyboard closes)
+    if (this.isActive) {
+      // We let inputs handle saving on blur/destroy
+      this.deactivate(this.comment, true)
+    }
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
+  }
+
   /**
    * Set display flag for Teachers/Owners/Co-Owners
    * @description provides reset when co-owners change, and handles live comments
    * @param project
    */
   private setAuthorOwner(project): void {
-    if (
-      this.comment.user_id === project.teacher_id ||
-      (project.co_owner_ids && project.co_owner_ids.indexOf(this.comment.user_id) > -1)
-    ) {
-      this.comment.authorIsTeacher = true
-    } else {
-      this.comment.authorIsTeacher = false
-    }
+    this.comment.authorIsTeacher = this._comments.isAuthorTeacher(project, this.comment)
   }
 
   /**
@@ -182,12 +187,12 @@ export class CommentComponent implements OnInit, OnDestroy {
    * Deactivates/unfocuses comment, and optionally triggers save
    * @param comment (optional) Full EdjiComment object
    */
-  deactivate(comment?: any, noUpdate?: boolean): void {
+  deactivate(comment: any, noUpdate?: boolean): void {
     // Deactivate this comment
     this.comment.active = this.active = false
     this.comment.new = false
 
-    if (this._comments.activeComment && this._comments.activeComment._id === this.comment._id) {
+    if (this._comments.activeComment && this._comments.activeComment._id === comment._id) {
       this._comments.activeComment.active = false
       // Deactivate emoji keyboard
       this._comments.setEmojiActive(false)
@@ -209,7 +214,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.comment.url = comment.url
     } else {
       this.comment.data = comment
-    } // else
+    }
 
     if (this.commentContext !== 'answer') {
       if (this.commentContext === 'reply') {
@@ -219,7 +224,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       } else {
         // If it is a regular comment.
         this.isLoading = true
-      } // else
+      }
       this.projectStore
         .saveComment(this.comment)
         .then(comment => {
@@ -316,16 +321,6 @@ export class CommentComponent implements OnInit, OnDestroy {
    */
   public hasReplies(comment): boolean {
     return this.repliesById[comment._id] && this.repliesById[comment._id].length > 0
-  }
-
-  ngOnDestroy() {
-    // Deactivate comment (for instance, ensures emoji keyboard closes)
-    if (this.comment.active) {
-      this.deactivate()
-    }
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe()
-    })
   }
 
   toggleCPane(comment?, forceOpen?: boolean): void {

@@ -228,4 +228,14 @@ export class CommentService {
   public isCommentNewDraft(comment: EdjiComment): boolean {
     return (!comment.data || comment.data == '') && (!comment.url || comment.url == '')
   }
+
+  /**
+   * Returns whether the author is currently a teacher
+   */
+  public isAuthorTeacher(project, comment): boolean {
+    return (
+      comment.user_id === project.teacher_id ||
+      (project.co_owner_ids && project.co_owner_ids.indexOf(comment.user_id) > -1)
+    )
+  }
 }

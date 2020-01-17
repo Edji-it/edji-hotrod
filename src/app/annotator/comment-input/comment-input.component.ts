@@ -1,4 +1,14 @@
-import { Component, EventEmitter, ElementRef, Input, Output, OnInit, AfterViewInit, ViewChild } from '@angular/core'
+import {
+  Component,
+  EventEmitter,
+  ElementRef,
+  Input,
+  Output,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core'
 
 // Project Dependencies
 import { EdjiComment } from '../../shared/datatypes/comment'
@@ -13,7 +23,7 @@ import * as Rangy from 'rangy'
   templateUrl: './comment-input.component.pug',
   styleUrls: ['./comment-input.component.scss'],
 })
-export class CommentInputComponent implements OnInit, AfterViewInit {
+export class CommentInputComponent implements OnInit, OnDestroy {
   @ViewChild('textInput', { static: false }) public textInput: ElementRef
   @ViewChild('textDisplay', { static: false }) public textDisplay: ElementRef
 
@@ -36,7 +46,6 @@ export class CommentInputComponent implements OnInit, AfterViewInit {
   @Input() set active(active) {
     if (!this.readOnly) {
       if (active && !this.active) {
-        this.activated = active
         this.activateField()
       } else if (!active && this.active) {
         this.blurField()
@@ -60,14 +69,27 @@ export class CommentInputComponent implements OnInit, AfterViewInit {
     )
   }
 
+  ngOnDestroy() {
+    // When input is blurred by closing parent, make sure we save
+    if (this.active) {
+      this.updateComment()
+    }
+    // Handle subscriptions
+    this.subscriptions.forEach(subscription => {
+      subscription && subscription.unsubscribe()
+    })
+  }
+
   insertAtCaret(html) {
     var txtarea = this.textInput.nativeElement
     if (!txtarea) {
       return
     }
+    // Construct node to insert
     let template = document.createElement('template')
     template.innerHTML = html
     let node = template.content.firstChild
+    // Insert node at selection/focus
     let sel = Rangy.getSelection()
     let range = sel.getRangeAt(0)
     range.insertNode(node)
@@ -75,8 +97,6 @@ export class CommentInputComponent implements OnInit, AfterViewInit {
     range.collapseAfter(node)
     sel.setSingleRange(range)
   }
-
-  ngAfterViewInit() {}
 
   /**
    * Determine if field should be activated or deactivated on Click
@@ -164,12 +184,15 @@ export class CommentInputComponent implements OnInit, AfterViewInit {
   }
 
   updateComment() {
+    let previousData = this.comment.data
     let clean: any = this.cleanData(this.textInput.nativeElement.innerHTML)
     this.comment.data = clean.data
     this.comment.type = this.comment.url ? 'audio' : clean.type
     this.activated = false
     this.htmlContents = ''
-    this.deactivate.emit()
+    // Prevent excess comment save calls
+    let shouldNotSave = previousData === this.comment.data
+    this.deactivate.emit(shouldNotSave)
   }
 
   blurField(event?: Event) {

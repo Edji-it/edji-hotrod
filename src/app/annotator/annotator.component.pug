@@ -222,9 +222,7 @@ emoji-keyboard(
 )
 
 comment-explorer(
-    [comment]="selectedComment",
-    [visible]="commentPane",
-    (closed)="toggleCommentExplorer(false)",
+    (visibleChange)="toggleCommentExplorer($event)",
     (clearSelected)="selectedComment = null"
 )
 

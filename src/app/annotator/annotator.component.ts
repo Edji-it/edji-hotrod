@@ -344,7 +344,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
        */
       this._socket.commentUpdates.subscribe(
         commentUpdate => {
-          let comment = commentUpdate.comment
+          let comment: EdjiComment = commentUpdate.comment
           let wIndex = comment.start
           let cIndex = -1
           let selfUpdate = comment.user_id === this.user._id
@@ -369,8 +369,10 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
           // If comment is updated to be empty, we consider a "DRAFT", and deleted to other users
           if (this.projectStore.isCommentHiddenDraft(commentUpdate.comment)) {
             commentUpdate.action = 'DELETE'
+          } else {
+            // Flag teacher's comments
+            comment.authorIsTeacher = this._comments.isAuthorTeacher(this.project, comment)
           }
-
           // Process different live comment updates
           if (commentUpdate.action === 'DELETE') {
             if (cIndex > -1) {
@@ -589,7 +591,7 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
     // settimeout here to prevent errors where expression changes after checked
     setTimeout(() => {
       // Scroll to line in reading where comment was made
-      commentEl && commentEl.scrollEl.nativeElement.scrollIntoView({ behavior: 'smooth' })
+      commentEl && commentEl.scrollEl && commentEl.scrollEl.nativeElement.scrollIntoView({ behavior: 'smooth' })
       // Toggle the comment pane
       if (isReply) {
         let reply = this.project.comments.find(comment => {
@@ -1615,22 +1617,43 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param selectedComment comment to display
    * @param selectedReply reply if applicable (results in expanding replies)
    */
-  public openComment(focusComment?: boolean, selectedComment?: EdjiComment, selectedReply?): void {
-    if (!focusComment) {
+  public openComment(focusComment?: boolean, selectedComment?: EdjiComment, selectedReply?: EdjiComment): void {
+    // If currently open comment is active, deactivate and allow for animation
+    if (this.selectedComment && this.selectedComment.active && this.selectedComment._id !== selectedComment._id) {
+      this.selectedComment.active = false
       this.commentBubble = false
-      this.toggleCommentExplorer(true, selectedComment, selectedReply)
-    } else {
+      setTimeout(() => {
+        this.openComment(focusComment, selectedComment, selectedReply)
+      }, 1000)
+      return
+    }
+    // Display Comment Bubble OR Explorer
+    if (focusComment) {
       // Set the icon arrow position based on lineY and offsets
       this.commentHeightPos = this.getCommentDisplayY(selectedComment)
       // Open Comment Bubble
       this.selectedComment = selectedComment
-      this.commentPane = false
       this.commentBubble = true
+      // Update Explorer and URL
+      this.commentPane = false
+      this._router.navigate(['./'], {
+        relativeTo: this.route,
+        queryParams: { comment: selectedComment._id, reply: selectedReply ? selectedReply._id : null },
+      })
+    } else {
+      // View Line
+      this.commentBubble = false
+      this.toggleCommentExplorer(true, selectedComment, selectedReply)
+      // Update URL
+      this._router.navigate(['./'], {
+        relativeTo: this.route,
+        queryParams: { line: selectedComment._id, pane: 'comments' },
+      })
     }
   }
 
   /**
-   * Toggles Comment Explorer/Pane
+   * Updates local Comment Explorer/Pane vars, and arrow position
    * - Primarily used by openComment()
    * - Remains "public" for toggling closed interactions
    */
@@ -1651,6 +1674,8 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
       // Toggle the variable that controls comment pane open/close so we can add a class to "push" screen over
       // Tell pane to open
       this.commentPane = true
+      // Ensure bubble closes
+      this.commentBubble = false
     } else {
       // iOS selection
       let selec = Rangy.getSelection()
