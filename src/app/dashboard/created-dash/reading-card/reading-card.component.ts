@@ -11,7 +11,7 @@ import {
   Academy,
   SecretSwitchesService,
 } from '../../../_services'
-import { Reading, Project, User, readingType } from '../../../shared/datatypes'
+import { Reading, Project, User, ReadingType } from '../../../shared/datatypes'
 import { take } from 'rxjs/operators'
 import { ALLSPARK } from 'src/app/app.constants'
 
@@ -51,7 +51,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
   public showBookmarkTooltip: boolean
   public gradeInitials: string[] = ALLSPARK.GRADEINITIALS
   public gradeDisplay: string
-  public newReadingType: readingType
+  public newReadingType: ReadingType
   public academyState: AcademyState = {}
   public currentAcademy: Academy = {}
 
@@ -137,7 +137,7 @@ export class ReadingCardComponent implements OnInit, OnDestroy {
     return this.versionHeight
   }
 
-  public toggleReadingType(readingType: readingType): void {
+  public toggleReadingType(readingType: ReadingType): void {
     const currentType = this.reading.reading_type
     const publicDetailsPresent = this.publicReadingReq()
 

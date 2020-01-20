@@ -10,8 +10,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
+    "esModuleInterop": false,
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "types/global/global.d.ts"
     ],
     "lib": [
       "es2017",

@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
-import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
@@ -14,12 +14,11 @@ import { ProjectStore } from 'src/app/_store'
   templateUrl: './owner-tools.component.pug',
   styleUrls: ['./owner-tools.component.scss'],
 })
-export class OwnerToolsComponent implements OnInit {
+export class OwnerToolsComponent implements OnInit, OnDestroy {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
 
-  public commentStats: CommentStats
   public currentProject: Project
   public currentReading: Reading
   public user: any = {}
@@ -30,6 +29,9 @@ export class OwnerToolsComponent implements OnInit {
   // State vars
   public powersLoading: any = {}
 
+  public statsLoaded = false
+  public commentCount = 0
+
   constructor(
     private projectStore: ProjectStore,
     private _auth: AuthService,
@@ -37,9 +39,7 @@ export class OwnerToolsComponent implements OnInit {
     private _readings: ReadingService,
     private angulartics: Angulartics2,
     private _route: ActivatedRoute,
-  ) {
-    this.commentStats = this.projectStore.commentStats
-  }
+  ) {}
 
   ngOnInit() {
     // Subscribe to the reading
@@ -76,7 +76,17 @@ export class OwnerToolsComponent implements OnInit {
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
+      this.projectStore.commentStats.subscribe(commentStats => {
+        if (commentStats) {
+          this.statsLoaded = true
+          this.commentCount = commentStats.stats.comment_count
+        }
+      }),
     )
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe())
   }
 
   private togglePower(powerName: string, turnOn: boolean) {

@@ -1,172 +1,71 @@
-import { EdjiComment, iCommentStats, Project, User } from './'
-import { UserCommentStats, userReadingStatus } from './comment'
+import { EdjiComment, iCommentStats, Project } from './'
+import { UserCommentStats, UserReadingStatus } from './comment'
 
 export class CommentStats {
-  public _stats: iCommentStats = {
+  private _allStudents = []
+  private _stats: iCommentStats = {
     reply_count: 0,
     comment_count: 0,
+    student_comments: 0,
     comment_max: 0,
     comment_min: 0,
     comment_avg: 0,
     userStats: [],
   }
-  public teacherIds: string[]
+  public teacherId: string
 
   constructor(project?: Project) {
-    this._stats = this.initStats(project)
+    if (project) {
+      this.processComments(project)
+    }
   }
 
   get stats(): iCommentStats {
-    return this._stats
-  }
-  set stats(stats: iCommentStats) {
-    this._stats = stats
+    return { ...this._stats }
   }
 
-  public initStats(project?: Project): iCommentStats {
-    let commentStats: iCommentStats = {
-      reply_count: 0,
-      comment_count: 0,
-      comment_max: 0,
-      comment_min: 0,
-      comment_avg: 0,
-      userStats: [],
-    }
-
-    // if there's not a project, just return the default commentStats
-    if (!project) {
-      return commentStats
-    }
+  public processComments(project: Project) {
     /**
-     * @todo Teacher ids should be referenced directly from the project, so they are kept up to date
-     * - This should be done as comment stats logic is pushed into either the project service or a separate one
+     * This lets us preserve status info between processing the comments twice. It's desirable to be able
+     * to build comment stats from a project without state, so this works around the state of the students' activity
+     * to copy it between times that comment stats are built
      */
-    this.teacherIds = []
-    // Push teacher id
-    if (project && project.teacher_id) {
-      this.teacherIds.push(project.teacher_id)
-    }
-    // Push co-teacher ids
-    if (project && project.co_owner_ids) {
-      this.teacherIds = this.teacherIds.concat(project.co_owner_ids)
-    }
-    // loop through student ids and add them to the array
-    //  we have to do this because some students won't make a comment, so this is their only data on the project
-    //  looping through addCommentToStats will later increment the count
-    let len = (project.students && project.students.length) || 0
-    for (let i = 0; i < len; i++) {
-      let student = project.students[i]
-
-      commentStats.userStats.push({
-        _id: student._id,
-        comment_count: 0,
-        reply_count: 0,
-        emoji_comment_count: 0,
-        text_comment_count: 0,
-        audio_comment_count: 0,
-        fullname: student.fullname,
-        comments: [],
-        status: 'offline',
-      })
-    }
-
-    // do the same for temp student ids
-    len = (project.temps && project.temps.length) || 0
-    for (let i = 0; i < len; i++) {
-      let student = project.temps[i]
-
-      commentStats.userStats.push({
-        _id: student._id,
-        comment_count: 0,
-        reply_count: 0,
-        emoji_comment_count: 0,
-        text_comment_count: 0,
-        audio_comment_count: 0,
-        fullname: student.fullname,
-        comments: [],
-        status: 'offline',
-      })
-    }
-    return commentStats
-  }
-
-  /**
-   * This will go back and add the missing user information to the commentStats object so the leaderboard is fully updated
-   * @param commentStats existing comment stats object that we're going to modify
-   * @param project the current project the user is on
-   */
-  public addUsersToStats(commentStats: iCommentStats, project: Project): iCommentStats {
-    // Run through the students and add the user to the stats if they're not already in the list
-    let len = project.students.length
-    for (let i = 0; i < len; i++) {
-      let student = project.students[i]
-      // see if there is a student in the stats list already
-      let studentFound
-      if (student) studentFound = commentStats.userStats.find(el => el._id === student._id)
-      // check for answered questions
-      let studentQuestions = project.reading_id.questions
-        ? this.getAnswers(project.reading_id.questions, project.answers, student)
-        : []
-      // add the student if they are not already in the list
-      if (!studentFound && student) {
-        commentStats.userStats.push({
-          _id: student._id,
-          comment_count: 0,
-
-          reply_count: 0,
-          emoji_comment_count: 0,
-          text_comment_count: 0,
-          audio_comment_count: 0,
-          fullname: student.fullname,
-          comments: [],
-          status: 'offline',
-          questions: studentQuestions,
-        })
-      }
-    }
-    // Run through the temps and add the user to the stats if they're not already in the list
-    len = project.temps.length
-    for (let i = 0; i < len; i++) {
-      let student = project.temps[i]
-      // see if there is a student in the stats list already
-      let studentFound
-      if (student) studentFound = commentStats.userStats.find(el => el._id === student._id)
-      // check for answered questions
-      let studentQuestions = project.reading_id.questions
-        ? this.getAnswers(project.reading_id.questions, project.answers, student)
-        : []
-      // add the student if they are not already in the list
-      if (!studentFound && student) {
-        commentStats.userStats.push({
-          _id: student._id,
-          comment_count: 0,
-
-          reply_count: 0,
-          emoji_comment_count: 0,
-          text_comment_count: 0,
-          audio_comment_count: 0,
-          fullname: student.fullname,
-          comments: [],
-          status: 'offline',
-          questions: studentQuestions,
-        })
-      }
-    }
-    return commentStats
-  }
-
-  /**
-   * Sets the stats back to a blank object
-   */
-  public resetStats(): void {
+    const knownStudentStatuses = this._stats.userStats.map(s => ({ _id: s._id, status: s.status }))
+    // reset stats
     this._stats = {
+      reply_count: 0,
       comment_count: 0,
+      student_comments: 0,
       comment_max: 0,
       comment_min: 0,
       comment_avg: 0,
-      reply_count: 0,
       userStats: [],
     }
+    this._allStudents = [].concat(project.students || []).concat(project.temps || [])
+    this.teacherId = project.teacher_id
+    // prep each students' stats
+    this._stats.userStats = this._allStudents.map(student => {
+      const studentStatus = knownStudentStatuses.find(({ _id }) => _id === student._id)
+      const studentStats: UserCommentStats = {
+        _id: student._id,
+        comment_count: 0,
+        reply_count: 0,
+        emoji_comment_count: 0,
+        text_comment_count: 0,
+        audio_comment_count: 0,
+        fullname: student.fullname,
+        comments: [],
+        status: (studentStatus && studentStatus.status) || 'offline',
+      }
+      if (project.reading_id.questions) {
+        studentStats.questions = project.reading_id.questions.map(q => ({ _id: q._id }))
+      }
+      return studentStats
+    })
+    project.comments.forEach(comment => this.addCommentToStats(comment))
+    project.answers.forEach(answer => this.calculateAnswers(answer))
+    this.calculateMinMaxAvg()
+    this._stats.userStats.sort(this.compareStudents)
   }
 
   /**
@@ -175,85 +74,41 @@ export class CommentStats {
    * @param difference The number to add/subtract. Should be 1, 0 or -1
    * @param commentStats The comment stats object which will be modified and returned
    */
-  public addCommentToStats(comment: EdjiComment, difference: number): void {
-    // if this is an answer, then do not do anything here
-    if (comment.questionId) return
-
-    let isReply = comment.reply_to && comment.reply_to.length > 0
+  private addCommentToStats(comment: EdjiComment): void {
+    const student = this.findStudent(comment.user_id)
+    const isReply = comment.reply_to && comment.reply_to.length > 0
     // increment the total reading comment count by the difference
     if (isReply) {
-      this._stats.reply_count += difference
+      this._stats.reply_count += 1
+      student.reply_count += 1
     } else {
-      this._stats.comment_count += difference
+      this._stats.comment_count += 1
+      if (!student) return // teachers comments do not count
+      student.comment_count += 1
+      switch (comment.type) {
+        case 'text':
+          student.text_comment_count += 1
+          break
+        case 'emoji':
+          student.emoji_comment_count += 1
+          break
+        case 'audio':
+          student.audio_comment_count += 1
+          break
+      }
     }
 
-    // find the student in the array. if they don't exist and are adding a comment, then add to the count
-    //  if they don't exist and are deleting a comment, log an error... we're not sure why that's happenning...
-    let student = this.findStudent(comment.user_id)
-    if (!student && difference > 0) {
-      this._stats.userStats.push({
-        _id: comment.user_id,
-        fullname: comment.author,
-        comment_count: isReply ? 0 : 1,
-        reply_count: isReply ? 1 : 0,
-        emoji_comment_count: comment.type === 'emoji' && !isReply ? 1 : 0,
-        text_comment_count: comment.type === 'text' && !isReply ? 1 : 0,
-        audio_comment_count: comment.type === 'audio' && !isReply ? 1 : 0,
-        comments: [comment],
-        status: this.findStudentStatus(comment.user_id),
-      })
-    } else if (student) {
-      if (isReply) {
-        student.reply_count += difference
-      } else {
-        student.comment_count += difference
-        switch (comment.type) {
-          case 'text':
-            student.text_comment_count += difference
-            break
-          case 'emoji':
-            student.emoji_comment_count += difference
-            break
-          case 'audio':
-            student.audio_comment_count += difference
-            break
-        }
-      }
-      // handle adding comments -- reading report needs this
-      if (!isReply) {
-        if (difference > 0) {
-          student.comments.push(comment)
-        } else {
-          let userCommentCount = student.comments.length
-          for (let i = 0; i < userCommentCount; i++) {
-            if (student.comments[i]._id === comment._id) {
-              student.comments.splice(i, 1)
-              break
-            }
-          }
-        }
-      }
-    } else {
-      // if we're trying to subtract from a non-existant student, then log this error... we don't want to do that.
-      console.error("We tried subtracting a comment from a student who doesn't exist!")
+    // handle adding comments -- reading report needs this
+    if (!isReply) {
+      student.comments.push(comment)
     }
-
-    this._stats.userStats.sort(this.compareStudents)
-    // calculate min/max/avg values
-    this.calculateMinMaxAvg()
   }
 
-  public recalculateAnswers(answer: any, answerChange: boolean, project: Project): void {
+  private calculateAnswers(answer: EdjiComment): void {
     let student = this.findStudent(answer.user_id)
     if (student) {
-      student.questions.find((ans: any) => ans.questionId === answer.questionId)
-      const len = student.questions.length
-      for (var i = 0; i < len; i++) {
-        let question = student.questions[i]
-        if (question._id === answer.questionId) {
-          student.questions[i].answered = answerChange
-        }
-      }
+      const q = student.questions.find(q => q._id === answer.questionId)
+      if (q) q.answered = true
     }
   }
 
@@ -262,9 +117,9 @@ export class CommentStats {
    * @param _id the _id from the student that you want to find
    * @returns the object in the array that matches that id
    */
-  private findStudent(_id: string): UserCommentStats {
+  public findStudent(_id: string): UserCommentStats {
     return this._stats.userStats.find(student => {
-      return student._id == _id
+      return student._id === _id
     })
   }
 
@@ -273,7 +128,7 @@ export class CommentStats {
    * Primarily used when populating comments because we can't assign a status multiple times (we'll let the student user indicate their status with sockets)
    * @param _id the comment user's _id
    */
-  private findStudentStatus(_id: string): userReadingStatus {
+  private findStudentStatus(_id: string): UserReadingStatus {
     let student = this._stats.userStats.find(student => {
       return student._id === _id
     })
@@ -300,35 +155,31 @@ export class CommentStats {
    * Calculates extra stats that we need for the reading report
    */
   private calculateMinMaxAvg(): void {
-    var lowest = Number.POSITIVE_INFINITY
-    var highest = Number.NEGATIVE_INFINITY
-    var tmp
-    let userLength = this._stats.userStats.length
-    var avgSum = 0
+    let lowest = Number.POSITIVE_INFINITY
+    let highest = Number.NEGATIVE_INFINITY
+    let sum = 0
 
-    for (var i = userLength - 1; i >= 0; i--) {
-      // only calculate these stats for the students
-      if (this.teacherIds.indexOf(this._stats.userStats[i]._id) === -1) {
-        tmp = this._stats.userStats[i].comment_count
-        avgSum += this._stats.userStats[i].comment_count
-        if (tmp < lowest) lowest = tmp
-        if (tmp > highest) highest = tmp
-      }
-    }
+    this._stats.userStats.forEach(stat => {
+      if (this.teacherId === stat._id) return
+      sum += stat.comment_count
+      if (stat.comment_count < lowest) lowest = stat.comment_count
+      if (stat.comment_count > highest) highest = stat.comment_count
+    })
 
     // set the stats values for max, min, and average
     this._stats.comment_max = highest
     this._stats.comment_min = lowest
-    this._stats.comment_avg = Math.round(avgSum / userLength)
+    this._stats.comment_avg = Math.round(sum / this._stats.userStats.length)
+    this._stats.student_comments = sum
   }
 
   /**
    * Updates the user status on the commentStats.userStats
    * @param user current user
-   * @param status is of type userReadingStatus (offline, idle, or active)
+   * @param status is of type UserReadingStatus (offline, idle, or active)
    */
-  public userStatus(user: any, status: userReadingStatus) {
-    let student = this.findStudent(user._id)
+  public setUserStatus(userId: string, status: UserReadingStatus) {
+    let student = this.findStudent(userId)
     if (student) {
       student.status = status
     }
@@ -347,7 +198,7 @@ export class CommentStats {
       let ans = false // default
       let question = readingQuestions[i]
       if (answers) {
-        let answerFound = answers.find((ans: any) => ans.questionId === question._id && ans.user_id === student._id)
+        let answerFound = answers.find(ans => ans.questionId === question._id && ans.user_id === student._id)
         if (answerFound) {
           ans = true
         }

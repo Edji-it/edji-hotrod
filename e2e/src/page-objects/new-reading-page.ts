@@ -1,7 +1,7 @@
 import * as path from 'path'
 import { browser, by, element, protractor } from 'protractor'
 import { PageObjectInterface } from './PageObjectInterface'
-import { readingType } from 'src/app/shared/datatypes'
+import { ReadingType } from 'src/app/shared/datatypes'
 import { Sidebar } from './sidebar-page'
 
 export class NewReading implements PageObjectInterface {
@@ -309,7 +309,7 @@ export class NewReading implements PageObjectInterface {
    * @param readingType reading type of readingType
    * @param title optional to set specific title
    */
-  public createReadingByType(readingType: readingType, title?: string): void {
+  public createReadingByType(readingType: ReadingType, title?: string): void {
     this.getPage()
     const uniqueTitle = title ? title : this.titleString
     // Enter sample Reading into form
