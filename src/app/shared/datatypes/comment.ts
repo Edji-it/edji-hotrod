@@ -66,18 +66,19 @@ export enum CommentPermissions {
 export interface UserCommentStats {
   _id: string
   fullname: string
-  comment_count: number
+  comment_count: number // number of comments the user made
   reply_count: number
   emoji_comment_count: number
   text_comment_count: number
   audio_comment_count: number
   comments?: EdjiComment[]
-  status: userReadingStatus
+  status: UserReadingStatus
   questions?: any[]
 }
 
 export interface iCommentStats {
-  comment_count: number
+  comment_count: number // total comments
+  student_comments: number // total of only student comments
   comment_max: number
   comment_min: number
   comment_avg: number
@@ -85,4 +86,4 @@ export interface iCommentStats {
   userStats: UserCommentStats[]
 }
 
-export type userReadingStatus = 'offline' | 'idle' | 'active'
+export type UserReadingStatus = 'offline' | 'idle' | 'active'

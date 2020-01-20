@@ -29,7 +29,7 @@ export interface BaseReading {
   title: string
   instructions?: string
   owner_id?: string
-  reading_type: readingType
+  reading_type: ReadingType
   promoter_ids?: string[]
   source?: string
   cover_img?: string
@@ -48,4 +48,4 @@ export interface BaseReading {
   institution_id?: string
 }
 
-export type readingType = 'public' | 'private' | 'academy'
+export type ReadingType = 'public' | 'private' | 'academy'

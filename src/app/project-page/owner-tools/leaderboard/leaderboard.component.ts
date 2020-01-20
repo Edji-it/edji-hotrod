@@ -16,7 +16,7 @@ import { ProjectStore } from 'src/app/_store'
 export class LeaderboardComponent implements OnInit {
   @Input() archived: boolean = false
   /** This is a reference to the actual commentStats object which has methods for modification of properties */
-  @Input() commentStats: CommentStats
+  private commentStats: CommentStats
 
   private currentUser: User
   private currentReading: Reading
@@ -24,6 +24,8 @@ export class LeaderboardComponent implements OnInit {
   private subscriptions: Subscription[] = []
   private answersById: any = {}
   private userAnswers: any[] = []
+  private numberOfStudents = 0
+  private studentStats = []
 
   public visible: boolean = false
   public slidePaneIn: boolean
@@ -45,68 +47,70 @@ export class LeaderboardComponent implements OnInit {
 
   ngOnInit() {
     // Subscribe to current user
-    this._auth.getCurrentUser().subscribe(user => {
-      this.currentUser = user
-    }),
-      // Subscribe to the reading
-      this.subscriptions.push(
-        this._readings.currentReading.subscribe(
-          reading => {
-            this.currentReading = reading
-          },
-          error => {
-            console.error(error)
-          },
-        ),
-        // Subscribe to updates to the answer reference object
-        this.projectStore.answersById.subscribe(
-          answersById => {
-            this.answersById = answersById
-          },
-          error => {
-            console.error(error)
-          },
-        ),
-        // Subscribe to updates to the project
-        this.projectStore.currentProject.subscribe(project => {
-          this.currentProject = project
-        }),
-        // Get Updates about applied comment filters so we can show the user
-        this.projectStore.filterUpdates.subscribe(filter => {
-          this.appliedFilter = filter
-          if (this.commentStats.stats.userStats) {
-            for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
-              this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(
-                this.commentStats.stats.userStats[i],
-              )
+    // Subscribe to the reading
+    this.subscriptions.push(
+      this._auth.getCurrentUser().subscribe(user => {
+        this.currentUser = user
+      }),
+      this._readings.currentReading.subscribe(
+        reading => {
+          this.currentReading = reading
+        },
+        error => {
+          console.error(error)
+        },
+      ),
+      // Subscribe to updates to the answer reference object
+      this.projectStore.answersById.subscribe(
+        answersById => {
+          this.answersById = answersById
+        },
+        error => {
+          console.error(error)
+        },
+      ),
+      // Subscribe to updates to the project
+      this.projectStore.currentProject.subscribe(project => {
+        this.currentProject = project
+      }),
+      // Get Updates about applied comment filters so we can show the user
+      this.projectStore.filterUpdates.subscribe(filter => {
+        this.appliedFilter = filter
+        if (this.commentStats.stats.userStats) {
+          for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
+            this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(
+              this.commentStats.stats.userStats[i],
+            )
+          }
+        }
+      }),
+      this.projectStore.commentStats.subscribe(commentStats => {
+        this.studentStats = commentStats.stats.userStats
+        this.numberOfStudents = this.studentStats.length
+      }),
+      // Check for question feed opened via url
+      this.route.queryParams.subscribe(params => {
+        if (params['pane'] && params['pane'] === 'students') {
+          this.visible = true
+          this.slidePaneIn = true
+          if (params.studentList === 'coteach') {
+            if (this.coOwnerTooltipIndex < 0) {
+              this.coOwnerTooltipIndex = 0
             }
           }
-        }),
-        // Check for question feed opened via url
-        this.route.queryParams.subscribe(params => {
-          if (params['pane'] && params['pane'] === 'students') {
-            this.visible = true
-            this.slidePaneIn = true
-            if (params.studentList === 'coteach') {
-              if (this.coOwnerTooltipIndex < 0) {
-                this.coOwnerTooltipIndex = 0
-              }
-            }
-          } else {
-            // Close questions
-            this.slidePaneIn = false
-            setTimeout(() => {
-              this.visible = this.slidePaneIn
-            }, 400)
-          }
-        }),
-      )
+        } else {
+          // Close questions
+          this.slidePaneIn = false
+          setTimeout(() => {
+            this.visible = this.slidePaneIn
+          }, 400)
+        }
+      }),
+    )
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe()
-    })
+    this.subscriptions.forEach(sub => sub.unsubscribe())
   }
 
   /**

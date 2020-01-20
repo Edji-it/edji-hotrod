@@ -70,9 +70,9 @@ export class UserAvatarComponent implements OnInit {
     if (!this.userDetails && this.userId) {
       this.userSubscription = this.projectStore.joinedUsers
         .pipe(
-          map((users: PublicUser[]) => {
+          map(users => {
             if (users && users[0]) {
-              let user: PublicUser = users.find(user => {
+              let user = users.find(user => {
                 return user._id === this.userId
               })
               if (!user && this.tempName) {

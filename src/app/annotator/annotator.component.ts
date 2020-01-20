@@ -31,7 +31,7 @@ import { EdjiComment, Project, Reading } from './../shared/datatypes'
 import { ALLSPARK } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TeacherFeedbackComponent } from './teacher-feedback/teacher-feedback.component'
-import { ProjectStore } from '../_store'
+import { ProjectStore, ProjectAction } from '../_store'
 import { Store } from '@ngrx/store'
 import { AppState } from '../_reducers'
 import { getMetricsComments } from '../_reducers/metrics.reducers'
@@ -1118,43 +1118,30 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setActiveCommentByIndex(true, start, 0)
       }
     }
-
-    this.projectStore.commentStats.addCommentToStats(commentPointer, 1)
     // Re-evaluate comment line counts
     this.projectStore.buildCommentsByPos()
+    this.projectStore.buildCommentStats()
   }
 
   /**
    * Removes comment from locally transformed array (commentsByIndex)
    */
-  commentsByIndexRemove(commentId, index: number, commentIndex: number) {
-    let comment = this.commentsByIndex[index][commentIndex]
-    let commentPointer
-    let commentCopy
+  commentsByIndexRemove(commentId, wordIndex: number, commentIndex: number) {
     // Find comment in local Comments array
     let commentsLength: number = this.project.comments.length
     // Some comments are removed from this array by the Project service, so don't expect to find one
     for (let i = 0; i < commentsLength; i++) {
-      if (this.project.comments[i]._id == commentId) {
-        commentPointer = this.project.comments[i]
-        commentCopy = Object.assign({}, commentPointer)
+      if (this.project.comments[i]._id === commentId) {
         this.project.comments.splice(i, 1)
         break
       }
     }
-    // Project service handles stats updates as well, but we need to handle socket updates
-    if (commentCopy) {
-      this.projectStore.commentStats.addCommentToStats(commentCopy, -1)
-    }
+
     // Remove from index reference object
-    for (let i = 0; i < this.commentsByIndex[index].length; i++) {
-      if (this.commentsByIndex[index][i]._id == commentId) {
-        this.commentsByIndex[index].splice(i, 1)
-        break
-      }
-    }
+    this.commentsByIndex[wordIndex].splice(commentIndex, 1)
     // Update line counts
     this.projectStore.buildCommentsByPos()
+    this.projectStore.buildCommentStats()
   }
 
   /**
@@ -1162,11 +1149,11 @@ export class AnnotatorComponent implements OnInit, OnDestroy, AfterViewInit {
    * - Removes comment from locally transformed array (commentsByIndex)
    * - De-increments the highlights
    */
-  removeComment(comment, index: number, commentIndex: number) {
+  removeComment(comment, wordIndex: number, commentIndex: number) {
     // Remove Highlights
     this.decrementHighlights(this.user._id === comment.user_id, comment.start, comment.end, comment.box)
     // Remove local comment object
-    this.commentsByIndexRemove(comment._id, index, commentIndex)
+    this.commentsByIndexRemove(comment._id, wordIndex, commentIndex)
     this.unfocusHighlight(comment.start, comment.end)
   }
 
