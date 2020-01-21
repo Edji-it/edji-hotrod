@@ -158,14 +158,20 @@ nav-bar
             [routerLink]="['/account']",
             [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
           )
-    .hero-rule
-    .row.row-xl-pad
-      .col-12.col-md-8.offset-md-2
-        h4
-          | Teacher Reimbursement Program
-          img.ml-2(src="/assets/images/promo-heart-hand.svg", style="height: 2em; width: auto;")
-        p Hundreds of individual teachers subscribe to Edji, and we are thankful that they support us. But we don't think teachers should need to pay out of pocket for classroom tools. For this reason, if your school or district <a class="link" [routerLink]="'./'" [queryParams]="{ request: 'academy' }">subscribes to Academy</a>, we will reimburse your personal Hero subscription from the past year. Just <a class="link" href="mailto:support@edji.it">drop us an email</a>, and we will send you your refund.
-        p It's our way of thanking you for teaching the next generation and supporting Edji.
+  .hero-rule
+  .row.row-xl-pad
+    .col-12.col-md-8.offset-md-2
+      h4
+        | Teacher Reimbursement Program
+        img.ml-2(src="/assets/images/promo-heart-hand.svg", style="height: 2em; width: auto;")
+      p Hundreds of individual teachers subscribe to Edji, and we are thankful that they support us. But we don't think teachers should need to pay out of pocket for classroom tools. For this reason, if your school or district <a class="link" [routerLink]="'./'" [queryParams]="{ request: 'academy' }">subscribes to Academy</a>, we will reimburse your personal Hero subscription from the past year. Just <a class="link" href="mailto:support@edji.it">drop us an email</a>, and we will send you your refund.
+      p It's our way of thanking you for teaching the next generation and supporting Edji.
+      .hero-rule
+    .col-12.col-md-8.offset-md-2
+      h4
+        | Funding in the United States
+      p If you're wondering how to get funding for Edji, remember Edji can be purchased using Title I, II, or III funds. The most common way teachers get funding for Edji is by trying out the free version with a small group of teachers. When they've seen the insight and engagement it brings to their classes, they work with their principal or technology coordinator to <em>Go Hero</em> as an Academy.
+  .hero-rule
 .container-fluid
   .row.navy.row-xl-pad.has-sparks
       .sparks
