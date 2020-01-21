@@ -1,5 +1,5 @@
 import { Title } from '@angular/platform-browser'
-import { Component, ElementRef, OnInit } from '@angular/core'
+import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
@@ -20,7 +20,7 @@ import { User } from './../shared/datatypes'
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
   templateUrl: './dashboard.component.pug',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   // Set our default values
   private subscriptions: Subscription[] = []
   public currentUser: User
@@ -42,9 +42,11 @@ export class DashboardComponent implements OnInit {
     private _copy: CopyService,
   ) {
     // this makes the window always render scrolled to the top
-    this._router.events.subscribe(() => {
-      window.scrollTo(0, 0)
-    })
+    this.subscriptions.push(
+      this._router.events.subscribe(() => {
+        window.scrollTo(0, 0)
+      }),
+    )
   }
 
   ngOnInit() {
@@ -66,18 +68,18 @@ export class DashboardComponent implements OnInit {
       {
         title: 'The Dashboard',
         image: '/assets/dashboard-tooltips/logo.png',
-        body: 'Welcome to your Dashboard, your Edji hub. Here, you\'ll find all the readings you have created or are reading!',
+        body:
+          "Welcome to your Dashboard, your Edji hub. Here, you'll find all the readings you have created or are reading!",
       },
       {
         title: 'The Read Tab',
         image: '/assets/dashboard-tooltips/lightning-code.png',
-        body: 'Readings that you\'ve <b>joined</b> to read. Join a new one by using a group code!',
+        body: "Readings that you've <b>joined</b> to read. Join a new one by using a group code!",
       },
       {
-        title: `The ${ this.currentUser.isStudent ? 'Write' : 'Create' } Tab`,
+        title: `The ${this.currentUser.isStudent ? 'Write' : 'Create'} Tab`,
         image: '/assets/dashboard-tooltips/reading.png',
-        body:
-          'Readings that you <b>created</b> yourself. Each reading has groups, and each group has a code!',
+        body: 'Readings that you <b>created</b> yourself. Each reading has groups, and each group has a code!',
       },
       {
         title: 'Create A New Group',
@@ -87,8 +89,7 @@ export class DashboardComponent implements OnInit {
       {
         title: 'Copy & Edit',
         image: '/assets/dashboard-tooltips/versioning.png',
-        body:
-          'This will create a new version of your reading, allowing you to edit it for a new lesson.',
+        body: 'This will create a new version of your reading, allowing you to edit it for a new lesson.',
       },
     ]
 
@@ -119,6 +120,12 @@ export class DashboardComponent implements OnInit {
         }
       }),
     )
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
+      sub && sub.unsubscribe()
+    })
   }
 
   /**
