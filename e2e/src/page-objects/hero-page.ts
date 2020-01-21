@@ -8,8 +8,8 @@ export class Hero implements PageObjectInterface {
   private EC = protractor.ExpectedConditions
 
   // Public Instance Variables
-  public topCTAbutton = element(by.id('topHeroCTA'))
-  public CTAbutton = element(by.id('heroCTA'))
+  public CTAbutton = element(by.id('priceCardCTA'))
+  public bottomCTAbutton = element(by.id('heroCTA'))
   public subscribeButton = element(by.id('subHero'))
   public subscribeModal = element(by.id('upgradeHeroModal'))
   public subscribeModalHeader = element(by.css('#upgradeHeroModal .modal-header .modal-title'))
@@ -49,9 +49,10 @@ export class Hero implements PageObjectInterface {
     browser.get('/#/hero')
   }
 
-  public openHeroModalViaCTA(): void {
-    browser.wait(this.EC.elementToBeClickable(this.topCTAbutton), 3000, 'never saw Hero call to action button')
-    this.topCTAbutton.click()
+  public openHeroModalViaCTA() {
+    browser.wait(this.EC.elementToBeClickable(this.CTAbutton), 3000, 'never saw Hero call to action button')
+    browser.executeScript('document.getElementById("priceCardCTA").scrollIntoView({block:"center"});')
+    this.CTAbutton.click()
     // Wait for modal animation
     browser.sleep(500)
     // Verify modal popped up

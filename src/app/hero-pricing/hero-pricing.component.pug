@@ -3,35 +3,58 @@ nav-bar
 .container-fluid
   promo-banner([currentPage]="'hero'")
   //- Promo row
-  .row.twilight.has-sparks(style="padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
-    .sparks
-    img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
-    img(style="width:100%; position: absolute; bottom: -50px;",src="/assets/images/hero-promo-skyline.svg")
-    .col-md-11.offset-md-1(style="padding-bottom:25px;")
-      h1.big-bold(style="color:#fff;") Answer the Call
-    .col-md-1
-    .col-md-6
-      p.row-xl-pad(style='font-size:1.25em; padding-top: 0px;')
-        | Hero unleashes the full power of Edji, giving you unlimited access to all of your Readings, and allowing you to evaluate student engagement and provide powerful feedback right when it’s needed
+  .row(style="background: #44caf3; padding-top:100px; padding-bottom: 100px; position: relative; overflow:hidden;")
+    .promo-circle-graphic__wrap
+      img#promoCircleGraphicBottom(src="/assets/images/hero-graphic/bottom-circles.svg")
+      img#promoCircleGraphicMid(src="/assets/images/hero-graphic/top-circles.svg")
+      img#promoCircleGraphicSpotlight(src="/assets/images/hero-graphic/white-circle.svg")
+      img#promoCircleGraphicTop(src="/assets/images/hero-graphic/hands.svg")
+      img#promoCircleGraphicHero(
+        src="/assets/images/hero-lg.png",
+        (click)='scrollTo("plansRow")'
+      )
+    .col-md-11.offset-md-1(style="padding-bottom:25px; pointer-events:none;")
+      h1.big-bold(style="color:#fff;") Engage Every <br/>Student
+    //- .col-md-1
+    .col-md-6.offset-md-1
+      p.on-dark(style='font-size:1.25em; padding-top: 0px;')
+        | With a Hero subscription, <br/>every lesson can be engaging
         | &nbsp;
-        span([innerHTML]="':tada:' | emojione")
-      .btn-row.text-left
-        button#topHeroCTA.btn.btn-lg.btn-hero((click)='goHero("upperCTA")')
-          | Go Hero
+        //- span([innerHTML]="':tada:' | emojione")
+      .btn-row.left
+        button#topHeroCTA.btn.btn-primary((click)='scrollTo("plansRow")')
+          | Compare Plans
 .container
-  .row.row-xl-pad.align-items-top
-    .col-sm-4(style='padding-top:21%;')
+  .row.row-xl-pad
+    .col-12.col-md-4.text-center
+      .promo-icon-circle-wrap.blue
+        img.pl-1(src="/assets/images/icon-create.svg")
+      h4 Create endless readings
+      p No more limits on number of active readings
+    .col-12.col-md-4.text-center
+      .promo-icon-circle-wrap.yellow
+        img(src="/assets/images/icon-folder.svg")
+      h4 Access your archive
+      p View and edit any previously created readings
+    .col-12.col-md-4.text-center
+      .promo-icon-circle-wrap.red
+        span([innerHtml]="':calendar:' | emojione")
+      h4 Plan lessons ahead of time
+      p With unlimited readings, you can prepare your whole syllabus
+  .hero-rule
+  #plansRow.row.row-xl-pad.align-items-top
+    .col-12.col-md-6.col-lg-4.col--free-top-offset
       .card.card-outline-secondary
         .card-body
           h2.card-title Edji Free
           span.pricing Free
           p.small &nbsp;
           hr
-          p.card-text
+          p.card-text.card-text--pricing
             //- | Edji Free is an advanced set of reading creation, annotation and discussion tools for easy classroom reading and discussion.
             | 2 Reading Trial
           //- label Who is it for?
-          //- p.card-text
+          //- p.card-text.card-text--pricing
           //-   | Teachers that want their class to read occasionally and see their thoughts.
           //- Plan Details
           div(
@@ -41,7 +64,7 @@ nav-bar
           )
             hr
             .label([innerHtml]="detail.label")
-            p.card-text.plan-detail
+            p.card-text.card-text--pricing.plan-detail
               span([innerHtml]="detail.free | emojione")
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
@@ -50,7 +73,7 @@ nav-bar
             | Register
           a.btn.btn-primary.btn-lg.btn-block.disabled(*ngIf="user && user.isLoggedIn && user.hero_status", disabled)
             | {{ user.hero_status ? 'Included' : 'Current Plan'}}
-    .col-sm-4
+    .col-12.col-md-6.col-lg-4
       .card.card-outline-danger
         .card-body
           img.card-img-top(src='/assets/images/hero-lg.png', style="padding-top:15.5%;")
@@ -64,11 +87,11 @@ nav-bar
             span.small  / month
           p.small Charged annually per teacher
           hr
-          p.card-text
+          p.card-text.card-text--pricing
             //- | Hero takes the limits off of Edji and gives teachers powerful evaluation and feedback tools to assist and assess their students as they read.
             | Unlimited Readings
           //- label Who is it for?
-          //- p.card-text Teachers who make reading a staple of their class and want a detailed history of their classroom engagement
+          //- p.card-text.card-text--pricing Teachers who make reading a staple of their class and want a detailed history of their classroom engagement
           //- Plan Details
           div(
             *ngFor="let detail of planDetails",
@@ -77,14 +100,26 @@ nav-bar
           )
             hr
             .label([innerHtml]="detail.label")
-            p.card-text.plan-detail
+            p.card-text.card-text--pricing.plan-detail
               span([innerHtml]="detail.hero | emojione")
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
         .card-footer
-          a.btn.btn-hero.btn-lg.btn-block(*ngIf="!user || !user.isLoggedIn || !user.hero_status", tabindex='1', (click)='goHero("pricingHeroCard")') Go Hero
-          a.btn.btn-hero.btn-lg.btn-block(*ngIf="user && user.isLoggedIn && user.hero_status", [routerLink]="['/account']", [innerHtml]="'Current Plan &nbsp;:tada:' | emojione")
-    #academy.col-sm-4
+          a#priceCardCTA.btn.btn-hero.btn-lg.btn-block(
+            *ngIf="!isHero && !isAcademyHero",
+            tabindex='1',
+            (click)='goHero("pricingHeroCard")'
+          ) Go Hero
+          a.btn.btn-hero.btn-lg.btn-block(
+            *ngIf="isHero && !isAcademyHero",
+            [routerLink]="['/account']",
+            [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
+          )
+          a.btn.btn-primary.disabled.btn-block(
+            *ngIf="isAcademyHero",
+            disabled
+          ) Provided by Academy
+    #academy.col-12.col-md-6.offset-md-3.col-lg-4.offset-lg-0
       .card.card-outline-secondary
         .card-body
           img.card-img-top(src='/assets/images/hero-academy-lg.png')
@@ -95,11 +130,11 @@ nav-bar
             ) Request a Quote
           p.small Starting at $180/yr for 5 licenses
           hr
-          p.card-text
+          p.card-text.card-text--pricing
             //- | Academy is the easy way to get all your schools' teachers full access to Edji Hero features. Easily get teachers signed on and manage your Academy licenses.
             | For Schools and Districts
           //- label Who is it for?
-          //- p.card-text Teachers and Administrators who want to collaborate within their school.
+          //- p.card-text.card-text--pricing Teachers and Administrators who want to collaborate within their school.
           //- Plan Details
           div(
             *ngFor="let detail of planDetails",
@@ -108,48 +143,45 @@ nav-bar
           )
             hr
             .label([innerHtml]="detail.label")
-            p.card-text.plan-detail
+            p.card-text.card-text--pricing.plan-detail
               span([innerHtml]="detail.academy | emojione")
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
         .card-footer
           a.btn.btn-primary.btn-lg.btn-block(
+            *ngIf="!isAcademyHero",
             [routerLink]="'./'",
             [queryParams]="{ request: 'academy' }",
           ) Request Quote
-  //- .row.no-gutters
-  //-   .col-12
-  //-     .my-2
-  //-       h2 What's included?
-  //-     .table-responsive
-  //-       table.table.table-features
-  //-         thead
-  //-           tr
-  //-             th(scope="col", style="width:50%;") Feature
-  //-             th.text-center(scope="col") Edji Free
-  //-             th.text-center(scope="col") Edji Hero
-  //-         tbody
-  //-           ng-container(*ngFor="let feature of featureValues")
-  //-             tr([class.row-hover]="feature.info",  (click)="feature.info ? triggerInfoModal(feature.info) : null")
-  //-               td
-  //-                 span([innerHtml]="feature.name + ' '")
-                  //- i.icon__tooltip(*ngIf="feature.info")
-                  //-   span.icon.icon-circle.icon-info  i
-  //-                 span.text-primary.learn-more.small Learn more
-  //-               //- Standard check display
-  //-               td.feature-check(*ngIf="!feature.free_override", [innerHtml]="(feature.free ? ':white_check_mark:' : ':heavy_minus_sign:') | emojione")
-  //-               td.feature-check(*ngIf="!feature.free_override", [innerHtml]="':white_check_mark:' | emojione")
-  //-               //- Override text display
-  //-               td.feature-check(*ngIf="feature.free_override", [innerHtml]="feature.free_override")
-  //-               td.feature-check(*ngIf="feature.hero_override", [innerHtml]="feature.hero_override")
+          a.btn.btn-hero.btn-lg.btn-block(
+            *ngIf="isAcademyHero",
+            [routerLink]="['/account']",
+            [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
+          )
+  .hero-rule
+  .row.row-xl-pad
+    .col-12.col-md-8.offset-md-2
+      h4
+        | Teacher Reimbursement Program
+        img.ml-2(src="/assets/images/promo-heart-hand.svg", style="height: 2em; width: auto;")
+      p Hundreds of individual teachers subscribe to Edji, and we are thankful that they support us. But we don't think teachers should need to pay out of pocket for classroom tools. For this reason, if your school or district <a class="link" [routerLink]="'./'" [queryParams]="{ request: 'academy' }">subscribes to Academy</a>, we will reimburse your personal Hero subscription from the past year. Just <a class="link" href="mailto:support@edji.it">drop us an email</a>, and we will send you your refund.
+      p It's our way of thanking you for teaching the next generation and supporting Edji.
+      .hero-rule
+    .col-12.col-md-8.offset-md-2
+      h4
+        | Funding in the United States
+      p If you're wondering how to get funding for Edji, remember Edji can be purchased using Title I, II, or III funds. The most common way teachers get funding for Edji is by trying out the free version with a small group of teachers. When they've seen the insight and engagement it brings to their classes, they work with their principal or technology coordinator to <em>Go Hero</em> as an Academy.
+  .hero-rule
 .container-fluid
   .row.navy.row-xl-pad.has-sparks
       .sparks
+      img.promo-spotlight(src="/assets/images/hero-promo-spotlight.svg")
+      img.promo-skyline(src="/assets/images/hero-promo-skyline.svg")
       .col-12.text-center
         h1.big-light.on-dark(style="margin:0px;")
           | Answer the Call
         p.on-dark.mt-2.mb-4
-          | Engage your students, build super lessons, and support Edji
+          |  Build <em>super</em> lessons and engage your students
         .button__row.pb-2
             button#heroCTA.btn-lg.btn.btn-hero((click)='goHero("pricingLowerCTA")')
               | Go Hero

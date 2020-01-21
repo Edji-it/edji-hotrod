@@ -32,7 +32,7 @@
                 <mask id="mask-2" fill="white">
                     <use xlink:href="#path-1"></use>
                 </mask>
-                <use id="Mask-Copy" fill="#072649" xlink:href="#path-1"></use>
+                <!-- <use id="Mask-Copy" fill="#072649" xlink:href="#path-1"></use> -->
                 <ellipse id="Oval-Copy" fill="#2E6187" mask="url(#mask-2)" cx="1069.22636" cy="765.582601" rx="867.549056" ry="865.845812"></ellipse>
                 <ellipse id="Oval-Copy" fill="#3C7EA2" mask="url(#mask-2)" cx="1021.05489" cy="692.159929" rx="671.958076" ry="703.786127"></ellipse>
                 <ellipse id="Oval" fill="#4A92BC" mask="url(#mask-2)" cx="992.5" cy="799.237725" rx="530.802564" ry="529.760449"></ellipse>
