@@ -1,7 +1,7 @@
 doctype html
 .text-comment.input-wrap([ngClass]="[activated ? 'active' : '']")
   //- Comment Input
-  .text-comment-input(
+  .text-comment-input.text-comment-editable(
     #textInput,
     contenteditable="true",
     type='text',
@@ -19,7 +19,7 @@ doctype html
   //- Comment Display
   #textCommentInput.text-comment-input.text-comment-display(
     #textDisplay,
-    [innerHtml]="comment.data ? (comment.data | linkify | emojione) : 'Share your thoughts...'",
+    [innerHtml]="comment.data ? (comment.data | linkify:{hashtags:true} | emojione) : 'Share your thoughts...'",
     [ngClass]="{ 'reply-display': reply, 'hide': activated, 'large-emoji': comment.type === 'emoji' }",
     (tap)="clickToggleActive($event)"
   )
