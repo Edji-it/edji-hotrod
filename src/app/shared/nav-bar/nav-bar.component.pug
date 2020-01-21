@@ -17,20 +17,13 @@
       ng-container(*ngFor="let link of navLinks")
         a.btn.btn-link([attr.id]="link.id", [routerLink]="[link.route]", routerLinkActive="active", [attr.title]="link.tooltip")
           | {{ link.displayName }}
-      .dropdown(*ngIf="user.isAcademyAdmin", [class.show]="academyMenuShow")
-        a#navAcademy.btn.btn-link([routerLink]="['/academy/licenses']", routerLinkActive="active")
-          | Academy
-        //- a#navAcademy.btn.btn-link.dropdown-toggle(
-        //-     routerLinkActive="active",
-        //-     (click)="academyMenuShow = !academyMenuShow"
-        //-   )
-        //-   | Academy
-        //- .dropdown-menu(aria-labelledby="navAcademy")
-        //-   a.dropdown-item([routerLink]="['/academy/engagement']", routerLinkActive="active")
-        //-     | Engagement
-        //-   a.dropdown-item([routerLink]="['/academy/licenses']", routerLinkActive="active")
-        //-     | Licenses
-      a#navGuide.btn.btn-link.btn--hover-icon(*ngIf="!user.isStudent", href="http://guide.edji.it", target="_blank", )
+      a#navAcademy.hidden-sm-down.btn.btn-link(
+        *ngIf="user.isAcademyAdmin",
+        [routerLink]="['/academy/licenses']",
+        routerLinkActive="active"
+      )
+        | Academy
+      a#navGuide.hidden-sm-down.btn.btn-link.btn--hover-icon(*ngIf="!user.isStudent", href="http://guide.edji.it", target="_blank")
         | Guide
         .icon.icon-external
     //- Optional Title
@@ -90,26 +83,42 @@
         )
         .avatar__drop-down.list-group(*ngIf="showAvatarDropdown", [class.visible]="showAvatarDropdown")
           .arrow
-          //- Account
-          button#accountButton.list-group-item.list-group-item-action(*ngIf="user.fullname", type="button", (click)="openAccount()") {{ user.fullname }}
-            span.list-icon--right([innerHtml]="':gear:' | emojione")
-          //- Refer
-          button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()")
-            ng-container(*ngIf="user.hero_status")
-              | Refer a Friend
-              span.list-icon--right([innerHtml]="':satellite:' | emojione")
-            ng-container(*ngIf="!user.hero_status")
-              span.hero-color-text Get Hero Free
-              span.list-icon--right([innerHtml]="':gift:' | emojione")
-          //- Feedback
-          button#navFeedbackButton.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
-            span.list-icon--right([innerHtml]="':question:' | emojione")
-          //- Guides
-          button#navGuidesButton.list-group-item.list-group-item-action(type="button", (click)="openGuides()") Guide
-            span.list-icon--right([innerHtml]="':book:' | emojione")
-          //- Log Out
-          button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
-            span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
+          .avatar__drop-down-contents
+            //- Mobile overflow items
+            a#navAcademyMobile.hidden-md-up.list-group-item.list-group-item-action(
+              *ngIf="user.isAcademyAdmin",
+              [routerLink]="['/academy/licenses']",
+              routerLinkActive="active"
+            ) Academy
+            a#navGuideMobile.hidden-md-up.list-group-item.list-group-item-action(
+              *ngIf="!user.isStudent",
+              href="http://guide.edji.it",
+              target="_blank",
+            ) Guide
+            //- Account
+            a#accountButton.list-group-item.list-group-item-action(
+              *ngIf="user.fullname",
+              [routerLink]="['/account']",
+              routerLinkActive="active"
+            ) {{ user.fullname }}
+              span.list-icon--right([innerHtml]="':gear:' | emojione")
+            //- Refer
+            button#navReferralButton.list-group-item.list-group-item-action(*ngIf="!user.isStudent" type="button", (click)="openReferralModal()")
+              ng-container(*ngIf="user.hero_status")
+                | Refer a Friend
+                span.list-icon--right([innerHtml]="':satellite:' | emojione")
+              ng-container(*ngIf="!user.hero_status")
+                span.hero-color-text Get Hero Free
+                span.list-icon--right([innerHtml]="':gift:' | emojione")
+            //- Feedback
+            button#navFeedbackButton.list-group-item.list-group-item-action(type="button", (click)="openFeedback()") Contact Us
+              span.list-icon--right([innerHtml]="':question:' | emojione")
+            //- Guides
+            button#navGuidesButton.list-group-item.list-group-item-action(type="button", (click)="openGuides()") Guide
+              span.list-icon--right([innerHtml]="':book:' | emojione")
+            //- Log Out
+            button#logOutButton.list-group-item.list-group-item-action(type="button", (click)="logout()") Log Out
+              span.list-icon--right([innerHtml]="':outbox_tray:' | emojione")
     //- Project Info (Desktop & Mobile)
     .nav-bar__project-data
       ng-container(*ngIf="showProjectInfo && currentProject && currentProject._id && currentProject.owners")
