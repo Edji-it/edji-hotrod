@@ -319,14 +319,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Open Account page
-   */
-  private openAccount(): void {
-    this.showAvatarDropdown = false
-    this._router.navigate(['/account'])
-  }
-
-  /**
    * Open Feedback Modal
    * - Requires "edji-feedback" component to exist on route
    */
