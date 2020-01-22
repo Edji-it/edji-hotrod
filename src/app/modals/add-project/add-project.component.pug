@@ -13,8 +13,8 @@
                 quick-start-flag
                 b About Reading Groups
                 p Readings on Edji can be shared with multiple groups, and when creating a reading we kick things off with a first group
-            .form-group
-                p(*ngIf='subheading') {{ subheading }}
+            .form-group(*ngIf='subheading')
+                p {{ subheading }}
             .form-group
                 label(for='newProjectLabel')
                     | Group Name
@@ -30,53 +30,57 @@
                     i.icon__tooltip(tooltipPosition="right", pTooltip="Instructions are displayed at the beginning of a Reading, and included in the Recap.", tooltipZIndex="9000")
                         span.icon.icon-circle.icon-info  i
                 textarea#groupInstructions.form-control.mGroup([formControl]="projectForm.controls['groupInstructions']", type='text', placeholder="For today's lesson, you will...")
-            //- Add Quick Labels
-            .form-group(formArrayName="quickLabels")
-                label Quick Labels
-                .input-group(
-                    *ngFor="let item of quickLabels.controls; let pointIndex=index", 
-                    [formGroupName]="pointIndex"
-                )   
-                    .icon.icon-quick-label
-                    input.form-control(
-                        type="text", 
-                        formControlName="label",
-                        placeholder="Quick Label",
-                    )
-                    .form-control-clear.form-control-clear--in-field.icon.icon-close(
-                        *ngIf="pointIndex !== 0",
-                        type="button", 
-                        (click)="deleteQuickLabel(pointIndex)"
-                    ) 
-                button.btn.btn-sm(type="button", (click)="addQuickLabel()") 
-                    .icon.icon-quick-label
-                    | Add Label
-            .form-group.row()
-                label.col-12 Comment Abilities
-                .input-group.col-4
-                    .custom-control.custom-checkbox
-                        input#emojiCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['emojiType']")
-                        label.custom-control-label(for="emojiCommenting") Emoji
-                .input-group.col-4
-                    .custom-control.custom-checkbox
-                        input#audioCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['audioType']")
-                        label.custom-control-label(for="audioCommenting") Audio
-                .input-group.col-4
-                    .custom-control.custom-checkbox
-                        input#replyCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['replyType']")
-                        label.custom-control-label(for="replyCommenting") Replies
-            div([class.hero-box]="!isHero")
-                .form-group.p-0(*ngIf="!isHero")
-                    .row.no-gutters
-                        .label.w-100 Unlock custom codes!
-                            a.float-right.btn.btn-sm.btn-hero(target="_blank" href="/#/plans") Learn More
-                .form-group.pb-0([class.disabled]='!isHero')
-                    label(for='customCodeInput')
-                        | Custom Code
-                        span.hero-h(title='Hero Power')
-                            ='H'
-                    input#customCodeInput.form-control.text-code.h3.mGroup([formControl]="projectForm.controls['customCode']", type='text', placeholder='(optional)', style='text-transform:lowercase;')
-                    #errorInvalidCustomCode.alert.alert-warning(*ngIf='errors.invalidCode') Whoops, someone is already using that group code. Could you pick another?
+            //- Advanced Settings
+            p-fieldset([toggleable]="true", styleClass="modal-fieldset", collapsed="true")
+                p-header.label Advanced Settings
+                .card.card-body
+                    //- Add Quick Labels
+                    .form-group(formArrayName="quickLabels")
+                        label Quick Labels
+                        .label.text-muted Use labels to have students find or apply key terms, concepts, or categories.
+                        .input-group.quick-label__field-wrap(
+                            *ngFor="let item of quickLabels.controls; let pointIndex=index", 
+                            [formGroupName]="pointIndex"
+                        )   
+                            .icon.icon-quick-label
+                            input.form-control(
+                                type="text", 
+                                formControlName="label",
+                                placeholder="Quick Label",
+                            )
+                            .form-control-clear.form-control-clear--in-field.icon.icon-close(
+                                *ngIf="pointIndex !== 0",
+                                type="button", 
+                                (click)="deleteQuickLabel(pointIndex)"
+                            ) 
+                        button.btn.btn-primary.btn-sm.mt-1.float-right(type="button", (click)="addQuickLabel()") 
+                            | Add Label
+                    .form-group.row()
+                        label.col-12 Comment Abilities
+                        .input-group.col-4
+                            .custom-control.custom-checkbox
+                                input#emojiCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['emojiType']")
+                                label.custom-control-label(for="emojiCommenting") Emoji
+                        .input-group.col-4
+                            .custom-control.custom-checkbox
+                                input#audioCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['audioType']")
+                                label.custom-control-label(for="audioCommenting") Audio
+                        .input-group.col-4
+                            .custom-control.custom-checkbox
+                                input#replyCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['replyType']")
+                                label.custom-control-label(for="replyCommenting") Replies
+                    div([class.hero-box]="!isHero")
+                        .form-group.p-0(*ngIf="!isHero")
+                            .row.no-gutters
+                                .label.w-100 Unlock custom codes!
+                                    a.float-right.btn.btn-sm.btn-hero(target="_blank" href="/#/plans") Learn More
+                        .form-group.pb-0([class.disabled]='!isHero')
+                            label(for='customCodeInput')
+                                | Custom Code
+                                span.hero-h(title='Hero Power')
+                                    ='H'
+                            input#customCodeInput.form-control.text-code.h3.mGroup([formControl]="projectForm.controls['customCode']", type='text', placeholder='(optional)', style='text-transform:lowercase;')
+                            #errorInvalidCustomCode.alert.alert-warning(*ngIf='errors.invalidCode') Whoops, someone is already using that group code. Could you pick another?
         .modal-footer
             .button__row(style='padding-top:0px;')
                 button.btn.btn-primary(
