@@ -17,6 +17,7 @@ import { EmojiOnePipe } from 'src/app/_pipes'
 import * as emoji from 'emojione/lib/js/emojione'
 import { Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'comment-input',
@@ -56,7 +57,12 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     return this.activated
   }
 
-  constructor(private element: ElementRef, private _comments: CommentService, private emojiPipe: EmojiOnePipe) {}
+  constructor(private element: ElementRef, 
+    private _comments: CommentService, 
+    private emojiPipe: EmojiOnePipe,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -102,15 +108,22 @@ export class CommentInputComponent implements OnInit, OnDestroy {
    * Determine if field should be activated or deactivated on Click
    * @param event Click event
    */
-  clickToggleActive(event) {
-    if (this.activated) {
-      if (event && ['a', 'i'].indexOf(event.target.tagName.toLowerCase()) < 0) {
+  activateCommentOrLink(event) {
+    let checkForLink: boolean = event && ['a', 'i'].includes(event.target.tagName.toLowerCase())
+    if (this.activated && checkForLink) {
         this.deactivate.emit(false)
+    } else if (!this.activated && !this.readOnly) {
+      if (checkForLink && event.target.classList.contains('comment-hashtag')) {
+        // Handle hashtag links
+        let tag = event.target.innerText.trim()
+
+        tag && this.router.navigate(['./'], {
+          relativeTo: this.route,
+          queryParams: { pane: 'comments', search: `"${tag}"` },
+        })
       } else {
-        // ignore event
+        this.activateField()
       }
-    } else if (!this.readOnly) {
-      this.activateField()
     }
   }
 

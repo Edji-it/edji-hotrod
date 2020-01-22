@@ -21,5 +21,5 @@ doctype html
     #textDisplay,
     [innerHtml]="comment.data ? (comment.data | linkify:{hashtags:true} | emojione) : 'Share your thoughts...'",
     [ngClass]="{ 'reply-display': reply, 'hide': activated, 'large-emoji': comment.type === 'emoji' }",
-    (tap)="clickToggleActive($event)"
+    (tap)="activateCommentOrLink($event)"
   )

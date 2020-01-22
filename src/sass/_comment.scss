@@ -1150,9 +1150,20 @@ div.avatar-count-8 {
 
 // Comment Replies
 
-
-
 .comment--replyBlock {
   min-height: 75px;
   width: 100%;
+}
+
+// Hashtag and Quick Labels
+.comment-hashtag,
+a.comment-hashtag,
+.content a.comment-hashtag {
+  color: $hashtagBlue;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover, &:focus {
+    text-decoration: underline;
+  }
 }
