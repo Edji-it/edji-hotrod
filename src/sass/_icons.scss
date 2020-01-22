@@ -490,6 +490,10 @@ $iconGrayOpacity: 0.6;
   cursor: pointer;
 }
 
+.icon-quick-label {
+  @include icon('icon-quick-label.svg');
+}
+
 .icon-reading-recap {
   display: inline-block;
   width: 40px;

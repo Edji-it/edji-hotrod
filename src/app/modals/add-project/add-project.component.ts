@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
+import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms'
 import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
@@ -59,6 +59,7 @@ export class AddProjectModal implements OnInit {
       replyType: true,
       customCode: ['', { disabled: !this.isHero }],
       groupInstructions: this.reading.default_instructions || '',
+      quickLabels: this._fb.array([this._fb.group({label:''})]),
     })
   }
 
@@ -127,6 +128,7 @@ export class AddProjectModal implements OnInit {
       types: types,
       code: formValue.customCode,
       group_instructions: formValue.groupInstructions,
+      quick_labels: this.getQuickLabelStrings(),
     }
     this.projectStore.create(this.reading._id, newProject).subscribe(
       project => {
@@ -177,5 +179,30 @@ export class AddProjectModal implements OnInit {
         groupInstructions,
       properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
+  }
+
+  /**
+   * Quick Label setters and accessors
+   */
+  get quickLabels() {
+    return this.projectForm.get('quickLabels') as FormArray
+  }
+
+  addQuickLabel() {
+    this.quickLabels.push(this._fb.group({label:''}));
+  }
+
+  deleteQuickLabel(index) {
+    this.quickLabels.removeAt(index);
+  }
+
+  getQuickLabelStrings() {
+    let values: string[] = []
+    this.quickLabels.value.forEach(control => {
+      if (control.label) {
+        values.push(control.label)
+      }
+    })
+    return values
   }
 }

@@ -103,7 +103,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     range.collapseAfter(node)
     sel.setSingleRange(range)
   }
-
+  
   /**
    * Determine if field should be activated or deactivated on Click
    * @param event Click event

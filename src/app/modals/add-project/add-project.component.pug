@@ -30,6 +30,27 @@
                     i.icon__tooltip(tooltipPosition="right", pTooltip="Instructions are displayed at the beginning of a Reading, and included in the Recap.", tooltipZIndex="9000")
                         span.icon.icon-circle.icon-info  i
                 textarea#groupInstructions.form-control.mGroup([formControl]="projectForm.controls['groupInstructions']", type='text', placeholder="For today's lesson, you will...")
+            //- Add Quick Labels
+            .form-group(formArrayName="quickLabels")
+                label Quick Labels
+                .input-group(
+                    *ngFor="let item of quickLabels.controls; let pointIndex=index", 
+                    [formGroupName]="pointIndex"
+                )   
+                    .icon.icon-quick-label
+                    input.form-control(
+                        type="text", 
+                        formControlName="label",
+                        placeholder="Quick Label",
+                    )
+                    .form-control-clear.form-control-clear--in-field.icon.icon-close(
+                        *ngIf="pointIndex !== 0",
+                        type="button", 
+                        (click)="deleteQuickLabel(pointIndex)"
+                    ) 
+                button.btn.btn-sm(type="button", (click)="addQuickLabel()") 
+                    .icon.icon-quick-label
+                    | Add Label
             .form-group.row()
                 label.col-12 Comment Abilities
                 .input-group.col-4

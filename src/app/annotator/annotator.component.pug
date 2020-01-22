@@ -81,11 +81,17 @@ scroll-progress([scrollProgress]="currentScroll")
                 quick-start-flag
                 | How do I comment?
             //- Reading Group Instructions
-            .row.lesson-block(*ngIf="project.group_instructions && project.group_instructions.length > 1")
+            .row.lesson-block(*ngIf="(project.group_instructions && project.group_instructions.length > 1) || project.quick_labels")
                     .lesson-block__indicator([innerHtml]="':mega:' | emojione")
                     .lesson-block__body
-                        .lesson-block__header Instructions
-                        p([innerHtml]="project.group_instructions")
+                        ng-container(*ngIf="project.group_instructions")
+                            .lesson-block__header Instructions
+                            p([innerHtml]="project.group_instructions")
+                        ng-container(*ngIf="project.quick_labels")
+                            .lesson-block__header Quick Labels
+                            .quick-label(*ngFor="let label of project.quick_labels")
+                                .icon.icon-quick-label
+                                | {{ label | emojione }}
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word
