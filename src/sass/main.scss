@@ -616,3 +616,42 @@ div#driver-highlighted-element-stage {
   vertical-align: middle;
   margin-bottom: 1px;
 }
+
+/**
+ *  Pricing page emoji overrides
+ */
+.card-text--pricing .emojioneemoji {
+  font-size: 1.25em;
+  margin: 4px;
+}
+
+.promo-icon-circle-wrap {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  margin-bottom: 15px;
+  position: relative;
+  border-radius: 50%;
+  border: 2px solid #cdcdcd;
+
+  &.blue {
+    border-color: $blue;
+  }
+
+  &.yellow {
+    border-color: #fff291;
+  }
+
+  &.red {
+    border-color: #dd2e44;
+  }
+
+  & img {
+    height: 42px;
+    width: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
+}
