@@ -1169,13 +1169,16 @@ a.comment-hashtag,
 }
 
 $quickLabelBg: #f2faff;
-.quick-label  {
+.quick-label,
+a.quick-label  {
+  position: relative;
   background:$quickLabelBg;
-  padding: 2px;
+  padding: 2px 2px 2px 1.5em;
   border-radius: 5px;
   color: $hashtagBlue;
   margin-bottom: 3px;
   cursor: pointer;
+  display: inline-block;
 
   & .icon-quick-label {
     background-color:#fff;
@@ -1184,6 +1187,10 @@ $quickLabelBg: #f2faff;
     border: 3px solid#fff;
     border-radius: 5px;
     margin: 0 2px 0 1px;
+    height: calc(100% - 4px);
+    position: absolute;
+    top: 2px;
+    left: 1px;
   }
 
   & span {
@@ -1196,12 +1203,18 @@ $quickLabelBg: #f2faff;
   &:hover, &:focus {
     background-color: $hashtagBlue; 
     color: #fff;
+
+    & span {
+      color: #fff;
+    }
   }
 }
 
 .quick-label__field-wrap {
   @extend .quick-label;
   cursor: default;
+  display: block;
+  padding-left: 1.75em;
 
   &:hover, &:focus {
     background-color: $quickLabelBg;
@@ -1219,6 +1232,7 @@ $quickLabelBg: #f2faff;
     color: $hashtagBlue;
     font-weight: 500;
     border-radius: 5px;
+    width: 100%;
 
     &:focus, &:active {
       border-color: $hashtagBlue;

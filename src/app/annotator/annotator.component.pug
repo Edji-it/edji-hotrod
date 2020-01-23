@@ -89,9 +89,10 @@ scroll-progress([scrollProgress]="currentScroll")
                             p([innerHtml]="project.group_instructions")
                         ng-container(*ngIf="project.quick_labels")
                             .lesson-block__header Quick Labels
-                            .quick-label(*ngFor="let label of project.quick_labels")
-                                .icon.icon-quick-label
-                                | {{ label | emojione }}
+                            div(*ngFor="let label of project.quick_labels")
+                                a.quick-label([routerLink]="'./'", [queryParams]="{ pane: 'comments', label: label }")
+                                    .icon.icon-quick-label
+                                    span {{ label | emojione }}
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word

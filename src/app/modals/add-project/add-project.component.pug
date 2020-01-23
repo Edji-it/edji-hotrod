@@ -37,7 +37,7 @@
                     //- Add Quick Labels
                     .form-group(formArrayName="quickLabels")
                         label Quick Labels
-                        .label.text-muted Use labels to have students find or apply key terms, concepts, or categories.
+                        .label.text-muted Give students key terms, concepts, or categories to use in comments
                         .input-group.quick-label__field-wrap(
                             *ngFor="let item of quickLabels.controls; let pointIndex=index", 
                             [formGroupName]="pointIndex"
