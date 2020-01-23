@@ -13,11 +13,12 @@ import {
 // Project Dependencies
 import { EdjiComment } from '../../shared/datatypes/comment'
 import { CommentService } from '../../_services'
-import { EmojiOnePipe } from 'src/app/_pipes'
+import { EmojiOnePipe, LinkifyPipe } from 'src/app/_pipes'
 import * as emoji from 'emojione/lib/js/emojione'
 import { Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
 import { ActivatedRoute, Router } from '@angular/router';
+import { SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'comment-input',
@@ -39,7 +40,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
   public activated: boolean = false
   public textareaHeight: string = '32px'
 
-  public htmlContents: string
+  public htmlContents: SafeHtml
 
   private subscriptions: Subscription[] = []
 
@@ -60,6 +61,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
   constructor(private element: ElementRef, 
     private _comments: CommentService, 
     private emojiPipe: EmojiOnePipe,
+    private linkifyPipe: LinkifyPipe,
     private route: ActivatedRoute,
     private router: Router,
   ) {}
@@ -128,7 +130,9 @@ export class CommentInputComponent implements OnInit, OnDestroy {
   }
 
   activateField() {
-    this.htmlContents = this.emojiPipe.transform(this.comment.data)
+    let contentsWithImages: string = this.emojiPipe.transform(this.comment.data)
+    console.log("activate", this.linkifyPipe.transformQuickLabels(contentsWithImages))
+    this.htmlContents = this.linkifyPipe.transformQuickLabels(contentsWithImages, true)
     // Set activated
     this.activated = true
     // Set textarea height

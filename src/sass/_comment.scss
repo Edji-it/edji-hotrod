@@ -797,6 +797,7 @@ $progressStart: 51px;
 }
 
 .text-comment-input {
+
   & img {
     margin-right: 0.2em;
     margin-bottom: 0.2em;
@@ -863,7 +864,7 @@ textarea.text-comment-input,
   width: 180px;
   min-height: 30px;
   height: auto;
-  line-height: 16px;
+  line-height: 1.5em;
   resize: none;
   font-size: $commentFontSize;
   font-family: 'Open Sans', Arial;
@@ -1182,7 +1183,7 @@ a.quick-label  {
 
   & .icon-quick-label {
     background-color:#fff;
-    font-size: 25px;
+    font-size: 1.75em;
     padding: 0px;
     border: 3px solid#fff;
     border-radius: 5px;
@@ -1207,6 +1208,12 @@ a.quick-label  {
     & span {
       color: #fff;
     }
+  }
+
+  // Styling for inline
+  .text-comment-input & {
+    font-size: 10px;
+    margin: 0 0.5em;
   }
 }
 

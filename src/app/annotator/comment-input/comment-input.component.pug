@@ -19,7 +19,7 @@ doctype html
   //- Comment Display
   #textCommentInput.text-comment-input.text-comment-display(
     #textDisplay,
-    [innerHtml]="comment.data ? (comment.data | linkify:{hashtags:true} | emojione) : 'Share your thoughts...'",
+    [innerHtml]="comment.data ? (comment.data | linkify:{hashtags:true, quickLabels: true} | emojione) : 'Share your thoughts...'",
     [ngClass]="{ 'reply-display': reply, 'hide': activated, 'large-emoji': comment.type === 'emoji' }",
     (tap)="activateCommentOrLink($event)"
   )
