@@ -185,7 +185,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     let noText = !plainText.trim()
     // Process Quick Labels
     let labels = el.querySelectorAll('a.quick-label')
-    labels.forEach(labelEl => {
+    labels.forEach((labelEl: any) => {
       let text = labelEl.innerText.trim()
       if (text) {
         let label = document.createTextNode(`#[${text}]`)
