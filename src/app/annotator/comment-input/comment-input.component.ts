@@ -126,6 +126,13 @@ export class CommentInputComponent implements OnInit, OnDestroy {
             relativeTo: this.route,
             queryParams: { pane: 'comments', search: `"${tag}"` },
           })
+      } else if (checkForLink && event.target.classList.contains('quick-label')) {
+        // Handle Quick Label links
+        let label = event.target.innerText.trim()
+        label && this.router.navigate(['./'], {
+          relativeTo: this.route,
+          queryParams: { pane: 'comments', label: `${label}` },
+        })
       } else {
         this.activateField()
       }
@@ -176,6 +183,15 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     el.innerHTML = this.emojiPipe.transform(html)
     let plainText = el.innerText || el.textContent
     let noText = !plainText.trim()
+    // Process Quick Labels
+    let labels = el.querySelectorAll('a.quick-label')
+    labels.forEach(labelEl => {
+      let text = labelEl.innerText.trim()
+      if (text) {
+        let label = document.createTextNode(`#[${text}]`)
+        labelEl.replaceWith(label)
+      }
+    })
     // Process emojis as images (default state in content editable)
     let imgs = el.querySelectorAll('img')
     imgs.forEach(imgEl => {

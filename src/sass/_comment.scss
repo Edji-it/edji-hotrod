@@ -170,6 +170,7 @@ edji-comment {
   &.active {
     & .comment-input-wrapper,
     & .comment-input-wrapper:hover {
+      z-index: 10;
       box-shadow: $inputFocusShadow;
       border-color: #00a2f5;
       transform: scale(1) translateZ(0px);
@@ -1184,6 +1185,7 @@ a.quick-label  {
   & .icon-quick-label {
     background-color:#fff;
     font-size: 1.75em;
+    max-height: 36px;
     padding: 0px;
     border: 3px solid#fff;
     border-radius: 5px;
@@ -1192,6 +1194,7 @@ a.quick-label  {
     position: absolute;
     top: 2px;
     left: 1px;
+    pointer-events: none; // allow click listener on parent
   }
 
   & span {
@@ -1199,6 +1202,7 @@ a.quick-label  {
     vertical-align: top;
     line-height: 1em;
     padding: 0.5em 0.75em;
+    pointer-events: none; // allow click listener on parent
   }
 
   &:hover, &:focus {
