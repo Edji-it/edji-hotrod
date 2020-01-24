@@ -19,6 +19,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   public linkCopied: boolean = false
   public userPermission: number = CommentPermissions.READ
   public readOnly: boolean = true
+  public showQuickLabels: boolean = false
 
   public justSaved: boolean = false
   private isLoading: boolean = false
@@ -483,5 +484,13 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.comment.url = ''
     this.comment.dataArray = []
     this.comment.type = 'text'
+  }
+
+  /**
+   * Insert Quick Label
+   */
+  insertQuickLabel(label: string) {
+    this._comments.emitEmojiToActive(`#[${label}]`)
+    this.showQuickLabels = false
   }
 }

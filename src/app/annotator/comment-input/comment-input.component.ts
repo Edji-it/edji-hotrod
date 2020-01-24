@@ -17,8 +17,8 @@ import { EmojiOnePipe, LinkifyPipe } from 'src/app/_pipes'
 import * as emoji from 'emojione/lib/js/emojione'
 import { Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
-import { ActivatedRoute, Router } from '@angular/router';
-import { SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router'
+import { SafeHtml } from '@angular/platform-browser'
 
 @Component({
   selector: 'comment-input',
@@ -58,8 +58,9 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     return this.activated
   }
 
-  constructor(private element: ElementRef, 
-    private _comments: CommentService, 
+  constructor(
+    private element: ElementRef,
+    private _comments: CommentService,
     private emojiPipe: EmojiOnePipe,
     private linkifyPipe: LinkifyPipe,
     private route: ActivatedRoute,
@@ -71,7 +72,8 @@ export class CommentInputComponent implements OnInit, OnDestroy {
       this._comments.emojiEdit.subscribe(emoji => {
         if (this.comment._id === this._comments.activeComment._id) {
           // Insert at point of cursor
-          this.insertAtCaret(this.emojiPipe.transform(emoji))
+          let html = this.emojiPipe.transform(emoji)
+          this.insertAtCaret(this.linkifyPipe.transformQuickLabels(html))
         }
       }),
     )
@@ -105,7 +107,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     range.collapseAfter(node)
     sel.setSingleRange(range)
   }
-  
+
   /**
    * Determine if field should be activated or deactivated on Click
    * @param event Click event
@@ -113,16 +115,17 @@ export class CommentInputComponent implements OnInit, OnDestroy {
   activateCommentOrLink(event) {
     let checkForLink: boolean = event && ['a', 'i'].includes(event.target.tagName.toLowerCase())
     if (this.activated && checkForLink) {
-        this.deactivate.emit(false)
+      this.deactivate.emit(false)
     } else if (!this.activated && !this.readOnly) {
       if (checkForLink && event.target.classList.contains('comment-hashtag')) {
         // Handle hashtag links
         let tag = event.target.innerText.trim()
 
-        tag && this.router.navigate(['./'], {
-          relativeTo: this.route,
-          queryParams: { pane: 'comments', search: `"${tag}"` },
-        })
+        tag &&
+          this.router.navigate(['./'], {
+            relativeTo: this.route,
+            queryParams: { pane: 'comments', search: `"${tag}"` },
+          })
       } else {
         this.activateField()
       }
@@ -131,7 +134,6 @@ export class CommentInputComponent implements OnInit, OnDestroy {
 
   activateField() {
     let contentsWithImages: string = this.emojiPipe.transform(this.comment.data)
-    console.log("activate", this.linkifyPipe.transformQuickLabels(contentsWithImages))
     this.htmlContents = this.linkifyPipe.transformQuickLabels(contentsWithImages, true)
     // Set activated
     this.activated = true

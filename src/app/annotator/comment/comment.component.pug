@@ -79,6 +79,13 @@ div([id]="'comment-' + comment._id")
                         (deactivate)="deactivate(comment, $event)"
                     )
                     .icon-group--in-field(*ngIf="userPermission >= 5 && !_comments.emojiActive")
+                        #commentAddLabel.icon.icon-quick-label.hover--tooltip(
+                              *ngIf="project.quick_labels && project.quick_labels[0] && availableInContext('label')",
+                              (click)="showQuickLabels = !showQuickLabels"
+                            )
+                                .tooltip-wrap
+                                    .tooltip
+                                        .tooltip-title Add Quick Label
                         #commentAddEmoji.icon.icon-comment-emoji.hover--tooltip(
                           *ngIf="project.types.indexOf('emoji') > -1 && availableInContext('emoji')",
                           (click)="activateEmojiKeyboard($event)"
@@ -93,6 +100,13 @@ div([id]="'comment-' + comment._id")
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Recording
+                    .quick-label__dropdown(*ngIf="showQuickLabels")
+                        .quick-label(
+                          *ngFor="let label of project.quick_labels",
+                          (click)="insertQuickLabel(label)"
+                        )
+                            i.icon.icon-quick-label
+                            span([innerHtml]="label | emojione")
                 .comment-attachment-wrapper(*ngIf="comment.type == 'audio' && availableInContext('audio')")
                     audio-comment(
                         [comment]="comment",
