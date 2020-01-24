@@ -1229,6 +1229,29 @@ a.quick-label  {
 
   .text-comment-editable & {
     pointer-events: none;
+    padding-right: 1.75em;
+
+    &:hover {
+      background: $gray;
+    }
+
+    &:after {
+      @extend .icon-close;
+      pointer-events: all;
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 4px;
+      width: 1.75em !important;
+      height: 1.75em !important;
+      transform: translateY(-50%);
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 }
 

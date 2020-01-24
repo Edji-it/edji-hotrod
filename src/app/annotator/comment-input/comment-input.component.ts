@@ -140,6 +140,19 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * If quick label clicked while editing, remove
+   * @param e tap/click event
+   */
+  removeLabel(e) {
+    if (e.target && e.target.classList.contains('quick-label')) {
+      let el = e.target
+      // We want to remove the wrapping span element, if possible
+      if (el.parentNode.tagName === 'span') el = el.parentNode
+      el.remove()
+    }
+  }
+
   activateField() {
     let contentsWithImages: string = this.emojiPipe.transform(this.comment.data)
     this.htmlContents = this.linkifyPipe.transformQuickLabels(contentsWithImages, true)

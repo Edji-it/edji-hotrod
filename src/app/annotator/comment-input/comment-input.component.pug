@@ -14,7 +14,8 @@ doctype html
     (keydown.shift.enter)='blurField($event)',
     (keyup.esc)='blurField($event)',
     [ngClass]="{ 'reply-display': reply, 'disabled': readOnly, 'hide': !activated }",
-    [style.minHeight]="textareaHeight"
+    [style.minHeight]="textareaHeight",
+    (tap)="removeLabel($event)"
   )
   //- Comment Display
   #textCommentInput.text-comment-input.text-comment-display(
