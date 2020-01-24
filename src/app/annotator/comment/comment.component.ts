@@ -490,7 +490,7 @@ export class CommentComponent implements OnInit, OnDestroy {
    * Insert Quick Label
    */
   insertQuickLabel(label: string) {
-    this._comments.emitEmojiToActive(`#[${label}]`)
+    this._comments.emitEmojiToActive(`<span>&nbsp;#[${label}]&nbsp;</span>`)
     this.showQuickLabels = false
   }
 }

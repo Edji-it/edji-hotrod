@@ -91,6 +91,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
   }
 
   insertAtCaret(html) {
+    console.log("insert!")
     var txtarea = this.textInput.nativeElement
     if (!txtarea) {
       return

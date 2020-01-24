@@ -1218,7 +1218,17 @@ a.quick-label  {
   // Styling for inline
   .text-comment-input & {
     font-size: 10px;
-    margin: 0 0.5em;
+    margin: 0.1em 0;
+    vertical-align: middle;
+
+    & span {
+      font-size: 1.25em;
+      line-height: 0.75em;
+    }
+  }
+
+  .text-comment-editable & {
+    pointer-events: none;
   }
 }
 
