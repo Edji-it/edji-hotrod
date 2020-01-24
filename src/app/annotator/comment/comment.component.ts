@@ -213,7 +213,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.comment.data = comment.data
       this.comment.url = comment.url
     } else {
-      this.comment.data = comment
+      this.comment.data = comment.toString()
     }
 
     if (this.commentContext !== 'answer') {

@@ -28,7 +28,7 @@ export interface BaseComment {
   recipient_id?: string
   start: number
   end: number
-  data: any
+  data: string
   author: string
   type: string // emoji, text, or audio comment?
   dataArray?: any[]
