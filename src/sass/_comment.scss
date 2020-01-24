@@ -1160,7 +1160,8 @@ div.avatar-count-8 {
 // Hashtag and Quick Labels
 .comment-hashtag,
 a.comment-hashtag,
-.content a.comment-hashtag {
+.content a.comment-hashtag,
+a.comment-hashtag:not([href]) {
   color: $hashtagBlue;
   cursor: pointer;
   text-decoration: none;
@@ -1177,7 +1178,7 @@ a.quick-label  {
   background:$quickLabelBg;
   padding: 2px 2px 2px 1.5em;
   border-radius: 5px;
-  color: $hashtagBlue;
+  color: $hashtagBlue !important;
   margin-bottom: 3px;
   cursor: pointer;
   display: inline-block;
