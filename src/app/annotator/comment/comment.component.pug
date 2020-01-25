@@ -68,7 +68,8 @@ div([id]="'comment-' + comment._id")
                 .comment-input-wrapper(
                   *ngIf="(comment.data || userPermission >= 5) && availableInContext(['emoji','text'])",
                   [ngClass]="[ comment.type + '' ]",
-                  [class.input-wrapper--reply]="reply || comment.reply_to"
+                  [class.input-wrapper--reply]="reply || comment.reply_to",
+                  (clickOutside)="showQuickLabels = false"
                 )
                     comment-input(
                         [readOnly]="userPermission < 5",
@@ -88,14 +89,14 @@ div([id]="'comment-' + comment._id")
                                         .tooltip-title Add Quick Label
                         #commentAddEmoji.icon.icon-comment-emoji.hover--tooltip(
                           *ngIf="project.types.indexOf('emoji') > -1 && availableInContext('emoji')",
-                          (click)="activateEmojiKeyboard($event)"
+                          (click)="showQuickLabels = false; activateEmojiKeyboard($event)"
                         )
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Emoji
                         #commentAddAudio.icon.icon-comment-audio.hover--tooltip(
                           *ngIf="comment.type !== 'audio' && project.types.indexOf('audio') > -1 && availableInContext('audio')",
-                          (click)="addAudio()"
+                          (click)="showQuickLabels = false; addAudio()"
                         )
                             .tooltip-wrap
                                 .tooltip

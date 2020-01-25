@@ -91,7 +91,6 @@ export class CommentInputComponent implements OnInit, OnDestroy {
   }
 
   insertAtCaret(html) {
-    console.log("insert!")
     var txtarea = this.textInput.nativeElement
     if (!txtarea) {
       return
@@ -130,10 +129,11 @@ export class CommentInputComponent implements OnInit, OnDestroy {
       } else if (checkForLink && event.target.classList.contains('quick-label')) {
         // Handle Quick Label links
         let label = event.target.innerText.trim()
-        label && this.router.navigate(['./'], {
-          relativeTo: this.route,
-          queryParams: { pane: 'comments', label: `${label}` },
-        })
+        label &&
+          this.router.navigate(['./'], {
+            relativeTo: this.route,
+            queryParams: { pane: 'comments', label: `${label}` },
+          })
       } else {
         this.activateField()
       }
