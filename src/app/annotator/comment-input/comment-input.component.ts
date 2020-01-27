@@ -119,7 +119,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     } else if (!this.activated && !this.readOnly) {
       if (checkForLink && event.target.classList.contains('comment-hashtag')) {
         // Handle hashtag links
-        let tag = event.target.innerText.trim()
+        let tag = (event.target.innerText || '').trim()
 
         tag &&
           this.router.navigate(['./'], {
@@ -128,7 +128,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
           })
       } else if (checkForLink && event.target.classList.contains('quick-label')) {
         // Handle Quick Label links
-        let label = event.target.innerText.trim()
+        let label = (event.target.innerText || '').trim()
         label &&
           this.router.navigate(['./'], {
             relativeTo: this.route,
@@ -200,7 +200,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     // Process Quick Labels
     let labels = el.querySelectorAll('a.quick-label')
     labels.forEach((labelEl: any) => {
-      let text = labelEl.innerText.trim()
+      let text = (labelEl.innerText || labelEl.textContent).trim()
       if (text) {
         let label = document.createTextNode(`#[${text}]`)
         labelEl.replaceWith(label)
