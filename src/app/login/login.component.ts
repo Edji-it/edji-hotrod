@@ -32,16 +32,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _title: Title,
   ) {
-    // this makes the window always render scrolled to the top
-    this._router.events.subscribe(() => {
-      window.scrollTo(0, 0)
-    })
-    this.route.queryParams.subscribe(params => {
-      let modalLink = params['mlink']
-      if (modalLink === 'forgot') {
-        this.showPassModal = true
-      }
-    })
+    this.subscriptions.push(
+      // this makes the window always render scrolled to the top
+      this._router.events.subscribe(() => {
+        window.scrollTo(0, 0)
+      }),
+      this.route.queryParams.subscribe(params => {
+        let modalLink = params['mlink']
+        if (modalLink === 'forgot') {
+          this.showPassModal = true
+        }
+      }),
+    )
   }
 
   ngOnInit() {
