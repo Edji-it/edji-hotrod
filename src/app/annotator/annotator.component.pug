@@ -87,6 +87,7 @@ scroll-progress([scrollProgress]="currentScroll")
                         ng-container(*ngIf="project.group_instructions")
                             .lesson-block__header Instructions
                             p([innerHtml]="project.group_instructions")
+                        hr(*ngIf="project.group_instructions && project.quick_labels")
                         ng-container(*ngIf="project.quick_labels")
                             .lesson-block__header Quick Labels
                             div(*ngFor="let label of project.quick_labels")

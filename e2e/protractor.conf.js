@@ -50,6 +50,7 @@ exports.config = {
     explorer: helpers.root('e2e/src/project__comment-explorer.spec.ts'),
     heroSubscribe: helpers.root('e2e/src/hero-subscribe.spec.ts'),
     home: helpers.root('e2e/src/home.spec.ts'),
+    label: helpers.root('e2e/src/project__quick-labels.spec.ts'),
     leaderboard: helpers.root('e2e/src/owner-tools__leaderboard.spec.ts'),
     license: helpers.root('e2e/src/license.spec.ts'),
     login: helpers.root('e2e/src/login.spec.ts'),
