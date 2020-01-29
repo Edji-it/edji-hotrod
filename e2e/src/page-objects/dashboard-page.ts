@@ -70,6 +70,10 @@ export class Dashboard implements PageObjectInterface {
   public getGroupDeleteButton = (card: ElementFinder) => card.element(by.css('.btn--delete-project'))
   public groupDeleteModal = element(by.id('deleteProjectModal'))
   public groupDeleteModalConfirmButton = element(by.id('delProjectBtnModal'))
+  public labelInput = (index: number) => {
+    return element(by.css('#labelInput' + index + ' input'))
+  }
+  public labelAddBtn = element(by.css('[data-test="addQuickLabelBtn"]'))
 
   // Toasts
   public toast = element(by.css('.toast'))
@@ -153,7 +157,12 @@ export class Dashboard implements PageObjectInterface {
   } // getNewReadingPage() : void
 
   // 6.3.17
-  createNewGroupModalInput(groupName: string): void {
+  createNewGroupModalInput(
+    groupName: string,
+    options?: {
+      labels?: string[]
+    },
+  ): void {
     // The modal needs to have already appeared before you use this.
     // This tak groupName and hits the Create Group button on the modal.
     let groupNameInput = this.projectLabel
@@ -167,6 +176,30 @@ export class Dashboard implements PageObjectInterface {
 
     groupNameInput.clear()
     groupNameInput.sendKeys(groupName)
+
+    // If options passed, use advanced settings
+    if (options) {
+      let advancedHeader = element(by.css('.ui-fieldset-toggleable.modal-fieldset'))
+      advancedHeader.click()
+
+      // Add Quick Labels if provided
+      if (options.labels) {
+        options.labels.forEach((label, i) => {
+          if (i !== 0) {
+            // click to add field
+            this.labelAddBtn.click()
+          }
+          let labelInput = this.labelInput(i)
+          browser.wait(
+            this.EC.elementToBeClickable(labelInput),
+            3000,
+            `did not find Quick Label input field index ${i}`,
+          )
+          labelInput.click()
+          labelInput.sendKeys(label)
+        })
+      }
+    }
 
     browser.wait(this.EC.presenceOf(createGroupButton), 5000, 'never saw a createGroupButton')
     browser.wait(this.EC.elementToBeClickable(createGroupButton), 5000, 'createGroupButton was never clickable')

@@ -39,21 +39,26 @@
                         label Quick Labels
                         .label.text-muted Give students key terms, concepts, or categories to use in comments
                         .input-group.quick-label__field-wrap(
-                            *ngFor="let item of quickLabels.controls; let pointIndex=index", 
-                            [formGroupName]="pointIndex"
-                        )   
+                            *ngFor="let item of quickLabels.controls; let pointIndex=index",
+                            [formGroupName]="pointIndex",
+                            [attr.id]="'labelInput'+pointIndex"
+                        )
                             .icon.icon-quick-label
                             input.form-control(
-                                type="text", 
+                                type="text",
                                 formControlName="label",
                                 placeholder="Quick Label",
                             )
                             .form-control-clear.form-control-clear--in-field.icon.icon-close(
                                 *ngIf="pointIndex !== 0",
-                                type="button", 
+                                type="button",
                                 (click)="deleteQuickLabel(pointIndex)"
-                            ) 
-                        button.btn.btn-primary.btn-sm.mt-1.float-right(type="button", (click)="addQuickLabel()") 
+                            )
+                        button.btn.btn-primary.btn-sm.mt-1.float-right(
+                          type="button",
+                          (click)="addQuickLabel()",
+                          data-test="addQuickLabelBtn"
+                        )
                             | Add Label
                     .form-group.row()
                         label.col-12 Comment Abilities

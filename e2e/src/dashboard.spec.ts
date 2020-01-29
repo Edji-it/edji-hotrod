@@ -180,7 +180,7 @@ describe('Dashboard Page as a Hero', () => {
     6.1.17
     */
   describe('Delete Readings & Projects', () => {
-    it('Delete a project on a reading.', () => {
+    it('add and delete a simple project on a reading.', () => {
       // Switch to the created readings tab on mobile (will simply skip if on desktop)
       dashboard.goToCreatedTab()
 
@@ -199,6 +199,47 @@ describe('Dashboard Page as a Hero', () => {
 
       // Create a new group
       dashboard.createNewGroupModalInput(dashboard.uniqueGroupTitle)
+
+      // We're gonna identify the new project by its new group class since it was just created.
+      const newProjectCard = dashboard.newProjectCard
+      browser.wait(EC.presenceOf(newProjectCard), 5000, 'never saw a newProjectCard')
+
+      // Now click that delete button
+      let newProjectCardDelBtn = dashboard.getGroupDeleteButton(newProjectCard)
+      browser.wait(EC.elementToBeClickable(newProjectCardDelBtn), 5000, 'never saw a project delete button')
+      newProjectCardDelBtn.click()
+
+      // Click ok on that there delete modal
+      browser.wait(EC.presenceOf(dashboard.groupDeleteModal), 5000, 'never saw the delete group modal')
+      const deleteButton = dashboard.groupDeleteModalConfirmButton
+      browser.wait(EC.presenceOf(deleteButton), 5000, 'never saw the delete group button on the delete group modal')
+      browser.wait(
+        EC.elementToBeClickable(deleteButton),
+        5000,
+        'delProjectBtn on the delProjectModal was never clickable',
+      )
+      deleteButton.click()
+      browser.wait(EC.invisibilityOf(newProjectCard), 5000, 'still see the project card after deleting from the modal')
+    })
+
+    it('add and delete a project with Advanced Settings on a reading.', () => {
+      // Switch to the created readings tab on mobile (will simply skip if on desktop)
+      dashboard.goToCreatedTab()
+      // Click the dropdown menu
+      browser.sleep(3000) // the clickOutside directive is a little finicky and will close this if you click it too fast
+      browser.wait(EC.elementToBeClickable(dashboard.firstDropdownMenu), 5000, 'never saw a reading card dropdown menu')
+      dashboard.firstDropdownMenu.click()
+      // // Click the create new group button & create a new project
+      const newGroupButton = dashboard.newGroupButton
+      browser.wait(
+        EC.elementToBeClickable(newGroupButton),
+        5000,
+        'create new group button was never clickable from dropdown menu',
+      )
+      newGroupButton.click()
+
+      // Create a new group with Advanced Settings options
+      dashboard.createNewGroupModalInput(dashboard.uniqueGroupTitle, { labels: ['Test 1', 'Test 2'] })
 
       // We're gonna identify the new project by its new group class since it was just created.
       const newProjectCard = dashboard.newProjectCard
