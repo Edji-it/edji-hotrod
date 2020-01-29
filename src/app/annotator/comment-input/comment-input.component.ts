@@ -254,6 +254,8 @@ export class CommentInputComponent implements OnInit, OnDestroy {
         this.textInput.nativeElement.blur()
       }
     }
+    // Make sure quick labels close
+    this.toggleLabelDropdown.emit(false)
   }
 
   /**
