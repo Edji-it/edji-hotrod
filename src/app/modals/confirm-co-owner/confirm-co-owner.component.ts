@@ -27,7 +27,6 @@ export class ConfirmCoOwnerModal implements OnInit {
   makeCoOwner(student: User): void {
     this.projectStore.makeCoOwner(student).subscribe(
       data => {
-        console.log(data)
         this.closeModal.emit()
       },
       err => {

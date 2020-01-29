@@ -171,7 +171,7 @@ export class CommentService {
     }
   }
 
-  public emitEmojiToActive(shortCode: string) {
+  public emitInputToActive(shortCode: string) {
     this.activeInputAppendSource.next(shortCode)
   }
 

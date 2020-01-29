@@ -494,7 +494,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     // Close dropdown
     this.showQuickLabels = false
     if (this.isActive) {
-      this._comments.emitEmojiToActive(`<span>&nbsp;${wrappedLabel}&nbsp;</span>`)
+      this._comments.emitInputToActive(`<span>&nbsp;${wrappedLabel}&nbsp;</span>`)
     } else {
       this.comment.data += ` ${wrappedLabel} `
       this.updateComment(this.comment)
