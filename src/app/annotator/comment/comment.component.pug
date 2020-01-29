@@ -77,7 +77,8 @@ div([id]="'comment-' + comment._id")
                         [active]="comment.active",
                         [reply]="reply",
                         (activate)="activate()",
-                        (deactivate)="deactivate(comment, $event)"
+                        (deactivate)="deactivate(comment, $event)",
+                        (toggleLabelDropdown)="showQuickLabels = $event",
                     )
                     .icon-group--in-field(*ngIf="userPermission >= 5 && !_comments.emojiActive")
                         #commentAddQuickLabel.icon.icon-quick-label.hover--tooltip(
@@ -101,7 +102,7 @@ div([id]="'comment-' + comment._id")
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Recording
-                    .quick-label__dropdown(*ngIf="showQuickLabels")
+                    .quick-label__dropdown(*ngIf="showQuickLabels && project.quick_labels")
                         .quick-label(
                           *ngFor="let label of project.quick_labels; let i = index",
                           (click)="insertQuickLabel(label)",

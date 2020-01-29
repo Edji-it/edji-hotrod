@@ -36,6 +36,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
 
   @Output() activate: EventEmitter<any> = new EventEmitter<any>()
   @Output() deactivate: EventEmitter<any> = new EventEmitter<any>()
+  @Output() toggleLabelDropdown: EventEmitter<boolean> = new EventEmitter<boolean>()
 
   public activated: boolean = false
   public textareaHeight: string = '32px'
@@ -69,7 +70,7 @@ export class CommentInputComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this._comments.emojiEdit.subscribe(emoji => {
+      this._comments.activeInputAppend.subscribe(emoji => {
         if (this.comment._id === this._comments.activeComment._id) {
           // Insert at point of cursor
           let html = this.emojiPipe.transform(emoji)
@@ -252,6 +253,28 @@ export class CommentInputComponent implements OnInit, OnDestroy {
       if (document.activeElement === this.textInput.nativeElement) {
         this.textInput.nativeElement.blur()
       }
+    }
+  }
+
+  /**
+   * Handle events while typing
+   * @param e keyup Event
+   */
+  inputKeyupHandler(e): void {
+    switch (e.keyCode) {
+      case 27:
+        // Escape
+        this.blurField(e)
+        break
+      case 51:
+      case 35:
+        // Hashtag or 3
+        this.toggleLabelDropdown.emit(true)
+        break
+      case 32:
+        // Space
+        this.toggleLabelDropdown.emit(false)
+        break
     }
   }
 }

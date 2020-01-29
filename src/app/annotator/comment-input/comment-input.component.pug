@@ -12,7 +12,7 @@ doctype html
     [innerHtml]="htmlContents",
     (keydown.enter)='blurField($event)',
     (keydown.shift.enter)='blurField($event)',
-    (keyup.esc)='blurField($event)',
+    (keyup)='inputKeyupHandler($event)',
     [ngClass]="{ 'reply-display': reply, 'disabled': readOnly, 'hide': !activated }",
     [style.minHeight]="textareaHeight",
     (tap)="removeLabel($event)"
