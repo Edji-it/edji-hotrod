@@ -85,6 +85,19 @@ exports.config = {
   },
   directConnect: true,
 
+  plugins: [
+    {
+      package: 'protractor-console-plugin',
+      failOnWarning: false,
+      /**
+       * @todo enable failing on logged errors for improved quality checks
+       */
+      failOnError: false,
+      logWarnings: true,
+      exclude: ['ExpressionChangedAfterItHasBeenCheckedError', 'HttpErrorResponse', 'DebugContext_', 'sentry.io'],
+    },
+  ],
+
   onPrepare: function() {
     // We do not want to ignoreSynchronization, it defeats the purpose of protractor
     browser.ignoreSynchronization = true

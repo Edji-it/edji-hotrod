@@ -24,19 +24,7 @@ describe('Dashboard Page as a Hero', () => {
     sidebar.logout()
   })
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   it('should arrive at dashboard', () => {
     browser.wait(EC.urlContains('dashboard'), 15000, 'never arrived at dashboard')
@@ -390,19 +378,7 @@ describe('Dashboard page as a sidekick', () => {
     sidebar.logout()
   })
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   it('should have only two active readings', async () => {
     const numTotalReadings = await dashboard.readingCards.count()
@@ -456,19 +432,7 @@ describe('Dashboard page as a sidekick', () => {
     sidebar.logout()
   })
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   it('should make a private reading go academy', () => {
     dashboard.goToCreatedTab()

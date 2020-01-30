@@ -10,20 +10,6 @@ describe('Project Page - Quick Labels', () => {
   let guestForm = new GuestLoginForm()
   let explorer = new CommentExplorer()
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
-
   describe('Use Quick Labels and Hashtags in comments, then filter', async () => {
     beforeAll(() => {
       project.getPage('quicklabels')

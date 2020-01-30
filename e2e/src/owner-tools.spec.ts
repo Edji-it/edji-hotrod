@@ -21,19 +21,7 @@ describe('Project Page as a Project Owner: ', () => {
     sidebar.logout()
   })
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   it('should toggle on Heat Vision as Project Owner', () => {
     browser.wait(EC.presenceOf(loginModal.guestLoginHeader), 5000, "never saw the login modal's header")
