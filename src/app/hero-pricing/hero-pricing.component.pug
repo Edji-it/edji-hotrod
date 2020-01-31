@@ -168,16 +168,23 @@ nav-bar
         [tickInterval]="1"
       )
   .row.my-4
-    .col-6
+    .col-8
       h4 {{ academyPlans[currentSliderVal].plan }}
-      h3 {{ academyPlans[currentSliderVal].size }} | {{ academyPlans[currentSliderVal].cost }}
-    .col-6
-
-          a.btn.btn-hero.btn-lg.btn-block(
-            *ngIf="isAcademyHero",
-            [routerLink]="['/account']",
-            [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
-          )
+      h3 {{ academyPlans[currentSliderVal].size }} | 
+        del {{ academyPlans[currentSliderVal].prevCost }}
+        | &nbsp;{{ academyPlans[currentSliderVal].cost }}
+      p.small {{ academyPlans[currentSliderVal].planDetail }}
+    .col-4
+      a.btn.btn-hero.btn-lg.btn-block(
+        *ngIf="isAcademyHero",
+        [routerLink]="['/account']",
+        [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
+      )
+      a.btn.btn-action.btn-lg.btn-block(
+        *ngIf="!isAcademyHero",
+        [routerLink]="'./'",
+        [queryParams]="{ request: 'academy' }",
+      ) Request Quote
   .hero-rule
   .row.row-xl-pad
     .col-12.col-md-8.offset-md-2

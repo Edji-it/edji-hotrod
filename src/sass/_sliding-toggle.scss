@@ -1,6 +1,10 @@
 @import './base/variables';
 
 $sliderHeight: 10px;
+$sliderTickOffsetY: 6px;
+$tickYShift: 16%;
+$sliderTickWidth: 3px;
+$sliderTickColor: rgba(0,0,0,.5);
 
 .mat-slider {
   &-horizontal {
@@ -14,8 +18,16 @@ $sliderHeight: 10px;
     background-color: $red !important;
   }
   &-ticks {
+    height: $sliderHeight + $sliderTickOffsetY !important;
+    background-image: repeating-linear-gradient(to right, $sliderTickColor, $sliderTickColor $sliderTickWidth,transparent 0,transparent) !important;
+    background-size: 20% 2px !important;
+    transform: translateZ(0px) translateX(10%) !important;
     .label-sticky & {
-      opacity: 1;
+      opacity: 1 !important;
+    }
+    &-container {
+      transform: translateX(-10%) translateY(-$tickYShift) !important;
+      height: $sliderHeight + $sliderTickOffsetY !important;
     }
   }
   &-thumb {
@@ -66,5 +78,12 @@ $sliderHeight: 10px;
   }
   &-wrapper {
     height: $sliderHeight;
+    &::after {
+      opacity: 1 !important;
+      height: $sliderHeight + $sliderTickOffsetY !important;
+      border-left-width: $sliderTickWidth !important;
+      transform: translateY(-$tickYShift);
+      border-color: $sliderTickColor !important;
+    }
   }
 }

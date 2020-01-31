@@ -80,12 +80,48 @@ export class HeroPricingComponent implements OnInit {
   private subscriptions: Subscription[] = []
 
   private academyPlans = [
-    { plan: 'Intro Plan', size: '5 Teachers', cost: '$180' },
-    { plan: 'Team Plan', size: '25 Teachers', cost: '$690' },
-    { plan: 'Small School', size: '50 Teachers', cost: '$990' },
-    { plan: 'Large School', size: 'Whole School', cost: '$1990' },
-    { plan: 'Small District', size: '6 Schools', cost: '$4900' },
-    { plan: 'Large District', size: 'Whole District', cost: 'Contact Us' },
+    {
+      plan: 'Intro Plan',
+      size: '5 Teachers',
+      prevCost: '$300',
+      cost: '$180',
+      planDetail: 'A small group of teachers piloting Edji for their school',
+    },
+    {
+      plan: 'Team Plan',
+      size: '25 Teachers',
+      prevCost: '$1500',
+      cost: '$690',
+      planDetail: 'Perfect for departments and PLCs',
+    },
+    {
+      plan: 'Small School',
+      size: '50 Teachers',
+      prevCost: '$3000',
+      cost: '$990',
+      planDetail: 'Great for a small school or large department',
+    },
+    {
+      plan: 'Large School',
+      size: 'Whole School',
+      prevCost: '$7500',
+      cost: '$1990',
+      planDetail: 'Unlimited number of teachers at a single site',
+    },
+    {
+      plan: 'Small District',
+      size: '6 Schools',
+      prevCost: '$22800',
+      cost: '$4900',
+      planDetail: 'Unlimited Edji for 6 or less schools in a single district',
+    },
+    {
+      plan: 'Large District',
+      size: 'Whole District',
+      prevCost: '',
+      cost: 'Contact Us',
+      planDetail: 'Unlimited Edji for an entire district',
+    },
   ]
 
   public sliderVal: number = 1
