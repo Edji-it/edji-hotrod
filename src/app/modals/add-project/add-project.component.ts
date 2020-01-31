@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, ElementRef, QueryList } from '@angular/core'
 import { FormGroup, FormControl, FormBuilder, Validators, FormArray } from '@angular/forms'
 import { take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
@@ -25,6 +25,8 @@ export class AddProjectModal implements OnInit {
   @Input() largeReadingWarning: boolean
   @Input() showGuideMessage: boolean
   @Input() hideInstructions: boolean
+
+  @ViewChildren('quickLabel') labelInputs: QueryList<any>
 
   public projectForm: FormGroup
   public formSubmitted: boolean = false
@@ -59,7 +61,7 @@ export class AddProjectModal implements OnInit {
       replyType: true,
       customCode: ['', { disabled: !this.isHero }],
       groupInstructions: this.reading.default_instructions || '',
-      quickLabels: this._fb.array([this._fb.group({label:''})]),
+      quickLabels: this._fb.array([this._fb.group({ label: '' })]),
     })
   }
 
@@ -188,12 +190,17 @@ export class AddProjectModal implements OnInit {
     return this.projectForm.get('quickLabels') as FormArray
   }
 
-  addQuickLabel() {
-    this.quickLabels.push(this._fb.group({label:''}));
+  addQuickLabel(focusNew?: boolean) {
+    this.quickLabels.push(this._fb.group({ label: '' }))
+    focusNew &&
+      setTimeout(() => {
+        // Let new label render
+        this.labelInputs.last.nativeElement.focus()
+      })
   }
 
   deleteQuickLabel(index) {
-    this.quickLabels.removeAt(index);
+    this.quickLabels.removeAt(index)
   }
 
   getQuickLabelStrings() {

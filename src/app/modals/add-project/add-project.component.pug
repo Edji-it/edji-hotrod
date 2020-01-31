@@ -4,7 +4,7 @@
       .modal-header
         h4.modal-title {{ heading ? heading : &apos;New Group&apos; }}
         button.close((click)='closeModal.emit()', type='button') &times;
-      form([formGroup]='projectForm', (ngSubmit)='addProject(projectForm.value)')
+      form([formGroup]='projectForm')
         .modal-body.pb-0
             .alert.alert-warning(*ngIf='largeReadingWarning')
                 b Large Reading
@@ -48,6 +48,8 @@
                                 type="text",
                                 formControlName="label",
                                 placeholder="Quick Label",
+                                (keyup.enter)="addQuickLabel(true)",
+                                #quickLabel
                             )
                             .form-control-clear.form-control-clear--in-field.icon.icon-close(
                                 *ngIf="pointIndex !== 0",
@@ -91,8 +93,11 @@
                 button.btn.btn-primary(
                     [attr.id]=" (!reading._id || loading) ? 'loading-buttonCreateGroup' : 'buttonCreateGroup'",
                     tabindex='0',
-                    type='submit',
+                    type='button',
                     [class.loading]='!reading._id || loading',
                     name='Add Project',
-                    style='margin: 5px 3px; width:100%;') Create Group
+                    style='margin: 5px 3px; width:100%;',
+                    (click)='addProject(projectForm.value)',
+                    (keyup.enter)="addProject(projectForm.value)",
+                  ) Create Group
             #msgServiceError.alert.alert-warning(*ngIf='formSubmitted && errors.serviceError', role='alert') There was an error in while creating your reading. Try again or contact support.
