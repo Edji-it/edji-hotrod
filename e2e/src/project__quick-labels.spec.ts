@@ -72,7 +72,7 @@ describe('Project Page - Quick Labels', () => {
       let commentResults = element.all(by.css('.sliding-pane-comment edji-comment'))
       browser.wait(EC.visibilityOf(commentResults.first()), 5000, 'comments did not show when searching')
       let commentCount = await element.all(by.css('.sliding-pane-comment edji-comment')).count()
-      expect(commentCount).toBeGreaterThanOrEqual(2)
+      expect(commentCount).toBeGreaterThanOrEqual(2, 'expected to find at least two comments for the Quick Label')
       // Try filtering by hashtag on comment, should filter down to one comment
       let hashtagLink = element(by.css('a.comment-hashtag'))
       browser.wait(EC.elementToBeClickable(hashtagLink), 3000, 'hashtag in comment was not clickable')
