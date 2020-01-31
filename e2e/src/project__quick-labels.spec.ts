@@ -72,7 +72,7 @@ describe('Project Page - Quick Labels', () => {
       let commentResults = element.all(by.css('.sliding-pane-comment edji-comment'))
       browser.wait(EC.visibilityOf(commentResults.first()), 5000, 'comments did not show when searching')
       let commentCount = await element.all(by.css('.sliding-pane-comment edji-comment')).count()
-      expect(commentCount).toBe(2)
+      expect(commentCount).toBeGreaterThanOrEqual(2)
       // Try filtering by hashtag on comment, should filter down to one comment
       let hashtagLink = element(by.css('a.comment-hashtag'))
       browser.wait(EC.elementToBeClickable(hashtagLink), 3000, 'hashtag in comment was not clickable')
@@ -82,7 +82,7 @@ describe('Project Page - Quick Labels', () => {
       expect(browser.getCurrentUrl()).toContain('search=%22%23hashtag%22')
       // Verify only one comment
       let hashtagCommentCount = await element.all(by.css('.sliding-pane-comment edji-comment')).count()
-      expect(hashtagCommentCount).toBe(1)
+      expect(hashtagCommentCount).toBeLessThan(commentCount, "expected hashtag to filter out teacher's comment")
       // Delete the comment
       browser.wait(EC.elementToBeClickable(project.commentDelete), 5000, 'could not find delete button')
       project.commentDelete.click()
