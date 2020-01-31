@@ -23,19 +23,7 @@ describe('Reading Media', () => {
     sidebar.logout()
   })
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   describe('PDF upload', () => {
     it('should upload a PDF to a reading and save it to the reading', function () {

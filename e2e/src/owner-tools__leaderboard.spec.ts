@@ -22,19 +22,7 @@ describe('Project Page as an owner wishing to filter by student: ', () => {
     sidebar.logout()
   })
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   it('should open the Leaderboard and filter by student', () => {
     // Need to check for and click the owner tools button if its showing

@@ -641,9 +641,6 @@ export class AuthService implements CanActivate {
                   if (data.token) {
                     this.setToken(data.token)
                   }
-
-                  console.log(this.user.avatar)
-
                   return data
                 }),
               )

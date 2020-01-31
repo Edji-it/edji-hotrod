@@ -14,19 +14,7 @@ describe('Login Page', () => {
     login.getPage()
   })
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   describe('Login errors', () => {
     loginForm.testLoginErrors()

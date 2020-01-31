@@ -131,6 +131,7 @@ import { CommentExplorerComponent, CommentBubbleComponent } from './shared'
 import { DataListModule } from 'primeng/datalist'
 import { PaginatorModule } from 'primeng/paginator'
 import { TooltipModule } from 'primeng/tooltip'
+import { FieldsetModule } from 'primeng/fieldset'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule, PreloadAllModules, Router, ExtraOptions } from '@angular/router'
 import { ROUTES } from './app.routes'
@@ -305,6 +306,7 @@ const routerOptions: ExtraOptions = {
     RouterModule.forRoot(ROUTES, routerOptions),
     DataListModule,
     PaginatorModule,
+    FieldsetModule,
     TooltipModule,
     NgxPageScrollModule,
     StoreModule.forRoot(reducers, { metaReducers }),

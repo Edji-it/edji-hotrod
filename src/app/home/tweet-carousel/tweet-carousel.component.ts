@@ -34,7 +34,6 @@ export class TweetCarouselComponent implements OnInit, OnDestroy {
       lang: 'en',
       dataOnly: true,
       customCallback: (data: any) => {
-        console.log(data)
         data.forEach(tweet => {
           tweet.tweet = tweet.tweet.replace(new RegExp('href="', 'g'), 'target="_blank" href="')
           tweet.author = tweet.author.replace(new RegExp('href="', 'g'), 'target="_blank" href="')

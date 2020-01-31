@@ -19,6 +19,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   public linkCopied: boolean = false
   public userPermission: number = CommentPermissions.READ
   public readOnly: boolean = true
+  public showQuickLabels: boolean = false
 
   public justSaved: boolean = false
   private isLoading: boolean = false
@@ -213,7 +214,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.comment.data = comment.data
       this.comment.url = comment.url
     } else {
-      this.comment.data = comment
+      this.comment.data = comment.toString()
     }
 
     if (this.commentContext !== 'answer') {
@@ -483,5 +484,20 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.comment.url = ''
     this.comment.dataArray = []
     this.comment.type = 'text'
+  }
+
+  /**
+   * Insert Quick Label
+   */
+  insertQuickLabel(label: string) {
+    let wrappedLabel = `#[${label}]`
+    // Close dropdown
+    this.showQuickLabels = false
+    if (this.isActive) {
+      this._comments.emitInputToActive(`<span>&nbsp;${wrappedLabel}&nbsp;</span>`)
+    } else {
+      this.comment.data += ` ${wrappedLabel} `
+      this.updateComment(this.comment)
+    }
   }
 }

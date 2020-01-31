@@ -32,6 +32,7 @@ describe('Text Comment Input', () => {
         { provide: ActivatedRoute, useValue: {} },
         { provide: CommentService, useValue: {} },
         EmojiOnePipe,
+        LinkifyPipe,
       ],
       imports: [ReactiveFormsModule, RouterModule, FormsModule],
     }).compileComponents()
@@ -61,5 +62,11 @@ describe('Text Comment Input', () => {
     let emojiAndTextHtml = textComment.cleanData('<b>So cool</b><br/>:100:💯')
     expect(emojiAndTextHtml.data).toBe('So cool\n:100::100:')
     expect(emojiAndTextHtml.type).toBe('text')
+    // Check processing Quick Labels and links
+    let quickLabelHtml = textComment.cleanData(
+      '<a class="quick-label">Test Label</a> <a href="somewhere" target="_blank">firstlink.edu</a> other.com/link',
+    )
+    expect(quickLabelHtml.data).toBe('#[Test Label] firstlink.edu other.com/link')
+    expect(quickLabelHtml.type).toBe('text')
   }))
 })

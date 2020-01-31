@@ -7,19 +7,7 @@ describe('Home Page', () => {
   let home = new Home()
   let EC = protractor.ExpectedConditions
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   it('it should see Edji in the title', async () => {
     home.getPage()
