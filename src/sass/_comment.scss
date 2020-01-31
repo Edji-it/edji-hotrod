@@ -1260,6 +1260,8 @@ a.quick-label  {
   cursor: default;
   display: block;
   padding-left: 2em;
+  box-shadow: $inputShadow;
+  border: $inputBorder;
 
   &:hover, &:focus {
     background-color: $quickLabelBg;
@@ -1288,6 +1290,10 @@ a.quick-label  {
     &::placeholder {
       font-weight: 300;
     }
+  }
+
+  & .form-control-clear {
+    -webkit-appearance: none;
   }
 }
 
