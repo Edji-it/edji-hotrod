@@ -21,6 +21,7 @@ export class Project implements PageObjectInterface {
   public viewCommentMobileBtn = element(by.id('viewCommentsMobile'))
   public addEmojiBtn = element(by.id('commentAddEmoji'))
   public addAudioBtn = element(by.id('commentAddAudio'))
+  public addLabelBtn = element(by.id('commentAddQuickLabel'))
   public addTextReplyBtn = element(by.id('addTextReply'))
   public addEmojiReplyBtn = element(by.id('addEmojiReply'))
   public addAudioReplyBtn = element(by.id('addAudioReply'))
@@ -45,6 +46,9 @@ export class Project implements PageObjectInterface {
   public commentContentDisplay = element(by.css('.text-comment-display'))
   public word = (index: string | number) => element(by.css(`.w[index='${index}']`))
   public commentAnnotatedText = element(by.css('[data-test="commentAnnotatedText"]'))
+
+  // Quick Labels
+  public label = (index: string | number) => element(by.css(`#labelOption${index}`))
 
   // Audio Comment test variables
   public audioPlay = element(by.css('audio-comment #audioPlay:not(.disabled)'))

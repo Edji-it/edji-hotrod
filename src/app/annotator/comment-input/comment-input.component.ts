@@ -13,10 +13,12 @@ import {
 // Project Dependencies
 import { EdjiComment } from '../../shared/datatypes/comment'
 import { CommentService } from '../../_services'
-import { EmojiOnePipe } from 'src/app/_pipes'
+import { EmojiOnePipe, LinkifyPipe } from 'src/app/_pipes'
 import * as emoji from 'emojione/lib/js/emojione'
 import { Subscription } from 'rxjs'
 import * as Rangy from 'rangy'
+import { ActivatedRoute, Router } from '@angular/router'
+import { SafeHtml } from '@angular/platform-browser'
 
 @Component({
   selector: 'comment-input',
@@ -34,11 +36,12 @@ export class CommentInputComponent implements OnInit, OnDestroy {
 
   @Output() activate: EventEmitter<any> = new EventEmitter<any>()
   @Output() deactivate: EventEmitter<any> = new EventEmitter<any>()
+  @Output() toggleLabelDropdown: EventEmitter<boolean> = new EventEmitter<boolean>()
 
   public activated: boolean = false
   public textareaHeight: string = '32px'
 
-  public htmlContents: string
+  public htmlContents: SafeHtml
 
   private subscriptions: Subscription[] = []
 
@@ -56,14 +59,22 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     return this.activated
   }
 
-  constructor(private element: ElementRef, private _comments: CommentService, private emojiPipe: EmojiOnePipe) {}
+  constructor(
+    private element: ElementRef,
+    private _comments: CommentService,
+    private emojiPipe: EmojiOnePipe,
+    private linkifyPipe: LinkifyPipe,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
-      this._comments.emojiEdit.subscribe(emoji => {
+      this._comments.activeInputAppend.subscribe(emoji => {
         if (this.comment._id === this._comments.activeComment._id) {
           // Insert at point of cursor
-          this.insertAtCaret(this.emojiPipe.transform(emoji))
+          let html = this.emojiPipe.transform(emoji)
+          this.insertAtCaret(this.linkifyPipe.transformQuickLabels(html))
         }
       }),
     )
@@ -102,20 +113,50 @@ export class CommentInputComponent implements OnInit, OnDestroy {
    * Determine if field should be activated or deactivated on Click
    * @param event Click event
    */
-  clickToggleActive(event) {
-    if (this.activated) {
-      if (event && ['a', 'i'].indexOf(event.target.tagName.toLowerCase()) < 0) {
-        this.deactivate.emit(false)
+  activateCommentOrLink(event) {
+    let checkForLink: boolean = event && ['a', 'i'].includes(event.target.tagName.toLowerCase())
+    if (this.activated && checkForLink) {
+      this.deactivate.emit(false)
+    } else if (!this.activated && !this.readOnly) {
+      if (checkForLink && event.target.classList.contains('comment-hashtag')) {
+        // Handle hashtag links
+        let tag = (event.target.innerText || '').trim()
+
+        tag &&
+          this.router.navigate(['./'], {
+            relativeTo: this.route,
+            queryParams: { pane: 'comments', search: `"${tag}"` },
+          })
+      } else if (checkForLink && event.target.classList.contains('quick-label')) {
+        // Handle Quick Label links
+        let label = (event.target.innerText || '').trim()
+        label &&
+          this.router.navigate(['./'], {
+            relativeTo: this.route,
+            queryParams: { pane: 'comments', label: `${label}` },
+          })
       } else {
-        // ignore event
+        this.activateField()
       }
-    } else if (!this.readOnly) {
-      this.activateField()
+    }
+  }
+
+  /**
+   * If quick label clicked while editing, remove
+   * @param e tap/click event
+   */
+  removeLabel(e) {
+    if (e.target && e.target.classList.contains('quick-label')) {
+      let el = e.target
+      // We want to remove the wrapping span element, if possible
+      if (el.parentNode.tagName === 'span') el = el.parentNode
+      el.remove()
     }
   }
 
   activateField() {
-    this.htmlContents = this.emojiPipe.transform(this.comment.data)
+    let contentsWithImages: string = this.emojiPipe.transform(this.comment.data)
+    this.htmlContents = this.linkifyPipe.transformQuickLabels(contentsWithImages, true)
     // Set activated
     this.activated = true
     // Set textarea height
@@ -157,6 +198,15 @@ export class CommentInputComponent implements OnInit, OnDestroy {
     el.innerHTML = this.emojiPipe.transform(html)
     let plainText = el.innerText || el.textContent
     let noText = !plainText.trim()
+    // Process Quick Labels
+    let labels = el.querySelectorAll('a.quick-label')
+    labels.forEach((labelEl: any) => {
+      let text = (labelEl.innerText || labelEl.textContent).trim()
+      if (text) {
+        let label = document.createTextNode(`#[${text}]`)
+        labelEl.replaceWith(label)
+      }
+    })
     // Process emojis as images (default state in content editable)
     let imgs = el.querySelectorAll('img')
     imgs.forEach(imgEl => {
@@ -203,6 +253,30 @@ export class CommentInputComponent implements OnInit, OnDestroy {
       if (document.activeElement === this.textInput.nativeElement) {
         this.textInput.nativeElement.blur()
       }
+    }
+    // Make sure quick labels close
+    this.toggleLabelDropdown.emit(false)
+  }
+
+  /**
+   * Handle events while typing
+   * @param e keyup Event
+   */
+  inputKeyupHandler(e): void {
+    switch (e.keyCode) {
+      case 27:
+        // Escape
+        this.blurField(e)
+        break
+      case 51:
+      case 35:
+        // Hashtag or 3
+        this.toggleLabelDropdown.emit(true)
+        break
+      case 32:
+        // Space
+        this.toggleLabelDropdown.emit(false)
+        break
     }
   }
 }

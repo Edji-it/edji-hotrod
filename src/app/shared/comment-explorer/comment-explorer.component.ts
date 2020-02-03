@@ -39,6 +39,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   public filterSpan: { start: number; end: number; boxStart?: number; boxEnd?: number }
   public filterSpanText: string
   public filterLineId: string
+  public filterLabel: string
 
   // Display
   public loading: boolean
@@ -178,6 +179,11 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       this.clearFilters(this.filterSpan)
       this.visible = true
       this.filterComments()
+    } else if (params['label']) {
+      this.filterLabel = params['label']
+      this.clearFilters({ label: this.filterLabel })
+      this.filterComments()
+      this.visible = true
     } else if (params['line']) {
       this.filterLineId = params['line']
       this.clearFilters({ line: this.filterLineId })
@@ -331,6 +337,11 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
       sorted = sorted.filter(comment => {
         return comment.user_id === this.filterUserId
       })
+    } else if (this.filterLabel) {
+      this.filterMode = 'label'
+      sorted = sorted.filter(comment => {
+        return comment.data && comment.data.includes(`#[${this.filterLabel}]`)
+      })
     } else {
       this.filterMode = 'all'
       sorted = sorted.filter(comment => {
@@ -372,6 +383,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
    */
   private clearFilters(paramsToOverride?: {
     search?: string
+    label?: string
     line?: string
     student?: string
     pane?: string
@@ -380,9 +392,10 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
   }): void {
     this.filterMode = 'all' //- default
     if (!paramsToOverride) paramsToOverride = {}
-    if (!paramsToOverride['student']) this.filterUserId = null
+    if (!paramsToOverride['label']) this.filterLabel = null
     if (!paramsToOverride['line']) this.filterLineId = null
     if (!paramsToOverride['search']) this.searchTerm = null
+    if (!paramsToOverride['student']) this.filterUserId = null
     if (!paramsToOverride['sort']) this.sortValue = 'created'
     if (!paramsToOverride['start']) {
       this.filterSpan = null
@@ -392,7 +405,7 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
     this.clearSelected.emit()
     // Merge params to keep with reset/null
     let params = Object.assign(
-      { student: null, line: null, search: null, sort: null, start: null, end: null, pane: 'comments' },
+      { student: null, label: null, line: null, search: null, sort: null, start: null, end: null, pane: 'comments' },
       paramsToOverride,
     )
     // Clear URL params
@@ -548,4 +561,4 @@ export class CommentExplorerComponent implements OnInit, OnDestroy {
 }
 
 type SearchSort = 'created' | 'location' | 'match'
-type SearchFilter = 'line' | 'all' | 'user' | 'search' | 'indices'
+type SearchFilter = 'all' | 'line' | 'label' | 'user' | 'search' | 'indices'

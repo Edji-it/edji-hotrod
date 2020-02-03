@@ -418,6 +418,10 @@ $iconGrayOpacity: 0.6;
   background-image: url('/assets/images/icon-mic--white.svg');
 }
 
+.icon-minus, .pi-minus {
+  @include icon('icon-minus.svg');
+}
+
 .icon-more {
   @include icon('icon-more.svg');
   display: inline-block;
@@ -474,7 +478,7 @@ $iconGrayOpacity: 0.6;
   cursor: pointer;
 }
 
-.icon-plus {
+.icon-plus, .pi-plus {
   @include icon('icon-plus.svg');
 }
 
@@ -488,6 +492,10 @@ $iconGrayOpacity: 0.6;
   width: 40px;
   height: 40px;
   cursor: pointer;
+}
+
+.icon-quick-label {
+  @include icon('icon-quick-label.svg');
 }
 
 .icon-reading-recap {

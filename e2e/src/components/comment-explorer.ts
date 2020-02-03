@@ -13,6 +13,7 @@ export class CommentExplorer {
   public userHeader = element(by.css('[data-test="userFilterHeader"]'))
   public searchHeader = element(by.css('[data-test="searchFilterHeader"]'))
   public viewHeader = element(by.css('[data-test="indicesFilterHeader"]'))
+  public labelHeader = element(by.css('[data-test="labelFilterHeader"]'))
   // Loading state
   public loading = element(by.css('[data-test="explorerLoading"]'))
   // Action items

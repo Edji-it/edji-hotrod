@@ -1,7 +1,7 @@
 doctype html
 .text-comment.input-wrap([ngClass]="[activated ? 'active' : '']")
   //- Comment Input
-  .text-comment-input(
+  .text-comment-input.text-comment-editable(
     #textInput,
     contenteditable="true",
     type='text',
@@ -12,14 +12,15 @@ doctype html
     [innerHtml]="htmlContents",
     (keydown.enter)='blurField($event)',
     (keydown.shift.enter)='blurField($event)',
-    (keyup.esc)='blurField($event)',
+    (keyup)='inputKeyupHandler($event)',
     [ngClass]="{ 'reply-display': reply, 'disabled': readOnly, 'hide': !activated }",
-    [style.minHeight]="textareaHeight"
+    [style.minHeight]="textareaHeight",
+    (tap)="removeLabel($event)"
   )
   //- Comment Display
   #textCommentInput.text-comment-input.text-comment-display(
     #textDisplay,
-    [innerHtml]="comment.data ? (comment.data | linkify | emojione) : 'Share your thoughts...'",
+    [innerHtml]="comment.data ? (comment.data | linkify:{hashtags:true, quickLabels: true} | emojione) : 'Share your thoughts...'",
     [ngClass]="{ 'reply-display': reply, 'hide': activated, 'large-emoji': comment.type === 'emoji' }",
-    (tap)="clickToggleActive($event)"
+    (tap)="activateCommentOrLink($event)"
   )

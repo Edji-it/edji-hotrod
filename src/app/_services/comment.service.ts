@@ -24,8 +24,8 @@ export class CommentService {
   public clearActiveComments: Observable<string> = this.clearActiveCommentsSource.asObservable()
 
   // Emoji keyboard insert observable
-  public emojiEditSource: Subject<string> = new Subject()
-  public emojiEdit: Observable<string> = this.emojiEditSource.asObservable()
+  public activeInputAppendSource: Subject<string> = new Subject()
+  public activeInputAppend: Observable<string> = this.activeInputAppendSource.asObservable()
 
   /*
   Last Modified: 6 June 2017
@@ -171,8 +171,8 @@ export class CommentService {
     }
   }
 
-  public emitEmojiToActive(shortCode: string) {
-    this.emojiEditSource.next(shortCode)
+  public emitInputToActive(shortCode: string) {
+    this.activeInputAppendSource.next(shortCode)
   }
 
   /**

@@ -31,6 +31,7 @@ interface BaseProject {
   heat_vision: boolean
   report_evals?: EdjiComment[]
   group_instructions?: string
+  quick_labels?: string[]
   createdAt?: string
   updatedAt?: string
 }

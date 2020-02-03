@@ -81,11 +81,19 @@ scroll-progress([scrollProgress]="currentScroll")
                 quick-start-flag
                 | How do I comment?
             //- Reading Group Instructions
-            .row.lesson-block(*ngIf="project.group_instructions && project.group_instructions.length > 1")
+            .row.lesson-block(*ngIf="(project.group_instructions && project.group_instructions.length > 1) || (project.quick_labels && project.quick_labels[0])")
                     .lesson-block__indicator([innerHtml]="':mega:' | emojione")
                     .lesson-block__body
-                        .lesson-block__header Instructions
-                        p([innerHtml]="project.group_instructions")
+                        ng-container(*ngIf="project.group_instructions")
+                            .lesson-block__header Instructions
+                            p([innerHtml]="project.group_instructions")
+                        hr(*ngIf="project.group_instructions && project.quick_labels")
+                        ng-container(*ngIf="project.quick_labels && project.quick_labels[0]")
+                            .lesson-block__header Quick Labels
+                            div(*ngFor="let label of project.quick_labels")
+                                a.quick-label([routerLink]="'./'", [queryParams]="{ pane: 'comments', label: label }")
+                                    .icon.icon-quick-label
+                                    span {{ label | emojione }}
             //- Word Loop: reading.words is one big array of individual "words", which can also be puncuation or media
             <span #words class="w" *ngFor="let w of reading.words | slice:0:lastWord ; let i = index" [ngClass]="[ w && w.styles ? w.styles.join(' ') : '', getHighlightClass(project.heat_vision, project.isTeaching, filterHighlightArray, highlightArray, alwaysHighlightArray, i), focusClass(focusArray, i), quickSelectClass(quickSelect, i) ]" [attr.index]="i">
                 //- Comment Loop: Display comments if they exist for this Word

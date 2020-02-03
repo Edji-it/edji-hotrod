@@ -676,3 +676,28 @@ $sliderHeight: 10px;
     transform: translate3d(-50%, -50%, 0);
   }
 }
+
+// ngPrime Fieldset overrides
+.ui-fieldset.modal-fieldset {
+  padding: 0px;
+  margin-bottom: 1em;
+
+  & .ui-fieldset-legend a {
+    padding: 0px;
+  }
+}
+
+.pi-minus {
+  display: inline-block;
+}
+
+.pi-plus {
+  display: inline-block;
+}
+
+.ui-fieldset .ui-fieldset-toggler {
+  width: 1em;
+  height: 1em;
+  font-size: 12px;
+  margin-right: 0.5em;
+}

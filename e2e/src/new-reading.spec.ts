@@ -24,19 +24,7 @@ describe('New Reading Page', () => {
     sidebar.logout()
   })
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   it('should add reading when all fields are filled and submitted', () => {
     const uniqueTitle = newReading.titleString
@@ -297,19 +285,7 @@ describe('Create Academy Readings', () => {
     sidebar.logout()
   })
 
-  afterEach(() => {
-    browser
-      .manage()
-      .logs()
-      .get('browser')
-      .then(browserLog => {
-        if (browserLog.length > 0) {
-          browserLog.forEach(log => {
-            console.error(log.message)
-          })
-        }
-      })
-  })
+  
 
   it('should create a reading with reading type academy', () => {
     // Utilize the convenience function and then verify reading showed up with academy type

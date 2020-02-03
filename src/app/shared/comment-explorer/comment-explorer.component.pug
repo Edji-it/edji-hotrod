@@ -23,6 +23,14 @@
                 .sub-label {{ commentCount }} Comments on:
                 .comment__highlight {{ filterSpanText }}
                 //- | {{ commentCount }} Comments
+            //- Selection/Words/Indices header
+            ng-container(*ngIf="filterMode === 'label'")
+              .header-text.header-text--search(data-test="labelFilterHeader")
+                .sub-label {{ commentCount }} Comments with Quick Label:
+                .quick-label
+                  i.icon.icon-quick-label
+                  span([innerHtml]="filterLabel | emojione")
+                //- | {{ commentCount }} Comments
             //- Search header (we only hide so that input can be focus)
             .header-text.header-text--search(
               data-test="searchFilterHeader",
