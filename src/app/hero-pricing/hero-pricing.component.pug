@@ -41,6 +41,40 @@ nav-bar
         span([innerHtml]="':calendar:' | emojione")
       h4 Plan lessons ahead of time
       p With unlimited readings, you can prepare your whole syllabus
+  //- Academy Pricing Slider
+  .hero-rule
+  .row
+    .col-12
+      h1.mb-5 Academy Plans
+      mat-slider.label-sticky(
+        [min]="0", 
+        [max]="5", 
+        [step]="1", 
+        [thumbLabel]="true", 
+        [displayWith]="formatRateLabel", 
+        [(ngModel)]="sliderVal",
+        [tickInterval]="1"
+      )
+  .row.my-4
+    .col-8
+      h4 {{ academyPlans[currentSliderVal].plan }}
+      h3 {{ academyPlans[currentSliderVal].size }} | 
+        del(style="color: red;") {{ academyPlans[currentSliderVal].prevCost }}
+        h3(style="color: green; display: inline;") &nbsp;{{ academyPlans[currentSliderVal].cost }}
+      p.small {{ academyPlans[currentSliderVal].planDetail }}
+      br
+      i.small Additional discounts available if purchasing multiple years at once
+    .col-4
+      a.btn.btn-hero.btn-lg.btn-block(
+        *ngIf="isAcademyHero",
+        [routerLink]="['/account']",
+        [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
+      )
+      a.btn.btn-action.btn-lg.btn-block(
+        *ngIf="!isAcademyHero",
+        [routerLink]="'./'",
+        [queryParams]="{ request: 'academy' }",
+      ) Request Quote
   .hero-rule
   #plansRow.row.row-xl-pad.align-items-top
     .col-12.col-md-6.col-lg-4.col--free-top-offset
@@ -153,38 +187,6 @@ nav-bar
             [routerLink]="'./'",
             [queryParams]="{ request: 'academy' }",
           ) Request Quote
-  //- Academy Pricing Slider
-  .hero-rule
-  .row
-    .col-12
-      h1.mb-5 Academy Plans
-      mat-slider.label-sticky(
-        [min]="0", 
-        [max]="5", 
-        [step]="1", 
-        [thumbLabel]="true", 
-        [displayWith]="formatRateLabel", 
-        [(ngModel)]="sliderVal",
-        [tickInterval]="1"
-      )
-  .row.my-4
-    .col-8
-      h4 {{ academyPlans[currentSliderVal].plan }}
-      h3 {{ academyPlans[currentSliderVal].size }} | 
-        del {{ academyPlans[currentSliderVal].prevCost }}
-        | &nbsp;{{ academyPlans[currentSliderVal].cost }}
-      p.small {{ academyPlans[currentSliderVal].planDetail }}
-    .col-4
-      a.btn.btn-hero.btn-lg.btn-block(
-        *ngIf="isAcademyHero",
-        [routerLink]="['/account']",
-        [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
-      )
-      a.btn.btn-action.btn-lg.btn-block(
-        *ngIf="!isAcademyHero",
-        [routerLink]="'./'",
-        [queryParams]="{ request: 'academy' }",
-      ) Request Quote
   .hero-rule
   .row.row-xl-pad
     .col-12.col-md-8.offset-md-2

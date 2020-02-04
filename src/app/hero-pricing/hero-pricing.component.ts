@@ -82,21 +82,21 @@ export class HeroPricingComponent implements OnInit {
   private academyPlans = [
     {
       plan: 'Intro Plan',
-      size: '5 Teachers',
+      size: 'Up to 5 Teachers',
       prevCost: '$300',
       cost: '$180',
       planDetail: 'A small group of teachers piloting Edji for their school',
     },
     {
       plan: 'Team Plan',
-      size: '25 Teachers',
+      size: 'Up to 25 Teachers',
       prevCost: '$1500',
       cost: '$690',
       planDetail: 'Perfect for departments and PLCs',
     },
     {
       plan: 'Small School',
-      size: '50 Teachers',
+      size: 'Up to 50 Teachers',
       prevCost: '$3000',
       cost: '$990',
       planDetail: 'Great for a small school or large department',
@@ -110,7 +110,7 @@ export class HeroPricingComponent implements OnInit {
     },
     {
       plan: 'Small District',
-      size: '6 Schools',
+      size: 'Up to 6 Schools',
       prevCost: '$22800',
       cost: '$4900',
       planDetail: 'Unlimited Edji for 6 or less schools in a single district',
