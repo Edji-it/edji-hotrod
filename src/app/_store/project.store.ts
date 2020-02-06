@@ -215,7 +215,7 @@ export class ProjectStore {
         // joinedUsers and currentProject are separates states
         this.joinedUsersSource.next(users)
       case ProjectAction.BuildCommentStats:
-        if (project && project._id) {
+        if (project && project._id && this._commentStats) {
           this._commentStats.processComments(project)
         } else {
           this._commentStats = new CommentStats()

@@ -84,7 +84,6 @@ export class ReadingRecapComponent implements OnInit {
     private _fb: FormBuilder,
     private _academy: AcademyService,
     private angulartics: Angulartics2,
-    private _socket: SocketService,
     private route: ActivatedRoute,
     private router: Router,
   ) {
@@ -103,6 +102,7 @@ export class ReadingRecapComponent implements OnInit {
       }),
       this.projectStore.commentStats.subscribe(stats => {
         this.commentStats = stats
+        this.buildReport()
       }),
       this.projectStore.currentProject.subscribe(
         project => {
@@ -126,7 +126,6 @@ export class ReadingRecapComponent implements OnInit {
                     console.error(error)
                   },
                 )
-              this.buildReport()
             }
           }
         },
@@ -186,8 +185,16 @@ export class ReadingRecapComponent implements OnInit {
    */
   private buildReport(): void {
     if (!this.commentStats.stats.userStats) return
-    this.populateStudentList()
+    // populate the student list
+    console.log(this.commentStats.stats.userStats)
+    this.students = this.commentStats.stats.userStats.map(s => ({ label: s.fullname, value: s._id }))
+    // Load selected student if not loaded
+    if (this.selectedStudent && !this.currentStudent) {
+      this.changeStudentSelection()
+    }
     const userStats = this.commentStats.findStudent(this.currentStudent.value)
+    if (!userStats) return
+
     // Comments by the filtered user for displaying on the report right-out
     this.comments = userStats.comments
     // Comment count gauge chart setup
@@ -225,32 +232,9 @@ export class ReadingRecapComponent implements OnInit {
   }
 
   /**
-   * This method will build the list of users for the dropdown
-   */
-  private populateStudentList(): void {
-    let removePos = -1
-    // set the dropdown filter for all students
-    this.students = []
-    this.commentStats.stats.userStats.forEach((student, index) => {
-      if (student._id !== this.teacherId) {
-        this.students.push({ label: student.fullname, value: student._id })
-      }
-      // if the current userStats object is our teacher, mark the index
-      if (student._id === this.teacherId) {
-        // mark the index of where the teacher is
-        removePos = index
-      }
-    })
-    // Load selected student if not loaded
-    if (this.selectedStudent && !this.currentStudent) {
-      this.changeStudentSelection()
-    }
-  }
-
-  /**
    * This gets called whenever the dropdown selection changes
    */
-  public changeStudentSelection(): void {
+  public changeStudentSelection(event?: any): void {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({
       action: 'readingRecap_studentSelected',
