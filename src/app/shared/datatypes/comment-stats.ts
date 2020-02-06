@@ -76,6 +76,7 @@ export class CommentStats {
    */
   private addCommentToStats(comment: EdjiComment): void {
     const student = this.findStudent(comment.user_id)
+    if (!student) return // teachers comments do not count
     const isReply = comment.reply_to && comment.reply_to.length > 0
     // increment the total reading comment count by the difference
     if (isReply) {
@@ -83,7 +84,6 @@ export class CommentStats {
       student.reply_count += 1
     } else {
       this._stats.comment_count += 1
-      if (!student) return // teachers comments do not count
       student.comment_count += 1
       switch (comment.type) {
         case 'text':
