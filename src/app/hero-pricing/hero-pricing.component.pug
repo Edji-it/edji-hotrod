@@ -24,6 +24,8 @@ nav-bar
       .btn-row.left
         button#topHeroCTA.btn.btn-primary((click)='scrollTo("plansRow")')
           | Compare Plans
+        button#viewPricingCTA.btn.btn-link((click)='scrollTo("academyPlans", true)')
+          | View Pricing
 .container
   .row.row-xl-pad
     .col-12.col-md-4.text-center
@@ -43,25 +45,26 @@ nav-bar
       p With unlimited readings, you can prepare your whole syllabus
   //- Academy Pricing Slider
   .hero-rule
-  .row
+  #academyPlans.row
     .col-12
       h1.mb-5 Academy Plans
       mat-slider.label-sticky(
         [min]="0", 
         [max]="5", 
+        [value]="1",
         [step]="1", 
         [thumbLabel]="true", 
-        [displayWith]="formatRateLabel", 
-        [(ngModel)]="sliderVal",
-        [tickInterval]="1"
+        [displayWith]="formatRateLabel",
+        [tickInterval]="1",
+        (input)="sliderPos = $event.value",
       )
   .row.my-4
     .col-8
-      h4 {{ academyPlans[currentSliderVal].plan }}
-      h3 {{ academyPlans[currentSliderVal].size }} | 
-        del(style="color: red;") {{ academyPlans[currentSliderVal].prevCost }}
-        h3(style="color: green; display: inline;") &nbsp;{{ academyPlans[currentSliderVal].cost }}
-      p.small {{ academyPlans[currentSliderVal].planDetail }}
+      h4 {{ academyPlans[sliderPos].plan }}
+      h3 {{ academyPlans[sliderPos].size }} | 
+        del(style="color: red;") {{ academyPlans[sliderPos].prevCost }}
+        h3(style="color: green; display: inline;") &nbsp;{{ academyPlans[sliderPos].cost }}
+      p.small {{ academyPlans[sliderPos].planDetail }}
       br
       i.small Additional discounts available if purchasing multiple years at once
     .col-4

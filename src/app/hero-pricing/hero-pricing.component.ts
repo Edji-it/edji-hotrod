@@ -1,5 +1,5 @@
 import { Router, ActivatedRoute } from '@angular/router'
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
 
 // Project Dependencies
@@ -9,7 +9,6 @@ import { User } from '../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 import { AppState } from './../_reducers'
 import { IncrementMetric } from '../_reducers/metrics.reducers'
-import { map, take } from 'rxjs/operators'
 @Component({
   selector: 'hero-pricing',
   templateUrl: './hero-pricing.component.pug',
@@ -124,10 +123,8 @@ export class HeroPricingComponent implements OnInit {
     },
   ]
 
-  public sliderVal: number = 1
-  public currentSliderVal: number = 1
+  public sliderPos: number = 1
   public formatRateLabel = (v: number) => {
-    this.currentSliderVal = v
     return this.academyPlans[v].plan
   }
 
@@ -190,8 +187,10 @@ export class HeroPricingComponent implements OnInit {
     this.showInfoModal = true
   }
 
-  public scrollTo(id: string) {
+  public scrollTo(id: string, center?: boolean) {
     let el = document.getElementById(id)
-    el && el.scrollIntoView({ behavior: 'smooth' })
+    let options: any = { behavior: 'smooth' }
+    if (center) options.block = 'center'
+    el && el.scrollIntoView(options)
   }
 }
