@@ -48,6 +48,9 @@ nav-bar
   #academyPlans.row
     .col-12
       h1.mb-5 Academy Plans
+      .row
+        .col-2.p-0(*ngFor="let plan of academyPlans; let i = index")
+          p.text-center.small.m-0([class.hide]="i==sliderPos") {{ plan.plan }}
       mat-slider.label-sticky(
         [min]="0", 
         [max]="5", 
