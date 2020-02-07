@@ -9,6 +9,10 @@ $sliderTickColor: rgba(0,0,0,.5);
 .mat-slider {
   &-horizontal {
     width: 100%;
+    &.slider-form {
+      margin: 0 30px;
+      width: 508px;
+    }
   }
   &-track-background {
     height: $sliderHeight;

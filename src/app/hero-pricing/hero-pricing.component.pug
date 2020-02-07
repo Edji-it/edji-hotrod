@@ -51,7 +51,7 @@ nav-bar
       mat-slider.label-sticky(
         [min]="0", 
         [max]="5", 
-        [value]="1",
+        [value]="sliderPos",
         [step]="1", 
         [thumbLabel]="true", 
         [displayWith]="formatRateLabel",
@@ -232,7 +232,10 @@ hero-subscribe-modal.modal-will-fade(
 )
 request-academy-modal.modal-will-fade(
   [class.show]="showRequestAcademyModal",
-  (closeModal)="showRequestAcademyModal = false"
+  (closeModal)="showRequestAcademyModal = false",
+  [academyPlans]="academyPlans",
+  [sliderPos]="sliderPos",
+  (sliderPosUpdate)="sliderPos = $event"
 )
 //- Feature Info Modal
 .modal(*ngIf="showInfoModal")

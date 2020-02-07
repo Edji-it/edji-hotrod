@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgScrollbarModule } from 'ngx-scrollbar'
+import { MatSliderModule } from '@angular/material/slider'
 
 // Project Dependencies
 import {
@@ -85,6 +86,7 @@ let SHARED_IMPORTS = [CommonModule, FormsModule, ReactiveFormsModule, NgScrollba
     // Routes have to be privately imported for every module
     // RouterModule.forChild(ROUTES)
     RouterModule,
+    MatSliderModule,
   ],
   /**
    * Declarations are private to AppShared

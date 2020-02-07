@@ -78,7 +78,7 @@ export class HeroPricingComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
 
-  private academyPlans = [
+  public academyPlans = [
     {
       plan: 'Intro Plan',
       size: 'Up to 5 Teachers',
