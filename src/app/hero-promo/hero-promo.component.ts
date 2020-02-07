@@ -28,6 +28,53 @@ export class HeroPromoPageComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
 
+  public academyPlans = [
+    {
+      plan: 'Intro Plan',
+      size: 'Up to 5 Teachers',
+      prevCost: '$300',
+      cost: '$180',
+      planDetail: 'A small group of teachers piloting Edji for their school',
+    },
+    {
+      plan: 'Team Plan',
+      size: 'Up to 25 Teachers',
+      prevCost: '$1500',
+      cost: '$690',
+      planDetail: 'Perfect for departments and PLCs',
+    },
+    {
+      plan: 'Small School',
+      size: 'Up to 50 Teachers',
+      prevCost: '$3000',
+      cost: '$990',
+      planDetail: 'Great for a small school or large department',
+    },
+    {
+      plan: 'Large School',
+      size: 'Whole School',
+      prevCost: '$7500',
+      cost: '$1990',
+      planDetail: 'Unlimited number of teachers at a single site',
+    },
+    {
+      plan: 'Small District',
+      size: 'Up to 6 Schools',
+      prevCost: '$22800',
+      cost: '$4900',
+      planDetail: 'Unlimited Edji for 6 or less schools in a single district',
+    },
+    {
+      plan: 'Large District',
+      size: 'Whole District',
+      prevCost: '',
+      cost: 'Contact Us',
+      planDetail: 'Unlimited Edji for an entire district',
+    },
+  ]
+
+  public sliderPos: number = 1
+
   constructor(
     public _auth: AuthService,
     private route: ActivatedRoute,
