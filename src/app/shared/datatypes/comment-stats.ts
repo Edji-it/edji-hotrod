@@ -62,6 +62,7 @@ export class CommentStats {
       }
       return studentStats
     })
+    this._stats.comment_count = (project.comments && project.comments.length) || 0
     project.comments.forEach(comment => this.addCommentToStats(comment))
     project.answers.forEach(answer => this.calculateAnswers(answer))
     this.calculateMinMaxAvg()
@@ -82,20 +83,18 @@ export class CommentStats {
     if (isReply) {
       this._stats.reply_count += 1
       student.reply_count += 1
-    } else {
-      this._stats.comment_count += 1
-      student.comment_count += 1
-      switch (comment.type) {
-        case 'text':
-          student.text_comment_count += 1
-          break
-        case 'emoji':
-          student.emoji_comment_count += 1
-          break
-        case 'audio':
-          student.audio_comment_count += 1
-          break
-      }
+    }
+    student.comment_count += 1
+    switch (comment.type) {
+      case 'text':
+        student.text_comment_count += 1
+        break
+      case 'emoji':
+        student.emoji_comment_count += 1
+        break
+      case 'audio':
+        student.audio_comment_count += 1
+        break
     }
 
     // handle adding comments -- reading report needs this
@@ -124,18 +123,6 @@ export class CommentStats {
   }
 
   /**
-   * Returns the current status for the comment user
-   * Primarily used when populating comments because we can't assign a status multiple times (we'll let the student user indicate their status with sockets)
-   * @param _id the comment user's _id
-   */
-  private findStudentStatus(_id: string): UserReadingStatus {
-    let student = this._stats.userStats.find(student => {
-      return student._id === _id
-    })
-    return (student && student.status) || 'offline'
-  }
-
-  /**
    * Compares two students' counts together and returns number to match API of Array.prototype.sort()
    *  used to sort the array of students
    */
@@ -160,7 +147,6 @@ export class CommentStats {
     let sum = 0
 
     this._stats.userStats.forEach(stat => {
-      if (this.teacherId === stat._id) return
       sum += stat.comment_count
       if (stat.comment_count < lowest) lowest = stat.comment_count
       if (stat.comment_count > highest) highest = stat.comment_count

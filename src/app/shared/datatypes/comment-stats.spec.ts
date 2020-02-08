@@ -231,12 +231,12 @@ describe('class CommentStats', () => {
       const stats = new CommentStats(mockProject)
       expect(stats.teacherId).toEqual(mockProject.teacher_id)
       expect(stats.stats.reply_count).toEqual(2)
-      expect(stats.stats.comment_count).toEqual(4)
-      expect(stats.stats.student_comments).toEqual(3)
+      expect(stats.stats.comment_count).toEqual(6)
+      expect(stats.stats.student_comments).toEqual(5)
       expect(stats.stats.comment_max).toEqual(3)
       expect(stats.stats.comment_min).toEqual(0)
       expect(stats.stats.comment_avg).toEqual(1)
-      expect(stats.stats.userStats[0]).toMatchObject({
+      expect(stats.stats.userStats.find(u => u._id === '5e19f175e37fc1002cf230cd')).toMatchObject({
         _id: '5e19f175e37fc1002cf230cd',
         comment_count: 3,
         reply_count: 0,
@@ -248,6 +248,11 @@ describe('class CommentStats', () => {
           { _id: '5e19f05be37fc1002cf230c1', answered: true },
         ],
         status: 'offline',
+      })
+      expect(stats.stats.userStats.find(u => u._id === '5e19f241c309d40033b204da')).toMatchObject({
+        _id: '5e19f241c309d40033b204da',
+        comment_count: 2,
+        reply_count: 2,
       })
       const teacher = stats.stats.userStats.find(user => user._id === stats.teacherId)
       expect(teacher).toBeUndefined()
@@ -293,12 +298,12 @@ describe('class CommentStats', () => {
       stats.processComments(mockProject)
       expect(stats.teacherId).toEqual(mockProject.teacher_id)
       expect(stats.stats.reply_count).toEqual(2)
-      expect(stats.stats.comment_count).toEqual(4)
-      expect(stats.stats.student_comments).toEqual(3)
+      expect(stats.stats.comment_count).toEqual(6)
+      expect(stats.stats.student_comments).toEqual(5)
       expect(stats.stats.comment_max).toEqual(3)
       expect(stats.stats.comment_min).toEqual(0)
       expect(stats.stats.comment_avg).toEqual(1)
-      expect(stats.stats.userStats[0]).toMatchObject({
+      expect(stats.stats.userStats.find(u => u._id === '5e19f175e37fc1002cf230cd')).toMatchObject({
         _id: '5e19f175e37fc1002cf230cd',
         comment_count: 3,
         reply_count: 0,
