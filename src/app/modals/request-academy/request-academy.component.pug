@@ -57,10 +57,9 @@
                   [formControl]="feedbackForm.controls['roleOther']"
                 )
           //- Academy Pricing Slider
-          .hero-rule
           #academyPlansForm.row.justify-content-center
             .col-12
-              h2.mb-5 Academy Plans
+              .label.mb-4 Academy Plan
             .col-11
               .row.mat-slider__label-row
                 .col-2(*ngFor="let plan of academyPlans; let i = index")
