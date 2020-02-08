@@ -728,9 +728,8 @@ export class ProjectStore {
   public saveAnswer(answerObj: EdjiComment): Promise<any> {
     let project: Project = this.currentProjectSource.getValue()
     let answer = Object.assign({}, answerObj)
-
     answer.project_id = project._id // Tell the answer what project it's a part of
-
+    delete answer.active
     // Get the url of this project that we're saving to.
     if (!answer.user_id) {
       answer.user_id = this._auth.getUser()._id
