@@ -68,6 +68,12 @@
               [queryParams]="{ pane: 'students'}"
             )
               | {{ liveCount }} Reading
+    //- Open Link
+    .nav__btn-wrap(*ngIf="openWindowLink")
+      a#newWindowLink.btn.btn-icon--round.hover--tooltip([href]="openWindowLink" target="_blank" )
+        .icon.icon-external
+        .tooltip.tooltip--bottom-left
+            .tooltip-title New Window
     //- Login/Register Actions
     .nav__btn-wrap(*ngIf="!user.isLoggedIn && !hideAccountOptions")
       a#loginLink.btn.btn-primary.nav-bar__btn([routerLink]="['/login']") Log In

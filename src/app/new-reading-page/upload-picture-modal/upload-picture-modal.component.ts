@@ -112,7 +112,7 @@ export class UploadModalComponent implements OnInit {
           }
         },
         error => {
-          console.log(error)
+          console.error(error)
         },
       )
   }

@@ -37,7 +37,5 @@ export class EdjiQuestion implements Question {
   // Answer types.
   public answerType: string
 
-  constructor() {
-    // console.log(this.answers);
-  } // constructor
-} // export class EdjiQuestion
+  constructor() {}
+}

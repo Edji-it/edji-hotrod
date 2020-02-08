@@ -186,7 +186,6 @@ export class ReadingRecapComponent implements OnInit {
   private buildReport(): void {
     if (!this.commentStats.stats.userStats) return
     // populate the student list
-    console.log(this.commentStats.stats.userStats)
     this.students = this.commentStats.stats.userStats.map(s => ({ label: s.fullname, value: s._id }))
     // Load selected student if not loaded
     if (this.selectedStudent && !this.currentStudent) {

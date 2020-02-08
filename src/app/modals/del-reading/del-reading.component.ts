@@ -48,6 +48,5 @@ export class DeleteReadingModal implements OnInit {
           this.showError = true
         },
       )
-    // console.log("[reading-card.component.ts] deleteReading() worked!");
-  } // deleteReading(reading : Reading)
-} // class DeleteReadingModule
+  }
+}
