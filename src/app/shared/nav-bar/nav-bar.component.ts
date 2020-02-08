@@ -41,6 +41,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   public showAvatarDropdown: boolean = false
   public showAcademyDropdown: boolean = false
   public showShareTooltip: boolean = false
+  public openWindowLink: string
   public user: any
   public academyState: AcademyState = {}
   public currentAcademy: Academy = {}
@@ -148,6 +149,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
      */
     if (this._router.url.indexOf('/project') > -1 || this._router.url.indexOf('/embed') > -1) {
       this.currentPage = 'project'
+      this.openWindowLink = this._router.url.indexOf('/embed') > -1 && this._router.url.replace('embed', '#/project')
     } else if (this._router.url.indexOf('/home') > -1) {
       this.currentPage = 'home'
     } else if (this._router.url.indexOf('/hero') > -1 || this._router.url.indexOf('/plans') > -1) {

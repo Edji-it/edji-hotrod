@@ -35,7 +35,6 @@ scroll-progress([scrollProgress]="currentScroll")
             .comment__options--mobileRow.comment-options-group--mobile([class.btn-group-show--animation]="optionsShow")
                 //- Add Comment (Mobile)
                 #addCommentMobile.comment__options--mobileCol.btn.btn-icon--circle-shadow.comment-options--mobile.col-6(
-                    *ngIf="project.types.indexOf('emoji') > -1",
                     [class.btn-show--animation]="optionsShow",
                     (tap)="addCommentOfType()"
                 )
