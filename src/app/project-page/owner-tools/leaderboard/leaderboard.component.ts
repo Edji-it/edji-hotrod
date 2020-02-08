@@ -15,8 +15,6 @@ import { ProjectStore } from 'src/app/_store'
 })
 export class LeaderboardComponent implements OnInit {
   @Input() archived: boolean = false
-  /** This is a reference to the actual commentStats object which has methods for modification of properties */
-  private commentStats: CommentStats
 
   private currentUser: User
   private currentReading: Reading
@@ -76,11 +74,9 @@ export class LeaderboardComponent implements OnInit {
       // Get Updates about applied comment filters so we can show the user
       this.projectStore.filterUpdates.subscribe(filter => {
         this.appliedFilter = filter
-        if (this.commentStats.stats.userStats) {
-          for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
-            this.commentStats.stats.userStats[i]['filtered'] = this.isStudentFiltered(
-              this.commentStats.stats.userStats[i],
-            )
+        if (this.studentStats) {
+          for (let i = 0; i < this.studentStats.length; i++) {
+            this.studentStats[i]['filtered'] = this.isStudentFiltered(this.studentStats[i])
           }
         }
       }),
@@ -135,10 +131,10 @@ export class LeaderboardComponent implements OnInit {
   public pageStudentFilter(pageChange: number): void {
     let currentIndex: number
     let newIndex: number
-    let userCount: number = this.commentStats.stats.userStats.length
+    let userCount: number = this.studentStats.length
     // Find the current index/page of the applied student filter
     for (let i = 0; i < userCount; i++) {
-      if (this.commentStats.stats.userStats[i]['filtered'] === true) {
+      if (this.studentStats[i]['filtered'] === true) {
         currentIndex = i
         break
       }
@@ -154,7 +150,7 @@ export class LeaderboardComponent implements OnInit {
       newIndex = 0
     }
     // Apply filter for student navigated to
-    this.viewStudentFilter(this.commentStats.stats.userStats[newIndex]._id)
+    this.studentStats[newIndex] && this.viewStudentFilter(this.studentStats[newIndex]._id)
   }
 
   /**
