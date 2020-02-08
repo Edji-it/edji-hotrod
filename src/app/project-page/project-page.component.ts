@@ -74,59 +74,58 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
           this.joinRoom(this.user, this.project)
         }
       }),
-    )
+      // Set current project AND subscribe to updates from that project
+      this.projectStore.setCurrentProject(idParam).subscribe(
+        project => {
+          if (project) {
+            // If the reading is archived, we'll show them a banner or modal
+            if (project.archived) {
+              // If not owner or existing student, block viewing and show modal
+              let notExistingStudent = project.students_ids && project.students_ids.indexOf(this.user._id) < 0
+              let notTeacher = this.user._id !== project.teacher_id
+              if (notExistingStudent && notTeacher) {
+                // we don't want the login modal to get in the way
+                this.showLoginModal = false
+                this.showArchiveModal = true
+              }
+            }
 
-    // Set current project AND subscribe to updates from that project
-    this.projectStore.setCurrentProject(idParam).subscribe(
-      project => {
-        if (project) {
-          // If the reading is archived, we'll show them a banner or modal
-          if (project.archived) {
-            // If not owner or existing student, block viewing and show modal
-            let notExistingStudent = project.students_ids && project.students_ids.indexOf(this.user._id) < 0
-            let notTeacher = this.user._id !== project.teacher_id
-            if (notExistingStudent && notTeacher) {
-              // we don't want the login modal to get in the way
-              this.showLoginModal = false
-              this.showArchiveModal = true
+            this.project = project
+            // Join socket + start reading timer
+            if (this.user._id && this.project._id && !this.joinedRoom) {
+              this.joinRoom(this.user, this.project)
+              this.projectStore.addUserToProject(this.project._id)
+            }
+
+            if (this.project.reading_id && this.project.reading_id['_id']) {
+              this.reading = this.project.reading_id
+              this._readings.setReadingObj(this.project.reading_id)
+
+              this._title.setTitle('Edji | ' + this.reading.title)
+
+              let analyticsType = 'joined'
+              if (this.user._id === this.project.teacher_id) {
+                analyticsType = 'created'
+              }
+              // fire an analytic event here for tracking purposes
+              this.angulartics.eventTrack.next({
+                action: analyticsType + 'Reading_open',
+                properties: {
+                  category: this._auth.setAnalyticEventCategory(),
+                  label: this._auth.setAnalyticEventLabel(),
+                },
+              })
             }
           }
-
-          this.project = project
-          // Join socket + start reading timer
-          if (this.user._id && this.project._id && !this.joinedRoom) {
-            this.joinRoom(this.user, this.project)
-            this.projectStore.addUserToProject(this.project._id)
+        },
+        error => {
+          // TRACK EXCEPTION
+          if (error.status == 404) {
+            // this means that we didn't get the project, so we'll direct them to the 404 page
+            this._router.navigate(['/not-found'])
           }
-
-          if (this.project.reading_id && this.project.reading_id['_id']) {
-            this.reading = this.project.reading_id
-            this._readings.setReadingObj(this.project.reading_id)
-
-            this._title.setTitle('Edji | ' + this.reading.title)
-
-            let analyticsType = 'joined'
-            if (this.user._id === this.project.teacher_id) {
-              analyticsType = 'created'
-            }
-            // fire an analytic event here for tracking purposes
-            this.angulartics.eventTrack.next({
-              action: analyticsType + 'Reading_open',
-              properties: {
-                category: this._auth.setAnalyticEventCategory(),
-                label: this._auth.setAnalyticEventLabel(),
-              },
-            })
-          }
-        }
-      },
-      error => {
-        // TRACK EXCEPTION
-        if (error.status == 404) {
-          // this means that we didn't get the project, so we'll direct them to the 404 page
-          this._router.navigate(['/not-found'])
-        }
-      },
+        },
+      ),
     )
   }
 
@@ -153,7 +152,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     // Start Reading Timer
     this._academy.startReadingTimer(user, project)
     // this will set the user's status on the leaderboard
-    this.projectStore.commentStats.userStatus(this.user, 'active')
+    this.projectStore.setUserStatus(this.user._id, 'active')
     if (this.user._id !== this.project.teacher_id) {
       // emit the socket back to the teacher
       this._socket.groupUpdateEvent({

@@ -5,7 +5,7 @@ import { Angulartics2 } from 'angulartics2'
 import { Store } from '@ngrx/store'
 
 // Internal
-import { CommentStats, EdjiComment, PublicUser, Project, User } from '../shared/datatypes'
+import { CommentStats, EdjiComment, PublicUser, Project, User, UserReadingStatus } from '../shared/datatypes'
 import {
   CommentFilter,
   AuthService,
@@ -25,46 +25,47 @@ export class ProjectStore {
   // For verifying comment ownership on heat vision
   private user: any
 
+  subscriptions: Subscription[] = []
+
   /**
    * Project Store: This value is the source of truth
    **/
-  private currentProjectSource: BehaviorSubject<any> = new BehaviorSubject<any>({ title: 'initial value' })
-  public currentProject: Observable<any> = this.currentProjectSource.asObservable()
+  private currentProjectSource = new BehaviorSubject<any>({ title: 'initial value' })
+  public currentProject = this.currentProjectSource.asObservable()
 
   /**
    * Subset: Observable for changes on project users
    */
-  private joinedUsersSource: BehaviorSubject<PublicUser[]> = new BehaviorSubject<PublicUser[]>([])
-  public joinedUsers: Observable<PublicUser[]> = this.joinedUsersSource.asObservable()
+  private joinedUsersSource = new BehaviorSubject<PublicUser[]>([])
+  public joinedUsers = this.joinedUsersSource.asObservable()
 
   /**
-   * VERY IMPORTANT: please don't construct more than one of these (please)
-   *  components don't know how to handle it if the reference to the commentStats object changes
-   * This stores all of the comment stats for a project and all of the logic to manipulate the stats
+   * Subset: Observable for user information from projects
    */
-  _commentStats: CommentStats
-  subscriptions: Subscription[] = []
+  private _commentStats = new CommentStats() // local version to store state
+  private commentStatsSource = new BehaviorSubject(this._commentStats)
+  public commentStats = this.commentStatsSource.asObservable()
 
   /**
    * Updated Reference Object
    * Reference comments by word index
    */
-  private commentsByIndexSubject: BehaviorSubject<EdjiComment[][]> = new BehaviorSubject<EdjiComment[][]>([])
-  public commentsByIndex: Observable<EdjiComment[][]> = this.commentsByIndexSubject.asObservable()
+  private commentsByIndexSubject = new BehaviorSubject<EdjiComment[][]>([])
+  public commentsByIndex = this.commentsByIndexSubject.asObservable()
 
   /**
    *  Updated Reference Object
    * Reference comment replies by comment id
    */
-  private repliesByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>({})
-  public repliesById: Observable<any> = this.repliesByIdSubject.asObservable()
+  private repliesByIdSubject = new BehaviorSubject<any>({})
+  public repliesById = this.repliesByIdSubject.asObservable()
 
   /**
    *  Updated Reference Object
    * Reference answers by question id
    */
-  private answersByIdSubject: BehaviorSubject<any> = new BehaviorSubject<any>({})
-  public answersById: Observable<any> = this.answersByIdSubject.asObservable()
+  private answersByIdSubject = new BehaviorSubject<any>({})
+  public answersById = this.answersByIdSubject.asObservable()
 
   /**
    *  Comments by Position
@@ -95,9 +96,6 @@ export class ProjectStore {
     private _messages: MessageService,
     private store: Store<AppState>,
   ) {
-    // needs to be constructed here or else it returns undefined
-    this._commentStats = new CommentStats()
-
     /** Set the current user every time it changes */
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
@@ -144,15 +142,16 @@ export class ProjectStore {
        * groupUpdate.type is the identifier for specific events
        */
       this._socket.groupUpdate.subscribe(groupUpdate => {
-        if (groupUpdate.type === 'groupUsers') {
-          this.addJoinedUser(groupUpdate)
-        } else if (groupUpdate.type === 'coteacherPromote') {
-          this.addProjectOwner(groupUpdate.user)
-        } else if (
-          groupUpdate.type === 'updateUserStatus' &&
-          this.user._id === this.currentProjectSource.getValue().teacher_id
-        ) {
-          this.commentStats.userStatus(groupUpdate.user, groupUpdate.status)
+        switch (groupUpdate.type) {
+          case 'groupUsers':
+            this.addJoinedUser(groupUpdate)
+            break
+          case 'coteacherPromote':
+            this.addProjectOwner(groupUpdate.user)
+            break
+          case 'updateUserStatus':
+            this.setUserStatus(groupUpdate.user._id, groupUpdate.status)
+            break
         }
       }),
       /**
@@ -162,7 +161,7 @@ export class ProjectStore {
       this._academy.userStatus.subscribe(userStatus => {
         let project = this.currentProjectSource.getValue()
         if (this.user._id === project.teacher_id) {
-          this.commentStats.userStatus(this.user, userStatus.status)
+          this.commentStatsSource.getValue().setUserStatus(this.user, userStatus.status)
         } else {
           // emit the socket back to the teacher
           this._socket.groupUpdateEvent({
@@ -177,7 +176,7 @@ export class ProjectStore {
        */
       this._auth.clearAll.subscribe(clear => {
         if (clear) {
-          this.projectStoreDispatch(ProjectAction.ClearSuccess, { title: '' })
+          this.projectStoreDispatch(ProjectAction.ClearSuccess, <any>{ title: '' })
         }
       }),
     )
@@ -201,7 +200,7 @@ export class ProjectStore {
    * @param action Change being made
    * @param project Updated project value
    */
-  private projectStoreDispatch(action: ProjectAction, project): void {
+  private projectStoreDispatch(action: ProjectAction, project?: Project): void {
     // Handle different action types
     switch (action) {
       case ProjectAction.ClearSuccess:
@@ -215,6 +214,14 @@ export class ProjectStore {
         users.push(project.teacher)
         // joinedUsers and currentProject are separates states
         this.joinedUsersSource.next(users)
+      case ProjectAction.BuildCommentStats:
+        if (project && project._id && this._commentStats) {
+          this._commentStats.processComments(project)
+        } else {
+          this._commentStats = new CommentStats()
+        }
+        this.commentStatsSource.next(this._commentStats)
+        break
       case ProjectAction.UpdateSuccess:
       default:
         this.currentProjectSource.next(project)
@@ -251,7 +258,7 @@ export class ProjectStore {
           project.owners = project.owners.concat(project.co_owners)
         }
         // Clear stats object
-        this._commentStats.resetStats()
+        this.projectStoreDispatch(ProjectAction.BuildCommentStats)
         /**
          * Set up our comments array
          * - Hide other user's comments without contents
@@ -422,13 +429,6 @@ export class ProjectStore {
   }
 
   /**
-   * Provide a getter for the private commentStats object
-   */
-  get commentStats(): CommentStats {
-    return this._commentStats
-  }
-
-  /**
    * The one-time loop through all of the comments in a reading to take care of data processing
    *  the object it returns is weird, but it encapsulates all of the logic into one loop
    *  it runs all of the data processing funcitons individually
@@ -446,26 +446,16 @@ export class ProjectStore {
     let commentsByIndex: EdjiComment[][] = []
     let alwaysHighlightArray: number[][] = []
     let highlightArray: number[][] = []
-    this._commentStats.initStats(project)
+    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
     let user = this._auth.getUser()
 
-    // using a cached-length for loop for speediness
-    // doing my best to only loop through this once for efficiency
-    // abstracted the logic related to the different items so that it's more readable
-    // you can look in any one of those funcitons if you want to change what is returning
-    let len = project.comments.length
-    for (let i = 0; i < len; i++) {
-      let comment = project.comments[i]
-
+    project.comments.forEach(comment => {
       // decorate the comment and push it into the array
       this.addCommentToArray(comment, project, user, commentsByIndex)
 
       // create and return the highlight array
       this.prepareHighlightArrays(comment, user._id, project, alwaysHighlightArray, highlightArray)
-
-      // add the comment to the stats object
-      this._commentStats.addCommentToStats(comment, 1)
-    }
+    })
 
     let ans = project.answers && project.answers.length
     for (let i = 0; i < ans; i++) {
@@ -479,7 +469,7 @@ export class ProjectStore {
       commentsByIndex: commentsByIndex,
       highlightArrays: { alwaysHighlightArray: alwaysHighlightArray, highlightArray: highlightArray },
     }
-  } //  public processComments(project: Project):
+  }
 
   /**
    * Save a comment on a project.
@@ -583,17 +573,16 @@ export class ProjectStore {
       .deleteComment(project._id, comment)
       .pipe(
         map(data => {
+          // remove the comment
+          const commentIndex = project.comments.findIndex(c => c._id === comment._id)
+          if (commentIndex > -1) {
+            project.comments.splice(commentIndex, 1)
+          }
           // Tell other Project views that the comment is gone
           this._socket.updateComment(comment, 'DELETE', project._id)
           // Update stats
-          this.commentStats.addCommentToStats(comment, -1)
+          this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
 
-          for (var i = 0; i <= project.comments.length; i++) {
-            if (project.comments[i] && project.comments[i]._id === comment._id) {
-              // Remove comment from local object
-              project.comments.splice(i, 1)
-            }
-          }
           this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
           this.buildCommentsByPos()
           return data
@@ -620,11 +609,6 @@ export class ProjectStore {
       // preset authorIsTeacher for existing data
       comment.authorIsTeacher = true
     }
-    // if (comment.loc && comment.loc.y && comment.text==="") {
-    //     comment.imagePos = Math.round(comment.loc.y/8)*8
-    // }
-
-    // this.decorateComment(comment)
 
     this.addCommentToReplies(comment)
 
@@ -991,7 +975,7 @@ export class ProjectStore {
           currentProject.temps = userInfo.filter(user => {
             return user._id && currentProject.temp_ids.includes(user._id)
           })
-          this._commentStats.addUsersToStats(this.commentStats._stats, currentProject)
+          this.projectStoreDispatch(ProjectAction.BuildCommentStats, currentProject)
           this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, currentProject)
         },
         error => {
@@ -1027,7 +1011,7 @@ export class ProjectStore {
     }
     // update the project info across the app for the teacher based on this update
     this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
-    this._commentStats.addUsersToStats(this.commentStats._stats, project)
+    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
   }
 
   /**
@@ -1060,7 +1044,7 @@ export class ProjectStore {
    */
   public recalculateAnswers(answer: any, answerChange: boolean): void {
     let project = this.currentProjectSource.getValue()
-    this.commentStats.recalculateAnswers(answer, answerChange, project)
+    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
   }
 
   /**
@@ -1099,10 +1083,22 @@ export class ProjectStore {
     }
     this.commentByPosSubject.next(this.commentByPosSource)
   }
+
+  public buildCommentStats() {
+    const project = this.currentProjectSource.getValue()
+    if (project.comments) {
+      this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
+    }
+  }
+
+  public setUserStatus(userId: string, state: UserReadingStatus) {
+    this._commentStats.setUserStatus(userId, state)
+  }
 }
 
 export const enum ProjectAction {
   ClearSuccess = '[Project] Clear Success',
   UpdateSuccess = '[Project] Update Success',
   UpdateUsersSuccess = '[Project] Update Users Success',
+  BuildCommentStats = '[Project] Build Comment Stats',
 }

@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs'
-import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core'
 
 // Project Dependencies
 import { AuthService, ReadingService, SocketService } from '../../_services'
@@ -11,7 +11,7 @@ import { ProjectStore } from 'src/app/_store'
   templateUrl: './reader-tools.component.pug',
   styleUrls: ['./reader-tools.component.scss'],
 })
-export class ReaderToolsComponent implements OnInit {
+export class ReaderToolsComponent implements OnInit, OnDestroy {
   @Output() hide: EventEmitter<any> = new EventEmitter()
 
   private subscriptions: Subscription[] = []
@@ -26,9 +26,7 @@ export class ReaderToolsComponent implements OnInit {
   // State vars
   public powersLoading: any = {}
 
-  constructor(private projectStore: ProjectStore, private _auth: AuthService, private _readings: ReadingService) {
-    this.commentStats = this.projectStore.commentStats
-  }
+  constructor(private projectStore: ProjectStore, private _auth: AuthService, private _readings: ReadingService) {}
 
   ngOnInit() {
     // Subscribe to the reading
@@ -52,6 +50,13 @@ export class ReaderToolsComponent implements OnInit {
       this._auth.getCurrentUser().subscribe(user => {
         this.user = user
       }),
+      this.projectStore.commentStats.subscribe(stats => {
+        this.commentStats = stats
+      }),
     )
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe())
   }
 }

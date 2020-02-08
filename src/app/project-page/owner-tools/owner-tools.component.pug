@@ -32,7 +32,7 @@
     [class.disabled]="currentProject.archived"
   )
     i#toggleAllComments.icon-comment-feed
-    span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.comment_count && commentStats.stats.comment_count > 0") {{ commentStats.stats.comment_count }}
+    span.badge.badge-pill.badge-info(*ngIf="statsLoaded") {{ commentCount }}
     label Comments
   //- Question Feed toggle
   div(*ngIf="currentReading.questions && currentReading.questions.length>0")
@@ -88,7 +88,7 @@
       [class.disabled]="currentProject.archived"
     )
       i#toggleFirefeedMobile.icon-comment-feed.toolbar-icon-mobile(*ngIf="currentProject")
-      span.badge.badge-pill.badge-info(*ngIf="commentStats.stats.count && commentStats.stats.count > 0") {{ commentStats.stats.count }}
+      span.badge.badge-pill.badge-info(*ngIf="statsLoaded && commentCount > 0") {{ commentCount }}
       //- label Feed
     //- Question Feed toggle
     div(*ngIf="currentReading.questions && currentReading.questions.length>0")
@@ -114,7 +114,6 @@
 
 //- Leaderboard goes here
 hot-leaderboard(
-  [commentStats]="commentStats",
   [archived]="currentProject.archived"
 )
 
@@ -122,6 +121,4 @@ hot-leaderboard(
 hot-questionfeed()
 
 //- Reading Report goes here
-hot-reading-recap(
-  [commentStats]="commentStats"
-)
+hot-reading-recap()
