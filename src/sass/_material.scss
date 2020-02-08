@@ -1,0 +1,15 @@
+/**
+ * Material component overrides
+ */
+
+.mat-slider-thumb-label {
+  border-radius: 8px !important;
+}
+
+.mat-slider-thumb-label-text {
+  font-weight: bold;
+}
+
+.mat-slider-horizontal {
+  cursor: pointer;
+}

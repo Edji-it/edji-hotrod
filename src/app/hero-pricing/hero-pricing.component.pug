@@ -188,7 +188,12 @@ nav-bar
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
         .card-footer
-          a.btn.btn-primary.btn-lg.btn-block(
+          a.btn.btn-hero.btn-lg.btn-block(
+            *ngIf="isAcademyHero",
+            [routerLink]="['/account']",
+            [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
+          )
+          a.btn.btn-action.btn-lg.btn-block(
             *ngIf="!isAcademyHero",
             [routerLink]="'./'",
             [queryParams]="{ request: 'academy' }",
