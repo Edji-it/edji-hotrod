@@ -391,6 +391,11 @@ div.sliding-pane.from-left.slide-in {
   position: relative;
   height: 100%;
   margin-right: 15px;
+
+  & .btn-icon--round {
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }
 
 .project-code__text {

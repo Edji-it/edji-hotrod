@@ -15,7 +15,7 @@ export class CopyEmbedButton implements AfterViewInit {
   @Input()
   set projectId(id: string) {
     this.id = id
-    this.embedCode = `<iframe src="${location.origin}/#/embed/${this.id}" style="border:1px #cdcdcd solid; border-radius: 5px; width: 100%; height: 100%; min-height:400px; min-width:400px;" name="Edji Reading" scrolling="auto" align="bottom"></iframe>`
+    this.embedCode = `<iframe src="${location.origin}/#/embed/${this.id}" style="border:1px #ef832e solid; border-radius: 8px !important; width: 100% !important; height: 100% !important; min-height: 800px; min-width: 600px;" name="Edji Reading" scrolling="auto"  width="600px" height="800px" align="bottom" allowfullscreen></iframe>`
   }
   get projectId(): string {
     return this.id

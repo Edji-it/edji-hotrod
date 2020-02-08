@@ -41,6 +41,10 @@
   &.tooltip--top-right {
     transform: translate3d(-27px, 0px, 0);
   }
+
+  &.tooltip--bottom-left {
+    transform: translate3d(-100%, 0px, 0);
+  }
 }
 
 // Util for showing explanation tooltip on disabled buttons
@@ -71,6 +75,20 @@ button:disabled > .tooltip--on-disabled {
   &::after {
     top: auto !important;
     bottom: 100%;
+    border-color: transparent transparent #fff transparent;
+  }
+}
+
+.tooltip.tooltip--bottom-left {
+  bottom: auto !important;
+  left: 32px !important;
+  top: calc(100% + 20px);
+  transform: translate3d(-100%, -10px, 0);
+
+  &::after {
+    top: auto !important;
+    bottom: 100%;
+    left: calc(100% - 27px);
     border-color: transparent transparent #fff transparent;
   }
 }
