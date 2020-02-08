@@ -67,13 +67,15 @@ describe('Versioning - ', () => {
     newReading.finalizeAndSkipToReading()
     // Should redirect to Project page for new reading
     browser.wait(EC.urlContains('project'), 10000, 'never arrived at the reading page after published')
+    // Give the page a second before returning to the dashboard
+    // - This test has been flaky, either due to querying search too quickly or old data persisting
+    browser.sleep(1000)
     // Go to the dashboard
     sidebar.backToDash()
   })
 
   it('should go to new reading page with existing reading and validate the reading; then save it as a draft', () => {
     dashboard.goToCreatedTab()
-
     // Make a new version of that reading
     // Click the options, then copy and edit button
     browser.wait(
