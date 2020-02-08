@@ -662,6 +662,7 @@ export class ProjectStore {
    */
   public addAnswerToAnswers(answer: EdjiComment): void {
     let answersById = this.answersByIdSubject.getValue()
+    let project = this.currentProjectSource.getValue()
     let skipAdd = false
     if (answer.questionId) {
       if (!answersById[answer.questionId]) {
@@ -681,14 +682,20 @@ export class ProjectStore {
       }
       if (!skipAdd) {
         answersById[answer.questionId].push(answer)
+        // Update observable
+        this.answersByIdSubject.next(answersById)
       }
-      // Update observable
-      this.answersByIdSubject.next(answersById)
+    }
+    // Update Project Array
+    if (!project.answers.find(existing => existing._id === answer._id)) {
+      project.answers.push(answer)
+      this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
     }
   }
 
   public removeAnswerFromAnswers(answer: EdjiComment): void {
     let answersById = this.answersByIdSubject.getValue()
+    let project = this.currentProjectSource.getValue()
     if (answer.questionId) {
       for (let i = 0; i < answersById[answer.questionId].length; i++) {
         if (answersById[answer.questionId][i]._id === answer._id) {
@@ -696,6 +703,12 @@ export class ProjectStore {
           this.answersByIdSubject.next(answersById)
         }
       }
+    }
+    // Update Project Array
+    let i = project.answers.findIndex(a => a._id === answer._id)
+    if (i >= 0) {
+      project.answers.splice(i, 1)
+      this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
     }
   }
 
@@ -709,9 +722,8 @@ export class ProjectStore {
   public saveAnswer(answerObj: EdjiComment): Promise<any> {
     let project: Project = this.currentProjectSource.getValue()
     let answer = Object.assign({}, answerObj)
-
     answer.project_id = project._id // Tell the answer what project it's a part of
-
+    delete answer.active
     // Get the url of this project that we're saving to.
     if (!answer.user_id) {
       answer.user_id = this._auth.getUser()._id

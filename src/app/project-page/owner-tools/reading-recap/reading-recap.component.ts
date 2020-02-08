@@ -167,6 +167,7 @@ export class ReadingRecapComponent implements OnInit {
    * @description Gets counts for this Reading, student agnostic stats
    */
   private getReadingCounts(reading: Reading): void {
+    if (!reading || !reading.words) return
     // handle overall reading counts here
     this.wordCount = Math.round((reading.words.length || 0) / 2)
     this.questionCount = reading.questions ? reading.questions.length : 0
