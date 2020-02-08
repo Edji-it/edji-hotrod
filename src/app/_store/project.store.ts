@@ -705,13 +705,7 @@ export class ProjectStore {
       }
     }
     // Update Project Array
-    let i
-    project.answers.find((existing, index) => {
-      if (existing._id === answer._id) {
-        i = index
-        return true
-      }
-    })
+    let i = project.answers.findIndex(a => a._id === answer._id)
     if (i >= 0) {
       project.answers.splice(i, 1)
       this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
