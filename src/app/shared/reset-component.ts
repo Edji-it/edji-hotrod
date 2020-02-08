@@ -9,7 +9,5 @@ import { Component, OnInit } from '@angular/core'
 export class ResetComponent implements OnInit {
   constructor() {}
 
-  ngOnInit() {
-    console.log('reset-component initialized')
-  }
+  ngOnInit() {}
 }
