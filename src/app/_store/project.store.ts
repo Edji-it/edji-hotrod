@@ -662,6 +662,7 @@ export class ProjectStore {
    */
   public addAnswerToAnswers(answer: EdjiComment): void {
     let answersById = this.answersByIdSubject.getValue()
+    let project = this.currentProjectSource.getValue()
     let skipAdd = false
     if (answer.questionId) {
       if (!answersById[answer.questionId]) {
@@ -681,14 +682,20 @@ export class ProjectStore {
       }
       if (!skipAdd) {
         answersById[answer.questionId].push(answer)
+        // Update observable
+        this.answersByIdSubject.next(answersById)
       }
-      // Update observable
-      this.answersByIdSubject.next(answersById)
+    }
+    // Update Project Array
+    if (!project.answers.find(existing => existing._id === answer._id)) {
+      project.answers.push(answer)
+      this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
     }
   }
 
   public removeAnswerFromAnswers(answer: EdjiComment): void {
     let answersById = this.answersByIdSubject.getValue()
+    let project = this.currentProjectSource.getValue()
     if (answer.questionId) {
       for (let i = 0; i < answersById[answer.questionId].length; i++) {
         if (answersById[answer.questionId][i]._id === answer._id) {
@@ -696,6 +703,18 @@ export class ProjectStore {
           this.answersByIdSubject.next(answersById)
         }
       }
+    }
+    // Update Project Array
+    let i
+    project.answers.find((existing, index) => {
+      if (existing._id === answer._id) {
+        i = index
+        return true
+      }
+    })
+    if (i >= 0) {
+      project.answers.splice(i, 1)
+      this.projectStoreDispatch(ProjectAction.UpdateSuccess, project)
     }
   }
 
