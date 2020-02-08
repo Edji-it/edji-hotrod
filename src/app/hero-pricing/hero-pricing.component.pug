@@ -24,7 +24,7 @@ nav-bar
       .btn-row.left
         button#topHeroCTA.btn.btn-primary((click)='scrollTo("plansRow")')
           | Compare Plans
-        button#viewPricingCTA.btn.btn-link((click)='scrollTo("academyPlans", true)')
+        button#viewPricingCTA.btn.btn-link.on-dark((click)='scrollTo("academyPlans", true)')
           | View Pricing
 .container
   .row.row-xl-pad
@@ -52,11 +52,11 @@ nav-bar
         .col-2.p-0(*ngFor="let plan of academyPlans; let i = index")
           p.text-center.small.m-0([class.hide]="i==sliderPos") {{ plan.plan }}
       mat-slider.label-sticky(
-        [min]="0", 
-        [max]="5", 
+        [min]="0",
+        [max]="5",
         [value]="sliderPos",
-        [step]="1", 
-        [thumbLabel]="true", 
+        [step]="1",
+        [thumbLabel]="true",
         [displayWith]="formatRateLabel",
         [tickInterval]="1",
         (input)="sliderPos = $event.value",
@@ -64,7 +64,7 @@ nav-bar
   .row.my-4
     .col-8
       h4 {{ academyPlans[sliderPos].plan }}
-      h3 {{ academyPlans[sliderPos].size }} | 
+      h3 {{ academyPlans[sliderPos].size }} |
         del(style="color: red;") {{ academyPlans[sliderPos].prevCost }}
         h3(style="color: green; display: inline;") &nbsp;{{ academyPlans[sliderPos].cost }}
       p.small {{ academyPlans[sliderPos].planDetail }}
@@ -228,9 +228,9 @@ hot-login-register.modal-will-fade(
   (loginSuccess)='showHeroSubModal = true'
 )
 hero-subscribe-modal.modal-will-fade(
-  [class.show]='showHeroSubModal', 
-  [goHeroLocation]="'heroPricingPage'", 
-  (closeModal)='showHeroSubModal = !showHeroSubModal', 
+  [class.show]='showHeroSubModal',
+  [goHeroLocation]="'heroPricingPage'",
+  (closeModal)='showHeroSubModal = !showHeroSubModal',
   (heroWasBorn)="_router.navigate(['/dashboard'])"
 )
 request-academy-modal.modal-will-fade(

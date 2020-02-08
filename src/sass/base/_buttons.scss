@@ -421,6 +421,16 @@ button {
     border-bottom: 1px solid $btnPrimaryColor;
   }
 
+  &.on-dark {
+    color: #fff;
+    border-bottom-color: #fff;
+
+    &:hover, &.active {
+      color: #dcf5ff;
+      border-color: #dcf5ff;
+    }
+  }
+
   & .icon {
     vertical-align: middle;
   }
