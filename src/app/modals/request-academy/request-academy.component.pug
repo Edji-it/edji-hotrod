@@ -58,30 +58,30 @@
                 )
           //- Academy Pricing Slider
           .hero-rule
-          #academyPlansForm.row
+          #academyPlansForm.row.justify-content-center
             .col-12
               h2.mb-5 Academy Plans
-              .row
-                .col-2.p-0(*ngFor="let plan of academyPlans; let i = index")
-                  p.text-center.small.m-0([class.hide]="i==sliderPos") {{ plan.plan }}
+            .col-11
+              .row.mat-slider__label-row
+                .col-2(*ngFor="let plan of academyPlans; let i = index")
+                  p.small([class.hide]="i==sliderPos") {{ plan.plan }}
               mat-slider.label-sticky.slider-form(
-                [min]="0", 
-                [max]="5", 
+                [min]="0",
+                [max]="5",
                 [value]="sliderPos",
-                [step]="1", 
-                [thumbLabel]="true", 
+                [step]="1",
+                [thumbLabel]="true",
                 [displayWith]="formatRateLabel",
                 [tickInterval]="1",
                 (input)="sliderPos=$event.value ; sliderPosUpdate.emit($event.value)",
               )
-          .row.my-4
-            .col-12
-              h4 {{ academyPlans[sliderPos].plan }}
-              h3 {{ academyPlans[sliderPos].size }} | 
+            .col-11.my-4
+              b {{ academyPlans[sliderPos].plan }}
+              h3 {{ academyPlans[sliderPos].size }} |
                 del(style="color: red;") {{ academyPlans[sliderPos].prevCost }}
                 h3(style="color: green; display: inline;") &nbsp;{{ academyPlans[sliderPos].cost }}
-              p.small {{ academyPlans[sliderPos].planDetail }}
-              i.small Additional discounts available if purchasing multiple years at once
+              //- p.small {{ academyPlans[sliderPos].planDetail }}
+              //- i.small Additional discounts available if purchasing multiple years at once
           #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
             strong Oh no!&nbsp;
             | {{errorObject.serverError}}

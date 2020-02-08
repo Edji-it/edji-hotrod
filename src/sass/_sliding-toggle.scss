@@ -6,13 +6,30 @@ $tickYShift: 16%;
 $sliderTickWidth: 3px;
 $sliderTickColor: rgba(0,0,0,.5);
 
+.mat-slider__label-row {
+  & * {
+    padding: 0px !important;
+  }
+  & p {
+    text-align: center;
+    margin-bottom: 0px;
+  }
+  & > *:first-child, & > *:first-child p {
+    text-align: left;
+  }
+  & > *:last-child, & > *:last-child p {
+    text-align: right;
+  }
+}
+
 .mat-slider {
   &-horizontal {
     width: 100%;
-    &.slider-form {
-      margin: 0 30px;
-      width: 508px;
-    }
+    cursor: pointer;
+    // &.slider-form {
+    //   margin: 0 30px;
+    //   width: 508px;
+    // }
   }
   &-track-background {
     height: $sliderHeight;
@@ -50,7 +67,7 @@ $sliderTickColor: rgba(0,0,0,.5);
       height: 50px !important;
       right: -50px !important;
       top: -64px !important;
-      border-radius: 50% !important;
+      border-radius: 8px !important;
       opacity: 0 !important;
       .cdk-focused &, .label-sticky & {
         opacity: 1 !important;
@@ -59,6 +76,7 @@ $sliderTickColor: rgba(0,0,0,.5);
       &-text {
         transform: none !important;
         color: #fff !important;
+        font-weight: bold;
         .label-sticky & {
           opacity: 1;
         }

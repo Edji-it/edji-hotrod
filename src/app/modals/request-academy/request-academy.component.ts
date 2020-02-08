@@ -81,8 +81,6 @@ export class RequestAcademyModal implements OnInit {
       phone: [],
       role: [prefillIdentity, Validators.required],
       roleOther: [],
-      count: [null, Validators.required],
-      countType: ['Teachers', Validators.required],
     })
 
     this.window = window
@@ -142,7 +140,8 @@ export class RequestAcademyModal implements OnInit {
       formValue.content = formValue.content + '\nPhone: ' + formValue.phone
     }
     // Attach contact preference
-    formValue.content = formValue.content + `\nQuote for: ${formValue.count} ${formValue.countType}`
+    let sliderPlan = this.academyPlans[this.sliderPos]
+    formValue.content = formValue.content + `\nQuote for: ${sliderPlan.plan} (${sliderPlan.size})`
     // Include institution info
     if (this.user.school) {
       formValue.content =
