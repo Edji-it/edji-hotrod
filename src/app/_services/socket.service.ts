@@ -3,7 +3,7 @@ import * as io from 'socket.io-client'
 import { Observable, Subject } from 'rxjs'
 
 import { AuthService } from './auth.service'
-import { userReadingStatus } from '../shared/datatypes'
+import { UserReadingStatus } from '../shared/datatypes'
 
 @Injectable()
 export class SocketService {
@@ -125,7 +125,7 @@ export class SocketService {
    *  - active: sets user to active if they weren't previously in the socket room, but are in it now
    *  - offline: sets user to offline if they were in the socket room previously, but are not now
    */
-  private toggleUserStatus(userList1: any[], userList2: any[], statusChange: userReadingStatus): void {
+  private toggleUserStatus(userList1: any[], userList2: any[], statusChange: UserReadingStatus): void {
     const len1 = userList1.length
     const len2 = userList2.length
     let newListCheck: any
@@ -172,7 +172,7 @@ export class SocketService {
    * @param liveUser is our current user from the socket room and contains the user _id as userId
    * @param status the status we're going to broadcast out via sockets
    */
-  private changeUserStatus(liveUser: any, status: userReadingStatus) {
+  private changeUserStatus(liveUser: any, status: UserReadingStatus) {
     this.groupUpdateEvent({
       type: 'updateUserStatus',
       status: status,

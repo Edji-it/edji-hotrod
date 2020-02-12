@@ -277,15 +277,15 @@ export class UploadPdfModalComponent implements OnInit {
           }
         },
         error => {
-          console.log(error)
+          console.error(error)
         },
       )
   }
 
   /**
    * Detects if page has pdf error
-   * @param doc 
-   * @param index 
+   * @param doc
+   * @param index
    */
   public hasWordsError(doc: DocumentSpark, index: number): boolean {
     if (doc.pdf && doc.pdf.pages && !doc.disable_words) {
@@ -356,7 +356,7 @@ export class UploadPdfModalComponent implements OnInit {
 
   /**
    * Prep report text and open feedback modal
-   * @param doc 
+   * @param doc
    */
   loadReportErrorModal(doc: DocumentSpark) {
     this.reportErrorMsg = `Any additional details?\n\n\n
@@ -364,11 +364,11 @@ export class UploadPdfModalComponent implements OnInit {
       PDF Error Report
 
       Document Title:
-        ${ doc.title}
+        ${doc.title}
       Document ID:
-        ${ doc.uuid}
+        ${doc.uuid}
       Request Time: 
-        ${ doc.requestedTime}
+        ${doc.requestedTime}
     ***********************************
     `
     this.showReportError = true

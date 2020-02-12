@@ -18,7 +18,7 @@
   #leaderboard.sliding-pane
     #studentListContent.container-fluid.container--less-pad
       h4.sliding-pane__header
-        | {{ commentStats.stats.userStats.length }} Students
+        | {{ numberOfStudents }} Students
         button#leaderboard--close.close.stats-close-btn.btn-icon--round((click)='close()' type='button')
           span(aria-hidden='true') &times;
       p(style='opacity: 0.3; margin-bottom: 14px; white-space: nowrap; border-bottom: 1px solid #cdcdcd;')
@@ -27,7 +27,7 @@
         span(style="float:right;")
           //- span.small.mr-2 Replies
           span.small Comments & Options
-      .user-list-item.hover-parent(*ngFor='let commentUser of commentStats.stats.userStats; let i = index')
+      .user-list-item.hover-parent(*ngFor='let commentUser of studentStats; let i = index')
         span.answer-circle__group.mr-2.live-status([attr.title]="commentUser.fullname + ' is ' + commentUser.status")
           .circle.filled([ngClass]="commentUser.status")
         span.user-list__name([attr.id]="'studentName'+i")

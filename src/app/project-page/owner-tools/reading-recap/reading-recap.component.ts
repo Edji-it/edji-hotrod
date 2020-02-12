@@ -21,9 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router'
   styleUrls: ['./reading-recap.component.scss'],
 })
 export class ReadingRecapComponent implements OnInit {
-  // @Input() visible: boolean = false
-  /** This is a reference to the actual commentStats object which has methods for modification of properties */
-  @Input() commentStats: CommentStats
+  private commentStats: CommentStats
   private _visible: boolean
   @Input()
   set visible(visible: boolean) {
@@ -86,7 +84,6 @@ export class ReadingRecapComponent implements OnInit {
     private _fb: FormBuilder,
     private _academy: AcademyService,
     private angulartics: Angulartics2,
-    private _socket: SocketService,
     private route: ActivatedRoute,
     private router: Router,
   ) {
@@ -98,93 +95,79 @@ export class ReadingRecapComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Subscribe to current user
+    // Get Project from project service
     this.subscriptions.push(
       this._auth.getCurrentUser().subscribe(user => {
         this.currentUser = user
       }),
-    ),
-      // Get Project from project service
-      this.subscriptions.push(
-        this.projectStore.currentProject.subscribe(
-          project => {
-            if (project) {
-              this.project = project
-              this.teacherId = project.teacher_id
-              // need to wait until we have the project loaded before we can proceed
-              if (project && project.comments) {
-                // Get time on reading data
-                this._academy
-                  .getTimeOnReading(this.project._id)
-                  .pipe(take(1))
-                  .subscribe(
-                    readingTimeData => {
-                      this.readingTimeData = readingTimeData.time_on_reading
-                      this.processTimeChart()
-                    },
-                    error => {
-                      console.error(error)
-                    },
-                  )
-                // need a 1 millisecond delay for the comment stats getter to evaluate
-                setTimeout(() => {
-                  // only run this if we have data for any student
-                  if (this.commentStats.stats.userStats && this.commentStats.stats.userStats.length > 0) {
-                    if (this.students.length === 0) {
-                      this.populateStudentList(true)
-                    } else {
-                      this.populateStudentList()
-                    }
-                    this.buildReport()
-                  }
-                }, 1)
-              }
+      this.projectStore.commentStats.subscribe(stats => {
+        this.commentStats = stats
+        this.buildReport()
+      }),
+      this.projectStore.currentProject.subscribe(
+        project => {
+          if (project) {
+            this.project = project
+            this.teacherId = project.teacher_id
+            // need to wait until we have the project loaded before we can proceed
+            if (project && project.comments) {
+              // Get Reading counts
+              this.getReadingCounts(project)
+              // Get time on reading data
+              this._academy
+                .getTimeOnReading(this.project._id)
+                .pipe(take(1))
+                .subscribe(
+                  readingTimeData => {
+                    this.readingTimeData = readingTimeData.time_on_reading
+                    this.processTimeChart()
+                  },
+                  error => {
+                    console.error(error)
+                  },
+                )
             }
-          },
-          error => {
-            console.error(error)
-          },
-        ),
-        // Get Reading stats
-        this.readingService.currentReading.subscribe(reading => {
-          if (reading && reading.words) {
-            this.getReadingCounts(reading)
           }
-        }),
-        // Check for recap opened via url
-        this.route.queryParams.subscribe(params => {
-          if (params['recap']) {
-            if (params['recap'] !== 'true' && this.students && this.selectedStudent !== params['recap']) {
-              // SET USER BY ID
-              this.selectedStudent = params['recap']
-              this.changeStudentSelection()
-            }
-            if (!this.visible) {
-              // event tracking for opening recap
-              this.angulartics.eventTrack.next({
-                action: 'readingRecap_opened',
-                properties: {
-                  category: this._auth.setAnalyticEventCategory(),
-                  label: this._auth.setAnalyticEventLabel(),
-                },
-              })
-            }
-            this.visible = true
-          } else {
-            // Close recap
-            this.slidePaneIn = false
-            setTimeout(() => {
-              this.visible = this.slidePaneIn
-            }, 400)
+        },
+        error => {
+          console.error(error)
+        },
+      ),
+      // Check for recap opened via url
+      this.route.queryParams.subscribe(params => {
+        if (params['recap']) {
+          if (params['recap'] !== 'true' && this.students && this.selectedStudent !== params['recap']) {
+            // SET USER BY ID
+            this.selectedStudent = params['recap']
+            this.changeStudentSelection()
           }
-        }),
-      )
+          if (!this.visible) {
+            // event tracking for opening recap
+            this.angulartics.eventTrack.next({
+              action: 'readingRecap_opened',
+              properties: {
+                category: this._auth.setAnalyticEventCategory(),
+                label: this._auth.setAnalyticEventLabel(),
+              },
+            })
+          }
+          this.visible = true
+        } else {
+          // Close recap
+          this.slidePaneIn = false
+          setTimeout(() => {
+            this.visible = this.slidePaneIn
+          }, 400)
+        }
+      }),
+    )
   }
 
   /** Get Reading specific stats
    * @description Gets counts for this Reading, student agnostic stats
    */
   private getReadingCounts(reading: Reading): void {
+    if (!reading || !reading.words) return
     // handle overall reading counts here
     this.wordCount = Math.round((reading.words.length || 0) / 2)
     this.questionCount = reading.questions ? reading.questions.length : 0
@@ -202,27 +185,31 @@ export class ReadingRecapComponent implements OnInit {
    * when we change student selections, this will get called to re-build the metrics on the report
    */
   private buildReport(): void {
-    // Loop through the user stats inside of the comment stats
-    for (let i = 0; i < this.commentStats.stats.userStats.length; i++) {
-      if (this.commentStats.stats.userStats[i]._id === this.currentStudent.value) {
-        let userStats = this.commentStats.stats.userStats[i]
-        // Comments by the filtered user for displaying on the report right-out
-        this.comments = userStats.comments
-        // Comment count gauge chart setup
-        this.chartComments = {
-          min: this.commentStats.stats.comment_min,
-          max: this.commentStats.stats.comment_max,
-          avg: this.commentStats.stats.comment_avg,
-          val: userStats.comment_count,
-        }
-        // Comment count by type horizontal bar chart setup
-        this.commentCountByType = {
-          emoji: userStats.emoji_comment_count,
-          text: userStats.text_comment_count,
-          audio: userStats.audio_comment_count,
-          reply: userStats.reply_count,
-        }
-      }
+    if (!this.commentStats.stats.userStats) return
+    // populate the student list
+    this.students = this.commentStats.stats.userStats.map(s => ({ label: s.fullname, value: s._id }))
+    // Load selected student if not loaded
+    if (this.selectedStudent && !this.currentStudent) {
+      this.changeStudentSelection()
+    }
+    const userStats = this.commentStats.findStudent(this.currentStudent.value)
+    if (!userStats) return
+
+    // Comments by the filtered user for displaying on the report right-out
+    this.comments = userStats.comments
+    // Comment count gauge chart setup
+    this.chartComments = {
+      min: this.commentStats.stats.comment_min,
+      max: this.commentStats.stats.comment_max,
+      avg: this.commentStats.stats.comment_avg,
+      val: userStats.comment_count,
+    }
+    // Comment count by type horizontal bar chart setup
+    this.commentCountByType = {
+      emoji: userStats.emoji_comment_count,
+      text: userStats.text_comment_count,
+      audio: userStats.audio_comment_count,
+      reply: userStats.reply_count,
     }
 
     // If there are evaluations from the teacher on the selected student, let's display it here
@@ -245,38 +232,9 @@ export class ReadingRecapComponent implements OnInit {
   }
 
   /**
-   * This method will build the list of users for the dropdown
-   */
-  private populateStudentList(initialPass?: boolean): void {
-    let removePos = -1
-    // set the dropdown filter for all students
-    this.students = []
-    this.commentStats.stats.userStats.forEach((student, index) => {
-      if (student._id !== this.teacherId) {
-        this.students.push({ label: student.fullname, value: student._id })
-      }
-      // if the current userStats object is our teacher, mark the index
-      if (student._id === this.teacherId) {
-        // mark the index of where the teacher is
-        removePos = index
-      }
-    })
-    if (initialPass) {
-      // remove the teacher data from the local stats array so we don't count it in things like averages
-      if (removePos > -1) {
-        this.commentStats.stats.userStats.splice(removePos, 1)
-      }
-    }
-    // Load selected student if not loaded
-    if (this.selectedStudent && !this.currentStudent) {
-      this.changeStudentSelection()
-    }
-  }
-
-  /**
    * This gets called whenever the dropdown selection changes
    */
-  public changeStudentSelection(): void {
+  public changeStudentSelection(event?: any): void {
     // fire an analytic event here for tracking purposes
     this.angulartics.eventTrack.next({
       action: 'readingRecap_studentSelected',

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { Reading, readingType } from './../../shared/datatypes'
+import { Reading, ReadingType } from './../../shared/datatypes'
 import { ReadingService } from './../../_services'
 import { IMultiSelectOption, IMultiSelectSettings } from '../../_directives'
 
@@ -14,7 +14,7 @@ import { IMultiSelectOption, IMultiSelectSettings } from '../../_directives'
 export class DiscoverAddMetaModal implements OnInit {
   @Input() showModal: boolean
   @Input() reading: Reading
-  @Input() newReadingType: readingType
+  @Input() newReadingType: ReadingType
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   private readingMetaForm: FormGroup

@@ -179,7 +179,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.comment.active = this.active = true
     this._comments.activeComment = this.comment
     // Open emoji keyboard for emoji comments
-    if (this.comment.type === 'emoji') {
+    if (this.comment.type === 'emoji' && this.comment.user_id === this.user._id) {
       this.activateEmojiKeyboard(new Event('created'))
     }
   }

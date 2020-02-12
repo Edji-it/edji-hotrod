@@ -22,8 +22,8 @@ describe('metrics effects', () => {
         {
           provide: MessageService,
           useValue: {
-            sendToast: jasmine.createSpy('sendToast')
-          }
+            sendToast: jasmine.createSpy('sendToast'),
+          },
         },
         MetricsEffects,
         provideMockActions(() => actions),
@@ -48,7 +48,7 @@ describe('metrics effects', () => {
         },
       ],
     })
-    
+
     messageService = TestBed.get(MessageService)
     effects = TestBed.get(MetricsEffects)
     stateService = TestBed.get(StateService)
@@ -63,7 +63,7 @@ describe('metrics effects', () => {
       const action = new IncrementMetric('hero_page_load_count')
       const outcome = new SetState(<any>{ hero_page_load_count: 3, metricsLoaded: true })
       const success = new IncrementMetricSuccess('hero_page_load_count', 3)
-      
+
       actions = hot('-a', { a: action })
       const response = cold('-a|', { a: { hero_page_load_count: 2 } })
       const expected = cold('--(bc)', { b: outcome, c: success })
@@ -82,7 +82,7 @@ describe('metrics effects', () => {
     })
     // no error handling tests as there's not yet in-app success or failure implecations
   })
-  
+
   describe('saveMetrics$', () => {
     it('should update the state', () => {
       const action = new SetState(<any>{ hero_page_load_count: 5 })
