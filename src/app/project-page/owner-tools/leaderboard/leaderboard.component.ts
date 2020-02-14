@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
-import { CommentStats, Reading, User, Project, PublicUser } from './../../../shared/datatypes'
+import { Reading, User, Project, PublicUser } from './../../../shared/datatypes'
 import { ReadingService, AuthService } from '../../../_services'
 import { CommentFilter } from '../../../_services/project.service'
 import { ProjectStore } from 'src/app/_store'
@@ -76,7 +76,7 @@ export class LeaderboardComponent implements OnInit {
         this.appliedFilter = filter
         if (this.studentStats) {
           for (let i = 0; i < this.studentStats.length; i++) {
-            this.studentStats[i]['filtered'] = this.isStudentFiltered(this.studentStats[i])
+            this.studentStats[i].filtered = this.isStudentFiltered(this.studentStats[i])
           }
         }
       }),

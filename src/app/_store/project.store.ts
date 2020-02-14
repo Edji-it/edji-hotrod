@@ -340,15 +340,10 @@ export class ProjectStore {
     if (!project.student_ids) {
       project.student_ids = []
     }
-    // check if student already is in the student_ids or temp_ids arrays
-    let alreadyJoined = false
-    if (this.user.type && this.user.type === 'temp') {
-      alreadyJoined = project && project.temp_ids.includes(this.user._id)
-    } else {
-      alreadyJoined = project && project.students_ids.includes(this.user._id)
-    }
 
-    if (projectId === project._id && alreadyJoined) {
+    this.projectStoreDispatch(ProjectAction.BuildCommentStats, this.currentProjectSource.getValue())
+
+    if (projectId === project._id && this._commentStats.findStudent(this.user._id)) {
       return of({ status: 'success' }) // mock response
     } else {
       return this._project.addUserToProject(projectId).pipe(
