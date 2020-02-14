@@ -49,20 +49,21 @@ nav-bar
     .col-12
       h1.mb-5 Academy Plans
       .row.mat-slider__label-row
-        .col-2(*ngFor="let plan of academyPlans; let i = index")
+        .col-2.hidden-sm-down(*ngFor="let plan of academyPlans; let i = index")
           p.small([class.hide]="i==sliderPos") {{ plan.plan }}
-      mat-slider.label-sticky(
-        [min]="0",
-        [max]="5",
-        [value]="sliderPos",
-        [step]="1",
-        [thumbLabel]="true",
-        [displayWith]="formatRateLabel",
-        [tickInterval]="1",
-        (input)="sliderPos = $event.value",
-      )
+        .col-10.offset-1
+          mat-slider.label-sticky(
+            [min]="0",
+            [max]="5",
+            [value]="sliderPos",
+            [step]="1",
+            [thumbLabel]="true",
+            [displayWith]="formatRateLabel",
+            [tickInterval]="1",
+            (input)="sliderPos = $event.value",
+          )
   .row.my-4
-    .col-8
+    .col-12.col-md-8
       h4 {{ academyPlans[sliderPos].plan }}
       h3 {{ academyPlans[sliderPos].size }} |
         del(style="color: red;") {{ academyPlans[sliderPos].prevCost }}
@@ -70,7 +71,7 @@ nav-bar
       p.small {{ academyPlans[sliderPos].planDetail }}
       br
       i.small Additional discounts available if purchasing multiple years at once
-    .col-4
+    .col-12.col-md-4.mt-2
       a.btn.btn-hero.btn-lg.btn-block(
         *ngIf="isAcademyHero",
         [routerLink]="['/account']",

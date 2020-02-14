@@ -14,12 +14,6 @@ $sliderTickColor: rgba(0,0,0,.5);
     text-align: center;
     margin-bottom: 0px;
   }
-  & > *:first-child, & > *:first-child p {
-    text-align: left;
-  }
-  & > *:last-child, & > *:last-child p {
-    text-align: right;
-  }
 }
 
 .mat-slider {

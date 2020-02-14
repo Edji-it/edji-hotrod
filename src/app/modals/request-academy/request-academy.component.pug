@@ -60,20 +60,21 @@
           #academyPlansForm.row.justify-content-center
             .col-12
               .label.mb-4 Academy Plan
-            .col-11
+            .col-12
               .row.mat-slider__label-row
                 .col-2(*ngFor="let plan of academyPlans; let i = index")
                   p.small([class.hide]="i==sliderPos") {{ plan.plan }}
-              mat-slider.label-sticky.slider-form(
-                [min]="0",
-                [max]="5",
-                [value]="sliderPos",
-                [step]="1",
-                [thumbLabel]="true",
-                [displayWith]="formatRateLabel",
-                [tickInterval]="1",
-                (input)="sliderPos=$event.value ; sliderPosUpdate.emit($event.value)",
-              )
+                .col-10.offset-1
+                  mat-slider.label-sticky.slider-form(
+                    [min]="0",
+                    [max]="5",
+                    [value]="sliderPos",
+                    [step]="1",
+                    [thumbLabel]="true",
+                    [displayWith]="formatRateLabel",
+                    [tickInterval]="1",
+                    (input)="sliderPos=$event.value ; sliderPosUpdate.emit($event.value)",
+                  )
             .col-11.my-4
               b {{ academyPlans[sliderPos].plan }}
               h3 {{ academyPlans[sliderPos].size }} |
