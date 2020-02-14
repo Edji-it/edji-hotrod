@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
 import { take } from 'rxjs/operators'
@@ -17,9 +17,14 @@ import { ActivatedRoute, Router } from '@angular/router'
 export class RequestAcademyModal implements OnInit {
   @Output()
   private openModal: EventEmitter<any> = new EventEmitter()
-
   @Output()
   private closeModal: EventEmitter<any> = new EventEmitter()
+  @Input()
+  public academyPlans: any[]
+  @Input()
+  public sliderPos: number
+  @Output()
+  public sliderPosUpdate: EventEmitter<number> = new EventEmitter()
 
   // private showFeedbackModal: boolean = false
   public showRequestSuccess: boolean = false
@@ -51,6 +56,10 @@ export class RequestAcademyModal implements OnInit {
     { name: 'other', id: 'typeOtherInput', displayName: ':sparkles: Other', emoji: ':sparkles:' },
   ]
 
+  public formatRateLabel = (v: number) => {
+    return this.academyPlans[v].plan
+  }
+
   constructor(
     private _auth: AuthService,
     private _bumblebee: BumblebeeService,
@@ -72,8 +81,6 @@ export class RequestAcademyModal implements OnInit {
       phone: [],
       role: [prefillIdentity, Validators.required],
       roleOther: [],
-      count: [null, Validators.required],
-      countType: ['Teachers', Validators.required],
     })
 
     this.window = window
@@ -133,7 +140,8 @@ export class RequestAcademyModal implements OnInit {
       formValue.content = formValue.content + '\nPhone: ' + formValue.phone
     }
     // Attach contact preference
-    formValue.content = formValue.content + `\nQuote for: ${formValue.count} ${formValue.countType}`
+    let sliderPlan = this.academyPlans[this.sliderPos]
+    formValue.content = formValue.content + `\nQuote for: ${sliderPlan.plan} (${sliderPlan.size})`
     // Include institution info
     if (this.user.school) {
       formValue.content =

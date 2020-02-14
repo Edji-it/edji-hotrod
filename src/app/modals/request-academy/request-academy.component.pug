@@ -56,27 +56,32 @@
                   placeholder="Other role...",
                   [formControl]="feedbackForm.controls['roleOther']"
                 )
-          //- License Count
-          label.mb-3(for="emailInput") Academy Size
-            .input-group
-              input.form-control#countInput(
-                type="number",
-                placeholder="20",
-                [formControl]="feedbackForm.controls['count']",
-                tabindex="0",
-                step="1", min="5"
-              )
-              select.form-control#countTypeInput(
-                formControlName="countType",
-                tabindex="0",
-                style="margin-top: 0.25em;",
-              )
-                option(value="Teachers", selected) Teachers
-                option(value="Schools") Schools
-              //- <select formControlName="orders" id="orders">
-              //- <option *ngFor="let order of orders; let i = index" [value]="orders[i].id">
-              //-   {{orders[i].name}}
-              //- </option>
+          //- Academy Pricing Slider
+          #academyPlansForm.row.justify-content-center
+            .col-12
+              .label.mb-4 Academy Plan
+            .col-12
+              .row.mat-slider__label-row
+                .col-2(*ngFor="let plan of academyPlans; let i = index")
+                  p.small([class.hide]="i==sliderPos") {{ plan.plan }}
+                .col-10.offset-1
+                  mat-slider.label-sticky.slider-form(
+                    [min]="0",
+                    [max]="5",
+                    [value]="sliderPos",
+                    [step]="1",
+                    [thumbLabel]="true",
+                    [displayWith]="formatRateLabel",
+                    [tickInterval]="1",
+                    (input)="sliderPos=$event.value ; sliderPosUpdate.emit($event.value)",
+                  )
+            .col-11.my-4
+              b {{ academyPlans[sliderPos].plan }}
+              h3 {{ academyPlans[sliderPos].size }} |
+                del(style="color: red;") {{ academyPlans[sliderPos].prevCost }}
+                h3(style="color: green; display: inline;") &nbsp;{{ academyPlans[sliderPos].cost }}
+              //- p.small {{ academyPlans[sliderPos].planDetail }}
+              //- i.small Additional discounts available if purchasing multiple years at once
           #msgServerError.alert.alert-danger(*ngIf="errorObject.serverError")
             strong Oh no!&nbsp;
             | {{errorObject.serverError}}

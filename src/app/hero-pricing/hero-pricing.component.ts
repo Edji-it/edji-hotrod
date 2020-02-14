@@ -1,5 +1,5 @@
 import { Router, ActivatedRoute } from '@angular/router'
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
 
 // Project Dependencies
@@ -9,7 +9,6 @@ import { User } from '../shared/datatypes'
 import { Angulartics2 } from 'angulartics2'
 import { AppState } from './../_reducers'
 import { IncrementMetric } from '../_reducers/metrics.reducers'
-import { map, take } from 'rxjs/operators'
 @Component({
   selector: 'hero-pricing',
   templateUrl: './hero-pricing.component.pug',
@@ -79,6 +78,56 @@ export class HeroPricingComponent implements OnInit {
 
   private subscriptions: Subscription[] = []
 
+  public academyPlans = [
+    {
+      plan: 'Intro Plan',
+      size: 'Up to 5 Teachers',
+      prevCost: '$300',
+      cost: '$180',
+      planDetail: 'A small group of teachers piloting Edji for their school',
+    },
+    {
+      plan: 'Team Plan',
+      size: 'Up to 25 Teachers',
+      prevCost: '$1500',
+      cost: '$690',
+      planDetail: 'Perfect for departments and PLCs',
+    },
+    {
+      plan: 'Small School',
+      size: 'Up to 50 Teachers',
+      prevCost: '$3000',
+      cost: '$990',
+      planDetail: 'Great for a small school or large department',
+    },
+    {
+      plan: 'Large School',
+      size: 'Whole School',
+      prevCost: '$7500',
+      cost: '$1990',
+      planDetail: 'Unlimited number of teachers at a single site',
+    },
+    {
+      plan: 'Small District',
+      size: 'Up to 6 Schools',
+      prevCost: '$22800',
+      cost: '$4900',
+      planDetail: 'Unlimited Edji for 6 or less schools in a single district',
+    },
+    {
+      plan: 'Large District',
+      size: 'Whole District',
+      prevCost: '',
+      cost: 'Contact Us',
+      planDetail: 'Unlimited Edji for an entire district',
+    },
+  ]
+
+  public sliderPos: number = 1
+  public formatRateLabel = (v: number) => {
+    return this.academyPlans[v].plan
+  }
+
   constructor(
     public _router: Router,
     private _auth: AuthService,
@@ -138,8 +187,10 @@ export class HeroPricingComponent implements OnInit {
     this.showInfoModal = true
   }
 
-  public scrollTo(id: string) {
+  public scrollTo(id: string, center?: boolean) {
     let el = document.getElementById(id)
-    el && el.scrollIntoView({ behavior: 'smooth' })
+    let options: any = { behavior: 'smooth' }
+    if (center) options.block = 'center'
+    el && el.scrollIntoView(options)
   }
 }
