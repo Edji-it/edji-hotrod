@@ -334,6 +334,14 @@ export class ProjectStore {
    */
   public addSelfToProject(projectId: string): Observable<any> {
     const project = this.currentProjectSource.getValue()
+    if (!project.temp_ids) {
+      project.temp_ids = []
+    }
+    if (!project.student_ids) {
+      project.student_ids = []
+    }
+
+    this.projectStoreDispatch(ProjectAction.BuildCommentStats, this.currentProjectSource.getValue())
 
     if (projectId === project._id && this._commentStats.findStudent(this.user._id)) {
       return of({ status: 'success' }) // mock response
