@@ -1,0 +1,105 @@
+@import './base/variables';
+
+$sliderHeight: 10px;
+$sliderTickOffsetY: 6px;
+$tickYShift: 16%;
+$sliderTickWidth: 3px;
+$sliderTickColor: rgba(0,0,0,.5);
+
+.mat-slider__label-row {
+  & * {
+    padding: 0px !important;
+  }
+  & p {
+    text-align: center;
+    margin-bottom: 0px;
+  }
+}
+
+.mat-slider {
+  &-horizontal {
+    width: 100%;
+    cursor: pointer;
+    // &.slider-form {
+    //   margin: 0 30px;
+    //   width: 508px;
+    // }
+  }
+  &-track-background {
+    height: $sliderHeight;
+  }
+  &-track-fill {
+    height: $sliderHeight;
+    background-color: $red !important;
+  }
+  &-ticks {
+    height: $sliderHeight + $sliderTickOffsetY !important;
+    background-image: repeating-linear-gradient(to right, $sliderTickColor, $sliderTickColor $sliderTickWidth,transparent 0,transparent) !important;
+    background-size: 20% 2px !important;
+    transform: translateZ(0px) translateX(10%) !important;
+    .label-sticky & {
+      opacity: 1 !important;
+    }
+    &-container {
+      transform: translateX(-10%) translateY(-$tickYShift) !important;
+      height: $sliderHeight + $sliderTickOffsetY !important;
+    }
+  }
+  &-thumb {
+    background-color: $red !important;
+    border: solid 3px $gray !important;
+    .label-sticky & {
+      transform: scale(0.7) !important;
+    }
+    .cdk-focused & {
+      transform: scale(0.9) !important;
+    }
+    &-label {
+      background-color: $red !important;
+      transform: rotate(0deg) !important;
+      width: 100px !important;
+      height: 50px !important;
+      right: -50px !important;
+      top: -64px !important;
+      border-radius: 8px !important;
+      opacity: 0 !important;
+      .cdk-focused &, .label-sticky & {
+        opacity: 1 !important;
+        transition: opacity .8s cubic-bezier(.25,.8,.25,1);
+      }
+      &-text {
+        transform: none !important;
+        color: #fff !important;
+        font-weight: bold;
+        .label-sticky & {
+          opacity: 1;
+        }
+      }
+      &::after{
+        content: '';
+        position: absolute;
+        left: 30%;
+        top: 78%;
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 20px solid $red;
+        clear: both;
+      }
+    }
+  }
+  &-track-wrapper {
+    height: $sliderHeight;
+  }
+  &-wrapper {
+    height: $sliderHeight;
+    &::after {
+      opacity: 1 !important;
+      height: $sliderHeight + $sliderTickOffsetY !important;
+      border-left-width: $sliderTickWidth !important;
+      transform: translateY(-$tickYShift);
+      border-color: $sliderTickColor !important;
+    }
+  }
+}

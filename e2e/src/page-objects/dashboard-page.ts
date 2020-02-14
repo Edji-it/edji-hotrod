@@ -212,7 +212,7 @@ export class Dashboard implements PageObjectInterface {
     browser.wait(
       this.EC.urlContains('dashboard'),
       5000,
-      'never reached the dashboard before clicking first created reading',
+      'never reached the dashboard before clicking first created tab',
     )
     this.createdTab.isPresent().then(result => {
       if (result) {

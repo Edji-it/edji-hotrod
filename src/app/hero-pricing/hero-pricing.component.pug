@@ -24,6 +24,8 @@ nav-bar
       .btn-row.left
         button#topHeroCTA.btn.btn-primary((click)='scrollTo("plansRow")')
           | Compare Plans
+        button#viewPricingCTA.btn.btn-link.on-dark((click)='scrollTo("academyPlans", true)')
+          | View Pricing
 .container
   .row.row-xl-pad
     .col-12.col-md-4.text-center
@@ -41,6 +43,45 @@ nav-bar
         span([innerHtml]="':calendar:' | emojione")
       h4 Plan lessons ahead of time
       p With unlimited readings, you can prepare your whole syllabus
+  //- Academy Pricing Slider
+  .hero-rule
+  #academyPlans.row
+    .col-12
+      h1.mb-5 Academy Plans
+      .row.mat-slider__label-row
+        .col-2.hidden-sm-down(*ngFor="let plan of academyPlans; let i = index")
+          p.small([class.hide]="i==sliderPos") {{ plan.plan }}
+        .col-10.offset-1
+          mat-slider.label-sticky(
+            [min]="0",
+            [max]="5",
+            [value]="sliderPos",
+            [step]="1",
+            [thumbLabel]="true",
+            [displayWith]="formatRateLabel",
+            [tickInterval]="1",
+            (input)="sliderPos = $event.value",
+          )
+  .row.my-4
+    .col-12.col-md-8
+      h4 {{ academyPlans[sliderPos].plan }}
+      h3 {{ academyPlans[sliderPos].size }} |
+        del(style="color: red;") {{ academyPlans[sliderPos].prevCost }}
+        h3(style="color: green; display: inline;") &nbsp;{{ academyPlans[sliderPos].cost }}
+      p.small {{ academyPlans[sliderPos].planDetail }}
+      br
+      i.small Additional discounts available if purchasing multiple years at once
+    .col-12.col-md-4.mt-2
+      a.btn.btn-hero.btn-lg.btn-block(
+        *ngIf="isAcademyHero",
+        [routerLink]="['/account']",
+        [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
+      )
+      a.btn.btn-action.btn-lg.btn-block(
+        *ngIf="!isAcademyHero",
+        [routerLink]="'./'",
+        [queryParams]="{ request: 'academy' }",
+      ) Request Quote
   .hero-rule
   #plansRow.row.row-xl-pad.align-items-top
     .col-12.col-md-6.col-lg-4.col--free-top-offset
@@ -148,16 +189,16 @@ nav-bar
               i.icon__tooltip
                 span.icon.icon-circle.icon-info  i
         .card-footer
-          a.btn.btn-primary.btn-lg.btn-block(
-            *ngIf="!isAcademyHero",
-            [routerLink]="'./'",
-            [queryParams]="{ request: 'academy' }",
-          ) Request Quote
           a.btn.btn-hero.btn-lg.btn-block(
             *ngIf="isAcademyHero",
             [routerLink]="['/account']",
             [innerHtml]="'Current Plan &nbsp;:tada:' | emojione"
           )
+          a.btn.btn-action.btn-lg.btn-block(
+            *ngIf="!isAcademyHero",
+            [routerLink]="'./'",
+            [queryParams]="{ request: 'academy' }",
+          ) Request Quote
   .hero-rule
   .row.row-xl-pad
     .col-12.col-md-8.offset-md-2
@@ -187,14 +228,23 @@ nav-bar
               | Go Hero
               span(style='font-weight: 700;')
 hot-login-register.modal-will-fade(
-    [loginHeader]='"To go Hero, first you\'ll need an account"',
-    [class.show]='showLoginModal',
-    (closeModal)='showLoginModal = false',
-    (loginSuccess)='showHeroSubModal = true')
-hero-subscribe-modal.modal-will-fade([class.show]='showHeroSubModal', [goHeroLocation]="'heroPricingPage'", (closeModal)='showHeroSubModal = !showHeroSubModal', (heroWasBorn)="_router.navigate(['/dashboard'])")
+  [loginHeader]='"To go Hero, first you\'ll need an account"',
+  [class.show]='showLoginModal',
+  (closeModal)='showLoginModal = false',
+  (loginSuccess)='showHeroSubModal = true'
+)
+hero-subscribe-modal.modal-will-fade(
+  [class.show]='showHeroSubModal',
+  [goHeroLocation]="'heroPricingPage'",
+  (closeModal)='showHeroSubModal = !showHeroSubModal',
+  (heroWasBorn)="_router.navigate(['/dashboard'])"
+)
 request-academy-modal.modal-will-fade(
   [class.show]="showRequestAcademyModal",
-  (closeModal)="showRequestAcademyModal = false"
+  (closeModal)="showRequestAcademyModal = false",
+  [academyPlans]="academyPlans",
+  [sliderPos]="sliderPos",
+  (sliderPosUpdate)="sliderPos = $event"
 )
 //- Feature Info Modal
 .modal(*ngIf="showInfoModal")

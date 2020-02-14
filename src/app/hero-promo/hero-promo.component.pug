@@ -158,5 +158,7 @@ hero-subscribe-modal.modal-will-fade(
   )
 request-academy-modal.modal-will-fade(
   [class.show]="showRequestAcademyModal",
-  (closeModal)="showRequestAcademyModal = false"
+  (closeModal)="showRequestAcademyModal = false",
+  [academyPlans]="academyPlans",
+  [sliderPos]="sliderPos"
 )

@@ -10,6 +10,7 @@
 @import '../../node_modules/driver.js/dist/driver.min.css';
 @import './lib/bourbon/_bourbon.scss';
 @import './lib/emojionearea/emojionearea.scss';
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 /**
  * ----------------------------------------------------------
@@ -58,6 +59,7 @@ $seamlessPlaceholderColor: #cdcdcd;
 @import 'emojionearea';
 @import 'comment';
 @import 'sliding-pane';
+@import 'sliding-toggle';
 @import 'modals';
 @import 'medium-editor';
 @import 'badges';
@@ -80,6 +82,7 @@ $seamlessPlaceholderColor: #cdcdcd;
 @import 'tooltips';
 @import 'toast';
 @import 'dropdowns';
+@import 'material';
 @import './base/variables';
 
 /**
@@ -617,6 +620,25 @@ div#driver-highlighted-element-stage {
   margin-bottom: 1px;
 }
 
+$sliderHeight: 10px;
+
+.mat-slider {
+  &-horizontal {
+    width: 100%;
+  }
+  &-track-background {
+    height: $sliderHeight !important;
+  }
+  &-track-fill {
+    height: $sliderHeight !important;
+  }
+  &-track-wrapper {
+    height: $sliderHeight !important;
+  }
+  &-wrapper {
+    height: $sliderHeight !important;
+  }
+}
 /**
  *  Pricing page emoji overrides
  */

@@ -7,6 +7,8 @@ import * as Sentry from '@sentry/browser'
 import { StoreModule } from '@ngrx/store'
 import { reducers, metaReducers } from './_reducers'
 import { EffectsModule } from '@ngrx/effects'
+import { MatSliderModule } from '@angular/material/slider'
+import { GestureConfig } from '@angular/material'
 
 // App is our top level component
 import { AppComponent } from './app.component'
@@ -189,6 +191,10 @@ const APP_PROVIDERS = [
     provide: HAMMER_GESTURE_CONFIG,
     useClass: MyHammerConfig,
   },
+  {
+    provide: HAMMER_GESTURE_CONFIG,
+    useClass: GestureConfig,
+  },
   // ,
   // { provide: ErrorHandler, useClass: SentryErrorHandler }
   // { provide: RouteReuseStrategy, useClass: ReuseStrategy }
@@ -299,9 +305,6 @@ const routerOptions: ExtraOptions = {
       pageTracking: {
         clearIds: true,
       },
-      // gst: {
-      //   trackingIds: ['UA-83792906-1'],
-      // }
     }),
     RouterModule.forRoot(ROUTES, routerOptions),
     DataListModule,
@@ -311,6 +314,7 @@ const routerOptions: ExtraOptions = {
     NgxPageScrollModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot([MetricsEffects]),
+    MatSliderModule,
   ],
   providers: [
     // expose our Services and Providers into Angular's dependency injection
