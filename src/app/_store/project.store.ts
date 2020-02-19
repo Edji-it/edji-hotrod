@@ -341,7 +341,7 @@ export class ProjectStore {
       project.student_ids = []
     }
 
-    this.projectStoreDispatch(ProjectAction.BuildCommentStats, this.currentProjectSource.getValue())
+    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
 
     if (projectId === project._id && this._commentStats.findStudent(this.user._id)) {
       return of({ status: 'success' }) // mock response
@@ -1024,6 +1024,30 @@ export class ProjectStore {
   }
 
   /**
+<<<<<<< HEAD
+=======
+   * Adds user information to the student that just joined the project so we can see them on the leaderboard
+   * @param groupUpdate the object that contains user properties to properly add student to leaderboard
+   */
+  private addJoinedUser(groupUpdate: any) {
+    if (!groupUpdate.user || !groupUpdate.user._id) {
+      console.error('[Project Store] Attempted adding undefined user')
+    }
+    let project = this.currentProjectSource.getValue()
+    // Make sure student and temp arrays exist
+    if (!project.students) project.students = []
+    if (!project.temps) project.temps = []
+    // if the student that joined is a temp, here is their info
+    const userArray = groupUpdate.user.type === 'temp' ? 'temps' : 'students'
+    project[userArray].push(groupUpdate.user)
+
+    // update the project info across the app for the teacher based on this update
+    this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
+    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
+  }
+
+  /**
+>>>>>>> fix live student join
    * Create a new Project
    * @param Requires a Reading ID
    * @param takes a Project object with the new label
