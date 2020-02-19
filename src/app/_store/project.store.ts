@@ -333,15 +333,8 @@ export class ProjectStore {
    * @returns Observable which will not contain any data
    */
   public addUserToProject(projectId: string): Observable<any> {
-    let project = this.currentProjectSource.value
-    if (!project.temp_ids) {
-      project.temp_ids = []
-    }
-    if (!project.student_ids) {
-      project.student_ids = []
-    }
-
-    this.projectStoreDispatch(ProjectAction.BuildCommentStats, this.currentProjectSource.getValue())
+    const project = this.currentProjectSource.getValue()
+    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
 
     if (projectId === project._id && this._commentStats.findStudent(this.user._id)) {
       return of({ status: 'success' }) // mock response
@@ -1011,11 +1004,9 @@ export class ProjectStore {
     if (!project.students) project.students = []
     if (!project.temps) project.temps = []
     // if the student that joined is a temp, here is their info
-    if (groupUpdate.user.type && groupUpdate.user.type === 'temp') {
-      project.temps.push(groupUpdate.user)
-    } else {
-      project.students.push(groupUpdate.user)
-    }
+    const userArray = groupUpdate.user.type === 'temp' ? 'temps' : 'students'
+    project[userArray].push(groupUpdate.user)
+
     // update the project info across the app for the teacher based on this update
     this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
     this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)

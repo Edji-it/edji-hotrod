@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { ProjectService, SocketService, AuthService } from './../../_services'
+import { SocketService, AuthService } from './../../_services'
 import { ProjectStore } from 'src/app/_store'
 
 @Component({

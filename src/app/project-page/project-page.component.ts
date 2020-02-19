@@ -97,7 +97,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
               this.projectStore.addUserToProject(this.project._id)
             }
 
-            if (this.project.reading_id && this.project.reading_id['_id']) {
+            if (this.project.reading_id && this.project.reading_id._id) {
               this.reading = this.project.reading_id
               this._readings.setReadingObj(this.project.reading_id)
 

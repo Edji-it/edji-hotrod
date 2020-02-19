@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { Title } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
@@ -32,9 +32,16 @@ export class DiscoverFeedComponent implements OnInit {
   // State vars
   public loading: boolean = true
 
-  constructor(private _auth: AuthService, private _readings: ReadingService, private angulartics: Angulartics2) {}
+  constructor(
+    private _auth: AuthService,
+    private _readings: ReadingService,
+    private _title: Title,
+    private angulartics: Angulartics2,
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._title.setTitle('Edji | Discover')
+  }
 
   /**
    * Load Feed with Params
