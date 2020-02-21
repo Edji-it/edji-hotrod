@@ -332,26 +332,50 @@ export class ProjectStore {
    * @param projectId The id of the project to which the current user should be added
    * @returns Observable which will not contain any data
    */
-  public addUserToProject(projectId: string): Observable<any> {
+  public addSelfToProject(projectId: string): Observable<any> {
     const project = this.currentProjectSource.getValue()
-    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
 
     if (projectId === project._id && this._commentStats.findStudent(this.user._id)) {
       return of({ status: 'success' }) // mock response
     } else {
-      return this._project.addUserToProject(projectId).pipe(
+      return this._project.addSelfToProject(projectId).pipe(
         map(data => {
           // Success! Handle update to store
           // our socket event takes a bit of user information to setup the event
-          let publicUser = this._auth.getPublicUser()
           // fire the socket event so the teacher knows we just got another student
           this._socket.groupUpdateEvent({
             type: 'groupUsers',
-            user: publicUser,
+            user: this._auth.getPublicUser(),
           })
         }),
       )
     }
+  }
+
+  /**
+   * Adds user information to the student that just joined the project so we can see them on the leaderboard
+   * @param groupUpdate the object that contains user properties to properly add student to leaderboard
+   */
+  private addJoinedUser(groupUpdate: any) {
+    if (!groupUpdate.user || !groupUpdate.user._id) {
+      console.error('[Project Store] Attempted adding undefined user')
+    }
+    const project = this.currentProjectSource.getValue()
+    // Make sure student and temp arrays exist
+    if (!project.students) project.students = []
+    if (!project.temps) project.temps = []
+    if (
+      !this.commentStatsSource.getValue().findStudent(groupUpdate.user._id) &&
+      !groupUpdate.user._id === project.teacher_id
+    ) {
+      // if the student that joined is a temp, here is their info
+      const userArray = groupUpdate.user.type === 'temp' ? 'temps' : 'students'
+      project[userArray].push(groupUpdate.user)
+    }
+
+    // update the project info across the app for the teacher based on this update
+    this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
+    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
   }
 
   /**
@@ -989,27 +1013,6 @@ export class ProjectStore {
       currentProject.temps = []
       this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, currentProject)
     }
-  }
-
-  /**
-   * Adds user information to the student that just joined the project so we can see them on the leaderboard
-   * @param groupUpdate the object that contains user properties to properly add student to leaderboard
-   */
-  private addJoinedUser(groupUpdate: any) {
-    if (!groupUpdate.user || !groupUpdate.user._id) {
-      console.error('[Project Store] Attempted adding undefined user')
-    }
-    let project = this.currentProjectSource.getValue()
-    // Make sure student and temp arrays exist
-    if (!project.students) project.students = []
-    if (!project.temps) project.temps = []
-    // if the student that joined is a temp, here is their info
-    const userArray = groupUpdate.user.type === 'temp' ? 'temps' : 'students'
-    project[userArray].push(groupUpdate.user)
-
-    // update the project info across the app for the teacher based on this update
-    this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
-    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
   }
 
   /**

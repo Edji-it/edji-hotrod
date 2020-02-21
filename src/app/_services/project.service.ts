@@ -196,7 +196,7 @@ export class ProjectService {
    * @param projectId The id of the project to which the current user should be added
    * @returns Observable which will not contain any data
    */
-  public addUserToProject(projectId: string): Observable<any> {
+  public addSelfToProject(projectId: string): Observable<any> {
     return this._http.put(
       this._auth.getUrl() + '/api/v1/projects/' + projectId + '/students',
       {},

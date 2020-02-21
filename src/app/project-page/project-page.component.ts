@@ -94,7 +94,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
             // Join socket + start reading timer
             if (this.user._id && this.project._id && !this.joinedRoom) {
               this.joinRoom(this.user, this.project)
-              this.projectStore.addUserToProject(this.project._id)
+              this.projectStore.addSelfToProject(this.project._id)
             }
 
             if (this.project.reading_id && this.project.reading_id._id) {
@@ -107,6 +107,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
               if (this.user._id === this.project.teacher_id) {
                 analyticsType = 'created'
               }
+
               // fire an analytic event here for tracking purposes
               this.angulartics.eventTrack.next({
                 action: analyticsType + 'Reading_open',
@@ -153,6 +154,10 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
     this._academy.startReadingTimer(user, project)
     // this will set the user's status on the leaderboard
     this.projectStore.setUserStatus(this.user._id, 'active')
+    this._socket.groupUpdateEvent({
+      type: 'groupUsers',
+      user: this._auth.getPublicUser(),
+    })
     if (this.user._id !== this.project.teacher_id) {
       // emit the socket back to the teacher
       this._socket.groupUpdateEvent({

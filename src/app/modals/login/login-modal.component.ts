@@ -54,7 +54,7 @@ export class LoginModal implements AfterViewInit, OnInit {
   onLoginSuccess() {
     if (this.projectId) {
       this.projectStore
-        .addUserToProject(this.projectId)
+        .addSelfToProject(this.projectId)
         .pipe(take(1))
         .subscribe(
           () => {
