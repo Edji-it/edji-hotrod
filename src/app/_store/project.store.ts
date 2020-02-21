@@ -1025,6 +1025,7 @@ export class ProjectStore {
 
   /**
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
    * Adds user information to the student that just joined the project so we can see them on the leaderboard
    * @param groupUpdate the object that contains user properties to properly add student to leaderboard
@@ -1048,6 +1049,8 @@ export class ProjectStore {
 
   /**
 >>>>>>> fix live student join
+=======
+>>>>>>> fix users joining readings with socket updates
    * Create a new Project
    * @param Requires a Reading ID
    * @param takes a Project object with the new label
