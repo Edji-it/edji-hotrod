@@ -29,6 +29,8 @@ export class SocketService {
   private groupUpdateSubj: Subject<any> = new Subject()
   public groupUpdate: Observable<any> = this.groupUpdateSubj.asObservable()
 
+  private reconnectInterval
+
   constructor(private _auth: AuthService) {
     if (this._auth.getEnv() === 'prod') {
       this.url = '//bluestreak.edji.it'
@@ -39,39 +41,49 @@ export class SocketService {
   }
 
   public leaveRoom(): void {
+    this.reconnectInterval && clearInterval(this.reconnectInterval)
     delete this.currentRoomProjectId
     this.socket && this.socket.disconnect && this.socket.disconnect()
+  }
+
+  public beginAttemptingReconnect(projectId: string): void {
+    console.info('🔁 Starting Socket reconnect interval')
+    this.reconnectInterval && clearInterval(this.reconnectInterval)
+    this.reconnectInterval = setInterval(() => {
+      if (this.socket && !this.socket.connected) {
+        this.joinSocketRoom(projectId)
+      } else {
+        clearInterval(this.reconnectInterval)
+      }
+    }, 5000)
   }
 
   /**
    * Join the Socket room based on the Project ID
    */
   public joinSocketRoom(projectId): void {
-    this.leaveRoom()
+    if (this.currentRoomProjectId !== projectId) this.leaveRoom()
+    this.currentRoomProjectId = projectId
     // Sockets are destroyed on disconnect, make sure we have a fresh one!
+    this.socket && this.socket.disconnect()
     this.socket = io(this.url)
 
-    this.socket.on('connect', socket => {
+    this.socket.on('connect', () => {
       this.socket.emit('openProject', { id: projectId })
-      // this.socket.emit('this', { will: 'be received by everyone'});
       console.info('⚡ Socket Connected')
+      this.reconnectInterval && clearInterval(this.reconnectInterval)
 
       this.socket.on('disconnect', function() {
-        console.info('⚠ Socket Disconnected')
-        // Manually attempt reconnection if user idles
+        // console.info('⚠ Socket Disconnected')
         if (this.currentRoomProjectId) {
-          console.info('🔁 Socket Reconnect')
-          this.joinSocketRoom(this.currentRoomProjectId)
+          this.beginAttemptingReconnect(this.currentRoomProjectId)
         }
       })
 
-      this.socket.on('error', socket => {
-        console.warn('⚠ Socket Error')
+      this.socket.on('error', () => {
+        // console.warn('⚠ Socket Error')
         if (this.currentRoomProjectId) {
-          setTimeout(() => {
-            console.info('🔁 Socket Reconnect (After Error)')
-            this.joinSocketRoom(this.currentRoomProjectId)
-          }, 10000)
+          this.beginAttemptingReconnect(this.currentRoomProjectId)
         }
       })
     })
