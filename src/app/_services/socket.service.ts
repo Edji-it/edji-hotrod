@@ -9,6 +9,7 @@ import { UserReadingStatus } from '../shared/datatypes'
 export class SocketService {
   private url: any
   private socket: any
+  private currentRoomProjectId: string
 
   // User count observable
   private userCount: any[] = []
@@ -35,27 +36,45 @@ export class SocketService {
       // this.url = '//localhost:7899';
       this.url = '//bluestreak-dev.edji.it'
     }
+  }
 
-    // Ensure we have a socket available
-    this.createSocketAndWatch()
+  public leaveRoom(): void {
+    delete this.currentRoomProjectId
+    this.socket && this.socket.disconnect && this.socket.disconnect()
   }
 
   /**
    * Join the Socket room based on the Project ID
    */
-  public joinSocketRoom(projectId, userId): void {
-    this.createSocketAndWatch()
-    this.socket.emit('openProject', { id: projectId, user: userId })
-  }
-
-  public leaveRoom(): void {
-    this.socket && this.socket.disconnect && this.socket.disconnect()
-  }
-
-  private createSocketAndWatch(): void {
+  public joinSocketRoom(projectId): void {
     this.leaveRoom()
     // Sockets are destroyed on disconnect, make sure we have a fresh one!
     this.socket = io(this.url)
+
+    this.socket.on('connect', socket => {
+      this.socket.emit('openProject', { id: projectId })
+      // this.socket.emit('this', { will: 'be received by everyone'});
+      console.info('⚡ Socket Connected')
+
+      this.socket.on('disconnect', function() {
+        console.info('⚠ Socket Disconnected')
+        // Manually attempt reconnection if user idles
+        if (this.currentRoomProjectId) {
+          console.info('🔁 Socket Reconnect')
+          this.joinSocketRoom(this.currentRoomProjectId)
+        }
+      })
+
+      this.socket.on('error', socket => {
+        console.warn('⚠ Socket Error')
+        if (this.currentRoomProjectId) {
+          setTimeout(() => {
+            console.info('🔁 Socket Reconnect (After Error)')
+            this.joinSocketRoom(this.currentRoomProjectId)
+          }, 10000)
+        }
+      })
+    })
 
     // Watch user count
     this.socket.on('liveUsers', liveCount => {
