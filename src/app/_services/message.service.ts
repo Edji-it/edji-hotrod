@@ -134,11 +134,8 @@ export class MessageService {
           .pipe(take(1))
           .subscribe(
             data => {
-              let messages = data.messages
-              let msgLen = messages.length
               // Check through the messages
-              for (var i = 0; i < msgLen; i++) {
-                let message = messages[i]
+              for (let message of data.messages) {
                 // Refresh the user if message is 'user_refresh_required'
                 if (message.key === 'user_refresh_required') {
                   this._auth

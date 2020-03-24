@@ -311,7 +311,7 @@ export class AuthService implements CanActivate {
    * - Uses current user's id
    */
   private fetchUser(): Observable<{ user?: User }> {
-    return this._http.get(this.baseUrl + '/users/' + this.getUser()._id, this.getOptions())
+    return this._http.get(this.baseUrl + '/api/v1/users/' + this.getUser()._id, this.getOptions())
   }
 
   /**
