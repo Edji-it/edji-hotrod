@@ -148,7 +148,7 @@ export class ProjectPageComponent implements OnInit, OnDestroy {
   private joinRoom(user, project): void {
     this.joinedRoom = true
     // Join Socket Room based on ID param
-    this._socket.joinSocketRoom(project._id, user._id)
+    this._socket.joinSocketRoom(project._id)
     // Start Reading Timer
     this._academy.startReadingTimer(user, project)
     // this will set the user's status on the leaderboard

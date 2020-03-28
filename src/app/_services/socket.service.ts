@@ -9,6 +9,7 @@ import { UserReadingStatus } from '../shared/datatypes'
 export class SocketService {
   private url: any
   private socket: any
+  private currentRoomProjectId: string
 
   // User count observable
   private userCount: any[] = []
@@ -28,6 +29,8 @@ export class SocketService {
   private groupUpdateSubj: Subject<any> = new Subject()
   public groupUpdate: Observable<any> = this.groupUpdateSubj.asObservable()
 
+  private reconnectInterval
+
   constructor(private _auth: AuthService) {
     if (this._auth.getEnv() === 'prod') {
       this.url = '//bluestreak.edji.it'
@@ -35,27 +38,55 @@ export class SocketService {
       // this.url = '//localhost:7899';
       this.url = '//bluestreak-dev.edji.it'
     }
+  }
 
-    // Ensure we have a socket available
-    this.createSocketAndWatch()
+  public leaveRoom(): void {
+    this.reconnectInterval && clearInterval(this.reconnectInterval)
+    delete this.currentRoomProjectId
+    this.socket && this.socket.disconnect && this.socket.disconnect()
+  }
+
+  public beginAttemptingReconnect(projectId: string): void {
+    console.info('🔁 Starting Socket reconnect interval')
+    this.reconnectInterval && clearInterval(this.reconnectInterval)
+    this.reconnectInterval = setInterval(() => {
+      if (this.socket && !this.socket.connected) {
+        this.joinSocketRoom(projectId)
+      } else {
+        clearInterval(this.reconnectInterval)
+      }
+    }, 5000)
   }
 
   /**
    * Join the Socket room based on the Project ID
    */
-  public joinSocketRoom(projectId, userId): void {
-    this.createSocketAndWatch()
-    this.socket.emit('openProject', { id: projectId, user: userId })
-  }
-
-  public leaveRoom(): void {
-    this.socket && this.socket.disconnect && this.socket.disconnect()
-  }
-
-  private createSocketAndWatch(): void {
-    this.leaveRoom()
+  public joinSocketRoom(projectId): void {
+    if (this.currentRoomProjectId !== projectId) this.leaveRoom()
+    this.currentRoomProjectId = projectId
     // Sockets are destroyed on disconnect, make sure we have a fresh one!
+    this.socket && this.socket.disconnect()
     this.socket = io(this.url)
+
+    this.socket.on('connect', () => {
+      this.socket.emit('openProject', { id: projectId })
+      console.info('⚡ Socket Connected')
+      this.reconnectInterval && clearInterval(this.reconnectInterval)
+
+      this.socket.on('disconnect', function() {
+        // console.info('⚠ Socket Disconnected')
+        if (this.currentRoomProjectId) {
+          this.beginAttemptingReconnect(this.currentRoomProjectId)
+        }
+      })
+
+      this.socket.on('error', () => {
+        // console.warn('⚠ Socket Error')
+        if (this.currentRoomProjectId) {
+          this.beginAttemptingReconnect(this.currentRoomProjectId)
+        }
+      })
+    })
 
     // Watch user count
     this.socket.on('liveUsers', liveCount => {
