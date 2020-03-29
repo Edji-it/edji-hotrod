@@ -72,6 +72,11 @@ export class UploadPdfModalComponent implements OnInit {
               this.checkConversion(doc)
             }
           })
+          // sort the pdf pages since the S3 bucket has a strange sorting policy for numbers in a string
+          this.uploadedDocs = this.sortPdfPages(this.uploadedDocs)
+          /**
+           * @todo figure out if we should save the sorted pages to the user object and update the locker
+           */
         }
       })
 
@@ -372,5 +377,35 @@ export class UploadPdfModalComponent implements OnInit {
     ***********************************
     `
     this.showReportError = true
+  }
+
+  private sortPdfPages(docs: DocumentSpark[]): DocumentSpark[] {
+    docs.forEach(doc => {
+      let pages = doc.pages
+      // create a new array of objects comprised of page strings and page numbers
+      const pageObjs = pages.map(page => {
+        return {
+          p: page,
+          n: parseInt(page.split('-')[page.split('-').length - 1].split('.')[0]),
+        }
+      })
+      // sort our array of page objects by the page number
+      pageObjs.sort((a, b) => {
+        if (a.n < b.n) {
+          return -1
+        }
+        if (a.n > b.n) {
+          return 1
+        }
+        return 0
+      })
+      // create a new array from the sorted pages that is just page strings
+      const sortedPages = pageObjs.map(page => {
+        return page.p
+      })
+      // assign the sorted pages to the doc property
+      doc.pages = sortedPages
+    })
+    return docs
   }
 }
