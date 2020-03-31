@@ -103,7 +103,7 @@ export class ReadingRecapComponent implements OnInit {
       this.projectStore.commentStats.subscribe(stats => {
         this.commentStats = stats
         // default to first student in students list
-        if (!this.selectedStudent && stats.stats.userStats[0]._id) {
+        if (!this.selectedStudent && stats.stats.userStats[0] && stats.stats.userStats[0]._id) {
           console.log('selecting default student')
           this.selectedStudent = stats.stats.userStats[0]._id
         }
