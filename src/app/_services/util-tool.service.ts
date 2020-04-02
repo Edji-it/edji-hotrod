@@ -7,10 +7,12 @@ export class UtilToolService {
   public showFeedbackModal: boolean
   public showShareCode: boolean
   public appVersion: string
+  public iOS: boolean
 
   constructor() {
     // Get version number
     this.appVersion = appVersion
+    this.iOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)
   }
 
   /**
