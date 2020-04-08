@@ -390,16 +390,16 @@ export class UploadPdfModalComponent implements OnInit {
       let pages = doc.pages
       let json = doc.pdf.pages
       // create a new array of objects comprised of page strings and page numbers (& JSON)
-      const pageObjs = pages.map(page => {
+      const pageObjs = pages.map((page, i) => {
         return {
           p: page,
-          n: parseInt(page.split('-')[page.split('-').length - 1].split('.')[0]),
+          n: page ? parseInt(page.split('-')[page.split('-').length - 1].split('.')[0]) : i,
         }
       })
-      const jsonPageObjs = json.map(page => {
+      const jsonPageObjs = json.map((page, i) => {
         return {
           p: page,
-          n: parseInt(page.split('-')[page.split('-').length - 1].split('.')[0]),
+          n: page ? parseInt(page.split('-')[page.split('-').length - 1].split('.')[0]) : i,
         }
       })
       // sort our array of page & JSON objects by the page number
