@@ -105,7 +105,7 @@ div([id]="'comment-' + comment._id")
                     .quick-label__dropdown(*ngIf="showQuickLabels && project.quick_labels")
                         .quick-label(
                           *ngFor="let label of project.quick_labels; let i = index",
-                          (click)="insertQuickLabel(label)",
+                          (tap)="insertQuickLabel(label)",
                           [attr.id]="'labelOption'+(i+1)"
                         )
                             i.icon.icon-quick-label
