@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output }
 import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
-import { AuthService, CommentService, SocketService, AnalyticsService } from '../../_services'
+import { AuthService, CommentService, SocketService, AnalyticsService, UtilToolService } from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ProjectStore } from 'src/app/_store'
 import { copyToClipboard } from 'src/app/shared/clipboard'
@@ -90,6 +90,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     private _socket: SocketService,
     private route: ActivatedRoute,
     private _router: Router,
+    public _util: UtilToolService,
   ) {}
 
   ngOnInit() {
@@ -493,7 +494,13 @@ export class CommentComponent implements OnInit, OnDestroy {
     let wrappedLabel = `#[${label}]`
     // Close dropdown
     this.showQuickLabels = false
-    if (this.isActive) {
+    if (this._util.iOS) {
+      this.isActive = false
+      setTimeout(() => {
+        this.comment.data += ` ${wrappedLabel} `
+        this.updateComment(this.comment)
+      })
+    } else if (this.isActive) {
       this._comments.emitInputToActive(`<span>&nbsp;${wrappedLabel}&nbsp;</span>`)
     } else {
       this.comment.data += ` ${wrappedLabel} `
