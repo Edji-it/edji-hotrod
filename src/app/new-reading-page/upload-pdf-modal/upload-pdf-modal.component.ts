@@ -72,6 +72,11 @@ export class UploadPdfModalComponent implements OnInit {
               this.checkConversion(doc)
             }
           })
+          // sort the pdf pages since the S3 bucket has a strange sorting policy for numbers in a string
+          this.uploadedDocs = this.sortPdfPages(this.uploadedDocs)
+          /**
+           * @todo figure out if we should save the sorted pages to the user object and update the locker
+           */
         }
       })
 
@@ -258,6 +263,8 @@ export class UploadPdfModalComponent implements OnInit {
 
   // Save Uploaded Doc list to localStorage AND user object
   saveUploadedDocs(): void {
+    // sort the pdf pages since the S3 bucket has a strange sorting policy for numbers in a string
+    this.uploadedDocs = this.sortPdfPages(this.uploadedDocs)
     this._locker.set('uploadedDocs', this.uploadedDocs)
     let user = this._auth.getUser()
     if (!user.media) {
@@ -372,5 +379,59 @@ export class UploadPdfModalComponent implements OnInit {
     ***********************************
     `
     this.showReportError = true
+  }
+
+  /**
+   * Sorts the PNG and JSON files in the correct order. They come out of order from the PDF Upload Service
+   * @param docs user media pdf documents
+   */
+  private sortPdfPages(docs: DocumentSpark[]): DocumentSpark[] {
+    docs.forEach(doc => {
+      let pages = doc.pages
+      let json = doc.pdf.pages
+      // create a new array of objects comprised of page strings and page numbers (& JSON)
+      const pageObjs = pages.map((page, i) => {
+        return {
+          p: page,
+          n: page ? parseInt(page.split('-')[page.split('-').length - 1].split('.')[0]) : i,
+        }
+      })
+      const jsonPageObjs = json.map((page, i) => {
+        return {
+          p: page,
+          n: page ? parseInt(page.split('-')[page.split('-').length - 1].split('.')[0]) : i,
+        }
+      })
+      // sort our array of page & JSON objects by the page number
+      pageObjs.sort((a, b) => {
+        if (a.n < b.n) {
+          return -1
+        }
+        if (a.n > b.n) {
+          return 1
+        }
+        return 0
+      })
+      jsonPageObjs.sort((a, b) => {
+        if (a.n < b.n) {
+          return -1
+        }
+        if (a.n > b.n) {
+          return 1
+        }
+        return 0
+      })
+      // create a new array from the sorted pages & JSON files that is just an array of strings
+      const sortedPages = pageObjs.map(page => {
+        return page.p
+      })
+      const sortedJson = jsonPageObjs.map(page => {
+        return page.p
+      })
+      // assign the sorted pages to the doc property
+      doc.pages = sortedPages
+      doc.pdf.pages = sortedJson
+    })
+    return docs
   }
 }

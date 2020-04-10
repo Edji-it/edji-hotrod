@@ -87,6 +87,7 @@
                     u.link Report error?
               //- The pages of the PDF
               .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
+                span.badge.badge-pill.badge-primary.badge-page {{ i + 1 }}
                 img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
                 .card-img-overlay.overlay-on-hover
                   button.btn.btn-primary.card__center-overlay Insert
