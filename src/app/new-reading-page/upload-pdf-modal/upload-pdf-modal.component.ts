@@ -387,8 +387,9 @@ export class UploadPdfModalComponent implements OnInit {
    */
   private sortPdfPages(docs: DocumentSpark[]): DocumentSpark[] {
     docs.forEach(doc => {
-      let pages = doc.pages
-      let json = doc.pdf.pages
+      if (!doc || (!doc.pages || doc.pages.length == 0) || (!doc.pdf.pages || doc.pdf.pages.length == 0)) return
+      let pages = doc && doc.pages
+      let json = doc && doc.pdf.pages
       // create a new array of objects comprised of page strings and page numbers (& JSON)
       const pageObjs = pages.map((page, i) => {
         return {
