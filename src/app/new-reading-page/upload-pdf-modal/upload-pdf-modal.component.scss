@@ -177,7 +177,8 @@ $pdfThumbHeight: 250px;
     height: 4em;
   }
 
-  & u, & .link {
+  & u,
+  & .link {
     color: $btnPrimaryColor;
   }
 
@@ -202,4 +203,9 @@ $pdfThumbHeight: 250px;
   width: 4em;
   position: absolute;
   right: 0px;
+}
+
+.timestamp-position {
+  top: 12px;
+  right: 12px;
 }
