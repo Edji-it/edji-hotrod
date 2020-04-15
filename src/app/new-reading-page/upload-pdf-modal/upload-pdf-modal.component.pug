@@ -60,6 +60,9 @@
                 //- Delete Button
                 #pdfDelBtn.icon-button.btn--delete-pdf(title="Delete PDF", (click)="doc.confirmDelete = !doc.confirmDelete")
                   span([innerHtml]="':x:' | emojione")
+                //- Timestamp
+                span.text-muted.small.position-absolute.timestamp-position
+                  i(*ngIf="doc.requestedTime") {{ doc.requestedTime | edjidate:'timeStamp':'mediumDate' }}
                 //- Title & Insert Button
                 .card__center-overlay
                   span.doc-title(*ngIf="doc.title") {{ doc.title }}

@@ -387,8 +387,11 @@ export class UploadPdfModalComponent implements OnInit {
    */
   private sortPdfPages(docs: DocumentSpark[]): DocumentSpark[] {
     docs.forEach(doc => {
-      let pages = doc.pages
-      let json = doc.pdf.pages
+      // if the pages are empty here, that means the image conversion failed or it is still converting
+      if (!doc || (!doc.pages || doc.pages.length == 0)) return
+      let pages = doc && doc.pages
+      // if the user is not using OCR, this will be blank
+      let json = (doc && doc.pdf.pages) || []
       // create a new array of objects comprised of page strings and page numbers (& JSON)
       const pageObjs = pages.map((page, i) => {
         return {

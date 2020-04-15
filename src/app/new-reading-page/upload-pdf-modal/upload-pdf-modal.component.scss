@@ -177,7 +177,8 @@ $pdfThumbHeight: 250px;
     height: 4em;
   }
 
-  & u, & .link {
+  & u,
+  & .link {
     color: $btnPrimaryColor;
   }
 
@@ -199,7 +200,13 @@ $pdfThumbHeight: 250px;
 }
 
 .badge-page {
-  width: 4em;
+  width: 2em;
   position: absolute;
-  right: 0px;
+  top: 2px;
+  right: 2px;
+}
+
+.timestamp-position {
+  top: 12px;
+  right: 12px;
 }
