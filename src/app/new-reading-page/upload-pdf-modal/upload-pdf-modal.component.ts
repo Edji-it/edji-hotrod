@@ -125,6 +125,8 @@ export class UploadPdfModalComponent implements OnInit {
     }
 
     this.uploading = true
+    this.noUploadAllowed = true
+    document.getElementById(this.pdfFileInputId)['value'] = ''
 
     this._media.uploadPdf(this.file).subscribe(
       data => {
@@ -138,7 +140,7 @@ export class UploadPdfModalComponent implements OnInit {
         // Clear fields
         this.file = {}
         this.title = ''
-        this.noUploadAllowed = true
+        this.noUploadAllowed = false
       },
       error => {
         this.uploading = false
@@ -236,10 +238,9 @@ export class UploadPdfModalComponent implements OnInit {
     // Since the PDF's are just stored locally, deleting an uploaded PDF is mostly
     // gonna be front end magic. We're gonna dive into the user prefs as found in
     // auth.service.ts
-
     // Edit our front-end listing...
     this.uploadedDocs.forEach((doc, index) => {
-      if (docToDelete._id === doc._id) {
+      if ((docToDelete.uuid && docToDelete.uuid === doc.uuid) || (docToDelete._id && docToDelete._id === doc._id)) {
         // Remove doc
         this.uploadedDocs.splice(index, 1)
       }
