@@ -35,6 +35,8 @@ export class UploadPdfModalComponent implements OnInit {
   // Toggle Feedback/Report modal
   public showReportError: boolean = false
   public reportErrorMsg: string = ''
+  public firstDocument: number = 0
+  public totalDocuments: number = 1
 
   /**
    * Temporary: PDF word highlight flag
@@ -387,6 +389,7 @@ export class UploadPdfModalComponent implements OnInit {
    * @param docs user media pdf documents
    */
   private sortPdfPages(docs: DocumentSpark[]): DocumentSpark[] {
+    this.totalDocuments = docs.length
     docs.forEach(doc => {
       // if the pages are empty here, that means the image conversion failed or it is still converting
       if (!doc || (!doc.pages || doc.pages.length == 0)) return
