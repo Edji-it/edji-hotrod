@@ -50,88 +50,87 @@
           hr
           //- LISTING OF ALL UPLOADED PDFS
           h3.pb-2 Select an uploaded PDF to add to your Reading
-          //- <p-paginator [rows]="rows" [first]="firstDocument" [totalRecords]="totalDocuments" (onPageChange)="updatePdfPages($event)"></p-paginator>
-          <p-dataList [value]="uploadedDocs" [paginator]="uploadedDocs.length > 0" [paginatorPosition]="'both'" [rows]="15" [totalRecords]="totalDocuments">
-            //- .upload-list-item(*ngFor="let doc of uploadedDocs | slice:0:15; let i = index", [class.new]="newDocsIds.indexOf(doc.uuid) > -1")
-            <ng-template let-doc pTemplate="item" let-i="index">
-              //- Display doc pages if available
-              .card-group(*ngIf="doc.converted == true || doc.pdfConverted == true")
-                //- Delete PDF Mini Modal
-                delete-pdf-mini-modal(*ngIf="doc.confirmDelete", (confirm)="removeUploadedDoc(doc)", (dismiss)="doc.confirmDelete = false")
-                //- Title Card
-                #titleCard.card.title-card
-                  //- Delete Button
-                  #pdfDelBtn.icon-button.btn--delete-pdf(title="Delete PDF", (click)="doc.confirmDelete = !doc.confirmDelete")
-                    span([innerHtml]="':x:' | emojione")
-                  //- Timestamp
-                  span.text-muted.small.position-absolute.timestamp-position
-                    i(*ngIf="doc.requestedTime") {{ doc.requestedTime | edjidate:'timeStamp':'mediumDate' }}
-                  //- Title & Insert Button
-                  .card__center-overlay
-                    span.doc-title(*ngIf="doc.title") {{ doc.title }}
-                    span.doc-title(*ngIf="!doc.title")
-                      i Untitled
-                    //- Insert legacy PDF
-                    button.btn.btn-primary.e2e-insert-doc((click)="insertPages(doc)")
-                      | Insert {{ doc.pages.length }} Page
-                      span(*ngIf="doc.pages.length > 1") s
-                  //- Display if OCR/word highlighting is available, and allow user to turn it off
-                  .btn.btn-sm.highlight-toggle.hover-parent(*ngIf="wordHighlightsEnabled && doc.pdf && doc.pdf.pages && doc.pdf.pages[0]", (click)="toggleWordHighlights(doc)")
-                    .icon.icon-word-boxes([class.inactive]="doc.disable_words")
-                    .hover-show--block {{ doc.disable_words ? 'Enable?' : 'Disable?' }}
-                    span(*ngIf="!doc.disable_words") Word highlights enabled
-                    span(*ngIf="doc.disable_words") Word highlights disabled
-                  //- Display if OCR/word highlighting is available, and allow user to turn it off
-                  .btn.btn-sm.highlight-toggle.has-error.hover-parent(
-                    *ngIf="wordHighlightsEnabled && doc.error", 
-                    (click)="loadReportErrorModal(doc)"
-                  )
-                    .icon.icon-word-boxes.error
-                    span 
-                      | No words found
-                      br
-                      u.link Report error?
-                //- The pages of the PDF
-                .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
-                  span.badge.badge-pill.badge-primary.badge-page {{ i + 1 }}
-                  img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
-                  .card-img-overlay.overlay-on-hover
-                    button.btn.btn-primary.card__center-overlay Insert
-                  .badge.badge-warning.document-tag.hover-parent(
-                    *ngIf="wordHighlightsEnabled && hasWordsError(doc, i)",
-                    (click)="loadReportErrorModal(doc)"
-                  )
-                    span.hover-hide No words found
-                    .hover-show--inline Report error?
-              //- Display conversion message if doc isn't ready
-              .card-group.card-group--placeholder(*ngIf="doc.converted !== true && doc.pdfConverted !== true")
-                .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired && !doc.error")
-                  i.icon.icon-loading.group-alert__icon
-                  b Preparing your PDF
-                  br
-                  | Thank you for your patience! Some documents, especially those with many pages, can take several minutes.
-                .alert.alert-warning.group-alert(*ngIf="doc.expired")
-                  button.close((click)="removeUploadedDoc(doc)", type="button", data-dismiss="alert", aria-label="Close")
-                    span(aria-hidden="true") &times;
-                  b Document conversion timed out
-                  br
-                  | Please try again later, or with a different file. If this problem persists, please <a href="mailto:support@edji.it">contact us</a>.
-                .alert.alert-warning.group-alert(*ngIf="doc.error")
-                  button.close((click)="removeUploadedDoc(doc)", type="button", data-dismiss="alert", aria-label="Close")
-                    span(aria-hidden="true") &times;
-                  b Error converting
-                  br
-                  | Please try again later, or with a different file. If this problem persists, please <a href="mailto:support@edji.it">contact us</a>.
-                .card.title-card
-                  .card__center-overlay
-                    span.doc-title(*ngIf="doc.title") {{ doc.title }}
-                    span.doc-title(*ngIf="!doc.title")
-                      i Untitled
-                    button.btn.btn-primary([disabled]="true") Insert X Pages
-                .card.card-placeholder(*ngFor="let card of [0, 1, 2, 3]")
-                  .card-img-top &nbsp;
-            </ng-template>
-          </p-dataList>
+          //- <p-dataList [value]="uploadedDocs" [paginator]="uploadedDocs.length > 15" [paginatorPosition]="'both'" [rows]="15" [totalRecords]="totalDocuments">
+          .upload-list-item(*ngFor="let doc of uploadedDocs | slice:0:15; let i = index", [class.new]="newDocsIds.indexOf(doc.uuid) > -1")
+            //- <ng-template let-doc pTemplate="item" let-i="index">
+            //- Display doc pages if available
+            .card-group(*ngIf="doc.converted == true || doc.pdfConverted == true")
+              //- Delete PDF Mini Modal
+              delete-pdf-mini-modal(*ngIf="doc.confirmDelete", (confirm)="removeUploadedDoc(doc)", (dismiss)="doc.confirmDelete = false")
+              //- Title Card
+              #titleCard.card.title-card
+                //- Delete Button
+                #pdfDelBtn.icon-button.btn--delete-pdf(title="Delete PDF", (click)="doc.confirmDelete = !doc.confirmDelete")
+                  span([innerHtml]="':x:' | emojione")
+                //- Timestamp
+                span.text-muted.small.position-absolute.timestamp-position
+                  i(*ngIf="doc.requestedTime") {{ doc.requestedTime | edjidate:'timeStamp':'mediumDate' }}
+                //- Title & Insert Button
+                .card__center-overlay
+                  span.doc-title(*ngIf="doc.title") {{ doc.title }}
+                  span.doc-title(*ngIf="!doc.title")
+                    i Untitled
+                  //- Insert legacy PDF
+                  button.btn.btn-primary.e2e-insert-doc((click)="insertPages(doc)")
+                    | Insert {{ doc.pages.length }} Page
+                    span(*ngIf="doc.pages.length > 1") s
+                //- Display if OCR/word highlighting is available, and allow user to turn it off
+                .btn.btn-sm.highlight-toggle.hover-parent(*ngIf="wordHighlightsEnabled && doc.pdf && doc.pdf.pages && doc.pdf.pages[0]", (click)="toggleWordHighlights(doc)")
+                  .icon.icon-word-boxes([class.inactive]="doc.disable_words")
+                  .hover-show--block {{ doc.disable_words ? 'Enable?' : 'Disable?' }}
+                  span(*ngIf="!doc.disable_words") Word highlights enabled
+                  span(*ngIf="doc.disable_words") Word highlights disabled
+                //- Display if OCR/word highlighting is available, and allow user to turn it off
+                .btn.btn-sm.highlight-toggle.has-error.hover-parent(
+                  *ngIf="wordHighlightsEnabled && doc.error", 
+                  (click)="loadReportErrorModal(doc)"
+                )
+                  .icon.icon-word-boxes.error
+                  span 
+                    | No words found
+                    br
+                    u.link Report error?
+              //- The pages of the PDF
+              .card.document-card(*ngFor="let url of doc.pages; let i = index", (click)="insertPages(doc, i)")
+                span.badge.badge-pill.badge-primary.badge-page {{ i + 1 }}
+                img.card-img-top.img-fluid([src]="url", [alt]="'Page ' + (i + 1)")
+                .card-img-overlay.overlay-on-hover
+                  button.btn.btn-primary.card__center-overlay Insert
+                .badge.badge-warning.document-tag.hover-parent(
+                  *ngIf="wordHighlightsEnabled && hasWordsError(doc, i)",
+                  (click)="loadReportErrorModal(doc)"
+                )
+                  span.hover-hide No words found
+                  .hover-show--inline Report error?
+            //- Display conversion message if doc isn't ready
+            .card-group.card-group--placeholder(*ngIf="doc.converted !== true && doc.pdfConverted !== true")
+              .alert.alert-info.group-alert.has-icon(*ngIf="!doc.expired && !doc.error")
+                i.icon.icon-loading.group-alert__icon
+                b Preparing your PDF
+                br
+                | Thank you for your patience! Some documents, especially those with many pages, can take several minutes.
+              .alert.alert-warning.group-alert(*ngIf="doc.expired")
+                button.close((click)="removeUploadedDoc(doc)", type="button", data-dismiss="alert", aria-label="Close")
+                  span(aria-hidden="true") &times;
+                b Document conversion timed out
+                br
+                | Please try again later, or with a different file. If this problem persists, please <a href="mailto:support@edji.it">contact us</a>.
+              .alert.alert-warning.group-alert(*ngIf="doc.error")
+                button.close((click)="removeUploadedDoc(doc)", type="button", data-dismiss="alert", aria-label="Close")
+                  span(aria-hidden="true") &times;
+                b Error converting
+                br
+                | Please try again later, or with a different file. If this problem persists, please <a href="mailto:support@edji.it">contact us</a>.
+              .card.title-card
+                .card__center-overlay
+                  span.doc-title(*ngIf="doc.title") {{ doc.title }}
+                  span.doc-title(*ngIf="!doc.title")
+                    i Untitled
+                  button.btn.btn-primary([disabled]="true") Insert X Pages
+              .card.card-placeholder(*ngFor="let card of [0, 1, 2, 3]")
+                .card-img-top &nbsp;
+          //-   </ng-template>
+          //- </p-dataList>
         .modal-footer
 edji-feedback(
   *ngIf="showReportError",
