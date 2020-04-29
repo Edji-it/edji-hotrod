@@ -50,7 +50,9 @@
           hr
           //- LISTING OF ALL UPLOADED PDFS
           h3.pb-2 Select an uploaded PDF to add to your Reading
+          //- <p-dataList [value]="uploadedDocs" [paginator]="uploadedDocs.length > 15" [paginatorPosition]="'both'" [rows]="15" [totalRecords]="totalDocuments">
           .upload-list-item(*ngFor="let doc of uploadedDocs | slice:0:15; let i = index", [class.new]="newDocsIds.indexOf(doc.uuid) > -1")
+            //- <ng-template let-doc pTemplate="item" let-i="index">
             //- Display doc pages if available
             .card-group(*ngIf="doc.converted == true || doc.pdfConverted == true")
               //- Delete PDF Mini Modal
@@ -127,6 +129,8 @@
                   button.btn.btn-primary([disabled]="true") Insert X Pages
               .card.card-placeholder(*ngFor="let card of [0, 1, 2, 3]")
                 .card-img-top &nbsp;
+          //-   </ng-template>
+          //- </p-dataList>
         .modal-footer
 edji-feedback(
   *ngIf="showReportError",

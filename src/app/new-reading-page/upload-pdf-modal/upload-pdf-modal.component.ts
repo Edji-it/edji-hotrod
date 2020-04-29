@@ -35,6 +35,8 @@ export class UploadPdfModalComponent implements OnInit {
   // Toggle Feedback/Report modal
   public showReportError: boolean = false
   public reportErrorMsg: string = ''
+  public firstDocument: number = 0
+  public totalDocuments: number = 1
 
   /**
    * Temporary: PDF word highlight flag
@@ -125,6 +127,8 @@ export class UploadPdfModalComponent implements OnInit {
     }
 
     this.uploading = true
+    this.noUploadAllowed = true
+    document.getElementById(this.pdfFileInputId)['value'] = ''
 
     this._media.uploadPdf(this.file).subscribe(
       data => {
@@ -138,7 +142,7 @@ export class UploadPdfModalComponent implements OnInit {
         // Clear fields
         this.file = {}
         this.title = ''
-        this.noUploadAllowed = true
+        this.noUploadAllowed = false
       },
       error => {
         this.uploading = false
@@ -236,10 +240,9 @@ export class UploadPdfModalComponent implements OnInit {
     // Since the PDF's are just stored locally, deleting an uploaded PDF is mostly
     // gonna be front end magic. We're gonna dive into the user prefs as found in
     // auth.service.ts
-
     // Edit our front-end listing...
     this.uploadedDocs.forEach((doc, index) => {
-      if (docToDelete._id === doc._id) {
+      if ((docToDelete.uuid && docToDelete.uuid === doc.uuid) || (docToDelete._id && docToDelete._id === doc._id)) {
         // Remove doc
         this.uploadedDocs.splice(index, 1)
       }
@@ -386,6 +389,7 @@ export class UploadPdfModalComponent implements OnInit {
    * @param docs user media pdf documents
    */
   private sortPdfPages(docs: DocumentSpark[]): DocumentSpark[] {
+    this.totalDocuments = docs.length
     docs.forEach(doc => {
       // if the pages are empty here, that means the image conversion failed or it is still converting
       if (!doc || (!doc.pages || doc.pages.length == 0)) return
