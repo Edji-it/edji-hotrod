@@ -390,7 +390,6 @@ export class UploadPdfModalComponent implements OnInit {
    */
   private sortPdfPages(docs: DocumentSpark[]): DocumentSpark[] {
     this.totalDocuments = docs.length
-    console.log(this.totalDocuments)
     docs.forEach(doc => {
       // if the pages are empty here, that means the image conversion failed or it is still converting
       if (!doc || (!doc.pages || doc.pages.length == 0)) return
