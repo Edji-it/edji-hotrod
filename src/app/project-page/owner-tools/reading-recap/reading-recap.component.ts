@@ -194,7 +194,7 @@ export class ReadingRecapComponent implements OnInit {
     // populate the student list
     this.students = this.commentStats.stats.userStats.map(s => ({ label: s.fullname, value: s._id }))
     // Load selected student if not loaded
-    if (this.selectedStudent && !this.currentStudent) {
+    if (this.selectedStudent && !(this.currentStudent && this.currentStudent.value)) {
       this.changeStudentSelection()
     }
     const userStats = this.commentStats.findStudent(this.currentStudent.value)
