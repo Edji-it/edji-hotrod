@@ -465,7 +465,11 @@ export class AuthService implements CanActivate {
                     // Clean out the duplicates we probably just concat'd in
                     for (var i = 0; i < a.length; i++) {
                       for (var j = i + 1; j < a.length; j++) {
-                        if (isObj) {
+                        if (a[i].uuid) {
+                          if (a[i].uuid === a[j].uuid) {
+                            a.splice(j--, 1)
+                          }
+                        } else if (isObj) {
                           if (a[i]._id === a[j]._id) {
                             a.splice(j--, 1)
                           }
