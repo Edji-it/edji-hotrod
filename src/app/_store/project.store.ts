@@ -1069,18 +1069,7 @@ export class ProjectStore {
     // Copy then reverse the array
     let commentsArray = project.comments ? project.comments.slice().reverse() : []
     // Loop through each comment to group comments together by line number
-    let len2 = commentsArray.length
-    for (let i = 0; i < len2; i++) {
-      let comment = commentsArray[i]
-
-      // If the comment has data/url (meaning they've filled out the comment)
-      let dataInComment =
-        (comment.data && comment.data != '') || (comment.url && comment.url != '') || comment.user_id == this.user._id
-      // If user is current reading Owner/Teacher or Heat Vision is on, show all comments
-      let heatVisible = project.heat_vision || project.isTeaching
-      // Your own comments and the Owner/Teacher's comments are ALWAYS visible
-      let alwaysVisible = comment.user_id == this.user._id || comment.user_id == project.teacher_id
-
+    for (let comment of commentsArray) {
       if (comment && !comment.reply_to && !comment.questionId && comment.lineY && this.isCommentVisible(comment)) {
         // lineY is determined by each individual CommentComponent
         let lineY = comment.lineY
