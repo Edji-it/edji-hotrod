@@ -361,32 +361,6 @@ export class ProjectStore {
   }
 
   /**
-   * Adds user information to the student that just joined the project so we can see them on the leaderboard
-   * @param groupUpdate the object that contains user properties to properly add student to leaderboard
-   */
-  private addJoinedUser(groupUpdate: any) {
-    if (!groupUpdate.user || !groupUpdate.user._id) {
-      console.error('[Project Store] Attempted adding undefined user')
-    }
-    const project = this.currentProjectSource.getValue()
-    // Make sure student and temp arrays exist
-    if (!project.students) project.students = []
-    if (!project.temps) project.temps = []
-    if (
-      !this.commentStatsSource.getValue().findStudent(groupUpdate.user._id) &&
-      !groupUpdate.user._id === project.teacher_id
-    ) {
-      // if the student that joined is a temp, here is their info
-      const userArray = groupUpdate.user.type === 'temp' ? 'temps' : 'students'
-      project[userArray].push(groupUpdate.user)
-    }
-
-    // update the project info across the app for the teacher based on this update
-    this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
-    this.projectStoreDispatch(ProjectAction.BuildCommentStats, project)
-  }
-
-  /**
    * Update project owners (designed for adding co-teacher)
    * @calls currentProjectSource
    */
@@ -1024,9 +998,7 @@ export class ProjectStore {
   }
 
   /**
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
+  /**
    * Adds user information to the student that just joined the project so we can see them on the leaderboard
    * @param groupUpdate the object that contains user properties to properly add student to leaderboard
    */
@@ -1034,13 +1006,18 @@ export class ProjectStore {
     if (!groupUpdate.user || !groupUpdate.user._id) {
       console.error('[Project Store] Attempted adding undefined user')
     }
-    let project = this.currentProjectSource.getValue()
+    const project = this.currentProjectSource.getValue()
     // Make sure student and temp arrays exist
     if (!project.students) project.students = []
     if (!project.temps) project.temps = []
-    // if the student that joined is a temp, here is their info
-    const userArray = groupUpdate.user.type === 'temp' ? 'temps' : 'students'
-    project[userArray].push(groupUpdate.user)
+    if (
+      !this.commentStatsSource.getValue().findStudent(groupUpdate.user._id) &&
+      !groupUpdate.user._id === project.teacher_id
+    ) {
+      // if the student that joined is a temp, here is their info
+      const userArray = groupUpdate.user.type === 'temp' ? 'temps' : 'students'
+      project[userArray].push(groupUpdate.user)
+    }
 
     // update the project info across the app for the teacher based on this update
     this.projectStoreDispatch(ProjectAction.UpdateUsersSuccess, project)
@@ -1048,9 +1025,7 @@ export class ProjectStore {
   }
 
   /**
->>>>>>> fix live student join
-=======
->>>>>>> fix users joining readings with socket updates
+
    * Create a new Project
    * @param Requires a Reading ID
    * @param takes a Project object with the new label
