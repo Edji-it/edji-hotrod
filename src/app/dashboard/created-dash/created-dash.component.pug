@@ -215,14 +215,6 @@
             a.btn.btn-hero.btn-sm([routerLink]="['/plans']") Go Hero
     <p-paginator [class.disabled]="paginationDisabled"  [rows]="rows" [first]="searchParams.first" [totalRecords]="total" (onPageChange)="updateSearchParams('feed_paginate', $event)"></p-paginator>
   .col-12.col-sm-3
-    //- .row
-    //-   .col-12
-    //-     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") 
-    //-       | New Reading
-    //-       i.icon.icon-create.mr-0.icon--btn-inline
-    //-     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type != 'temp'", [routerLink]="['/new-reading']")
-    //-       | New Reading
-    //-       i.icon.icon-create.mr-0.icon--btn-inline
     h2 Drafts
     .draft-card__wrap(*ngFor="let draft of drafts", [class.action-active]="draft.loading")
       .draft-card([routerLink]="['/new-reading/' + draft._id]")
