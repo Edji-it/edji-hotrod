@@ -25,7 +25,7 @@ export class CopyService {
     this._airtable = Airtable
 
     this._airtable.configure({
-      apiKey: 'keypBiIZw05gzqcD5',
+      apiKey: 'keyA3qqbRhyli00LG',
     })
 
     // Copy Management Base
