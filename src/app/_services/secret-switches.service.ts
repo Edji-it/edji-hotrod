@@ -47,7 +47,7 @@ export class SecretSwitchesService {
     this._airtable = Airtable
 
     this._airtable.configure({
-      apiKey: 'keypBiIZw05gzqcD5',
+      apiKey: 'keyA3qqbRhyli00LG',
     })
 
     // Secret Switches Base
