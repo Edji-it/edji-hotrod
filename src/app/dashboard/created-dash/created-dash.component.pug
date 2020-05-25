@@ -5,7 +5,14 @@
       h1.no-flow Created Readings
         i.icon__tooltip(tooltipPosition="bottom", pTooltip="Readings are how you share content on Edji!")
           span.icon.icon-circle.icon-info  i
-  .col-12.col-sm-6.text-right
+  .col-12.col-sm-6.text-right.d-sm-none
+    button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") 
+      | New Reading
+      i.icon.icon-create.mr-0.icon--btn-inline
+    button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type != 'temp'", [routerLink]="['/new-reading']")
+      | New Reading
+      i.icon.icon-create.mr-0.icon--btn-inline
+  .col-12.col-sm-6.text-right.mt-5.d-none.d-sm-block
     button#buttonNewReading.btn.btn-primary.new-reading-btn(*ngIf="user.type == 'temp'", (click)="showLoginReqModal = true") 
       | New Reading
       i.icon.icon-create.mr-0.icon--btn-inline
