@@ -1,6 +1,6 @@
 ## Edji Hot Rod
 
-[![CircleCI](https://circleci.com/gh/codiak/edji-hotrod/tree/dev.svg?style=svg&circle-token=d31434adc07888175da13d892c3a7542b92ce66b)](https://circleci.com/gh/codiak/edji-hotrod/tree/dev)
+[![CircleCI](https://circleci.com/gh/Edji-it/edji-hotrod.svg?style=svg&circle-token=d31434adc07888175da13d892c3a7542b92ce66b)](https://circleci.com/gh/Edji-it/edji-hotrod)
 
 **Make sure you have Node version >= 5.0 and NPM >= 3**
 
