@@ -71,7 +71,7 @@ export class ReadingRecapComponent implements OnInit {
   }
 
   public students: any[] = []
-  public selectedStudent: any
+  public selectedStudent: string = ''
 
   // Slide in value animates pane once component has loaded
   public slidePaneIn: boolean = false
@@ -102,6 +102,11 @@ export class ReadingRecapComponent implements OnInit {
       }),
       this.projectStore.commentStats.subscribe(stats => {
         this.commentStats = stats
+        // default to first student in students list
+        if (!this.selectedStudent && stats.stats.userStats[0] && stats.stats.userStats[0]._id) {
+          console.log('selecting default student')
+          this.selectedStudent = stats.stats.userStats[0]._id
+        }
         this.buildReport()
       }),
       this.projectStore.currentProject.subscribe(
@@ -189,7 +194,7 @@ export class ReadingRecapComponent implements OnInit {
     // populate the student list
     this.students = this.commentStats.stats.userStats.map(s => ({ label: s.fullname, value: s._id }))
     // Load selected student if not loaded
-    if (this.selectedStudent && !this.currentStudent) {
+    if (this.selectedStudent && !(this.currentStudent && this.currentStudent.value)) {
       this.changeStudentSelection()
     }
     const userStats = this.commentStats.findStudent(this.currentStudent.value)
@@ -235,11 +240,13 @@ export class ReadingRecapComponent implements OnInit {
    * This gets called whenever the dropdown selection changes
    */
   public changeStudentSelection(event?: any): void {
-    // fire an analytic event here for tracking purposes
-    this.angulartics.eventTrack.next({
-      action: 'readingRecap_studentSelected',
-      properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
-    })
+    if (event) {
+      // fire an analytic event here for tracking purposes
+      this.angulartics.eventTrack.next({
+        action: 'readingRecap_studentSelected',
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+      })
+    }
     this.currentStudent = this.students.find(user => user.value === this.selectedStudent)
     if (this.currentStudent) {
       this.buildReport()

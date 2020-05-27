@@ -6,7 +6,7 @@
   .container.px-3
     .row
       .col-8
-        h1.mb-3.header-text__large(*ngIf="currentUser.hero_status") Reading Recap for
+        h1.mb-3.header-text__large Reading Recap for
           p-dropdown#studentSelector.w-100(
             [options]="students",
             [(ngModel)]="selectedStudent",
@@ -21,7 +21,7 @@
           span(aria-hidden='true') &times;
         //- button.btn.btn-success.btn-sm.float-right.mr-5((click)="goToEvalForm()") Send Copy
         //- button.btn.btn-primary.btn-sm.float-right.mr-5((click)="downloadPDF()") Download
-  .container.px-3(*ngIf="currentUser.hero_status && currentStudent")
+  .container.px-3(*ngIf="currentStudent")
     #readingReport.p-4
       //- Header Block
       .row
@@ -175,22 +175,3 @@
               tabindex="3",
               (click)="addEvaluationOnly(evaluationForm.controls['inputText'].value)"
             ) Add Feedback
-  //- Hero Micro
-  .container.px-3.mt-2(*ngIf="!currentUser.hero_status")
-    #readingReport
-      .modal-dialog.reading-recap-blurred
-        .modal-content.reading-recap-blurred-outer
-          .modal-body.text-center.reading-recap-blurred-inner
-            h2.h1 Unlock Reading Recap with Hero
-            .text-left
-              p([innerHtml]='":timer: Gauge a student\'s time and activity" | emojione')
-              p([innerHtml]='":speech_balloon: List all of a student\'s comments" | emojione')
-              p([innerHtml]='":bookmark_tabs: Provide feedback for students" | emojione')
-              //- p([innerHtml]='":floppy_disk: Save a copy of the Recap to share with parents" | emojione')
-            //- With Edji Hero, get and provide insights feedback save to parents
-            //- time on reading
-            //- activity
-            //- feedback
-            .btn-row.mt-4
-              .btn.btn-hero([routerLink]="['/plans']", fragment="top", target="_blank") Learn About Hero
-      img(src="/assets/images/reading-recap-blurred.jpg")

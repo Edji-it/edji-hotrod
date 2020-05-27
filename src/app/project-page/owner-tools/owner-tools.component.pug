@@ -49,7 +49,6 @@
     type="button",
     [routerLink]="'./'",
     [queryParams]="{ recap: true }",
-    [class.hero--micro-offer__wrap]="user && !user.hero_status",
     [class.disabled]="currentProject.archived"
   )
     i#toggleReadingRecap.icon-reading-recap(*ngIf="currentProject")

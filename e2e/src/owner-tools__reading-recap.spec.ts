@@ -38,8 +38,6 @@ describe('Project Page as an owner using reading report: ', () => {
     sidebar.logout()
   })
 
-  
-
   /* ---- Reading Report Tests ------------------------- */
 
   it("should open the reading report and verify it's open", () => {
@@ -132,8 +130,9 @@ describe('Project Page as an owner using reading report: ', () => {
       .all(by.css('.count-block.count-block__audio'))
       .count()
       .then(count => {
-        expect(count >= 1).toBeTruthy(
-          'Test Hero audio count was supposed to be equal to or greater than 1 on the reading report',
+        expect(count).toBeGreaterThan(
+          0,
+          `Test Hero audio count was supposed to be greater than 0 on the reading report`,
         )
       })
     // Click on the student dropdown to open it up
