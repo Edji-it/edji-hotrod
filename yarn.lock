@@ -6168,10 +6168,9 @@ optionator@^0.8.1, optionator@^0.8.2:
     type-check "~0.3.2"
     wordwrap "~1.0.0"
 
-opus-recorder@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/opus-recorder/-/opus-recorder-6.2.0.tgz#45949b43c08079ec87e63ff7ca18ee6a19daa1d3"
-  integrity sha512-890khMXgmkqarxvocdTc9iADKIxbhzX8DyBcjVcE5nyuOVfVAkvyIAI1jF8qUscdsgaRM+tVy20QM6LZy1Gp9A==
+opus-recorder@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/opus-recorder/-/opus-recorder-4.1.4.tgz#83dc5ef434a524775475e40f578710febc7949f0"
 
 original@^1.0.0:
   version "1.0.2"
