@@ -98,7 +98,7 @@ export class CreatedDashComponent implements OnInit, OnDestroy {
     let isDev = this._auth.getEnv() === 'dev'
     this.templates = [
       {
-        title: ':alembic: Scientific Method with Marie Currie',
+        title: ':alembic: Scientific Method with Marie Curie',
         cohort: 5,
         _id: isDev ? '5db1c419dafbb218db2a369e' : '5db47f10ba6d9c002165059e',
         note: 'Concept introduction, Middle to Junior High level',
