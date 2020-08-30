@@ -78,6 +78,7 @@ import { LoginForm, GuestForm, RegisterFormComponent, ProfileFormComponent } fro
 import {
   LoginModal,
   UserDetailsUpdateModal,
+  UserUpdateModal,
   ResetPassComponent,
   DeleteCommentModal,
   DeleteReadingModal,
@@ -273,6 +274,7 @@ const routerOptions: ExtraOptions = {
     HomeComponent,
     NoContentComponent,
     UserDetailsUpdateModal,
+    UserUpdateModal,
     ReadingCardComponent,
     ResetComponent,
     HeroPromoPageComponent,

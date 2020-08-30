@@ -17,7 +17,7 @@ nav-bar([showDashboardOptions]="true")
   .column.col-sm-9
     //- spacer div
     .spacer-mobile-collapse
-    .outer-circle.btn-profile-edit((click)="editProfile()")
+    .outer-circle.btn-profile-edit((click)="showUserUpdateModal=true")
     //- Name
     .info-group
       .name-label {{currentUser.fullname}}
@@ -98,4 +98,9 @@ hero-change-modal.modal-will-fade(
   *ngIf="showHeroChangeModal",
   [class.show]="showHeroChangeModal",
   (closeModal)="showHeroChangeModal = !showHeroChangeModal; updateHeroStatus()"
+)
+hot-user-update-modal.modal-will-fade(
+  *ngIf="showUserUpdateModal",
+  [class.show]="showUserUpdateModal",
+  (closeModal)="showUserUpdateModal = !showUserUpdateModal"
 )

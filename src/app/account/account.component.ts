@@ -29,6 +29,7 @@ export class AccountComponent implements OnInit, OnDestroy {
   public showUploadProfPicModal: boolean = false
   public showHeroSubModal: boolean = false
   public showHeroChangeModal: boolean = false
+  public showUserUpdateModal: boolean = false
 
   public canceled: boolean = false
   public academyHero: boolean = false
@@ -119,5 +120,9 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.customerSubEnd = this._auth.getStripeDate(sub.current_period_end).toString()
       }
     }
+  }
+
+  public editProfile(): void {
+    console.log('clicked')
   }
 }
