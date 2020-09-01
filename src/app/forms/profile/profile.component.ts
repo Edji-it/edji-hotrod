@@ -28,6 +28,7 @@ import { userColorOptions } from 'src/app/shared/user-avatar-editor/user-avatar-
 export class ProfileFormComponent implements OnInit {
   @Input() noRedirect: boolean
   @Input() submitCopy: string = 'See My Dashboard'
+  @Input() profileEdit: boolean = false
   /** The reading id that the user wanted to make a copy of */
   @Output() profileSuccess: EventEmitter<any> = new EventEmitter()
 
@@ -99,6 +100,12 @@ export class ProfileFormComponent implements OnInit {
       }
     }
 
+    let prefillSchool = null
+    if (userSoFar.school && userSoFar.school.district_name.length > 0) {
+      if (userSoFar.school.school_name.length > 0) prefillSchool = userSoFar.school.school_name
+      prefillSchool = userSoFar.school.district_name
+    }
+
     // Used for placeholder values in template
     this.userCopy = new Copy().getUserCopy()
 
@@ -107,7 +114,7 @@ export class ProfileFormComponent implements OnInit {
         firstname: [prefillFirst, Validators.required],
         lastname: [prefillLast, Validators.required],
         accountRole: [prefillIdentity, Validators.required],
-        school: [null],
+        school: [prefillSchool],
       },
       {
         validator: this.schoolValidator,
@@ -118,6 +125,7 @@ export class ProfileFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.profileEdit) this.submitCopy = 'Update My Profile'
     this.subscriptions.push(
       this.route.queryParams.subscribe(queryParams => {
         this.readingToAdd = queryParams['reading']
@@ -266,30 +274,38 @@ export class ProfileFormComponent implements OnInit {
       user.school = this.schoolInfo
     }
     // Update user will fetch most recent user object, update properties given
-    this._auth
-      .updateUser(user)
-      .pipe(take(1))
-      .subscribe(
-        data => {
-          this.profileFormLoading = false
-          // User Profile completion events
-          this.reportUserCreated(data.user)
-          // Bring the user to their dashboard, or where they were headed
-          this.handleProfileCompleteRouting(data)
-          // Emit via output
-          this.profileSuccess.emit(data.user)
-        },
-        err => {
-          this.profileFormLoading = false
-          let error = err.error
-          // If the full name has bad words
-          if (error.validationErrors.fullname === 'badWords') {
-            this.errorObject.badName = ':anguished: Would you mind choosing another name?'
-          } else {
-            console.error(err)
-            this.errorObject.serverError = true
-          }
-        },
-      )
+    // this._auth
+    //   .updateUser(user)
+    //   .pipe(take(1))
+    //   .subscribe(
+    //     data => {
+    //       this.profileFormLoading = false
+    //       // User Profile completion events
+    //       !this.profileEdit && this.reportUserCreated(data.user)
+    //       // Bring the user to their dashboard, or where they were headed
+    //       this.handleProfileCompleteRouting(data)
+    //       // Emit via output
+    //       this.profileSuccess.emit(data.user)
+    //     },
+    //     err => {
+    //       this.profileFormLoading = false
+    //       let error = err.error
+    //       // If the full name has bad words
+    //       if (error.validationErrors.fullname === 'badWords') {
+    //         this.errorObject.badName = ':anguished: Would you mind choosing another name?'
+    //       } else {
+    //         console.error(err)
+    //         this.errorObject.serverError = true
+    //       }
+    //     },
+    //   )
+    console.log(user)
+    this.profileFormLoading = false
+    // User Profile completion events
+    !this.profileEdit && this.reportUserCreated(user)
+    // Bring the user to their dashboard, or where they were headed
+    this.handleProfileCompleteRouting(user)
+    // Emit via output
+    this.profileSuccess.emit(user)
   }
 }

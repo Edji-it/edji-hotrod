@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { take } from 'rxjs/operators'
 
 import { User } from './../../shared/datatypes'
@@ -18,33 +17,7 @@ export class UserUpdateModal implements OnInit {
     serviceError?: boolean
   } = {}
 
-  constructor(private _auth: AuthService, _fb: FormBuilder) {}
+  constructor(private _auth: AuthService) {}
 
   ngOnInit() {}
-
-  /**
-   * Submits and closes modal on completion
-   * @param form
-   */
-  public formSubmit(form: FormGroup): void {
-    let detail = form.value.detail
-
-    let updateUser = {}
-    console.log(updateUser)
-
-    // this._auth
-    //   .updateUser(updateUser)
-    //   .pipe(take(1))
-    //   .subscribe(
-    //     (res: any) => {
-    //       this._auth.setUser(res.user)
-    //       this.messages.success = true
-    //       // Close the modal
-    //       this.closeModal.emit()
-    //     },
-    //     err => {
-    //       console.error(err)
-    //     },
-    //   )
-  }
 }

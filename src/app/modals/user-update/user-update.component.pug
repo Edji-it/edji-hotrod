@@ -1,21 +1,10 @@
-.modal.fade#userDetailsModal
+#userDetailsModal.modal
   .modal-dialog
-    form.modal-content([formGroup]="heardFromForm", (ngSubmit)="formSubmit(heardFromForm)")
+    .modal-content
       .modal-header
         h4.modal-title Update Profile Details
         button(type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
           span(aria-hidden="true") &times;
       .modal-body
-        .form-group
-          p([innerHTML]="modalHeadings.body | emojione")
-        .form-group
-          //- Name
-          //- User Type
-          //- School
-          //- @todo: email address
+        hot-profile-form([profileEdit]="true", [noRedirect]="true", (profileSuccess)="closeModal.emit()")
       .modal-footer
-        button.btn.btn-primary(
-          type="submit", 
-          [disabled]="heardFromForm.controls['source'].invalid",
-          data-text="userDetailsSubmit"
-        ) Update my info
