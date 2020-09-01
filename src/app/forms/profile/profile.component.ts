@@ -274,38 +274,30 @@ export class ProfileFormComponent implements OnInit {
       user.school = this.schoolInfo
     }
     // Update user will fetch most recent user object, update properties given
-    // this._auth
-    //   .updateUser(user)
-    //   .pipe(take(1))
-    //   .subscribe(
-    //     data => {
-    //       this.profileFormLoading = false
-    //       // User Profile completion events
-    //       !this.profileEdit && this.reportUserCreated(data.user)
-    //       // Bring the user to their dashboard, or where they were headed
-    //       this.handleProfileCompleteRouting(data)
-    //       // Emit via output
-    //       this.profileSuccess.emit(data.user)
-    //     },
-    //     err => {
-    //       this.profileFormLoading = false
-    //       let error = err.error
-    //       // If the full name has bad words
-    //       if (error.validationErrors.fullname === 'badWords') {
-    //         this.errorObject.badName = ':anguished: Would you mind choosing another name?'
-    //       } else {
-    //         console.error(err)
-    //         this.errorObject.serverError = true
-    //       }
-    //     },
-    //   )
-    console.log(user)
-    this.profileFormLoading = false
-    // User Profile completion events
-    !this.profileEdit && this.reportUserCreated(user)
-    // Bring the user to their dashboard, or where they were headed
-    this.handleProfileCompleteRouting(user)
-    // Emit via output
-    this.profileSuccess.emit(user)
+    this._auth
+      .updateUser(user)
+      .pipe(take(1))
+      .subscribe(
+        data => {
+          this.profileFormLoading = false
+          // User Profile completion events
+          !this.profileEdit && this.reportUserCreated(data.user)
+          // Bring the user to their dashboard, or where they were headed
+          this.handleProfileCompleteRouting(data)
+          // Emit via output
+          this.profileSuccess.emit(data.user)
+        },
+        err => {
+          this.profileFormLoading = false
+          let error = err.error
+          // If the full name has bad words
+          if (error.validationErrors.fullname === 'badWords') {
+            this.errorObject.badName = ':anguished: Would you mind choosing another name?'
+          } else {
+            console.error(err)
+            this.errorObject.serverError = true
+          }
+        },
+      )
   }
 }

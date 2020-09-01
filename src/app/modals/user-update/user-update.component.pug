@@ -5,6 +5,6 @@
         h4.modal-title Update Profile Details
         button(type="button", class="close", aria-label="Close", (click)="closeModal.emit()")
           span(aria-hidden="true") &times;
-      .modal-body
-        hot-profile-form([profileEdit]="true", [noRedirect]="true", (profileSuccess)="closeModal.emit()")
+      .modal-body.pb-0
+        hot-profile-form.mb-0([profileEdit]="true", [noRedirect]="true", (profileSuccess)="closeModal.emit()")
       .modal-footer
