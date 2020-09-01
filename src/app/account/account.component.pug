@@ -17,7 +17,8 @@ nav-bar([showDashboardOptions]="true")
   .column.col-sm-9
     //- spacer div
     .spacer-mobile-collapse
-    .outer-circle.btn-profile-edit((click)="showUserUpdateModal=true")
+    .outer-circle.btn-profile-edit((click)="showUserUpdateModal=true", title="Click to edit your profile")
+      span([innerHtml]="':pencil2:' | emojione", title="Click to edit your profile")
     //- Name
     .info-group
       .name-label {{currentUser.fullname}}
@@ -54,6 +55,13 @@ nav-bar([showDashboardOptions]="true")
         button#heroModifyBtn.btn.btn-secondary.mr-4(*ngIf="currentUser.hero_status && !canceled && !academyHero", (click)="showHeroChangeModal = true") View/Modify Subscription
         button.btn.btn-hero.mr-4(*ngIf="!currentUser.hero_status", (click)="showHeroSubModal = true; trackHeroClick()") Go Hero
         button#heroResubscribeBtn.btn.btn-hero.mr-4(*ngIf="canceled", (click)="showHeroSubModal = true; trackHeroClick()") Renew Subscription
+    //- selected school
+    .info-group(*ngIf="currentUser.school && currentUser.school.district_name")
+      label.info-label School District
+      p.info {{currentUser.school.district_name}}
+      div(*ngIf="currentUser.school && currentUser.school.school_name")
+        label.info-label School Name
+        p.info {{currentUser.school.school_name}}
     //- Linked Accounts
     //- Only showing this section if the user has an account linked, because we are temporarily disabling linking from this page.
     .info-group(*ngIf="linkedAccounts.clever")

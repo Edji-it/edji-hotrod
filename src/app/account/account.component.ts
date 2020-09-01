@@ -45,6 +45,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._auth.currentUser.subscribe(user => {
         this.currentUser = user
+        console.log(user)
         this.updateHeroStatus()
         if (user.oauth) {
           this.populateLinkedAccounts(user.oauth)
