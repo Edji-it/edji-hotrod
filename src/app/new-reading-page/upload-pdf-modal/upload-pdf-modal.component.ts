@@ -37,6 +37,7 @@ export class UploadPdfModalComponent implements OnInit {
   public reportErrorMsg: string = ''
   public firstDocument: number = 0
   public totalDocuments: number = 1
+  public supportEmail: string = 'mailto:support@edji.it'
 
   /**
    * Temporary: PDF word highlight flag
@@ -146,8 +147,12 @@ export class UploadPdfModalComponent implements OnInit {
       },
       error => {
         this.uploading = false
-        this.errorMsg =
-          '<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="mailto:brennen@edji.it">contact us</a>.'
+        this.errorMsg = `<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="${this.supportEmail}">contact us</a>.`
+        // Track PDF start upload failure event
+        this.angulartics.eventTrack.next({
+          action: 'pdf_upload_fail_start',
+          properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+        })
       },
     )
 
