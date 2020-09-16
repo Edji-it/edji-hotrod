@@ -17,11 +17,15 @@ nav-bar([showDashboardOptions]="true")
   .column.col-sm-9
     //- spacer div
     .spacer-mobile-collapse
-    .outer-circle.btn-profile-edit((click)="showUserUpdateModal=true", title="Click to edit your profile")
-      span([innerHtml]="':pencil2:' | emojione", title="Click to edit your profile")
     //- Name
-    .info-group
-      .name-label {{currentUser.fullname}}
+    .row
+      .col-md-8
+        .info-group
+          .name-label {{currentUser.fullname}}
+      .col-md-4.pt-3
+        button.btn.change-password-btn.mb-4(type="button", (click)="showUserUpdateModal=true", [innerHtml]="':pencil2: &nbsp; Update Your Profile' | emojione", title="Click to edit your profile")
+        //- .outer-circle.btn-profile-edit((click)="showUserUpdateModal=true", title="Click to edit your profile")
+        //-   span([innerHtml]="':pencil2:' | emojione", title="Click to edit your profile")
       //- .info-label Name
     //- user name
     .row

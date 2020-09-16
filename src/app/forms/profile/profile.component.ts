@@ -126,6 +126,9 @@ export class ProfileFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.profileEdit) this.submitCopy = 'Update My Profile'
+    if (this.profileEdit && this.profileForm.controls['lastname'].value == '') {
+      this.profileForm.controls['lastname'].markAsDirty()
+    }
     this.subscriptions.push(
       this.route.queryParams.subscribe(queryParams => {
         this.readingToAdd = queryParams['reading']

@@ -2,7 +2,7 @@
 .profile-card
     .avatar-editor__wrap.large
         user-avatar([userDetails]="user", [size]="'large'")
-        .btn.edit-btn(*ngIf="!editAvatar", (click)="editAvatar = true") Edit
+        .btn.edit-btn(*ngIf="!editAvatar && !profileEdit", (click)="editAvatar = true") Edit
         user-avatar-editor(*ngIf="editAvatar", (close)="editAvatar = false")
     .h1([innerHtml]="getProfileName(profileForm)")
     .label.small.text-muted.mb-0(*ngIf="profileForm.controls['school'] && profileForm.controls['school'].value")
