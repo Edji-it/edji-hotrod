@@ -28,6 +28,7 @@ import { userColorOptions } from 'src/app/shared/user-avatar-editor/user-avatar-
 export class ProfileFormComponent implements OnInit {
   @Input() noRedirect: boolean
   @Input() submitCopy: string = 'See My Dashboard'
+  @Input() profileEdit: boolean = false
   /** The reading id that the user wanted to make a copy of */
   @Output() profileSuccess: EventEmitter<any> = new EventEmitter()
 
@@ -99,6 +100,12 @@ export class ProfileFormComponent implements OnInit {
       }
     }
 
+    let prefillSchool = null
+    if (userSoFar.school && userSoFar.school.district_name.length > 0) {
+      if (userSoFar.school.school_name.length > 0) prefillSchool = userSoFar.school.school_name
+      prefillSchool = userSoFar.school.district_name
+    }
+
     // Used for placeholder values in template
     this.userCopy = new Copy().getUserCopy()
 
@@ -107,7 +114,7 @@ export class ProfileFormComponent implements OnInit {
         firstname: [prefillFirst, Validators.required],
         lastname: [prefillLast, Validators.required],
         accountRole: [prefillIdentity, Validators.required],
-        school: [null],
+        school: [prefillSchool],
       },
       {
         validator: this.schoolValidator,
@@ -118,6 +125,10 @@ export class ProfileFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.profileEdit) this.submitCopy = 'Update My Profile'
+    if (this.profileEdit && this.profileForm.controls['lastname'].value == '') {
+      this.profileForm.controls['lastname'].markAsDirty()
+    }
     this.subscriptions.push(
       this.route.queryParams.subscribe(queryParams => {
         this.readingToAdd = queryParams['reading']
@@ -273,7 +284,7 @@ export class ProfileFormComponent implements OnInit {
         data => {
           this.profileFormLoading = false
           // User Profile completion events
-          this.reportUserCreated(data.user)
+          !this.profileEdit && this.reportUserCreated(data.user)
           // Bring the user to their dashboard, or where they were headed
           this.handleProfileCompleteRouting(data)
           // Emit via output
