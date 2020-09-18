@@ -101,8 +101,10 @@ export class ProfileFormComponent implements OnInit {
     }
 
     let prefillSchool = null
-    if (userSoFar.school && userSoFar.school.district_name.length > 0) {
-      if (userSoFar.school.school_name.length > 0) prefillSchool = userSoFar.school.school_name
+    if (userSoFar.school && userSoFar.school.district_name && userSoFar.school.district_name.length > 0) {
+      if (userSoFar.school.school_name && userSoFar.school.school_name.length > 0) {
+        prefillSchool = userSoFar.school.school_name
+      }
       prefillSchool = userSoFar.school.district_name
     }
 
