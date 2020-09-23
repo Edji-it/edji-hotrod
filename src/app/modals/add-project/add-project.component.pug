@@ -64,18 +64,22 @@
                             | Add Label
                     .form-group.row()
                         label.col-12 Comment Abilities
-                        .input-group.col-4
+                        .input-group.col-6
                             .custom-control.custom-checkbox
                                 input#emojiCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['emojiType']")
                                 label.custom-control-label(for="emojiCommenting") Emoji
-                        .input-group.col-4
+                        .input-group.col-6
                             .custom-control.custom-checkbox
                                 input#audioCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['audioType']")
                                 label.custom-control-label(for="audioCommenting") Audio
-                        .input-group.col-4
+                        .input-group.col-6
                             .custom-control.custom-checkbox
                                 input#replyCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['replyType']")
                                 label.custom-control-label(for="replyCommenting") Replies
+                        .input-group.col-6
+                            .custom-control.custom-checkbox
+                                input#immersiveCommenting.custom-control-input(type='checkbox', [formControl]="projectForm.controls['immersiveType']")
+                                label.custom-control-label(for="immersiveCommenting") Immersive Reader
                     div([class.hero-box]="!isHero")
                         .form-group.p-0(*ngIf="!isHero")
                             .row.no-gutters
