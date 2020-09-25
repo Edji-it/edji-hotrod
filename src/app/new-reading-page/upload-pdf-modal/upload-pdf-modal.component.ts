@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { MediaService, AuthService, SecretSwitchesService } from '../../_services'
+import { MediaService, AuthService, SecretSwitchesService, BumblebeeService } from '../../_services'
 import { DeletePdfMiniModal } from './delete-pdf-mini-modal/delete-pdf-mini-modal.component'
 import { LockerService } from '../../_services/locker.service'
 import { DocumentSpark } from '../../shared/datatypes'
@@ -38,6 +38,7 @@ export class UploadPdfModalComponent implements OnInit {
   public firstDocument: number = 0
   public totalDocuments: number = 1
   public supportEmail: string = 'mailto:support@edji.it'
+  public pdfPageCount: number = 0
 
   /**
    * Temporary: PDF word highlight flag
@@ -51,6 +52,7 @@ export class UploadPdfModalComponent implements OnInit {
     private _auth: AuthService,
     private angulartics: Angulartics2,
     private _switches: SecretSwitchesService,
+    private _bumblebee: BumblebeeService,
   ) {}
 
   ngOnInit() {
@@ -103,13 +105,33 @@ export class UploadPdfModalComponent implements OnInit {
     if (this.file.name && this.title.length < 1) {
       this.title = this.file.name
     }
-    // Limit file size to 10mb
-    if (this.file && this.file.size > 10 * Math.pow(10, 6)) {
+    // Limit file size to 10mb and 30 pages
+    if (this.file) {
+      this.getPdfPageCount()
+    }
+    this.checkUploadWarning()
+  }
+
+  checkUploadWarning() {
+    if (this.file && (this.file.size > 10 * Math.pow(10, 6) || this.pdfPageCount > 30)) {
       this.noUploadAllowed = true
-      this.errorMsg = 'PDF uploads are limited to 10mb, please select a smaller PDF.'
+      this.errorMsg = 'PDF uploads are limited to 10mb and 30 pages. Please select a smaller PDF' // Track PDF start upload failure event
+      this.angulartics.eventTrack.next({
+        action: `pdf_upload_fail_too-large_${this.file.size}mb_${this.pdfPageCount}pgs`,
+        properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
+      })
     } else {
       this.noUploadAllowed = false
       this.errorMsg = ''
+    }
+  }
+
+  getPdfPageCount() {
+    const reader: any = new FileReader()
+    reader.readAsBinaryString(this.file)
+    reader.onloadend = async () => {
+      this.pdfPageCount = reader.result.match(/\/Type[\s]*\/Page[^s]/g).length
+      this.checkUploadWarning()
     }
   }
 
@@ -153,6 +175,8 @@ export class UploadPdfModalComponent implements OnInit {
           action: 'pdf_upload_fail_start',
           properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
         })
+        // send to slack alerts
+        this._bumblebee.reportError({ error: 'pdf failed upload to S3 bucket' })
       },
     )
 
