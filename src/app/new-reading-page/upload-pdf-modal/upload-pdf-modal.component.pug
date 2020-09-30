@@ -47,6 +47,10 @@
                 )
                   | Upload
           .alert.alert-warning(*ngIf="errorMsg", [innerHtml]="errorMsg")
+          .alert.alert-warning(*ngIf="errorUploadFailed")
+            b Upload failed!
+            | Please try again later, or with a different file. If this problem persists, please &nbsp;
+            button.button.btn.btn-link.p-0.m-0((click)="populateErrorReport()", style="margin: 0 !important;") contact us
           hr
           //- LISTING OF ALL UPLOADED PDFS
           h3.pb-2 Select an uploaded PDF to add to your Reading

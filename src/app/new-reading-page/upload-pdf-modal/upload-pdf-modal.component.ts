@@ -30,6 +30,7 @@ export class UploadPdfModalComponent implements OnInit {
   public uploading: boolean = false
   public noUploadAllowed: boolean = true
   public errorMsg: string = ''
+  public errorUploadFailed: boolean = false
   public pdfFileInputId: string = 'pdfFileInput'
   public confirmDelete: boolean = false
   // Toggle Feedback/Report modal
@@ -151,6 +152,7 @@ export class UploadPdfModalComponent implements OnInit {
 
     this.uploading = true
     this.noUploadAllowed = true
+    this.errorUploadFailed = false
     document.getElementById(this.pdfFileInputId)['value'] = ''
 
     this._media.uploadPdf(this.file).subscribe(
@@ -169,7 +171,7 @@ export class UploadPdfModalComponent implements OnInit {
       },
       error => {
         this.uploading = false
-        this.errorMsg = `<b>Upload failed!</b> Please try again later, or with a different file. If this problem persists, please <a href="${this.supportEmail}">contact us</a>.`
+        this.errorUploadFailed = true
         // Track PDF start upload failure event
         this.angulartics.eventTrack.next({
           action: 'pdf_upload_fail_start',
@@ -391,6 +393,17 @@ export class UploadPdfModalComponent implements OnInit {
       action: 'newReading_pdf_toggleWordHighlights' + (doc.disable_words ? 'Off' : 'On'),
       properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },
     })
+  }
+
+  public populateErrorReport(errorObj: any): void {
+    this.reportErrorMsg = `Any additional details?\n\n\n
+    ***********************************
+      PDF Error Report:
+
+      PDF Upload Failed
+    ***********************************
+    `
+    this.showReportError = true
   }
 
   /**
