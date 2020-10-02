@@ -1234,17 +1234,6 @@ export class AuthService implements CanActivate {
         }),
       )
   }
-
-  public getImmersiveReaderCredentials(): Promise<{ access_token: string; subdomain: string }> {
-    return this._http
-      .get<immersiveReaderResponse>(`${this.baseUrl}/api/v1/auth/azure/immersive_reader`, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          Authorization: this.getToken(),
-        }),
-      })
-      .toPromise()
-  }
 }
 
 interface LoginObject {
@@ -1279,5 +1268,3 @@ interface RedeemTokenObj {
   userId: string
   token: string
 }
-
-type immersiveReaderResponse = { access_token: string; subdomain: string }

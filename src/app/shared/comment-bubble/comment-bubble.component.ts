@@ -1,11 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-import { AuthService } from 'src/app/_services'
+import { AuthService, ImmersiveReaderService } from 'src/app/_services'
 
 // Internal
 import { EdjiComment } from '../datatypes'
-
-declare const ImmersiveReader: any
 
 @Component({
   selector: 'comment-bubble',
@@ -37,7 +35,7 @@ export class CommentBubbleComponent {
 
   public fadeOut: boolean
 
-  constructor(private router: Router, private route: ActivatedRoute, private _auth: AuthService) {}
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   public close(clearParams?: boolean) {
     this.fadeOut = true
@@ -54,33 +52,5 @@ export class CommentBubbleComponent {
       this.closed.emit(true)
       this.fadeOut = false
     }, 1000)
-  }
-
-  exitImmersiveReader() {
-    console.log('exited!')
-  }
-
-  async openImmersiveReader() {
-    console.log(this.comment)
-    const { access_token, subdomain } = await this._auth.getImmersiveReaderCredentials()
-    const content = `Comment on: ${this.comment.text}\n\nComment: ${this.comment.data}`
-    const data = {
-      title: `Comment by ${this.comment.author}`,
-      chunks: [
-        {
-          content,
-          mimeType: 'text/plain',
-        },
-      ],
-    }
-    const options = {
-      onExit: this.exitImmersiveReader,
-      uiZIndex: 8000,
-    }
-    try {
-      ImmersiveReader.launchAsync(access_token, subdomain, data, options)
-    } catch (err) {
-      console.error('error loading immersive reader', err)
-    }
   }
 }

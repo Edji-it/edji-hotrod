@@ -17,12 +17,6 @@
   )
   .btn-row.right
     a.btn.btn-xs-primary.has-icon(
-      (click)="openImmersiveReader()",
-      data-test="linkImmersiveReader"
-    )
-      i.icon.icon-immersive-reader
-      | Immersive Reader
-    a.btn.btn-xs-primary.has-icon(
       [routerLink]="['./']",
       [queryParams]="{ line: comment._id }",
       data-test="commentViewLine"
