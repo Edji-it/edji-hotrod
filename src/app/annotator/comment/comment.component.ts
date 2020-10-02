@@ -524,7 +524,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   async exitImmersiveReader() {
-    console.log('exited!', this)
     await this._immersive.savePreferences()
   }
 
@@ -543,7 +542,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       onExit: () => this.exitImmersiveReader(), // arrow function essential here to make sure exitImmersiveReader can access 'this'
     }
     try {
-      console.log(this._immersive)
       this._immersive.startImmersiveReader(data, options)
     } catch (err) {
       console.error('error loading immersive reader', err)

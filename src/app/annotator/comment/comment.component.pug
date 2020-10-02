@@ -102,13 +102,13 @@ div([id]="'comment-' + comment._id")
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Recording
-                        //- #commentImmersiveReader.icon.icon-immersive-reader.hover--tooltip(
-                        //-   *ngIf="availableInContext('immersive')",
-                        //-   (click)="showQuickLabels = false; openImmersiveReader()"
-                        //- )
-                        //-     .tooltip-wrap
-                        //-         .tooltip
-                        //-             .tooltip-title Read to Me
+                        #commentImmersiveReader.icon.icon-immersive-reader.hover--tooltip(
+                          *ngIf="availableInContext('immersive')",
+                          (click)="showQuickLabels = false; openImmersiveReader()"
+                        )
+                            .tooltip-wrap
+                                .tooltip
+                                    .tooltip-title Read to Me
                     .quick-label__dropdown(*ngIf="showQuickLabels && project.quick_labels")
                         .quick-label(
                           *ngFor="let label of project.quick_labels; let i = index",
