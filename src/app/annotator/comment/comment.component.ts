@@ -469,21 +469,24 @@ export class CommentComponent implements OnInit, OnDestroy {
    * @param type
    */
   availableInContext(type: string): boolean {
+    // console.log(type)
+    // return true
     if (this.commentContext === 'answer' && type !== this.comment.type) {
       return false
     }
-    switch (type) {
-      case 'label':
-        return this.project.quick_labels && this.project.quick_labels[0]
-      case 'emoji':
-        return this.project.types.includes('emoji')
-      case 'audio':
-        return this.comment.type !== 'audio' && this.project.types.indexOf('audio') > -1
-      case 'immersive':
-        return this.project.types.includes('immersive')
-      default:
-        return true
-    }
+    return true
+    // switch (type) {
+    //   case 'label':
+    //     return this.project.quick_labels && this.project.quick_labels[0]
+    //   case 'emoji':
+    //     return this.project.types.includes('emoji')
+    //   case 'audio':
+    //     return this.comment.type !== 'audio' && this.project.types.indexOf('audio') > -1
+    //   case 'immersive':
+    //     return this.project.types.includes('immersive')
+    //   default:
+    //     return true
+    // }
   }
 
   /**
