@@ -528,7 +528,10 @@ export class CommentComponent implements OnInit, OnDestroy {
   }
 
   async openImmersiveReader() {
-    const content = `Comment on: ${this.comment.text}\n\nComment: ${this.comment.data}`
+    let content = `Comment on: ${this.comment.text}`
+    if (this.comment.data && this.comment.data.length > 0) {
+      content += `\n\nComment: ${this.comment.data}`
+    }
     const data = {
       title: `Comment by ${this.comment.author}`,
       chunks: [
