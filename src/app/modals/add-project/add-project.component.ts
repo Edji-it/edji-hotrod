@@ -59,6 +59,7 @@ export class AddProjectModal implements OnInit {
       textType: true,
       audioType: true,
       replyType: true,
+      immersiveType: true,
       customCode: ['', { disabled: !this.isHero }],
       groupInstructions: this.reading.default_instructions || '',
       quickLabels: this._fb.array([this._fb.group({ label: '' })]),
@@ -123,6 +124,9 @@ export class AddProjectModal implements OnInit {
     }
     if (formValue.replyType) {
       types.push('reply')
+    }
+    if (formValue.immersiveType) {
+      types.push('immersive')
     }
     // no code found - they're good to create the new one!
     let newProject = {

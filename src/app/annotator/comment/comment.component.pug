@@ -66,7 +66,7 @@ div([id]="'comment-' + comment._id")
                     | Reply
                     i.icon.icon-reply-arrow
                 .comment-input-wrapper(
-                  *ngIf="(comment.data || userPermission >= 5) && availableInContext(['emoji','text'])",
+                  *ngIf="(comment.data || userPermission >= 5) && (availableInContext('emoji') || availableInContext('text'))",
                   [ngClass]="[ comment.type + '' ]",
                   [class.input-wrapper--reply]="reply || comment.reply_to",
                   (clickOutside)="showQuickLabels = false"
@@ -80,28 +80,35 @@ div([id]="'comment-' + comment._id")
                         (deactivate)="deactivate(comment, $event)",
                         (toggleLabelDropdown)="showQuickLabels = $event",
                     )
-                    .icon-group--in-field(*ngIf="userPermission >= 5 && !_comments.emojiActive")
+                    .icon-group--in-field(*ngIf="!_comments.emojiActive")
                         #commentAddQuickLabel.icon.icon-quick-label.hover--tooltip(
-                              *ngIf="project.quick_labels && project.quick_labels[0] && availableInContext('label')",
+                              *ngIf="userPermission >= 5 && availableInContext('label')",
                               (click)="showQuickLabels = !showQuickLabels"
                             )
                                 .tooltip-wrap
                                     .tooltip
                                         .tooltip-title Add Quick Label
                         #commentAddEmoji.icon.icon-comment-emoji.hover--tooltip(
-                          *ngIf="project.types.indexOf('emoji') > -1 && availableInContext('emoji')",
+                          *ngIf="userPermission >= 5 && availableInContext('emoji')",
                           (click)="showQuickLabels = false; activateEmojiKeyboard($event)"
                         )
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Emoji
                         #commentAddAudio.icon.icon-comment-audio.hover--tooltip(
-                          *ngIf="comment.type !== 'audio' && project.types.indexOf('audio') > -1 && availableInContext('audio')",
+                          *ngIf="userPermission >= 5 && availableInContext('audio')",
                           (click)="showQuickLabels = false; addAudio()"
                         )
                             .tooltip-wrap
                                 .tooltip
                                     .tooltip-title Add Recording
+                        #commentImmersiveReader.icon.icon-immersive-reader.hover--tooltip(
+                          *ngIf="availableInContext('immersive')",
+                          (click)="showQuickLabels = false; openImmersiveReader()"
+                        )
+                            .tooltip-wrap
+                                .tooltip
+                                    .tooltip-title Read to Me
                     .quick-label__dropdown(*ngIf="showQuickLabels && project.quick_labels")
                         .quick-label(
                           *ngFor="let label of project.quick_labels; let i = index",
@@ -119,8 +126,8 @@ div([id]="'comment-' + comment._id")
                         [reply]="reply",
                         [commentContext]="commentContext"
                     )
-                    .icon-group--in-field(*ngIf="availableInContext('text')")
-                        .icon.icon-close(*ngIf="userPermission >= 5", (click)="removeAudio()")
+                    .icon-group--in-field(*ngIf="availableInContext('text') && userPermission >= 5")
+                        .icon.icon-close((click)="removeAudio()")
             //- Comment action buttons
             .comment__action-row.btn-row.left.mt-0(*ngIf="!readingReport", [class.reply-gap]="repliesShowing")
                 ng-container(*ngIf="((!comment.data || comment.data=='') && (!comment.url || comment.url == '')) && !readingReport")

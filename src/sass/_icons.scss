@@ -585,6 +585,10 @@ $iconGrayOpacity: 0.6;
   @include icon('icon-view-line-sm.svg');
 }
 
+.icon-immersive-reader {
+  @include icon('icon-immersive-reader.png')
+}
+
 .icon-vision-flame {
   @include icon('icon-vision-flame.svg');
 

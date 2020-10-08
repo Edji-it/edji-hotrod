@@ -3,7 +3,14 @@ import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output }
 import { ActivatedRoute, Router } from '@angular/router'
 
 // Project Dependencies
-import { AuthService, CommentService, SocketService, AnalyticsService, UtilToolService } from '../../_services'
+import {
+  AuthService,
+  CommentService,
+  SocketService,
+  AnalyticsService,
+  UtilToolService,
+  ImmersiveReaderService,
+} from '../../_services'
 import { EdjiComment, CommentPermissions, EdjiQuestion } from './../../shared/datatypes'
 import { ProjectStore } from 'src/app/_store'
 import { copyToClipboard } from 'src/app/shared/clipboard'
@@ -91,6 +98,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _router: Router,
     public _util: UtilToolService,
+    private _immersive: ImmersiveReaderService,
   ) {}
 
   ngOnInit() {
@@ -460,14 +468,21 @@ export class CommentComponent implements OnInit, OnDestroy {
    * @param commentContext
    * @param type
    */
-  availableInContext(types: string | string[]) {
-    if (typeof types === 'string') {
-      types = [types]
-    }
-    if (this.commentContext === 'answer' && !types.includes(this.comment.type)) {
+  availableInContext(type: string): boolean {
+    if (this.commentContext === 'answer' && type !== this.comment.type) {
       return false
-    } else {
-      return true
+    }
+    switch (type) {
+      case 'label':
+        return this.project.quick_labels && this.project.quick_labels[0]
+      case 'emoji':
+        return this.project.types.includes('emoji')
+      case 'audio':
+        return this.comment.type !== 'audio' && this.project.types.indexOf('audio') > -1
+      case 'immersive':
+        return this.project.types.includes('immersive')
+      default:
+        return true
     }
   }
 
@@ -505,6 +520,34 @@ export class CommentComponent implements OnInit, OnDestroy {
     } else {
       this.comment.data += ` ${wrappedLabel} `
       this.updateComment(this.comment)
+    }
+  }
+
+  async exitImmersiveReader() {
+    await this._immersive.savePreferences()
+  }
+
+  async openImmersiveReader() {
+    let content = `Comment on: ${this.comment.text}`
+    if (this.comment.data && this.comment.data.length > 0) {
+      content += `\n\nComment: ${this.comment.data}`
+    }
+    const data = {
+      title: `Comment by ${this.comment.author}`,
+      chunks: [
+        {
+          content,
+          mimeType: 'text/plain',
+        },
+      ],
+    }
+    const options = {
+      onExit: () => this.exitImmersiveReader(), // arrow function essential here to make sure exitImmersiveReader can access 'this'
+    }
+    try {
+      this._immersive.startImmersiveReader(data, options)
+    } catch (err) {
+      console.error('error loading immersive reader', err)
     }
   }
 }
