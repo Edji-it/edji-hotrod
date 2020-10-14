@@ -96,7 +96,7 @@ div([id]="'comment-' + comment._id")
                                 .tooltip
                                     .tooltip-title Add Emoji
                         #commentAddAudio.icon.icon-comment-audio.hover--tooltip(
-                          *ngIf="userPermission >= 5 && availableInContext('audio')",
+                          *ngIf="userPermission >= 5 && availableInContext('audio-toggle')",
                           (click)="showQuickLabels = false; addAudio()"
                         )
                             .tooltip-wrap

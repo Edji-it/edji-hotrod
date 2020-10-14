@@ -477,8 +477,10 @@ export class CommentComponent implements OnInit, OnDestroy {
         return this.project.quick_labels && this.project.quick_labels[0]
       case 'emoji':
         return this.project.types.includes('emoji')
-      case 'audio':
+      case 'audio-toggle':
         return this.comment.type !== 'audio' && this.project.types.indexOf('audio') > -1
+      case 'audio':
+        return this.comment.type == 'audio' && this.project.types.indexOf('audio') > -1
       case 'immersive':
         return this.project.types.includes('immersive')
       default:
