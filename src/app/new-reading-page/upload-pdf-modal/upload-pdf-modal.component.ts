@@ -116,7 +116,7 @@ export class UploadPdfModalComponent implements OnInit {
   checkUploadWarning() {
     if (this.file && (this.file.size > 10 * Math.pow(10, 6) || this.pdfPageCount > 15)) {
       this.noUploadAllowed = true
-      this.errorMsg = 'PDF uploads are limited to 10mb and 15 pages. Please select a smaller PDF' // Track PDF start upload failure event
+      this.errorMsg = 'PDF uploads are limited to 10mb and 15 pages.' // Track PDF start upload failure event
       this.angulartics.eventTrack.next({
         action: `pdf_upload_fail_too-large_${this.file.size}mb_${this.pdfPageCount}pgs`,
         properties: { category: this._auth.setAnalyticEventCategory(), label: this._auth.setAnalyticEventLabel() },

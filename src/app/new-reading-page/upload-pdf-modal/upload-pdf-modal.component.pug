@@ -9,18 +9,6 @@
             span(aria-hidden="true") &times;
         //- MODAL BODY
         .modal-body
-          .alert.alert-info(*ngIf="!wordHighlightsEnabled")
-            b Hint
-            | PDF's in Edji use dot comments, just like images. If you would like to learn how to convert your
-            | PDF to plain text so your students can highlight,
-            a.link(target="_blank",
-              href="http://guide.edji.it/index.php/2017/05/09/customizing-your-lessons-with-edji-pdf-uploads/")
-              | check out our Guide page here
-            | .
-          .alert.alert-success(*ngIf="wordHighlightsEnabled")
-            .badge.badge-success.badge-dot
-            b([innerHtml]="':tada: Now with word highlighting!' | emojione")
-            | You and your students can highlight the text in newly uploaded PDFs.
           h3.pb-2 Upload a new PDF to add
           form
             .form-group
