@@ -225,6 +225,7 @@ export class ProfileFormComponent implements OnInit {
     } else if (this.noRedirect) {
       // do nothing
     } else {
+      console.log('navigating to dashboard')
       // default case where nothing special happens
       this._router.navigate(['/dashboard'])
     }
