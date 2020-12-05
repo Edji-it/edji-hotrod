@@ -19,6 +19,7 @@ export class DashboardGuardService implements CanActivate {
       }
       return false
     } else if (user.profileIncomplete) {
+      console.log('profile found to be incomplete')
       // Guide user to completing their profile before continuing
       this.router.navigate(['/register/profile'])
     } else {
