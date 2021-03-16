@@ -34,8 +34,10 @@ nav-bar([showDashboardOptions]="true")
           label.info-label Username
           p.info {{currentUser.username}}
       .col-md-4.pt-3
+        //- Set Password Button -- TODO: CHANGE THE 'ngIf's TO ACCOUNT FOR WHETHER THE USER ALREADY HAS A PASSWORD!
+        button.btn.set-password-btn.mb-4(*ngIf="(linkedAccounts.clever || linkedAccounts.google) && !currentUser.hasPassword" type="button", (click)="showSetPassModal = !showSetPassModal") Set Password
         //- Change Password Button
-        button.btn.change-password-btn.mb-4(type="button", (click)="showPassModal = !showPassModal") Change Password
+        button.btn.change-password-btn.mb-4(*ngIf="currentUser.hasPassword" type="button", (click)="showChangePassModal = !showChangePassModal") Change Password
     //- email
     .info-group
       label.info-label Email
@@ -91,9 +93,14 @@ nav-bar([showDashboardOptions]="true")
   .row.container-line
 
 edji-change-pass.modal-will-fade(
-  *ngIf="showPassModal",
-  [class.show]="showPassModal",
-  (closeModal)="showPassModal = !showPassModal"
+  *ngIf="showChangePassModal",
+  [class.show]="showChangePassModal",
+  (closeModal)="showChangePassModal = !showChangePassModal"
+)
+edji-set-pass.modal-will-fade(
+  *ngIf="showSetPassModal",
+  [class.show]="showSetPassModal",
+  (closeModal)="showSetPassModal = !showSetPassModal"
 )
 hot-upload-avatar.modal-will-fade(
   [class.show]="showUploadProfPicModal",

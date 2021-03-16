@@ -25,7 +25,8 @@ export class AccountComponent implements OnInit, OnDestroy {
   public customerCancelDate: string = ''
   public linkedAccounts: { clever?: boolean; google?: boolean } = {}
 
-  public showPassModal: boolean = false
+  public showChangePassModal: boolean = false
+  public showSetPassModal: boolean = false
   public showUploadProfPicModal: boolean = false
   public showHeroSubModal: boolean = false
   public showHeroChangeModal: boolean = false
