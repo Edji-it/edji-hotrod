@@ -76,7 +76,7 @@ interface BaseUser {
   }>
   // User ids this user follows
   following?: string[]
-  hasPassword: boolean
+  has_password: boolean
 }
 
 export interface UserSchoolDistrict {
