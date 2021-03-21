@@ -709,25 +709,6 @@ export class AuthService implements CanActivate {
   }
 
   /**
-   * This is only used for:
-   *  1) User is logged in and setting password => setObject should be assigned properties new_password, email
-   * @param setObject Can have properties: new_password, email
-   * @returns Chainable promise resolved with json data containing either a user object & token or errors
-   **/
-  public setPassword(setObject: { email: string, new_password: string }) {
-    return this._http
-      .post(this.baseUrl + '/api/v1/users/@me/set_password', setObject, this.getOptions())
-      .toPromise()
-      .then((data: any) => {
-        if (data.token && data.user) {
-          data.user = this.setUser(data.user)
-          this.setToken(data.token)
-        }
-        return data
-      })
-  }
-
-  /**
    * There are two cases to use this call:
    *  1) User is logged in and resetting value => resetObject should be assigned properties type, newValue
    *  2) User has a recovery email => resetObject should be assigned properties: token, newValue
