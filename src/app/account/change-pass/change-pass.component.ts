@@ -11,6 +11,7 @@ import { AuthService } from './../../_services/auth.service'
 })
 export class ChangePassComponent implements OnInit {
   public passwordForm: FormGroup
+  public currentUser: any
   public messages: {
     success?: boolean
     wrongPasswordError?: boolean
@@ -18,6 +19,8 @@ export class ChangePassComponent implements OnInit {
   } = {}
   public loading: boolean
   @Output() closeModal = new EventEmitter()
+
+  private subscriptions: any[] = []
 
   constructor(private _auth: AuthService, private angulartics: Angulartics2, fb: FormBuilder) {
     this.passwordForm = fb.group(
@@ -30,11 +33,31 @@ export class ChangePassComponent implements OnInit {
     )
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.subscriptions.push(
+      this._auth.currentUser.subscribe(user => {
+        this.currentUser = user
+        this.setOldPasswordRequired(user.has_password)
+      }),
+    )
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
+  }
 
   //https://angular.io/docs/ts/latest/api/forms/index/FormGroup-class.html
   private passwordsEqual(group: FormGroup) {
     return group.get('new_password').value === group.get('newPasswordConfirm').value ? null : { mismatch: true }
+  }
+
+  private setOldPasswordRequired(old_password_required: boolean) {
+    if(old_password_required)
+      this.passwordForm.get("old_password").enable()
+    else
+      this.passwordForm.get("old_password").disable()
   }
 
   public onSubmit(value: any): void {

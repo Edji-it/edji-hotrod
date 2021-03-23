@@ -59,16 +59,11 @@ export class ResetPassComponent {
           this.submissionSuccess = false
           if (err.status == 400) {
             let errorBody = err.error
-            // User's password can't reset because it's an OAuth account
-            if (errorBody.oauth_types && errorBody.oauth_types[0] == 'google') {
-              // Google
-              this.errorObject.unsuccessful =
-                '<b>Google Account</b> Unable to reset password, please try signing in with Google.'
-            } else {
-              // Other 400 account error
-              this.errorObject.unsuccessful =
-                "<b>Account Error</b> We were unable to reset your account, please <a class='link' href='mailto:support@edji.it'>contact support</a>"
-            }
+
+            // Removed oauth check now that we are allowing them to set a password
+            // Other 400 account error
+            this.errorObject.unsuccessful =
+              "<b>Account Error</b> We were unable to reset your account, please <a class='link' href='mailto:support@edji.it'>contact support</a>"
           } else if (err.status == 404) {
             // Account not found
             this.errorObject.unsuccessful = '<b>Account Not Found</b> We were unable to find that account'

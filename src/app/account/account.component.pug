@@ -34,8 +34,10 @@ nav-bar([showDashboardOptions]="true")
           label.info-label Username
           p.info {{currentUser.username}}
       .col-md-4.pt-3
+        //- Set Password Button
+        button.btn.set-password-btn.mb-4(*ngIf="(linkedAccounts.clever || linkedAccounts.google) && !currentUser.has_password" type="button", (click)="showPassModal = !showPassModal") Set Password
         //- Change Password Button
-        button.btn.change-password-btn.mb-4(type="button", (click)="showPassModal = !showPassModal") Change Password
+        button.btn.change-password-btn.mb-4(*ngIf="currentUser.has_password" type="button", (click)="showPassModal = !showPassModal") Change Password
     //- email
     .info-group
       label.info-label Email

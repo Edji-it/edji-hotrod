@@ -2,14 +2,16 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Reset Password</h4>
+        <h4 *ngIf="currentUser.has_password" class="modal-title">Reset Password</h4>
+        <h4 *ngIf="!currentUser.has_password" class="modal-title">Set Password</h4>
         <button (click)="closeAndReset()" type="button" class="close btn-icon--round">&times;</button>
       </div>
       <form (ngSubmit)="onSubmit(passwordForm.value)" [formGroup]="passwordForm">
         <div class="modal-body">
           <div class="form-group">
-            <label for="old-password-input">Old Password</label>
+            <label *ngIf="currentUser.has_password" for="old-password-input">Old Password</label>
             <input
+              *ngIf="currentUser.has_password"
               type="password"
               id="old-password-input"
               class="form-control"
@@ -17,13 +19,13 @@
             />
             <div
               *ngIf="
-                passwordForm.controls['old_password'].hasError('required') && passwordForm.controls['old_password'].dirty
+                passwordForm.controls['old_password'].hasError('required') && passwordForm.controls['old_password'].dirty && currentUser.has_password
               "
               class="alert alert-info"
             >
               You must have a password
             </div>
-            <div id="msgWrongPass" class="alert alert-danger" *ngIf="messages.wrongPasswordError">
+            <div id="msgWrongPass" class="alert alert-danger" *ngIf="messages.wrongPasswordError && currentUser.has_password">
               This password does not match your current password
             </div>
             <label for="new-password-input">New Password</label>
