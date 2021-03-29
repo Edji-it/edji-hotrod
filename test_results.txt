@@ -1,8 +1,8 @@
 yarn run v1.22.10
 $ ng e2e
-[21:57:49] I/update - chromedriver: file exists H:\work\edji-hotrod\node_modules\webdriver-manager\selenium\chromedriver_89.0.4389.23.zip
-[21:57:49] I/update - chromedriver: unzipping chromedriver_89.0.4389.23.zip
-[21:57:50] I/update - chromedriver: chromedriver_89.0.4389.23.exe up to date
+[11:44:26] I/update - chromedriver: file exists H:\work\edji-hotrod\node_modules\webdriver-manager\selenium\chromedriver_89.0.4389.23.zip
+[11:44:26] I/update - chromedriver: unzipping chromedriver_89.0.4389.23.zip
+[11:44:26] I/update - chromedriver: chromedriver_89.0.4389.23.exe up to date
 [34mi[39m [90m∩╜ówds∩╜ú[39m: Project is running at http://localhost:3375/webpack-dev-server/
 [34mi[39m [90m∩╜ówds∩╜ú[39m: webpack output is served from /
 [34mi[39m [90m∩╜ówds∩╜ú[39m: 404s will fallback to //index.html
@@ -15,17 +15,17 @@ chunk {polyfills-es5} polyfills-es5.js, polyfills-es5.js.map (polyfills-es5) 446
 chunk {runtime} runtime.js, runtime.js.map (runtime) 9.02 kB [entry] [rendered]
 chunk {styles} styles.js, styles.js.map (styles) 2.34 MB [initial] [rendered]
 chunk {vendor} vendor.js, vendor.js.map (vendor) 7.01 MB [initial] [rendered]
-Date: 2021-03-29T02:58:47.732Z - Hash: 0f3594c0288593847194 - Time: 55491ms
+Date: 2021-03-29T16:45:21.833Z - Hash: 246a45b2b1418b7e0b6b - Time: 53021ms
 ** Angular Live Development Server is listening on localhost:3375, open your browser on http://localhost:3375/ **
 [34mi[39m [90m∩╜ówdm∩╜ú[39m: Compiled with warnings.
-[21:58:48] I/launcher - Running 5 instances of WebDriver
-.........F.[21:59:00] I/testLogger - 
+[11:45:22] I/launcher - Running 5 instances of WebDriver
+.......[11:45:33] I/testLogger - 
 ------------------------------------
 
-[21:59:00] I/testLogger - [chrome #01-0] PID: 18060
+[11:45:33] I/testLogger - [chrome #01-0] PID: 27540
 [chrome #01-0] Specs: H:\work\edji-hotrod\e2e\src\account.spec.ts
 [chrome #01-0] 
-[chrome #01-0] [21:58:48] I/direct - Using ChromeDriver directly...
+[chrome #01-0] [11:45:23] I/direct - Using ChromeDriver directly...
 [chrome #01-0] Jasmine started
 [chrome #01-0] 
 [chrome #01-0]   Account Page
@@ -37,27 +37,27 @@ Date: 2021-03-29T02:58:47.732Z - Hash: 0f3594c0288593847194 - Time: 55491ms
 [chrome #01-0]       [32mΓêÜ should click avatar, make selections, and save[39m
 [chrome #01-0]       [32mΓêÜ should verify custom avatar shows on other pages[39m
 [chrome #01-0] 
-[chrome #01-0] Executed 3 of 3 specs[32m SUCCESS[39m in 9 secs.
+[chrome #01-0] Executed 3 of 3 specs[32m SUCCESS[39m in 7 secs.
 
-[21:59:00] I/testLogger - 
+[11:45:33] I/testLogger - 
 
-[21:59:00] I/launcher - 5 instance(s) of WebDriver still running
-.....F[21:59:05] I/testLogger - 
+[11:45:33] I/launcher - 5 instance(s) of WebDriver still running
+...F.....F[11:45:42] I/testLogger - 
 ------------------------------------
 
-[21:59:05] I/testLogger - [chrome #01-4] PID: 15672
+[11:45:42] I/testLogger - [chrome #01-4] PID: 5108
 [chrome #01-4] Specs: H:\work\edji-hotrod\e2e\src\discover-share-public.spec.ts
 [chrome #01-4] 
-[chrome #01-4] [21:58:48] I/direct - Using ChromeDriver directly...
+[chrome #01-4] [11:45:23] I/direct - Using ChromeDriver directly...
 [chrome #01-4] Jasmine started
 [chrome #01-4] 
 [chrome #01-4]   Discover Feed - share new public reading and check feed
 [chrome #01-4]     [32mΓêÜ should arrive at Discover Feed[39m
-[chrome #01-4] [21:58:54] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-4] [11:45:31] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
 [chrome #01-4] 
 [chrome #01-4]     Create new public reading, and verify it shows in Public feed
 [chrome #01-4]       [31m├ù should create new public reading as testbot[39m
-[chrome #01-4]         [31m- [39m[31mFailed: Wait timed out after 5000ms[39m
+[chrome #01-4]         [31m- [39m[31mFailed: Wait timed out after 5004ms[39m
 [chrome #01-4]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-4]             at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-4]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -80,7 +80,6 @@ Date: 2021-03-29T02:58:47.732Z - Hash: 0f3594c0288593847194 - Time: 55491ms
 [chrome #01-4]             at TaskQueue.executeNext_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3067:27)
 [chrome #01-4]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2974:25
 [chrome #01-4]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:668:7
-[chrome #01-4]             at runMicrotasks (<anonymous>)
 [chrome #01-4]             at processTicksAndRejections (internal/process/task_queues.js:93:5)
 [chrome #01-4]         From: Task: Run it("should create new public reading as testbot") in control flow
 [chrome #01-4]             at processImmediate (internal/timers.js:439:21)
@@ -108,8 +107,8 @@ Date: 2021-03-29T02:58:47.732Z - Hash: 0f3594c0288593847194 - Time: 55491ms
 [chrome #01-4]             at processTicksAndRejections (internal/process/task_queues.js:75:11)
 [chrome #01-4]       [31m├ù should see testbot's new public reading in public feed[39m
 [chrome #01-4]         [31m- [39m[31mFailed: never got the login page
-[chrome #01-4]         Wait timed out after 5005ms[39m
-[chrome #01-4]         Wait timed out after 5005ms
+[chrome #01-4]         Wait timed out after 5009ms[39m
+[chrome #01-4]         Wait timed out after 5009ms
 [chrome #01-4]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-4]             at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-4]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -169,15 +168,15 @@ Date: 2021-03-29T02:58:47.732Z - Hash: 0f3594c0288593847194 - Time: 55491ms
 [chrome #01-4] **************************************************
 [chrome #01-4] 
 [chrome #01-4] 1) Discover Feed - share new public reading and check feed Create new public reading, and verify it shows in Public feed should create new public reading as testbot
-[chrome #01-4]   [31m- [39m[31mFailed: Wait timed out after 5000ms[39m
+[chrome #01-4]   [31m- [39m[31mFailed: Wait timed out after 5004ms[39m
 [chrome #01-4] 
 [chrome #01-4] 2) Discover Feed - share new public reading and check feed Create new public reading, and verify it shows in Public feed should see testbot's new public reading in public feed
 [chrome #01-4]   [31m- [39m[31mFailed: never got the login page
-[chrome #01-4]   Wait timed out after 5005ms[39m
+[chrome #01-4]   Wait timed out after 5009ms[39m
 [chrome #01-4] 
-[chrome #01-4] Executed 3 of 3 specs[31m (2 FAILED)[39m in 15 secs.
-[chrome #01-4] [21:59:05] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 80794:49 "ERROR" TypeError: Cannot read property 'undefined' of undefined
-[chrome #01-4]     at SafeSubscriber._next (http://localhost:3375/main.js:29817:59)
+[chrome #01-4] Executed 3 of 3 specs[31m (2 FAILED)[39m in 17 secs.
+[chrome #01-4] [11:45:42] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 80794:49 "ERROR" TypeError: Cannot read property 'undefined' of undefined
+[chrome #01-4]     at SafeSubscriber._next (http://localhost:3375/main.js:29812:59)
 [chrome #01-4]     at SafeSubscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.SafeSubscriber.__tryOrUnsub (http://localhost:3375/vendor.js:128657:16)
 [chrome #01-4]     at SafeSubscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.SafeSubscriber.next (http://localhost:3375/vendor.js:128595:22)
 [chrome #01-4]     at Subscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.Subscriber._next (http://localhost:3375/vendor.js:128541:26)
@@ -188,13 +187,13 @@ Date: 2021-03-29T02:58:47.732Z - Hash: 0f3594c0288593847194 - Time: 55491ms
 [chrome #01-4]     at BehaviorSubject.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable.subscribe (http://localhost:3375/vendor.js:127886:22)
 [chrome #01-4]     at Observable.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable._subscribe (http://localhost:3375/vendor.js:127935:33)
 [chrome #01-4]     at Observable.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable.subscribe (http://localhost:3375/vendor.js:127885:22)
-[chrome #01-4]     at SearchPage.push../src/app/search-page/search-page.component.ts.SearchPage.ngOnInit (http://localhost:3375/main.js:29815:44)
+[chrome #01-4]     at SearchPage.push../src/app/search-page/search-page.component.ts.SearchPage.ngOnInit (http://localhost:3375/main.js:29810:44)
 [chrome #01-4]     at checkAndUpdateDirectiveInline (http://localhost:3375/vendor.js:45699:19)
 [chrome #01-4]     at checkAndUpdateNodeInline (http://localhost:3375/vendor.js:53912:20)
 [chrome #01-4]     at checkAndUpdateNode (http://localhost:3375/vendor.js:53874:16)
 [chrome #01-4]     at debugCheckAndUpdateNode (http://localhost:3375/vendor.js:54508:38)
 [chrome #01-4]     at debugCheckDirectivesFn (http://localhost:3375/vendor.js:54468:13)
-[chrome #01-4]     at Object.updateDirectives (http://localhost:3375/main.js:29555:1006)
+[chrome #01-4]     at Object.updateDirectives (http://localhost:3375/main.js:29550:1006)
 [chrome #01-4]     at Object.debugUpdateDirectives [as updateDirectives] (http://localhost:3375/vendor.js:54460:21)
 [chrome #01-4]     at checkAndUpdateView (http://localhost:3375/vendor.js:53856:14)
 [chrome #01-4]     at callViewAction (http://localhost:3375/vendor.js:54097:21)
@@ -228,46 +227,46 @@ Date: 2021-03-29T02:58:47.732Z - Hash: 0f3594c0288593847194 - Time: 55491ms
 [chrome #01-4]     at Zone.push../node_modules/zone.js/dist/zone.js.Zone._updateTaskCount (http://localhost:3375/polyfills.js:2630:34)
 [chrome #01-4]     at Zone.push../node_modules/zone.js/dist/zone.js.Zone.runTask (http://localhost:3375/polyfills.js:2551:30)
 
-[21:59:05] I/testLogger - 
+[11:45:42] I/testLogger - 
 
-[21:59:05] I/launcher - 5 instance(s) of WebDriver still running
-..[21:59:11] I/testLogger - 
+[11:45:42] I/launcher - 5 instance(s) of WebDriver still running
+..[11:45:44] I/testLogger - 
 ------------------------------------
 
-[21:59:11] I/testLogger - [chrome #01-1] PID: 29816
+[11:45:44] I/testLogger - [chrome #01-1] PID: 25200
 [chrome #01-1] Specs: H:\work\edji-hotrod\e2e\src\owner-tools__co-teacher.spec.ts
 [chrome #01-1] 
-[chrome #01-1] [21:58:48] I/direct - Using ChromeDriver directly...
+[chrome #01-1] [11:45:23] I/direct - Using ChromeDriver directly...
 [chrome #01-1] Jasmine started
-[chrome #01-1] [21:58:57] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
-[chrome #01-1] [21:59:02] W/element - more than one element found for locator By(css selector, *[id="promoteCoTeacherOption"]) - the first result will be used
-[chrome #01-1] [21:59:02] W/element - more than one element found for locator By(css selector, *[id="promoteCoTeacherOption"]) - the first result will be used
-[chrome #01-1] [21:59:02] W/element - more than one element found for locator By(css selector, *[id="promoteCoTeacherOption"]) - the first result will be used
+[chrome #01-1] [11:45:29] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-1] [11:45:35] W/element - more than one element found for locator By(css selector, *[id="promoteCoTeacherOption"]) - the first result will be used
+[chrome #01-1] [11:45:35] W/element - more than one element found for locator By(css selector, *[id="promoteCoTeacherOption"]) - the first result will be used
+[chrome #01-1] [11:45:35] W/element - more than one element found for locator By(css selector, *[id="promoteCoTeacherOption"]) - the first result will be used
 [chrome #01-1] 
 [chrome #01-1]   Project Page as a Co-Teacher: 
 [chrome #01-1]     [32mΓêÜ should promote student to teacher, and see confirmation toast[39m
-[chrome #01-1] [21:59:04] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-1] [11:45:37] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-1]     [32mΓêÜ should access Reading Group as co-teacher, and have owner tools[39m
 [chrome #01-1] 
-[chrome #01-1] Executed 2 of 2 specs[32m SUCCESS[39m in 20 secs.
-[chrome #01-1] [21:59:11] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cfc30cdcf25ac1de40258ec - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-1] [21:59:11] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
-[chrome #01-1] [21:59:11] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
-[chrome #01-1] [21:59:11] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
-[chrome #01-1] [21:59:11] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
-[chrome #01-1] [21:59:11] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/projects/5cfc30cdcf25ac1de40258ec/students - Failed to load resource: the server responded with a status of 404 (Not Found)
-[chrome #01-1] [21:59:11] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cfc30cdcf25ac1de40258ec - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-1] Executed 2 of 2 specs[32m SUCCESS[39m in 19 secs.
+[chrome #01-1] [11:45:44] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cfc30cdcf25ac1de40258ec - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-1] [11:45:44] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
+[chrome #01-1] [11:45:44] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
+[chrome #01-1] [11:45:44] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
+[chrome #01-1] [11:45:44] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
+[chrome #01-1] [11:45:44] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/projects/5cfc30cdcf25ac1de40258ec/students - Failed to load resource: the server responded with a status of 404 (Not Found)
+[chrome #01-1] [11:45:44] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cfc30cdcf25ac1de40258ec - Failed to load resource: the server responded with a status of 401 (Unauthorized)
 
-[21:59:11] I/testLogger - 
+[11:45:44] I/testLogger - 
 
-[21:59:11] I/launcher - 5 instance(s) of WebDriver still running
-F......[21:59:16] I/testLogger - 
+[11:45:44] I/launcher - 5 instance(s) of WebDriver still running
+.F....[11:45:49] I/testLogger - 
 ------------------------------------
 
-[21:59:16] I/testLogger - [chrome #01-7] PID: 17976
+[11:45:49] I/testLogger - [chrome #01-7] PID: 22208
 [chrome #01-7] Specs: H:\work\edji-hotrod\e2e\src\home.spec.ts
 [chrome #01-7] 
-[chrome #01-7] [21:59:11] I/direct - Using ChromeDriver directly...
+[chrome #01-7] [11:45:44] I/direct - Using ChromeDriver directly...
 [chrome #01-7] Jasmine started
 [chrome #01-7] 
 [chrome #01-7]   Home Page
@@ -278,42 +277,42 @@ F......[21:59:16] I/testLogger -
 [chrome #01-7] 
 [chrome #01-7] Executed 4 of 4 specs[32m SUCCESS[39m in 2 secs.
 
-[21:59:16] I/testLogger - 
+[11:45:49] I/testLogger - 
 
-[21:59:16] I/launcher - 5 instance(s) of WebDriver still running
-....F..........[21:59:31] I/testLogger - 
+[11:45:49] I/launcher - 5 instance(s) of WebDriver still running
+......F......[11:46:03] I/testLogger - 
 ------------------------------------
 
-[21:59:31] I/testLogger - [chrome #01-8] PID: 2772
+[11:46:03] I/testLogger - [chrome #01-8] PID: 25108
 [chrome #01-8] Specs: H:\work\edji-hotrod\e2e\src\project__quick-labels.spec.ts
 [chrome #01-8] 
-[chrome #01-8] [21:59:17] I/direct - Using ChromeDriver directly...
+[chrome #01-8] [11:45:50] I/direct - Using ChromeDriver directly...
 [chrome #01-8] Jasmine started
-[chrome #01-8] [21:59:23] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-8] [11:45:55] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-8] 
 [chrome #01-8]   Project Page - Quick Labels
 [chrome #01-8] 
 [chrome #01-8]     Use Quick Labels and Hashtags in comments, then filter
 [chrome #01-8]       [32mΓêÜ should make a comment and add a quick label[39m
 [chrome #01-8] 
-[chrome #01-8] Executed 1 of 1 spec[32m SUCCESS[39m in 12 secs.
-[chrome #01-8] [21:59:31] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5e30bb910d163e2b9ce66b5f - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-8] [21:59:31] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
-[chrome #01-8] [21:59:31] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
-[chrome #01-8] [21:59:31] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5e30bb910d163e2b9ce66b5f - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-8] Executed 1 of 1 spec[32m SUCCESS[39m in 11 secs.
+[chrome #01-8] [11:46:03] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5e30bb910d163e2b9ce66b5f - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-8] [11:46:03] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
+[chrome #01-8] [11:46:03] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
+[chrome #01-8] [11:46:03] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5e30bb910d163e2b9ce66b5f - Failed to load resource: the server responded with a status of 401 (Unauthorized)
 
-[21:59:31] I/testLogger - 
+[11:46:03] I/testLogger - 
 
-[21:59:31] I/launcher - 5 instance(s) of WebDriver still running
-..........[21:59:37] I/testLogger - 
+[11:46:03] I/launcher - 5 instance(s) of WebDriver still running
+.......[11:46:08] I/testLogger - 
 ------------------------------------
 
-[21:59:37] I/testLogger - [chrome #01-5] PID: 30004
+[11:46:08] I/testLogger - [chrome #01-5] PID: 28220
 [chrome #01-5] Specs: H:\work\edji-hotrod\e2e\src\project__comment-explorer.spec.ts
 [chrome #01-5] 
-[chrome #01-5] [21:59:00] I/direct - Using ChromeDriver directly...
+[chrome #01-5] [11:45:33] I/direct - Using ChromeDriver directly...
 [chrome #01-5] Jasmine started
-[chrome #01-5] [21:59:08] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-5] [11:45:39] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-5] http://localhost:3375/vendor.js 80794:49 "ERROR" Error: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'comment: [object Object]'. Current value: 'comment: null'.
 [chrome #01-5]     at viewDebugError (http://localhost:3375/vendor.js:44229:15)
 [chrome #01-5]     at expressionChangedAfterItHasBeenCheckedError (http://localhost:3375/vendor.js:44217:12)
@@ -322,7 +321,7 @@ F......[21:59:16] I/testLogger -
 [chrome #01-5]     at checkNoChangesNode (http://localhost:3375/vendor.js:53939:9)
 [chrome #01-5]     at debugCheckNoChangesNode (http://localhost:3375/vendor.js:54543:24)
 [chrome #01-5]     at debugCheckDirectivesFn (http://localhost:3375/vendor.js:54471:13)
-[chrome #01-5]     at Object.updateDirectives (http://localhost:3375/main.js:7807:3588)
+[chrome #01-5]     at Object.updateDirectives (http://localhost:3375/main.js:7802:3588)
 [chrome #01-5]     at Object.debugUpdateDirectives [as updateDirectives] (http://localhost:3375/vendor.js:54460:21)
 [chrome #01-5]     at checkNoChangesView (http://localhost:3375/vendor.js:53838:14)
 [chrome #01-5]     at callViewAction (http://localhost:3375/vendor.js:54077:21)
@@ -380,8 +379,8 @@ F......[21:59:16] I/testLogger -
 [chrome #01-5] 
 [chrome #01-5]     Teacher using comment explorer
 [chrome #01-5]       [32mΓêÜ should open the Comment Explorer and sort[39m
-[chrome #01-5] [21:59:16] W/element - more than one element found for locator By(css selector, edji-comment) - the first result will be used
-[chrome #01-5] [21:59:16] W/element - more than one element found for locator By(css selector, edji-comment) - the first result will be used
+[chrome #01-5] [11:45:47] W/element - more than one element found for locator By(css selector, edji-comment) - the first result will be used
+[chrome #01-5] [11:45:47] W/element - more than one element found for locator By(css selector, edji-comment) - the first result will be used
 [chrome #01-5] https://sentry.io/api/229527/store/?sentry_key=f71b0ea0db5a4785b8ebee0b426b4bec&sentry_version=7 - Failed to load resource: the server responded with a status of 403 (Forbidden)
 [chrome #01-5] https://sentry.io/api/229527/store/?sentry_key=f71b0ea0db5a4785b8ebee0b426b4bec&sentry_version=7 - Failed to load resource: the server responded with a status of 403 (Forbidden)
 [chrome #01-5]       [32mΓêÜ should open the Comment Explorer and filter by student[39m
@@ -393,7 +392,7 @@ F......[21:59:16] I/testLogger -
 [chrome #01-5] https://sentry.io/api/229527/store/?sentry_key=f71b0ea0db5a4785b8ebee0b426b4bec&sentry_version=7 - Failed to load resource: the server responded with a status of 403 (Forbidden)
 [chrome #01-5]       [32mΓêÜ should search for a comment after viewing line[39m
 [chrome #01-5] 
-[chrome #01-5] [21:59:27] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-5] [11:45:58] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-5] http://localhost:3375/vendor.js 80794:49 "ERROR" Error: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'comment: [object Object]'. Current value: 'comment: null'.
 [chrome #01-5]     at viewDebugError (http://localhost:3375/vendor.js:44229:15)
 [chrome #01-5]     at expressionChangedAfterItHasBeenCheckedError (http://localhost:3375/vendor.js:44217:12)
@@ -402,7 +401,7 @@ F......[21:59:16] I/testLogger -
 [chrome #01-5]     at checkNoChangesNode (http://localhost:3375/vendor.js:53939:9)
 [chrome #01-5]     at debugCheckNoChangesNode (http://localhost:3375/vendor.js:54543:24)
 [chrome #01-5]     at debugCheckDirectivesFn (http://localhost:3375/vendor.js:54471:13)
-[chrome #01-5]     at Object.updateDirectives (http://localhost:3375/main.js:7807:3588)
+[chrome #01-5]     at Object.updateDirectives (http://localhost:3375/main.js:7802:3588)
 [chrome #01-5]     at Object.debugUpdateDirectives [as updateDirectives] (http://localhost:3375/vendor.js:54460:21)
 [chrome #01-5]     at checkNoChangesView (http://localhost:3375/vendor.js:53838:14)
 [chrome #01-5]     at callViewAction (http://localhost:3375/vendor.js:54077:21)
@@ -456,18 +455,18 @@ F......[21:59:16] I/testLogger -
 [chrome #01-5] https://sentry.io/api/229527/store/?sentry_key=f71b0ea0db5a4785b8ebee0b426b4bec&sentry_version=7 - Failed to load resource: the server responded with a status of 403 (Forbidden)
 [chrome #01-5]       [32mΓêÜ should open My Comments in Comment Explorer[39m
 [chrome #01-5] 
-[chrome #01-5] Executed 7 of 7 specs[32m SUCCESS[39m in 35 secs.
+[chrome #01-5] Executed 7 of 7 specs[32m SUCCESS[39m in 32 secs.
 
-[21:59:37] I/testLogger - 
+[11:46:08] I/testLogger - 
 
-[21:59:37] I/launcher - 5 instance(s) of WebDriver still running
-..[21:59:40] I/testLogger - 
+[11:46:08] I/launcher - 5 instance(s) of WebDriver still running
+..........[11:46:16] I/testLogger - 
 ------------------------------------
 
-[21:59:40] I/testLogger - [chrome #01-3] PID: 26096
+[11:46:16] I/testLogger - [chrome #01-3] PID: 26084
 [chrome #01-3] Specs: H:\work\edji-hotrod\e2e\src\discover.spec.ts
 [chrome #01-3] 
-[chrome #01-3] [21:58:48] I/direct - Using ChromeDriver directly...
+[chrome #01-3] [11:45:23] I/direct - Using ChromeDriver directly...
 [chrome #01-3] Jasmine started
 [chrome #01-3] 
 [chrome #01-3]   Discover Feed
@@ -480,12 +479,12 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3]     reading preview
 [chrome #01-3]       [32mΓêÜ should open reading preview in discover feed and then close it[39m
 [chrome #01-3]       [32mΓêÜ should access reading link from discover feed and then close it[39m
-[chrome #01-3] [21:59:04] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-3] [21:59:04] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-3] [11:45:40] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-3] [11:45:40] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
 [chrome #01-3]       [31m├ù should open reading preview and edit a reading then save it[39m
 [chrome #01-3]         [31m- [39m[31mFailed: never got back to the dashboard
-[chrome #01-3]         Wait timed out after 5018ms[39m
-[chrome #01-3]         Wait timed out after 5018ms
+[chrome #01-3]         Wait timed out after 5006ms[39m
+[chrome #01-3]         Wait timed out after 5006ms
 [chrome #01-3]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-3]             at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-3]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -542,8 +541,8 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3] A Jasmine spec timed out. Resetting the WebDriver Control Flow.
 [chrome #01-3]       [31m├ù should open reading preview and share a reading[39m
 [chrome #01-3]         [31m- [39m[31mTimeoutError: never got back to the dashboard
-[chrome #01-3]         Wait timed out after 5001ms[39m
-[chrome #01-3]         Wait timed out after 5001ms
+[chrome #01-3]         Wait timed out after 5005ms[39m
+[chrome #01-3]         Wait timed out after 5005ms
 [chrome #01-3]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-3]             at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-3]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -567,12 +566,12 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3] 
 [chrome #01-3]     access discover feed from home page
 [chrome #01-3]       [32mΓêÜ should access discover feed from home page and see readings[39m
-[chrome #01-3] [21:59:26] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
-[chrome #01-3] [21:59:26] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
-[chrome #01-3] [21:59:26] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
+[chrome #01-3] [11:46:01] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
+[chrome #01-3] [11:46:01] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
+[chrome #01-3] [11:46:02] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
 [chrome #01-3]       [32mΓêÜ should be able to search for readings[39m
-[chrome #01-3] [21:59:27] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
-[chrome #01-3] [21:59:28] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
+[chrome #01-3] [11:46:02] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
+[chrome #01-3] [11:46:03] W/element - more than one element found for locator By(css selector, [data-test="searchCount"]) - the first result will be used
 [chrome #01-3]       [32mΓêÜ should not get any readings for a bad search[39m
 [chrome #01-3]       [32mΓêÜ should open login modal when trying to follow a user[39m
 [chrome #01-3]       [32mΓêÜ should open reading preview and see a login button for the only reading action[39m
@@ -594,15 +593,15 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3] 
 [chrome #01-3] 1) Discover Feed reading preview should open reading preview and edit a reading then save it
 [chrome #01-3]   [31m- [39m[31mFailed: never got back to the dashboard
-[chrome #01-3]   Wait timed out after 5018ms[39m
+[chrome #01-3]   Wait timed out after 5006ms[39m
 [chrome #01-3] 
 [chrome #01-3] 2) Discover Feed reading preview should open reading preview and share a reading
 [chrome #01-3]   [31m- [39m[31mTimeoutError: never got back to the dashboard
-[chrome #01-3]   Wait timed out after 5001ms[39m
+[chrome #01-3]   Wait timed out after 5005ms[39m
 [chrome #01-3] 
-[chrome #01-3] Executed 19 of 19 specs[31m (2 FAILED)[39m in 49 secs.
-[chrome #01-3] [21:59:40] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 80794:49 "ERROR" TypeError: Cannot read property 'undefined' of undefined
-[chrome #01-3]     at SafeSubscriber._next (http://localhost:3375/main.js:29817:59)
+[chrome #01-3] Executed 19 of 19 specs[31m (2 FAILED)[39m in 51 secs.
+[chrome #01-3] [11:46:16] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 80794:49 "ERROR" TypeError: Cannot read property 'undefined' of undefined
+[chrome #01-3]     at SafeSubscriber._next (http://localhost:3375/main.js:29812:59)
 [chrome #01-3]     at SafeSubscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.SafeSubscriber.__tryOrUnsub (http://localhost:3375/vendor.js:128657:16)
 [chrome #01-3]     at SafeSubscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.SafeSubscriber.next (http://localhost:3375/vendor.js:128595:22)
 [chrome #01-3]     at Subscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.Subscriber._next (http://localhost:3375/vendor.js:128541:26)
@@ -613,13 +612,13 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3]     at BehaviorSubject.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable.subscribe (http://localhost:3375/vendor.js:127886:22)
 [chrome #01-3]     at Observable.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable._subscribe (http://localhost:3375/vendor.js:127935:33)
 [chrome #01-3]     at Observable.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable.subscribe (http://localhost:3375/vendor.js:127885:22)
-[chrome #01-3]     at SearchPage.push../src/app/search-page/search-page.component.ts.SearchPage.ngOnInit (http://localhost:3375/main.js:29815:44)
+[chrome #01-3]     at SearchPage.push../src/app/search-page/search-page.component.ts.SearchPage.ngOnInit (http://localhost:3375/main.js:29810:44)
 [chrome #01-3]     at checkAndUpdateDirectiveInline (http://localhost:3375/vendor.js:45699:19)
 [chrome #01-3]     at checkAndUpdateNodeInline (http://localhost:3375/vendor.js:53912:20)
 [chrome #01-3]     at checkAndUpdateNode (http://localhost:3375/vendor.js:53874:16)
 [chrome #01-3]     at debugCheckAndUpdateNode (http://localhost:3375/vendor.js:54508:38)
 [chrome #01-3]     at debugCheckDirectivesFn (http://localhost:3375/vendor.js:54468:13)
-[chrome #01-3]     at Object.updateDirectives (http://localhost:3375/main.js:29555:1006)
+[chrome #01-3]     at Object.updateDirectives (http://localhost:3375/main.js:29550:1006)
 [chrome #01-3]     at Object.debugUpdateDirectives [as updateDirectives] (http://localhost:3375/vendor.js:54460:21)
 [chrome #01-3]     at checkAndUpdateView (http://localhost:3375/vendor.js:53856:14)
 [chrome #01-3]     at callViewAction (http://localhost:3375/vendor.js:54097:21)
@@ -652,8 +651,8 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3]     at ZoneDelegate.push../node_modules/zone.js/dist/zone.js.ZoneDelegate._updateTaskCount (http://localhost:3375/polyfills.js:2802:22)
 [chrome #01-3]     at Zone.push../node_modules/zone.js/dist/zone.js.Zone._updateTaskCount (http://localhost:3375/polyfills.js:2630:34)
 [chrome #01-3]     at Zone.push../node_modules/zone.js/dist/zone.js.Zone.runTask (http://localhost:3375/polyfills.js:2551:30)
-[chrome #01-3] [21:59:40] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 80794:49 "ERROR" TypeError: Cannot read property 'undefined' of undefined
-[chrome #01-3]     at SafeSubscriber._next (http://localhost:3375/main.js:29817:59)
+[chrome #01-3] [11:46:16] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 80794:49 "ERROR" TypeError: Cannot read property 'undefined' of undefined
+[chrome #01-3]     at SafeSubscriber._next (http://localhost:3375/main.js:29812:59)
 [chrome #01-3]     at SafeSubscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.SafeSubscriber.__tryOrUnsub (http://localhost:3375/vendor.js:128657:16)
 [chrome #01-3]     at SafeSubscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.SafeSubscriber.next (http://localhost:3375/vendor.js:128595:22)
 [chrome #01-3]     at Subscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.Subscriber._next (http://localhost:3375/vendor.js:128541:26)
@@ -664,13 +663,13 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3]     at BehaviorSubject.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable.subscribe (http://localhost:3375/vendor.js:127886:22)
 [chrome #01-3]     at Observable.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable._subscribe (http://localhost:3375/vendor.js:127935:33)
 [chrome #01-3]     at Observable.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable.subscribe (http://localhost:3375/vendor.js:127885:22)
-[chrome #01-3]     at SearchPage.push../src/app/search-page/search-page.component.ts.SearchPage.ngOnInit (http://localhost:3375/main.js:29815:44)
+[chrome #01-3]     at SearchPage.push../src/app/search-page/search-page.component.ts.SearchPage.ngOnInit (http://localhost:3375/main.js:29810:44)
 [chrome #01-3]     at checkAndUpdateDirectiveInline (http://localhost:3375/vendor.js:45699:19)
 [chrome #01-3]     at checkAndUpdateNodeInline (http://localhost:3375/vendor.js:53912:20)
 [chrome #01-3]     at checkAndUpdateNode (http://localhost:3375/vendor.js:53874:16)
 [chrome #01-3]     at debugCheckAndUpdateNode (http://localhost:3375/vendor.js:54508:38)
 [chrome #01-3]     at debugCheckDirectivesFn (http://localhost:3375/vendor.js:54468:13)
-[chrome #01-3]     at Object.updateDirectives (http://localhost:3375/main.js:29555:1006)
+[chrome #01-3]     at Object.updateDirectives (http://localhost:3375/main.js:29550:1006)
 [chrome #01-3]     at Object.debugUpdateDirectives [as updateDirectives] (http://localhost:3375/vendor.js:54460:21)
 [chrome #01-3]     at checkAndUpdateView (http://localhost:3375/vendor.js:53856:14)
 [chrome #01-3]     at callViewAction (http://localhost:3375/vendor.js:54097:21)
@@ -703,8 +702,8 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3]     at ZoneDelegate.push../node_modules/zone.js/dist/zone.js.ZoneDelegate._updateTaskCount (http://localhost:3375/polyfills.js:2802:22)
 [chrome #01-3]     at Zone.push../node_modules/zone.js/dist/zone.js.Zone._updateTaskCount (http://localhost:3375/polyfills.js:2630:34)
 [chrome #01-3]     at Zone.push../node_modules/zone.js/dist/zone.js.Zone.runTask (http://localhost:3375/polyfills.js:2551:30)
-[chrome #01-3] [21:59:40] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 80794:49 "ERROR" TypeError: Cannot read property 'undefined' of undefined
-[chrome #01-3]     at SafeSubscriber._next (http://localhost:3375/main.js:29817:59)
+[chrome #01-3] [11:46:16] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 80794:49 "ERROR" TypeError: Cannot read property 'undefined' of undefined
+[chrome #01-3]     at SafeSubscriber._next (http://localhost:3375/main.js:29812:59)
 [chrome #01-3]     at SafeSubscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.SafeSubscriber.__tryOrUnsub (http://localhost:3375/vendor.js:128657:16)
 [chrome #01-3]     at SafeSubscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.SafeSubscriber.next (http://localhost:3375/vendor.js:128595:22)
 [chrome #01-3]     at Subscriber.push../node_modules/rxjs/_esm5/internal/Subscriber.js.Subscriber._next (http://localhost:3375/vendor.js:128541:26)
@@ -715,13 +714,13 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3]     at BehaviorSubject.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable.subscribe (http://localhost:3375/vendor.js:127886:22)
 [chrome #01-3]     at Observable.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable._subscribe (http://localhost:3375/vendor.js:127935:33)
 [chrome #01-3]     at Observable.push../node_modules/rxjs/_esm5/internal/Observable.js.Observable.subscribe (http://localhost:3375/vendor.js:127885:22)
-[chrome #01-3]     at SearchPage.push../src/app/search-page/search-page.component.ts.SearchPage.ngOnInit (http://localhost:3375/main.js:29815:44)
+[chrome #01-3]     at SearchPage.push../src/app/search-page/search-page.component.ts.SearchPage.ngOnInit (http://localhost:3375/main.js:29810:44)
 [chrome #01-3]     at checkAndUpdateDirectiveInline (http://localhost:3375/vendor.js:45699:19)
 [chrome #01-3]     at checkAndUpdateNodeInline (http://localhost:3375/vendor.js:53912:20)
 [chrome #01-3]     at checkAndUpdateNode (http://localhost:3375/vendor.js:53874:16)
 [chrome #01-3]     at debugCheckAndUpdateNode (http://localhost:3375/vendor.js:54508:38)
 [chrome #01-3]     at debugCheckDirectivesFn (http://localhost:3375/vendor.js:54468:13)
-[chrome #01-3]     at Object.updateDirectives (http://localhost:3375/main.js:29555:1006)
+[chrome #01-3]     at Object.updateDirectives (http://localhost:3375/main.js:29550:1006)
 [chrome #01-3]     at Object.debugUpdateDirectives [as updateDirectives] (http://localhost:3375/vendor.js:54460:21)
 [chrome #01-3]     at checkAndUpdateView (http://localhost:3375/vendor.js:53856:14)
 [chrome #01-3]     at callViewAction (http://localhost:3375/vendor.js:54097:21)
@@ -754,28 +753,62 @@ F......[21:59:16] I/testLogger -
 [chrome #01-3]     at ZoneDelegate.push../node_modules/zone.js/dist/zone.js.ZoneDelegate._updateTaskCount (http://localhost:3375/polyfills.js:2802:22)
 [chrome #01-3]     at Zone.push../node_modules/zone.js/dist/zone.js.Zone._updateTaskCount (http://localhost:3375/polyfills.js:2630:34)
 [chrome #01-3]     at Zone.push../node_modules/zone.js/dist/zone.js.Zone.runTask (http://localhost:3375/polyfills.js:2551:30)
-[chrome #01-3] [21:59:40] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-3] [11:46:16] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
 
-[21:59:40] I/testLogger - 
+[11:46:16] I/testLogger - 
 
-[21:59:40] I/launcher - 5 instance(s) of WebDriver still running
-.........[21:59:48] I/testLogger - 
+[11:46:16] I/launcher - 5 instance(s) of WebDriver still running
+....[11:46:21] I/testLogger - 
 ------------------------------------
 
-[21:59:48] I/testLogger - [chrome #01-2] PID: 20732
+[11:46:21] I/testLogger - [chrome #01-9] PID: 29648
+[chrome #01-9] Specs: H:\work\edji-hotrod\e2e\src\owner-tools__leaderboard.spec.ts
+[chrome #01-9] 
+[chrome #01-9] [11:46:04] I/direct - Using ChromeDriver directly...
+[chrome #01-9] Jasmine started
+[chrome #01-9] [11:46:12] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-9] [11:46:16] W/element - more than one element found for locator By(css selector, *[id="studentFilterBtn0"]) - the first result will be used
+[chrome #01-9] [11:46:16] W/element - more than one element found for locator By(css selector, *[id="studentFilterBtn0"]) - the first result will be used
+[chrome #01-9] [11:46:16] W/element - more than one element found for locator by.cssContainingText(".user-list__name", "First Commenter") - the first result will be used
+[chrome #01-9] [11:46:17] W/element - more than one element found for locator by.cssContainingText(".user-list__name", "First Commenter") - the first result will be used
+[chrome #01-9] [11:46:17] W/element - more than one element found for locator By(css selector, .e2e-student-filter) - the first result will be used
+[chrome #01-9] [11:46:17] W/element - more than one element found for locator by.cssContainingText(".user-list__name", "First Commenter") - the first result will be used
+[chrome #01-9] [11:46:17] W/element - more than one element found for locator By(css selector, .e2e-student-filter) - the first result will be used
+[chrome #01-9] [11:46:17] W/element - more than one element found for locator by.cssContainingText(".user-list__name", "First Commenter") - the first result will be used
+[chrome #01-9] [11:46:17] W/element - more than one element found for locator By(css selector, .e2e-student-filter) - the first result will be used
+[chrome #01-9] 
+[chrome #01-9]   Project Page as an owner wishing to filter by student: 
+[chrome #01-9]     [32mΓêÜ should open the Leaderboard and filter by student[39m
+[chrome #01-9]     [32mΓêÜ should open the Leaderboard and see a live status indicator next to the user name[39m
+[chrome #01-9] 
+[chrome #01-9] Executed 2 of 2 specs[32m SUCCESS[39m in 15 secs.
+[chrome #01-9] [11:46:21] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5b32f41e11d22286fd0ec0f6 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-9] [11:46:21] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
+[chrome #01-9] [11:46:21] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
+[chrome #01-9] [11:46:21] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
+[chrome #01-9] [11:46:21] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
+[chrome #01-9] [11:46:21] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/projects/5b32f41e11d22286fd0ec0f6/students - Failed to load resource: the server responded with a status of 404 (Not Found)
+
+[11:46:21] I/testLogger - 
+
+[11:46:21] I/launcher - 5 instance(s) of WebDriver still running
+........[11:46:25] I/testLogger - 
+------------------------------------
+
+[11:46:25] I/testLogger - [chrome #01-2] PID: 25556
 [chrome #01-2] Specs: H:\work\edji-hotrod\e2e\src\dashboard.spec.ts
 [chrome #01-2] 
-[chrome #01-2] [21:58:48] I/direct - Using ChromeDriver directly...
+[chrome #01-2] [11:45:23] I/direct - Using ChromeDriver directly...
 [chrome #01-2] Jasmine started
 [chrome #01-2] 
 [chrome #01-2]   Dashboard Page as a Hero
 [chrome #01-2]     [32mΓêÜ should arrive at dashboard[39m
-[chrome #01-2] [21:58:59] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-next) - the first result will be used
-[chrome #01-2] [21:58:59] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-next) - the first result will be used
-[chrome #01-2] [21:58:59] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-next) - the first result will be used
-[chrome #01-2] [21:59:01] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-prev) - the first result will be used
-[chrome #01-2] [21:59:01] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-prev) - the first result will be used
-[chrome #01-2] [21:59:01] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-prev) - the first result will be used
+[chrome #01-2] [11:45:35] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-next) - the first result will be used
+[chrome #01-2] [11:45:35] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-next) - the first result will be used
+[chrome #01-2] [11:45:35] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-next) - the first result will be used
+[chrome #01-2] [11:45:37] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-prev) - the first result will be used
+[chrome #01-2] [11:45:37] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-prev) - the first result will be used
+[chrome #01-2] [11:45:37] W/element - more than one element found for locator By(css selector, .created-list .ui-paginator-prev) - the first result will be used
 [chrome #01-2]     [32mΓêÜ should paginate Created readings[39m
 [chrome #01-2]     [32mΓêÜ should see a list of readings and projects[39m
 [chrome #01-2]     [32mΓêÜ should see the join code box at multiple sizes[39m
@@ -795,56 +828,24 @@ F......[21:59:16] I/testLogger -
 [chrome #01-2]     [32mΓêÜ should search for readings and get results[39m
 [chrome #01-2]     [32mΓêÜ should search for readings with a bad term and get no results[39m
 [chrome #01-2] 
-[chrome #01-2] [21:59:43] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-2] [21:59:43] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-2] [21:59:48] W/element - more than one element found for locator By(css selector, *[id="readingAcademy"]) - the first result will be used
+[chrome #01-2] [11:46:18] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-2] [11:46:18] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-2] [11:46:24] W/element - more than one element found for locator By(css selector, *[id="readingAcademy"]) - the first result will be used
 [chrome #01-2]   Dashboard page as a sidekick
 [chrome #01-2]     [32mΓêÜ should make a private reading go academy[39m
 [chrome #01-2] 
-[chrome #01-2] Executed 14 of 14 specs[32m SUCCESS[39m in 57 secs.
+[chrome #01-2] Executed 14 of 14 specs[32m SUCCESS[39m in 1 min.
 
-[21:59:48] I/testLogger - 
+[11:46:25] I/testLogger - 
 
-[21:59:48] I/launcher - 5 instance(s) of WebDriver still running
-..[21:59:49] I/testLogger - 
+[11:46:25] I/launcher - 5 instance(s) of WebDriver still running
+......[11:46:34] I/testLogger - 
 ------------------------------------
 
-[21:59:49] I/testLogger - [chrome #01-9] PID: 26520
-[chrome #01-9] Specs: H:\work\edji-hotrod\e2e\src\owner-tools__leaderboard.spec.ts
-[chrome #01-9] 
-[chrome #01-9] [21:59:31] I/direct - Using ChromeDriver directly...
-[chrome #01-9] Jasmine started
-[chrome #01-9] [21:59:39] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
-[chrome #01-9] [21:59:45] W/element - more than one element found for locator By(css selector, *[id="studentFilterBtn0"]) - the first result will be used
-[chrome #01-9] [21:59:45] W/element - more than one element found for locator By(css selector, *[id="studentFilterBtn0"]) - the first result will be used
-[chrome #01-9] [21:59:45] W/element - more than one element found for locator by.cssContainingText(".user-list__name", "First Commenter") - the first result will be used
-[chrome #01-9] [21:59:45] W/element - more than one element found for locator by.cssContainingText(".user-list__name", "First Commenter") - the first result will be used
-[chrome #01-9] [21:59:45] W/element - more than one element found for locator By(css selector, .e2e-student-filter) - the first result will be used
-[chrome #01-9] [21:59:45] W/element - more than one element found for locator by.cssContainingText(".user-list__name", "First Commenter") - the first result will be used
-[chrome #01-9] [21:59:45] W/element - more than one element found for locator By(css selector, .e2e-student-filter) - the first result will be used
-[chrome #01-9] [21:59:45] W/element - more than one element found for locator by.cssContainingText(".user-list__name", "First Commenter") - the first result will be used
-[chrome #01-9] [21:59:45] W/element - more than one element found for locator By(css selector, .e2e-student-filter) - the first result will be used
-[chrome #01-9] 
-[chrome #01-9]   Project Page as an owner wishing to filter by student: 
-[chrome #01-9]     [32mΓêÜ should open the Leaderboard and filter by student[39m
-[chrome #01-9]     [32mΓêÜ should open the Leaderboard and see a live status indicator next to the user name[39m
-[chrome #01-9] 
-[chrome #01-9] Executed 2 of 2 specs[32m SUCCESS[39m in 16 secs.
-[chrome #01-9] [21:59:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5b32f41e11d22286fd0ec0f6 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-9] [21:59:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
-[chrome #01-9] [21:59:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
-[chrome #01-9] [21:59:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/projects/5b32f41e11d22286fd0ec0f6/students - Failed to load resource: the server responded with a status of 404 (Not Found)
-
-[21:59:49] I/testLogger - 
-
-[21:59:49] I/launcher - 5 instance(s) of WebDriver still running
-.........[21:59:59] I/testLogger - 
-------------------------------------
-
-[21:59:59] I/testLogger - [chrome #01-11] PID: 28540
+[11:46:34] I/testLogger - [chrome #01-11] PID: 25368
 [chrome #01-11] Specs: H:\work\edji-hotrod\e2e\src\login.spec.ts
 [chrome #01-11] 
-[chrome #01-11] [21:59:41] I/direct - Using ChromeDriver directly...
+[chrome #01-11] [11:46:17] I/direct - Using ChromeDriver directly...
 [chrome #01-11] Jasmine started
 [chrome #01-11] 
 [chrome #01-11]   Login Page
@@ -864,23 +865,23 @@ F......[21:59:16] I/testLogger -
 [chrome #01-11]       [32mΓêÜ should show a success message for an existing account username[39m
 [chrome #01-11]       [32mΓêÜ should show a success message for an existing account email[39m
 [chrome #01-11] 
-[chrome #01-11] Executed 9 of 9 specs[32m SUCCESS[39m in 16 secs.
-[chrome #01-11] [21:59:59] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/login - Failed to load resource: the server responded with a status of 400 (Bad Request)
-[chrome #01-11] [21:59:59] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/login - Failed to load resource: the server responded with a status of 400 (Bad Request)
-[chrome #01-11] [21:59:59] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/login - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-11] [21:59:59] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/login - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-11] [21:59:59] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/tokens/password?username=Nonexistent! - Failed to load resource: the server responded with a status of 404 (Not Found)
+[chrome #01-11] Executed 9 of 9 specs[32m SUCCESS[39m in 15 secs.
+[chrome #01-11] [11:46:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/login - Failed to load resource: the server responded with a status of 400 (Bad Request)
+[chrome #01-11] [11:46:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/login - Failed to load resource: the server responded with a status of 400 (Bad Request)
+[chrome #01-11] [11:46:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/login - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-11] [11:46:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/login - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-11] [11:46:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/users/tokens/password?username=Nonexistent! - Failed to load resource: the server responded with a status of 404 (Not Found)
 
-[21:59:59] I/testLogger - 
+[11:46:34] I/testLogger - 
 
-[21:59:59] I/launcher - 5 instance(s) of WebDriver still running
-..[22:00:05] I/testLogger - 
+[11:46:34] I/launcher - 5 instance(s) of WebDriver still running
+F.F[11:46:40] I/testLogger - 
 ------------------------------------
 
-[22:00:05] I/testLogger - [chrome #01-10] PID: 13368
+[11:46:40] I/testLogger - [chrome #01-10] PID: 22688
 [chrome #01-10] Specs: H:\work\edji-hotrod\e2e\src\license.spec.ts
 [chrome #01-10] 
-[chrome #01-10] [21:59:38] I/direct - Using ChromeDriver directly...
+[chrome #01-10] [11:46:08] I/direct - Using ChromeDriver directly...
 [chrome #01-10] Jasmine started
 [chrome #01-10] 
 [chrome #01-10]   Academy user that has ability to manage licenses for their academy: 
@@ -892,45 +893,102 @@ F......[21:59:16] I/testLogger -
 [chrome #01-10]     Academy admin should be able to log in and:
 [chrome #01-10]       [32mΓêÜ should verify more than 1 license is in use[39m
 [chrome #01-10]       [32mΓêÜ should log in as an admin and verify more than 1 license is available[39m
-[chrome #01-10] [21:59:54] W/element - more than one element found for locator By(css selector, *[id="licenseInviteSubmitBtn"]) - the first result will be used
-[chrome #01-10] [21:59:54] W/element - more than one element found for locator By(css selector, *[id="licenseInviteSubmitBtn"]) - the first result will be used
-[chrome #01-10] [21:59:54] W/element - more than one element found for locator By(css selector, *[id="licenseInviteSubmitBtn"]) - the first result will be used
-[chrome #01-10]       [32mΓêÜ should log in as an admin and successfully invite a teacher to join[39m
+[chrome #01-10] [11:46:28] W/element - more than one element found for locator By(css selector, *[id="licenseInviteSubmitBtn"]) - the first result will be used
+[chrome #01-10] [11:46:28] W/element - more than one element found for locator By(css selector, *[id="licenseInviteSubmitBtn"]) - the first result will be used
+[chrome #01-10] [11:46:28] W/element - more than one element found for locator By(css selector, *[id="licenseInviteSubmitBtn"]) - the first result will be used
+[chrome #01-10]       [31m├ù should log in as an admin and successfully invite a teacher to join[39m
+[chrome #01-10]         [31m- [39m[31mFailed: never saw the latest license invite get added
+[chrome #01-10]         Wait timed out after 5460ms[39m
+[chrome #01-10]         Wait timed out after 5460ms
+[chrome #01-10]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
+[chrome #01-10]             at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
+[chrome #01-10]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
+[chrome #01-10]             at TaskQueue.executeNext_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3067:27)
+[chrome #01-10]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2927:27
+[chrome #01-10]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:668:7
+[chrome #01-10]             at processTicksAndRejections (internal/process/task_queues.js:93:5)
+[chrome #01-10]         From: Task: never saw the latest license invite get added
+[chrome #01-10]             at scheduleWait (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2188:20)
+[chrome #01-10]             at ControlFlow.wait (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2517:12)
+[chrome #01-10]             at Driver.wait (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\webdriver.js:934:29)
+[chrome #01-10]             at run (H:\work\edji-hotrod\node_modules\protractor\built\browser.js:59:33)
+[chrome #01-10]             at ProtractorBrowser.to.<computed> [as wait] (H:\work\edji-hotrod\node_modules\protractor\built\browser.js:67:16)
+[chrome #01-10]             at UserContext.<anonymous> (H:\work\edji-hotrod\e2e\src\license.spec.ts:140:34)
+[chrome #01-10]             at new ManagedPromise (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1077:7)
+[chrome #01-10]             at ControlFlow.promise (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2505:12)
+[chrome #01-10]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
+[chrome #01-10]             at TaskQueue.executeNext_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3067:27)
+[chrome #01-10]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2974:25
+[chrome #01-10]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:668:7
+[chrome #01-10]             at runMicrotasks (<anonymous>)
+[chrome #01-10]             at processTicksAndRejections (internal/process/task_queues.js:93:5)
+[chrome #01-10]         From: Task: Run it("should log in as an admin and successfully invite a teacher to join") in control flow
+[chrome #01-10]             at processImmediate (internal/timers.js:439:21)
+[chrome #01-10]         From asynchronous test: 
+[chrome #01-10]         Error
+[chrome #01-10]             at Suite.<anonymous> (H:\work\edji-hotrod\e2e\src\license.spec.ts:122:9)
+[chrome #01-10]             at Suite.<anonymous> (H:\work\edji-hotrod\e2e\src\license.spec.ts:82:5)
+[chrome #01-10]             at Object.<anonymous> (H:\work\edji-hotrod\e2e\src\license.spec.ts:42:1)
+[chrome #01-10]             at Module._compile (internal/modules/cjs/loader.js:956:30)
+[chrome #01-10]             at Module.m._compile (H:\work\edji-hotrod\node_modules\ts-node\src\index.ts:400:23)
+[chrome #01-10]             at Module._extensions..js (internal/modules/cjs/loader.js:973:10)
+[chrome #01-10]             at Object.require.extensions.<computed> [as .ts] (H:\work\edji-hotrod\node_modules\ts-node\src\index.ts:403:12)
+[chrome #01-10]             at Module.load (H:\work\edji-hotrod\node_modules\coffeescript\lib\coffee-script\register.js:45:36)
+[chrome #01-10]             at Function.Module._load (internal/modules/cjs/loader.js:724:14)
+[chrome #01-10]             at Module.require (internal/modules/cjs/loader.js:849:19)
+[chrome #01-10]             at require (internal/modules/cjs/helpers.js:74:18)
+[chrome #01-10]             at Array.forEach (<anonymous>)
+[chrome #01-10]             at Function.promise (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:682:9)
+[chrome #01-10]             at _fulfilled (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:834:54)
+[chrome #01-10]             at H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:863:30
+[chrome #01-10]             at Promise.promise.promiseDispatch (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:796:13)
+[chrome #01-10]             at H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:556:49
+[chrome #01-10]             at runSingle (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:137:13)
+[chrome #01-10]             at flush (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:125:13)
+[chrome #01-10]             at processTicksAndRejections (internal/process/task_queues.js:75:11)
 [chrome #01-10]       [32mΓêÜ should generate a correct invite link[39m
 [chrome #01-10] 
-[chrome #01-10] Executed 6 of 6 specs[32m SUCCESS[39m in 25 secs.
+[chrome #01-10] **************************************************
+[chrome #01-10] *                    Failures                    *
+[chrome #01-10] **************************************************
+[chrome #01-10] 
+[chrome #01-10] 1) Academy user that has ability to manage licenses for their academy:  Academy admin should be able to log in and: should log in as an admin and successfully invite a teacher to join
+[chrome #01-10]   [31m- [39m[31mFailed: never saw the latest license invite get added
+[chrome #01-10]   Wait timed out after 5460ms[39m
+[chrome #01-10] 
+[chrome #01-10] Executed 6 of 6 specs[31m (1 FAILED)[39m in 29 secs.
 
-[22:00:05] I/testLogger - 
+[11:46:40] I/testLogger - 
 
-[22:00:05] I/launcher - 5 instance(s) of WebDriver still running
-F............[22:00:15] I/testLogger - 
+[11:46:40] I/launcher - 5 instance(s) of WebDriver still running
+.............[11:46:51] I/testLogger - 
 ------------------------------------
 
-[22:00:15] I/testLogger - [chrome #01-13] PID: 5112
+[11:46:51] I/testLogger - [chrome #01-13] PID: 25236
 [chrome #01-13] Specs: H:\work\edji-hotrod\e2e\src\reading-media.spec.ts
 [chrome #01-13] 
-[chrome #01-13] [21:59:50] I/direct - Using ChromeDriver directly...
+[chrome #01-13] [11:46:26] I/direct - Using ChromeDriver directly...
 [chrome #01-13] Jasmine started
 [chrome #01-13] 
 [chrome #01-13]   Reading Media
 [chrome #01-13] 
 [chrome #01-13]     PDF upload
 [chrome #01-13]       [32mΓêÜ should upload a PDF to a reading and save it to the reading[39m
-[chrome #01-13] [22:00:09] W/element - more than one element found for locator By(css selector, *[id="pdfDelBtn"]) - the first result will be used
-[chrome #01-13] [22:00:09] W/element - more than one element found for locator By(css selector, *[id="pdfDelBtn"]) - the first result will be used
-[chrome #01-13] [22:00:09] W/element - more than one element found for locator By(css selector, *[id="pdfDelBtn"]) - the first result will be used
+[chrome #01-13] [11:46:45] W/element - more than one element found for locator By(css selector, *[id="pdfDelBtn"]) - the first result will be used
+[chrome #01-13] [11:46:45] W/element - more than one element found for locator By(css selector, *[id="pdfDelBtn"]) - the first result will be used
+[chrome #01-13] [11:46:45] W/element - more than one element found for locator By(css selector, *[id="pdfDelBtn"]) - the first result will be used
 [chrome #01-13]       [32mΓêÜ should delete a PDF that was uploaded[39m
 [chrome #01-13] 
-[chrome #01-13] [22:00:10] W/element - more than one element found for locator By(css selector, [data-test="buttonUploadImage"]) - the first result will be used
-[chrome #01-13] [22:00:10] W/element - more than one element found for locator By(css selector, [data-test="buttonUploadImage"]) - the first result will be used
-[chrome #01-13] [22:00:10] W/element - more than one element found for locator By(css selector, [data-test="buttonUploadImage"]) - the first result will be used
-[chrome #01-13] [22:00:12] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-13] [22:00:12] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-13] [11:46:46] W/element - more than one element found for locator By(css selector, [data-test="buttonUploadImage"]) - the first result will be used
+[chrome #01-13] [11:46:46] W/element - more than one element found for locator By(css selector, [data-test="buttonUploadImage"]) - the first result will be used
+[chrome #01-13] [11:46:46] W/element - more than one element found for locator By(css selector, [data-test="buttonUploadImage"]) - the first result will be used
+[chrome #01-13] [11:46:48] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-13] [11:46:48] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
 [chrome #01-13]     Image upload
 [chrome #01-13]       [32mΓêÜ should upload an image to a reading and save it to the reading[39m
 [chrome #01-13] 
 [chrome #01-13]     [31m├ù Reading Media[39m
-[chrome #01-13]       [31m- [39m[31mFailed: element click intercepted: Element <user-avatar _ngcontent-wow-c3="" class="pointer float-right" id="avatarActionIcon" _nghost-wow-c5="" ng-reflect-user-details="[object Object]" ng-reflect-size="large">...</user-avatar> is not clickable at point (1606, 34). Other element would receive the click: <div _ngcontent-wow-c6="" class="modal modal-will-fade show ng-star-inserted" id="shareCodeModal">...</div>
+[chrome #01-13]       [31m- [39m[31mFailed: element click intercepted: Element <user-avatar _ngcontent-bfw-c3="" class="pointer float-right" id="avatarActionIcon" _nghost-bfw-c5="" ng-reflect-user-details="[object Object]" ng-reflect-size="large">...</user-avatar> is not clickable at point (1606, 34). Other element would receive the click: <div _ngcontent-bfw-c6="" class="modal modal-will-fade show ng-star-inserted" id="shareCodeModal">...</div>
 [chrome #01-13]         (Session info: chrome=89.0.4389.90)
 [chrome #01-13]         (Driver info: chromedriver=89.0.4389.23 (61b08ee2c50024bab004e48d2b1b083cdbdac579-refs/branch-heads/4389@{#294}),platform=Windows NT 10.0.19042 x86_64)[39m
 [chrome #01-13]         (Session info: chrome=89.0.4389.90)
@@ -997,30 +1055,72 @@ F............[22:00:15] I/testLogger -
 [chrome #01-13] **************************************************
 [chrome #01-13] 
 [chrome #01-13] 1) Reading Media
-[chrome #01-13]   [31m- [39m[31mFailed: element click intercepted: Element <user-avatar _ngcontent-wow-c3="" class="pointer float-right" id="avatarActionIcon" _nghost-wow-c5="" ng-reflect-user-details="[object Object]" ng-reflect-size="large">...</user-avatar> is not clickable at point (1606, 34). Other element would receive the click: <div _ngcontent-wow-c6="" class="modal modal-will-fade show ng-star-inserted" id="shareCodeModal">...</div>
+[chrome #01-13]   [31m- [39m[31mFailed: element click intercepted: Element <user-avatar _ngcontent-bfw-c3="" class="pointer float-right" id="avatarActionIcon" _nghost-bfw-c5="" ng-reflect-user-details="[object Object]" ng-reflect-size="large">...</user-avatar> is not clickable at point (1606, 34). Other element would receive the click: <div _ngcontent-bfw-c6="" class="modal modal-will-fade show ng-star-inserted" id="shareCodeModal">...</div>
 [chrome #01-13]     (Session info: chrome=89.0.4389.90)
 [chrome #01-13]     (Driver info: chromedriver=89.0.4389.23 (61b08ee2c50024bab004e48d2b1b083cdbdac579-refs/branch-heads/4389@{#294}),platform=Windows NT 10.0.19042 x86_64)[39m
 [chrome #01-13] 
 [chrome #01-13] Executed 3 of 3 specs[31m (1 ERROR)[39m in 23 secs.
-[chrome #01-13] [22:00:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://image-dev.edji.it/documents/38d020c9-cabd-42e5-8330-cb3479b8f21c/spark.json - Failed to load resource: the server responded with a status of 403 (Forbidden)
-[chrome #01-13] [22:00:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-13] [22:00:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-13] [22:00:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-13] [22:00:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-13] [11:46:51] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://image-dev.edji.it/documents/1d7efa95-48ff-4b93-94cc-f45624c22aaf/spark.json - Failed to load resource: the server responded with a status of 403 (Forbidden)
+[chrome #01-13] [11:46:51] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-13] [11:46:51] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-13] [11:46:51] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-13] [11:46:51] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
 
-[22:00:15] I/testLogger - 
+[11:46:51] I/testLogger - 
 
-[22:00:15] I/launcher - 5 instance(s) of WebDriver still running
-....F.F[22:00:25] I/testLogger - 
+[11:46:51] I/launcher - 5 instance(s) of WebDriver still running
+....[11:46:58] I/testLogger - 
 ------------------------------------
 
-[22:00:25] I/testLogger - [chrome #01-14] PID: 2972
+[11:46:58] I/testLogger - [chrome #01-6] PID: 11088
+[chrome #01-6] Specs: H:\work\edji-hotrod\e2e\src\hero-subscribe.spec.ts
+[chrome #01-6] 
+[chrome #01-6] [11:45:43] I/direct - Using ChromeDriver directly...
+[chrome #01-6] Jasmine started
+[chrome #01-6] [11:45:47] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6] [11:45:47] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6] 
+[chrome #01-6]   Hero Subscription Management
+[chrome #01-6] 
+[chrome #01-6]     Subscribe to Hero
+[chrome #01-6]       [32mΓêÜ should subscribe to hero with no discount[39m
+[chrome #01-6] [11:45:59] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6] [11:45:59] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6]       [32mΓêÜ should subscribe to hero with a partial discount[39m
+[chrome #01-6] [11:46:11] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6] [11:46:11] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6]       [32mΓêÜ should subscribe to hero with a 100% discount[39m
+[chrome #01-6] 
+[chrome #01-6]     Test Hero subscription modal coupon codes
+[chrome #01-6]       [32mΓêÜ should login and navigate to the hero subscription page[39m
+[chrome #01-6]       [32mΓêÜ should test coupon code validation[39m
+[chrome #01-6] 
+[chrome #01-6] [11:46:24] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6] [11:46:24] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6]     Change Credit Card Number for Subscribed Hero
+[chrome #01-6]       [32mΓêÜ should open view/modify modal on account page and change credit card[39m
+[chrome #01-6] 
+[chrome #01-6] [11:46:43] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6] [11:46:43] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-6]     Cancel Subscription and Renew
+[chrome #01-6]       [32mΓêÜ should cancel hero subscription[39m
+[chrome #01-6]       [32mΓêÜ should renew hero subscription that was previously canceled[39m
+[chrome #01-6] 
+[chrome #01-6] Executed 8 of 8 specs[32m SUCCESS[39m in 1 min 14 secs.
+
+[11:46:58] I/testLogger - 
+
+[11:46:58] I/launcher - 5 instance(s) of WebDriver still running
+..F[11:47:01] I/testLogger - 
+------------------------------------
+
+[11:47:01] I/testLogger - [chrome #01-14] PID: 25992
 [chrome #01-14] Specs: H:\work\edji-hotrod\e2e\src\onboarding__teacher.spec.ts
 [chrome #01-14] 
-[chrome #01-14] [22:00:00] I/direct - Using ChromeDriver directly...
+[chrome #01-14] [11:46:34] I/direct - Using ChromeDriver directly...
 [chrome #01-14] Jasmine started
-[chrome #01-14] [22:00:04] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-14] [22:00:04] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-14] [11:46:40] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-14] [11:46:41] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
 [chrome #01-14] 
 [chrome #01-14]   Teacher Onboarding
 [chrome #01-14] 
@@ -1028,139 +1128,124 @@ F............[22:00:15] I/testLogger -
 [chrome #01-14]       [32mΓêÜ should register a new teacher account[39m
 [chrome #01-14]       [32mΓêÜ should complete dashboard teacher onboarding flow[39m
 [chrome #01-14]       [32mΓêÜ should navigate New Reading onboarding tooltips[39m
-[chrome #01-14] [22:00:13] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-14] [22:00:13] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-14] [11:46:50] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-14] [11:46:50] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
 [chrome #01-14]       [32mΓêÜ should create onboarding lesson without any changes[39m
 [chrome #01-14]       [32mΓêÜ should see and open commenting onboarding guide[39m
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:22] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:23] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:24] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
-[chrome #01-14] [22:00:25] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:58] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:58] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:58] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:58] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:58] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:46:59] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-14] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
 [chrome #01-14]       [31m├ù should verify onboarding messages are no longer shown once completed[39m
 [chrome #01-14]         [31m- [39m[31mFailed: new reading button did not become clickable
-[chrome #01-14]         Wait timed out after 3017ms[39m
-[chrome #01-14]         Wait timed out after 3017ms
+[chrome #01-14]         Wait timed out after 3022ms[39m
+[chrome #01-14]         Wait timed out after 3022ms
 [chrome #01-14]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-14]             at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-14]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -1215,130 +1300,29 @@ F............[22:00:15] I/testLogger -
 [chrome #01-14] 
 [chrome #01-14] 1) Teacher Onboarding Register and complete onboarding for New Reading should verify onboarding messages are no longer shown once completed
 [chrome #01-14]   [31m- [39m[31mFailed: new reading button did not become clickable
-[chrome #01-14]   Wait timed out after 3017ms[39m
+[chrome #01-14]   Wait timed out after 3022ms[39m
 [chrome #01-14] 
-[chrome #01-14] Executed 6 of 6 specs[31m (1 FAILED)[39m in 23 secs.
+[chrome #01-14] Executed 6 of 6 specs[31m (1 FAILED)[39m in 25 secs.
 
-[22:00:25] I/testLogger - 
+[11:47:01] I/testLogger - 
 
-[22:00:25] I/launcher - 5 instance(s) of WebDriver still running
-[22:00:25] I/testLogger - 
+[11:47:01] I/launcher - 5 instance(s) of WebDriver still running
+.F...[11:47:14] I/testLogger - 
 ------------------------------------
 
-[22:00:25] I/testLogger - [chrome #01-6] PID: 25852
-[chrome #01-6] Specs: H:\work\edji-hotrod\e2e\src\hero-subscribe.spec.ts
-[chrome #01-6] 
-[chrome #01-6] [21:59:05] I/direct - Using ChromeDriver directly...
-[chrome #01-6] Jasmine started
-[chrome #01-6] [21:59:12] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6] [21:59:12] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6] 
-[chrome #01-6]   Hero Subscription Management
-[chrome #01-6] 
-[chrome #01-6]     Subscribe to Hero
-[chrome #01-6]       [32mΓêÜ should subscribe to hero with no discount[39m
-[chrome #01-6] [21:59:24] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6] [21:59:24] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6]       [32mΓêÜ should subscribe to hero with a partial discount[39m
-[chrome #01-6] [21:59:36] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6] [21:59:36] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6]       [32mΓêÜ should subscribe to hero with a 100% discount[39m
-[chrome #01-6] 
-[chrome #01-6]     Test Hero subscription modal coupon codes
-[chrome #01-6]       [32mΓêÜ should login and navigate to the hero subscription page[39m
-[chrome #01-6]       [32mΓêÜ should test coupon code validation[39m
-[chrome #01-6] 
-[chrome #01-6] [21:59:48] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6] [21:59:48] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6]     Change Credit Card Number for Subscribed Hero
-[chrome #01-6]       [32mΓêÜ should open view/modify modal on account page and change credit card[39m
-[chrome #01-6] 
-[chrome #01-6] [22:00:07] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6] [22:00:07] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-6]     Cancel Subscription and Renew
-[chrome #01-6]       [32mΓêÜ should cancel hero subscription[39m
-[chrome #01-6]       [31m├ù should renew hero subscription that was previously canceled[39m
-[chrome #01-6]         [31m- [39m[31mFailed: should see renew subscription button
-[chrome #01-6]         Wait timed out after 5002ms[39m
-[chrome #01-6]         Wait timed out after 5002ms
-[chrome #01-6]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
-[chrome #01-6]             at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
-[chrome #01-6]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
-[chrome #01-6]             at TaskQueue.executeNext_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3067:27)
-[chrome #01-6]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2927:27
-[chrome #01-6]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:668:7
-[chrome #01-6]             at runMicrotasks (<anonymous>)
-[chrome #01-6]             at processTicksAndRejections (internal/process/task_queues.js:93:5)
-[chrome #01-6]         From: Task: should see renew subscription button
-[chrome #01-6]             at scheduleWait (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2188:20)
-[chrome #01-6]             at ControlFlow.wait (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2517:12)
-[chrome #01-6]             at Driver.wait (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\webdriver.js:934:29)
-[chrome #01-6]             at run (H:\work\edji-hotrod\node_modules\protractor\built\browser.js:59:33)
-[chrome #01-6]             at ProtractorBrowser.to.<computed> [as wait] (H:\work\edji-hotrod\node_modules\protractor\built\browser.js:67:16)
-[chrome #01-6]             at UserContext.<anonymous> (H:\work\edji-hotrod\e2e\src\hero-subscribe.spec.ts:243:34)
-[chrome #01-6]             at new ManagedPromise (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1077:7)
-[chrome #01-6]             at ControlFlow.promise (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2505:12)
-[chrome #01-6]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
-[chrome #01-6]             at TaskQueue.executeNext_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3067:27)
-[chrome #01-6]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2974:25
-[chrome #01-6]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:668:7
-[chrome #01-6]             at runMicrotasks (<anonymous>)
-[chrome #01-6]             at processTicksAndRejections (internal/process/task_queues.js:93:5)
-[chrome #01-6]         From: Task: Run it("should renew hero subscription that was previously canceled") in control flow
-[chrome #01-6]             at listOnTimeout (internal/timers.js:531:17)
-[chrome #01-6]             at processTimers (internal/timers.js:475:7)
-[chrome #01-6]         From asynchronous test: 
-[chrome #01-6]         Error
-[chrome #01-6]             at Suite.<anonymous> (H:\work\edji-hotrod\e2e\src\hero-subscribe.spec.ts:241:9)
-[chrome #01-6]             at Suite.<anonymous> (H:\work\edji-hotrod\e2e\src\hero-subscribe.spec.ts:217:5)
-[chrome #01-6]             at Object.<anonymous> (H:\work\edji-hotrod\e2e\src\hero-subscribe.spec.ts:79:1)
-[chrome #01-6]             at Module._compile (internal/modules/cjs/loader.js:956:30)
-[chrome #01-6]             at Module.m._compile (H:\work\edji-hotrod\node_modules\ts-node\src\index.ts:400:23)
-[chrome #01-6]             at Module._extensions..js (internal/modules/cjs/loader.js:973:10)
-[chrome #01-6]             at Object.require.extensions.<computed> [as .ts] (H:\work\edji-hotrod\node_modules\ts-node\src\index.ts:403:12)
-[chrome #01-6]             at Module.load (H:\work\edji-hotrod\node_modules\coffeescript\lib\coffee-script\register.js:45:36)
-[chrome #01-6]             at Function.Module._load (internal/modules/cjs/loader.js:724:14)
-[chrome #01-6]             at Module.require (internal/modules/cjs/loader.js:849:19)
-[chrome #01-6]             at require (internal/modules/cjs/helpers.js:74:18)
-[chrome #01-6]             at Array.forEach (<anonymous>)
-[chrome #01-6]             at Function.promise (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:682:9)
-[chrome #01-6]             at _fulfilled (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:834:54)
-[chrome #01-6]             at H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:863:30
-[chrome #01-6]             at Promise.promise.promiseDispatch (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:796:13)
-[chrome #01-6]             at H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:556:49
-[chrome #01-6]             at runSingle (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:137:13)
-[chrome #01-6]             at flush (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:125:13)
-[chrome #01-6]             at processTicksAndRejections (internal/process/task_queues.js:75:11)
-[chrome #01-6] 
-[chrome #01-6] **************************************************
-[chrome #01-6] *                    Failures                    *
-[chrome #01-6] **************************************************
-[chrome #01-6] 
-[chrome #01-6] 1) Hero Subscription Management Cancel Subscription and Renew should renew hero subscription that was previously canceled
-[chrome #01-6]   [31m- [39m[31mFailed: should see renew subscription button
-[chrome #01-6]   Wait timed out after 5002ms[39m
-[chrome #01-6] 
-[chrome #01-6] Executed 8 of 8 specs[31m (1 FAILED)[39m in 1 min 17 secs.
-
-[22:00:25] I/testLogger - 
-
-[22:00:25] I/launcher - 5 instance(s) of WebDriver still running
-...[22:00:34] I/testLogger - 
-------------------------------------
-
-[22:00:34] I/testLogger - [chrome #01-12] PID: 13168
+[11:47:14] I/testLogger - [chrome #01-12] PID: 28240
 [chrome #01-12] Specs: H:\work\edji-hotrod\e2e\src\new-reading.spec.ts
 [chrome #01-12] 
-[chrome #01-12] [21:59:49] I/direct - Using ChromeDriver directly...
+[chrome #01-12] [11:46:22] I/direct - Using ChromeDriver directly...
 [chrome #01-12] Jasmine started
-[chrome #01-12] [21:59:56] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-12] [21:59:56] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:31] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:31] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
 [chrome #01-12] 
 [chrome #01-12]   New Reading Page
 [chrome #01-12]     [31m├ù should add reading when all fields are filled and submitted[39m
 [chrome #01-12]       [31m- [39m[31mFailed: reading cards did not appear on dashboard while trying to delete
-[chrome #01-12]       Wait timed out after 5001ms[39m
-[chrome #01-12]       Wait timed out after 5001ms
+[chrome #01-12]       Wait timed out after 5004ms[39m
+[chrome #01-12]       Wait timed out after 5004ms
 [chrome #01-12]           at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-12]           at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-12]           at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -1390,31 +1374,31 @@ F............[22:00:15] I/testLogger -
 [chrome #01-12]           at runSingle (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:137:13)
 [chrome #01-12]           at flush (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:125:13)
 [chrome #01-12]           at processTicksAndRejections (internal/process/task_queues.js:75:11)
-[chrome #01-12] [22:00:06] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-12] [22:00:06] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:41] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:41] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
 [chrome #01-12]     [32mΓêÜ should display an error if the title is not filled[39m
-[chrome #01-12] [22:00:07] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-12] [22:00:07] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:41] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:41] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
 [chrome #01-12]     [32mΓêÜ should display an error if no content is entered[39m
-[chrome #01-12] [22:00:08] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-12] [22:00:08] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:42] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:42] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
 [chrome #01-12]     [32mΓêÜ should display an error if no group label is entered[39m
 [chrome #01-12]     [32mΓêÜ should not see the option to create a reading as type academy[39m
-[chrome #01-12] [22:00:12] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-12] [22:00:12] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:46] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:46:46] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
 [chrome #01-12] 
 [chrome #01-12]     Reading draft
 [chrome #01-12]       [32mΓêÜ should add a reading as a draft and return to the same screen with a reading id[39m
 [chrome #01-12]       [32mΓêÜ should create a draft, and find it on the dashboard after manually saving[39m
 [chrome #01-12]       [32mΓêÜ should create a draft, and find it on the dashboard after letting it autosave[39m
 [chrome #01-12] 
-[chrome #01-12] [22:00:26] W/element - more than one element found for locator By(css selector, *[id="showReadingPreview"]) - the first result will be used
-[chrome #01-12] [22:00:26] W/element - more than one element found for locator By(css selector, *[id="showReadingPreview"]) - the first result will be used
+[chrome #01-12] [11:47:00] W/element - more than one element found for locator By(css selector, *[id="showReadingPreview"]) - the first result will be used
+[chrome #01-12] [11:47:01] W/element - more than one element found for locator By(css selector, *[id="showReadingPreview"]) - the first result will be used
 [chrome #01-12]     Preview reading formatting
 [chrome #01-12]       [32mΓêÜ should preview basic formatting, and see expected formatting[39m
 [chrome #01-12] 
-[chrome #01-12] [22:00:30] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
-[chrome #01-12] [22:00:30] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:47:07] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
+[chrome #01-12] [11:47:07] W/element - more than one element found for locator By(css selector, [data-test="navShareReadingBtn"]) - the first result will be used
 [chrome #01-12]   Create Academy Readings
 [chrome #01-12]     [32mΓêÜ should create a reading with reading type academy[39m
 [chrome #01-12] 
@@ -1424,30 +1408,30 @@ F............[22:00:15] I/testLogger -
 [chrome #01-12] 
 [chrome #01-12] 1) New Reading Page should add reading when all fields are filled and submitted
 [chrome #01-12]   [31m- [39m[31mFailed: reading cards did not appear on dashboard while trying to delete
-[chrome #01-12]   Wait timed out after 5001ms[39m
+[chrome #01-12]   Wait timed out after 5004ms[39m
 [chrome #01-12] 
-[chrome #01-12] Executed 10 of 10 specs[31m (1 FAILED)[39m in 43 secs.
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings/606142b9bdba57003f9a6437 - Failed to load resource: the server responded with a status of 406 (Not Acceptable)
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
-[chrome #01-12] [22:00:34] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-12] Executed 10 of 10 specs[31m (1 FAILED)[39m in 49 secs.
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings/60620473ba59410038232ef5 - Failed to load resource: the server responded with a status of 406 (Not Acceptable)
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
+[chrome #01-12] [11:47:13] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/readings?pop=projects - Failed to load resource: the server responded with a status of 500 (Internal Server Error)
 
-[22:00:34] I/testLogger - 
+[11:47:14] I/testLogger - 
 
-[22:00:34] I/launcher - 5 instance(s) of WebDriver still running
-...F.....F[22:00:48] I/testLogger - 
+[11:47:14] I/launcher - 5 instance(s) of WebDriver still running
+....F[11:47:22] I/testLogger - 
 ------------------------------------
 
-[22:00:48] I/testLogger - [chrome #01-18] PID: 7140
+[11:47:22] I/testLogger - [chrome #01-18] PID: 27844
 [chrome #01-18] Specs: H:\work\edji-hotrod\e2e\src\referral.spec.ts
 [chrome #01-18] 
-[chrome #01-18] [22:00:26] I/direct - Using ChromeDriver directly...
+[chrome #01-18] [11:47:02] I/direct - Using ChromeDriver directly...
 [chrome #01-18] Jasmine started
 [chrome #01-18] 
 [chrome #01-18]   Referral
@@ -1456,28 +1440,38 @@ F............[22:00:15] I/testLogger -
 [chrome #01-18]       [32mΓêÜ should access referral modal with code[39m
 [chrome #01-18]       [32mΓêÜ should be able to share unique referral link via socials[39m
 [chrome #01-18]       [32mΓêÜ should reward user with 5 or more referrals[39m
-[chrome #01-18] [22:00:37] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-18] [22:00:37] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
-[chrome #01-18] [22:00:43] W/element - more than one element found for locator By(css selector, #referralModal .close) - the first result will be used
-[chrome #01-18] [22:00:43] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-18] [11:47:16] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
+[chrome #01-18] [11:47:16] W/element - more than one element found for locator By(css selector, *[id="emailInput"]) - the first result will be used
 [chrome #01-18]       [31m├ù should register with referral link, create reading, and be credited for referral[39m
-[chrome #01-18]         [31m- [39m[31mFailed: Wait timed out after 5000ms[39m
-[chrome #01-18]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
+[chrome #01-18]         [31m- [39m[31mFailed: element click intercepted: Element <user-avatar _ngcontent-use-c3="" class="pointer float-right" id="avatarActionIcon" _nghost-use-c5="" ng-reflect-user-details="[object Object]" ng-reflect-size="large">...</user-avatar> is not clickable at point (1623, 34). Other element would receive the click: <div _ngcontent-use-c19="" class="modal fade show" id="userDetailsModal">...</div>
+[chrome #01-18]           (Session info: chrome=89.0.4389.90)
+[chrome #01-18]           (Driver info: chromedriver=89.0.4389.23 (61b08ee2c50024bab004e48d2b1b083cdbdac579-refs/branch-heads/4389@{#294}),platform=Windows NT 10.0.19042 x86_64)[39m
+[chrome #01-18]           (Session info: chrome=89.0.4389.90)
+[chrome #01-18]           (Driver info: chromedriver=89.0.4389.23 (61b08ee2c50024bab004e48d2b1b083cdbdac579-refs/branch-heads/4389@{#294}),platform=Windows NT 10.0.19042 x86_64)
+[chrome #01-18]             at Object.checkLegacyResponse (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\error.js:546:15)
+[chrome #01-18]             at parseHttpResponse (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\http.js:509:13)
+[chrome #01-18]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\http.js:441:30
+[chrome #01-18]             at runMicrotasks (<anonymous>)
+[chrome #01-18]             at processTicksAndRejections (internal/process/task_queues.js:93:5)
+[chrome #01-18]         From: Task: WebElement.click()
+[chrome #01-18]             at Driver.schedule (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\webdriver.js:807:17)
+[chrome #01-18]             at WebElement.schedule_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\webdriver.js:2010:25)
+[chrome #01-18]             at WebElement.click (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\webdriver.js:2092:17)
+[chrome #01-18]             at actionFn (H:\work\edji-hotrod\node_modules\protractor\built\element.js:89:44)
+[chrome #01-18]             at Array.map (<anonymous>)
+[chrome #01-18]             at H:\work\edji-hotrod\node_modules\protractor\built\element.js:461:65
 [chrome #01-18]             at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-18]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
 [chrome #01-18]             at TaskQueue.executeNext_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3067:27)
 [chrome #01-18]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2927:27
 [chrome #01-18]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:668:7
 [chrome #01-18]             at runMicrotasks (<anonymous>)
-[chrome #01-18]             at processTicksAndRejections (internal/process/task_queues.js:93:5)
-[chrome #01-18]         From: Task: <anonymous wait>
-[chrome #01-18]             at scheduleWait (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2188:20)
-[chrome #01-18]             at ControlFlow.wait (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2517:12)
-[chrome #01-18]             at Driver.wait (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\webdriver.js:934:29)
-[chrome #01-18]             at run (H:\work\edji-hotrod\node_modules\protractor\built\browser.js:59:33)
-[chrome #01-18]             at ProtractorBrowser.to.<computed> [as wait] (H:\work\edji-hotrod\node_modules\protractor\built\browser.js:67:16)
-[chrome #01-18]             at Dashboard.openNewReading (H:\work\edji-hotrod\e2e\src\page-objects\dashboard-page.ts:130:30)
-[chrome #01-18]             at UserContext.<anonymous> (H:\work\edji-hotrod\e2e\src\referral.spec.ts:203:23)
+[chrome #01-18]             at processTicksAndRejections (internal/process/task_queues.js:93:5)Error
+[chrome #01-18]             at ElementArrayFinder.applyAction_ (H:\work\edji-hotrod\node_modules\protractor\built\element.js:459:27)
+[chrome #01-18]             at ElementArrayFinder.<computed> [as click] (H:\work\edji-hotrod\node_modules\protractor\built\element.js:91:29)
+[chrome #01-18]             at ElementFinder.<computed> [as click] (H:\work\edji-hotrod\node_modules\protractor\built\element.js:831:22)
+[chrome #01-18]             at Sidebar.clickReferralButton (H:\work\edji-hotrod\e2e\src\page-objects\sidebar-page.ts:108:31)
+[chrome #01-18]             at UserContext.<anonymous> (H:\work\edji-hotrod\e2e\src\referral.spec.ts:195:21)
 [chrome #01-18]             at new ManagedPromise (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1077:7)
 [chrome #01-18]             at ControlFlow.promise (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2505:12)
 [chrome #01-18]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -1516,48 +1510,30 @@ F............[22:00:15] I/testLogger -
 [chrome #01-18] **************************************************
 [chrome #01-18] 
 [chrome #01-18] 1) Referral Account Referral Sharing and Rewards should register with referral link, create reading, and be credited for referral
-[chrome #01-18]   [31m- [39m[31mFailed: Wait timed out after 5000ms[39m
+[chrome #01-18]   [31m- [39m[31mFailed: element click intercepted: Element <user-avatar _ngcontent-use-c3="" class="pointer float-right" id="avatarActionIcon" _nghost-use-c5="" ng-reflect-user-details="[object Object]" ng-reflect-size="large">...</user-avatar> is not clickable at point (1623, 34). Other element would receive the click: <div _ngcontent-use-c19="" class="modal fade show" id="userDetailsModal">...</div>
+[chrome #01-18]     (Session info: chrome=89.0.4389.90)
+[chrome #01-18]     (Driver info: chromedriver=89.0.4389.23 (61b08ee2c50024bab004e48d2b1b083cdbdac579-refs/branch-heads/4389@{#294}),platform=Windows NT 10.0.19042 x86_64)[39m
 [chrome #01-18] 
-[chrome #01-18] Executed 4 of 4 specs[31m (1 FAILED)[39m in 20 secs.
+[chrome #01-18] Executed 4 of 4 specs[31m (1 FAILED)[39m in 18 secs.
 
-[22:00:48] I/testLogger - 
+[11:47:22] I/testLogger - 
 
-[22:00:48] I/launcher - 5 instance(s) of WebDriver still running
-..[22:00:51] I/testLogger - 
+[11:47:22] I/launcher - 5 instance(s) of WebDriver still running
+...[11:47:28] I/testLogger - 
 ------------------------------------
 
-[22:00:51] I/testLogger - [chrome #01-19] PID: 25564
-[chrome #01-19] Specs: H:\work\edji-hotrod\e2e\src\reading-link.spec.ts
-[chrome #01-19] 
-[chrome #01-19] [22:00:35] I/direct - Using ChromeDriver directly...
-[chrome #01-19] Jasmine started
-[chrome #01-19] 
-[chrome #01-19]   Reading Link
-[chrome #01-19]     [32mΓêÜ should open reading link from created dashboard[39m
-[chrome #01-19]     [32mΓêÜ should copy reading link from share modal[39m
-[chrome #01-19]     [32mΓêÜ should open reading link without logging in and get a reading preview in discover[39m
-[chrome #01-19]     [32mΓêÜ should open reading link as testbot and get a reading preview in discover[39m
-[chrome #01-19] 
-[chrome #01-19] Executed 4 of 4 specs[32m SUCCESS[39m in 14 secs.
-
-[22:00:51] I/testLogger - 
-
-[22:00:51] I/launcher - 5 instance(s) of WebDriver still running
-.[22:00:52] I/testLogger - 
-------------------------------------
-
-[22:00:52] I/testLogger - [chrome #01-17] PID: 20144
+[11:47:28] I/testLogger - [chrome #01-17] PID: 27404
 [chrome #01-17] Specs: H:\work\edji-hotrod\e2e\src\questions.spec.ts
 [chrome #01-17] 
-[chrome #01-17] [22:00:26] I/direct - Using ChromeDriver directly...
+[chrome #01-17] [11:46:59] I/direct - Using ChromeDriver directly...
 [chrome #01-17] Jasmine started
-[chrome #01-17] [22:00:32] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-17] [11:47:05] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
 [chrome #01-17] 
 [chrome #01-17]   Questions
 [chrome #01-17] 
 [chrome #01-17]     Create
 [chrome #01-17]       [31m├ù should add reading with questions when all fields are filled and submitted[39m
-[chrome #01-17]         [31m- [39m[31mFailed: Wait timed out after 5002ms[39m
+[chrome #01-17]         [31m- [39m[31mFailed: Wait timed out after 5005ms[39m
 [chrome #01-17]             at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-17]             at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-17]             at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -1613,10 +1589,10 @@ F............[22:00:15] I/testLogger -
 [chrome #01-17]             at flush (H:\work\edji-hotrod\node_modules\protractor\node_modules\q\q.js:125:13)
 [chrome #01-17]             at processTicksAndRejections (internal/process/task_queues.js:75:11)
 [chrome #01-17] 
-[chrome #01-17] [22:00:38] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-17] [11:47:11] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-17]     Create Answers
 [chrome #01-17]       [32mΓêÜ should make an emoji answer to a question as a guest[39m
-[chrome #01-17] [22:00:46] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-17] [11:47:20] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-17]       [32mΓêÜ should make a text answer to a question as a guest[39m
 [chrome #01-17] 
 [chrome #01-17] **************************************************
@@ -1624,24 +1600,44 @@ F............[22:00:15] I/testLogger -
 [chrome #01-17] **************************************************
 [chrome #01-17] 
 [chrome #01-17] 1) Questions Create should add reading with questions when all fields are filled and submitted
-[chrome #01-17]   [31m- [39m[31mFailed: Wait timed out after 5002ms[39m
+[chrome #01-17]   [31m- [39m[31mFailed: Wait timed out after 5005ms[39m
 [chrome #01-17] 
-[chrome #01-17] Executed 3 of 3 specs[31m (1 FAILED)[39m in 25 secs.
-[chrome #01-17] [22:00:52] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/59bdafd4ecc9ef57c04d67bc - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-17] [22:00:52] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/59bdafd4ecc9ef57c04d67bc - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-17] [22:00:52] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/59bdafd4ecc9ef57c04d67bc - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-17] [22:00:52] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/59bdafd4ecc9ef57c04d67bc - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-17] Executed 3 of 3 specs[31m (1 FAILED)[39m in 27 secs.
+[chrome #01-17] [11:47:28] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/59bdafd4ecc9ef57c04d67bc - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-17] [11:47:28] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/59bdafd4ecc9ef57c04d67bc - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-17] [11:47:28] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/59bdafd4ecc9ef57c04d67bc - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-17] [11:47:28] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/59bdafd4ecc9ef57c04d67bc - Failed to load resource: the server responded with a status of 401 (Unauthorized)
 
-[22:00:52] I/testLogger - 
+[11:47:28] I/testLogger - 
 
-[22:00:52] I/launcher - 4 instance(s) of WebDriver still running
-....F.F..[22:01:06] I/testLogger - 
+[11:47:28] I/launcher - 5 instance(s) of WebDriver still running
+..[11:47:30] I/testLogger - 
 ------------------------------------
 
-[22:01:06] I/testLogger - [chrome #01-20] PID: 10096
+[11:47:30] I/testLogger - [chrome #01-19] PID: 26968
+[chrome #01-19] Specs: H:\work\edji-hotrod\e2e\src\reading-link.spec.ts
+[chrome #01-19] 
+[chrome #01-19] [11:47:14] I/direct - Using ChromeDriver directly...
+[chrome #01-19] Jasmine started
+[chrome #01-19] 
+[chrome #01-19]   Reading Link
+[chrome #01-19]     [32mΓêÜ should open reading link from created dashboard[39m
+[chrome #01-19]     [32mΓêÜ should copy reading link from share modal[39m
+[chrome #01-19]     [32mΓêÜ should open reading link without logging in and get a reading preview in discover[39m
+[chrome #01-19]     [32mΓêÜ should open reading link as testbot and get a reading preview in discover[39m
+[chrome #01-19] 
+[chrome #01-19] Executed 4 of 4 specs[32m SUCCESS[39m in 13 secs.
+
+[11:47:30] I/testLogger - 
+
+[11:47:30] I/launcher - 4 instance(s) of WebDriver still running
+.....FF..[11:47:42] I/testLogger - 
+------------------------------------
+
+[11:47:42] I/testLogger - [chrome #01-20] PID: 29332
 [chrome #01-20] Specs: H:\work\edji-hotrod\e2e\src\owner-tools__reading-recap.spec.ts
 [chrome #01-20] 
-[chrome #01-20] [22:00:49] I/direct - Using ChromeDriver directly...
+[chrome #01-20] [11:47:23] I/direct - Using ChromeDriver directly...
 [chrome #01-20] Jasmine started
 [chrome #01-20] 
 [chrome #01-20]   Project Page as an owner using reading report: 
@@ -1649,8 +1645,8 @@ F............[22:00:15] I/testLogger -
 [chrome #01-20]     [32mΓêÜ verify there is a comment in the count and the count is greater than 0 for the initial student[39m
 [chrome #01-20]     [31m├ù should add an evaluation and verify it shows up[39m
 [chrome #01-20]       [31m- [39m[31mFailed: previous reading evals never became visible
-[chrome #01-20]       Wait timed out after 7007ms[39m
-[chrome #01-20]       Wait timed out after 7007ms
+[chrome #01-20]       Wait timed out after 7002ms[39m
+[chrome #01-20]       Wait timed out after 7002ms
 [chrome #01-20]           at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-20]           at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-20]           at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -1672,6 +1668,7 @@ F............[22:00:15] I/testLogger -
 [chrome #01-20]           at TaskQueue.executeNext_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3067:27)
 [chrome #01-20]           at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2974:25
 [chrome #01-20]           at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:668:7
+[chrome #01-20]           at runMicrotasks (<anonymous>)
 [chrome #01-20]           at processTicksAndRejections (internal/process/task_queues.js:93:5)
 [chrome #01-20]       From: Task: Run it("should add an evaluation and verify it shows up") in control flow
 [chrome #01-20]           at processImmediate (internal/timers.js:439:21)
@@ -1705,20 +1702,20 @@ F............[22:00:15] I/testLogger -
 [chrome #01-20] 
 [chrome #01-20] 1) Project Page as an owner using reading report:  should add an evaluation and verify it shows up
 [chrome #01-20]   [31m- [39m[31mFailed: previous reading evals never became visible
-[chrome #01-20]   Wait timed out after 7007ms[39m
+[chrome #01-20]   Wait timed out after 7002ms[39m
 [chrome #01-20] 
-[chrome #01-20] Executed 5 of 5 specs[31m (1 FAILED)[39m in 15 secs.
+[chrome #01-20] Executed 5 of 5 specs[31m (1 FAILED)[39m in 17 secs.
 
-[22:01:06] I/testLogger - 
+[11:47:42] I/testLogger - 
 
-[22:01:06] I/launcher - 3 instance(s) of WebDriver still running
-.F.[22:01:15] I/testLogger - 
+[11:47:42] I/launcher - 3 instance(s) of WebDriver still running
+.F.[11:47:49] I/testLogger - 
 ------------------------------------
 
-[22:01:15] I/testLogger - [chrome #01-15] PID: 23976
+[11:47:49] I/testLogger - [chrome #01-15] PID: 3752
 [chrome #01-15] Specs: H:\work\edji-hotrod\e2e\src\owner-tools.spec.ts
 [chrome #01-15] 
-[chrome #01-15] [22:00:06] I/direct - Using ChromeDriver directly...
+[chrome #01-15] [11:46:41] I/direct - Using ChromeDriver directly...
 [chrome #01-15] Jasmine started
 [chrome #01-15] 
 [chrome #01-15]   Project Page as a Project Owner: 
@@ -1728,32 +1725,30 @@ F............[22:00:15] I/testLogger -
 [chrome #01-15]     [32mΓêÜ hide other user's comments to guest while Heat Vision is on[39m
 [chrome #01-15] 
 [chrome #01-15] Executed 4 of 4 specs[32m SUCCESS[39m in 1 min 7 secs.
-[chrome #01-15] [22:01:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-15] [22:01:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/projects/5cad22f5ffd34f199dd0fc35/students - Failed to load resource: the server responded with a status of 404 (Not Found)
-[chrome #01-15] [22:01:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-15] [22:01:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-15] [22:01:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-15] [22:01:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/projects/5cad22f5ffd34f199dd0fc35/students - Failed to load resource: the server responded with a status of 404 (Not Found)
-[chrome #01-15] [22:01:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-15] [22:01:15] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-15] [11:47:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-15] [11:47:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/projects/5cad22f5ffd34f199dd0fc35/students - Failed to load resource: the server responded with a status of 404 (Not Found)
+[chrome #01-15] [11:47:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-15] [11:47:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://optimus-dev.edji.it/api/v1/projects/5cad22f5ffd34f199dd0fc35/students - Failed to load resource: the server responded with a status of 404 (Not Found)
+[chrome #01-15] [11:47:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-15] [11:47:49] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
 
-[22:01:15] I/testLogger - 
+[11:47:49] I/testLogger - 
 
-[22:01:15] I/launcher - 2 instance(s) of WebDriver still running
-.F.F[22:01:24] I/testLogger - 
+[11:47:49] I/launcher - 2 instance(s) of WebDriver still running
+..F.F[11:48:01] I/testLogger - 
 ------------------------------------
 
-[22:01:24] I/testLogger - [chrome #01-21] PID: 28656
+[11:48:01] I/testLogger - [chrome #01-21] PID: 28144
 [chrome #01-21] Specs: H:\work\edji-hotrod\e2e\src\version.spec.ts
 [chrome #01-21] 
-[chrome #01-21] [22:00:51] I/direct - Using ChromeDriver directly...
+[chrome #01-21] [11:47:29] I/direct - Using ChromeDriver directly...
 [chrome #01-21] Jasmine started
 [chrome #01-21] 
 [chrome #01-21]   Versioning - 
 [chrome #01-21]     [32mΓêÜ should see Edji in the title[39m
-[chrome #01-21] [22:00:57] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
+[chrome #01-21] [11:47:34] W/element - more than one element found for locator By(css selector, *[id="buttonNewReading"]) - the first result will be used
 [chrome #01-21]     [31m├ù should create a new reading with a specific title[39m
-[chrome #01-21]       [31m- [39m[31mFailed: Wait timed out after 5000ms[39m
+[chrome #01-21]       [31m- [39m[31mFailed: Wait timed out after 5003ms[39m
 [chrome #01-21]           at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-21]           at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-21]           at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -1802,8 +1797,8 @@ F............[22:00:15] I/testLogger -
 [chrome #01-21]           at processTicksAndRejections (internal/process/task_queues.js:75:11)
 [chrome #01-21]     [31m├ù should go to new reading page with existing reading and validate the reading; then save it as a draft[39m
 [chrome #01-21]       [31m- [39m[31mFailed: reading card options button never became clickable after load
-[chrome #01-21]       Wait timed out after 8006ms[39m
-[chrome #01-21]       Wait timed out after 8006ms
+[chrome #01-21]       Wait timed out after 8001ms[39m
+[chrome #01-21]       Wait timed out after 8001ms
 [chrome #01-21]           at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-21]           at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-21]           at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -1902,8 +1897,8 @@ F............[22:00:15] I/testLogger -
 [chrome #01-21]           at processTicksAndRejections (internal/process/task_queues.js:75:11)
 [chrome #01-21]     [31m├ù should create a new group for an older version[39m
 [chrome #01-21]       [31m- [39m[31mFailed: past versions never loaded
-[chrome #01-21]       Wait timed out after 5003ms[39m
-[chrome #01-21]       Wait timed out after 5003ms
+[chrome #01-21]       Wait timed out after 5002ms[39m
+[chrome #01-21]       Wait timed out after 5002ms
 [chrome #01-21]           at H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:2201:17
 [chrome #01-21]           at ManagedPromise.invokeCallback_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:1376:14)
 [chrome #01-21]           at TaskQueue.execute_ (H:\work\edji-hotrod\node_modules\selenium-webdriver\lib\promise.js:3084:14)
@@ -1956,11 +1951,11 @@ F............[22:00:15] I/testLogger -
 [chrome #01-21] **************************************************
 [chrome #01-21] 
 [chrome #01-21] 1) Versioning -  should create a new reading with a specific title
-[chrome #01-21]   [31m- [39m[31mFailed: Wait timed out after 5000ms[39m
+[chrome #01-21]   [31m- [39m[31mFailed: Wait timed out after 5003ms[39m
 [chrome #01-21] 
 [chrome #01-21] 2) Versioning -  should go to new reading page with existing reading and validate the reading; then save it as a draft
 [chrome #01-21]   [31m- [39m[31mFailed: reading card options button never became clickable after load
-[chrome #01-21]   Wait timed out after 8006ms[39m
+[chrome #01-21]   Wait timed out after 8001ms[39m
 [chrome #01-21] 
 [chrome #01-21] 3) Versioning -  should open up the latest version that is a draft and publish the draft
 [chrome #01-21]   [31m- [39m[31mFailed: draft never became clickable after loading of reading cards
@@ -1968,94 +1963,89 @@ F............[22:00:15] I/testLogger -
 [chrome #01-21] 
 [chrome #01-21] 4) Versioning -  should create a new group for an older version
 [chrome #01-21]   [31m- [39m[31mFailed: past versions never loaded
-[chrome #01-21]   Wait timed out after 5003ms[39m
+[chrome #01-21]   Wait timed out after 5002ms[39m
 [chrome #01-21] 
 [chrome #01-21] Executed 5 of 5 specs[31m (4 FAILED)[39m in 30 secs.
 
-[22:01:24] I/testLogger - 
+[11:48:01] I/testLogger - 
 
-[22:01:24] I/launcher - 1 instance(s) of WebDriver still running
-...[22:01:36] I/testLogger - 
+[11:48:01] I/launcher - 1 instance(s) of WebDriver still running
+..[11:48:09] I/testLogger - 
 ------------------------------------
 
-[22:01:36] I/testLogger - [chrome #01-16] PID: 24620
+[11:48:09] I/testLogger - [chrome #01-16] PID: 9560
 [chrome #01-16] Specs: H:\work\edji-hotrod\e2e\src\project.spec.ts
 [chrome #01-16] 
-[chrome #01-16] [22:00:16] I/direct - Using ChromeDriver directly...
+[chrome #01-16] [11:46:52] I/direct - Using ChromeDriver directly...
 [chrome #01-16] Jasmine started
-[chrome #01-16] [22:00:34] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
-[chrome #01-16] [22:00:37] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-16] [11:47:09] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-16] [11:47:12] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-16] 
 [chrome #01-16]   Project Page
 [chrome #01-16] 
 [chrome #01-16]     Commenting and student interactions
 [chrome #01-16]       [32mΓêÜ should make an emoji comment by clicking on words[39m
-[chrome #01-16] [22:00:47] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
-[chrome #01-16] [22:00:54] W/element - more than one element found for locator By(css selector, [dataname=':heart_eyes:']) - the first result will be used
-[chrome #01-16] [22:00:54] W/element - more than one element found for locator By(css selector, [dataname=':heart_eyes:']) - the first result will be used
-[chrome #01-16] [22:00:54] W/element - more than one element found for locator By(css selector, [dataname=':heart_eyes:']) - the first result will be used
+[chrome #01-16] [11:47:21] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-16] [11:47:27] W/element - more than one element found for locator By(css selector, [dataname=':heart_eyes:']) - the first result will be used
+[chrome #01-16] [11:47:27] W/element - more than one element found for locator By(css selector, [dataname=':heart_eyes:']) - the first result will be used
+[chrome #01-16] [11:47:28] W/element - more than one element found for locator By(css selector, [dataname=':heart_eyes:']) - the first result will be used
 [chrome #01-16]       [32mΓêÜ should make a text AND emoji comment on an image by clicking on image[39m
-[chrome #01-16] [22:00:57] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-16] [11:47:30] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-16]       [32mΓêÜ should make audio comment by selecting text[39m
-[chrome #01-16] [22:01:08] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
-[chrome #01-16] [22:01:12] W/element - more than one element found for locator By(css selector, [dataname=':grinning:']) - the first result will be used
-[chrome #01-16] [22:01:12] W/element - more than one element found for locator By(css selector, [dataname=':grinning:']) - the first result will be used
-[chrome #01-16] [22:01:12] W/element - more than one element found for locator By(css selector, [dataname=':grinning:']) - the first result will be used
-[chrome #01-16] [22:01:17] W/element - more than one element found for locator By(css selector, button.e2e-delete-button) - the first result will be used
-[chrome #01-16] [22:01:17] W/element - more than one element found for locator By(css selector, button.e2e-delete-button) - the first result will be used
-[chrome #01-16] [22:01:17] W/element - more than one element found for locator By(css selector, button.e2e-delete-button) - the first result will be used
+[chrome #01-16] [11:47:42] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-16] [11:47:47] W/element - more than one element found for locator By(css selector, [dataname=':grinning:']) - the first result will be used
+[chrome #01-16] [11:47:47] W/element - more than one element found for locator By(css selector, [dataname=':grinning:']) - the first result will be used
+[chrome #01-16] [11:47:47] W/element - more than one element found for locator By(css selector, [dataname=':grinning:']) - the first result will be used
+[chrome #01-16] [11:47:52] W/element - more than one element found for locator By(css selector, button.e2e-delete-button) - the first result will be used
+[chrome #01-16] [11:47:52] W/element - more than one element found for locator By(css selector, button.e2e-delete-button) - the first result will be used
+[chrome #01-16] [11:47:52] W/element - more than one element found for locator By(css selector, button.e2e-delete-button) - the first result will be used
 [chrome #01-16]       [32mΓêÜ should make a reply comment as a logged in user[39m
-[chrome #01-16] [22:01:18] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-16] [11:47:53] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-16]       [32mΓêÜ should not give students owner tools[39m
 [chrome #01-16] 
-[chrome #01-16] [22:01:22] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-16] [11:47:55] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-16]     Live Notifications
 [chrome #01-16]       [32mΓêÜ should open a project with the query param for a live comment and see that comment[39m
-[chrome #01-16] [22:01:26] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-16] [11:48:00] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-16]       [32mΓêÜ should open a project with the query param for a live reply and see that reply[39m
 [chrome #01-16] 
-[chrome #01-16] [22:01:31] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
+[chrome #01-16] [11:48:04] W/element - more than one element found for locator By(css selector, *[id="inProjectReadingTitle"]) - the first result will be used
 [chrome #01-16]     Word highlight comment on a PDF image
 [chrome #01-16]       [32mΓêÜ should make a comment on an image by clicking two word boxes[39m
 [chrome #01-16] 
-[chrome #01-16] Executed 8 of 8 specs[32m SUCCESS[39m in 1 min 17 secs.
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://bluestreak-dev.edji.it/socket.io/?EIO=3&transport=polling&t=NXxxKPc&sid=l_xu8TQut33cM-hhAACK - Failed to load resource: the server responded with a status of 503 (Service Unavailable)
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://bluestreak-dev.edji.it/socket.io/?EIO=3&transport=polling&t=NXxxL5l&sid=l_xu8TQut33cM-hhAACK - Failed to load resource: the server responded with a status of 400 (Bad Request)
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://bluestreak-dev.edji.it/socket.io/?EIO=3&transport=polling&t=NXxxMqU&sid=n5h4LZ71ppx9IdJpAACO - Failed to load resource: the server responded with a status of 400 (Bad Request)
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://bluestreak-dev.edji.it/socket.io/?EIO=3&transport=polling&t=NXxxNN7&sid=n5h4LZ71ppx9IdJpAACO - Failed to load resource: the server responded with a status of 400 (Bad Request)
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://bluestreak-dev.edji.it/socket.io/?EIO=3&transport=polling&t=NXxxRc3&sid=lNE9l3Tpidg7_GqVAACT - Failed to load resource: the server responded with a status of 400 (Bad Request)
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5d669c747f98f834bc96833e - Failed to load resource: the server responded with a status of 401 (Unauthorized)
-[chrome #01-16] [22:01:36] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5d669c747f98f834bc96833e - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-16] Executed 8 of 8 specs[32m SUCCESS[39m in 1 min 15 secs.
+[chrome #01-16] [11:48:09] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-16] [11:48:09] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150706:8 "Invalid Host/Origin header"
+[chrome #01-16] [11:48:09] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://localhost:3375/vendor.js 150709:8 "[WDS] Disconnected!"
+[chrome #01-16] [11:48:09] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5cad22f5ffd34f199dd0fc35 - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-16] [11:48:09] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5d669c747f98f834bc96833e - Failed to load resource: the server responded with a status of 401 (Unauthorized)
+[chrome #01-16] [11:48:09] W/plugins - Warning from "protractor-console-plugin" plugin: SEVERE: http://pipo-dev.edji.it/api/v1/stats/groups/5d669c747f98f834bc96833e - Failed to load resource: the server responded with a status of 401 (Unauthorized)
 
-[22:01:36] I/testLogger - 
+[11:48:09] I/testLogger - 
 
-[22:01:36] I/launcher - 0 instance(s) of WebDriver still running
-[22:01:36] I/launcher - chrome #01-0 passed
-[22:01:36] I/launcher - chrome #01-4 failed 2 test(s)
-[22:01:36] I/launcher - chrome #01-1 passed
-[22:01:36] I/launcher - chrome #01-7 passed
-[22:01:36] I/launcher - chrome #01-8 passed
-[22:01:36] I/launcher - chrome #01-5 passed
-[22:01:36] I/launcher - chrome #01-3 failed 2 test(s)
-[22:01:36] I/launcher - chrome #01-2 passed
-[22:01:36] I/launcher - chrome #01-9 passed
-[22:01:36] I/launcher - chrome #01-11 passed
-[22:01:36] I/launcher - chrome #01-10 passed
-[22:01:36] I/launcher - chrome #01-13 passed
-[22:01:36] I/launcher - chrome #01-14 failed 1 test(s)
-[22:01:36] I/launcher - chrome #01-6 failed 1 test(s)
-[22:01:36] I/launcher - chrome #01-12 failed 1 test(s)
-[22:01:36] I/launcher - chrome #01-18 failed 1 test(s)
-[22:01:36] I/launcher - chrome #01-19 passed
-[22:01:36] I/launcher - chrome #01-17 failed 1 test(s)
-[22:01:36] I/launcher - chrome #01-20 failed 1 test(s)
-[22:01:36] I/launcher - chrome #01-15 passed
-[22:01:36] I/launcher - chrome #01-21 failed 4 test(s)
-[22:01:36] I/launcher - chrome #01-16 passed
-[22:01:36] I/launcher - overall: 14 failed spec(s)
-[22:01:36] E/launcher - Process exited with error code 1
+[11:48:09] I/launcher - 0 instance(s) of WebDriver still running
+[11:48:09] I/launcher - chrome #01-0 passed
+[11:48:09] I/launcher - chrome #01-4 failed 2 test(s)
+[11:48:09] I/launcher - chrome #01-1 passed
+[11:48:09] I/launcher - chrome #01-7 passed
+[11:48:09] I/launcher - chrome #01-8 passed
+[11:48:09] I/launcher - chrome #01-5 passed
+[11:48:09] I/launcher - chrome #01-3 failed 2 test(s)
+[11:48:09] I/launcher - chrome #01-9 passed
+[11:48:09] I/launcher - chrome #01-2 passed
+[11:48:09] I/launcher - chrome #01-11 passed
+[11:48:09] I/launcher - chrome #01-10 failed 1 test(s)
+[11:48:09] I/launcher - chrome #01-13 passed
+[11:48:09] I/launcher - chrome #01-6 passed
+[11:48:09] I/launcher - chrome #01-14 failed 1 test(s)
+[11:48:09] I/launcher - chrome #01-12 failed 1 test(s)
+[11:48:09] I/launcher - chrome #01-18 failed 1 test(s)
+[11:48:09] I/launcher - chrome #01-17 failed 1 test(s)
+[11:48:09] I/launcher - chrome #01-19 passed
+[11:48:09] I/launcher - chrome #01-20 failed 1 test(s)
+[11:48:09] I/launcher - chrome #01-15 passed
+[11:48:09] I/launcher - chrome #01-21 failed 4 test(s)
+[11:48:09] I/launcher - chrome #01-16 passed
+[11:48:09] I/launcher - overall: 14 failed spec(s)
+[11:48:09] E/launcher - Process exited with error code 1
 info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

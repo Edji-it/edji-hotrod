@@ -58,9 +58,7 @@ export class ChangeEmailComponent implements OnInit {
     this.loading = true
 
     this._auth
-      .resetEmail({
-        email: this.emailForm.get('current_email').value,
-      })
+      .resetEmail()
       .pipe(take(1))
       .subscribe(
         success => {
