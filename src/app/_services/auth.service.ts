@@ -770,6 +770,25 @@ export class AuthService implements CanActivate {
     })
   }
 
+  /**
+   * Reset Email
+   * - Sends an email reset link to a user so they can change their email
+   * @params resetUser simple object with either username or email
+   * @returns HttpClient observable
+   */
+  public resetEmail(resetUser: { email?: string }): Observable<boolean> {
+    // need to pass in the correct user search
+    let userInfo: string
+    userInfo = 'email=' + encodeURIComponent(resetUser.email)
+
+    return this._http.get<any>(this.baseUrl + '/api/v1/users/tokens/email?' + userInfo, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    })
+  }
+
+
   /** Call to convert a temp user's properties to the current user (who should already have credentials) */
   public convertTempUser(oldId: string): Observable<boolean> {
     return this._http

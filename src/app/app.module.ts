@@ -122,7 +122,7 @@ import {
   ReadingCardComponent,
 } from './dashboard'
 import { NoContentComponent } from './no-content'
-import { AccountComponent, ChangePassComponent, UploadAvatarModal } from './account'
+import { AccountComponent, ChangePassComponent, ChangeEmailComponent, UploadAvatarModal } from './account'
 import { LoginComponent } from './login'
 import { RedeemToken } from './redeem-token/redeem-token.component'
 import { HeroPromoPageComponent } from './hero-promo/hero-promo.component'
@@ -239,6 +239,7 @@ const routerOptions: ExtraOptions = {
     ConfirmCoOwnerModal,
     ReadingLinkModal,
     ReadingPreviewModal,
+    ChangeEmailComponent,
     ChangePassComponent,
     ResetPassComponent,
     DeleteCommentModal,
