@@ -39,8 +39,11 @@ nav-bar
             ) Please make sure the {{ redeemCopy.name }}s match
           .button__row
             #msgFailure.alert.alert-danger(
-              *ngIf="serviceResponse.failure"
+              *ngIf="serviceResponse.failure && redeemCopy.name !== 'Email'"
             ) Please request another {{ redeemCopy.name }} link. The link used was invalid. Remember, they only last 24 hours.
+            #msgFailure.alert.alert-danger(
+              *ngIf="serviceResponse.failure && redeemCopy.name === 'Email'"
+            ) That username/email already exists.
             #msgSuccess.alert.alert-success(
               *ngIf="serviceResponse.success"
             ) You've successfully changed your {{ redeemCopy.name }}! 
