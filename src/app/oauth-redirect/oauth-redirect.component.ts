@@ -157,22 +157,18 @@ export class OAuthComponent implements OnInit {
 
     this._auth
       .linkOauth(type, token)
-      .pipe(take(1))
-      .subscribe(
-        user => {
-          // Confirm with toast
-          this._messages.sendToast({
-            id: 'oauth-link',
-            type: 'success',
-            message: 'Successfully linked your Edji account',
-          })
-          // Account successfully linked!
-          this.routeAfterOAuth()
-        },
-        error => {
-          this.messages.linkError = true
-        },
-      )
+      .then(res => {
+        // Confirm with toast
+        this._messages.sendToast({
+          id: 'oauth-link',
+          type: 'success',
+          message: 'Successfully linked your Edji account',
+        })
+        // Account successfully linked!
+        this.routeAfterOAuth()
+      }).catch(error => {
+        this.messages.linkError = true
+      });
   }
 
   /**

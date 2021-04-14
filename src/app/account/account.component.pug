@@ -38,6 +38,11 @@ nav-bar([showDashboardOptions]="true")
         button.btn.set-password-btn.mb-4(*ngIf="(linkedAccounts.clever || linkedAccounts.google) && !currentUser.has_password" type="button", (click)="showPassModal = !showPassModal") Set Password
         //- Change Password Button
         button.btn.change-password-btn.mb-4(*ngIf="currentUser.has_password" type="button", (click)="showPassModal = !showPassModal") Change Password
+    .row
+      .col-md-8
+      .col-md-4.pt-3
+        //- Unlink OAuth Button
+        button.btn.unlink-oauth-btn.mb-4(*ngIf="currentUser.oauth.length > 0" type="button", (click)="showUnlinkModal = !showUnlinkModal") Unlink OAuth
     //- email
     .info-group
       label.info-label Email
@@ -96,6 +101,11 @@ edji-change-pass.modal-will-fade(
   *ngIf="showPassModal",
   [class.show]="showPassModal",
   (closeModal)="showPassModal = !showPassModal"
+)
+edji-unlink-oauth.modal-will-fade(
+  *ngIf="showUnlinkModal",
+  [class.show]="showUnlinkModal",
+  (closeModal)="showUnlinkModal = !showUnlinkModal"
 )
 hot-upload-avatar.modal-will-fade(
   [class.show]="showUploadProfPicModal",
