@@ -1,0 +1,58 @@
+<div id="emailModal" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Change Email</h4>
+        <button (click)="closeAndReset()" type="button" class="close btn-icon--round">&times;</button>
+      </div>
+      <form (ngSubmit)="onSubmit(emailForm.value)" [formGroup]="emailForm">
+        <div class="modal-body">
+          <div class="form-group">
+            
+            <label for="new-email-input">Current Email</label>
+            <input
+              type="email"
+              id="new-email-input"
+              class="form-control"
+              [formControl]="emailForm.controls['current_email']"
+            />
+            <div
+              *ngIf="
+                emailForm.controls['current_email'].hasError('required') && emailForm.controls['current_email'].dirty
+              "
+              class="alert alert-info"
+            >
+              Your current email is required
+            </div>
+            <div
+              *ngIf="
+                emailForm.controls['current_email'].hasError('minlength') && emailForm.controls['current_email'].dirty
+              "
+              class="alert alert-warning"
+            >
+              Email must have at least 6 characters
+            </div>
+            <div *ngIf="messages.wrongEmailError" class="alert alert-danger">
+              Please enter in your current email
+            </div>
+          </div>
+        </div>
+        <div [class.hide]="messages.success" class="modal-footer">
+          <button (click)="closeAndReset()" type="button" class="btn" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" [class.loading]="loading" [disabled]="!emailForm.valid">
+            Request Email Change
+          </button>
+        </div>
+        <div *ngIf="messages.success || messages.serviceError" class="modal-footer">
+          <div id="msgServiceError" class="alert alert-danger" *ngIf="messages.serviceError">
+            We encountered an error while changing your email. Please try again or contact support.
+          </div>
+          <div id="msgServiceSuccess" class="alert alert-success" *ngIf="messages.success">
+            A reset link was sent to your email!
+            <button (click)="closeAndReset()" type="button" class="btn ml-2" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
