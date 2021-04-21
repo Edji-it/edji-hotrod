@@ -27,6 +27,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   public showPassModal: boolean = false
   public showUnlinkModal: boolean = false
+  public showEmailModal: boolean = false
   public showUploadProfPicModal: boolean = false
   public showHeroSubModal: boolean = false
   public showHeroChangeModal: boolean = false
