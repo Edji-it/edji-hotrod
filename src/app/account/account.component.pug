@@ -41,12 +41,17 @@ nav-bar([showDashboardOptions]="true")
     .row
       .col-md-8
       .col-md-4.pt-3
+        //- Unlink OAuth Button
+        button.btn.unlink-oauth-btn.mb-4(*ngIf="currentUser.oauth.length > 0" type="button", (click)="showUnlinkModal = !showUnlinkModal") Unlink OAuth
+    //- email
+    .row
+      .col-md-8
+        .info-group
+          label.info-label Email
+          p.info {{currentUser.email}}
+      .col-md-4.pt-3
         //- Change Email Button
         button.btn.change-email-btn.mb-4(type="button", (click)="showEmailModal = !showEmailModal") Change Email
-    //- email
-    .info-group
-      label.info-label Email
-      p.info {{currentUser.email}}
     //- Hero Subscription Mgmt
     .row
       .col-md-8
@@ -101,6 +106,11 @@ edji-change-pass.modal-will-fade(
   *ngIf="showPassModal",
   [class.show]="showPassModal",
   (closeModal)="showPassModal = !showPassModal"
+)
+edji-unlink-oauth.modal-will-fade(
+  *ngIf="showUnlinkModal",
+  [class.show]="showUnlinkModal",
+  (closeModal)="showUnlinkModal = !showUnlinkModal"
 )
 edji-change-email.modal-will-fade(
   *ngIf="showEmailModal",

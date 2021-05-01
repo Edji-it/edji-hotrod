@@ -411,12 +411,43 @@ export class AuthService implements CanActivate {
   /**
    * Link Oauth to an existing account
    */
-  public linkOauth(oauthType: string, oauthToken: string): Observable<any> {
+  public linkOauth(oauthType: string, oauthToken: string): Promise<any> {
     return this._http.put(
       `${this.baseUrl}/api/v1/users/@me/link?oauth_type=${oauthType}&oauth_token=${oauthToken}`,
       {},
       { headers: this.getHeaders() },
     )
+    .toPromise()
+    .then((data: any) => {
+      if (data.token && data.user) {
+        data.user = this.setUser(data.user)
+        this.setToken(data.token)
+      }
+      return data
+    });
+  }
+
+  /**
+   * Unlink an oauth account
+   */
+  public unlinkOauth(obj: {oauthType: string, newPassword?: string}) : Promise<any> {
+    return this._http.put(
+      `${this.baseUrl}/api/v1/users/@me/unlink`,
+      {
+        oauth_type: obj.oauthType,
+        // Required if we're unlinking our last oauth account
+        new_password: obj.newPassword,
+      },
+      { headers: this.getHeaders() },
+    )
+    .toPromise()
+    .then((data: any) => {
+      if (data.token && data.user) {
+        data.user = this.setUser(data.user)
+        this.setToken(data.token)
+      }
+      return data
+    })
   }
 
   /**

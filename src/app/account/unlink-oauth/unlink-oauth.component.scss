@@ -1,0 +1,20 @@
+@import '../../../sass/base/variables';
+
+.unlink-oauth-accounts-div label {
+    display: inline-block;
+    transform: translate(0px, -2px);
+}
+
+.unlink-oauth-accounts-div input {
+    width: 15px;
+    height: 15px;
+}
+
+.unlink-oauth-accounts-div #oauth-input-clever {
+    margin-left: 10px;
+}
+
+#unlinkOauthModal .modal-body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
