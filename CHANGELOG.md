@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.13.30"></a>
+## [4.13.30](https://github.com/Edji-it/edji-hotrod/compare/v4.13.29...v4.13.30) (2021-05-01)
+
+
+
 <a name="4.13.29"></a>
 ## [4.13.29](https://github.com/Edji-it/edji-hotrod/compare/v4.13.28...v4.13.29) (2020-10-14)
 
