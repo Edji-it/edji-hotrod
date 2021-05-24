@@ -27,6 +27,9 @@ export class AcademyService implements CanActivate {
   public userStatusSubj: Subject<any> = new Subject()
   public userStatus: Observable<any> = this.userStatusSubj.asObservable()
 
+  public tempLicenseRemoveUserSubj: Subject<any> = new Subject()
+  public tempLicenseRemoveUser: Observable<any> = this.tempLicenseRemoveUserSubj.asObservable()
+
   constructor(
     private _http: HttpClient,
     private _auth: AuthService,
@@ -163,6 +166,21 @@ export class AcademyService implements CanActivate {
           return data.licenses
         }),
       )
+  }
+
+  public removeFromLicense(licenseId: string, email: string): Observable<any> {
+    return this._http.put<any>(
+      this._auth.getUrl() + '/api/v1/licenses/' + licenseId + '/remove',
+      {
+        email: email,
+      },
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Authorization: this._auth.getToken(),
+        }),
+      },
+    )
   }
 
   /**

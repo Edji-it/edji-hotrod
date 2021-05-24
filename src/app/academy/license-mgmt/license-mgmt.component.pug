@@ -40,6 +40,8 @@ nav-bar([showDashboardOptions]="true")
                 td.educator-pending.expires(*ngIf="licenseUser.type=='expired'")
                   | Expired {{ licenseUser.joined | edjidate:'timeStamp':'mediumDate' }}
                   .btn.btn-secondary.btn-sm.ml-3((click)="resendInvite(licenseUser)") Resend
+                td
+                  button.btn.btn-danger(*ngIf="licenseUser.role!='Owner'", (click)="updateLicenseUser(licenseUser)") REMOVE
       .row
         .container
           .row.my-5
@@ -132,3 +134,9 @@ nav-bar([showDashboardOptions]="true")
                   strong Oh no!&nbsp;
                   | {{errorObject.serverError}}
                 button.btn.btn-primary.float-right#licenseInviteSubmitBtn(type="submit", [disabled]="!licenseRequest.valid") Request
+edji-license-remove-user.modal-will-fade(
+  *ngIf="showLicenseRemoveUserModal",
+  [class.show]="showLicenseRemoveUserModal",
+  (openModal)="openModal()",
+  (closeModal)="closeModal()"
+)
