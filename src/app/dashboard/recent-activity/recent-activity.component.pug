@@ -1,0 +1,18 @@
+
+.row.loading.e2e-reading-loader(*ngIf="loading")
+div.container(*ngIf="!loading")
+  div(*ngFor="let project of projects")
+    //- List each project, then their activity (with Load More button every 20?)
+    a.activity-title(href="#/project/{{project._id}}?pane=comments") {{project.name}}
+    div.activity-box
+      p.activity-description Ben Nylund replied to Scott Bodell's post: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+      p.activity-timestamp 3 days ago
+      hr
+      p.activity-description Ben Nylund commented: "Test Comment"
+      p.activity-timestamp 3 days ago
+      hr
+      p.activity-description Ben Nylund commented: "Test"
+      p.activity-timestamp 3 days ago
+      hr
+      p.activity-description Ben Nylund replied to Teacher's post: "Reply"
+      p.activity-timestamp 3 days ago
