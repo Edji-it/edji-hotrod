@@ -33,9 +33,20 @@ export class RecentActivityComponent implements OnInit, OnDestroy {
     ) { }
   
     ngOnInit() {
+      this.projects = []
       this.loading = true
       this._project.getActivity().toPromise().then(data => {
         this.projects = data
+
+        this.projects.forEach((project) => {
+          let toAdd = project.comments.length < 5 ? project.comments.length : 5
+          for(let i = 0; i < toAdd; i++) {
+            project.comments[i].show = true
+            project.comments[i].index = i
+          }
+          project.curStart = toAdd
+        });
+
         this.loading = false
       }).catch(err => {
         this.loading = false
@@ -46,5 +57,29 @@ export class RecentActivityComponent implements OnInit, OnDestroy {
       this.subscriptions.forEach(sub => {
         sub.unsubscribe()
       })
+    }
+
+    showMore(projectId) {
+      let project = this.projects.find(x => x._id === projectId)
+      let endIndex = project.comments.length < (project.curStart+5) ? project.comments.length : (project.curStart+5)
+      for(let i = 0; i < endIndex; i++) {
+        project.comments[i].show = true
+        project.comments[i].index = i
+      }
+      project.curStart = endIndex
+    }
+
+    showComment(projectId, commentId, replyId) {
+      this.router.navigate([`/project/${projectId}`], { queryParams: { comment: commentId, reply: replyId }})
+    }
+
+    scroll(id) {
+      document.getElementById(id).scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+
+    navigate(projectId) {
+      this.router.navigate([`/project/${projectId}`], { queryParams: { pane: 'comments' } })
     }
 }

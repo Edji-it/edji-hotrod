@@ -1,18 +1,45 @@
 
 .row.loading.e2e-reading-loader(*ngIf="loading")
-div.container(*ngIf="!loading")
-  div(*ngFor="let project of projects")
-    //- List each project, then their activity (with Load More button every 20?)
-    a.activity-title(href="#/project/{{project._id}}?pane=comments") {{project.name}}
-    div.activity-box
-      p.activity-description Ben Nylund replied to Scott Bodell's post: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-      p.activity-timestamp 3 days ago
-      hr
-      p.activity-description Ben Nylund commented: "Test Comment"
-      p.activity-timestamp 3 days ago
-      hr
-      p.activity-description Ben Nylund commented: "Test"
-      p.activity-timestamp 3 days ago
-      hr
-      p.activity-description Ben Nylund replied to Teacher's post: "Reply"
-      p.activity-timestamp 3 days ago
+.row
+  div.col-12.col-sm-3(style="margin-bottom: 20px", *ngIf="!loading")
+    ng-container
+      h1(style="white-space: nowrap") Recent Activity
+        i.icon__tooltip(tooltipPosition="bottom", pTooltip="View comments and replies made on your readings!")
+          span.icon.icon-circle.icon-info  i
+      div(*ngFor="let project of projects")
+        a.btn.btn-link.project-title((click)="scroll('recentactivity-' + project._id)") {{project.name}} - {{ project.group }}
+
+  //- Main Content
+  div.recent-activity-col.col-12.col-sm-6(*ngIf="!loading")
+    ng-container.recent-activity-projects(*ngFor="let project of projects")
+      .activity-box(id="recentactivity-{{project._id}}")
+        div.activity-title((click)="navigate(project._id)")
+          .reading-icon.hide-for-archived
+            span {{ project.name.substring(0,2) }}
+          .archived-icon.show-for-archived
+            .icon.icon-folder
+          .reading-title
+            .reading-title--center-row
+              h1.small {{ project.name }}
+              p {{ project.group }}
+        div.activity-hover(*ngFor="let post of project.comments")
+          div(*ngIf="post.show", (click)="showComment(project._id, post.type === 'reply' ? post.replyTo._id : post._id, post.type === 'reply' ? post._id : undefined)")
+            div(style="padding: 20px;")
+              div(style="width: 100%;margin-left: 10px;", *ngIf="post.type === 'reply'")
+                user-avatar.pointer.float-left(
+                  [userDetails]="post.author",
+                  [size]="'small'"
+                )
+                p.reply-text(style="") {{ post.replyTo.data }}
+                div(style="height: 20px;border-left:#bbc1c7 dashed 2.5px;margin-left:13px;")
+              user-avatar.pointer.float-left(
+                [userDetails]="post.author",
+                [size]="'large'"
+              )
+              .comment-header
+                p {{ post.author.fullname }}
+                p {{ post.date | edjidate:'timeAgo':null}}
+              p(style="margin: 0.75em 0;") {{ post.data }}
+            hr
+        button.btn-primary.show-more-btn(*ngIf="project.curStart < project.comments.length", (click)="showMore(project._id)") Show More
+        p.no-more-comments(*ngIf="project.curStart >= project.comments.length") No more comments found.
