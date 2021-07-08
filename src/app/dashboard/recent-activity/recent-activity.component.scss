@@ -116,6 +116,15 @@
                 font-size: 1.2em !important;
             }
         }
+        
+        .highlighted-box {
+            margin: 1em 0;
+            padding: 1em;
+            background-color: #FCEE80;
+            border-radius: 10px;
+            font-style: italic;
+            color: black;
+        }
     }
 
     .activity-hover:first-child {

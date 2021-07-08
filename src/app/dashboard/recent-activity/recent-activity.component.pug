@@ -39,6 +39,7 @@
               .comment-header
                 p {{ post.author.fullname }}
                 p {{ post.date | edjidate:'timeAgo':null}}
+              p.highlighted-box {{ post.text }}
               p(style="margin: 0.75em 0;") {{ post.data }}
             hr
         button.btn-primary.show-more-btn(*ngIf="project.curStart < project.comments.length", (click)="showMore(project._id)") Show More
