@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { Router, ActivatedRoute } from '@angular/router'
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Router } from '@angular/router'
+import { FormBuilder } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
 import { AuthService, ProjectService } from '../../_services'
-import { act } from '@ngrx/effects'
 
 @Component({
   selector: 'edji-recent-activity',
@@ -19,7 +18,7 @@ import { act } from '@ngrx/effects'
 })
 export class RecentActivityComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = []
-    private loading: boolean = true
+    loading: boolean = true
     private projects: any = []
 
     public activity: any = []
@@ -51,74 +50,6 @@ export class RecentActivityComponent implements OnInit, OnDestroy {
       }).catch(err => {
         this.loading = false
       })
-
-      // Rest of this is test stuff
-      this.loading = false;
-      this.projects = [
-        {
-          name: "Test Activity",
-          group: "Test Group",
-          _id: "ID",
-          date: "2021-03-13T19:36:12.667Z",
-          comments: [
-            {
-              show: false,
-              _id: "ID",
-              author: {
-                _id: "604d142cb74936003ff2613b",
-                fullname: "Ben Nylund",
-                firstname: "Ben",
-                lastname: "Nylund",
-                initials: "BN",
-                hero_status: true,
-                avatar: "#822562",
-                createdAt: "2021-03-13T19:36:12.667Z",
-                updatedAt: "2021-07-02T02:29:10.354Z",
-              },
-              date: "2021-06-30T12:00:00.667Z",
-              type: "reply",
-              data: "Comment data here",
-              text: "Text from reading here",
-              replyTo: {
-                _id: "ID",
-                author: {
-                  _id: "604d142cb74936003ff2613b",
-                  fullname: "Ben Nylund",
-                  firstname: "Ben",
-                  lastname: "Nylund",
-                  initials: "BN",
-                  hero_status: true,
-                  avatar: "#822562",
-                  createdAt: "2021-03-13T19:36:12.667Z",
-                  updatedAt: "2021-07-02T02:29:10.354Z",
-                },
-                date: "2021-03-13T19:36:12.667Z",
-                type: "comment",
-                data: "Comment to reply to",
-                text: "Text from reading here",
-              }
-            }
-          ]
-        }
-      ]
-
-      for(let i = 0; i < 10; i++) {
-        let newCom = JSON.parse(JSON.stringify(this.projects[0].comments[0]));
-        if(i % 2 === 0) {
-          newCom.replyTo = undefined;
-          newCom.type = "comment";
-        }
-        this.projects[0].comments.push(newCom);
-      }
-
-      this.projects.forEach((project) => {
-        let toAdd = project.comments.length < 5 ? project.comments.length : 5
-        for(let i = 0; i < toAdd; i++) {
-          project.comments[i].show = true
-          project.comments[i].index = i
-        }
-        project.curStart = toAdd
-      });
     }
   
     ngOnDestroy() {

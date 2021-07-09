@@ -1,4 +1,3 @@
-
 .row.loading.e2e-reading-loader(*ngIf="loading")
 .row
   div.col-12.col-sm-3(style="margin-bottom: 20px", *ngIf="!loading")
@@ -39,8 +38,16 @@
               .comment-header
                 p {{ post.author.fullname }}
                 p {{ post.date | edjidate:'timeAgo':null}}
-              p.highlighted-box {{ post.text }}
+              p.highlighted-box(*ngIf="post.type === 'comment'") {{ post.text }}
               p(style="margin: 0.75em 0;") {{ post.data }}
             hr
         button.btn-primary.show-more-btn(*ngIf="project.curStart < project.comments.length", (click)="showMore(project._id)") Show More
         p.no-more-comments(*ngIf="project.curStart >= project.comments.length") No more comments found.
+    ng-container(*ngIf="projects.length === 0")
+      .alert.alert-info 
+        h4.alert-heading No activity found.
+        | Head over to the
+        | 
+        a(href="#/dashboard/create") Write
+        | 
+        | tab to create a new reading!

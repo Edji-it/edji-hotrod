@@ -108,6 +108,8 @@ export class ProfileFormComponent implements OnInit {
       prefillSchool = userSoFar.school.district_name
     }
 
+    let prefillRecap = userSoFar.prefs ? (userSoFar.prefs.activityRecap ? 'yes' : 'no') : 'no'
+
     // Used for placeholder values in template
     this.userCopy = new Copy().getUserCopy()
 
@@ -117,6 +119,7 @@ export class ProfileFormComponent implements OnInit {
         lastname: [prefillLast, Validators.required],
         accountRole: [prefillIdentity, Validators.required],
         school: [prefillSchool],
+        activityRecap: [prefillRecap, Validators.required]
       },
       {
         validator: this.schoolValidator,
@@ -278,6 +281,8 @@ export class ProfileFormComponent implements OnInit {
     if (this.schoolInfo && this.isSchoolStaff(form.accountRole)) {
       user.school = this.schoolInfo
     }
+    user.prefs = user.prefs || { }
+    user.prefs.activityRecap = form.activityRecap === 'yes'
     // Update user will fetch most recent user object, update properties given
     this._auth
       .updateUser(user)
