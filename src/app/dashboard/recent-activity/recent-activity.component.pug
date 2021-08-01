@@ -1,10 +1,18 @@
-div.col-12(style="margin-bottom: 20px")
+div.col-12(style="margin-bottom: 20px; padding-left: 0px;")
   ng-container
     h1(style="white-space: nowrap") Recent Activity
       i.icon__tooltip(tooltipPosition="bottom", pTooltip="View comments and replies made on your readings!")
         span.icon.icon-circle.icon-info  i
 .container-fluid
   .row
+    div.no-activity(*ngIf="projects.length === 0 && !loading")
+      .alert.alert-info(*ngIf="projects.length === 0 && !loading")
+        h4.alert-heading No activity found.
+        | Head over to the
+        | 
+        a(href="#/dashboard/create") Write
+        | 
+        | tab to create a new reading!
     div.col-12.loading.e2e-reading-loader(*ngIf="loading")
     div.project-links.col-4.col-sm-4(style="margin-bottom: 20px", *ngIf="!loading")
       div(*ngFor="let project of projects")
@@ -44,11 +52,3 @@ div.col-12(style="margin-bottom: 20px")
               hr
           button.btn-primary.show-more-btn(*ngIf="project.curStart < project.comments.length", (click)="showMore(project._id)") Show More
           p.no-more-comments(*ngIf="project.curStart >= project.comments.length") No more comments found.
-    ng-container(*ngIf="projects.length === 0")
-      .alert.alert-info 
-        h4.alert-heading No activity found.
-        | Head over to the
-        | 
-        a(href="#/dashboard/create") Write
-        | 
-        | tab to create a new reading!

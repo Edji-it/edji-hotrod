@@ -175,3 +175,15 @@
         max-width: 100% !important;
     }
 }
+
+.no-activity {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .alert {
+        min-width: 300px;
+        max-width: 1000px;
+    }
+}
