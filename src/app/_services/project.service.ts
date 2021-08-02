@@ -25,11 +25,11 @@ export class ProjectService {
     private _academy: AcademyService,
   ) {} // constructor
 
-  public getActivity(): Observable<any> {
-    return this._http.get<any>(this._auth.getUrl() + '/api/v1/users/@me/activity_recap', {
+  public getActivity(query?: string): Observable<any> {
+    return this._http.get<any>(`${this._auth.getUrl()}/api/v1/users/@me/activity_recap${query ? `?${query}` : ''}`, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        Authorization: this._auth.getToken()
+        Authorization: this._auth.getToken(),
       }),
     })
   }

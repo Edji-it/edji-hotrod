@@ -17,68 +17,73 @@ import { AuthService, ProjectService } from '../../_services'
   templateUrl: './recent-activity.component.pug',
 })
 export class RecentActivityComponent implements OnInit, OnDestroy {
-    private subscriptions: Subscription[] = []
-    loading: boolean = true
-    private projects: any = []
+  private subscriptions: Subscription[] = []
+  loading: boolean = true
+  private projects: any = []
 
-    public activity: any = []
-  
-    constructor(
-      public router: Router,
-      private _auth: AuthService,
-      private angulartics: Angulartics2,
-      private _project: ProjectService,
-      fb: FormBuilder,
-    ) { }
-  
-    ngOnInit() {
-      this.projects = []
-      this.loading = true
-      this._project.getActivity().toPromise().then(data => {
+  public activity: any = []
+
+  constructor(
+    public router: Router,
+    private _auth: AuthService,
+    private angulartics: Angulartics2,
+    private _project: ProjectService,
+    fb: FormBuilder,
+  ) {}
+
+  ngOnInit() {
+    this.projects = []
+    this.loading = true
+    this._project
+      .getActivity()
+      .toPromise()
+      .then(data => {
         this.projects = data
 
-        this.projects.forEach((project) => {
-          let toAdd = project.comments.length < 5 ? project.comments.length : 5
-          for(let i = 0; i < toAdd; i++) {
-            project.comments[i].show = true
-            project.comments[i].index = i
-          }
-          project.curStart = toAdd
-        });
+        this.projects.forEach(project => {
+          project.curPage = 1
+        })
 
         this.loading = false
-      }).catch(err => {
+      })
+      .catch(err => {
         this.loading = false
       })
-    }
-  
-    ngOnDestroy() {
-      this.subscriptions.forEach(sub => {
-        sub.unsubscribe()
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe()
+    })
+  }
+
+  showMore(projectId) {
+    let project = this.projects.find(x => x._id === projectId)
+    project.loading = true
+    this._project
+      .getActivity(`page=${project.curPage + 1}&project=${projectId}`)
+      .toPromise()
+      .then(data => {
+        project.loading = false
+        project.curPage++
+        project.comments.push(...data[0].comments)
       })
-    }
+      .catch(err => {
+        project.loading = false
+      })
+  }
 
-    showMore(projectId) {
-      let project = this.projects.find(x => x._id === projectId)
-      let endIndex = project.comments.length < (project.curStart+5) ? project.comments.length : (project.curStart+5)
-      for(let i = 0; i < endIndex; i++) {
-        project.comments[i].show = true
-        project.comments[i].index = i
-      }
-      project.curStart = endIndex
-    }
+  showComment(projectId, commentId, replyId) {
+    this.router.navigate([`/project/${projectId}`], { queryParams: { comment: commentId, reply: replyId } })
+  }
 
-    showComment(projectId, commentId, replyId) {
-      this.router.navigate([`/project/${projectId}`], { queryParams: { comment: commentId, reply: replyId }})
-    }
+  scroll(id) {
+    document.getElementById(id).scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
 
-    scroll(id) {
-      document.getElementById(id).scrollIntoView({
-        behavior: 'smooth',
-      });
-    }
-
-    navigate(projectId) {
-      this.router.navigate([`/project/${projectId}`], { queryParams: { pane: 'comments' } })
-    }
+  navigate(projectId) {
+    this.router.navigate([`/project/${projectId}`], { queryParams: { pane: 'comments' } })
+  }
 }
