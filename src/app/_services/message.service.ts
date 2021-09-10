@@ -60,7 +60,7 @@ export class MessageService {
       // Begin timer for dismissing toast
       this.toastTimers[toast.id] = setTimeout(() => {
         this.dismissToast(toast.id)
-      }, TOAST_TIME)
+      }, toast.duration || TOAST_TIME)
     }
 
     // Check if toast with ID exists
@@ -171,6 +171,11 @@ interface GetMessagesResponse {
   }[]
 }
 
+export interface ToastButton {
+  text: string
+  onClick: Function
+}
+
 export interface MessageToast {
   message: string
   type: string // "info", "heat-on", "heat-off", "promo", "new-feedback", "promoted", "new-reply"
@@ -181,4 +186,6 @@ export interface MessageToast {
   date?: Date
   limitToPage?: string // identify route where message type should show
   requireDismiss?: boolean
+  buttons?: ToastButton[]
+  duration?: number // Duration of toast in ms
 }

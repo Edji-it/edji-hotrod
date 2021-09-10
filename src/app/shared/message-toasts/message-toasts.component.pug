@@ -12,7 +12,6 @@
             [routerLink]="toast.link",
             [fragment]="toast.linkFragment",
             [queryParams]="toast.linkParams",
-            (click)="dismissToast(toast.id)"
             )
             .toast-header
                 i.icon.rounded([ngClass]="[toastIconClass(toast.type)]")
@@ -23,3 +22,5 @@
                     span(aria-hidden="true") &times;
                 //- For providing a longer message:
             //- .toast-body {{ toast.message }}
+            .toast-body(*ngFor="let button of toast.buttons")
+                .btn.btn-primary(type="button", (click)="button.onClick(); dismissToast(toast.id)", style="text-align: center;width: 100%;") {{ button.text }}

@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs'
 // Project Dependencies
 import { AuthService, ReadingService, ProjectService, LockerService, MessageService, CopyService } from '../_services'
 import { User } from './../shared/datatypes'
+import { take } from 'rxjs/operators'
 
 @Component({
   // The selector is what angular internally uses
@@ -40,6 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _messages: MessageService,
     private _copy: CopyService,
+    private _msg: MessageService,
   ) {
     // this makes the window always render scrolled to the top
     this.subscriptions.push(
@@ -96,6 +98,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._auth.currentUser.subscribe(user => {
         this.currentUser = user
+        if (!this.currentUser.confirmed) {
+          this._msg.sendToast({
+            message: "Your email isn't confirmed. Please check your email for a confirmation link.",
+            type: 'info',
+            id: 'email-confirm',
+            duration: 1000 * 60,
+            buttons: [
+              {
+                text: 'Resend Email',
+                onClick: () => {
+                  this._auth
+                    .resendConfirmation()
+                    .pipe(take(1))
+                    .subscribe(success => {}, err => {})
+                },
+              },
+            ],
+          })
+        }
       }),
       this._copy.activePromotions.subscribe(promo => {
         if (promo.toastMessage && promo.promotionTitle) {
@@ -126,6 +147,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => {
       sub && sub.unsubscribe()
     })
+    this._msg.dismissToast('email-confirm')
   }
 
   /**
