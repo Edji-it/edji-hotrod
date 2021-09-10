@@ -121,6 +121,7 @@ export class RegisterFormComponent implements OnInit {
     }
 
     formValue.fullname = ''
+    formValue.confirmed = false
 
     // Attempt to register this user.
     this._auth

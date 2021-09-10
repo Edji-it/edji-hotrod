@@ -76,6 +76,7 @@ interface BaseUser {
   }>
   // User ids this user follows
   following?: string[]
+  confirmed?: boolean
   has_password: boolean
 }
 
