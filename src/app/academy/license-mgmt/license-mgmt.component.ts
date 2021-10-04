@@ -24,6 +24,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
   public license: any
   // Hold on to loaded licenses
   private licenses: any[]
+  private tmpRemoveUser: any;
   public currentAcademy: any
   public licenseRoles: any = [
     { label: 'Teacher', value: 'teacher' },
@@ -38,6 +39,7 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
 
   public inviteLink: string = ''
   public showLicenseInviteModal: boolean
+  public showLicenseRemoveUserModal: boolean = false
   public licenseInvite: FormGroup
   public inviteSuccess: {
     sent?: boolean
@@ -111,7 +113,6 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
     // Set the array lengths here for looping speed
     let activeLicenseLength = this.license.users.length
     let pendLicenseLength = this.license.pending_invitations.length
-
     // Set up the array with the active licenses
     for (var i = 0; i < activeLicenseLength; i++) {
       let licenseUser = this.license.users[i]
@@ -326,6 +327,27 @@ export class LicenseMgmtComponent implements OnInit, OnDestroy {
         console.error(error)
         this.inviteError.server = true
       },
+    )
+  }
+
+  private updateLicenseUser(user: LicenseRow): any {
+    this.tmpRemoveUser = user
+    this.showLicenseRemoveUserModal = !this.showLicenseRemoveUserModal
+  }
+
+  private openModal(): any {
+    this._academy.tempLicenseRemoveUserSubj.next(this.tmpRemoveUser)
+  }
+
+  private closeModal(): any {
+    this.showLicenseRemoveUserModal = !this.showLicenseRemoveUserModal
+    this.subscriptions.push(
+      this._academy.getLicenses().subscribe(licenses => {
+        let licenseIndex = this.academyState.selected || 0
+        this.licenses = licenses
+        this.loadLicenseRows(this.licenses[licenseIndex])
+        this.inviteLink = this.buildLicenseLink(licenses, this.currentAcademy)
+      }),
     )
   }
 }

@@ -339,6 +339,37 @@ button {
   }
 }
 
+.btn.btn-danger {
+  background-color: $btnDangerColor;
+  // background-image: linear-gradient(180deg, #FFFFFF 7%, $btnHeroBg 100%);
+  border: $btnBorderWidth solid $btnDangerColor;
+  border-radius: $btnBorderRadius;
+  color: #fff;
+  box-shadow: 0 4px 2px -2px rgba($btnDangerColor, 0.5);
+
+  &:not([href]):not([tabindex]) {
+    color: #fff;
+  }
+
+  &.loading {
+    background: $btnDangerBg;
+  }
+
+  &.active {
+    background: #fff;
+    color: $btnDangerColor;
+  }
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: $btnDangerFocusColor;
+    border-color: $btnDangerColor;
+    color: #fff;
+    box-shadow: 0 0px 15px 0px rgba($btnDangerFocusColor, 0.5);
+  }
+}
+
 %btnAcademy,
 .btn.btn-academy {
   background-color: $btnAcademyBg;

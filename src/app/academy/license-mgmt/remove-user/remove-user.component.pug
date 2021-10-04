@@ -1,0 +1,21 @@
+#licenseRemoveUser.modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title Remove User
+        button.close.btn-icon--round((click)="closeAndReset()", type="button") &times;
+      form((ngSubmit)="onSubmit()")
+        .modal-body
+          .form-group
+            p(*ngIf="userRemove.type === 'pending'") Are you sure you want to cancel the invite sent to {{ userRemove.email }}?
+            p(*ngIf="userRemove.type === 'active' || userRemove.type === 'expired'") Are you sure you want to remove {{ userRemove.email }} from your organization?
+          #msgServiceSuccess.alert.alert-success(*ngIf="messages.success")
+            | User removed!
+        .modal-footer([class.hide]="messages.success || messages.serviceError")
+          button.btn((click)="closeAndReset()", type="button", data-dismiss="modal") Cancel
+          button.btn.btn-primary(*ngIf="userRemove.type === 'active' || userRemove.type === 'expired'", [class.loading]="loading", type="submit") Remove
+          button.btn.btn-primary(*ngIf="userRemove.type === 'pending'", [class.loading]="loading", type="submit") Cancel Invite
+        .modal-footer(*ngIf="messages.success || messages.serviceError")
+          #msgServiceError.alert.alert-danger(*ngIf="messages.serviceError") 
+            | We encountered an error while removing {{ userRemove.email }} from the academy. Please try again or contact support.
+          button.btn.ml-2((click)="closeAndReset()", type="button", data-dismiss="modal") Close
