@@ -4,11 +4,11 @@ import { Angulartics2 } from 'angulartics2'
 import { take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, AcademyService, AcademyState } from '../../../_services';
+import { AuthService, AcademyService, AcademyState } from '../../../_services'
 
 @Component({
   selector: 'edji-license-remove-user',
-  templateUrl: 'remove-user.component.html',
+  templateUrl: 'remove-user.component.pug',
 })
 export class LicenseRemoveUserComponent implements OnInit {
   public currentUser: any
@@ -73,7 +73,7 @@ export class LicenseRemoveUserComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         data => {
-          this.activeLicense = data.license;
+          this.activeLicense = data.license
           this.messages.success = true
           this.loading = false
           this.angulartics.eventTrack.next({
