@@ -5,12 +5,12 @@ import { Subscription } from 'rxjs'
 import { Angulartics2 } from 'angulartics2'
 
 // Project Dependencies
-import { AuthService, ProjectService } from '../../_services'
+import { AudioService, AuthService, ProjectService } from '../../_services'
 
 @Component({
   selector: 'edji-recent-activity',
   // We need to tell Angular's Dependency Injection which providers are in our app.
-  providers: [],
+  providers: [AudioService],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: ['./recent-activity.component.scss'],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
@@ -28,6 +28,7 @@ export class RecentActivityComponent implements OnInit, OnDestroy {
     private _auth: AuthService,
     private angulartics: Angulartics2,
     private _project: ProjectService,
+    private _audio: AudioService,
     fb: FormBuilder,
   ) {}
 
