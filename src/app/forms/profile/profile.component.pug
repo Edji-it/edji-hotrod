@@ -96,6 +96,39 @@ form.form-block#registerForm([formGroup]="profileForm", (ngSubmit)="updateProfil
         )
         .alert.alert-info(*ngIf="profileForm.controls['school'].dirty && profileForm.hasError('schoolRequired')")
             | Please add your school or district
+    .form-group 
+        label Activity Recap
+            p.sub-label Activity Recaps are sent daily at 7PM CT.
+        .input-group
+            .form-check.pl-0
+                //- Yes
+                label#recapSubscribeInput.form-check-label.form-check-btn.hover--tooltip(
+                    [class.active]="profileForm.controls['activityRecap'].value == 'yes'"
+                    )
+                    input.form-check-input(
+                        type="radio",
+                        name="activityRecap",
+                        value="yes",
+                        [formControl]="profileForm.controls['activityRecap']"
+                    )
+                    span([innerHTML]="'Yes' | emojione")
+                    .tooltip-wrap
+                        .tooltip
+                            .tooltip-title I want to get daily activity recaps
+                //- No
+                label#recapUnsubscribeInput.form-check-label.form-check-btn.hover--tooltip(
+                    [class.active]="profileForm.controls['activityRecap'].value == 'no'"
+                    )
+                    input.form-check-input(
+                        type="radio",
+                        name="activityRecap",
+                        value="no",
+                        [formControl]="profileForm.controls['activityRecap']"
+                    )
+                    span([innerHTML]="'No' | emojione")
+                    .tooltip-wrap
+                        .tooltip
+                            .tooltip-title I don't want to get daily activity recaps
     #msgBadName.alert.alert-warn(*ngIf="errorObject.badName", [innerHtml]="errorObject.badName | emojione")
     .button__row.right
         button#buttonCreateProfile.btn.btn-primary(

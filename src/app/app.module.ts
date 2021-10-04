@@ -118,6 +118,7 @@ import {
   DashboardComponent,
   JoinedDashComponent,
   CreatedDashComponent,
+  RecentActivityComponent,
   TutorialReadingComponent,
   ReadingCardComponent,
 } from './dashboard'
@@ -272,6 +273,7 @@ const routerOptions: ExtraOptions = {
     DashboardComponent,
     JoinedDashComponent,
     CreatedDashComponent,
+    RecentActivityComponent,
     LoginComponent,
     BadgeRowComponent,
     TweetCarouselComponent,

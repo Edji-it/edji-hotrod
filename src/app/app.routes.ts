@@ -7,7 +7,7 @@ import { ProjectPageComponent } from './project-page'
 import { HomeComponent } from './home'
 import { RegisterPageComponent, CreateProfilePageComponent } from './register-page'
 import { AccountComponent } from './account'
-import { DashboardComponent, CreatedDashComponent, JoinedDashComponent } from './dashboard'
+import { DashboardComponent, CreatedDashComponent, JoinedDashComponent, RecentActivityComponent } from './dashboard'
 import { NoContentComponent } from './no-content'
 import { LoginComponent } from './login'
 import { RedeemToken } from './redeem-token/redeem-token.component'
@@ -44,6 +44,7 @@ export const ROUTES: Routes = [
       { path: 'create', component: CreatedDashComponent },
       { path: 'create/search', component: CreatedDashComponent },
       { path: 'read', component: JoinedDashComponent },
+      { path: 'activity', component: RecentActivityComponent },
     ],
   },
   { path: 'create', redirectTo: '/dashboard/create' },

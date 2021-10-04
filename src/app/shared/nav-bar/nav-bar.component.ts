@@ -274,6 +274,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
         tooltip: 'Discover Readings from other Teachers',
       })
     }
+    links.push({
+      id: 'recentActivity',
+      route: '/dashboard/activity',
+      displayName: 'Activity',
+      tooltip: 'Recent Activity ',
+    })
     return links
   }
 

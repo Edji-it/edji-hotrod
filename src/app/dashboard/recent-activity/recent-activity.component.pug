@@ -1,0 +1,91 @@
+div.col-12(style="margin-bottom: 20px; padding-left: 0px;")
+  ng-container
+    h1(style="white-space: nowrap") Recent Activity
+      i.icon__tooltip(tooltipPosition="bottom", pTooltip="View comments and replies made on your readings!")
+        span.icon.icon-circle.icon-info  i
+.container-fluid
+  .row
+    div.no-activity(*ngIf="projects.length === 0 && !loading")
+      .alert.alert-info(*ngIf="projects.length === 0 && !loading")
+        h4.alert-heading No activity found.
+        | Head over to the
+        | 
+        a(href="#/dashboard/create") Write
+        | 
+        | tab to create a new reading!
+    div.col-12.loading.e2e-reading-loader(*ngIf="loading")
+    div.project-links.col-4.col-sm-4(style="margin-bottom: 20px", *ngIf="!loading")
+      div(*ngFor="let project of projects")
+        a.text-nowrap.max-width.btn.btn-link.project-title((click)="scroll('recentactivity-' + project._id)") {{project.name}} - {{ project.group }}
+    //- Main Content
+    div.recent-activity-col.col-8.col-sm-8(*ngIf="!loading")
+      ng-container.recent-activity-projects(*ngFor="let project of projects")
+        .activity-box(id="recentactivity-{{project._id}}")
+          div.activity-title((click)="navigate(project._id)")
+            .reading-icon.hide-for-archived
+              span {{ project.name.substring(0,2) }}
+            .archived-icon.show-for-archived
+              .icon.icon-folder
+            .reading-title
+              .reading-title--center-row
+                h1.small.text-nowrap {{ project.name }}
+                p.text-nowrap {{ project.group }}
+          div.activity-hover(*ngFor="let comment of project.comments")
+            div((click)="showComment(project._id, comment.comment_type === 'reply' ? comment.replyTo._id : comment._id, comment.comment_type === 'reply' ? comment._id : undefined)")
+              div(style="padding: 20px;")
+                div(style="width: 100%;margin-left: 10px;", *ngIf="comment.comment_type === 'reply'")
+                  user-avatar.pointer.float-left(
+                    [userDetails]="comment.replyTo.author",
+                    [size]="'small'"
+                  )
+
+                  //- Text Reply 
+                  p.reply-text(*ngIf="comment.replyTo.type === 'text'") {{ comment.replyTo.data }}
+                  
+                  //- Audio Reply
+                  audio-comment(
+                    [comment]="comment.replyTo",
+                    [active]="true",
+                    [userPermission]="1",
+                    *ngIf="comment.replyTo.type === 'audio'",
+                    (click)="$event.stopPropagation()"
+                  )
+
+                  //- Emoji Reply
+                  div.text-comment.display(
+                    [innerHtml]="comment.replyTo.data ? (comment.replyTo.data | linkify:{hashtags:true, quickLabels: true} | emojione) : ''",
+                    [ngClass]="{ 'large-emoji': comment.replyTo.type === 'emoji' }",
+                    *ngIf="comment.replyTo.type === 'emoji'",
+                    style="font-size: 1.4em;")
+
+                  div(style="height: 20px;border-left:#bbc1c7 dashed 2.5px;margin-left:13px;")
+                user-avatar.pointer.float-left(
+                  [userDetails]="comment.author",
+                  [size]="'large'"
+                )
+                .comment-header
+                  p {{ comment.author.fullname }}
+                  p {{ comment.createdAt | edjidate:'timeAgo':null}}
+                p.highlighted-box(*ngIf="comment.comment_type === 'comment'") {{ comment.text }}
+                
+                //- Emoji
+                div.text-comment.display(
+                  [innerHtml]="comment.data ? (comment.data | linkify:{hashtags:true, quickLabels: true} | emojione) : ''",
+                  [ngClass]="{ 'large-emoji': comment.type === 'emoji' }",
+                  *ngIf="comment.type === 'emoji'",
+                  style="min-height: 30px;font-size: 2.5em;padding-bottom: 8px;")
+                
+                //- Text
+                p(*ngIf="comment.type === 'text'", style="margin: 0.75em 0;") {{ comment.data }}
+                
+                //- Audio
+                div(*ngIf="comment.type === 'audio'", style="margin-top:10px;margin-bottom:10px;")
+                  audio-comment(
+                    [comment]="comment",
+                    [userPermission]="1",
+                    [active]="true",
+                    (click)="$event.stopPropagation()"
+                  )
+              hr
+          button.btn.btn-primary.show-more-btn(*ngIf="project.comments.length < project.numComments", (click)="showMore(project._id)", [class.loading]="project.loading") Show More
+          p.no-more-comments(*ngIf="project.numComments === project.comments.length") No more comments found.

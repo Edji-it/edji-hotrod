@@ -522,6 +522,9 @@ export class AuthService implements CanActivate {
               }
             }
 
+            mergedUser.prefs = mergedUser.prefs || {}
+            mergedUser.prefs.activityRecap = updatedUser.prefs.activityRecap
+
             // This is repeated code from forceUpdateDocuments() we could consolidate these. 6.14.
             this._http
               .put(

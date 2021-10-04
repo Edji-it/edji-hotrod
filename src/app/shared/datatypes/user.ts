@@ -40,6 +40,7 @@ interface BaseUser {
     detail?: string
   }
   prefs?: {
+    activityRecap?: boolean
     teachingGrades?: number[]
     recentEmoji?: string[]
     onboarding?: {
